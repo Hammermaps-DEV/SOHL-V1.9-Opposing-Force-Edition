@@ -1,0 +1,73 @@
+Half-Life Sprite Wizard v1.1
+=============================
+A Half-Life sprite compiler with a Windows interface. It takes
+you through a few easy steps to put together a sprite from a
+series of .bmp files that you've made.
+
+For more information about sprites, check these tutorials: 
+http://www.planethalflife.com/wavelength/2dart/tutorials/sprites.html
+http://www.planethalflife.com/wavelength/2dart/tutorials/SpriteTutorial.html
+
+Remember that Additive and Alphatest are what you'll most likely
+use for sprites. Additive is 256 colors, it doesn't have any special
+requirements for it's palette and is a standard picture on a dark
+background. Alphatest is like a .gif, with 255 colors for the picture,
+and the last color in the palette is for transparency.
+
+The Viewing Options defaults to show Alphatest sprites' transparency
+color as black, giving the impression of being transparent. Uncheck
+it if you want to see the actual transparent color.
+
+This program has been tested in Win95, Win98 and NT4, and will
+bring up message boxes for all known errors. It supports Color
+Modes over 256 colors, and Small and Large Font Settings. If you
+come across a bug, send in a detailed description to me.
+
+Version 1.1 fixes the banding distortion for color sprites with 
+less than 256 colors. Thanks to MrPastry and ShockMan from 
+Wavelength's Forums for letting me know about this bug.
+http://dynamic.gamespy.com/~wavelength/ubb/Ultimate.cgi
+
+Thanks to the regulars in the #HLediting channel on, the now deceased, 
+irc.3dnet.net for testing, most notably Malengine, EL (Mike Ottaway), 
+Ease and Bringer.
+
+Thanks to Ken "Page Fault" Alverson and Trevor Lanz 
+for answering my C++ questions.
+
+©1999 by Wavelength. This is freeware. Anyone wanting to release 
+this must not do so for profit and must include this text file.
+
+Michael "Spider" Morace
+kingminos@aol.com
+Wavelength - Half-Life Editing
+http://www.planethalflife.com/wavelength
+
+Other Half-Life related things by Spider:
+
+Half-Life font - February, 1998
+http://www.planethalflife.com/dl/dl.asp?planethalflife/wavelength/2dart/hlfont.zip
+
+Wallpaper for the Half-Life Themes - February, 1998
+http://www.planethalflife.com/dl/dl.asp?planethalflife/wavelength/2dart/theme.zip
+
+E3 1998 Preview of Half-Life - June 25, 1998
+http://www.planethalflife.com/wavelength/models/articles/e3_1998.html
+
+Playtesting Half-Life at Valve's Office - August 25, 1998
+http://www.planethalflife.com/wavelength/models/articles/04.html
+
+The first tutorial for Making Half-Life Decals - November 16, 1998
+http://www.planethalflife.com/wavelength/2dart/tutorials/decals.html
+
+Tutorial on Making Skins for Half-Life - January 3, 1999
+http://www.planethalflife.com/wavelength/2dart/tutorials/SkinTutorial.html
+
+Dukowski Multiplayer Model - January 13, 1999
+http://www.planethalflife.com/dl/dl.asp?planethalflife/wavelength/models/dukowski.exe
+
+Wavelength GfxWad Compiler - July 18, 1999
+http://www.planethalflife.com/dl/dl.asp?planethalflife/wavelength/2dart/GfxWad.zip
+
+Wavelength Palette Merge - October 5, 1999
+http://www.planethalflife.com/dl/dl.asp?planethalflife/wavelength/2dart/PalMerge.zip

@@ -1,0 +1,173 @@
+"Modifications"
+{
+
+	//  To manually add custom modifications, edit this file adding
+	//  "Modification" structures as needed.  Look in GameInfo.csf
+	//  for examples.
+
+	/*"Modification"
+	{
+		//  The name of the game this is a modification for,
+		//  options include "Generic", "Half-Life" and "Source".
+
+		"Game"		"<Game Name>"
+
+		//  The name of the modification, can be anything unique,
+		//  appears in Crafty's profile menu.
+
+		"Name"		"<Modification Name>"
+
+		//  The name of the folder local game content is stored in.
+		//  Either "SourceMods" or some folder in your
+		//  ..\Steam\SteamApps\<user> folder.  E.G. "half-life" or
+		//  "half-life 2".
+
+		"Root"		"<Root Folder>"
+
+		"MountPoints"
+		{
+			//  The packages to mount for the modification in
+			//  order of search priority.  E.G. "half-life.gcf"
+			//  or "half-life 2 content.gcf".
+
+			"MountPoint"	"<Mount Point>"
+			"MountPoint"	"<Mount Point>"
+		}
+		"SearchPaths"
+		{
+			//  The paths to search for modification content in
+			//  order of search priority.  E.G. "valve" or "hl2".
+
+			"SearchPath"	"<Path>"
+			"SearchPath"	"<Path>"
+		}
+	}*/
+	"Modification"
+	{
+		"Game"		"Source"
+		"Name"		"Battle Grounds 2"
+		"Root"		"SourceMods"
+		"MountPoints"
+		{
+			"MountPoint"	"half-life 2 deathmatch.gcf"
+			"MountPoint"	"source materials.gcf"
+			"MountPoint"	"source models.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"bg2"
+			"SearchPath"	"hl2mp"
+			"SearchPath"	"hl2"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Source"
+		"Name"		"Empires"
+		"Root"		"SourceMods"
+		"MountPoints"
+		{
+			"MountPoint"	"source materials.gcf"
+			"MountPoint"	"source models.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"empires"
+			"SearchPath"	"hl2"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Source"
+		"Name"		"Garry's Mod"
+		"Root"		"SourceMods"
+		"MountPoints"
+		{
+			"MountPoint"	"source materials.gcf"
+			"MountPoint"	"source models.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"garrysmod"
+			"SearchPath"	"hl2"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Source"
+		"Name"		"Golden Eye: Source"
+		"Root"		"SourceMods"
+		"MountPoints"
+		{
+			"MountPoint"	"source materials.gcf"
+			"MountPoint"	"source models.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"gesource"
+			"SearchPath"	"hl2"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Half-Life"
+		"Name"		"Natural Selection"
+		"Root"		"half-life"
+		"MountPoints"
+		{
+			"MountPoint"	"half-life.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"ns"
+			"SearchPath"	"valve"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Source"
+		"Name"		"Pirates Vikings and Knights II"
+		"Root"		"SourceMods"
+		"MountPoints"
+		{
+			"MountPoint"	"source materials.gcf"
+			"MountPoint"	"source models.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"pvkii"
+			"SearchPath"	"hl2"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Source"
+		"Name"		"The Hidden"
+		"Root"		"SourceMods"
+		"MountPoints"
+		{
+			"MountPoint"	"source materials.gcf"
+			"MountPoint"	"source models.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"hidden"
+			"SearchPath"	"hl2"
+		}
+	}
+	"Modification"
+	{
+		"Game"		"Half-Life"
+		"Name"		"The Specialists"
+		"Root"		"half-life"
+		"MountPoints"
+		{
+			"MountPoint"	"half-life.gcf"
+		}
+		"SearchPaths"
+		{
+			"SearchPath"	"ts"
+			"SearchPath"	"valve"
+		}
+	}
+}

@@ -1,0 +1,13 @@
+"Font"
+{
+	"Name"			"Courier New"
+	"Width"			"8"
+	"Height"		"12"
+	"VerticalSpacing"	"1"
+	"Lines"
+	{
+		"Line" " abcdefghijklmnopqrstuvwxyzABCDE"
+		"Line" "FGHIJKLMNOPQRSTUVWXYZ1234567890"
+		"Line" ",.!?:;'\"~`@&$#%+-*/^=(){}[]<>|_\\"
+	}
+}

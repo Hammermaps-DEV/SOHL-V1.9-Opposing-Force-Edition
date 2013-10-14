@@ -1,0 +1,52 @@
+8
+
+dir
+1
+svn://192.168.1.200/ryan/crafty/bin/Specifications
+svn://192.168.1.200/ryan/crafty
+
+
+
+2007-08-25T22:00:21.953125Z
+1
+ryan
+
+
+svn:special svn:externals svn:needs-lock
+
+GameInfo.csf
+file
+
+
+
+
+2006-09-04T00:48:23.817875Z
+379cb6392c424dc4d780436e653c803a
+2007-08-25T22:00:21.953125Z
+1
+ryan
+
+GameInfoSchema.csf
+file
+
+
+
+
+2006-04-21T20:41:03.203125Z
+bbb7784d38d59970cd0ef66546c02e38
+2007-08-25T22:00:21.953125Z
+1
+ryan
+
+GameInfoCustom.csf
+file
+
+
+
+
+2007-03-11T20:20:28.437500Z
+a16ff19b28813485bc0524c791af21f0
+2007-08-25T22:00:21.953125Z
+1
+ryan
+

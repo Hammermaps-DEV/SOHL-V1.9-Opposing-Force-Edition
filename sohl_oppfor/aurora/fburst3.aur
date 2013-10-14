@@ -1,0 +1,46 @@
+"particles" "100"
+"maintype" "smokesource"
+
+{
+  "name" "smokesource"
+  "spraytype" "flames"
+  "sprayforce" "300"
+  "sprayrate" "20"
+  "spraypitch" "0"
+  "sprayyaw" "90"
+}
+
+{
+  "name" "flames"
+  "lifetime" "1"
+  "gravity" "0"
+  "sprite" "sprites/blacksmoke.spr"
+  "startalpha" "1"
+  "endalpha" "0.75"
+  "startsize" "5"
+  "endsize" "90"
+  "startframe" "1"
+  "endframe" "16"
+  "startangle" "0..360"
+  "angledelta" "40..-40"
+  "rendermode" "solid"
+  "windyaw" "45"
+  "windstrength" "30"
+  "drag" "0"
+  "overlaytype" "flame"
+}
+
+{
+  "name" "flame"
+  "sprite" "sprites/fexplo.spr"
+  "startalpha" "0.75"
+  "endalpha" "0"
+  "startframe" "5"
+  "endframe" "25"
+  "startred" "0"
+  "endred" "170"
+  "startgreen" "0"
+  "endgreen" "50"
+  "startblue" "255"
+  "endblue" "0"
+}

@@ -1,0 +1,24 @@
+"particles" "100"
+"maintype" "galaxy"
+
+{
+  "name" "galaxy"
+  "spraytype" "layer"
+  "sprayrate" "10"
+  "sprayforce" "100"
+  "sprayyaw" "0..360"
+  "spraypitch" "90"
+}
+
+{
+  "name" "layer"
+  "gravity" "-90"
+  "sprite" "sprites/xspark3.spr"
+  "startalpha" "0.2"
+  "endalpha" "0"
+  "lifetime" "3"
+  "startsize" "5"
+  "endsize" "80"
+  "startangle" "0"
+  "angledelta" "9..-9"
+}

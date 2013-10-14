@@ -1,0 +1,24 @@
+"particles" "256"
+"maintype" "splash"
+
+{
+  "name" "splash"
+  "spraytype" "spray"
+  "sprayrate" "128"
+  "sprayforce" "120..240"
+  "sprayyaw" "0..360"
+  "spraypitch" "10..-1"
+}
+
+{
+  "name" "spray"
+  "gravity" "-10..10"
+  "sprite" "sprites/xspark3.spr"
+  "startalpha" "0.4..0.6"
+  "endalpha" "0"
+  "lifetime" "0.5..1.5"
+  "startsize" "20..60"
+  "endsize" "60..80"
+  "startangle" "0"
+  "angledelta" "16..-16"
+}

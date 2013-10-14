@@ -1,0 +1,50 @@
+"particles" "250"
+"maintype" "sparker"
+
+{
+  "name" "sparker"
+  "spraytype" "sparks"
+  "sprayrate" "40"
+  "sprayforce" "90"
+  "spraypitch" "45..-45"
+  "sprayyaw" "0"
+}
+
+{
+  "name" "sparks"
+  "gravity" "-300"
+  "sprite" "sprites/yelflare2.spr"
+  "startalpha" "0.25"
+  "endalpha" "0.05"
+  "lifetime" "3"
+  "startsize" 14"
+  "endsize" "5"
+  "startframe" "0..10"
+  "framerate" "20"
+  "startangle" "0..360"
+  "angledelta" "-50..50"
+  "startgreen" 1"
+  "endgreen" "0.5"
+  "startblue" "0.8"
+  "endblue" "0"
+  "bounce" "0.8"
+  "bouncefriction" "0.2"
+  "windyaw" "90"
+  "windstrength" "30"
+  "drag" "1"
+  "overlaytype" "sparks2"
+}
+
+{
+  "name" "sparks2"
+  "sprite" "sprites/yelflare2.spr"
+  "startalpha" "0.7"
+  "endalpha" "0.7"
+  "startred" 0"
+  "endred" "0"
+  "startgreen" 1"
+  "endgreen" "1"
+  "startblue" "0"
+  "endblue" "0"
+  "drawcondition" "special1"
+}

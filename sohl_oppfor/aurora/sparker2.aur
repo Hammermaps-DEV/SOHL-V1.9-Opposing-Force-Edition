@@ -1,0 +1,24 @@
+"particles" "70"
+"maintype" "sparker"
+
+{
+  "name" "sparker"
+  "spraytype" "sparks"
+  "sprayrate" "10"
+  "lifetime" "6"
+}
+
+{
+  "name" "sparks"
+  "gravity" "-70..-10"
+  "sprite" "sprites/yelflare2.spr"
+  "startalpha" "0.4"
+  "endalpha" "0.3..0.1"
+  "lifetime" "1..2"
+  "startsize" 14"
+  "endsize" "5"
+  "startframe" "0..10"
+  "framerate" "20"
+  "startangle" "0..360"
+  "angledelta" "-50..50"
+}

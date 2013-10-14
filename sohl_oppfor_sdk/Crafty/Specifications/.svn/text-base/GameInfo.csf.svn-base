@@ -1,0 +1,393 @@
+"GameInfo"
+{
+	"Games"
+	{
+		"Game"
+		{
+			"Name"	"Generic"
+			"MaterialBrowser"
+			{
+				"References"
+				{
+					"Filter"
+					{
+						"Filter"	"*.bmp;*.gif;*.jpg;*.jpeg;*.png;*.spr;*.tga;*.vtf;*.wal"
+					}
+				}
+			}
+			"ModelBrowser"
+			{
+				"References"
+				{
+					"Filter"
+					{
+						"Filter"	"*.mdl"
+					}
+				}
+			}
+		}
+		"Game"
+		{
+			"Name"	"Half-Life"
+			"MaterialBrowser"
+			{
+				"References"
+				{
+					"RootFilter"
+					{
+						"Root"		"*.wad"
+						"Filter"	"*.bmp"
+					}
+				}
+			}
+			"ModelBrowser"
+			{
+				"References"
+				{
+					"RootFilter"
+					{
+						"Root"		"models"
+						"Filter"	"*.mdl"
+					}
+				}
+			}
+		}
+		"Game"
+		{
+			"Name"	"Source"
+			"MaterialBrowser"
+			{
+				"References"
+				{
+					"RootFilter"
+					{
+						"Root"		"materials"
+						"Filter"	"*.vmt"
+					}
+				}
+			}
+			"ModelBrowser"
+			{
+				"References"
+				{
+					"RootFilter"
+					{
+						"Root"		"models"
+						"Filter"	"*.mdl"
+					}
+				}
+			}
+		}
+	}
+	"Modifications"
+	{
+		"Modification"
+		{
+			"Game"		"Generic"
+			"Name"		"Generic"
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Counter-Strike: Source"
+			"Root"		"counter-strike source"
+			"MountPoints"
+			{
+				"MountPoint"	"counter-strike source shared.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"cstrike"
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Day of Defeat: Source"
+			"Root"		"day of defeat source"
+			"MountPoints"
+			{
+				"MountPoint"	"day of defeat source.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"dod"
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Half-Life Deathmatch: Source"
+			"Root"		"half-life deathmatch source"
+			"MountPoints"
+			{
+				"MountPoint"	"half-life deathmatch source.gcf"
+				"MountPoint"	"half-life source.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"hl1mp"
+				"SearchPath"	"hl1"
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Half-Life: Source"
+			"Root"		"half-life source"
+			"MountPoints"
+			{
+				"MountPoint"	"half-life source.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"hl1"
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Half-Life 2"
+			"Root"		"half-life 2"
+			"Default"	"1"
+			"MountPoints"
+			{
+				"MountPoint"	"half-life 2 content.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Half-Life 2: Deathmatch"
+			"Root"		"half-life 2 deathmatch"
+			"MountPoints"
+			{
+				"MountPoint"	"half-life 2 deathmatch.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"hl2mp"
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"Half-Life 2: Lost Coast"
+			"Root"		"lostcoast"
+			"MountPoints"
+			{
+				"MountPoint"	"lostcoast content.gcf"
+				"MountPoint"	"source materials.gcf"
+				"MountPoint"	"source models.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"lostcoast"
+				"SearchPath"	"hl2"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Condition Zero"
+			"Root"		"condition zero"
+			"MountPoints"
+			{
+				"MountPoint"	"condition zero.gcf"
+				"MountPoint"	"counter-strike.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"czero"
+				"SearchPath"	"cstrike"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Condition Zero Deleted Scenes"
+			"Root"		"condition zero deleted scenes"
+			"MountPoints"
+			{
+				"MountPoint"	"condition zero deleted scenes base content.gcf"
+				"MountPoint"	"condition zero deleted scenes models.gcf"
+//				"MountPoint"	"counter-strike.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"czeror"
+				"SearchPath"	"cstrike"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Counter-Strike"
+			"Root"		"counter-strike"
+			"MountPoints"
+			{
+				"MountPoint"	"counter-strike.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"cstrike"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Day of Defeat"
+			"Root"		"day of defeat"
+			"MountPoints"
+			{
+				"MountPoint"	"day of defeat.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"dod"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Half-Life"
+			"Root"		"half-life"
+			"MountPoints"
+			{
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Half-Life: Blue Shift"
+			"Root"		"half-life blue shift"
+			"MountPoints"
+			{
+				"MountPoint"	"half-life blue shift.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"bshift"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Half-Life: Deathmatch"
+			"Root"		"deathmatch classic"
+			"MountPoints"
+			{
+				"MountPoint"	"deathmatch classic.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"dmc"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Opposing Force"
+			"Root"		"opposing force"
+			"MountPoints"
+			{
+				"MountPoint"	"opposing force.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"gearbox"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Ricochet"
+			"Root"		"ricochet"
+			"MountPoints"
+			{
+				"MountPoint"	"ricochet.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"ricochet"
+				"SearchPath"	"valve"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Source"
+			"Name"		"SiN Episodes: Emergence"
+			"Root"		"sin episodes emergence"
+			"MountPoints"
+			{
+				"MountPoint"	"sinepisodes emergence.gcf"
+				"MountPoint"	"sinepisodes materials.gcf"
+				"MountPoint"	"sinepisodes models.gcf"
+				"MountPoint"	"sinepisodes unabridged.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"se1"
+			}
+		}
+		"Modification"
+		{
+			"Game"		"Half-Life"
+			"Name"		"Team Fortress Classic"
+			"Root"		"team fortress classic"
+			"MountPoints"
+			{
+				"MountPoint"	"team fortress classic.gcf"
+				"MountPoint"	"half-life.gcf"
+			}
+			"SearchPaths"
+			{
+				"SearchPath"	"tfc"
+				"SearchPath"	"valve"
+			}
+		}
+
+		#embed "GameInfoCustom.csf"
+	}
+}

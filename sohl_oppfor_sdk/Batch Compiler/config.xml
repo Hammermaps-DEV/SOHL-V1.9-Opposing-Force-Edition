@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--Batch Compiler Config File-->
+<config>
+  <options showhint="True" opacity="1" showlog="True" pauseconsole="False" logviewer="C:\Windows\system32\notepad.exe" specificationupdateurl="http://nemesis.thewavelength.net/updates/batch compiler/specifications/" top="259" left="699" />
+  <recentfiles count="6">
+    <presets>
+      <preset path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\Batch Compiler\Quality.bcp" />
+      <preset path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\Batch Compiler\normal.bcp" />
+      <preset path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\Batch Compiler\Default.bcp" />
+    </presets>
+    <files>
+      <file path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\maps\opposing_force\of1a5_new.rmf" />
+      <file path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\maps\snowweathdemo.map" />
+    </files>
+  </recentfiles>
+  <presets>
+  </presets>
+  <specifications>
+    <specification name="Zoners Tools Advanced.bcs">
+      <variable name="WADRoot" value="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\wads" />
+      <variable name="Output" value="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\maps" />
+      <stage name="MakeWAD" path="" />
+      <stage name="HLFix" path="" />
+      <stage name="Backup" path="" />
+      <stage name="CSG" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlcsg.exe" />
+      <stage name="BSP" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlbsp.exe" />
+      <stage name="VIS" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlvis.exe" />
+      <stage name="RAD" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlrad.exe" />
+      <stage name="RipEnt" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\ripent.exe" />
+      <stage name="Opt_EntData" path="" />
+      <stage name="RESGen" path="" />
+      <stage name="HL" path="" />
+      <stage name="Steam" path="" />
+    </specification>
+    <specification name="Zoners Tools Normal.bcs">
+      <variable name="WADRoot" value="" />
+      <variable name="Output" value="" />
+      <stage name="CSG" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlcsg.exe" />
+      <stage name="BSP" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlbsp.exe" />
+      <stage name="VIS" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlvis.exe" />
+      <stage name="RAD" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\hlrad.exe" />
+      <stage name="RipEnt" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\spirit\devkit\tools\ZHLT\x64(64bit)\ripent.exe" />
+      <stage name="HL" path="D:\Program Files (x86)\Steam\SteamApps\common\Half-Life\hl.exe" />
+      <stage name="Steam" path="D:\Program Files (x86)\Steam\Steam.exe" />
+    </specification>
+  </specifications>
+</config>

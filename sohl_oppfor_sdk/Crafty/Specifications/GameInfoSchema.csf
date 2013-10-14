@@ -1,0 +1,161 @@
+"Root"
+{
+	"Name"		"GameInfo"
+	"Group"
+	{
+		"Name"		"Games"
+		"Cardinality"	"1"
+		"Group"
+		{
+			"Name"		"Game"
+			"Cardinality"	"1..*"
+			"Variable"
+			{
+				"Name"		"Name"
+				"Cardinality"	"1"
+			}
+			"Group"
+			{
+				"Name"		"MaterialBrowser"
+				"Cardinality"	"0..1"
+				"Group"
+				{
+					"Name"		"References"
+					"Cardinality"	"0..1"
+					"Group"
+					{
+						"Name"		"Root"
+						"Cardinality"	"0..*"
+						"Variable"
+						{
+							"Name"		"Root"
+							"Cardinality"	"1"
+						}
+					}
+					"Group"
+					{
+						"Name"		"Filter"
+						"Cardinality"	"0..*"
+						"Variable"
+						{
+							"Name"		"Filter"
+							"Cardinality"	"1"
+						}
+					}
+					"Group"
+					{
+						"Name"		"RootFilter"
+						"Cardinality"	"0..*"
+						"Variable"
+						{
+							"Name"		"Root"
+							"Cardinality"	"1"
+						}
+						"Variable"
+						{
+							"Name"		"Filter"
+							"Cardinality"	"1"
+						}
+					}
+				}
+			}
+			"Group"
+			{
+				"Name"		"ModelBrowser"
+				"Cardinality"	"0..1"
+				"Group"
+				{
+					"Name"		"References"
+					"Cardinality"	"0..1"
+					"Group"
+					{
+						"Name"		"Root"
+						"Cardinality"	"0..*"
+						"Variable"
+						{
+							"Name"		"Root"
+							"Cardinality"	"1"
+						}
+					}
+					"Group"
+					{
+						"Name"		"Filter"
+						"Cardinality"	"0..*"
+						"Variable"
+						{
+							"Name"		"Filter"
+							"Cardinality"	"1"
+						}
+					}
+					"Group"
+					{
+						"Name"		"RootFilter"
+						"Cardinality"	"0..*"
+						"Variable"
+						{
+							"Name"		"Root"
+							"Cardinality"	"1"
+						}
+						"Variable"
+						{
+							"Name"		"Filter"
+							"Cardinality"	"1"
+						}
+					}
+				}
+			}
+		}
+	}
+	"Group"
+	{
+		"Name"		"Modifications"
+		"Cardinality"	"1"
+		"Group"
+		{
+			"Name"		"Modification"
+			"Cardinality"	"1..*"
+			"Variable"
+			{
+				"Name"		"Game"
+				"Cardinality"	"1"
+			}
+			"Variable"
+			{
+				"Name"		"Name"
+				"Cardinality"	"1"
+			}
+			"Variable"
+			{
+				"Name"		"Root"
+				"Cardinality"	"1"
+				"Default"	""
+			}
+			"Variable"
+			{
+				"Name"		"Default"
+				"Cardinality"	"1"
+				"Default"	"0"
+			}
+			"Group"
+			{
+				"Name"		"MountPoints"
+				"Cardinality"	"0..1"
+				"Variable"
+				{
+					"Name"		"MountPoint"
+					"Cardinality"	"0..*"
+				}
+			}
+			"Group"
+			{
+				"Name"		"SearchPaths"
+				"Cardinality"	"0..1"
+				"Variable"
+				{
+					"Name"		"SearchPath"
+					"Cardinality"	"0..*"
+				}
+			}
+		}
+	}
+}

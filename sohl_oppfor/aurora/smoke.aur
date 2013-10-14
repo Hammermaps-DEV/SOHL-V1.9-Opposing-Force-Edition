@@ -1,0 +1,24 @@
+"particles" "100"
+"maintype" "smokesource"
+
+{
+  "name" "smokesource"
+  "spraytype" "smoke"
+  "sprayrate" "10"
+  "lifetime" "50"
+}
+
+{
+  "name" "smoke"
+  "gravity" "40"
+  "sprite" "sprites/ballsmoke.spr"
+  "startalpha" "0.3"
+  "endalpha" "0"
+  "lifetime" "2"
+  "startsize" "0"
+  "endsize" "40"
+  "startframe" "0..10"
+  "framerate" "0"
+  "startangle" "0..360"
+  "angledelta" "40..-40"
+}

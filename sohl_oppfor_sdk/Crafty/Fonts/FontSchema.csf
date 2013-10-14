@@ -1,0 +1,41 @@
+"Root"
+{
+	"Name"		"Font"
+	"Variable"
+	{
+		"Name"		"Name"
+		"Cardinality"	"1"
+	}
+	"Variable"
+	{
+		"Name"		"Width"
+		"Cardinality"	"1"
+	}
+	"Variable"
+	{
+		"Name"		"Height"
+		"Cardinality"	"1"
+	}
+	"Variable"
+	{
+		"Name"		"HorizontalSpacing"
+		"Cardinality"	"1"
+		"Default"	"0"
+	}
+	"Variable"
+	{
+		"Name"		"VerticalSpacing"
+		"Cardinality"	"1"
+		"Default"	"0"
+	}
+	"Group"
+	{
+		"Name"		"Lines"
+		"Cardinality"	"1"
+		"Variable"
+		{
+			"Name"		"Line"
+			"Cardinality"	"1..*"
+		}
+	}
+}

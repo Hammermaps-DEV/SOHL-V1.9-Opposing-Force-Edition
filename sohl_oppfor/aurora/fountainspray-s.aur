@@ -1,0 +1,29 @@
+"particles" "70"
+"maintype" "fountain"
+
+{
+  "name" "fountain"
+  "spraytype" "layer"
+  "sprayrate" "10"
+  "sprayforce" "80"
+  "spraypitch" "60..50"
+  "sprayyaw" "90"
+}
+
+{
+  "name" "layer"
+  "gravity" "-100"
+  "sprite" "sprites/xspark3.spr"
+  "startalpha" "0.2"
+  "endalpha" "0"
+  "lifetime" "3"
+  "startsize" "5"
+  "endsize" "80"
+  "drag" "0.2"
+  "startframe" "0..10"
+  "framerate" "20"
+  "startangle" "0"
+  "angledelta" "-50..50"
+  "collision" "bounce"
+  "bounce" "0.5"
+}
