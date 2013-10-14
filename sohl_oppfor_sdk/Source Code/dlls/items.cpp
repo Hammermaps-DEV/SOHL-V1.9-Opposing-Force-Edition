@@ -219,6 +219,7 @@ class CItemBattery : public CItem
 			SET_MODEL(ENT(pev), "models/w_battery.mdl");
 		CItem::Spawn( );
 	}
+
 	void Precache( void )
 	{
 		if (pev->model)
@@ -231,6 +232,7 @@ class CItemBattery : public CItem
 		else
 			PRECACHE_SOUND( "items/gunpickup2.wav" );
 	}
+
 	BOOL MyTouch( CBasePlayer *pPlayer )
 	{
 		if ( pPlayer->pev->deadflag != DEAD_NO )
@@ -277,8 +279,6 @@ class CItemBattery : public CItem
 };
 
 LINK_ENTITY_TO_CLASS(item_battery, CItemBattery);
-
-
 class CItemAntidote : public CItem
 {
 	void Spawn( void )
@@ -287,22 +287,21 @@ class CItemAntidote : public CItem
 		SET_MODEL(ENT(pev), "models/w_antidote.mdl");
 		CItem::Spawn( );
 	}
+
 	void Precache( void )
 	{
 		PRECACHE_MODEL ("models/w_antidote.mdl");
 	}
+
 	BOOL MyTouch( CBasePlayer *pPlayer )
 	{
 		pPlayer->SetSuitUpdate("!HEV_DET4", FALSE, SUIT_NEXT_IN_1MIN);
-		
 		pPlayer->m_rgItems[ITEM_ANTIDOTE] += 1;
 		return TRUE;
 	}
 };
 
 LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
-
-
 class CItemSecurity : public CItem
 {
 	void Spawn( void )
@@ -311,10 +310,12 @@ class CItemSecurity : public CItem
 		SET_MODEL(ENT(pev), "models/w_security.mdl");
 		CItem::Spawn( );
 	}
+
 	void Precache( void )
 	{
 		PRECACHE_MODEL ("models/w_security.mdl");
 	}
+
 	BOOL MyTouch( CBasePlayer *pPlayer )
 	{
 		pPlayer->m_rgItems[ITEM_SECURITY] += 1;
@@ -332,10 +333,12 @@ class CItemLongJump : public CItem
 		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
 		CItem::Spawn( );
 	}
+
 	void Precache( void )
 	{
 		PRECACHE_MODEL ("models/w_longjump.mdl");
 	}
+
 	BOOL MyTouch( CBasePlayer *pPlayer )
 	{
 		if ( pPlayer->m_fLongJump )

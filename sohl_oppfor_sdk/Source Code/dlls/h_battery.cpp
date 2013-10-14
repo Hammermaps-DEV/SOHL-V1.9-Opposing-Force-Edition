@@ -38,17 +38,19 @@ public:
 	void KeyValue( KeyValueData *pkvd );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int	ObjectCaps( void ) { return (CBaseToggle :: ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	virtual int	Save( CSave &save );
+	virtual int	Restore( CRestore &restore );
 	virtual STATE GetState( void );
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	float m_flNextCharge; 
+	float   m_flNextCharge; 
 	int		m_iReactivate ; // DeathMatch Delay until reactvated
 	int		m_iJuice;
 	int		m_iOn;			// 0 = off, 1 = startup, 2 = going
 	float   m_flSoundTime;
+	char	*m_szTarget;
+	BOOL	m_bTriggerable;
 };
 
 TYPEDESCRIPTION CRecharge::m_SaveData[] =
@@ -58,12 +60,11 @@ TYPEDESCRIPTION CRecharge::m_SaveData[] =
 	DEFINE_FIELD( CRecharge, m_iJuice, FIELD_INTEGER),
 	DEFINE_FIELD( CRecharge, m_iOn, FIELD_INTEGER),
 	DEFINE_FIELD( CRecharge, m_flSoundTime, FIELD_TIME ),
+	DEFINE_FIELD( CRecharge, m_bTriggerable, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE( CRecharge, CBaseEntity );
-
 LINK_ENTITY_TO_CLASS(func_recharge, CRecharge);
-
 
 void CRecharge::KeyValue( KeyValueData *pkvd )
 {
@@ -78,6 +79,12 @@ void CRecharge::KeyValue( KeyValueData *pkvd )
 	else if (FStrEq(pkvd->szKeyName, "dmdelay"))
 	{
 		m_iReactivate = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "target"))
+	{
+		ALERT(at_console, "Healthcharger: has target = %s\n", pkvd->szValue);
+		strcpy(m_szTarget, pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else
@@ -95,7 +102,9 @@ void CRecharge::Spawn()
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	SET_MODEL(ENT(pev), STRING(pev->model) );
 	m_iJuice = gSkillData.suitchargerCapacity;
-	pev->frame = 0;			
+	m_bTriggerable = TRUE;
+	pev->frame = 0;
+
 	//LRC
 	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
 	else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "z");
@@ -108,7 +117,6 @@ void CRecharge::Precache()
 	PRECACHE_SOUND("items/suitchargeok1.wav");
 }
 
-
 void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 { 
 	// if it's not a player, ignore
@@ -118,14 +126,21 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	// if there is no juice left, turn it off
 	if (m_iJuice <= 0)
 	{
-		pev->frame = 1;			
+		if( m_bTriggerable ) 
+		{
+			FireTargets( STRING(pev->target), pActivator, this, USE_TOGGLE, 0);
+			m_bTriggerable = FALSE;
+		}
+
+		pev->frame = 1;	
+
 		//LRC
 		if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "z");
 		else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "a");
 		Off();
 	}
           
-          CBasePlayer *pPlayer = (CBasePlayer *)pActivator;
+    CBasePlayer *pPlayer = (CBasePlayer *)pActivator;
 	
 	// if the player doesn't have the suit, or there is no juice left, make the deny noise
 	if ((m_iJuice <= 0) || (!(pPlayer->m_iHideHUD & ITEM_SUIT)))
@@ -142,7 +157,6 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	SetThink(&CRecharge::Off);
 
 	// Time to recharge yet?
-
 	if (m_flNextCharge >= gpGlobals->time)
 		return;
 
@@ -153,7 +167,6 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	m_hActivator = pActivator;
 
 	//only recharge the player
-
 	if (!m_hActivator->IsPlayer() )
 		return;
 	
@@ -164,12 +177,12 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM );
 		m_flSoundTime = 0.56 + gpGlobals->time;
 	}
+
 	if ((m_iOn == 1) && (m_flSoundTime <= gpGlobals->time))
 	{
 		m_iOn++;
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.85, ATTN_NORM );
 	}
-
 
 	// charge the player
 	if (m_hActivator->TakeArmor( 1 ))
@@ -184,7 +197,9 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 void CRecharge::Recharge(void)
 {
 	m_iJuice = gSkillData.suitchargerCapacity;
-	pev->frame = 0;			
+	m_bTriggerable = TRUE;
+	pev->frame = 0;	
+
 	//LRC
 	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
 	else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "z");

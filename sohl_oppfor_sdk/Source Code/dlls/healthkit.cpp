@@ -29,49 +29,36 @@ class CHealthKit : public CItem
 	void Spawn( void );
 	void Precache( void );
 	BOOL MyTouch( CBasePlayer *pPlayer );
-
-/*
-	virtual int		Save( CSave &save ); 
-	virtual int		Restore( CRestore &restore );
-	
-	static	TYPEDESCRIPTION m_SaveData[];
-*/
-
 };
-
 
 LINK_ENTITY_TO_CLASS( item_healthkit, CHealthKit );
-
-/*
-TYPEDESCRIPTION	CHealthKit::m_SaveData[] = 
-{
-
-};
-
-
-IMPLEMENT_SAVERESTORE( CHealthKit, CItem);
-*/
 
 void CHealthKit :: Spawn( void )
 {
 	Precache( );
-	SET_MODEL(ENT(pev), "models/w_medkit.mdl");
+
+	if (pev->model)
+		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
+	else
+		SET_MODEL(ENT(pev), "models/w_medkit.mdl");
 
 	CItem::Spawn();
 }
 
 void CHealthKit::Precache( void )
 {
-	PRECACHE_MODEL("models/w_medkit.mdl");
+	if (pev->model)
+		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
+	else
+		PRECACHE_MODEL("models/w_medkit.mdl");
+
 	PRECACHE_SOUND("items/smallmedkit1.wav");
 }
 
 BOOL CHealthKit::MyTouch( CBasePlayer *pPlayer )
 {
 	if ( pPlayer->pev->deadflag != DEAD_NO )
-	{
 		return FALSE;
-	}
 
 	if ( pPlayer->TakeHealth( gSkillData.healthkitCapacity, DMG_GENERIC ) )
 	{
@@ -82,21 +69,15 @@ BOOL CHealthKit::MyTouch( CBasePlayer *pPlayer )
 		EMIT_SOUND(ENT(pPlayer->pev), CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);
 
 		if ( g_pGameRules->ItemShouldRespawn( this ) )
-		{
 			Respawn();
-		}
 		else
-		{
 			UTIL_Remove(this);	
-		}
 
 		return TRUE;
 	}
 
 	return FALSE;
 }
-
-
 
 //-------------------------------------------------------------
 // Wall mounted health kit
@@ -111,17 +92,19 @@ public:
 	void KeyValue( KeyValueData *pkvd );
 	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	virtual int	ObjectCaps( void ) { return (CBaseToggle :: ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	virtual int	Save( CSave &save );
+	virtual int	Restore( CRestore &restore );
 	virtual STATE GetState( void );
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	float m_flNextCharge; 
+	float   m_flNextCharge; 
 	int		m_iReactivate ; // DeathMatch Delay until reactivated
 	int		m_iJuice;
 	int		m_iOn;			// 0 = off, 1 = startup, 2 = going
 	float   m_flSoundTime;
+	char	*m_szTarget;
+	BOOL	m_bTriggerable;
 };
 
 TYPEDESCRIPTION CWallHealth::m_SaveData[] =
@@ -131,12 +114,11 @@ TYPEDESCRIPTION CWallHealth::m_SaveData[] =
 	DEFINE_FIELD( CWallHealth, m_iJuice, FIELD_INTEGER),
 	DEFINE_FIELD( CWallHealth, m_iOn, FIELD_INTEGER),
 	DEFINE_FIELD( CWallHealth, m_flSoundTime, FIELD_TIME),
+	DEFINE_FIELD( CWallHealth, m_bTriggerable, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE( CWallHealth, CBaseEntity );
-
 LINK_ENTITY_TO_CLASS(func_healthcharger, CWallHealth);
-
 
 void CWallHealth::KeyValue( KeyValueData *pkvd )
 {
@@ -151,6 +133,12 @@ void CWallHealth::KeyValue( KeyValueData *pkvd )
 	else if (FStrEq(pkvd->szKeyName, "dmdelay"))
 	{
 		m_iReactivate = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "target"))
+	{
+		ALERT(at_console, "Healthcharger: has target = %s\n", pkvd->szValue);
+		strcpy(m_szTarget, pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else
@@ -168,7 +156,9 @@ void CWallHealth::Spawn()
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
 	SET_MODEL(ENT(pev), STRING(pev->model) );
 	m_iJuice = gSkillData.healthchargerCapacity;
-	pev->frame = 0;			
+	m_bTriggerable = TRUE;
+	pev->frame = 0;
+
 	//LRC
 	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
 	else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "z");
@@ -181,27 +171,29 @@ void CWallHealth::Precache()
 	PRECACHE_SOUND("items/medcharge4.wav");
 }
 
-
 void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 { 
-	// Make sure that we have a caller
-	if (!pActivator)
-		return;
-	// if it's not a player, ignore
-	if ( !pActivator->IsPlayer() )
+	// Make sure that we have a caller & if it's not a player, ignore
+	if (!pActivator || !pActivator->IsPlayer())
 		return;
 
 	// if there is no juice left, turn it off
 	if (m_iJuice <= 0)
 	{
-		pev->frame = 1;			
+		if(m_bTriggerable)
+		{
+			FireTargets( STRING(pev->target), pActivator, this, USE_TOGGLE, 0);
+			m_bTriggerable = FALSE;
+		}
+
+		pev->frame = 1;	
 		//LRC
 		if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "z");
 		else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "a");
 		Off();
 	}
           
-          CBasePlayer *pPlayer = (CBasePlayer *)pActivator;
+    CBasePlayer *pPlayer = (CBasePlayer *)pActivator;
 	
 	// if the player doesn't have the suit, or there is no juice left, make the deny noise
 	if ((m_iJuice <= 0) || (!(pPlayer->m_iHideHUD & ITEM_SUIT)))
@@ -211,6 +203,7 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 			m_flSoundTime = gpGlobals->time + 0.62;
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshotno1.wav", 1.0, ATTN_NORM );
 		}
+
 		return;
 	}
 
@@ -218,7 +211,6 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 	SetThink(&CWallHealth::Off);
 
 	// Time to recharge yet?
-
 	if (m_flNextCharge >= gpGlobals->time)
 		return;
 
@@ -229,12 +221,12 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshot4.wav", 1.0, ATTN_NORM );
 		m_flSoundTime = 0.56 + gpGlobals->time;
 	}
+
 	if ((m_iOn == 1) && (m_flSoundTime <= gpGlobals->time))
 	{
 		m_iOn++;
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/medcharge4.wav", 1.0, ATTN_NORM );
 	}
-
 
 	// charge the player
 	if ( pActivator->TakeHealth( 1, DMG_GENERIC ) )
@@ -248,9 +240,11 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 
 void CWallHealth::Recharge(void)
 {
-		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshot4.wav", 1.0, ATTN_NORM );
+	EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshot4.wav", 1.0, ATTN_NORM );
 	m_iJuice = gSkillData.healthchargerCapacity;
-	pev->frame = 0;			
+	m_bTriggerable = TRUE;
+	pev->frame = 0;
+
 	//LRC
 	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
 	else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "z");
