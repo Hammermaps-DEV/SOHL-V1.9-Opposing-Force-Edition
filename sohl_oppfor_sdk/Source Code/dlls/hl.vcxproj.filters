@@ -15,12 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="aflock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="agrunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="airtank.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -33,25 +27,7 @@
     <ClCompile Include="animation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="apache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="barnacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="barney.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bigmomma.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bloater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="bmodels.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bullsquid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="buttons.cpp">
@@ -66,31 +42,13 @@
     <ClCompile Include="combat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="crossbow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="crowbar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="defaultai.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="doors.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="effects.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="egon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="explode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="flyingmonster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="func_break.cpp">
@@ -105,25 +63,10 @@
     <ClCompile Include="gamerules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gargantua.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gauss.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="genericmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ggrenade.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="globals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="glock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gman.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="h_ai.cpp">
@@ -141,40 +84,10 @@
     <ClCompile Include="h_export.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="handgrenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hassassin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="headcrab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="healthkit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hgrunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="hornet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hornetgun.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="houndeye.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ichthyosaur.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="islave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="items.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="leech.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lights.cpp">
@@ -201,19 +114,10 @@
     <ClCompile Include="movewith.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mp5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="multiplay_gamerules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nihilanth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="nodes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="osprey.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="pathcorner.cpp">
@@ -231,31 +135,10 @@
     <ClCompile Include="playermonster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="python.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="roach.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rpg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="satchel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="schedule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scientist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="scripted.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="shotgun.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="singleplay_gamerules.cpp">
@@ -276,9 +159,6 @@
     <ClCompile Include="squadmonster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="squeakgrenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="stats.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -294,13 +174,7 @@
     <ClCompile Include="tempmonster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tentacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="triggers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tripmine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="turret.cpp">
@@ -318,9 +192,6 @@
     <ClCompile Include="xen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="zombie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\pm_shared\pm_shared.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -331,6 +202,135 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game_shared\voice_gamemgr.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_aflock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_agrunt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_apache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barnacle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barney.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_bigmomma.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_bloater.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_bullsquid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_controller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_flyingmonster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_gargantua.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_genericmonster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_gman.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hassassin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_headcrab.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hgrunt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_houndeye.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_ichthyosaur.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_islave.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_leech.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_nihilanth.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_osprey.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_rat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_roach.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_scientist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_tentacle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_crowbar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_crossbow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_egon.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_gauss.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_glock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_handgrenade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_hornetgun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_tripmine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_squeakgrenade.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_shotgun.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_satchel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_rpg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_mp5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="func_doors.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_python.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="item_healthkit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
