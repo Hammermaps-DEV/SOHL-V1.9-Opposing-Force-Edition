@@ -226,6 +226,25 @@ float EV_HLDM_PlayTextureSound( int idx, pmtrace_t *ptr, float *vecSrc, float *v
 	return fvolbar;
 }
 
+/*
+=================
+EV_MuzzleFlash
+
+Flag weapon/view model for muzzle flash
+=================
+*/
+void EV_Dynamic_MuzzleFlash( vec3_t pos )
+{
+	int radius = gEngfuncs.pfnRandomLong( 260, 300 );
+	dlight_t *dl = gEngfuncs.pEfxAPI->CL_AllocDlight( 999 );
+	dl->die = gEngfuncs.GetClientTime();
+	dl->origin = pos;
+	dl->color.r = 255;
+	dl->color.g = 192;
+	dl->color.b = 28;
+	dl->radius = radius;
+}
+
 //======================
 //	    MIRROR UTILS
 //======================
@@ -831,16 +850,17 @@ void EV_FireGlock1( event_args_t *args )
 	{
 		cl_entity_s *view = gEngfuncs.GetViewModel();
 		gEngfuncs.pEventAPI->EV_WeaponAnimation( empty ? GLOCK_SHOOT_EMPTY : GLOCK_SHOOT, args->iparam1 );
-		EV_MuzzleFlash();							
+		EV_MuzzleFlash();
+
 		if(args->bparam2)//silence mode
 			gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&view->attachment[1], 17 );
 		else//normal flash
 			gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&view->attachment[0], 11 );
+
 		V_PunchAxis( 0, -2.0 );
 	}
 
 	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4 );
-
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHELL ); 
 
 	if(args->bparam2)
@@ -861,6 +881,7 @@ void EV_FireGlock1( event_args_t *args )
 	
 	VectorCopy( forward, vecAiming );
 
+	EV_Dynamic_MuzzleFlash( vecSrc );
 	EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, 0, args->fparam1, args->fparam2 );
 }
 //======================
@@ -922,6 +943,7 @@ void EV_FireMP5( event_args_t *args )
 	EV_GetGunPosition( args, vecSrc, origin );
 	VectorCopy( forward, vecAiming );
 
+	EV_Dynamic_MuzzleFlash( vecSrc );
 	if ( gEngfuncs.GetMaxClients() > 1 )
 		EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx-1], args->fparam1, args->fparam2 );
 	else 	EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx-1], args->fparam1, args->fparam2 );
@@ -978,6 +1000,7 @@ void EV_FireShotGunDouble( event_args_t *args )
 	EV_GetGunPosition( args, vecSrc, origin );
 	VectorCopy( forward, vecAiming );
 
+	EV_Dynamic_MuzzleFlash( vecSrc );
 	if ( gEngfuncs.GetMaxClients() > 1 )
 	{
 		EV_HLDM_FireBullets( idx, forward, right, up, 8, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0, &tracerCount[idx-1], 0.17365, 0.04362 );
@@ -1030,6 +1053,7 @@ void EV_FireShotGunSingle( event_args_t *args )
 	EV_GetGunPosition( args, vecSrc, origin );
 	VectorCopy( forward, vecAiming );
 
+	EV_Dynamic_MuzzleFlash( vecSrc );
 	if ( gEngfuncs.GetMaxClients() > 1 )
 	{
 		EV_HLDM_FireBullets( idx, forward, right, up, 4, vecSrc, vecAiming, 2048, BULLET_PLAYER_BUCKSHOT, 0, &tracerCount[idx-1], 0.08716, 0.04362 );
@@ -1091,6 +1115,7 @@ void EV_FirePython( event_args_t *args )
 	
 	VectorCopy( forward, vecAiming );
 
+	EV_Dynamic_MuzzleFlash( vecSrc );
 	EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_357, 0, 0, args->fparam1, args->fparam2 );
 }
 //======================
@@ -1739,6 +1764,7 @@ void EV_Explode( struct event_args_s *args )
          	else	m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/zerogxplode.spr" ); 
 
 	gEngfuncs.pEfxAPI->R_Explosion( args->origin, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES );
+
 	if(mirpos != vec3_t(0,0,0))
 		gEngfuncs.pEfxAPI->R_Explosion( mirpos, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND | TE_EXPLFLAG_NOPARTICLES );
 }

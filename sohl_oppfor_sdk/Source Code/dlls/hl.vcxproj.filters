@@ -333,6 +333,9 @@
     <ClCompile Include="item_healthkit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="monster_zombie_soldier.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">

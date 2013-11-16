@@ -25,14 +25,14 @@
 
 enum mp5_e
 {
-	MP5_IDLE = 0,
+	MP5_LONGIDLE = 0,
+	MP5_IDLE1,
+	MP5_GRENADE,
+	MP5_RELOAD,
 	MP5_DEPLOY,
-	MP5_HOLSTER,
-	MP5_FIRE1,
-	MP5_FIRE2,
-	MP5_FIRE3,
-	MP5_LAUNCH,
-	MP5_RELOAD
+	MP5_SHOOT1,
+	MP5_SHOOT2,
+	MP5_SHOOT3
 };
 
 class CMP5 : public CBasePlayerWeapon
@@ -46,7 +46,6 @@ public:
 	void SecondaryAttack( void );
 	int SecondaryAmmoIndex( void );
 	BOOL Deploy( void );
-	void Holster( );
 	void Reload( void );
 	void WeaponIdle( void );
 private:
@@ -54,7 +53,6 @@ private:
 };
 LINK_ENTITY_TO_CLASS( weapon_mp5, CMP5 );
 LINK_ENTITY_TO_CLASS( weapon_9mmAR, CMP5 );
-
 
 int CMP5::SecondaryAmmoIndex( void )
 {
@@ -70,7 +68,6 @@ void CMP5::Spawn( )
 
 	FallInit();// get ready to fall down.
 }
-
 
 void CMP5::Precache( void )
 {
@@ -104,12 +101,6 @@ int CMP5::GetItemInfo(ItemInfo *p)
 BOOL CMP5::Deploy( )
 {
 	return DefaultDeploy( "models/v_9mmAR.mdl", "models/p_9mmAR.mdl", MP5_DEPLOY, "mp5", 0.8 );
-}
-
-void CMP5::Holster( )
-{
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.6;
-	SendWeaponAnim(MP5_HOLSTER);
 }
 
 void CMP5::PrimaryAttack()
@@ -148,8 +139,6 @@ void CMP5::PrimaryAttack()
 	}
 }
 
-
-
 void CMP5::SecondaryAttack( void )
 {
 	// don't fire underwater
@@ -171,7 +160,7 @@ void CMP5::SecondaryAttack( void )
 		// we don't add in player velocity anymore.
 		CGrenade::ShootContact( m_pPlayer->pev, m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16, gpGlobals->v_forward * 800 );
 
-		SendWeaponAnim(MP5_LAUNCH);
+		SendWeaponAnim(MP5_GRENADE);
 		m_pPlayer->pev->punchangle.x -= 10;
 	
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1;
@@ -202,7 +191,7 @@ void CMP5::WeaponIdle( void )
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.3)
 		{
-			SendWeaponAnim(MP5_IDLE);
+			SendWeaponAnim(MP5_LONGIDLE);
 			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 41.0/8.0;
 		}
 		else	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_LONG(10, 30);

@@ -33,6 +33,7 @@
     <ClCompile Include="client.cpp" />
     <ClCompile Include="combat.cpp" />
     <ClCompile Include="monster_controller.cpp" />
+    <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
     <ClCompile Include="weapon_crowbar.cpp" />
     <ClCompile Include="defaultai.cpp" />

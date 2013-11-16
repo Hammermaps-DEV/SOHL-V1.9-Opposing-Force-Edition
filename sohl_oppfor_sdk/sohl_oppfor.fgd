@@ -3253,6 +3253,38 @@ sequence(Choices) : "Animation Sequence (editor)" : 10 =
 		43 : "c2a3 snack getup"
 	]
 ]
+
+@PointClass base(Monster) size(-16 -16 0, 16 16 72) = monster_zombie_soldier : "Soldier Zombie" []
+sequence(Choices) : "Animation Sequence (editor)" : 10 =
+	[
+		0 : "idle1"
+		1 : "turn left"
+		2 : "turn right"
+		3 : "flinch small"
+		4 : "flinch"
+		5 : "big flinch"
+		6 : "getup"
+		7 : "falling"
+		8 : "attack1"
+		9 : "attack2"
+		10 : "walk"
+		11 : "laflinch"
+		12 : "raflinch"
+		13 : "llflinch"
+		14 : "rlflinch"
+		15 : "dieheadshot"
+		16 : "dieheadshot2"
+		17 : "diesimple"
+		18 : "dieback"
+		19 : "dieforward"
+		20 : "dead on back"
+		21 : "dead on stomach"
+		22 : "throw scientist"
+		23 : "get off table"
+		24 : "table breathe"
+	]
+]
+
 @PointClass base(Targetname, MoveWith) size(-16 -16 -16, 16 16 16) = monstermaker : "Monster Maker"
 [
 	noise(String) : "Position to place monster at [LP]"

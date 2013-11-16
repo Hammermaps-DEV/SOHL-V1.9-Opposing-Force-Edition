@@ -219,6 +219,12 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieDmgOneSlash = GetSkillCvar( "sk_zombie_dmg_one_slash");
 	gSkillData.zombieDmgBothSlash = GetSkillCvar( "sk_zombie_dmg_both_slash");
 
+	// Opposing-Force
+	// Zombie Soldier
+	gSkillData.zombieSoldierHealth = GetSkillCvar( "sk_zombie_soldier_health");
+	gSkillData.zombieSoldierDmgOneSlash = GetSkillCvar( "sk_zombie_soldier_dmg_one_slash");
+	gSkillData.zombieSoldierDmgBothSlash = GetSkillCvar( "sk_zombie_soldier_dmg_both_slash");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 
