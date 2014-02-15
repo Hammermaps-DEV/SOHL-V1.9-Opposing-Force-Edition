@@ -91,10 +91,14 @@ struct skilldata_t
 	float zombieSoldierDmgOneSlash;
 	float zombieSoldierDmgBothSlash;
 
+	float fgruntHealth;
+	float fgruntDmgKick;
+	float fgruntShotgunPellets;
+	float fgruntGrenadeSpeed;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;
-
 
 // Player Weapons
 	float plrDmgCrowbar;

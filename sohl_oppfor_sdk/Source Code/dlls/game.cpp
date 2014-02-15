@@ -266,6 +266,23 @@ cvar_t	sk_zombie_soldier_dmg_both_slash1 = {"sk_zombie_soldier_dmg_both_slash1",
 cvar_t	sk_zombie_soldier_dmg_both_slash2 = {"sk_zombie_soldier_dmg_both_slash2","0"};
 cvar_t	sk_zombie_soldier_dmg_both_slash3 = {"sk_zombie_soldier_dmg_both_slash3","0"};
 
+// Ally Grunt 
+cvar_t	sk_hgrunt_ally_health1 = {"sk_hgrunt_ally_health1","0"};
+cvar_t	sk_hgrunt_ally_health2 = {"sk_hgrunt_ally_health2","0"};
+cvar_t	sk_hgrunt_ally_health3 = {"sk_hgrunt_ally_health3","0"};
+
+cvar_t	sk_hgrunt_ally_kick1 = {"sk_hgrunt_ally_kick1","0"};
+cvar_t	sk_hgrunt_ally_kick2 = {"sk_hgrunt_ally_kick2","0"};
+cvar_t	sk_hgrunt_ally_kick3 = {"sk_hgrunt_ally_kick3","0"};
+
+cvar_t	sk_hgrunt_ally_pellets1 = {"sk_hgrunt_ally_pellets1","0"};
+cvar_t	sk_hgrunt_ally_pellets2 = {"sk_hgrunt_ally_pellets2","0"};
+cvar_t	sk_hgrunt_ally_pellets3 = {"sk_hgrunt_ally_pellets3","0"};
+
+cvar_t	sk_hgrunt_ally_gspeed1 = {"sk_hgrunt_ally_gspeed1","0"};
+cvar_t	sk_hgrunt_ally_gspeed2 = {"sk_hgrunt_ally_gspeed2","0"};
+cvar_t	sk_hgrunt_ally_gspeed3 = {"sk_hgrunt_ally_gspeed3","0"};
+
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
 cvar_t	sk_turret_health2 = {"sk_turret_health2","0"};
@@ -693,6 +710,23 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_zombie_soldier_dmg_both_slash1 );
 	CVAR_REGISTER ( &sk_zombie_soldier_dmg_both_slash2 );
 	CVAR_REGISTER ( &sk_zombie_soldier_dmg_both_slash3 );
+
+	// Ally Grunt
+	CVAR_REGISTER ( &sk_hgrunt_ally_health1 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_health2 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_health3 );
+
+	CVAR_REGISTER ( &sk_hgrunt_ally_kick1 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_kick2 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_kick3 );
+
+	CVAR_REGISTER ( &sk_hgrunt_ally_pellets1 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_pellets2 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_pellets3 );
+
+	CVAR_REGISTER ( &sk_hgrunt_ally_gspeed1 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_gspeed2 );
+	CVAR_REGISTER ( &sk_hgrunt_ally_gspeed3 );
 
 	//Turret
 	CVAR_REGISTER ( &sk_turret_health1 );

@@ -87,8 +87,8 @@ typedef enum
 		TASK_WAIT_FACE_ENEMY,
 		TASK_WAIT_PVS,
 		TASK_SUGGEST_STATE,
-		TASK_WALK_TO_SCRIPT,
-		TASK_RUN_TO_SCRIPT,
+		TASK_WALK_TO_TARGET,
+		TASK_RUN_TO_TARGET,
 		TASK_MOVE_TO_TARGET_RANGE,
 		TASK_GET_PATH_TO_ENEMY,
 		TASK_GET_PATH_TO_ENEMY_LKP,
@@ -96,7 +96,6 @@ typedef enum
 		TASK_GET_PATH_TO_LEADER,
 		TASK_GET_PATH_TO_SPOT,
 		TASK_GET_PATH_TO_TARGET,
-		TASK_GET_PATH_TO_SCRIPT,
 		TASK_GET_PATH_TO_HINTNODE,
 		TASK_GET_PATH_TO_LASTPOSITION,
 		TASK_GET_PATH_TO_BESTSOUND,
@@ -166,6 +165,9 @@ typedef enum
 		TASK_PLANT_ON_SCRIPT,
 		TASK_FACE_SCRIPT,
 		TASK_END_SCRIPT, //LRC
+		TASK_WALK_TO_SCRIPT,
+		TASK_RUN_TO_SCRIPT,
+		TASK_GET_PATH_TO_SCRIPT,
 		TASK_WAIT_RANDOM,
 		TASK_WAIT_INDEFINITE,
 		TASK_STOP_MOVING,
@@ -176,7 +178,6 @@ typedef enum
 		TASK_WAIT_FOR_MOVEMENT,			// wait until MovementIsComplete()
 		LAST_COMMON_TASK, // LEAVE THIS AT THE BOTTOM!! (sjb)
 } SHARED_TASKS;
-
 
 // These go in the flData member of the TASK_WALK_TO_TARGET, TASK_RUN_TO_TARGET
 enum 
@@ -203,7 +204,6 @@ enum
 // an array of schedules is a schedule list
 struct Task_t
 {
-
 	int		iTask;
 	float	flData;
 };
@@ -280,12 +280,14 @@ struct WayPoint_t
 
 #define bits_COND_SPECIAL1				( 1 << 28) // Defined by individual monster
 #define bits_COND_SPECIAL2				( 1 << 29) // Defined by individual monster
+#define bits_COND_SPECIAL3				( 1 << 32) // Defined by individual monster
+#define bits_COND_SPECIAL4				( 1 << 33) // Defined by individual monster
 
 #define bits_COND_TASK_FAILED			( 1 << 30)
 #define bits_COND_SCHEDULE_DONE			( 1 << 31)
 
 
-#define bits_COND_ALL_SPECIAL			(bits_COND_SPECIAL1 | bits_COND_SPECIAL2)
+#define bits_COND_ALL_SPECIAL			(bits_COND_SPECIAL1 | bits_COND_SPECIAL2 | bits_COND_SPECIAL3 | bits_COND_SPECIAL4)
 
 #define bits_COND_CAN_ATTACK			(bits_COND_CAN_RANGE_ATTACK1 | bits_COND_CAN_MELEE_ATTACK1 | bits_COND_CAN_RANGE_ATTACK2 | bits_COND_CAN_MELEE_ATTACK2)
 

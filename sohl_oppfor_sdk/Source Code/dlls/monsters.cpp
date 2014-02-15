@@ -30,6 +30,7 @@
 #include "weapons.h"
 #include "scripted.h"
 #include "squadmonster.h"
+#include "rcallymonster.h"
 #include "decals.h"
 #include "soundent.h"
 #include "gamerules.h"
@@ -3093,6 +3094,7 @@ void CBaseMonster::ReportAIState( void )
 	}
 
 	CSquadMonster *pSquadMonster = MySquadMonsterPointer();
+	CRCAllyMonster *pTalkSquadMonster = MyTalkSquadMonsterPointer();
 
 	if ( pSquadMonster )
 	{
@@ -3109,6 +3111,24 @@ void CBaseMonster::ReportAIState( void )
 		}
 
 		ALERT ( level, "Leader." );
+	}
+
+	if ( pTalkSquadMonster )
+	{
+		if ( !pTalkSquadMonster->InSquad() )
+		{
+			ALERT ( level, "not " );
+		}
+
+		ALERT ( level, "In Squad, " );
+
+		if ( !pTalkSquadMonster->IsLeader() )
+		{
+			ALERT ( level, "not " );
+		}
+
+		ALERT ( level, "Leader." );
+		ALERT( at_console, "Heal target is %s\n", pTalkSquadMonster->m_hHealTarget );
 	}
 
 	ALERT( level, "\n" );

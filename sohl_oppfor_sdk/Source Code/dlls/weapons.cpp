@@ -277,7 +277,25 @@ void DecalGunshot( TraceResult *pTrace, int iBulletType )
 	}
 }
 
-
+//
+// WeaponFlash - tosses a brass shell from passed origin at passed velocity
+//
+void WeaponFlash ( const Vector &vecOrigin )
+{
+	int m_iRadius = RANDOM_FLOAT ( 16 , 12 );
+    MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
+         WRITE_BYTE( TE_DLIGHT );
+         WRITE_COORD( vecOrigin.x ); // origin
+         WRITE_COORD( vecOrigin.y );
+         WRITE_COORD( vecOrigin.z );
+         WRITE_BYTE( m_iRadius );     // radius
+         WRITE_BYTE( 255 );     // R
+         WRITE_BYTE( 192 );     // G
+         WRITE_BYTE( 64 );     // B
+         WRITE_BYTE( 0 );     // life * 10
+         WRITE_BYTE( 0 ); // decay
+    MESSAGE_END();
+}
 
 //
 // EjectBrass - tosses a brass shell from passed origin at passed velocity

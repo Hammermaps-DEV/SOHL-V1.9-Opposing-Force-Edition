@@ -2463,7 +2463,6 @@ Schedule_t* CHGrunt :: GetScheduleOfType ( int Type )
 	}
 }
 
-
 //=========================================================
 // CHGruntRepel - when triggered, spawns a monster_human_grunt
 // repelling down a line.
@@ -2498,17 +2497,12 @@ void CHGruntRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 {
 	TraceResult tr;
 	UTIL_TraceLine( pev->origin, pev->origin + Vector( 0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
-	/*
-	if ( tr.pHit && Instance( tr.pHit )->pev->solid != SOLID_BSP) 
-		return NULL;
-	*/
 
 	CBaseEntity *pEntity = Create( "monster_human_grunt", pev->origin, pev->angles );
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer( );
 	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector( 0, 0, RANDOM_FLOAT( -196, -128 ) );
 	pGrunt->SetActivity( ACT_GLIDE );
-	// UNDONE: position?
 	pGrunt->m_vecLastPosition = tr.vecEndPos;
 
 	CBeam *pBeam = CBeam::BeamCreate( "sprites/rope.spr", 10 );

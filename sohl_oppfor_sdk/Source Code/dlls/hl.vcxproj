@@ -33,9 +33,11 @@
     <ClCompile Include="client.cpp" />
     <ClCompile Include="combat.cpp" />
     <ClCompile Include="monster_controller.cpp" />
+    <ClCompile Include="monster_hgrunt_opfor.cpp" />
     <ClCompile Include="monster_recruit.cpp" />
     <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="monster_drillsergeant.cpp" />
+    <ClCompile Include="rcallymonster.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
     <ClCompile Include="weapon_crowbar.cpp" />
     <ClCompile Include="defaultai.cpp" />
@@ -80,6 +82,7 @@
     <ClCompile Include="monsterstate.cpp" />
     <ClCompile Include="mortar.cpp" />
     <ClCompile Include="movewith.cpp" />
+    <ClCompile Include="weapon_m249.cpp" />
     <ClCompile Include="weapon_mp5.cpp" />
     <ClCompile Include="multiplay_gamerules.cpp" />
     <ClCompile Include="monster_nihilanth.cpp" />
@@ -156,6 +159,7 @@
     <ClInclude Include="nodes.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="rcallymonster.h" />
     <ClInclude Include="saverestore.h" />
     <ClInclude Include="schedule.h" />
     <ClInclude Include="scripted.h" />
