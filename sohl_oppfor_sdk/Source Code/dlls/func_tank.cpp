@@ -25,7 +25,7 @@
 
 
 #define SF_TANK_ACTIVE			0x0001
-//#define SF_TANK_PLAYER			0x0002	// for internal camera function. G-Cont
+#define SF_TANK_PLAYER			0x0002	// for internal camera function. G-Cont
 //#define SF_TANK_HUMANS			0x0004	// for external camera (override internal camera). G-Cont
 //#define SF_TANK_ALIENS			0x0008
 #define SF_TANK_LINEOFSIGHT		0x0010
@@ -1312,7 +1312,15 @@ void CFuncTankGun::Fire( const Vector &barrelEnd, const Vector &forward, entvars
 		CFuncTank::Fire( barrelEnd, forward, pevAttacker );
 }
 
-
+class CFuncTankOf : public CFuncTank
+{
+public:
+	inline BOOL IsActive( void ) { return (pev->spawnflags & SF_TANK_PLAYER)?TRUE:FALSE; }
+	inline void TankActivate( void ) { pev->spawnflags |= SF_TANK_PLAYER; SetNextThink(0.1); m_fireLast = 0; }
+	inline void TankDeactivate( void ) { pev->spawnflags &= ~SF_TANK_PLAYER; m_fireLast = 0; StopRotSound(); }
+	inline BOOL CanFire( void ) { return false; }
+};
+LINK_ENTITY_TO_CLASS( func_tank_of, CFuncTankOf );
 
 class CFuncTankLaser : public CFuncTank
 {
