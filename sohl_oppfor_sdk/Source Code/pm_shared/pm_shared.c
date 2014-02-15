@@ -81,8 +81,8 @@ typedef struct hull_s
 #define VEC_VIEW			28
 #define	STOP_EPSILON	0.1
 
-#define CTEXTURESMAX		512			// max number of textures loaded
-#define CBTEXTURENAMEMAX	13			// only load first n chars of name
+#define CTEXTURESMAX		1024		// max number of textures loaded
+#define CBTEXTURENAMEMAX	32			// only load first n chars of name
 
 #define CHAR_TEX_CONCRETE	'C'			// texture types
 #define CHAR_TEX_METAL		'M'
@@ -96,6 +96,10 @@ typedef struct hull_s
 #define CHAR_TEX_GLASS		'Y'
 #define CHAR_TEX_FLESH		'F'
 
+// Opposing-Force
+#define CHAR_TEX_SNOW		'N'
+#define CHAR_TEX_GRASS		'Z'
+
 #define STEP_CONCRETE	0		// default step sound
 #define STEP_METAL		1		// metal floor
 #define STEP_DIRT		2		// dirt, sand, rock
@@ -105,6 +109,10 @@ typedef struct hull_s
 #define STEP_SLOSH		6		// shallow liquid puddle
 #define STEP_WADE		7		// wading in liquid
 #define STEP_LADDER		8		// climbing ladder
+
+// Opposing-Force
+#define STEP_SNOW		9		// snow
+#define STEP_GRASS		10		// grass
 
 #define PLAYER_FATAL_FALL_SPEED		1024// approx 60 feet
 #define PLAYER_MAX_SAFE_FALL_SPEED	580// approx 20 feet
@@ -147,6 +155,7 @@ static int rgStuckLast[MAX_CLIENTS][2];
 static int gcTextures = 0;
 static char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];	
 static char grgchTextureType[CTEXTURESMAX];
+char *materialfile = "sound/materials.txt";
 
 int g_onladder = 0;
 
@@ -165,22 +174,16 @@ void PM_SwapTextures( int i, int j )
 	grgchTextureType[ j ] = chTemp;
 }
 
-void PM_SortTextures( void )
+void PM_SortTextures(void)
 {
 	// Bubble sort, yuck, but this only occurs at startup and it's only 512 elements...
-	//
-	int i, j;
-
-	for ( i = 0 ; i < gcTextures; i++ )
+	short i, j;
+	for (i = 0 ; i < gcTextures; ++i)
 	{
-		for ( j = i + 1; j < gcTextures; j++ )
+		for (j = i + 1; j < gcTextures; ++j)
 		{
-			if ( stricmp( grgszTextureName[ i ], grgszTextureName[ j ] ) > 0 )
-			{
-				// Swap
-				//
-				PM_SwapTextures( i, j );
-			}
+			if (_stricmp( grgszTextureName[i], grgszTextureName[j] ) > 0 )
+				PM_SwapTextures(i, j);
 		}
 	}
 }
@@ -202,8 +205,8 @@ void PM_InitTextureTypes()
 	gcTextures = 0;
 	memset(buffer, 0, 512);
 
-	fileSize = pmove->COM_FileSize( "sound/materials.txt" );
-	pMemFile = pmove->COM_LoadFile( "sound/materials.txt", 5, NULL );
+	fileSize = pmove->COM_FileSize(materialfile);
+	pMemFile = pmove->COM_LoadFile(materialfile, 5, NULL);
 	if ( !pMemFile )
 		return;
 
@@ -507,6 +510,30 @@ void PM_PlayStepSound( int step, float fvol )
 		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_ladder4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
 		}
 		break;
+
+	// Opposing-Force
+	case STEP_SNOW:
+		switch(irand)
+		{
+		// right foot
+		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		// left foot
+		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		}
+		break;
+	case STEP_GRASS:
+		switch(irand)
+		{
+		// right foot
+		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		// left foot
+		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );	break;
+		}
+		break;
 	}
 }	
 
@@ -522,6 +549,10 @@ int PM_MapTextureTypeStepType(char chTextureType)
 		case CHAR_TEX_GRATE: return STEP_GRATE;	
 		case CHAR_TEX_TILE: return STEP_TILE;
 		case CHAR_TEX_SLOSH: return STEP_SLOSH;
+
+		// Opposing-Force
+		case CHAR_TEX_SNOW: return STEP_SNOW;
+		case CHAR_TEX_GRASS: return STEP_GRASS;
 	}
 }
 
@@ -688,6 +719,32 @@ void PM_UpdateStepSound( void )
 				fvol = fWalking ? 0.2 : 0.5;
 				pmove->flTimeStepSound = fWalking ? 400 : 300;
 				break;
+
+			case CHAR_TEX_WOOD:
+				fvol = fWalking ? 0.2f : 0.5f;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_COMPUTER:
+				fvol = fWalking ? 0.2f : 0.4f;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_FLESH:
+				fvol = fWalking ? 0.1f : 0.3f;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			// Opposing-Force
+			case CHAR_TEX_SNOW:
+				fvol = fWalking ? 0.2f : 0.5f;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
+
+			case CHAR_TEX_GRASS:
+				fvol = fWalking ? 0.2f : 0.5f;
+				pmove->flTimeStepSound = fWalking ? 400 : 300;
+				break;
 			}
 		}
 		
@@ -696,9 +753,7 @@ void PM_UpdateStepSound( void )
 		// play the sound
 		// 35% volume if ducking
 		if ( pmove->flags & FL_DUCKING )
-		{
 			fvol *= 0.35;
-		}
 
 		PM_PlayStepSound( step, fvol );
 	}

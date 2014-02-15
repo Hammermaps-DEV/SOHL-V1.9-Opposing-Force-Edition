@@ -2733,6 +2733,26 @@ void CBaseMonster :: StepSound( void )
 		rgsz[3] = "player/pl_slosh4.wav";
 		cnt = 4;
 		break;
+
+	// Opposing-Force
+	case CHAR_TEX_SNOW:
+		fvol = fWalking ? 0.2 : 0.5;
+		rgsz[0] = "player/pl_snow1.wav";
+		rgsz[1] = "player/pl_snow3.wav";
+		rgsz[2] = "player/pl_snow2.wav";
+		rgsz[3] = "player/pl_snow4.wav";
+		cnt = 4;
+		break;
+
+	case CHAR_TEX_GRASS:
+		fvol = fWalking ? 0.2 : 0.5;
+		rgsz[0] = "player/pl_grass1.wav";
+		rgsz[1] = "player/pl_grass3.wav";
+		rgsz[2] = "player/pl_grass2.wav";
+		rgsz[3] = "player/pl_grass4.wav";
+		cnt = 4;
+		break;
+
 	default:	// default NPC sounds
 		fvol = fWalking ? 0.2 : 0.5;
 		rgsz[0] = "common/npc_step1.wav";
