@@ -96,6 +96,10 @@ struct skilldata_t
 	float fgruntShotgunPellets;
 	float fgruntGrenadeSpeed;
 
+	float medicHealth;
+	float medicDmgKick;
+	float medicHeal;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;

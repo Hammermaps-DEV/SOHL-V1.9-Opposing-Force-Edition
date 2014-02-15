@@ -33,6 +33,7 @@
     <ClCompile Include="client.cpp" />
     <ClCompile Include="combat.cpp" />
     <ClCompile Include="monster_controller.cpp" />
+    <ClCompile Include="monster_hgrunt_medic.cpp" />
     <ClCompile Include="monster_hgrunt_opfor.cpp" />
     <ClCompile Include="monster_recruit.cpp" />
     <ClCompile Include="monster_zombie_soldier.cpp" />

@@ -231,6 +231,11 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.fgruntShotgunPellets = GetSkillCvar( "sk_hgrunt_ally_pellets");
 	gSkillData.fgruntGrenadeSpeed = GetSkillCvar( "sk_hgrunt_ally_gspeed");
 
+	// Ally Grunt Medic
+	gSkillData.medicHealth = GetSkillCvar( "sk_medic_ally_health");
+	gSkillData.medicDmgKick = GetSkillCvar( "sk_medic_ally_kick");
+	gSkillData.medicHeal = GetSkillCvar( "sk_medic_ally_heal");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 

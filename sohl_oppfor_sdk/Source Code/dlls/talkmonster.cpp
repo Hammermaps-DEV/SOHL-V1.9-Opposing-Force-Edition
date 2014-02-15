@@ -55,8 +55,12 @@ IMPLEMENT_SAVERESTORE( CTalkMonster, CBaseMonster );
 char *CTalkMonster::m_szFriends[TLK_CFRIENDS] = 
 {
 	"monster_barney",
+	"monster_otis",
 	"monster_scientist",
 	"monster_sitting_scientist",
+	"monster_human_grunt_ally",
+	"monster_human_torch_ally",
+	"monster_human_medic_ally",
 };
 
 

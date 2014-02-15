@@ -278,10 +278,10 @@ struct WayPoint_t
 #define bits_COND_SEE_CLIENT			( 1 << 21) // see a client
 #define bits_COND_SEE_NEMESIS			( 1 << 22) // see my nemesis
 
-#define bits_COND_SPECIAL1				( 1 << 28) // Defined by individual monster
-#define bits_COND_SPECIAL2				( 1 << 29) // Defined by individual monster
-#define bits_COND_SPECIAL3				( 1 << 32) // Defined by individual monster
-#define bits_COND_SPECIAL4				( 1 << 33) // Defined by individual monster
+#define bits_COND_SPECIAL1				( 1 << 0) // Defined by individual monster
+#define bits_COND_SPECIAL2				( 1 << 1) // Defined by individual monster
+#define bits_COND_SPECIAL3				( 1 << 2) // Defined by individual monster
+#define bits_COND_SPECIAL4				( 1 << 3) // Defined by individual monster
 
 #define bits_COND_TASK_FAILED			( 1 << 30)
 #define bits_COND_SCHEDULE_DONE			( 1 << 31)
