@@ -354,6 +354,9 @@
     <ClCompile Include="monster_hgrunt_medic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="monster_hgrunt_torch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
