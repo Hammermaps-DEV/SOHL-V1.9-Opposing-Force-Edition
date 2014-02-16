@@ -35,6 +35,7 @@
 #include "soundent.h"
 #include "gamerules.h"
 #include "player.h"
+#include "pm_materials.h"
 
 #define MONSTER_CUT_CORNER_DIST		8 // 8 means the monster's bounding box is contained without the box of the node in WC
 
@@ -1417,33 +1418,36 @@ float CBaseMonster :: OpenDoorAndWait( entvars_t *pevDoor )
 {
 	float flTravelTime = 0;
 
-	//ALERT(at_aiconsole, "A door. ");
+//	ALERT(at_console, "A door. ");
 	CBaseEntity *pcbeDoor = CBaseEntity::Instance(pevDoor);
 	if (pcbeDoor && !pcbeDoor->IsLockedByMaster())
 	{
-		//ALERT(at_aiconsole, "unlocked! ");
+//		ALERT(at_console, "unlocked! ");
 		pcbeDoor->Use(this, this, USE_ON, 0.0);
 		//ALERT(at_aiconsole, "pevDoor->nextthink = %d ms\n", (int)(1000*pevDoor->nextthink));
 		//ALERT(at_aiconsole, "pevDoor->ltime = %d ms\n", (int)(1000*pevDoor->ltime));
 		//ALERT(at_aiconsole, "pev-> nextthink = %d ms\n", (int)(1000*pev->nextthink));
 		//ALERT(at_aiconsole, "pev->ltime = %d ms\n", (int)(1000*pev->ltime));
-
-		flTravelTime = pcbeDoor->m_fNextThink - pevDoor->ltime;
-
+		flTravelTime = pevDoor->nextthink - pevDoor->ltime;
 		//ALERT(at_aiconsole, "Waiting %d ms\n", (int)(1000*flTravelTime));
 		if ( pcbeDoor->pev->targetname )
 		{
-			CBaseEntity *pTarget = NULL;
+			edict_t *pentTarget = NULL;
 			for (;;)
 			{
-				pTarget = UTIL_FindEntityByTargetname( pTarget, STRING(pcbeDoor->pev->targetname));
-				if (!pTarget)
-					break;
+				pentTarget = FIND_ENTITY_BY_TARGETNAME( pentTarget, STRING(pcbeDoor->pev->targetname));
 
-				if ( VARS( pTarget->pev ) != pcbeDoor->pev &&
-						FClassnameIs ( pTarget->pev, STRING(pcbeDoor->pev->classname) ) )
+				if ( VARS( pentTarget ) != pcbeDoor->pev )
 				{
-					pTarget->Use(this, this, USE_ON, 0.0);
+					if (FNullEnt(pentTarget))
+						break;
+
+					if ( FClassnameIs ( pentTarget, STRING(pcbeDoor->pev->classname) ) )
+					{
+						CBaseEntity *pDoor = Instance(pentTarget);
+						if ( pDoor )
+							pDoor->Use(this, this, USE_ON, 0.0);
+					}
 				}
 			}
 		}
@@ -1451,7 +1455,6 @@ float CBaseMonster :: OpenDoorAndWait( entvars_t *pevDoor )
 
 	return gpGlobals->time + flTravelTime;
 }
-
 
 //=========================================================
 // AdvanceRoute - poorly named function that advances the 
@@ -3657,9 +3660,6 @@ BOOL CBaseMonster :: ShouldFadeOnDeath( void )
 
 	return FALSE;
 }
-
-
-
 
 //LRC - an entity for monsters to shoot at.
 #define SF_MONSTERTARGET_OFF 1

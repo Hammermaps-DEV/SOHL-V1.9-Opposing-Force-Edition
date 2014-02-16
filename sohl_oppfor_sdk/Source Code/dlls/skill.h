@@ -100,6 +100,9 @@ struct skilldata_t
 	float medicDmgKick;
 	float medicHeal;
 
+	float torchHealth;
+	float torchDmgKick;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;

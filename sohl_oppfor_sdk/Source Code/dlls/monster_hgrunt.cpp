@@ -810,24 +810,10 @@ void CHGrunt :: Shoot ( void )
 		m_cAmmoLoaded--;// take away a bullet!
 	}
 
+	WeaponFlash ( vecShootOrigin );
+
 	Vector angDir = UTIL_VecToAngles( vecShootDir );
 	SetBlending( 0, angDir.x );
-	
-	// Teh_Freak: World Lighting!
-     MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-          WRITE_BYTE( TE_DLIGHT );
-          WRITE_COORD( vecShootOrigin.x ); // origin
-          WRITE_COORD( vecShootOrigin.y );
-          WRITE_COORD( vecShootOrigin.z );
-          WRITE_BYTE( 16 );     // radius
-          WRITE_BYTE( 255 );     // R
-          WRITE_BYTE( 255 );     // G
-          WRITE_BYTE( 128 );     // B
-          WRITE_BYTE( 0 );     // life * 10
-          WRITE_BYTE( 0 ); // decay
-     MESSAGE_END();
-	// Teh_Freak: World Lighting!
-
 }
 
 //=========================================================

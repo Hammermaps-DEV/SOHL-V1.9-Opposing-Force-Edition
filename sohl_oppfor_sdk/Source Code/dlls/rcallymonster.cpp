@@ -636,7 +636,6 @@ void CRCAllyMonster :: RunTask( Task_t *pTask )
 	}
 }
 
-
 void CRCAllyMonster :: Killed( entvars_t *pevAttacker, int iGib )
 {
 	// If a client killed me (unless I was already Barnacle'd), make everyone else mad/afraid of him
@@ -691,7 +690,6 @@ CBaseEntity	*CRCAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber
 	return NULL;
 }
 
-
 void CRCAllyMonster::AlertFriends( void )
 {
 	CBaseEntity *pFriend = NULL;
@@ -711,8 +709,6 @@ void CRCAllyMonster::AlertFriends( void )
 		}
 	}
 }
-
-
 
 void CRCAllyMonster::ShutUpFriends( void )
 {
@@ -1189,6 +1185,7 @@ int CRCAllyMonster :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacke
 			}
 		}
 	}
+
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
@@ -1411,7 +1408,6 @@ BOOL CRCAllyMonster::CanFollow( void )
 
 	return !IsFollowing();
 }
-
 
 void CRCAllyMonster :: FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {

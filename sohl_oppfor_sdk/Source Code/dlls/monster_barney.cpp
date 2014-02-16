@@ -387,6 +387,7 @@ void CBarney :: BarneyFirePistol ( void )
 		EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift );
 	}
 
+	WeaponFlash ( vecShootOrigin );
 	CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, 384, 0.3 );
 
 	// UNDONE: Reload?

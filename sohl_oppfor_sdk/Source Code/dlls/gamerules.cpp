@@ -236,6 +236,10 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.medicDmgKick = GetSkillCvar( "sk_medic_ally_kick");
 	gSkillData.medicHeal = GetSkillCvar( "sk_medic_ally_heal");
 
+	// Ally Grunt Torch
+	gSkillData.torchHealth = GetSkillCvar( "sk_torch_ally_health");
+	gSkillData.torchDmgKick = GetSkillCvar( "sk_torch_ally_kick");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 
