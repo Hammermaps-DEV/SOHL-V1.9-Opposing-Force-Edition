@@ -3276,3 +3276,20 @@ Vector UTIL_MirrorPos ( Vector endpos )
 	}
 	return mirpos;
 }
+
+void UTIL_WhiteSparks(const Vector &origin, const Vector &direction, int color, int count, int speed, int velocityRange)
+{
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, origin);
+	WRITE_BYTE(TE_STREAK_SPLASH);
+	WRITE_COORD(origin.x);		// origin
+	WRITE_COORD(origin.y);
+	WRITE_COORD(origin.z);
+	WRITE_COORD(direction.x);	// direction
+	WRITE_COORD(direction.y);
+	WRITE_COORD(direction.z);
+	WRITE_BYTE(color);	// Streak color 6
+	WRITE_SHORT(count);	// count
+	WRITE_SHORT(speed);
+	WRITE_SHORT(velocityRange);	// Random velocity modifier
+	MESSAGE_END();
+}

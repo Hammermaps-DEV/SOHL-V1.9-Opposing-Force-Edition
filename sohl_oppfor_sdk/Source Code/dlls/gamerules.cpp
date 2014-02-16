@@ -296,9 +296,13 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.monDmg12MM = GetSkillCvar( "sk_12mm_bullet");
 	gSkillData.monDmgMP5 = GetSkillCvar ("sk_9mmAR_bullet" );
 	gSkillData.monDmg9MM = GetSkillCvar( "sk_9mm_bullet");
+	gSkillData.monDmgM249 = GetSkillCvar("sk_556_bullet");
 
 	// MONSTER HORNET
 	gSkillData.monDmgHornet = GetSkillCvar( "sk_hornet_dmg");
+
+	// M249
+	gSkillData.plrDmgM249 = GetSkillCvar("sk_plr_556_bullet");
 
 	// PLAYER HORNET
 // Up to this point, player hornet damage and monster hornet damage were both using
@@ -314,7 +318,7 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.healthchargerCapacity = GetSkillCvar ( "sk_healthcharger" );
 	gSkillData.healthkitCapacity = GetSkillCvar ( "sk_healthkit" );
 	gSkillData.scientistHeal = GetSkillCvar ( "sk_scientist_heal" );
-          gSkillData.flashlightCharge = GetSkillCvar ( "sk_flashcharge" );
+    gSkillData.flashlightCharge = GetSkillCvar ( "sk_flashcharge" );
 	
 	// monster damage adj
 	gSkillData.monHead = GetSkillCvar( "sk_monster_head" );

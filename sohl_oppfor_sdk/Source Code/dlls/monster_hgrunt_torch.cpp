@@ -1831,14 +1831,60 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 				WRITE_COORD( ptr->vecEndPos.y );
 				WRITE_COORD( ptr->vecEndPos.z );
 				WRITE_SHORT( g_sModelIndexFireball );
-				WRITE_BYTE( 15  ); // scale * 10
+				WRITE_BYTE( 30  ); // scale * 10
 				WRITE_BYTE( 15  ); // framerate
 				WRITE_BYTE( TE_EXPLFLAG_NONE );
 			MESSAGE_END();
+
+			if (UTIL_PointContents(pev->origin) == CONTENTS_WATER)
+			{
+				UTIL_Bubbles(pev->origin - Vector(64, 64, 64), pev->origin + Vector(64, 64, 64), 100);
+			}
+			else
+			{
+				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_SMOKE);
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_SHORT(g_sModelIndexSmoke);
+				WRITE_BYTE((pev->dmg - 50) * 0.80); // scale * 10
+				WRITE_BYTE(12); // framerate
+				MESSAGE_END();
+
+				Vector mirpos = UTIL_MirrorPos(pev->origin);
+				if (mirpos != Vector(0, 0, 0))
+				{
+					MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+					WRITE_BYTE(TE_SMOKE);
+					WRITE_COORD(mirpos.x);
+					WRITE_COORD(mirpos.y);
+					WRITE_COORD(mirpos.z);
+					WRITE_SHORT(g_sModelIndexSmoke);
+					WRITE_BYTE((pev->dmg - 50) * 0.80); // scale * 10
+					WRITE_BYTE(12); // framerate
+					MESSAGE_END();
+				}
+			}
+
+			if (UTIL_PointContents(pev->origin) != CONTENTS_WATER)
+			{
+				int sparkCount = RANDOM_LONG(1, 5);
+				Vector mirpos = UTIL_MirrorPos(pev->origin);
+
+				for (int i = 0; i < sparkCount; i++)
+					Create("spark_shower", pev->origin, tr.vecPlaneNormal, NULL);
+
+				if (mirpos != Vector(0, 0, 0))
+				for (int i = 0; i < sparkCount; i++)
+					Create("spark_shower", mirpos, tr.vecPlaneNormal, NULL);
+			}
+
 			RadiusDamage ( pev, pev, 100, CLASS_NONE, DMG_BLAST );
-			Create( "spark_shower", pev->origin, tr.vecPlaneNormal, NULL );
+			UTIL_ScreenShake(tr.vecEndPos, 25.0, 150.0, 1.0, 750);
 		}
 	}
+
 	CRCAllyMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType );
 }
 

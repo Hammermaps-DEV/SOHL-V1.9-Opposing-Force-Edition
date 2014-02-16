@@ -50,24 +50,26 @@ extern cvar_t *cl_lw;
 
 extern "C"
 {
+	// HLDM
+	void EV_FireNull(event_args_t *args);
+	void EV_FireCrowbar(struct event_args_s *args);
+	void EV_FireGlock1( struct event_args_s *args  );
+	void EV_FireMP5( struct event_args_s *args  );
+	void EV_FirePython( struct event_args_s *args  );
+	void EV_FireGauss( struct event_args_s *args  );
+	void EV_SpinGauss( struct event_args_s *args  );
+	void EV_EgonFire( struct event_args_s *args  );
+	void EV_EgonStop( struct event_args_s *args  );
+	void EV_FireShotGunSingle( struct event_args_s *args  );
+	void EV_FireShotGunDouble( struct event_args_s *args  );
+	void EV_SnarkFire( struct event_args_s *args  );
+	void EV_TrainPitchAdjust( struct event_args_s *args );
+	void EV_PlayEmptySound( struct event_args_s *args );
+	void EV_Decals( struct event_args_s *args );
+	void EV_Explode( struct event_args_s *args );
 
-// HLDM
-void EV_FireNull(event_args_t *args);
-void EV_FireCrowbar(struct event_args_s *args);
-void EV_FireGlock1( struct event_args_s *args  );
-void EV_FireMP5( struct event_args_s *args  );
-void EV_FirePython( struct event_args_s *args  );
-void EV_FireGauss( struct event_args_s *args  );
-void EV_SpinGauss( struct event_args_s *args  );
-void EV_EgonFire( struct event_args_s *args  );
-void EV_EgonStop( struct event_args_s *args  );
-void EV_FireShotGunSingle( struct event_args_s *args  );
-void EV_FireShotGunDouble( struct event_args_s *args  );
-void EV_SnarkFire( struct event_args_s *args  );
-void EV_TrainPitchAdjust( struct event_args_s *args );
-void EV_PlayEmptySound( struct event_args_s *args );
-void EV_Decals( struct event_args_s *args );
-void EV_Explode( struct event_args_s *args );
+	// SOHL - Opposing-Force
+	void EV_FireM249(struct event_args_s *args);
 }
 
 #define VECTOR_CONE_1DEGREES Vector( 0.00873, 0.00873, 0.00873 )
@@ -528,6 +530,8 @@ void EV_HLDM_DecalGunshot( pmtrace_t *pTrace, int iBulletType )
 		case BULLET_MONSTER_9MM:
 		case BULLET_PLAYER_MP5:
 		case BULLET_MONSTER_MP5:
+		case BULLET_PLAYER_556:
+		case BULLET_MONSTER_556:
 		case BULLET_PLAYER_BUCKSHOT:
 		case BULLET_PLAYER_357:
 		default:
@@ -570,6 +574,8 @@ int EV_HLDM_CheckTracer( int idx, float *vecSrc, float *end, float *forward, flo
 		{
 		case BULLET_PLAYER_MP5:
 		case BULLET_MONSTER_MP5:
+		case BULLET_PLAYER_556:
+		case BULLET_MONSTER_556:
 		case BULLET_MONSTER_9MM:
 		case BULLET_MONSTER_12MM:
 		default:
@@ -673,6 +679,7 @@ void EV_HLDM_FireBullets( int idx, float *forward, float *right, float *up, int 
 				EV_HLDM_DecalGunshot( &tr, iBulletType );
 			
 					break;
+			case BULLET_PLAYER_556:
 			case BULLET_PLAYER_MP5:		
 				
 				if ( !tracer )
@@ -961,11 +968,103 @@ void EV_FireMP5( event_args_t *args )
 	EV_Dynamic_MuzzleFlash( vecSrc );
 	if ( gEngfuncs.GetMaxClients() > 1 )
 		EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx-1], args->fparam1, args->fparam2 );
-	else 	EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx-1], args->fparam1, args->fparam2 );
+	else 	
+		EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx-1], args->fparam1, args->fparam2 );
 }
 //======================
 //		 MP5 END
 //======================
+
+//======================
+//SOHL - Opposing-Force
+//	    SAW START
+//======================
+int shell_link_count = 0;
+void EV_FireM249(event_args_t *args)
+{
+	int idx;
+	vec3_t origin;
+	vec3_t angles;
+	vec3_t velocity;
+	int body;
+
+	vec3_t ShellVelocity;
+	vec3_t ShellOrigin;
+	int shell;
+	int shell_link;
+	vec3_t vecSrc, vecAiming;
+	vec3_t up, right, forward;
+	float flSpread = 0.01;
+
+	idx = args->entindex;
+	body = args->iparam1;
+	VectorCopy(args->origin, origin);
+	VectorCopy(args->angles, angles);
+	VectorCopy(args->velocity, velocity);
+
+	AngleVectors(angles, forward, right, up);
+
+	shell = gEngfuncs.pEventAPI->EV_FindModelIndex("models/saw_shell.mdl");// brass shell
+	shell_link = gEngfuncs.pEventAPI->EV_FindModelIndex("models/saw_link.mdl");// brass shell link
+
+	if (EV_IsLocal(idx))
+	{
+		// Add muzzle flash to current weapon model
+		EV_MuzzleFlash();
+		switch (gEngfuncs.pfnRandomLong(0, 2))
+		{
+		case 0:
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(SAW_SHOOT1 + gEngfuncs.pfnRandomLong(0, 2), body);
+			break;
+		case 1:
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(SAW_SHOOT2 + gEngfuncs.pfnRandomLong(0, 2), body);
+			break;
+		case 2:
+			gEngfuncs.pEventAPI->EV_WeaponAnimation(SAW_SHOOT3 + gEngfuncs.pfnRandomLong(0, 2), body);
+			break;
+		}
+
+		V_PunchAxis(0, gEngfuncs.pfnRandomFloat(-2, 2 + gEngfuncs.pfnRandomLong(0, 0.3)));
+		V_PunchAxis(1, gEngfuncs.pfnRandomFloat(2 + gEngfuncs.pfnRandomLong(0, 0.1), -2));
+	}
+
+	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 12, -14, 5);
+	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell, TE_BOUNCE_SHELL);
+
+	if (shell_link_count >= 2)
+	{
+		EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 12, -14, 5);
+		EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell_link, TE_BOUNCE_SHELL);
+		shell_link_count = 0;
+	}
+	shell_link_count++;
+
+	switch (gEngfuncs.pfnRandomLong(0, 2))
+	{
+	case 0:
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		break;
+	case 1:
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		break;
+	case 2:
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire3.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
+		break;
+	}
+
+	EV_GetGunPosition(args, vecSrc, origin);
+	VectorCopy(forward, vecAiming);
+	EV_Dynamic_MuzzleFlash(vecSrc);
+
+	if (gEngfuncs.GetMaxClients() > 1)
+		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	else 	
+		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+}
+//======================
+//		 SAW END
+//======================
+
 
 //======================
 //	  SHOTGUN START

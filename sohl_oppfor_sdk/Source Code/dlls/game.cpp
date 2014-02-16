@@ -395,6 +395,11 @@ cvar_t	sk_plr_tripmine1 = {"sk_plr_tripmine1","0"};
 cvar_t	sk_plr_tripmine2 = {"sk_plr_tripmine2","0"};
 cvar_t	sk_plr_tripmine3 = {"sk_plr_tripmine3","0"};
 
+// 556
+cvar_t	sk_plr_556_bullet1 = { "sk_plr_556_bullet1", "0" };
+cvar_t	sk_plr_556_bullet2 = { "sk_plr_556_bullet2", "0" };
+cvar_t	sk_plr_556_bullet3 = { "sk_plr_556_bullet3", "0" };
+
 // WORLD WEAPONS
 cvar_t	sk_12mm_bullet1 = {"sk_12mm_bullet1","0"};
 cvar_t	sk_12mm_bullet2 = {"sk_12mm_bullet2","0"};
@@ -407,6 +412,11 @@ cvar_t	sk_9mmAR_bullet3 = {"sk_9mmAR_bullet3","0"};
 cvar_t	sk_9mm_bullet1 = {"sk_9mm_bullet1","0"};
 cvar_t	sk_9mm_bullet2 = {"sk_9mm_bullet2","0"};
 cvar_t	sk_9mm_bullet3 = {"sk_9mm_bullet3","0"};
+
+// 556
+cvar_t	sk_556_bullet1 = { "sk_556_bullet1", "0" };
+cvar_t	sk_556_bullet2 = { "sk_556_bullet2", "0" };
+cvar_t	sk_556_bullet3 = { "sk_556_bullet3", "0" };
 
 // HORNET
 cvar_t	sk_hornet_dmg1 = {"sk_hornet_dmg1","0"};
@@ -862,6 +872,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_plr_tripmine2 );
 	CVAR_REGISTER ( &sk_plr_tripmine3 );
 
+	// 556
+	CVAR_REGISTER(&sk_plr_556_bullet1);
+	CVAR_REGISTER(&sk_plr_556_bullet2);
+	CVAR_REGISTER(&sk_plr_556_bullet3);
+
 	// WORLD WEAPONS
 	CVAR_REGISTER ( &sk_12mm_bullet1 );
 	CVAR_REGISTER ( &sk_12mm_bullet2 );
@@ -874,6 +889,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_9mm_bullet1 );
 	CVAR_REGISTER ( &sk_9mm_bullet2 );
 	CVAR_REGISTER ( &sk_9mm_bullet3 );
+
+	// 556
+	CVAR_REGISTER(&sk_556_bullet1);
+	CVAR_REGISTER(&sk_556_bullet2);
+	CVAR_REGISTER(&sk_556_bullet3);
 
 	// HORNET
 	CVAR_REGISTER ( &sk_hornet_dmg1 );

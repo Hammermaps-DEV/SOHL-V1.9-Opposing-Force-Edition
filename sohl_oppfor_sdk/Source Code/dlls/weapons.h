@@ -95,6 +95,9 @@ public:
 #define WEAPON_SATCHEL			15
 #define WEAPON_SNARK			16
 
+//SOHL - Opposing-Force
+#define WEAPON_M249			17
+
 
 #define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
 
@@ -121,6 +124,9 @@ public:
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
 
+//SOHL - Opposing-Force
+#define M249_WEIGHT			25
+
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
 #define	_9MM_MAX_CARRY		250
@@ -134,6 +140,9 @@ public:
 #define SNARK_MAX_CARRY		15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
+
+//SOHL - Opposing-Force
+#define _556_MAX_CARRY			200
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP		-1
@@ -154,22 +163,28 @@ public:
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP		WEAPON_NOCLIP
 
+//SOHL - Opposing-Force
+#define M249_MAX_CLIP	50
+
 // the default amount of ammo that comes with each gun when it spawns
-#define GLOCK_DEFAULT_GIVE		17
-#define PYTHON_DEFAULT_GIVE		6
-#define MP5_DEFAULT_GIVE		25
-#define MP5_DEFAULT_AMMO		25
+#define GLOCK_DEFAULT_GIVE			17
+#define PYTHON_DEFAULT_GIVE			6
+#define MP5_DEFAULT_GIVE			25
+#define MP5_DEFAULT_AMMO			25
 #define MP5_M203_DEFAULT_GIVE		0
 #define SHOTGUN_DEFAULT_GIVE		12
 #define CROSSBOW_DEFAULT_GIVE		5
-#define RPG_DEFAULT_GIVE		1
-#define GAUSS_DEFAULT_GIVE		20
-#define EGON_DEFAULT_GIVE		20
+#define RPG_DEFAULT_GIVE			1
+#define GAUSS_DEFAULT_GIVE			20
+#define EGON_DEFAULT_GIVE			20
 #define HANDGRENADE_DEFAULT_GIVE	5
 #define SATCHEL_DEFAULT_GIVE		1
 #define TRIPMINE_DEFAULT_GIVE		1
-#define SNARK_DEFAULT_GIVE		5
+#define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
+
+//SOHL - Opposing-Force
+#define M249_DEFAULT_GIVE			50
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -184,6 +199,9 @@ public:
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
 
+//SOHL - Opposing-Force
+#define AMMO_556_GIVE			50
+
 // bullet types
 typedef	enum
 {
@@ -194,9 +212,15 @@ typedef	enum
 	BULLET_PLAYER_BUCKSHOT, // shotgun
 	BULLET_PLAYER_CROWBAR, // crowbar swipe
 
+	//SOHL - Opposing-Force
+	BULLET_PLAYER_556, // m249
+
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
 	BULLET_MONSTER_12MM,
+
+	//SOHL - Opposing-Force
+	BULLET_MONSTER_556,
 } Bullet;
 
 
@@ -205,13 +229,6 @@ typedef	enum
 #define ITEM_FLAG_NOAUTOSWITCHEMPTY	4
 #define ITEM_FLAG_LIMITINWORLD		8
 #define ITEM_FLAG_EXHAUSTIBLE		16 // A player can totally exhaust their ammo supply and lose this weapon
-
-#define BARNEY_SUIT			0 // just in case
-#define GORDON_SUIT			1 // gordon suit
-#define NUM_HANDS			2 // number of hands: barney and gordon
-
-#define PLAYER_HAS_SUIT		(m_pPlayer->m_iHideHUD & ITEM_SUIT)
-#define PLAYER_DRAW_SUIT		(pev->body & GORDON_SUIT)
 
 #define WEAPON_IS_ONTARGET 0x40
 
@@ -344,13 +361,13 @@ public:
 	BOOL PlayEmptySound( int iSoundType = 0 );//universal empty sound
 	virtual void ResetEmptySound( void );
 
-	virtual void SendWeaponAnim( int iAnim );
+	virtual void SendWeaponAnim(const int &iAnim);
 
 	virtual BOOL CanDeploy( void );
 	virtual BOOL IsUseable( void );
-	BOOL DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, float fDrawTime = 0.5 );
-	BOOL DefaultDeploy( string_t iViewModel, string_t iWeaponModel, int iAnim, char *szAnimExt, float fDrawTime = 0.5 );
-	int DefaultReload( int iClipSize, int iAnim, float fDelay );
+	BOOL DefaultDeploy(char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, float fDrawTime = 0.5);
+	BOOL DefaultDeploy(string_t iViewModel, string_t iWeaponModel, int iAnim, char *szAnimExt, float fDrawTime = 0.5);
+	int DefaultReload(int iClipSize, int iAnim, float fDelay);
 
 	virtual void ItemPostFrame( void );	// called each frame by the player PostThink
 	// called by CBasePlayerWeapons ItemPostFrame()

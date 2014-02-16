@@ -28,10 +28,12 @@ typedef	enum
 	BULLET_PLAYER_357, // python
 	BULLET_PLAYER_BUCKSHOT, // shotgun
 	BULLET_PLAYER_CROWBAR, // crowbar swipe
+	BULLET_PLAYER_556, // saw
 
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
 	BULLET_MONSTER_12MM,
+	BULLET_MONSTER_556,
 } Bullet;
 
 enum glock_e {
@@ -59,6 +61,20 @@ enum mp5_e
 	MP5_FIRE3,
 	MP5_LAUNCH,
 	MP5_RELOAD
+};
+
+//SOHL - Opposing-Force
+enum m249_e
+{
+	SAW_SLOWIDLE = 0,
+	SAW_IDLE,
+	SAW_RELOAD_START,
+	SAW_RELOAD_END,
+	SAW_HOLSTER,
+	SAW_DRAW,
+	SAW_SHOOT1,
+	SAW_SHOOT2,
+	SAW_SHOOT3
 };
 
 enum python_e {

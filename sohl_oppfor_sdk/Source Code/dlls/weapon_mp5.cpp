@@ -54,8 +54,6 @@ private:
 LINK_ENTITY_TO_CLASS( weapon_mp5, CMP5 );
 LINK_ENTITY_TO_CLASS( weapon_9mmAR, CMP5 );
 
-LINK_ENTITY_TO_CLASS( weapon_m249, CMP5 );//DEV
-
 int CMP5::SecondaryAmmoIndex( void )
 {
 	return m_iSecondaryAmmoType;

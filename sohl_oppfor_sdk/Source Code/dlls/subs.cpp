@@ -487,9 +487,12 @@ pev->origin traveling at flSpeed
 void CBaseToggle ::  LinearMove( Vector	vecInput, float flSpeed )//, BOOL bNow )
 {
 //	ALERT(at_console, "LMove %s: %f %f %f, speed %f\n", STRING(pev->targetname), vecInput.x, vecInput.y, vecInput.z, flSpeed);
-	ASSERTSZ(flSpeed != 0, "LinearMove:  no speed is defined!");
+	ASSERTSZ(flSpeed == 0, "LinearMove:  no speed is defined!");
 //	ASSERTSZ(m_pfnCallWhenMoveDone != NULL, "LinearMove: no post-move function defined");
 	
+	if (flSpeed == 0)
+		flSpeed = 300;
+
 	m_flLinearMoveSpeed = flSpeed;
 	m_vecFinalDest = vecInput;
 

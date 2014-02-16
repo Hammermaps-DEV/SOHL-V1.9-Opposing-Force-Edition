@@ -29,6 +29,7 @@
 #include "animation.h"
 #include "weapons.h"
 #include "func_break.h"
+#include "pm_materials.h"
 #include "../engine/studio.h" //LRC
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
@@ -1512,21 +1513,31 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 			case BULLET_MONSTER_MP5:
 			case BULLET_MONSTER_9MM:
 			case BULLET_MONSTER_12MM:
+			case BULLET_PLAYER_556:
 			default:
 				MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, vecTracerSrc );
 					WRITE_BYTE( TE_TRACER );
 					WRITE_COORD( vecTracerSrc.x );
 					WRITE_COORD( vecTracerSrc.y );
 					WRITE_COORD( vecTracerSrc.z );
-					WRITE_COORD( tr.vecEndPos.x );
-					WRITE_COORD( tr.vecEndPos.y );
-					WRITE_COORD( tr.vecEndPos.z );
+					if (g_engfuncs.pfnPointContents(tr.vecEndPos) != CONTENT_SKY)
+					{
+						WRITE_COORD(tr.vecEndPos.x);
+						WRITE_COORD(tr.vecEndPos.y);
+						WRITE_COORD(tr.vecEndPos.z);
+					}
+					else
+					{
+						WRITE_COORD(vecEnd.x);
+						WRITE_COORD(vecEnd.y);
+						WRITE_COORD(vecEnd.z);
+					}
 				MESSAGE_END();
 				break;
 			}
 		}
 		// do damage, paint decals
-		if (tr.flFraction != 1.0)
+		if (tr.flFraction != 1.0 && g_engfuncs.pfnPointContents(tr.vecEndPos) != CONTENT_SKY)
 		{
 			CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
 
@@ -1568,6 +1579,16 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 					//DecalGunshot( &tr, iBulletType );
 				}
 				break;
+
+			case BULLET_MONSTER_556:
+				pEntity->TraceAttack(pevAttacker, gSkillData.monDmgM249, vecDir, &tr, DMG_BULLET);
+				if (!tracer)
+				{
+					TEXTURETYPE_PlaySound(&tr, vecSrc, vecEnd, iBulletType);
+					PLAYBACK_EVENT_FULL(FEV_RELIABLE | FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pEntity->entindex(), 6, 0, 0);
+					//DecalGunshot( &tr, iBulletType );
+				}
+				break;
 			
 			case BULLET_PLAYER_357:
 				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmg357, vecDir, &tr, DMG_BULLET);
@@ -1591,6 +1612,7 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 				break;
 			}
 		}
+
 		// make bullet trails
 		UTIL_BubbleTrail( vecSrc, tr.vecEndPos, (flDistance * tr.flFraction) / 64.0 );
 	}
@@ -1614,6 +1636,7 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 	Vector vecRight = gpGlobals->v_right;
 	Vector vecUp = gpGlobals->v_up;
 	float x, y, z;
+	BOOL b_CanMakeParticles = TRUE;
 
 	if ( pevAttacker == NULL )
 		pevAttacker = pev;  // the default attacker is ourselves
@@ -1638,7 +1661,7 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 		UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, ENT(pev)/*pentIgnore*/, &tr);
 		
 		// do damage, paint decals
-		if (tr.flFraction != 1.0)
+		if (tr.flFraction != 1.0 && g_engfuncs.pfnPointContents(tr.vecEndPos) != CONTENT_SKY)
 		{
 			CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
 
@@ -1658,6 +1681,10 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 
 			case BULLET_PLAYER_MP5:		
 				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmgMP5, vecDir, &tr, DMG_BULLET); 
+				break;
+
+			case BULLET_PLAYER_556:
+				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmgM249, vecDir, &tr, DMG_BULLET);
 				break;
 
 			case BULLET_PLAYER_BUCKSHOT:	
@@ -1680,10 +1707,103 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 
 				break;
 			}
+
+			if (pEntity->IsBSPModel())
+			{
+				char chTextureType;
+				char szbuffer[64];
+				const char *pTextureName;
+				float rgfl1[3];
+				float rgfl2[3];
+
+				chTextureType = 0;
+
+				vecSrc.CopyToArray(rgfl1);
+				vecEnd.CopyToArray(rgfl2);
+
+				if (pEntity)
+					pTextureName = TRACE_TEXTURE(ENT(pEntity->pev), rgfl1, rgfl2);
+				else
+					pTextureName = TRACE_TEXTURE(ENT(0), rgfl1, rgfl2);
+
+				if (pTextureName)
+				{
+					if (*pTextureName == '-' || *pTextureName == '+')
+						pTextureName += 2;
+
+					if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ')
+						pTextureName++;
+
+					strcpy(szbuffer, pTextureName);
+					szbuffer[CBTEXTURENAMEMAX - 1] = 0;
+					chTextureType = TEXTURETYPE_Find(szbuffer);
+
+					if (strcmp(pTextureName, "null"))
+						b_CanMakeParticles = TRUE;
+				}
+
+				if (pEntity && pEntity->pev->rendermode == kRenderTransAlpha)
+					b_CanMakeParticles = FALSE;
+
+				if (chTextureType == CHAR_TEX_METAL)
+				{
+					UTIL_Ricochet(tr.vecEndPos, 0.5);
+
+					if (RANDOM_LONG(0, 99) < 40)
+						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
+
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
+
+					b_CanMakeParticles = FALSE;
+				}
+				else if (chTextureType == CHAR_TEX_VENT)
+				{
+					UTIL_Ricochet(tr.vecEndPos, 0.5);
+
+					if (RANDOM_LONG(0, 99) < 40)
+						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
+
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
+
+					b_CanMakeParticles = FALSE;
+				}
+				else if (chTextureType == CHAR_TEX_COMPUTER)
+				{
+					UTIL_Ricochet(tr.vecEndPos, 0.5);
+
+					if (RANDOM_LONG(0, 99) < 40)
+						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
+
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
+
+					UTIL_Sparks(tr.vecEndPos);
+
+					b_CanMakeParticles = FALSE;
+				}
+				else if (chTextureType == CHAR_TEX_GRATE)
+				{
+					UTIL_Ricochet(tr.vecEndPos, 0.5);
+
+					if (RANDOM_LONG(0, 99) < 40)
+						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
+
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
+					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
+
+					UTIL_Sparks(tr.vecEndPos);
+
+					b_CanMakeParticles = FALSE;
+				}
+			}
 		}
+
 		// make bullet trails
 		UTIL_BubbleTrail( vecSrc, tr.vecEndPos, (flDistance * tr.flFraction) / 64.0 );
 	}
+
 	ApplyMultiDamage(pev, pevAttacker);
 
 	return Vector( x * vecSpread.x, y * vecSpread.y, 0.0 );

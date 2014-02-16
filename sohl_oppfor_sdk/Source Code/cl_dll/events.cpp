@@ -27,6 +27,9 @@ extern "C"
 	void EV_TrainPitchAdjust( struct event_args_s *args );
 	void EV_Decals( struct event_args_s *args );
 	void EV_Explode( struct event_args_s *args );
+
+	// SOHL - Opposing-Force
+	void EV_FireM249(struct event_args_s *args);
 }
 
 /*
@@ -46,19 +49,22 @@ That was what we were going to do, but we ran out of time...oh well.
 void EV_HookEvents( void )
 {
 	gEngfuncs.pfnHookEvent( "events/null.sc",				EV_FireNull);
-	gEngfuncs.pfnHookEvent( "events/crowbar.sc",				EV_FireCrowbar);
-	gEngfuncs.pfnHookEvent( "events/tripfire.sc",				EV_PlayEmptySound );
+	gEngfuncs.pfnHookEvent( "events/crowbar.sc",			EV_FireCrowbar);
+	gEngfuncs.pfnHookEvent( "events/tripfire.sc",			EV_PlayEmptySound );
 	gEngfuncs.pfnHookEvent( "events/glock1.sc",				EV_FireGlock1 );
-	gEngfuncs.pfnHookEvent( "events/shotgun1.sc",				EV_FireShotGunSingle );
-	gEngfuncs.pfnHookEvent( "events/shotgun2.sc",				EV_FireShotGunDouble );
+	gEngfuncs.pfnHookEvent( "events/shotgun1.sc",			EV_FireShotGunSingle );
+	gEngfuncs.pfnHookEvent( "events/shotgun2.sc",			EV_FireShotGunDouble );
 	gEngfuncs.pfnHookEvent( "events/mp5.sc",				EV_FireMP5 );
 	gEngfuncs.pfnHookEvent( "events/mp52.sc",				EV_Explode );
 	gEngfuncs.pfnHookEvent( "events/python.sc",				EV_FirePython );
 	gEngfuncs.pfnHookEvent( "events/gauss.sc",				EV_FireGauss );
-	gEngfuncs.pfnHookEvent( "events/gaussspin.sc",				EV_SpinGauss );
-	gEngfuncs.pfnHookEvent( "events/egon_fire.sc",				EV_EgonFire );
-	gEngfuncs.pfnHookEvent( "events/egon_stop.sc",				EV_EgonStop );
+	gEngfuncs.pfnHookEvent( "events/gaussspin.sc",			EV_SpinGauss );
+	gEngfuncs.pfnHookEvent( "events/egon_fire.sc",			EV_EgonFire );
+	gEngfuncs.pfnHookEvent( "events/egon_stop.sc",			EV_EgonStop );
 	gEngfuncs.pfnHookEvent( "events/train.sc",				EV_TrainPitchAdjust );
-	gEngfuncs.pfnHookEvent( "events/snarkfire.sc",				EV_SnarkFire );
+	gEngfuncs.pfnHookEvent( "events/snarkfire.sc",			EV_SnarkFire );
 	gEngfuncs.pfnHookEvent( "events/glock2.sc",				EV_Decals );
+
+	// SOHL - Opposing-Force
+	gEngfuncs.pfnHookEvent( "events/m249.sc",				EV_FireM249 );
 }

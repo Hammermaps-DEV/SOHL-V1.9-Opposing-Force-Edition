@@ -259,13 +259,15 @@ void DecalGunshot( TraceResult *pTrace, int iBulletType )
 		case BULLET_MONSTER_9MM:
 		case BULLET_PLAYER_MP5:
 		case BULLET_MONSTER_MP5:
+
+		//SOHL - Opposing-Force
+		case BULLET_PLAYER_556:
+		case BULLET_MONSTER_556:
+
 		case BULLET_PLAYER_BUCKSHOT:
 		case BULLET_PLAYER_357:
-		default:
-			// smoke and decal
-			UTIL_GunshotDecalTrace( pTrace, DamageDecal( pEntity, DMG_BULLET ) );
-			break;
 		case BULLET_MONSTER_12MM:
+		default:
 			// smoke and decal
 			UTIL_GunshotDecalTrace( pTrace, DamageDecal( pEntity, DMG_BULLET ) );
 			break;
@@ -318,25 +320,6 @@ void EjectBrass ( const Vector &vecOrigin, const Vector &vecVelocity, float rota
 		WRITE_BYTE ( 25 );// 2.5 seconds
 	MESSAGE_END();
 }
-
-
-#if 0
-// UNDONE: This is no longer used?
-void ExplodeModel( const Vector &vecOrigin, float speed, int model, int count )
-{
-	MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, vecOrigin );
-		WRITE_BYTE ( TE_EXPLODEMODEL );
-		WRITE_COORD( vecOrigin.x );
-		WRITE_COORD( vecOrigin.y );
-		WRITE_COORD( vecOrigin.z );
-		WRITE_COORD( speed );
-		WRITE_SHORT( model );
-		WRITE_SHORT( count );
-		WRITE_BYTE ( 15 );// 1.5 seconds
-	MESSAGE_END();
-}
-#endif
-
 
 int giAmmoIndex = 0;
 
@@ -481,6 +464,10 @@ void W_Precache(void)
 
 	// cycler
 	UTIL_PrecacheOtherWeapon( "cycler_weapon" );
+
+	// saw
+	UTIL_PrecacheOtherWeapon("weapon_m249");
+	UTIL_PrecacheOther("ammo_556");
 
 	if ( g_pGameRules->IsDeathmatch() )
 	{
@@ -767,6 +754,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 	{
 		WeaponIdle();
 	}
+
 	if ((m_fInReload) && ( m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase() ) )
 	{
 		// complete the reload. 
@@ -811,18 +799,6 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 	{
 		// no fire buttons down
 		m_fFireOnEmpty = FALSE;
-
-		//play sequence holster/deploy if player find or lose suit
-		if(( PLAYER_HAS_SUIT && !PLAYER_DRAW_SUIT ) || ( !PLAYER_HAS_SUIT && PLAYER_DRAW_SUIT ))
-		{
-			m_pPlayer->m_pActiveItem->Holster( );
-			m_pPlayer->QueueItem(this);
-			if (m_pPlayer->m_pActiveItem) 
-			{
-				m_pPlayer->m_pActiveItem->Deploy();
-				m_pPlayer->m_pActiveItem->UpdateItemInfo( );
-			}
-		}
 
 		if ( !IsUseable() && m_flNextPrimaryAttack < gpGlobals->time ) 
 		{
@@ -1004,15 +980,12 @@ int CBasePlayerWeapon::UpdateClientData( CBasePlayer *pPlayer )
 	return 1;
 }
 
-
-void CBasePlayerWeapon::SendWeaponAnim( int iAnim )
+void CBasePlayerWeapon::SendWeaponAnim(const int &iAnim)
 {
+	if (m_pPlayer == NULL) return;
 	m_pPlayer->pev->weaponanim = iAnim;
 
-	//calculate additional body for special effects
-	pev->body = (pev->body % NUM_HANDS) + NUM_HANDS * m_iBody;
-
-	MESSAGE_BEGIN( MSG_ONE, SVC_WEAPONANIM, NULL, m_pPlayer->pev );
+	MESSAGE_BEGIN(MSG_ONE, SVC_WEAPONANIM, NULL, m_pPlayer->pev);
 		WRITE_BYTE( iAnim );						// sequence number
 		WRITE_BYTE( pev->body );					// weaponmodel bodygroup.
 	MESSAGE_END();
@@ -1112,12 +1085,8 @@ BOOL CBasePlayerWeapon :: CanDeploy( void )
 	return TRUE;
 }
 
-BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, float fDrawTime )
+BOOL CBasePlayerWeapon::DefaultDeploy(char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, float fDrawTime)
 {
-	if( PLAYER_HAS_SUIT )
-		pev->body |= GORDON_SUIT;
-	else pev->body &= ~GORDON_SUIT;
-
 	if (IsMultiplayer() && !CanDeploy()) return FALSE;
 	m_iLastSkin = -1;//reset last skin info for new weapon
 	b_Restored = TRUE;//no need update if deploy
@@ -1125,7 +1094,7 @@ BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel,
 	m_pPlayer->pev->viewmodel = MAKE_STRING(szViewModel);
 	m_pPlayer->pev->weaponmodel = MAKE_STRING(szWeaponModel);
 	strcpy( m_pPlayer->m_szAnimExtention, szAnimExt );
-	SendWeaponAnim( iAnim );
+	SendWeaponAnim(iAnim);
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDrawTime;//Custom time for deploy
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + fDrawTime + 0.5; //Make half-second delay beetwen draw and idle animation
@@ -1134,12 +1103,8 @@ BOOL CBasePlayerWeapon :: DefaultDeploy( char *szViewModel, char *szWeaponModel,
 }
 
 // g-cont. special version for weapon_generic
-BOOL CBasePlayerWeapon :: DefaultDeploy( string_t iViewModel, string_t iWeaponModel, int iAnim, char *szAnimExt, float fDrawTime )
+BOOL CBasePlayerWeapon::DefaultDeploy(string_t iViewModel, string_t iWeaponModel, int iAnim, char *szAnimExt, float fDrawTime)
 {
-	if( PLAYER_HAS_SUIT )
-		pev->body |= GORDON_SUIT;
-	else pev->body &= ~GORDON_SUIT;
-
 	if (IsMultiplayer() && !CanDeploy()) return FALSE;
 	m_iLastSkin = -1;//reset last skin info for new weapon
 	b_Restored = TRUE;//no need update if deploy
@@ -1147,7 +1112,7 @@ BOOL CBasePlayerWeapon :: DefaultDeploy( string_t iViewModel, string_t iWeaponMo
 	m_pPlayer->pev->viewmodel = iViewModel;
 	m_pPlayer->pev->weaponmodel = iWeaponModel;
 	strcpy( m_pPlayer->m_szAnimExtention, szAnimExt );
-	SendWeaponAnim( iAnim );
+	SendWeaponAnim(iAnim);
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDrawTime;//Custom time for deploy
 	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + fDrawTime + 0.5; //Make half-second delay beetwen draw and idle animation
@@ -1155,7 +1120,7 @@ BOOL CBasePlayerWeapon :: DefaultDeploy( string_t iViewModel, string_t iWeaponMo
 	return TRUE;
 }
 
-BOOL CBasePlayerWeapon :: DefaultReload( int iClipSize, int iAnim, float fDelay )
+BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay)
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		return FALSE;
@@ -1166,7 +1131,7 @@ BOOL CBasePlayerWeapon :: DefaultReload( int iClipSize, int iAnim, float fDelay 
 
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDelay;
 
-	SendWeaponAnim( iAnim );
+	SendWeaponAnim(iAnim);
 
 	m_fInReload = TRUE;
 
@@ -1201,7 +1166,6 @@ void CBasePlayerWeapon :: RestoreBody ( void )
 
 	if(!b_Restored )
 	{         //calculate additional body for special effects
-		pev->body = (pev->body % NUM_HANDS) + NUM_HANDS * m_iBody;
 		MESSAGE_BEGIN( MSG_ONE, gmsgSetBody, NULL, m_pPlayer->pev );
 			WRITE_BYTE( pev->body ); //weaponmodel body
 		MESSAGE_END();
