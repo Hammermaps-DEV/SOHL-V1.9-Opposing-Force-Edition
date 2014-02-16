@@ -3480,28 +3480,35 @@ CBaseEntity *FindEntityForward( CBaseEntity *pMe )
 }
 
 
-BOOL CBasePlayer :: FlashlightIsOn( void )
+BOOL CBasePlayer::FlashlightIsOn(void)
 {
-	return FBitSet(pev->effects, EF_DIMLIGHT);
+	return FBitSet(pev->effects, EF_BRIGHTLIGHT);
 }
 
-
-void CBasePlayer :: FlashlightTurnOn( void )
+void CBasePlayer::FlashlightTurnOn(void)
 {
-	if ( !g_pGameRules->FAllowFlashlight()) return;
+	if (!g_pGameRules->FAllowFlashlight()) return;
 
-	if ( m_iHideHUD & ITEM_SUIT )
+	if (m_iHideHUD & ITEM_SUIT)
 	{
-		EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_ON, 1.0, ATTN_NORM, 0, PITCH_NORM );
-		if(m_iFlashBattery) SetBits(pev->effects, EF_DIMLIGHT);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_ON, 1.0, ATTN_NORM, 0, PITCH_NORM);
+		SetBits(pev->effects, EF_BRIGHTLIGHT);
+		MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
+		WRITE_BYTE(1);
+		WRITE_BYTE(m_iFlashBattery);
+		MESSAGE_END();
 	}
 }
 
 
 void CBasePlayer :: FlashlightTurnOff( void )
 {
-	EMIT_SOUND_DYN( ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_OFF, 1.0, ATTN_NORM, 0, PITCH_NORM );
-	ClearBits(pev->effects, EF_DIMLIGHT);
+	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_OFF, 1.0, ATTN_NORM, 0, PITCH_NORM);
+	ClearBits(pev->effects, EF_BRIGHTLIGHT);
+	MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
+	WRITE_BYTE(0);
+	WRITE_BYTE(m_iFlashBattery);
+	MESSAGE_END();
 }
 
 /*

@@ -404,7 +404,7 @@ void CHud :: Init( void )
 	m_iLogo = 0;
 	m_iFOV = 0;
 	numMirrors = 0;
-	m_iHUDColor = 0x00FFA000; //255,160,0 -- LRC
+	m_iHUDColor = RGB_GREENISH;
 	
 	CVAR_CREATE( "zoom_sensitivity_ratio", "1.2", 0 );
 	CVAR_CREATE("r_shadows", "0", FCVAR_ARCHIVE );

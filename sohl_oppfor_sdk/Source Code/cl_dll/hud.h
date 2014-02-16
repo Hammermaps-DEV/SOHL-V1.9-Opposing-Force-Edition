@@ -21,7 +21,6 @@
 //
 
 #define FOG_LIMIT 30000
-#define RGB_YELLOWISH 0x00FFA000 //255,160,0
 #define RGB_REDISH 0x00FF1010 //255,160,0
 #define RGB_GREENISH 0x0000A000 //0,160,0
 
@@ -114,6 +113,7 @@ public:
 	int MsgFunc_ItemPickup( const char *pszName, int iSize, void *pbuf );
 	int MsgFunc_HideWeapon( const char *pszName, int iSize, void *pbuf );
 
+
 	void SlotInput( int iSlot );
 	void _cdecl UserCmd_Slot1( void );
 	void _cdecl UserCmd_Slot2( void );
@@ -135,7 +135,7 @@ private:
 	WEAPON *m_pWeapon;
 	int	m_HUD_bucket0;
 	int m_HUD_selection;
-
+	int iClip;
 };
 
 //
@@ -416,21 +416,21 @@ private:
 	int	  m_iHeight;		// width of the battery innards
 };
 
-
 //
 //-----------------------------------------------------
 //
-class CHudFlashlight: public CHudBase
+class CHudFlashlight : public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int Draw(float flTime);
-	void Reset( void );
-	int MsgFunc_Flashlight(const char *pszName,  int iSize, void *pbuf );
-	int MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbuf );
+	void Reset(void);
+	int MsgFunc_Flashlight(const char *pszName, int iSize, void *pbuf);
+	int MsgFunc_FlashBat(const char *pszName, int iSize, void *pbuf);
 
 private:
+	HL_HSPRITE m_hNV;
 	HL_HSPRITE m_hSprite1;
 	HL_HSPRITE m_hSprite2;
 	HL_HSPRITE m_hBeam;

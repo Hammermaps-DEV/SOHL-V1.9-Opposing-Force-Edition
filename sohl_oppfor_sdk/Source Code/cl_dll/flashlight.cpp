@@ -59,6 +59,7 @@ int CHudFlashlight::VidInit(void)
 	int HUD_flash_full = gHUD.GetSpriteIndex( "flash_full" );
 	int HUD_flash_beam = gHUD.GetSpriteIndex( "flash_beam" );
 
+	m_hNV = LoadSprite("sprites/of_nv_a.spr");
 	m_hSprite1 = gHUD.GetSprite(HUD_flash_empty);
 	m_hSprite2 = gHUD.GetSprite(HUD_flash_full);
 	m_hBeam = gHUD.GetSprite(HUD_flash_beam);
@@ -106,7 +107,27 @@ int CHudFlashlight::Draw(float flTime)
 		return 1;
 
 	if (m_fOn)
-		a = 225;
+	{
+		int x, y, w, h;
+		int frame;
+
+		SPR_Set(m_hNV, 10, 100, 10);// COLOR
+
+		// play at 15fps
+		float fTime = gEngfuncs.GetClientTime();
+		frame = (int)(fTime * 15) % SPR_Frames(m_hNV);
+
+		w = SPR_Width(m_hNV, 0);
+		h = SPR_Height(m_hNV, 0);
+
+		for (y = -(rand() % h); y < ScreenHeight; y += h)
+		{
+			for (x = -(rand() % w); x < ScreenWidth; x += w)
+			{
+				SPR_DrawAdditive(frame, x, y, NULL);
+			}
+		}
+	}
 	else
 		a = MIN_ALPHA;
 
