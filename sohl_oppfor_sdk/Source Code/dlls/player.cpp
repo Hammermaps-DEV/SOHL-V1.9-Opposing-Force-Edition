@@ -2033,6 +2033,9 @@ void CBasePlayer::PreThink(void)
 
 	CheckSuitUpdate();
 
+	if (!g_pGameRules->IsMultiplayer())
+		NvgUpdate();
+
 	if (pev->deadflag >= DEAD_DYING)
 	{
 		PlayerDeathThink();
@@ -2961,6 +2964,7 @@ void CBasePlayer::Spawn( void )
 	m_bitsDamageType	= 0;
 	m_afPhysicsFlags	= 0;
 	m_fLongJump			= FALSE;// no longjump module.
+
 	Rain_dripsPerSecond = 0;
 	Rain_windX = 0;
 	Rain_windY = 0;
@@ -3011,7 +3015,7 @@ void CBasePlayer::Spawn( void )
 	else
 		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 
-    	pev->view_ofs = VEC_VIEW;
+    pev->view_ofs = VEC_VIEW;
 	viewEntity = 0;
 	viewFlags = 0;
 	Precache();
@@ -3030,8 +3034,8 @@ void CBasePlayer::Spawn( void )
 	m_fWeapon = FALSE;
 	m_pClientActiveItem = NULL;
 	m_iClientBattery = -1;
-          m_iClientFlashState = -1;
-          m_iClientFlashlight = -1;
+    m_iClientFlashState = -1;
+    m_iClientFlashlight = -1;
 	
 	// reset all ammo values to 0
 	for ( int i = 0; i < MAX_AMMO_SLOTS; i++ )
@@ -3479,10 +3483,55 @@ CBaseEntity *FindEntityForward( CBaseEntity *pMe )
 	return NULL;
 }
 
+static unsigned short FixedUnsigned16(float value, float scale) //FX
+{
+	int output;
+	output = value * scale;
+
+	if (output < 0)
+		output = 0;
+
+	if (output > 0xFFFF)
+		output = 0xFFFF;
+
+	return (unsigned short)output;
+}
+
+void UTIL_EdictScreenFadeBuild(ScreenFade &fade, const Vector &color, float fadeTime, float fadeHold, int alpha, int flags)
+{
+	fade.duration = FixedUnsigned16(fadeTime, 1 << 12); // 4.12 fixed
+	fade.holdTime = FixedUnsigned16(fadeHold, 1 << 12); // 4.12 fixed
+	fade.r = (int)color.x;
+	fade.g = (int)color.y;
+	fade.b = (int)color.z;
+	fade.a = alpha;
+	fade.fadeFlags = flags;
+}
+
+void UTIL_EdictScreenFadeWrite(const ScreenFade &fade, edict_s *edict)
+{
+	MESSAGE_BEGIN(MSG_ONE, gmsgFade, NULL, edict); // use the magic #1 for "one client
+	WRITE_SHORT(fade.duration); // fade lasts this long
+	WRITE_SHORT(fade.holdTime); // fade lasts this long
+	WRITE_SHORT(fade.fadeFlags); // fade type (in / out)
+	WRITE_BYTE(fade.r); // fade red
+	WRITE_BYTE(fade.g); // fade green
+	WRITE_BYTE(fade.b); // fade blue
+	WRITE_BYTE(fade.a); // fade blue
+	MESSAGE_END();
+}
+
+void UTIL_EdictScreenFade(edict_s *edict, const Vector &color, float fadeTime, float fadeHold, int alpha, int flags) //FX
+{
+	ScreenFade fade;
+	UTIL_EdictScreenFadeBuild(fade, color, fadeTime, fadeHold, alpha, flags);
+	UTIL_EdictScreenFadeWrite(fade, edict);
+}
 
 BOOL CBasePlayer::FlashlightIsOn(void)
-{
-	return FBitSet(pev->effects, EF_BRIGHTLIGHT);
+{ 
+	//return FBitSet(pev->effects, EF_BRIGHTLIGHT);
+	return m_flFlashlightIsOn; 
 }
 
 void CBasePlayer::FlashlightTurnOn(void)
@@ -3491,24 +3540,32 @@ void CBasePlayer::FlashlightTurnOn(void)
 
 	if (m_iHideHUD & ITEM_SUIT)
 	{
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_ON, 1.0, ATTN_NORM, 0, PITCH_NORM);
-		SetBits(pev->effects, EF_BRIGHTLIGHT);
+		// inform the client about the change
 		MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
-		WRITE_BYTE(1);
-		WRITE_BYTE(m_iFlashBattery);
+			WRITE_BYTE(1);
+			WRITE_BYTE(m_iFlashBattery);
 		MESSAGE_END();
+
+		//SetBits(pev->effects, EF_BRIGHTLIGHT);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_ON, 1.0, ATTN_NORM, 0, PITCH_NORM);
+		UTIL_EdictScreenFade(edict(), Vector(0, 255, 0), 3, 0, 255, FFADE_IN | FFADE_MODULATE | FFADE_STAYOUT); //FX
+		m_flFlashlightIsOn = true;
 	}
 }
 
-
 void CBasePlayer :: FlashlightTurnOff( void )
 {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_OFF, 1.0, ATTN_NORM, 0, PITCH_NORM);
-	ClearBits(pev->effects, EF_BRIGHTLIGHT);
+	UTIL_EdictScreenFade(edict(), Vector(0, 0, 0), 0.1, 0, 0, FFADE_IN); //off
+
+	// inform the client about the change
 	MESSAGE_BEGIN(MSG_ONE, gmsgFlashlight, NULL, pev);
-	WRITE_BYTE(0);
-	WRITE_BYTE(m_iFlashBattery);
+		WRITE_BYTE(0);
+		WRITE_BYTE(m_iFlashBattery);
 	MESSAGE_END();
+
+	//ClearBits(pev->effects, EF_BRIGHTLIGHT);
+	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, SOUND_FLASHLIGHT_OFF, 1.0, ATTN_NORM, 0, PITCH_NORM);
+	m_flFlashlightIsOn = false;
 }
 
 /*
@@ -5466,3 +5523,23 @@ void CHudSprite::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 }
 
 LINK_ENTITY_TO_CLASS( hud_sprite, CHudSprite );
+
+void CBasePlayer::NvgUpdate(void)
+{
+	if (m_flFlashlightIsOn)
+	{
+			Vector vecSrc = pev->origin + Vector(0, 0, 5);//55
+			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);
+			WRITE_BYTE(TE_DLIGHT);
+			WRITE_COORD(vecSrc.x);	// X
+			WRITE_COORD(vecSrc.y);	// Y
+			WRITE_COORD(vecSrc.z);	// Z
+			WRITE_BYTE(60);		// radius * 0.1 || 20 --40
+			WRITE_BYTE(20);		// r
+			WRITE_BYTE(150);		// g
+			WRITE_BYTE(20);		// b
+			WRITE_BYTE(0);		// time * 10 || 20 / pev->framerate
+			WRITE_BYTE(0);		// decay * 0.1
+			MESSAGE_END();
+	}//on
+}

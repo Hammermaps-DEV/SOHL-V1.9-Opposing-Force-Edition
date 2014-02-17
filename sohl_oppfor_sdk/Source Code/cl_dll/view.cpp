@@ -406,11 +406,14 @@ void V_CalcViewRoll ( struct ref_params_s *pparams )
 {
 	float		side;
 	cl_entity_t *viewentity;
-	
+		
+	extern cvar_t *cl_rollangle;
+	extern cvar_t *cl_rollspeed;
 	viewentity = gEngfuncs.GetEntityByIndex( pparams->viewentity );
 	if ( !viewentity )
 		return;
 
+	pparams->viewangles[ROLL] = V_CalcRoll (pparams->viewangles, pparams->simvel, cl_rollangle->value, cl_rollspeed->value ) * 4;
 	side = V_CalcRoll ( viewentity->angles, pparams->simvel, pparams->movevars->rollangle, pparams->movevars->rollspeed );
 
 	pparams->viewangles[ROLL] += side;
@@ -703,8 +706,8 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	view->origin[2] += bob;
 
 	// throw in a little tilt.
-	view->angles[YAW]   -= bob * 0.5;
-	view->angles[ROLL]  -= bob * 1;
+	view->angles[YAW] -= bob * 0.5;
+	view->angles[ROLL] -= bob * 1;
 	view->angles[PITCH] -= bob * 0.3;
 
 	// pushing the view origin down off of the same X/Z plane as the ent's origin will give the

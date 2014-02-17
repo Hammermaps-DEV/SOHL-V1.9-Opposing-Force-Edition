@@ -235,9 +235,12 @@ public:
 	virtual int		ObjectCaps( void ) { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	virtual void	Precache( void );
 	BOOL			IsOnLadder( void );
+
+	BOOL			m_flFlashlightIsOn;
 	BOOL			FlashlightIsOn( void );
 	void			FlashlightTurnOn( void );
 	void			FlashlightTurnOff( void );
+	void			NvgUpdate();
 	
 	void UpdatePlayerSound ( void );
 	void DeathSound ( void );

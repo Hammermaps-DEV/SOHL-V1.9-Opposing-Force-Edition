@@ -26,7 +26,6 @@
 #include <stdio.h>
 
 
-
 DECLARE_MESSAGE(m_Flash, FlashBat)
 DECLARE_MESSAGE(m_Flash, Flashlight)
 
@@ -59,7 +58,9 @@ int CHudFlashlight::VidInit(void)
 	int HUD_flash_full = gHUD.GetSpriteIndex( "flash_full" );
 	int HUD_flash_beam = gHUD.GetSpriteIndex( "flash_beam" );
 
-	m_hNV = LoadSprite("sprites/of_nv_a.spr");
+	m_hNV = LoadSprite("sprites/nvg.spr");
+	m_hNV_hres = LoadSprite("sprites/nvg_noise.spr");
+
 	m_hSprite1 = gHUD.GetSprite(HUD_flash_empty);
 	m_hSprite2 = gHUD.GetSprite(HUD_flash_full);
 	m_hBeam = gHUD.GetSprite(HUD_flash_beam);
@@ -73,8 +74,6 @@ int CHudFlashlight::VidInit(void)
 
 int CHudFlashlight:: MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbuf )
 {
-
-	
 	BEGIN_READ( pbuf, iSize );
 	int x = READ_BYTE();
 	m_iBat = x;
@@ -85,7 +84,6 @@ int CHudFlashlight:: MsgFunc_FlashBat(const char *pszName,  int iSize, void *pbu
 
 int CHudFlashlight:: MsgFunc_Flashlight(const char *pszName,  int iSize, void *pbuf )
 {
-
 	BEGIN_READ( pbuf, iSize );
 	m_fOn = READ_BYTE();
 	int x = READ_BYTE();
@@ -125,6 +123,25 @@ int CHudFlashlight::Draw(float flTime)
 			for (x = -(rand() % w); x < ScreenWidth; x += w)
 			{
 				SPR_DrawAdditive(frame, x, y, NULL);
+			}
+		}
+
+		int x2, y2, w2, h2;
+		int frame2;
+
+		SPR_Set(m_hNV_hres, 100, 200, 100);// COLOR
+
+		// play at 15fps
+		frame2 = (int)(fTime * 5) % SPR_Frames(m_hNV_hres);//15
+
+		w2 = SPR_Width(m_hNV_hres, 0);
+		h2 = SPR_Height(m_hNV_hres, 0);
+
+		for (y2 = -(rand() % h2); y2 < ScreenHeight; y2 += h2)
+		{
+			for (x2 = -(rand() % w2); x2 < ScreenWidth; x2 += w2)
+			{
+				SPR_DrawAdditive(frame2, x2, y2, NULL);
 			}
 		}
 	}

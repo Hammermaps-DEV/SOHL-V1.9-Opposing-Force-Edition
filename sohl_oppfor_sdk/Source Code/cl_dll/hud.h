@@ -431,6 +431,7 @@ public:
 
 private:
 	HL_HSPRITE m_hNV;
+	HL_HSPRITE m_hNV_hres;
 	HL_HSPRITE m_hSprite1;
 	HL_HSPRITE m_hSprite2;
 	HL_HSPRITE m_hBeam;
@@ -615,7 +616,7 @@ class CHud
 {
 private:
 	HUDLIST						*m_pHudList;
-	HL_HSPRITE						m_hsprLogo;
+	HL_HSPRITE					m_hsprLogo;
 	int							m_iLogo;
 	client_sprite_t				*m_pSpriteList;
 	int							m_iSpriteCount;
@@ -639,6 +640,7 @@ public:
 	cvar_t  *m_pCvarStealMouse;
 	cvar_t	*m_pCvarDraw;
 	cvar_t	*RainInfo;
+	cvar_t	*ProcessWeather;
 	CShinySurface *m_pShinySurface; //LRC
 	Vector	m_vecSkyPos; //LRC
 	int		m_iSkyMode;  //LRC
@@ -697,7 +699,7 @@ public:
 	CHudTextMessage	m_TextMessage;
 	CHudStatusIcons	m_StatusIcons;
 	CHudParticle	m_Particle; // (LRC) -- 30/08/02 November235: Particles to Order
-          CHudSound		m_Sound;	// g-cont. mp3 player from xash 0.45
+    CHudSound		m_Sound;	// g-cont. mp3 player from xash 0.45
  
 	void Init( void );
 	void VidInit( void );
