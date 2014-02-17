@@ -27,6 +27,7 @@
 #include <stdlib.h> // atoi
 #include <ctype.h>  // isspace
 
+vec3_t flPlayerOrigin;
 #ifdef CLIENT_DLL
 	// Spectator Mode
 	int		iJumpSpectator;
@@ -68,12 +69,12 @@ typedef struct hull_s
 } hull_t;
 
 // Ducking time
-#define TIME_TO_DUCK	0.4
+#define TIME_TO_DUCK	0.6
 #define VEC_DUCK_HULL_MIN	-18
 #define VEC_DUCK_HULL_MAX	18
 #define VEC_DUCK_VIEW		12
-#define PM_DEAD_VIEWHEIGHT	-8
-#define MAX_CLIMB_SPEED	200
+#define PM_DEAD_VIEWHEIGHT	-16
+#define MAX_CLIMB_SPEED	120
 #define STUCK_MOVEUP 1
 #define STUCK_MOVEDOWN -1
 #define VEC_HULL_MIN		-36
@@ -2656,6 +2657,29 @@ void PM_Jump (void)
 	// In the air now.
     pmove->onground = -1;
 
+	switch ( pmove->RandomLong(0,3) )
+	{
+		case 0: pmove->punchangle[ 2 ] = -3; //10
+				pmove->punchangle[ 0 ] = -3; 
+				pmove->PM_PlaySound( CHAN_BODY, "player/jump01.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+		break; 
+
+		case 1: pmove->punchangle[ 2 ] = 2; 
+				pmove->punchangle[ 0 ] = 2; 
+				pmove->PM_PlaySound( CHAN_BODY, "player/jump02.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+		break; 
+
+	 	case 2: pmove->punchangle[ 2 ] = -3; 
+				pmove->punchangle[ 0 ] = -3; 
+				pmove->PM_PlaySound( CHAN_BODY, "player/jump03.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+		break; 
+	
+		case 3: pmove->punchangle[ 2 ] = 1; 
+				pmove->punchangle[ 0 ] = 1; 
+				pmove->PM_PlaySound( CHAN_BODY, "player/jump04.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+		break;
+	}
+
 	PM_PreventMegaBunnyJumping();
 
 	if ( tfc )
@@ -2681,7 +2705,8 @@ void PM_Jump (void)
 			( pmove->flDuckTime > 0 ) &&
 			Length( pmove->velocity ) > 50 )
 		{
-			pmove->punchangle[0] = -5;
+			pmove->punchangle[0] = -20;//mover -5
+			pmove->punchangle[ 2 ] = -15; //10
 
 			for (i =0; i < 2; i++)
 			{
@@ -3073,6 +3098,7 @@ void PM_PlayerMove ( qboolean server )
 	{
 		PM_SpectatorMove();
 		PM_CatagorizePosition();
+		VectorCopy( pmove->origin, flPlayerOrigin );
 		return;
 	}
 
@@ -3302,6 +3328,7 @@ void PM_PlayerMove ( qboolean server )
 		PM_PlayWaterSounds();
 		break;
 	}
+	VectorCopy( pmove->origin, flPlayerOrigin );
 }
 
 void PM_CreateStuckTable( void )
