@@ -13,8 +13,8 @@
 *
 ****/
 
-#ifndef MONSTER_ISLAVE_H
-#define MONSTER_ISLAVE_H
+#ifndef MONSTER_ALIEN_SLAVE_H
+#define MONSTER_ALIEN_SLAVE_H
 
 #define		ISLAVE_MAX_BEAMS	8
 
@@ -73,4 +73,4 @@ public:
 	static const char *pDeathSounds[];
 };
 
-#endif // MONSTER_ISLAVE_H
+#endif // MONSTER_ALIEN_SLAVE_H

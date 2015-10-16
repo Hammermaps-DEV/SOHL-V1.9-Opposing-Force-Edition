@@ -25,7 +25,7 @@
 #include	"effects.h"
 #include	"weapons.h"
 #include	"soundent.h"
-#include    "monster_islave.h"
+#include    "monster_alien_slave.h"
 
 extern DLL_GLOBAL int		g_iSkillLevel;
 
