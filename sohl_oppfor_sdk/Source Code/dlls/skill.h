@@ -103,6 +103,10 @@ struct skilldata_t
 	float torchHealth;
 	float torchDmgKick;
 
+	float pwormHealth;
+	float pwormDmgSwipe;
+	float pwormDmgBeam;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;

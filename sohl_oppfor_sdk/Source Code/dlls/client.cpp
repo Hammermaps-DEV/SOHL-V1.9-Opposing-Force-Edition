@@ -794,6 +794,11 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/pl_grass3.wav");
 	PRECACHE_SOUND("player/pl_grass4.wav");
 
+	PRECACHE_SOUND("player/jump01.wav");	// jump sounds
+	PRECACHE_SOUND("player/jump02.wav");
+	PRECACHE_SOUND("player/jump03.wav");
+	PRECACHE_SOUND("player/jump04.wav");
+
 	PRECACHE_SOUND("plats/train_use1.wav");		// use a train
 
 	PRECACHE_SOUND("buttons/spark5.wav");		// hit computer texture
@@ -809,6 +814,7 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("common/bodysplat.wav");
 
 // player pain sounds
+	PRECACHE_SOUND("player/h2odeath.wav");
 	PRECACHE_SOUND("player/pl_pain2.wav");
 	PRECACHE_SOUND("player/pl_pain4.wav");
 	PRECACHE_SOUND("player/pl_pain5.wav");
@@ -818,7 +824,6 @@ void ClientPrecache( void )
 	PRECACHE_MODEL("models/player.mdl");
 
 	// hud sounds
-
 	PRECACHE_SOUND("common/wpn_hudoff.wav");
 	PRECACHE_SOUND("common/wpn_hudon.wav");
 	PRECACHE_SOUND("common/wpn_moveselect.wav");
@@ -826,7 +831,6 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("common/wpn_denyselect.wav");
 
 	// geiger sounds
-
 	PRECACHE_SOUND("player/geiger6.wav");
 	PRECACHE_SOUND("player/geiger5.wav");
 	PRECACHE_SOUND("player/geiger4.wav");

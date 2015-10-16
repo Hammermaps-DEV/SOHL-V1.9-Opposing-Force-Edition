@@ -25,6 +25,7 @@
     <ClCompile Include="monster_babycrab.cpp" />
     <ClCompile Include="monster_barnacle.cpp" />
     <ClCompile Include="monster_barney.cpp" />
+    <ClCompile Include="monster_barney_dead.cpp" />
     <ClCompile Include="monster_bigmomma.cpp" />
     <ClCompile Include="monster_bloater.cpp" />
     <ClCompile Include="bmodels.cpp" />
@@ -37,6 +38,9 @@
     <ClCompile Include="monster_hgrunt_medic.cpp" />
     <ClCompile Include="monster_hgrunt_opfor.cpp" />
     <ClCompile Include="monster_hgrunt_torch.cpp" />
+    <ClCompile Include="monster_otis.cpp" />
+    <ClCompile Include="monster_otis_dead.cpp" />
+    <ClCompile Include="monster_pitworm.cpp" />
     <ClCompile Include="monster_recruit.cpp" />
     <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="monster_drillsergeant.cpp" />
@@ -162,6 +166,7 @@
     <ClInclude Include="monster_babycrab.h" />
     <ClInclude Include="monster_barnacle.h" />
     <ClInclude Include="monster_barney.h" />
+    <ClInclude Include="monster_barney_dead.h" />
     <ClInclude Include="monster_bigmomma.h" />
     <ClInclude Include="monster_bloater.h" />
     <ClInclude Include="monster_bullsquid.h" />
@@ -183,6 +188,9 @@
     <ClInclude Include="monster_leech.h" />
     <ClInclude Include="monster_nihilanth.h" />
     <ClInclude Include="monster_osprey.h" />
+    <ClInclude Include="monster_otis.h" />
+    <ClInclude Include="monster_otis_dead.h" />
+    <ClInclude Include="monster_pitworm.h" />
     <ClInclude Include="monster_rat.h" />
     <ClInclude Include="monster_recruit.h" />
     <ClInclude Include="monster_roach.h" />

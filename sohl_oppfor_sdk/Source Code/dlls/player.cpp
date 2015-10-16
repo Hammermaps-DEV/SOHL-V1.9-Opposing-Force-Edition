@@ -325,13 +325,10 @@ int TrainSpeed(int iSpeed, int iMax)
 void CBasePlayer :: DeathSound( void )
 {
 	// water death sounds
-	/*
-	if (pev->waterlevel == 3)
-	{
+	if (pev->waterlevel == 3) {
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
-	*/
 
 	// temporarily using pain sounds for death sounds
 	switch (RANDOM_LONG(1,5))
@@ -378,8 +375,6 @@ int CBasePlayer :: TakeArmor( float flArmor )
 
 Vector CBasePlayer :: GetGunPosition( )
 {
-//	UTIL_MakeVectors(pev->v_angle);
-//	m_HackedGunPos = pev->view_ofs;
 	Vector origin;
 
 	origin = pev->origin + pev->view_ofs;
@@ -1054,9 +1049,6 @@ void CBasePlayer::Killed( entvars_t *pevAttacker, int iGib )
 		WRITE_BYTE(0);
 	MESSAGE_END();
 
-	//this will cause problems
-	//UTIL_ScreenFade( this, Vector(128,0,0), 6, 15, 255, FFADE_OUT | FFADE_MODULATE | FFADE_STAYOUT );
-
 	if ( ( pev->health < -40 && iGib != GIB_NEVER ) || iGib == GIB_ALWAYS )
 	{
 		pev->solid	= SOLID_NOT;
@@ -1266,7 +1258,6 @@ void CBasePlayer::TabulateAmmo()
 	ammo_556 = AmmoInventory(GetAmmoIndex("556"));
 }
 
-
 /*
 ===========
 WaterMove
@@ -1357,7 +1348,6 @@ void CBasePlayer::WaterMove()
 	}
 
 	// make bubbles
-
 	air = (int)(pev->air_finished - gpGlobals->time);
 	if (!RANDOM_LONG(0,0x1f) && RANDOM_LONG(0,AIRTIME-1) >= air)
 	{
@@ -1906,14 +1896,6 @@ void CBasePlayer::UpdateStatusBar()
 		}
 	}
 }
-
-
-
-
-
-
-
-
 
 #define CLIMB_SHAKE_FREQUENCY	22	// how many frames in between screen shakes when climbing
 #define	MAX_CLIMB_SPEED			200	// fastest vertical climbing speed possible

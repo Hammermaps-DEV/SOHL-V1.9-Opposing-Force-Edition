@@ -33,9 +33,9 @@
 // Monster's Anim Events Go Here
 //=========================================================
 // first flag is barney dying for scripted sequences?
-#define		BARNEY_AE_DRAW		( 2 )
-#define		BARNEY_AE_SHOOT		( 3 )
-#define		BARNEY_AE_HOLSTER	( 4 )
+#define	BARNEY_AE_DRAW		( 2 )
+#define	BARNEY_AE_SHOOT		( 3 )
+#define	BARNEY_AE_HOLSTER	( 4 )
 
 #define	BARNEY_BODY_GUNHOLSTERED	0
 #define	BARNEY_BODY_GUNDRAWN		1
@@ -812,60 +812,7 @@ MONSTERSTATE CBarney :: GetIdealState ( void )
 	return CTalkMonster::GetIdealState();
 }
 
-
-
 void CBarney::DeclineFollowing( void )
 {
 	PlaySentence( m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM ); //LRC
 }
-
-//=========================================================
-// DEAD BARNEY PROP
-//
-// Designer selects a pose in worldcraft, 0 through num_poses-1
-// this value is added to what is selected as the 'first dead pose'
-// among the monster's normal animations. All dead poses must
-// appear sequentially in the model file. Be sure and set
-// the m_iFirstPose properly!
-//
-//=========================================================
-char *CDeadBarney::m_szPoses[] = { "lying_on_back", "lying_on_side", "lying_on_stomach" };
-
-void CDeadBarney::KeyValue( KeyValueData *pkvd )
-{
-	if (FStrEq(pkvd->szKeyName, "pose"))
-	{
-		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
-	}
-	else 
-		CBaseMonster::KeyValue( pkvd );
-}
-
-LINK_ENTITY_TO_CLASS( monster_barney_dead, CDeadBarney );
-
-//=========================================================
-// ********** DeadBarney SPAWN **********
-//=========================================================
-void CDeadBarney :: Spawn( )
-{
-	PRECACHE_MODEL("models/barney.mdl");
-	SET_MODEL(ENT(pev), "models/barney.mdl");
-
-	pev->effects		= 0;
-	pev->yaw_speed		= 8;
-	pev->sequence		= 0;
-	m_bloodColor		= BLOOD_COLOR_RED;
-
-	pev->sequence = LookupSequence( m_szPoses[m_iPose] );
-	if (pev->sequence == -1)
-	{
-		ALERT ( at_debug, "Dead barney with bad pose\n" );
-	}
-	// Corpses have less health
-	pev->health			= 8;//gSkillData.barneyHealth;
-
-	MonsterInitDead();
-}
-
-

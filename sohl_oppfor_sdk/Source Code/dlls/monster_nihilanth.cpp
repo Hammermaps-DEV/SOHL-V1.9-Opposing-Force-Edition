@@ -164,14 +164,6 @@ void CNihilanth :: Spawn( void )
 	if (m_szTeleportTouch[0] == '\0')	strcpy( m_szTeleportTouch, "n_teleport" );
 	if (m_szDeadUse[0] == '\0')			strcpy( m_szDeadUse, "n_dead" );
 	if (m_szDeadTouch[0] == '\0')		strcpy( m_szDeadTouch, "n_ending" );
-
-	// near death
-	/*
-	m_iTeleport = 10;
-	m_iLevel = 10;
-	m_irritation = 2;
-	pev->health = 100;
-	*/
 }
 
 

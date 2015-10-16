@@ -108,6 +108,7 @@ void CDrillsergeant :: Spawn()
 	m_MonsterState		= MONSTERSTATE_NONE;
 
 	MonsterInit();
+	SetUse(&CDrillsergeant::DrillUse);
 }
 
 //=========================================================
@@ -125,8 +126,6 @@ void CDrillsergeant :: Precache()
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-
-
 void CDrillsergeant :: StartTask( Task_t *pTask )
 {
 	switch( pTask->iTask )
@@ -215,4 +214,12 @@ void CDrillsergeant::PlayScriptedSentence( const char *pszSentence, float durati
 
 	m_flTalkTime = gpGlobals->time + duration;
 	m_hTalkTarget = pListener;
+}
+
+//=========================================================
+// Purpose
+//=========================================================
+void CDrillsergeant::DrillUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+{
+	PlaySentence("DR_POK", 2, VOL_NORM, ATTN_NORM);
 }

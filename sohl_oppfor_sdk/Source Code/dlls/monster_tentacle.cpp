@@ -208,8 +208,6 @@ void CTentacle :: Spawn( )
 		m_flMaxYaw = 65;
 
 	m_MonsterState = MONSTERSTATE_IDLE;
-
-	// SetThink( Test );
 	UTIL_SetOrigin( this, pev->origin );
 }
 
@@ -362,17 +360,6 @@ int CTentacle :: MyLevel( )
 	}
 	return -1;
 }
-
-
-void CTentacle :: Test( void )
-{
-	pev->sequence = TENTACLE_ANIM_Floor_Strike;
-	pev->framerate = 0;
-	StudioFrameAdvance( );
-	SetNextThink( 0.1 );
-}
-
-
 
 //
 // TentacleThink
@@ -742,11 +729,6 @@ void CTentacle :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		{
 			Vector vecSrc, vecAngles;
 			GetAttachment( 0, vecSrc, vecAngles );
-
-			// Vector vecSrc = pev->origin + m_flTapRadius * Vector( cos( pev->angles.y * (3.14192653 / 180.0) ), sin( pev->angles.y * (M_PI / 180.0) ), 0.0 );
-
-			// vecSrc.z += MyHeight( );
-
 			switch( m_iTapSound )
 			{
 			case TE_SILO:
@@ -898,7 +880,7 @@ void CTentacle :: HitTouch( CBaseEntity *pOther )
 
 	m_flHitTime = gpGlobals->time + 0.5;
 
-	// ALERT( at_console, "%s : ", STRING( tr.pHit->v.classname ) );
+	//ALERT( at_console, "%s : ", STRING( tr.pHit->v.classname ) );
 
 	// ALERT( at_console, "%.0f : %s : %d\n", pev->angles.y, STRING( pOther->pev->classname ), tr.iHitgroup );
 }

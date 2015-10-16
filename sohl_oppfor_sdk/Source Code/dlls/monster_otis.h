@@ -13,39 +13,29 @@
 *
 ****/
 
-#ifndef MONSTER_BARNEY_H
-#define MONSTER_BARNEY_H
+#ifndef MONSTER_OTIS_H
+#define MONSTER_OTIS_H
 
-class CBarney : public CTalkMonster
+#include "monster_barney.h"
+
+class COtis : public CBarney
 {
 public:
 	void Spawn(void);
 	void Precache(void);
-	void SetYawSpeed(void);
-	int  ISoundMask(void);
 	void BarneyFirePistol(void);
+	void KeyValue(KeyValueData *pkvd);
 	void AlertSound(void);
-	int  Classify(void);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void RunTask(Task_t *pTask);
-	void StartTask(Task_t *pTask);
-	virtual int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
 
 	void DeclineFollowing(void);
 
 	// Override these to set behavior
-	Schedule_t *GetScheduleOfType(int Type);
 	Schedule_t *GetSchedule(void);
-	MONSTERSTATE GetIdealState(void);
-
-	void DeathSound(void);
-	void PainSound(void);
 
 	void TalkInit(void);
-
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	void Killed(entvars_t *pevAttacker, int iGib);
 
@@ -53,16 +43,8 @@ public:
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	int		m_iBaseBody; //LRC - for barneys with different bodies
-	BOOL	m_fGunDrawn;
-	float	m_painTime;
-	float	m_checkAttackTime;
-	BOOL	m_lastAttackCheck;
-
-	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
-
-	CUSTOM_SCHEDULES;
+	BOOL	m_fSuspicious;
+	int		head;
 };
 
-#endif // MONSTER_BARNEY_H
+#endif // MONSTER_OTIS_H

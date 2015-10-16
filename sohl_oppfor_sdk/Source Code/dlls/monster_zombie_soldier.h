@@ -43,4 +43,5 @@ public:
 	// No range attacks
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 };
+
 #endif // MONSTER_ZOMBIE_SOLDIER_H

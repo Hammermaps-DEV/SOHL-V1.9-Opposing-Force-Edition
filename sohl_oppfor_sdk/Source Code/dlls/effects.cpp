@@ -2447,97 +2447,46 @@ CBaseEntity *CEnvShooter :: CreateGib ( Vector vecPos, Vector vecVel )
 	return pShot;
 }
 
-
-
-
-class CTestEffect : public CBaseDelay
+//=========================================================
+// CPitwormGibShooter
+//=========================================================
+class CPitwormGibShooter : public CGibShooter
 {
 public:
-	void	Spawn( void );
-	void	Precache( void );
-	// void	KeyValue( KeyValueData *pkvd );
-	void EXPORT TestThink( void );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-
-	int		m_iLoop;
-	int		m_iBeam;
-	CBeam	*m_pBeam[24];
-	float	m_flBeamTime[24];
-	float	m_flStartTime;
+	void	Precache(void);
+	virtual CGib *CreateGib(void);
 };
 
+LINK_ENTITY_TO_CLASS(pitworm_gibshooter, CPitwormGibShooter);
 
-LINK_ENTITY_TO_CLASS( test_effect, CTestEffect );
-
-void CTestEffect::Spawn( void )
+//---------------------------------------------------------
+// Purpose:
+//---------------------------------------------------------
+void CPitwormGibShooter::Precache(void)
 {
-	Precache( );
+	m_iGibModelIndex = PRECACHE_MODEL("models/pit_worm_gibs.mdl");
 }
 
-void CTestEffect::Precache( void )
+//---------------------------------------------------------
+// Purpose:
+//---------------------------------------------------------
+CGib *CPitwormGibShooter::CreateGib(void)
 {
-	PRECACHE_MODEL( "sprites/lgtning.spr" );
-}
+	if (CVAR_GET_FLOAT("violence_hgibs") == 0)
+		return NULL;
 
-void CTestEffect::TestThink( void )
-{
-	int i;
-	float t = (gpGlobals->time - m_flStartTime);
+	CGib *pGib = GetClassPtr((CGib *)NULL);
+	pGib->Spawn("models/pit_worm_gibs.mdl");
+	pGib->m_bloodColor = BLOOD_COLOR_RED;
 
-	if (m_iBeam < 24)
+	if (pev->body <= 1)
 	{
-		CBeam *pbeam = CBeam::BeamCreate( "sprites/lgtning.spr", 100 );
-
-		TraceResult		tr;
-
-		Vector vecSrc = pev->origin;
-		Vector vecDir = Vector( RANDOM_FLOAT( -1.0, 1.0 ), RANDOM_FLOAT( -1.0, 1.0 ),RANDOM_FLOAT( -1.0, 1.0 ) );
-		vecDir = vecDir.Normalize();
-		UTIL_TraceLine( vecSrc, vecSrc + vecDir * 128, ignore_monsters, ENT(pev), &tr);
-
-		pbeam->PointsInit( vecSrc, tr.vecEndPos );
-		// pbeam->SetColor( 80, 100, 255 );
-		pbeam->SetColor( 255, 180, 100 );
-		pbeam->SetWidth( 100 );
-		pbeam->SetScrollRate( 12 );
-		
-		m_flBeamTime[m_iBeam] = gpGlobals->time;
-		m_pBeam[m_iBeam] = pbeam;
-		m_iBeam++;
+		ALERT(at_aiconsole, "PitwormGibShooter Body is <= 1!\n");
 	}
 
-	if (t < 3.0)
-	{
-		for (i = 0; i < m_iBeam; i++)
-		{
-			t = (gpGlobals->time - m_flBeamTime[i]) / ( 3 + m_flStartTime - m_flBeamTime[i]);
-			m_pBeam[i]->SetBrightness( 255 * t );
-			// m_pBeam[i]->SetScrollRate( 20 * t );
-		}
-		SetNextThink( 0.1 );
-	}
-	else
-	{
-		for (i = 0; i < m_iBeam; i++)
-		{
-			UTIL_Remove( m_pBeam[i] );
-		}
-		m_flStartTime = gpGlobals->time;
-		m_iBeam = 0;
-		// pev->nextthink = gpGlobals->time;
-		SetThink( NULL );
-	}
+	pGib->pev->body = RANDOM_LONG(1, pev->body - 1);// avoid throwing random amounts of the 0th gib. (skull).
+	return pGib;
 }
-
-
-void CTestEffect::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
-	SetThink(&CTestEffect:: TestThink );
-	SetNextThink( 0.1 );
-	m_flStartTime = gpGlobals->time;
-}
-
-
 
 // Blood effects
 class CBlood : public CPointEntity
@@ -4890,3 +4839,68 @@ TYPEDESCRIPTION	CRainModify::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE( CRainModify, CBaseEntity );
 
+//=========================================================
+// CSpriteTrain
+//=========================================================
+
+class CSpriteTrain : public CSprite
+{
+public:
+
+	void Spawn(void);
+	void Precache(void);
+	void KeyValue(KeyValueData* pkvd);
+
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
+
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	int		m_iModelIndex;
+	int		m_iSpeed;
+	float	m_flScale;
+};
+
+LINK_ENTITY_TO_CLASS(env_spritetrain, CSpriteTrain);
+
+
+TYPEDESCRIPTION	CSpriteTrain::m_SaveData[] =
+{
+	DEFINE_FIELD(CSpriteTrain, m_iModelIndex, FIELD_INTEGER),
+	DEFINE_FIELD(CSpriteTrain, m_iSpeed, FIELD_INTEGER),
+	DEFINE_FIELD(CSpriteTrain, m_flScale, FIELD_FLOAT),
+};
+
+IMPLEMENT_SAVERESTORE(CSpriteTrain, CSprite);
+
+void CSpriteTrain::KeyValue(KeyValueData *pkvd)
+{
+	if (FStrEq(pkvd->szKeyName, "model"))
+	{
+		m_iModelIndex = PRECACHE_MODEL(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "scale"))
+	{
+		pev->scale = (float)atof(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "speed"))
+	{
+		pev->speed = (int)atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CSprite::KeyValue(pkvd);
+}
+
+
+void CSpriteTrain::Spawn(void)
+{
+	CSprite::Spawn();
+}
+
+void CSpriteTrain::Precache(void)
+{
+	CSprite::Precache();
+}

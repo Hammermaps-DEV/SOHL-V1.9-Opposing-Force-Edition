@@ -43,8 +43,6 @@ public:
 	void EXPORT Start(void);
 	void EXPORT DieThink(void);
 
-	void EXPORT Test(void);
-
 	void EXPORT HitTouch(CBaseEntity *pOther);
 
 	float HearingSensitivity(void) { return 2.0; };

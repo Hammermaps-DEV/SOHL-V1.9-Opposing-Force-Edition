@@ -305,6 +305,19 @@ cvar_t	sk_torch_ally_kick1 = {"sk_torch_ally_kick1","0"};
 cvar_t	sk_torch_ally_kick2 = {"sk_torch_ally_kick2","0"};
 cvar_t	sk_torch_ally_kick3 = {"sk_torch_ally_kick3","0"};
 
+// Pitworm
+cvar_t	sk_pitworm_health1 = { "sk_pitworm_health1", "0" };
+cvar_t	sk_pitworm_health2 = { "sk_pitworm_health2", "0" };
+cvar_t	sk_pitworm_health3 = { "sk_pitworm_health3", "0" };
+
+cvar_t	sk_pitworm_dmg_swipe1 = { "sk_pitworm_dmg_swipe1", "0" };
+cvar_t	sk_pitworm_dmg_swipe2 = { "sk_pitworm_dmg_swipe2", "0" };
+cvar_t	sk_pitworm_dmg_swipe3 = { "sk_pitworm_dmg_swipe3", "0" };
+
+cvar_t	sk_pitworm_dmg_beam1 = { "sk_pitworm_dmg_beam1", "0" };
+cvar_t	sk_pitworm_dmg_beam2 = { "sk_pitworm_dmg_beam2", "0" };
+cvar_t	sk_pitworm_dmg_beam3 = { "sk_pitworm_dmg_beam3", "0" };
+
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
 cvar_t	sk_turret_health2 = {"sk_turret_health2","0"};
@@ -781,6 +794,19 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_torch_ally_kick1 );
 	CVAR_REGISTER ( &sk_torch_ally_kick2 );
 	CVAR_REGISTER ( &sk_torch_ally_kick3 );
+
+	// Pitworm
+	CVAR_REGISTER(&sk_pitworm_health1);
+	CVAR_REGISTER(&sk_pitworm_health2);
+	CVAR_REGISTER(&sk_pitworm_health3);
+
+	CVAR_REGISTER(&sk_pitworm_dmg_swipe1);
+	CVAR_REGISTER(&sk_pitworm_dmg_swipe2);
+	CVAR_REGISTER(&sk_pitworm_dmg_swipe3);
+
+	CVAR_REGISTER(&sk_pitworm_dmg_beam1);
+	CVAR_REGISTER(&sk_pitworm_dmg_beam2);
+	CVAR_REGISTER(&sk_pitworm_dmg_beam3);
 
 	//Turret
 	CVAR_REGISTER ( &sk_turret_health1 );

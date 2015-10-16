@@ -240,6 +240,11 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.torchHealth = GetSkillCvar( "sk_torch_ally_health");
 	gSkillData.torchDmgKick = GetSkillCvar( "sk_torch_ally_kick");
 
+	// Pitworm
+	gSkillData.pwormHealth = GetSkillCvar("sk_pitworm_health");
+	gSkillData.pwormDmgSwipe = GetSkillCvar("sk_pitworm_dmg_swipe");
+	gSkillData.pwormDmgBeam = GetSkillCvar("sk_pitworm_dmg_beam");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 
