@@ -30,7 +30,6 @@
     <ClInclude Include="eventscripts.h" />
     <ClInclude Include="ev_hldm.h" />
     <ClInclude Include="GameStudioModelRenderer.h" />
-    <ClInclude Include="GameStudioModelRenderer_Sample.h" />
     <ClInclude Include="health.h" />
     <ClInclude Include="hud.h" />
     <ClInclude Include="hud_iface.h" />

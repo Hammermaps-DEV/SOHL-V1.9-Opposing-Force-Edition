@@ -36,9 +36,6 @@
     <ClInclude Include="GameStudioModelRenderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameStudioModelRenderer_Sample.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="health.h">
       <Filter>Header Files</Filter>
     </ClInclude>
