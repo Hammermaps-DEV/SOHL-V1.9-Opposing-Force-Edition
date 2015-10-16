@@ -30,6 +30,7 @@ class CShockRoach : public CHeadCrab
 		void PrescheduleThink(void);
 		void StartTask(Task_t* pTask);
 		void KeyValue(KeyValueData *pkvd);
+		void HandleAnimEvent(MonsterEvent_t *pEvent);
 
 		int Classify(void);
 
@@ -42,8 +43,8 @@ class CShockRoach : public CHeadCrab
 		static const char *pAttackSounds[];
 
 		float m_flDie;
-		bool m_iDies;
-		bool m_iWeapon;
+		bool m_iDies = true;
+		bool m_iWeapon = true;
 };
 
 #endif // MONSTER_SHOCKROACH_H
