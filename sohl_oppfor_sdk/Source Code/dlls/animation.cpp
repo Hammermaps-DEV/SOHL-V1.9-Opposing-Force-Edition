@@ -30,6 +30,7 @@ typedef unsigned char byte;
 #include "progdefs.h"
 #include "edict.h"
 #include "eiface.h"
+#include "vminmax.h"
 
 #include "studio.h"
 
@@ -562,7 +563,7 @@ void SetBones( void *pmodel, float (*data)[3], int datasize)
 
 //	ALERT(at_console, "List begins:\n");
 	int j;
-	int limit = min(pstudiohdr->numbones, datasize);
+	int limit = V_min(pstudiohdr->numbones, datasize);
 	// go through the bones
 	for (int i = 0; i < limit; i++, pbone++)
 	{

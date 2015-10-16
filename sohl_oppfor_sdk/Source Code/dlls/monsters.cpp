@@ -1375,10 +1375,6 @@ int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEn
 			}
 			else
 			{
-				// If we're going toward an entity, and we're almost getting there, it's OK.
-//				if ( pTarget && fabs( flDist - iStep ) < LOCAL_STEP_SIZE )
-//					fReturn = TRUE;
-//				else
 				iReturn = LOCALMOVE_INVALID;
 				break;
 			}
@@ -1390,22 +1386,11 @@ int CBaseMonster :: CheckLocalMove ( const Vector &vecStart, const Vector &vecEn
 	{
 		// The monster can move to a spot UNDER the target, but not to it. Don't try to triangulate, go directly to the node graph.
 		// UNDONE: Magic # 64 -- this used to be pev->size.z but that won't work for small creatures like the headcrab
-		if ( fabs(vecEnd.z - pev->origin.z) > 64 )
+		if (V_fabs(vecEnd.z - pev->origin.z) > 64 )
 		{
 			iReturn = LOCALMOVE_INVALID_DONT_TRIANGULATE;
 		}
 	}
-	/*
-	// uncommenting this block will draw a line representing the nearest legal move.
-	WRITE_BYTE(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(MSG_BROADCAST, TE_SHOWLINE);
-	WRITE_COORD(MSG_BROADCAST, pev->origin.x);
-	WRITE_COORD(MSG_BROADCAST, pev->origin.y);
-	WRITE_COORD(MSG_BROADCAST, pev->origin.z);
-	WRITE_COORD(MSG_BROADCAST, vecStart.x);
-	WRITE_COORD(MSG_BROADCAST, vecStart.y);
-	WRITE_COORD(MSG_BROADCAST, vecStart.z);
-	*/
 
 	// since we've actually moved the monster during the check, undo the move.
 	UTIL_SetOrigin( this, vecStartPos );
@@ -2002,7 +1987,7 @@ void CBaseMonster::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir, f
 	while (flTotal > 0.001)
 	{
 		// don't walk more than 16 units or stairs stop working
-		flStep = min( 16.0, flTotal );
+		flStep = V_min( 16.0, flTotal );
 		UTIL_MoveToOrigin ( ENT(pev), m_Route[ m_iRouteIndex ].vecLocation, flStep, MOVE_NORMAL );
 		flTotal -= flStep;
 	}
@@ -3422,7 +3407,7 @@ Vector CBaseMonster :: ShootAtEnemy( const Vector &shootOrigin )
 //=========================================================
 BOOL CBaseMonster :: FacingIdeal( void )
 {
-	if ( fabs( FlYawDiff() ) <= 0.006 )//!!!BUGBUG - no magic numbers!!!
+	if (V_fabs( FlYawDiff() ) <= 0.006f )//!!!BUGBUG - no magic numbers!!!
 	{
 		return TRUE;
 	}

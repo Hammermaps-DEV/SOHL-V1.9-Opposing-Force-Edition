@@ -1584,7 +1584,7 @@ void CFuncTrackTrain :: Blocked( CBaseEntity *pOther )
 	// Blocker is on-ground on the train
 	if ( FBitSet( pevOther->flags, FL_ONGROUND ) && VARS(pevOther->groundentity) == pev )
 	{
-		float deltaSpeed = fabs(pev->speed);
+		float deltaSpeed = V_fabs(pev->speed);
 		if ( deltaSpeed > 50 )
 			deltaSpeed = 50;
 		if ( !pevOther->velocity.z )
@@ -2817,7 +2817,7 @@ void CFuncTrackChange :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 	if ( FStringNull( m_trainName ))
 	{
 		// train not specified - search train in radius of trackchange
-		float	radius = (max( pev->size.x, max( pev->size.y, pev->size.z ))) / 2.0f;
+		float	radius = (V_max( pev->size.x, V_max( pev->size.y, pev->size.z ))) / 2.0f;
 		CBaseEntity	*pFind = NULL;
 
 		while(( pFind = UTIL_FindEntityInSphere( pFind, pev->origin, radius )) != NULL )

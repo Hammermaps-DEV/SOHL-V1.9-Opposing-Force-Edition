@@ -433,11 +433,11 @@ void CRCAllyMonster :: StartTask( Task_t *pTask )
 
 			if (yaw < 0)
 			{
-				pev->ideal_yaw = min( yaw + 45, 0 ) + pev->angles.y;
+				pev->ideal_yaw = V_min( yaw + 45, 0 ) + pev->angles.y;
 			}
 			else
 			{
-				pev->ideal_yaw = max( yaw - 45, 0 ) + pev->angles.y;
+				pev->ideal_yaw = V_max( yaw - 45, 0 ) + pev->angles.y;
 			}
 		}
 		TaskComplete();
@@ -866,7 +866,7 @@ void CRCAllyMonster :: Touch( CBaseEntity *pOther )
 			return;
 
 		// Heuristic for determining if the player is pushing me away
-		float speed = fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
+		float speed = V_fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
 		if ( speed > 50 )
 		{
 			SetConditions( bits_COND_CLIENT_PUSH );

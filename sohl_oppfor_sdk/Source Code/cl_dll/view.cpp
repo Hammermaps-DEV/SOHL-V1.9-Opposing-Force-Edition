@@ -108,12 +108,12 @@ cvar_t	*cl_chasedist;
 
 // These cvars are not registered (so users can't cheat), so set the ->value field directly
 // Register these cvars in V_Init() if needed for easy tweaking
-cvar_t	v_iyaw_cycle		= {"v_iyaw_cycle", "2", 0, 2};
-cvar_t	v_iroll_cycle		= {"v_iroll_cycle", "0.5", 0, 0.5};
-cvar_t	v_ipitch_cycle		= {"v_ipitch_cycle", "1", 0, 1};
-cvar_t	v_iyaw_level		= {"v_iyaw_level", "0.3", 0, 0.3};
-cvar_t	v_iroll_level		= {"v_iroll_level", "0.1", 0, 0.1};
-cvar_t	v_ipitch_level		= {"v_ipitch_level", "0.3", 0, 0.3};
+cvar_t	v_iyaw_cycle		= {"v_iyaw_cycle", "2", 0, 2.0f};
+cvar_t	v_iroll_cycle		= {"v_iroll_cycle", "0.5", 0, 0.5f};
+cvar_t	v_ipitch_cycle		= {"v_ipitch_cycle", "1", 0, 1.0f};
+cvar_t	v_iyaw_level		= {"v_iyaw_level", "0.3", 0, 0.3f};
+cvar_t	v_iroll_level		= {"v_iroll_level", "0.1", 0, 0.1f};
+cvar_t	v_ipitch_level		= {"v_ipitch_level", "0.3", 0, 0.3f};
 
 float	v_idlescale;  // used by TFC for concussion grenade effect
 
@@ -237,7 +237,7 @@ float V_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollspe
     
 	side = DotProduct (velocity, right);
     sign = side < 0 ? -1 : 1;
-    side = fabs( side );
+    side = V_fabs( side );
     
 	value = rollangle;
     if (side < rollspeed)
@@ -307,7 +307,7 @@ void V_DriftPitch ( struct ref_params_s *pparams )
 	// don't count small mouse motion
 	if (pd.nodrift)
 	{
-		if ( fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
+		if (V_fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
 			pd.driftmove = 0;
 		else
 			pd.driftmove += pparams->frametime;
@@ -937,7 +937,7 @@ void V_SmoothInterpolateAngles( float * startAngle, float * endAngle, float * fi
 			d += 360.0f;
 		}
 
-		absd = fabs(d);
+		absd = V_fabs(d);
 
 		if ( absd > 0.01f )
 		{
@@ -1164,7 +1164,7 @@ float MaxAngleBetweenAngles(  float * a1, float * a2 )
 			d += 360;
 		}
 
-		d = fabs(d);
+		d = V_fabs(d);
 
 		if ( d > maxd )
 			maxd=d;

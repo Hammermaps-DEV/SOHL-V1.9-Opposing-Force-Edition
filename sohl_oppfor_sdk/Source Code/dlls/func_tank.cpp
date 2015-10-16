@@ -829,7 +829,7 @@ void CFuncTank :: Think( void )
 //	pev->avelocity = g_vecZero;
 	TrackTarget();
 
-	if ( fabs(pev->avelocity.x) > 1 || fabs(pev->avelocity.y) > 1 )
+	if (V_fabs(pev->avelocity.x) > 1.0f || V_fabs(pev->avelocity.y) > 1.0f )
 		StartRotSound();
 	else
 		StopRotSound();
@@ -1127,7 +1127,7 @@ void CFuncTank::TrackTarget( void )
 		}
 	}
 	// firing with automatic guns:
-	else if ( CanFire() && ( (fabs(distX) < m_pitchTolerance && fabs(distY) < m_yawTolerance) || (pev->spawnflags & SF_TANK_LINEOFSIGHT) ) )
+	else if ( CanFire() && ( (V_fabs(distX) < m_pitchTolerance && V_fabs(distY) < m_yawTolerance) || (pev->spawnflags & SF_TANK_LINEOFSIGHT) ) )
 	{
 		BOOL fire = FALSE;
 		Vector forward;

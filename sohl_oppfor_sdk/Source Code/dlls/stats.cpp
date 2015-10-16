@@ -123,8 +123,8 @@ void UpdateStats( CBasePlayer *pPlayer )
 	}
 
 	float health = pPlayer->pev->health + pPlayer->pev->armorvalue * 2;	// Armor is 2X health
-	float ammoDelta = fabs( ammo - gStats.lastAmmo );
-	float healthDelta = fabs( health - gStats.lastHealth );
+	float ammoDelta = V_fabs( ammo - gStats.lastAmmo );
+	float healthDelta = V_fabs( health - gStats.lastHealth );
 	int forceWrite = 0;
 	if ( health <= 0 && gStats.lastHealth > 0 )
 		forceWrite = 1;

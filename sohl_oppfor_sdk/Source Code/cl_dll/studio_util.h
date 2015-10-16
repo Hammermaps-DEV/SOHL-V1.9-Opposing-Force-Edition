@@ -25,7 +25,7 @@
 #define	ROLL	2
 #endif
 
-#define FDotProduct( a, b ) (fabs((a[0])*(b[0])) + fabs((a[1])*(b[1])) + fabs((a[2])*(b[2])))
+#define FDotProduct( a, b ) (V_fabs((a[0])*(b[0])) + V_fabs((a[1])*(b[1])) + V_fabs((a[2])*(b[2])))
 
 void	AngleMatrix (const float *angles, float (*matrix)[4] );
 int		VectorCompare (const float *v1, const float *v2);

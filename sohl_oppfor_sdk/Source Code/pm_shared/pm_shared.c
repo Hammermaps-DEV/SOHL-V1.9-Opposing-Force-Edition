@@ -21,6 +21,7 @@
 #include "pm_shared.h"
 #include "pm_movevars.h"
 #include "pm_debug.h"
+#include "vminmax.h"
 #include <stdio.h>  // NULL
 #include <math.h>   // sqrt
 #include <string.h> // strcpy
@@ -125,8 +126,7 @@ typedef struct hull_s
 
 // double to float warning
 #pragma warning(disable : 4244)
-#define max(a, b)  (((a) > (b)) ? (a) : (b))
-#define min(a, b)  (((a) < (b)) ? (a) : (b))
+
 // up / down
 #define	PITCH	0
 // left / right
@@ -2782,7 +2782,7 @@ void PM_CheckWaterJump (void)
 	savehull = pmove->usehull;
 	pmove->usehull = 2;
 	tr = pmove->PM_PlayerTrace( vecStart, vecEnd, PM_NORMAL, -1 );
-	if ( tr.fraction < 1.0 && fabs( tr.plane.normal[2] ) < 0.1f )  // Facing a near vertical wall?
+	if ( tr.fraction < 1.0 && V_fabs( tr.plane.normal[2] ) < 0.1f )  // Facing a near vertical wall?
 	{
 		vecStart[2] += pmove->player_maxs[ savehull ][2] - WJ_HEIGHT;
 		VectorMA( vecStart, 24, flatforward, vecEnd );
@@ -2920,7 +2920,7 @@ float PM_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollsp
     
 	sign = side < 0 ? -1 : 1;
     
-	side = fabs(side);
+	side = V_fabs(side);
     
 	value = rollangle;
     
@@ -2948,7 +2948,7 @@ void PM_DropPunchAngle ( vec3_t punchangle )
 	
 	len = VectorNormalize ( punchangle );
 	len -= (10.0 + len * 0.5) * pmove->frametime;
-	len = max( len, 0.0 );
+	len = V_max( len, 0.0 );
 	VectorScale ( punchangle, len, punchangle);
 }
 
@@ -2972,7 +2972,7 @@ void PM_CheckParamters( void )
 	maxspeed = pmove->clientmaxspeed; //atof( pmove->PM_Info_ValueForKey( pmove->physinfo, "maxspd" ) );
 	if ( maxspeed != 0.0 )
 	{
-		pmove->maxspeed = min( maxspeed, pmove->maxspeed );
+		pmove->maxspeed = V_min( maxspeed, pmove->maxspeed );
 	}
 
 	if ( ( spd != 0.0 ) &&

@@ -273,7 +273,7 @@ void CHudHealth::CalcDamageDirection(vec3_t vecFrom)
 		}
 		else
 		{
-			float f = fabs(side);
+			float f = V_fabs(side);
 			if (f > 0.3)
 				m_fAttackRear = V_max(m_fAttackRear, f);
 		}
@@ -285,7 +285,7 @@ void CHudHealth::CalcDamageDirection(vec3_t vecFrom)
 		}
 		else
 		{
-			float f = fabs(front);
+			float f = V_fabs(front);
 			if (f > 0.3)
 				m_fAttackLeft = V_max(m_fAttackLeft, f);
 		}
@@ -377,7 +377,7 @@ int CHudHealth::DrawDamage(float flTime)
 
 	UnpackRGB(r,g,b, gHUD.m_iHUDColor);
 	
-	a = (int)( fabs(sin(flTime*2)) * 256.0);
+	a = (int)(V_fabs(sin(flTime*2)) * 256.0f);
 
 	ScaleColors(r, g, b, a);
 

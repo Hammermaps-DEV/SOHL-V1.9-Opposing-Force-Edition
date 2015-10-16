@@ -994,15 +994,15 @@ void CIchthyosaur::Swim( )
 	float turn = 360;
 	// ALERT( at_console, "Y %.0f %.0f\n", Angles.y, pev->angles.y );
 
-	if (fabs(Angles.y - pev->angles.y) < fabs(turn))
+	if (V_fabs(Angles.y - pev->angles.y) < V_fabs(turn))
 	{
 		turn = Angles.y - pev->angles.y;
 	}
-	if (fabs(Angles.y - pev->angles.y + 360) < fabs(turn))
+	if (V_fabs(Angles.y - pev->angles.y + 360) < V_fabs(turn))
 	{
 		turn = Angles.y - pev->angles.y + 360;
 	}
-	if (fabs(Angles.y - pev->angles.y - 360) < fabs(turn))
+	if (V_fabs(Angles.y - pev->angles.y - 360) < V_fabs(turn))
 	{
 		turn = Angles.y - pev->angles.y - 360;
 	}
@@ -1010,7 +1010,7 @@ void CIchthyosaur::Swim( )
 	float speed = m_flightSpeed * 0.1;
 
 	// ALERT( at_console, "speed %.0f %f\n", turn, speed );
-	if (fabs(turn) > speed)
+	if (V_fabs(turn) > speed)
 	{
 		if (turn < 0.0)
 		{
@@ -1036,20 +1036,20 @@ void CIchthyosaur::Swim( )
 	// Roll Smoothing
 	//
 	turn = 360;
-	if (fabs(Angles.z - pev->angles.z) < fabs(turn))
+	if (V_fabs(Angles.z - pev->angles.z) < V_fabs(turn))
 	{
 		turn = Angles.z - pev->angles.z;
 	}
-	if (fabs(Angles.z - pev->angles.z + 360) < fabs(turn))
+	if (V_fabs(Angles.z - pev->angles.z + 360) < V_fabs(turn))
 	{
 		turn = Angles.z - pev->angles.z + 360;
 	}
-	if (fabs(Angles.z - pev->angles.z - 360) < fabs(turn))
+	if (V_fabs(Angles.z - pev->angles.z - 360) < V_fabs(turn))
 	{
 		turn = Angles.z - pev->angles.z - 360;
 	}
 	speed = m_flightSpeed/2 * 0.1;
-	if (fabs(turn) < speed)
+	if (V_fabs(turn) < speed)
 	{
 		pev->angles.z += turn;
 	}

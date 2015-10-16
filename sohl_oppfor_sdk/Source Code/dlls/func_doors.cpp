@@ -309,59 +309,6 @@ LINK_ENTITY_TO_CLASS( func_door, CBaseDoor );
 //
 LINK_ENTITY_TO_CLASS( func_water, CBaseDoor );
 
-//MH	this new spawn function messes up SF_DOOR_START_OPEN
-//		so replace it with the old one (below)
-/*
-void CBaseDoor::Spawn( )
-{
-	Precache();
-	SetMovedir (pev);
-
-	if ( pev->skin == 0 )
-	{//normal door
-		if ( FBitSet (pev->spawnflags, SF_DOOR_PASSABLE) )
-			pev->solid		= SOLID_NOT;
-		else
-			pev->solid		= SOLID_BSP;
-	}
-	else
-	{// special contents
-		pev->solid		= SOLID_NOT;
-		SetBits( pev->spawnflags, SF_DOOR_SILENT );	// water is silent for now
-	}
-
-	pev->movetype	= MOVETYPE_PUSH;
-	SET_MODEL( ENT(pev), STRING(pev->model) );
-	UTIL_SetOrigin(this, pev->origin);
-	
-	if (pev->speed == 0)
-		pev->speed = 100;
-	
-	m_vecPosition1	= pev->origin;
-	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
-	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
-	if ( FBitSet (pev->spawnflags, SF_DOOR_START_OPEN) )
-	{	// swap pos1 and pos2, put door at pos2
-		UTIL_SetOrigin(this, m_vecPosition2);
-		m_vecPosition2 = m_vecPosition1;
-		m_vecPosition1 = pev->origin;
-	}
-
-	m_toggle_state = TS_AT_BOTTOM;
-	
-	// if the door is flagged for USE button activation only, use NULL touch function
-	// (unless it's overridden, of course- LRC)
-	if ( FBitSet ( pev->spawnflags, SF_DOOR_USE_ONLY ) &&
-			!FBitSet ( pev->spawnflags, SF_DOOR_FORCETOUCHABLE ))
-	{
-		SetTouch ( NULL );
-	}
-	else // touchable button
-		SetTouch(&CBaseDoor:: DoorTouch );
-}
-*/
-
 //standard Spirit 1.0 spawn function
 void CBaseDoor::Spawn( )
 {
@@ -411,7 +358,7 @@ void CBaseDoor :: PostSpawn( void )
 		m_vecPosition1 = pev->origin;
 
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions
-	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (V_fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
 
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 	if ( FBitSet (pev->spawnflags, SF_DOOR_START_OPEN) )
@@ -1188,7 +1135,7 @@ void CMomentaryDoor::Spawn( void )
 	
 	m_vecPosition1	= pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
+	m_vecPosition2	= m_vecPosition1 + (pev->movedir * (V_fabs( pev->movedir.x * (pev->size.x-2) ) + fabs( pev->movedir.y * (pev->size.y-2) ) + fabs( pev->movedir.z * (pev->size.z-2) ) - m_flLip));
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 
 	//LRC: FIXME, move to PostSpawn
@@ -1742,7 +1689,7 @@ void CBaseTrainDoor::DoorGoUp( void )
 	STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving) );
 	EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseArrived), 1, ATTN_NORM);
 
-	float	depth = (fabs( gpGlobals->v_right.x * (pev->size.x-2) ) + fabs( gpGlobals->v_right.y * (pev->size.y-2) ) + fabs( gpGlobals->v_right.z * (pev->size.z-2)) - m_flLip);
+	float	depth = (V_fabs( gpGlobals->v_right.x * (pev->size.x-2) ) + fabs( gpGlobals->v_right.y * (pev->size.y-2) ) + fabs( gpGlobals->v_right.z * (pev->size.z-2)) - m_flLip);
 
 	if( pev->spawnflags & SF_TRAINDOOR_INVERSE )
 		depth = -depth;
@@ -1765,7 +1712,7 @@ void CBaseTrainDoor::DoorSlideUp( void )
 
 	UTIL_MakeVectors( m_vecOldAngles );
 
-	float	width = (fabs( gpGlobals->v_forward.x * (pev->size.x-2) ) + fabs( gpGlobals->v_forward.y * (pev->size.y-2) ) + fabs( gpGlobals->v_forward.z * (pev->size.z-2)));
+	float	width = (V_fabs( gpGlobals->v_forward.x * (pev->size.x-2) ) + fabs( gpGlobals->v_forward.y * (pev->size.y-2) ) + fabs( gpGlobals->v_forward.z * (pev->size.z-2)));
 
 	door_state = TD_SLIDING_UP;
 

@@ -446,7 +446,7 @@ void CNihilanth :: DyingThink( void )
 	{
 		Flight( );
 
-		if (fabs( pev->origin.z - m_flMaxZ ) < 16)
+		if (V_fabs( pev->origin.z - m_flMaxZ ) < 16)
 		{
 			pev->velocity = Vector( 0, 0, 0 );
 			FireTargets( m_szDeadUse, this, this, USE_ON, 1.0 );
@@ -469,7 +469,7 @@ void CNihilanth :: DyingThink( void )
 	{
 		if (m_pBall->pev->renderamt > 0)
 		{
-			m_pBall->pev->renderamt = max( 0, m_pBall->pev->renderamt - 2);
+			m_pBall->pev->renderamt = V_max( 0, m_pBall->pev->renderamt - 2);
 		}
 		else
 		{
@@ -490,7 +490,7 @@ void CNihilanth :: DyingThink( void )
 	switch( RANDOM_LONG( 1, 4 ))
 	{
 	case 1: // head
-		vecDir.z = fabs( vecDir.z ) * 0.5;
+		vecDir.z = V_fabs( vecDir.z ) * 0.5;
 		vecDir = vecDir + 2 * gpGlobals->v_up;
 		break;
 	case 2: // eyes
@@ -891,7 +891,7 @@ void CNihilanth :: HuntThink( void )
 		}
 		else
 		{
-			m_flAdj = min( m_flAdj + 10, 1000 );
+			m_flAdj = V_min( m_flAdj + 10, 1000 );
 		}
 	}
 
@@ -951,9 +951,9 @@ void CNihilanth :: Flight( void )
 	float flDist = DotProduct( m_posDesired - vecEst, gpGlobals->v_forward );
 
 	// sideways drag
-	m_velocity.x = m_velocity.x * (1.0 - fabs( gpGlobals->v_right.x ) * 0.05);
-	m_velocity.y = m_velocity.y * (1.0 - fabs( gpGlobals->v_right.y ) * 0.05);
-	m_velocity.z = m_velocity.z * (1.0 - fabs( gpGlobals->v_right.z ) * 0.05);
+	m_velocity.x = m_velocity.x * (1.0 - V_fabs( gpGlobals->v_right.x ) * 0.05);
+	m_velocity.y = m_velocity.y * (1.0 - V_fabs( gpGlobals->v_right.y ) * 0.05);
+	m_velocity.z = m_velocity.z * (1.0 - V_fabs( gpGlobals->v_right.z ) * 0.05);
 
 	// general drag
 	m_velocity = m_velocity * 0.995;

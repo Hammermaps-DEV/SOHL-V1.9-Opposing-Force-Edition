@@ -853,7 +853,7 @@ int CBaseEntity :: TakeHealth( float flHealth, int bitsDamageType )
 	if ( pev->health >= pev->max_health ) return 0;
 
 	pev->health += flHealth;
-          pev->health = min(pev->health, pev->max_health);
+          pev->health = V_min(pev->health, pev->max_health);
 
 	return 1;
 }
@@ -1018,10 +1018,10 @@ void SetObjectCollisionBox( entvars_t *pev )
 		max = 0;
 		for (i=0 ; i<3 ; i++)
 		{
-			v = fabs( ((float *)pev->mins)[i]);
+			v = V_fabs( ((float *)pev->mins)[i]);
 			if (v > max)
 				max = v;
-			v = fabs( ((float *)pev->maxs)[i]);
+			v = V_fabs( ((float *)pev->maxs)[i]);
 			if (v > max)
 				max = v;
 		}

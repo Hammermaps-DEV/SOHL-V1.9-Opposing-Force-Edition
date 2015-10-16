@@ -647,7 +647,7 @@ bool ParticleSystem::ParticleIsVisible( particle* part )
 	if ( DotProduct ( vecDir, forward ) < 0 )
 		return false;
 
-	float dot = fabs( DotProduct ( vecDir, right ) ) + fabs( DotProduct ( vecDir, up ) ) * 0.5;
+	float dot = V_fabs( DotProduct ( vecDir, right ) ) + V_fabs( DotProduct ( vecDir, up ) ) * 0.5;
 	// tweak for distance
 	dot *= 1.0 + 0.2 * ( distance / 8192 );
 
