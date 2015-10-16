@@ -1078,7 +1078,7 @@ void CFuncTank::TrackTarget( void )
 	UTIL_SetAvelocity(this, setAVel);
 
 	// notify the TankSequence if we're (pretty close to) facing the target
-	if (m_pSequence && abs(distY) < 0.1 && abs(distX) < 0.1)
+	if (m_pSequence && V_fabs(distY) < 0.1f && V_fabs(distX) < 0.1f)
 		m_pSequence->FacingNotify();
 
 	// firing in tanksequences:
