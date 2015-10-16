@@ -313,18 +313,10 @@ const char *CGargantua::pAttackMissSounds[] =
 
 const char *CGargantua::pRicSounds[] = 
 {
-#if 0
-	"weapons/ric1.wav",
-	"weapons/ric2.wav",
-	"weapons/ric3.wav",
-	"weapons/ric4.wav",
-	"weapons/ric5.wav",
-#else
 	"debris/metal4.wav",
 	"debris/metal6.wav",
 	"weapons/ric4.wav",
 	"weapons/ric5.wav",
-#endif
 };
 
 const char *CGargantua::pFootSounds[] = 
@@ -379,13 +371,6 @@ const char *CGargantua::pBreatheSounds[] =
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-#if 0
-enum
-{
-	SCHED_ = LAST_COMMON_SCHEDULE + 1,
-};
-#endif
-
 enum
 {
 	TASK_SOUND_ATTACK = LAST_COMMON_TASK + 1,

@@ -557,8 +557,7 @@ int CHudAmmo::MsgFunc_HideWeapon( const char *pszName, int iSize, void *pbuf )
 	}
 	else
 	{
-		//if ( m_pWeapon )
-			SetCrosshair( m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, 255, 255, 255 );
+		SetCrosshair( m_pWeapon->hCrosshair, m_pWeapon->rcCrosshair, 255, 255, 255 );
 //		CONPRINT("Selecting weapon crosshair\n");
 	}
 

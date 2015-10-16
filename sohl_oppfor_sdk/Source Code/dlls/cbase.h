@@ -335,13 +335,10 @@ public:
 		return (void *)ALLOC_PRIVATE(ENT(pev), stAllocateBlock);
 	};
 
-	// don't use this.
-#if _MSC_VER >= 1200 // only build this code if MSVC++ 6.0 or higher
 	void operator delete(void *pMem, entvars_t *pev)
 	{
 		pev->flags |= FL_KILLME;
 	};
-#endif
 
 	void UpdateOnRemove( void );
 

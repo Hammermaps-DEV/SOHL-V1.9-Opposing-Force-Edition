@@ -1171,23 +1171,12 @@ void CPushable :: Move( CBaseEntity *pOther, int push )
 			{
 				m_lastSound = RANDOM_LONG(0,2);
 				EMIT_SOUND(ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound], 0.5, ATTN_NORM);
-	//			SetThink( StopSound );
-	//			SetNextThink( 0.1 );
 			}
 			else
 				STOP_SOUND( ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound] );
 		}
 	}
 }
-
-#if 0
-void CPushable::StopSound( void )
-{
-	Vector dist = pev->oldorigin - pev->origin;
-	if ( dist.Length() <= 0 )
-		STOP_SOUND( ENT(pev), CHAN_WEAPON, m_soundNames[m_lastSound] );
-}
-#endif
 
 int CPushable::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
 {

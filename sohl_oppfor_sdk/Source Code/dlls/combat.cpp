@@ -1076,19 +1076,6 @@ int CBaseMonster :: DeadTakeDamage( entvars_t *pevInflictor, entvars_t *pevAttac
 		}
 	}
 
-#if 0// turn this back on when the bounding box issues are resolved.
-
-	pev->flags &= ~FL_ONGROUND;
-	pev->origin.z += 1;
-	
-	// let the damage scoot the corpse around a bit.
-	if ( !FNullEnt(pevInflictor) && (pevAttacker->solid != SOLID_TRIGGER) )
-	{
-		pev->velocity = pev->velocity + vecDir * -DamageForce( flDamage );
-	}
-
-#endif
-
 	// kill the corpse if enough damage was done to destroy the corpse and the damage is of a type that is allowed to destroy the corpse.
 	if ( bitsDamageType & DMG_GIB_CORPSE )
 	{

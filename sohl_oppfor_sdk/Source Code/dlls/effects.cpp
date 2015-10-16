@@ -873,7 +873,6 @@ void CLightning::TripThink( void )
 
 void CLightning::Zap( const Vector &vecSrc, const Vector &vecDest )
 {
-#if 1
 	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
 		WRITE_BYTE( TE_BEAMPOINTS);
 		WRITE_COORD(vecSrc.x);
@@ -894,21 +893,7 @@ void CLightning::Zap( const Vector &vecSrc, const Vector &vecDest )
 		WRITE_BYTE( pev->renderamt );	// brightness
 		WRITE_BYTE( m_speed );		// speed
 	MESSAGE_END();
-#else
-	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-		WRITE_BYTE(TE_LIGHTNING);
-		WRITE_COORD(vecSrc.x);
-		WRITE_COORD(vecSrc.y);
-		WRITE_COORD(vecSrc.z);
-		WRITE_COORD(vecDest.x);
-		WRITE_COORD(vecDest.y);
-		WRITE_COORD(vecDest.z);
-		WRITE_BYTE(10);
-		WRITE_BYTE(50);
-		WRITE_BYTE(40);
-		WRITE_SHORT(m_spriteTexture);
-	MESSAGE_END();
-#endif
+
 	DoSparks( vecSrc, vecDest );
 }
 
@@ -2519,22 +2504,6 @@ void CTestEffect::TestThink( void )
 		m_flBeamTime[m_iBeam] = gpGlobals->time;
 		m_pBeam[m_iBeam] = pbeam;
 		m_iBeam++;
-
-#if 0
-		Vector vecMid = (vecSrc + tr.vecEndPos) * 0.5;
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE(TE_DLIGHT);
-			WRITE_COORD(vecMid.x);	// X
-			WRITE_COORD(vecMid.y);	// Y
-			WRITE_COORD(vecMid.z);	// Z
-			WRITE_BYTE( 20 );		// radius * 0.1
-			WRITE_BYTE( 255 );		// r
-			WRITE_BYTE( 180 );		// g
-			WRITE_BYTE( 100 );		// b
-			WRITE_BYTE( 20 );		// time * 10
-			WRITE_BYTE( 0 );		// decay * 0.1
-		MESSAGE_END( );
-#endif
 	}
 
 	if (t < 3.0)

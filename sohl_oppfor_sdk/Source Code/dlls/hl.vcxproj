@@ -115,7 +115,6 @@
     <ClCompile Include="subs.cpp" />
     <ClCompile Include="talkmonster.cpp" />
     <ClCompile Include="teamplay_gamerules.cpp" />
-    <ClCompile Include="tempmonster.cpp" />
     <ClCompile Include="monster_tentacle.cpp" />
     <ClCompile Include="triggers.cpp" />
     <ClCompile Include="weapon_tripmine.cpp" />

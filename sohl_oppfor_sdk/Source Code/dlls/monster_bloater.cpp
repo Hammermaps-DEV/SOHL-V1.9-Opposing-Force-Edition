@@ -70,12 +70,6 @@ void CBloater :: SetYawSpeed ( void )
 
 	ys = 120;
 
-#if 0
-	switch ( m_Activity )
-	{
-	}
-#endif
-
 	pev->yaw_speed = ys;
 }
 
@@ -87,78 +81,22 @@ int CBloater :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 void CBloater :: PainSound( void )
 {
-#if 0	
-	int pitch = 95 + RANDOM_LONG(0,9);
 
-	switch (RANDOM_LONG(0,5))
-	{
-	case 0: 
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_pain1.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_pain2.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	default:
-		break;
-	}
-#endif
 }
 
 void CBloater :: AlertSound( void )
 {
-#if 0
-	int pitch = 95 + RANDOM_LONG(0,9);
 
-	switch (RANDOM_LONG(0,2))
-	{
-	case 0: 
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_alert10.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_alert20.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_alert30.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	}
-#endif
 }
 
 void CBloater :: IdleSound( void )
 {
-#if 0
-	int pitch = 95 + RANDOM_LONG(0,9);
 
-	switch (RANDOM_LONG(0,2))
-	{
-	case 0: 
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_idle1.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_idle2.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_idle3.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	}
-#endif
 }
 
 void CBloater :: AttackSnd( void )
 {
-#if 0
-	int pitch = 95 + RANDOM_LONG(0,9);
 
-	switch (RANDOM_LONG(0,1))
-	{
-	case 0: 
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_attack1.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "zombie/zo_attack2.wav", 1.0, ATTN_NORM, 0, pitch);
-		break;
-	}
-#endif
 }
 
 

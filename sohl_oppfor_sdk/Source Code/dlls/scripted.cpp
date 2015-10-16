@@ -508,16 +508,6 @@ BOOL CCineMonster :: StartSequence( CBaseMonster *pTarget, int iszSeq, BOOL comp
 		// return FALSE;
 	}
 
-#if 0
-	char *s;
-	if ( pev->spawnflags & SF_SCRIPT_NOINTERRUPT ) 
-		s = "No";
-	else
-		s = "Yes";
-
-	ALERT( at_debug, "%s (%s): started \"%s\":INT:%s\n", STRING( pTarget->pev->targetname ), STRING( pTarget->pev->classname ), STRING( iszSeq), s );
-#endif
-
 	pTarget->pev->frame = 0;
 	pTarget->ResetSequenceInfo( );
 	return TRUE;

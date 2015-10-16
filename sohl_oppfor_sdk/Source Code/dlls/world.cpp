@@ -489,15 +489,9 @@ void CWorld :: Precache( void )
 //	ALERT(at_console, "Clearing AssistList\n");
 
 	g_pLastSpawn = NULL;
-	
-#if 1
+
 	CVAR_SET_STRING("sv_gravity", "800"); // 67ft/sec
 	CVAR_SET_STRING("sv_stepsize", "18");
-#else
-	CVAR_SET_STRING("sv_gravity", "384"); // 32ft/sec
-	CVAR_SET_STRING("sv_stepsize", "24");
-#endif
-
 	CVAR_SET_STRING("room_type", "0");// clear DSP
 
 	// Set up game rules
@@ -507,20 +501,6 @@ void CWorld :: Precache( void )
 	}
 
 	g_pGameRules = InstallGameRules( );
-
-	//!!!UNDONE why is there so much Spawn code in the Precache function? I'll just keep it here 
-
-/*	if ( WorldGraph.m_fGraphPresent && !WorldGraph.m_fGraphPointersSet )
-	{
-		if ( !WorldGraph.FSetGraphPointers() )
-		{
-			ALERT ( at_debug, "**Graph pointers were not set!\n");
-		}
-		else
-		{
-			ALERT ( at_debug, "**Graph Pointers Set!\n" );
-		} 
-	}*/
 
 	///!!!LATER - do we want a sound ent in deathmatch? (sjb)
 	//pSoundEnt = CBaseEntity::Create( "soundent", g_vecZero, g_vecZero, edict() );

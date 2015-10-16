@@ -743,7 +743,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	V_DropPunchAngle ( pparams->frametime, (float *)&ev_punchangle );
 
 	// smooth out stair step ups
-#if 1
 	if ( !pparams->smoothing && pparams->onground && pparams->simorg[2] - oldz > 0)
 	{
 		float steptime;
@@ -765,7 +764,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	{
 		oldz = pparams->simorg[2];
 	}
-#endif
 
 	{
 		static float lastorg[3];

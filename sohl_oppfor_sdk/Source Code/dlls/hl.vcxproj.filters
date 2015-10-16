@@ -171,9 +171,6 @@
     <ClCompile Include="teamplay_gamerules.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tempmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="triggers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

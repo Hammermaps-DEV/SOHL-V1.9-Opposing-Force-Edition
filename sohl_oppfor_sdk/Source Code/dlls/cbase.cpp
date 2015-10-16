@@ -384,12 +384,6 @@ int DispatchRestore( edict_t *pent, SAVERESTOREDATA *pSaveData, int globalEntity
 		// Again, could be deleted, get the pointer again.
 		pEntity = (CBaseEntity *)GET_PRIVATE(pent);
 		if (pEntity) pEntity->pev->colormap = ENTINDEX(pent);
-#if 0
-		if ( pEntity && pEntity->pev->globalname && globalEntity ) 
-		{
-			ALERT( at_debug, "Global %s is %s\n", STRING(pEntity->pev->globalname), STRING(pEntity->pev->model) );
-		}
-#endif
 
 		// Is this an overriding global entity (coming over the transition), or one restoring in a level
 		if ( globalEntity )

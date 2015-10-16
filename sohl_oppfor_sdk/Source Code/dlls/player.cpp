@@ -145,39 +145,6 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 
 	DEFINE_FIELD( CBasePlayer, Rain_endFade, FIELD_TIME ),
 	DEFINE_FIELD( CBasePlayer, Rain_nextFadeUpdate, FIELD_TIME ),
-
-	//LRC
-	//DEFINE_FIELD( CBasePlayer, m_iFogStartDist, FIELD_INTEGER ),
-	//DEFINE_FIELD( CBasePlayer, m_iFogEndDist, FIELD_INTEGER ),
-	//DEFINE_FIELD( CBasePlayer, m_vecFogColor, FIELD_VECTOR ),
-
-	//DEFINE_FIELD( CBasePlayer, m_fDeadTime, FIELD_FLOAT ), // only used in multiplayer games
-	//DEFINE_FIELD( CBasePlayer, m_fGameHUDInitialized, FIELD_INTEGER ), // only used in multiplayer games
-	//DEFINE_FIELD( CBasePlayer, m_flStopExtraSoundTime, FIELD_TIME ),
-	//DEFINE_FIELD( CBasePlayer, m_fKnownItem, FIELD_INTEGER ), // reset to zero on load
-	//DEFINE_FIELD( CBasePlayer, m_iPlayerSound, FIELD_INTEGER ),	// Don't restore, set in Precache()
-	//DEFINE_FIELD( CBasePlayer, m_pentSndLast, FIELD_EDICT ),	// Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_flSndRoomtype, FIELD_FLOAT ),	// Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_flSndRange, FIELD_FLOAT ),	// Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_fNewAmmo, FIELD_INTEGER ), // Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_flgeigerRange, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-	//DEFINE_FIELD( CBasePlayer, m_flgeigerDelay, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-	//DEFINE_FIELD( CBasePlayer, m_igeigerRangePrev, FIELD_FLOAT ),	// Don't restore, reset in Precache()
-	//DEFINE_FIELD( CBasePlayer, m_iStepLeft, FIELD_INTEGER ), // Don't need to restore
-	//DEFINE_ARRAY( CBasePlayer, m_szTextureName, FIELD_CHARACTER, CBTEXTURENAMEMAX ), // Don't need to restore
-	//DEFINE_FIELD( CBasePlayer, m_chTextureType, FIELD_CHARACTER ), // Don't need to restore
-	//DEFINE_FIELD( CBasePlayer, m_fNoPlayerSound, FIELD_BOOLEAN ), // Don't need to restore, debug
-	//DEFINE_FIELD( CBasePlayer, m_iUpdateTime, FIELD_INTEGER ), // Don't need to restore
-	//DEFINE_FIELD( CBasePlayer, m_iClientHealth, FIELD_INTEGER ), // Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_iClientBattery, FIELD_INTEGER ), // Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_iClientHideHUD, FIELD_INTEGER ), // Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_fWeapon, FIELD_BOOLEAN ),  // Don't restore, client needs reset
-	//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't restore, depends on server message after spawning and only matters in multiplayer
-	//DEFINE_FIELD( CBasePlayer, m_vecAutoAim, FIELD_VECTOR ), // Don't save/restore - this is recomputed
-	//DEFINE_ARRAY( CBasePlayer, m_rgAmmoLast, FIELD_INTEGER, MAX_AMMO_SLOTS ), // Don't need to restore
-	//DEFINE_FIELD( CBasePlayer, m_fOnTarget, FIELD_BOOLEAN ), // Don't need to restore
-	//DEFINE_FIELD( CBasePlayer, m_nCustomSprayFrames, FIELD_INTEGER ), // Don't need to restore
-
 };
 
 
@@ -330,50 +297,6 @@ Vector VecVelocityForDamage(float flDamage)
 
 	return vec;
 }
-
-#if 0 /*
-static void ThrowGib(entvars_t *pev, char *szGibModel, float flDamage)
-{
-	edict_t *pentNew = CREATE_ENTITY();
-	entvars_t *pevNew = VARS(pentNew);
-
-	pevNew->origin = pev->origin;
-	SET_MODEL(ENT(pevNew), szGibModel);
-	UTIL_SetSize(pevNew, g_vecZero, g_vecZero);
-
-	pevNew->velocity		= VecVelocityForDamage(flDamage);
-	pevNew->movetype		= MOVETYPE_BOUNCE;
-	pevNew->solid			= SOLID_NOT;
-	pevNew->avelocity.x		= RANDOM_FLOAT(0,600);
-	pevNew->avelocity.y		= RANDOM_FLOAT(0,600);
-	pevNew->avelocity.z		= RANDOM_FLOAT(0,600);
-	CHANGE_METHOD(ENT(pevNew), em_think, SUB_Remove);
-	pevNew->ltime		= gpGlobals->time;
-	pevNew->nextthink	= gpGlobals->time + RANDOM_FLOAT(10,20);
-	pevNew->frame		= 0;
-	pevNew->flags		= 0;
-}
-
-
-static void ThrowHead(entvars_t *pev, char *szGibModel, floatflDamage)
-{
-	SET_MODEL(ENT(pev), szGibModel);
-	pev->frame			= 0;
-	pev->nextthink		= -1;
-	pev->movetype		= MOVETYPE_BOUNCE;
-	pev->takedamage		= DAMAGE_NO;
-	pev->solid			= SOLID_NOT;
-	pev->view_ofs		= Vector(0,0,8);
-	UTIL_SetSize(pev, Vector(-16,-16,0), Vector(16,16,56));
-	pev->velocity		= VecVelocityForDamage(flDamage);
-	pev->avelocity		= RANDOM_FLOAT(-1,1) * Vector(0,600,0);
-	pev->origin.z -= 24;
-	ClearBits(pev->flags, FL_ONGROUND);
-}
-
-
-*/
-#endif
 
 int TrainSpeed(int iSpeed, int iMax)
 {
@@ -3683,7 +3606,6 @@ void CBasePlayer::ImpulseCommands( )
 //=========================================================
 void CBasePlayer::CheatImpulseCommands( int iImpulse )
 {
-#if !defined( HLDEMO_BUILD )
 	if ( g_flWeaponCheat == 0.0 )
 	{
 		return;
@@ -3877,15 +3799,9 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		if ( pEntity )
 		{
 			UTIL_Remove (pEntity);
-			/*if ( pEntity->pev->takedamage )
-			{
-				pEntity->SetThink(&CBaseEntity::SUB_Remove);
-				pEntity->SetNextThink( 0 );	
-			}*/
 		}
 		break;
 	}
-#endif	// HLDEMO_BUILD
 }
 
 //

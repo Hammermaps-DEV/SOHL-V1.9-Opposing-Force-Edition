@@ -12,7 +12,6 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 
 //=========================================================
 // monster template
@@ -393,15 +392,7 @@ const char *CBigMomma::pFootSounds[] =
 
 void CBigMomma :: KeyValue( KeyValueData *pkvd )
 {
-#if 0
-	if (FStrEq(pkvd->szKeyName, "volume"))
-	{
-		m_volume = atof(pkvd->szValue);
-		pkvd->fHandled = TRUE;
-	}
-	else
-#endif
-		CBaseMonster::KeyValue( pkvd );
+	CBaseMonster::KeyValue( pkvd );
 }
 
 //=========================================================
@@ -1316,5 +1307,3 @@ void CBMortar::Touch( CBaseEntity *pOther )
 	RadiusDamage( pev->origin, pev, pevOwner, gSkillData.bigmommaDmgBlast, gSkillData.bigmommaRadiusBlast, CLASS_NONE, DMG_ACID );
 	UTIL_Remove( this );
 }
-
-#endif

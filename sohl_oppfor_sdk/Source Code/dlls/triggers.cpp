@@ -2103,76 +2103,19 @@ void CEnvCustomize :: Affect (CBaseEntity *pTarget, USE_TYPE useType)
 		pMonster->pev->spawnflags &= ~SF_MONSTER_PRISONER;
 		break;
 	}
-/*	if (m_iPrisoner != CUSTOM_FLAG_NOCHANGE)
-	{
-		if (pMonster->pev->spawnflags & SF_MONSTER_PRISONER && (m_iPrisoner == CUSTOM_FLAG_TOGGLE || m_iPrisoner == CUSTOM_FLAG_OFF))
-		{
-			pMonster->pev->spawnflags &= ~SF_MONSTER_PRISONER;
-			if (pev->spawnflags & SF_CUSTOM_DEBUG)
-				ALERT(at_debug, " prisoner=NO");
-		}
-		else if (m_iPrisoner != CUSTOM_FLAG_OFF)
-		{
-			pMonster->pev->spawnflags |= SF_MONSTER_PRISONER;
-			if (pev->spawnflags & SF_CUSTOM_DEBUG)
-				ALERT(at_debug, " prisoner=YES");
-			if (pMonster->m_hEnemy)
-			{
-				pMonster->m_hEnemy = NULL;
-				// make 'em stop attacking... might be better to use a different signal?
-				pMonster->SetConditions( bits_COND_NEW_ENEMY );
-			}
-		}
-		else if (pev->spawnflags & SF_CUSTOM_DEBUG)
-			ALERT(at_debug, " prisoner=unchanged");
-	}
-*/
+
 	switch (GetActionFor(m_iMonsterClip, pMonster->pev->flags & FL_MONSTERCLIP, useType, "monsterclip") )
 	{
 	case CUSTOM_FLAG_ON: pMonster->pev->flags |= FL_MONSTERCLIP; break;
 	case CUSTOM_FLAG_OFF: pMonster->pev->flags &= ~FL_MONSTERCLIP; break;
 	}
-/*	if (m_iMonsterClip != CUSTOM_FLAG_NOCHANGE)
-	{
-		if (pMonster->pev->flags & FL_MONSTERCLIP && (m_iMonsterClip == CUSTOM_FLAG_TOGGLE || m_iMonsterClip == CUSTOM_FLAG_OFF))
-		{
-			pMonster->pev->flags &= ~FL_MONSTERCLIP;
-			if (pev->spawnflags & SF_CUSTOM_DEBUG)
-				ALERT(at_debug, " monsterclip=NO");
-		}
-		else if (m_iMonsterClip != CUSTOM_FLAG_OFF)
-		{
-			pMonster->pev->flags |= FL_MONSTERCLIP;
-			if (pev->spawnflags & SF_CUSTOM_DEBUG)
-				ALERT(at_debug, " monsterclip=YES");
-		}
-		else if (pev->spawnflags & SF_CUSTOM_DEBUG)
-			ALERT(at_debug, " monsterclip=unchanged");
-	}
-*/
+
 	switch (GetActionFor(m_iProvoked, pMonster->m_afMemory & bits_MEMORY_PROVOKED, useType, "provoked") )
 	{
 	case CUSTOM_FLAG_ON: pMonster->Remember(bits_MEMORY_PROVOKED); break;
 	case CUSTOM_FLAG_OFF: pMonster->Forget(bits_MEMORY_PROVOKED); break;
 	}
-/*	if (m_iProvoked != CUSTOM_FLAG_NOCHANGE)
-	{
-		if (pMonster->m_afMemory & bits_MEMORY_PROVOKED && (m_iProvoked == CUSTOM_FLAG_TOGGLE || m_iProvoked == CUSTOM_FLAG_OFF))
-		{
-			pMonster->Forget(bits_MEMORY_PROVOKED);
-			if (pev->spawnflags & SF_CUSTOM_DEBUG)
-				ALERT(at_debug, " provoked=NO");
-		}
-		else if (m_iProvoked != CUSTOM_FLAG_OFF)
-		{
-			pMonster->Remember(bits_MEMORY_PROVOKED);
-			if (pev->spawnflags & SF_CUSTOM_DEBUG)
-				ALERT(at_debug, " provoked=YES");
-		}
-		else if (pev->spawnflags & SF_CUSTOM_DEBUG)
-			ALERT(at_debug, " provoked=unchanged");
-	}
-*/
+
 	if (pev->spawnflags & SF_CUSTOM_DEBUG)
 		ALERT(at_debug, " ]\n");
 }
@@ -2460,20 +2403,6 @@ void CTriggerHurt :: HurtTouch ( CBaseEntity *pOther )
 
 
 	// JAY: Cut this because it wasn't fully realized.  Damage is simpler now.
-#if 0
-	switch (m_bitsDamageInflict)
-	{
-	default: break;
-	case DMG_POISON:		fldmg = POISON_DAMAGE/4; break;
-	case DMG_NERVEGAS:		fldmg = NERVEGAS_DAMAGE/4; break;
-	case DMG_RADIATION:		fldmg = RADIATION_DAMAGE/4; break;
-	case DMG_PARALYZE:		fldmg = PARALYZE_DAMAGE/4; break; // UNDONE: cut this? should slow movement to 50%
-	case DMG_ACID:			fldmg = ACID_DAMAGE/4; break;
-	case DMG_SLOWBURN:		fldmg = SLOWBURN_DAMAGE/4; break;
-	case DMG_SLOWFREEZE:	fldmg = SLOWFREEZE_DAMAGE/4; break;
-	}
-#endif
-
 	if ( fldmg < 0 )
 		pOther->TakeHealth( -fldmg, m_bitsDamageInflict );
 	else
@@ -3026,16 +2955,6 @@ void CTriggerMultiple :: MultiTouch( CBaseEntity *pOther )
 	pevToucher = pOther->pev;
 
 	if (!CanTouch(pevToucher)) return;
-
-#if 0
-		// if the trigger has an angles field, check player's facing direction
-		if (pev->movedir != g_vecZero)
-		{
-			UTIL_MakeVectors( pevToucher->angles );
-			if ( DotProduct( gpGlobals->v_forward, pev->movedir ) < 0 )
-				return;         // not facing the right way
-		}
-#endif
 		
 	ActivateMultiTrigger( pOther );
 }

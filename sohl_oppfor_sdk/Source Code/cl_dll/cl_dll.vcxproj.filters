@@ -63,9 +63,6 @@
     <ClInclude Include="kbutton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="overview.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="parsemsg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -246,9 +243,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="message.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="overview.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="parsemsg.cpp">

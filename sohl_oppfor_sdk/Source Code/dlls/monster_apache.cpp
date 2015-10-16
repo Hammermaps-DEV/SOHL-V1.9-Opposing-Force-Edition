@@ -836,29 +836,8 @@ BOOL CApache :: FireGun( )
 
 	if (DotProduct( vecGun, vecTarget ) > 0.98)
 	{
-#if 1
 		FireBullets( 1, posGun, vecGun, VECTOR_CONE_4DEGREES, 8192, BULLET_MONSTER_12MM, 1 );
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "turret/tu_fire1.wav", 1, 0.3);
-#else
-		static float flNext;
-		TraceResult tr;
-		UTIL_TraceLine( posGun, posGun + vecGun * 8192, dont_ignore_monsters, ENT( pev ), &tr );
-
-		if (!m_pBeam)
-		{
-			m_pBeam = CBeam::BeamCreate( "sprites/lgtning.spr", 80 );
-			m_pBeam->PointEntInit( pev->origin, entindex( ) );
-			m_pBeam->SetEndAttachment( 1 );
-			m_pBeam->SetColor( 255, 180, 96 );
-			m_pBeam->SetBrightness( 192 );
-		}
-
-		if (flNext < gpGlobals->time)
-		{
-			flNext = gpGlobals->time + 0.5;
-			m_pBeam->SetStartPos( tr.vecEndPos );
-		}
-#endif
 		return TRUE;
 	}
 	else

@@ -283,158 +283,6 @@ int	CGraph :: HandleLinkEnt ( int iNode, entvars_t *pevLinkEnt, int afCapMask, N
 	return FALSE;
 }
 
-#if 0
-//=========================================================
-// FindNearestLink - finds the connection (line) nearest
-// the given point. Returns FALSE if fails, or TRUE if it
-// has stuffed the index into the nearest link pool connection
-// into the passed int pointer, and a BOOL telling whether or 
-// not the point is along the line into the passed BOOL pointer.
-//=========================================================
-int	CGraph :: FindNearestLink ( const Vector &vecTestPoint, int *piNearestLink, BOOL *pfAlongLine )
-{
-	int			i, j;// loops
-	
-	int			iNearestLink;// index into the link pool, this is the nearest node at any time. 
-	float		flMinDist;// the distance of of the nearest case so far
-	float		flDistToLine;// the distance of the current test case
-
-	BOOL		fCurrentAlongLine;
-	BOOL		fSuccess;
-
-	//float		flConstant;// line constant
-	Vector		vecSpot1, vecSpot2;
-	Vector2D	vec2Spot1, vec2Spot2, vec2TestPoint;
-	Vector2D	vec2Normal;// line normal
-	Vector2D	vec2Line;
-
-	TraceResult	tr;
-
-	iNearestLink = -1;// prepare for failure
-	fSuccess = FALSE;
-
-	flMinDist = 9999;// anything will be closer than this
-
-// go through all of the nodes, and each node's connections	
-	int	cSkip = 0;// how many links proper pairing allowed us to skip
-	int cChecked = 0;// how many links were checked
-
-	for ( i = 0 ; i < m_cNodes ; i++ )
-	{
-		vecSpot1 = m_pNodes[ i ].m_vecOrigin;
-
-		if ( m_pNodes[ i ].m_cNumLinks <= 0 )
-		{// this shouldn't happen!
-			ALERT ( at_aiconsole, "**Node %d has no links\n", i );
-			continue;
-		}
-
-		for ( j = 0 ; j < m_pNodes[ i ].m_cNumLinks ; j++ )
-		{
-			/*
-			!!!This optimization only works when the node graph consists of properly linked pairs. 
-			if ( INodeLink ( i, j ) <= i )
-			{
-				// since we're going through the nodes in order, don't check
-				// any connections whose second node is lower in the list
-				// than the node we're currently working with. This eliminates
-				// redundant checks.
-				cSkip++;
-				continue;
-			}
-			*/
-
-			vecSpot2 = PNodeLink ( i, j )->m_vecOrigin;
-
-			// these values need a little attention now and then, or sometimes ramps cause trouble.
-			if ( fabs ( vecSpot1.z - vecTestPoint.z ) > 48 && fabs ( vecSpot2.z - vecTestPoint.z ) > 48 )
-			{
-				// if both endpoints of the line are 32 units or more above or below the monster, 
-				// the monster won't be able to get to them, so we do a bit of trivial rejection here.
-				// this may change if monsters are allowed to jump down. 
-				// 
-				// !!!LATER: some kind of clever X/Y hashing should be used here, too
-				continue;
-			}
-
-// now we have two endpoints for a line segment that we've not already checked. 
-// since all lines that make it this far are within -/+ 32 units of the test point's
-// Z Plane, we can get away with doing the point->line check in 2d.
-			
-			cChecked++;
-
-			vec2Spot1 = vecSpot1.Make2D();
-			vec2Spot2 = vecSpot2.Make2D();
-			vec2TestPoint = vecTestPoint.Make2D();
-		
-			// get the line normal.
-			vec2Line = ( vec2Spot1 - vec2Spot2 ).Normalize();
-			vec2Normal.x = -vec2Line.y;
-			vec2Normal.y = vec2Line.x;
-
-			if ( DotProduct ( vec2Line, ( vec2TestPoint - vec2Spot1 ) ) > 0 )
-			{// point outside of line
-				flDistToLine = ( vec2TestPoint - vec2Spot1 ).Length();
-				fCurrentAlongLine = FALSE;
-			}
-			else if ( DotProduct ( vec2Line, ( vec2TestPoint - vec2Spot2 ) ) < 0 )
-			{// point outside of line
-				flDistToLine = ( vec2TestPoint - vec2Spot2 ).Length();
-				fCurrentAlongLine = FALSE;
-			}
-			else
-			{// point inside line
-				flDistToLine = fabs( DotProduct ( vec2TestPoint - vec2Spot2, vec2Normal ) );
-				fCurrentAlongLine = TRUE;
-			}
-
-			if ( flDistToLine < flMinDist )
-			{// just found a line nearer than any other so far
-				
-				UTIL_TraceLine ( vecTestPoint, SourceNode( i, j ).m_vecOrigin, ignore_monsters, g_pBodyQueueHead, &tr );
-
-				if ( tr.flFraction != 1.0 )
-				{// crap. can't see the first node of this link, try to see the other
-					
-					UTIL_TraceLine ( vecTestPoint, DestNode( i, j ).m_vecOrigin, ignore_monsters, g_pBodyQueueHead, &tr );
-					if ( tr.flFraction != 1.0 )
-					{// can't use this link, cause can't see either node!
-						continue;
-					}
-
-				}
-				
-				fSuccess = TRUE;// we know there will be something to return.
-				flMinDist = flDistToLine;
-				iNearestLink = m_pNodes [ i ].m_iFirstLink + j;
-				*piNearestLink = m_pNodes[ i ].m_iFirstLink + j;
-				*pfAlongLine = fCurrentAlongLine;
-			}
-		}
-	}
-
-/*
-	if ( fSuccess )
-	{
-		WRITE_BYTE(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(MSG_BROADCAST, TE_SHOWLINE);
-		
-		WRITE_COORD(MSG_BROADCAST, m_pNodes[ m_pLinkPool[ iNearestLink ].m_iSrcNode ].m_vecOrigin.x );
-		WRITE_COORD(MSG_BROADCAST, m_pNodes[ m_pLinkPool[ iNearestLink ].m_iSrcNode ].m_vecOrigin.y );
-		WRITE_COORD(MSG_BROADCAST, m_pNodes[ m_pLinkPool[ iNearestLink ].m_iSrcNode ].m_vecOrigin.z + NODE_HEIGHT);
-
-		WRITE_COORD(MSG_BROADCAST, m_pNodes[ m_pLinkPool[ iNearestLink ].m_iDestNode ].m_vecOrigin.x );
-		WRITE_COORD(MSG_BROADCAST, m_pNodes[ m_pLinkPool[ iNearestLink ].m_iDestNode ].m_vecOrigin.y );
-		WRITE_COORD(MSG_BROADCAST, m_pNodes[ m_pLinkPool[ iNearestLink ].m_iDestNode ].m_vecOrigin.z + NODE_HEIGHT);
-	}
-*/
-
-	ALERT ( at_aiconsole, "%d Checked\n", cChecked );
-	return fSuccess;
-}
-
-#endif
-
 int	CGraph::HullIndex( const CBaseEntity *pEntity )
 {
 	if ( pEntity->pev->movetype == MOVETYPE_FLY)
@@ -735,43 +583,6 @@ int CGraph :: FindShortestPath ( int *piPath, int iStart, int iDest, int iHull, 
 		}
 	}
 
-#if 0
-
-	if (m_fRoutingComplete)
-	{
-		// This will draw the entire path that was generated for the monster.
-
-		for ( int i = 0 ; i < iNumPathNodes - 1 ; i++ )
-		{
-			MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-				WRITE_BYTE( TE_SHOWLINE);
-				
-				WRITE_COORD( m_pNodes[ piPath[ i ] ].m_vecOrigin.x );
-				WRITE_COORD( m_pNodes[ piPath[ i ] ].m_vecOrigin.y );
-				WRITE_COORD( m_pNodes[ piPath[ i ] ].m_vecOrigin.z + NODE_HEIGHT );
-
-				WRITE_COORD( m_pNodes[ piPath[ i + 1 ] ].m_vecOrigin.x );
-				WRITE_COORD( m_pNodes[ piPath[ i + 1 ] ].m_vecOrigin.y );
-				WRITE_COORD( m_pNodes[ piPath[ i + 1 ] ].m_vecOrigin.z + NODE_HEIGHT );
-			MESSAGE_END();
-		}
-	}
-
-#endif
-#if 0 // MAZE map
-	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-		WRITE_BYTE( TE_SHOWLINE);
-		
-		WRITE_COORD( m_pNodes[ 4 ].m_vecOrigin.x );
-		WRITE_COORD( m_pNodes[ 4 ].m_vecOrigin.y );
-		WRITE_COORD( m_pNodes[ 4 ].m_vecOrigin.z + NODE_HEIGHT );
-
-		WRITE_COORD( m_pNodes[ 9 ].m_vecOrigin.x );
-		WRITE_COORD( m_pNodes[ 9 ].m_vecOrigin.y );
-		WRITE_COORD( m_pNodes[ 9 ].m_vecOrigin.z + NODE_HEIGHT );
-	MESSAGE_END();
-#endif
-
 	return iNumPathNodes;
 }
 
@@ -903,25 +714,12 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
 
 	// If we can find a visible point, then let CalcBounds set the limits, but if
 	// we have no visible point at all to start with, then don't restrict the limits.
-	//
-#if 1
 	m_minX = 0; m_maxX = 255;
 	m_minY = 0; m_maxY = 255;
 	m_minZ = 0; m_maxZ = 255;
 	m_minBoxX = 0; m_maxBoxX = 255;
 	m_minBoxY = 0; m_maxBoxY = 255;
 	m_minBoxZ = 0; m_maxBoxZ = 255;
-#else
-	m_minBoxX = CALC_RANGE(vecOrigin.x - flDist, m_RegionMin[0], m_RegionMax[0]);
-	m_maxBoxX = CALC_RANGE(vecOrigin.x + flDist, m_RegionMin[0], m_RegionMax[0]);
-	m_minBoxY = CALC_RANGE(vecOrigin.y - flDist, m_RegionMin[1], m_RegionMax[1]);
-	m_maxBoxY = CALC_RANGE(vecOrigin.y + flDist, m_RegionMin[1], m_RegionMax[1]);
-	m_minBoxZ = CALC_RANGE(vecOrigin.z - flDist, m_RegionMin[2], m_RegionMax[2]);
-	m_maxBoxZ = CALC_RANGE(vecOrigin.z + flDist, m_RegionMin[2], m_RegionMax[2])
-    CalcBounds(m_minX, m_maxX, CALC_RANGE(vecOrigin.x, m_RegionMin[0], m_RegionMax[0]), m_pNodes[m_iNearest].m_Region[0]);
-    CalcBounds(m_minY, m_maxY, CALC_RANGE(vecOrigin.y, m_RegionMin[1], m_RegionMax[1]), m_pNodes[m_iNearest].m_Region[1]);
-    CalcBounds(m_minZ, m_maxZ, CALC_RANGE(vecOrigin.z, m_RegionMin[2], m_RegionMax[2]), m_pNodes[m_iNearest].m_Region[2]);
-#endif
 
     int halfX = (m_minX+m_maxX)/2;
     int halfY = (m_minY+m_maxY)/2;
@@ -1027,46 +825,6 @@ int	CGraph :: FindNearestNode ( const Vector &vecOrigin,  int afNodeTypes )
         }
     }
 
-#if 0
-	// Verify our answers.
-	//
-	int iNearestCheck = -1;
-	m_flShortest = 8192;// find nodes within this radius
-
-	for ( i = 0 ; i < m_cNodes ; i++ )
-	{
-		float flDist = ( vecOrigin - m_pNodes[ i ].m_vecOriginPeek ).Length();
-
-		if ( flDist < m_flShortest )
-		{
-			// make sure that vecOrigin can trace to this node!
-			UTIL_TraceLine ( vecOrigin, m_pNodes[ i ].m_vecOriginPeek, ignore_monsters, 0, &tr );
-
-			if ( tr.flFraction == 1.0 )
-			{
-				iNearestCheck = i;
-				m_flShortest = flDist;
-			}
-		}
-	}
-
-	if (iNearestCheck != m_iNearest)
-	{
-		ALERT( at_aiconsole, "NOT closest %d(%f,%f,%f) %d(%f,%f,%f).\n",
-			iNearestCheck,
-			m_pNodes[iNearestCheck].m_vecOriginPeek.x,
-			m_pNodes[iNearestCheck].m_vecOriginPeek.y,
-			m_pNodes[iNearestCheck].m_vecOriginPeek.z,
-			m_iNearest,
-			(m_iNearest == -1?0.0:m_pNodes[m_iNearest].m_vecOriginPeek.x),
-			(m_iNearest == -1?0.0:m_pNodes[m_iNearest].m_vecOriginPeek.y),
-			(m_iNearest == -1?0.0:m_pNodes[m_iNearest].m_vecOriginPeek.z));
-	}
-	if (m_iNearest == -1)
-	{
-		ALERT(at_aiconsole, "All that work for nothing.\n");
-	}
-#endif
 	m_Cache[iHash].v = vecOrigin;
 	m_Cache[iHash].n = m_iNearest;
 	return m_iNearest;
@@ -1202,20 +960,11 @@ int CGraph :: LinkVisibleNodes ( CLink *pLinkPool, FILE *file, int *piBadNode )
 				continue;
 			}
 
-#if 0
-			
-			if ( (m_pNodes[ i ].m_afNodeInfo & bits_NODE_WATER) != (m_pNodes[ j ].m_afNodeInfo & bits_NODE_WATER) )
-			{
-				// don't connect water nodes to air nodes or land nodes. It just wouldn't be prudent at this juncture.
-				continue;
-			}
-#else
 			if ( (m_pNodes[ i ].m_afNodeInfo & bits_NODE_GROUP_REALM) != (m_pNodes[ j ].m_afNodeInfo & bits_NODE_GROUP_REALM) )
 			{
 				// don't connect air nodes to water nodes to land nodes. It just wouldn't be prudent at this juncture.
 				continue;
 			}
-#endif
 
 			tr.pHit = NULL;// clear every time so we don't get stuck with last trace's hit ent
 			pTraceEnt = 0;
@@ -2872,18 +2621,6 @@ void CGraph::BuildLinkLookups(void)
 		CLink &link = Link(i);
 		HashInsert(link.m_iSrcNode, link.m_iDestNode, i);
 	}
-#if 0
-	for (i = 0; i < m_cLinks; i++)
-	{
-		CLink &link = Link(i);
-		int iKey;
-		HashSearch(link.m_iSrcNode, link.m_iDestNode, iKey);
-		if (iKey != i)
-		{
-			ALERT(at_aiconsole, "HashLinks don't match (%d versus %d)\n", i, iKey);
-		}
-	}
-#endif
 }
 
 void CGraph::BuildRegionTables(void)
@@ -3099,23 +2836,6 @@ void CGraph :: ComputeStaticRoutingTables( void )
 									Routes[FROM_TO(iStart, iEnd)] = iNext;
 								}
 							}
-#if 0
-							// Well, at first glance, this should work, but actually it's safer
-							// to be told explictly that you can take a series of node in a
-							// particular direction. Some links don't appear to have links in
-							// the opposite direction.
-							//
-							for (iNode = cPathSize-1; iNode >= 1; iNode--)
-							{
-								int iStart = pMyPath[iNode];
-								int iNext  = pMyPath[iNode-1];
-								for (int iNode1 = iNode-1; iNode1 >= 0; iNode1--)
-								{
-									int iEnd = pMyPath[iNode1];
-									Routes[FROM_TO(iStart, iEnd)] = iNext;
-								}
-							}
-#endif
 						}
 						else
 						{
@@ -3247,11 +2967,7 @@ void CGraph :: ComputeStaticRoutingTables( void )
 						//
 						CompressedSize += 2;
 						*p++ = cRepeats - 1;
-#if 0
-						iLastNode = iFrom + *pRoute;
-						if (iLastNode >= m_cNodes) iLastNode -= m_cNodes;
-						else if (iLastNode < 0) iLastNode += m_cNodes;
-#endif
+
 						int a = iLastNode - iFrom;
 						int b = iLastNode - iFrom + m_cNodes;
 						int c = iLastNode - iFrom - m_cNodes;
@@ -3330,10 +3046,6 @@ void CGraph :: ComputeStaticRoutingTables( void )
 	BestNextNodes = 0;
 	pRoute = 0;
 	pMyPath = 0;
-
-#if 0
-	TestRoutingTables();
-#endif
 	m_fRoutingComplete = TRUE;
 }
 
@@ -3376,7 +3088,7 @@ void CGraph :: TestRoutingTables( void )
 
 						// Compare distances.
 						//
-#if 1
+
 						float flDistance1 = 0.0;
 						int i = 0;
 						for (i = 0; i < cPathSize1-1; i++)
@@ -3427,10 +3139,6 @@ void CGraph :: TestRoutingTables( void )
 						}
 						if (V_fabs(flDistance1 - flDistance2) > 0.10)
 						{
-#else
-						if (cPathSize1 != cPathSize2 || memcmp(pMyPath, pMyPath2, sizeof(int)*cPathSize1) != 0)
-						{
-#endif
 							ALERT(at_aiconsole, "Routing is inconsistent!!!\n");
 							ALERT(at_aiconsole, "(%d to %d |%d/%d)1:", iFrom, iTo, iHull, iCap);
 							int i = 0;

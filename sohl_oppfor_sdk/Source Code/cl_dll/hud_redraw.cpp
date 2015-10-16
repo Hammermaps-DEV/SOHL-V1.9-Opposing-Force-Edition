@@ -103,15 +103,11 @@ int CHud :: Redraw( float flTime, int intermission )
 	{
 		// Nicer might be to use some kind of logarithmic fade-in?
 		double fFraction = m_flTimeDelta/g_fFadeDuration;
-//		g_fStartDist -= (FOG_LIMIT - g_iFinalStartDist)*fFraction;
 		g_fEndDist -= (FOG_LIMIT - g_iFinalEndDist)*fFraction;
 
-//		CONPRINT("FogFading: %f - %f, frac %f, time %f, final %d\n", g_fStartDist, g_fEndDist, fFraction, flTime, g_iFinalEndDist);
+//		CONPRINT("FogFading: %f, frac %f, time %f, final %d\n", g_fEndDist, fFraction, flTime, g_iFinalEndDist);
 
-		// cap it
-//		if (g_fStartDist > FOG_LIMIT)				g_fStartDist = FOG_LIMIT;
 		if (g_fEndDist   > FOG_LIMIT)				g_fEndDist = FOG_LIMIT;
-//		if (g_fStartDist < g_iFinalStartDist)	g_fStartDist = g_iFinalStartDist;
 		if (g_fEndDist   < g_iFinalEndDist)		g_fEndDist   = g_iFinalEndDist;
 	}
 	
@@ -151,9 +147,6 @@ int CHud :: Redraw( float flTime, int intermission )
 	}
 
 	m_iIntermission = intermission;
-
-	// if no redrawing is necessary
-	// return 0;
 
 	// trigger_viewset stuff
 	if ((viewFlags & 1) && !(viewFlags & 2)) // custom view active, and flag "draw hud" isnt set
@@ -200,28 +193,6 @@ int CHud :: Redraw( float flTime, int intermission )
 
 		SPR_DrawAdditive(i, x, y, NULL);
 	}
-
-	/*
-	if ( g_iVisibleMouse )
-	{
-		void IN_GetMousePos( int *mx, int *my );
-		int mx, my;
-
-		IN_GetMousePos( &mx, &my );
-		
-		if (m_hsprCursor == 0)
-		{
-			char sz[256];
-			sprintf( sz, "sprites/cursor.spr" );
-			m_hsprCursor = SPR_Load( sz );
-		}
-
-		SPR_Set(m_hsprCursor, 250, 250, 250 );
-		
-		// Draw the logo at 20 fps
-		SPR_DrawAdditive( 0, mx, my, NULL );
-	}
-	*/
 
 	return 1;
 }
