@@ -107,6 +107,10 @@ struct skilldata_t
 	float pwormDmgSwipe;
 	float pwormDmgBeam;
 
+	float sroachHealth;
+	float sroachDmgBite;
+	float sroachLifespan;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;

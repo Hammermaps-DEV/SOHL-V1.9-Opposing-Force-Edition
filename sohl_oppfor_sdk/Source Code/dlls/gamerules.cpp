@@ -245,6 +245,11 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.pwormDmgSwipe = GetSkillCvar("sk_pitworm_dmg_swipe");
 	gSkillData.pwormDmgBeam = GetSkillCvar("sk_pitworm_dmg_beam");
 
+	// Shock Roach
+	gSkillData.sroachHealth = GetSkillCvar("sk_shockroach_health");
+	gSkillData.sroachDmgBite = GetSkillCvar("sk_shockroach_dmg_bite");
+	gSkillData.sroachLifespan = GetSkillCvar("sk_shockroach_lifespan");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 

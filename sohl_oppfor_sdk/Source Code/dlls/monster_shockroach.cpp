@@ -69,12 +69,12 @@ void CShockRoach::Spawn() {
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = 20; /*gSkillData.sroachHealth;*/
+	pev->health = gSkillData.sroachHealth;
 	pev->view_ofs = Vector(0, 0, 20);// position of the eyes relative to monster's origin.
 	pev->yaw_speed = 5;//´should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
-	m_flDie = gpGlobals->time + RANDOM_LONG(10, 15);
+	m_flDie = gpGlobals->time + gSkillData.sroachLifespan;
 
 	MonsterInit();
 }
@@ -84,7 +84,7 @@ void CShockRoach::Spawn() {
 // relationship table.
 //=========================================================
 int	CShockRoach::Classify(void) {
-	return m_iClass ? m_iClass : CLASS_NONE;
+	return m_iClass ? m_iClass : CLASS_ALIEN_BIOWEAPON;
 }
 
 //=========================================================
@@ -150,8 +150,7 @@ void CShockRoach::LeapTouch(CBaseEntity *pOther) {
 			return;
 		}
 		*/
-
-		pOther->TakeDamage(pev, pev, GetDamageAmount(), DMG_SLASH);
+		pOther->TakeDamage(pev, pev, gSkillData.sroachDmgBite, DMG_SLASH);
 	}
 
 	SetTouch(NULL);

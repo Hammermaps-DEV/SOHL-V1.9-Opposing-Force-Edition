@@ -318,6 +318,19 @@ cvar_t	sk_pitworm_dmg_beam1 = { "sk_pitworm_dmg_beam1", "0" };
 cvar_t	sk_pitworm_dmg_beam2 = { "sk_pitworm_dmg_beam2", "0" };
 cvar_t	sk_pitworm_dmg_beam3 = { "sk_pitworm_dmg_beam3", "0" };
 
+// Shock Roach
+cvar_t	sk_shockroach_health1 = { "sk_shockroach_health1", "0" };
+cvar_t	sk_shockroach_health2 = { "sk_shockroach_health2", "0" };
+cvar_t	sk_shockroach_health3 = { "sk_shockroach_health3", "0" };
+
+cvar_t	sk_shockroach_dmg_bite1 = { "sk_shockroach_dmg_bite1", "0" };
+cvar_t	sk_shockroach_dmg_bite2 = { "sk_shockroach_dmg_bite2", "0" };
+cvar_t	sk_shockroach_dmg_bite3 = { "sk_shockroach_dmg_bite3", "0" };
+
+cvar_t	sk_shockroach_lifespan1 = { "sk_shockroach_lifespan1", "0" };
+cvar_t	sk_shockroach_lifespan2 = { "sk_shockroach_lifespan2", "0" };
+cvar_t	sk_shockroach_lifespan3 = { "sk_shockroach_lifespan3", "0" };
+
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
 cvar_t	sk_turret_health2 = {"sk_turret_health2","0"};
@@ -807,6 +820,19 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_pitworm_dmg_beam1);
 	CVAR_REGISTER(&sk_pitworm_dmg_beam2);
 	CVAR_REGISTER(&sk_pitworm_dmg_beam3);
+
+	// Shock Roach
+	CVAR_REGISTER(&sk_shockroach_health1);
+	CVAR_REGISTER(&sk_shockroach_health2);
+	CVAR_REGISTER(&sk_shockroach_health3);
+
+	CVAR_REGISTER(&sk_shockroach_dmg_bite1);
+	CVAR_REGISTER(&sk_shockroach_dmg_bite2);
+	CVAR_REGISTER(&sk_shockroach_dmg_bite3);
+
+	CVAR_REGISTER(&sk_shockroach_lifespan1);
+	CVAR_REGISTER(&sk_shockroach_lifespan2);
+	CVAR_REGISTER(&sk_shockroach_lifespan3);
 
 	//Turret
 	CVAR_REGISTER ( &sk_turret_health1 );
