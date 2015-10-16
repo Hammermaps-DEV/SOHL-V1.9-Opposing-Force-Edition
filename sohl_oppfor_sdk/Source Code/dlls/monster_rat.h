@@ -12,7 +12,6 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
 #ifndef MONSTER_RAT_H
 #define MONSTER_RAT_H
 
@@ -22,7 +21,17 @@ public:
 	void Spawn(void);
 	void Precache(void);
 	void SetYawSpeed(void);
-	int  Classify(void);
+	void EXPORT MonsterThink(void);
+	void Move(float flInterval);
+	void PickNewDest(int iCondition);
+	void Killed(entvars_t *pevAttacker, int iGib);
+
+	float	m_flNextSmellTime;
+	int		Classify(void);
+	void	Look(int iDistance);
+	int		ISoundMask(void);
+
+	int		m_iMode;
 };
 
 #endif // MONSTER_RAT_H
