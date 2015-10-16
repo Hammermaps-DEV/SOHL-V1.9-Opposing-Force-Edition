@@ -25,6 +25,7 @@
 #include	"weapons.h"
 #include	"squadmonster.h"
 #include	"scripted.h"
+#include	"monster_controller.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -36,69 +37,6 @@
 #define CONTROLLER_AE_POWERUP_HALF	5
 
 #define CONTROLLER_FLINCH_DELAY			2		// at most one flinch every n secs
-
-class CController : public CSquadMonster
-{
-public:
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-
-	void RunAI( void );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );	// balls
-	BOOL CheckRangeAttack2 ( float flDot, float flDist );	// head
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist );	// block, throw
-	Schedule_t* GetSchedule ( void );
-	Schedule_t* GetScheduleOfType ( int Type );
-	void StartTask ( Task_t *pTask );
-	void RunTask ( Task_t *pTask );
-	CUSTOM_SCHEDULES;
-
-	void Stop( void );
-	void Move ( float flInterval );
-	int  CheckLocalMove ( const Vector &vecStart, const Vector &vecEnd, CBaseEntity *pTarget, float *pflDist );
-	void MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval );
-	void SetActivity ( Activity NewActivity );
-	BOOL ShouldAdvanceRoute( float flWaypointDist );
-	int LookupFloat( );
-
-	float m_flNextFlinch;
-
-	float m_flShootTime;
-	float m_flShootEnd;
-
-	void PainSound( void );
-	void AlertSound( void );
-	void IdleSound( void );
-	void AttackSound( void );
-	void DeathSound( void );
-
-	static const char *pAttackSounds[];
-	static const char *pIdleSounds[];
-	static const char *pAlertSounds[];
-	static const char *pPainSounds[];
-	static const char *pDeathSounds[];
-
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
-	void Killed( entvars_t *pevAttacker, int iGib );
-	void GibMonster( void );
-
-	CSprite *m_pBall[2];	// hand balls
-	int m_iBall[2];			// how bright it should be
-	float m_iBallTime[2];	// when it should be that color
-	int m_iBallCurrent[2];	// current brightness
-
-	Vector m_vecEstVelocity;
-
-	Vector m_velocity;
-	int m_fInCombat;
-};
 
 LINK_ENTITY_TO_CLASS( monster_alien_controller, CController );
 
@@ -183,14 +121,6 @@ int CController :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 
 void CController::Killed( entvars_t *pevAttacker, int iGib )
 {
-	// shut off balls
-	/*
-	m_iBall[0] = 0;
-	m_iBallTime[0] = gpGlobals->time + 4.0;
-	m_iBall[1] = 0;
-	m_iBallTime[1] = gpGlobals->time + 4.0;
-	*/
-
 	// fade balls
 	if (m_pBall[0])
 	{
@@ -222,9 +152,6 @@ void CController::GibMonster( void )
 	}
 	CSquadMonster::GibMonster( );
 }
-
-
-
 
 void CController :: PainSound( void )
 {
@@ -1139,29 +1066,10 @@ void CController::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir, fl
 	UTIL_MoveToOrigin ( ENT(pev), pev->origin + m_velocity, m_velocity.Length() * flInterval, MOVE_STRAFE );
 }
 
-
-
-
 //=========================================================
 // Controller bouncy ball attack
 //=========================================================
-class CControllerHeadBall : public CBaseMonster
-{
-	void Spawn( void );
-	void Precache( void );
-	void EXPORT HuntThink( void );
-	void EXPORT DieThink( void );
-	void EXPORT BounceTouch( CBaseEntity *pOther );
-	void MovetoTarget( Vector vecTarget );
-	void Crawl( void );
-	int m_iTrail;
-	int m_flNextAttack;
-	Vector m_vecIdeal;
-	EHANDLE m_hOwner;
-};
 LINK_ENTITY_TO_CLASS( controller_head_ball, CControllerHeadBall );
-
-
 
 void CControllerHeadBall :: Spawn( void )
 {
@@ -1342,21 +1250,7 @@ void CControllerHeadBall::BounceTouch( CBaseEntity *pOther )
 	m_vecIdeal = vecDir * m_vecIdeal.Length();
 }
 
-
-
-
-class CControllerZapBall : public CBaseMonster
-{
-	void Spawn( void );
-	void Precache( void );
-	void EXPORT AnimateThink( void );
-	void EXPORT ExplodeTouch( CBaseEntity *pOther );
-
-	EHANDLE m_hOwner;
-};
 LINK_ENTITY_TO_CLASS( controller_energy_ball, CControllerZapBall );
-
-
 void CControllerZapBall :: Spawn( void )
 {
 	Precache( );
@@ -1383,14 +1277,10 @@ void CControllerZapBall :: Spawn( void )
 	SetNextThink( 0.1 );
 }
 
-
 void CControllerZapBall :: Precache( void )
 {
 	PRECACHE_MODEL("sprites/xspark4.spr");
-	// PRECACHE_SOUND("debris/zap4.wav");
-	// PRECACHE_SOUND("weapons/electro4.wav");
 }
-
 
 void CControllerZapBall :: AnimateThink( void  )
 {

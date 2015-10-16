@@ -18,7 +18,6 @@
 
 extern void GameDLLInit( void );
 
-
 extern cvar_t	displaysoundlist;
 
 // multiplayer server rules

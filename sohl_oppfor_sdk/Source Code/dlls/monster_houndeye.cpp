@@ -26,6 +26,7 @@
 #include	"squadmonster.h"
 #include	"soundent.h"
 #include	"game.h"
+#include    "monster_houndeye.h"
 
 extern CGraph WorldGraph;
 
@@ -73,43 +74,6 @@ enum
 #define		HOUND_AE_HOPBACK		6
 #define		HOUND_AE_CLOSE_EYE		7
 
-class CHoundeye : public CSquadMonster
-{
-public:
-	void Spawn( void );
-	void Precache( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void SetYawSpeed ( void );
-	void WarmUpSound ( void );
-	void AlertSound( void );
-	void DeathSound( void );
-	void WarnSound( void );
-	void PainSound( void );
-	void IdleSound( void );
-	void StartTask( Task_t *pTask );
-	void RunTask ( Task_t *pTask );
-	void SonicAttack( void );
-	void PrescheduleThink( void );
-	void SetActivity ( Activity NewActivity );
-	void WriteBeamColor ( void );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );
-	BOOL FValidateHintType ( short sHint );
-	BOOL FCanActiveIdle ( void );
-	Schedule_t *GetScheduleOfType ( int Type );
-	Schedule_t *CHoundeye :: GetSchedule( void );
-
-	int	Save( CSave &save ); 
-	int Restore( CRestore &restore );
-
-	CUSTOM_SCHEDULES;
-	static TYPEDESCRIPTION m_SaveData[];
-
-	int m_iSpriteTexture;
-	BOOL m_fAsleep;// some houndeyes sleep in idle mode if this is set, the houndeye is lying down
-	BOOL m_fDontBlink;// don't try to open/close eye if this bit is set!
-	Vector	m_vecPackCenter; // the center of the pack. The leader maintains this by averaging the origins of all pack members.
-};
 LINK_ENTITY_TO_CLASS( monster_houndeye, CHoundeye );
 
 TYPEDESCRIPTION	CHoundeye::m_SaveData[] = 

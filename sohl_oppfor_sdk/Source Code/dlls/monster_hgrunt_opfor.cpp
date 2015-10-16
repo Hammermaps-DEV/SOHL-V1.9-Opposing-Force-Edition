@@ -28,6 +28,7 @@
 #include	"weapons.h"
 #include	"soundent.h"
 #include	"customentity.h"
+#include	"monster_hgrunt_opfor.h"
 
 //=========================================================
 //
@@ -115,87 +116,6 @@ enum
 	SCHED_HGRUNT_ALLY_TAKECOVER_FAILED,// special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
 	SCHED_HGRUNT_ALLY_ELOF_FAIL,
 	SCHED_HGRUNT_ALLY_FIND_MEDIC,
-};
-class CHFGrunt : public CRCAllyMonster
-{
-public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  ISoundMask( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	void CheckAmmo ( void );
-	void SetActivity ( Activity NewActivity );
-	void RunTask( Task_t *pTask );
-	void StartTask( Task_t *pTask );
-	void KeyValue( KeyValueData *pkvd );
-	virtual int	ObjectCaps( void ) { return CRCAllyMonster :: ObjectCaps() | FCAP_IMPULSE_USE; }
-	BOOL FCanCheckAttacks ( void );
-	BOOL CheckRangeAttack1 ( float flDot, float flDist );
-	BOOL CheckRangeAttack2 ( float flDot, float flDist );
-	BOOL CheckMeleeAttack1 ( float flDot, float flDist );
-	void DeclineFollowing( void );
-	void PrescheduleThink ( void );
-	Vector GetGunPosition( void );
-	void Shoot ( void );
-	void Shotgun ( void );
-	void M249 ( void );
-	// Override these to set behavior
-	CBaseEntity	*Kick( void );
-	Schedule_t *GetScheduleOfType ( int Type );
-	Schedule_t *GetSchedule ( void );
-	MONSTERSTATE GetIdealState ( void );
-
-	void DeathSound( void );
-	void PainSound( void );
-	void GibMonster( void );
-	void TalkInit( void );
-
-	BOOL FOkToSpeak( void );
-	void JustSpoke( void );
-
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
-	void Killed( entvars_t *pevAttacker, int iGib );
-	int IRelationship ( CBaseEntity *pTarget );
-
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
-
-	// checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
-	// not every server frame.
-	float m_flNextGrenadeCheck;
-	float m_flNextPainTime;
-	float m_flLastEnemySightTime;
-	float m_flMedicWaitTime;
-
-	float	m_flLinkToggle;// how much pain has the player inflicted on me?
-
-	Vector	m_vecTossVelocity;
-
-	BOOL	m_fThrowGrenade;
-	BOOL	m_fStanding;
-	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
-	BOOL	m_fImmortal;
-	int		m_cClipSize;
-
-	int		m_iBrassShell;
-	int		m_iShotgunShell;
-
-	int		m_iSentence;
-	int		m_iHead;
-
-	int		m_iM249Shell;
-	int		m_iM249Link;
-
-	static const char *pGruntSentences[];
-
-	CUSTOM_SCHEDULES;
 };
 
 LINK_ENTITY_TO_CLASS( monster_human_grunt_ally, CHFGrunt );
@@ -2741,16 +2661,6 @@ void CHFGrunt::DeclineFollowing( void )
 // CHFGruntRepel - when triggered, spawns a
 // repelling down a line.
 //=========================================================
-
-class CHFGruntRepel : public CBaseMonster
-{
-public:
-	void Spawn( void );
-	void Precache( void );
-	void EXPORT RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	int m_iSpriteTexture;	// Don't save, precache
-};
-
 LINK_ENTITY_TO_CLASS( monster_hgrunt_ally_repel, CHFGruntRepel );
 
 void CHFGruntRepel::Spawn( void )
@@ -2799,20 +2709,6 @@ void CHFGruntRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 // the m_iFirstPose properly!
 //
 //=========================================================
-
-class CDeadFGrunt : public CBaseMonster
-{
-public:
-	void Spawn( void );
-	int	Classify ( void ) { return	CLASS_PLAYER_ALLY; }
-
-	void KeyValue( KeyValueData *pkvd );
-
-	int		m_iHead;
-	int	m_iPose;// which sequence to display
-	static char *m_szPoses[7];
-};
-
 char *CDeadFGrunt::m_szPoses[] = { "deadstomach", "deadside", "deadsitting", "dead_on_back", "dead_headcrabbed", "hgrunt_dead_stomach", "dead_canyon" };
 
 void CDeadFGrunt::KeyValue( KeyValueData *pkvd )

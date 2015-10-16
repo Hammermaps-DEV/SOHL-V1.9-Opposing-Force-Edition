@@ -12,8 +12,6 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-#ifndef OEM_BUILD
-
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -21,74 +19,12 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "effects.h"
+#include "monster_apache.h"
 
 extern DLL_GLOBAL int		g_iSkillLevel;
 
 #define SF_WAITFORTRIGGER	(0x04 | 0x40) // UNDONE: Fix!
 #define SF_NOWRECKAGE		0x08
-
-class CApache : public CBaseMonster
-{
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	void Spawn( void );
-	void Precache( void );
-	int  Classify( void ) { return CLASS_HUMAN_MILITARY; };
-	int  BloodColor( void ) { return DONT_BLEED; }
-	void Killed( entvars_t *pevAttacker, int iGib );
-	void GibMonster( void );
-
-	void SetObjectCollisionBox( void )
-	{
-		pev->absmin = pev->origin + Vector( -300, -300, -172);
-		pev->absmax = pev->origin + Vector(300, 300, 8);
-	}
-
-	void EXPORT HuntThink( void );
-	void EXPORT FlyTouch( CBaseEntity *pOther );
-	void EXPORT CrashTouch( CBaseEntity *pOther );
-	void EXPORT DyingThink( void );
-	void EXPORT StartupUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void EXPORT NullThink( void );
-
-	void ShowDamage( void );
-	void Flight( void );
-	void FireRocket( void );
-	BOOL FireGun( void );
-	
-	int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-
-	int m_iRockets;
-	float m_flForce;
-	float m_flNextRocket;
-
-	Vector m_vecTarget;
-	Vector m_posTarget;
-
-	Vector m_vecDesired;
-	Vector m_posDesired;
-
-	Vector m_vecGoal;
-
-	Vector m_angGun;
-	float m_flLastSeen;
-	float m_flPrevSeen;
-
-	int m_iSoundState; // don't save this
-
-	int m_iSpriteTexture;
-	int m_iExplode;
-	int m_iBodyGibs;
-
-	float m_flGoalSpeed;
-
-	int m_iDoSmokePuff;
-	CBeam *m_pBeam;
-};
-LINK_ENTITY_TO_CLASS( monster_apache, CApache );
 
 TYPEDESCRIPTION	CApache::m_SaveData[] = 
 {
@@ -103,16 +39,13 @@ TYPEDESCRIPTION	CApache::m_SaveData[] =
 	DEFINE_FIELD( CApache, m_angGun, FIELD_VECTOR ),
 	DEFINE_FIELD( CApache, m_flLastSeen, FIELD_TIME ),
 	DEFINE_FIELD( CApache, m_flPrevSeen, FIELD_TIME ),
-//	DEFINE_FIELD( CApache, m_iSoundState, FIELD_INTEGER ),		// Don't save, precached
-//	DEFINE_FIELD( CApache, m_iSpriteTexture, FIELD_INTEGER ),
-//	DEFINE_FIELD( CApache, m_iExplode, FIELD_INTEGER ),
-//	DEFINE_FIELD( CApache, m_iBodyGibs, FIELD_INTEGER ),
 	DEFINE_FIELD( CApache, m_pBeam, FIELD_CLASSPTR ),
 	DEFINE_FIELD( CApache, m_flGoalSpeed, FIELD_FLOAT ),
 	DEFINE_FIELD( CApache, m_iDoSmokePuff, FIELD_INTEGER ),
 };
-IMPLEMENT_SAVERESTORE( CApache, CBaseMonster );
 
+IMPLEMENT_SAVERESTORE( CApache, CBaseMonster );
+LINK_ENTITY_TO_CLASS(monster_apache, CApache);
 
 void CApache :: Spawn( void )
 {
@@ -125,6 +58,7 @@ void CApache :: Spawn( void )
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/apache.mdl");
+
 	UTIL_SetSize( pev, Vector( -32, -32, -64 ), Vector( 32, 32, 0 ) );
 	UTIL_SetOrigin( this, pev->origin );
 
@@ -301,18 +235,6 @@ void CApache :: DyingThink( void )
 	{
 		Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
 
-		/*
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_EXPLOSION);		// This just makes a dynamic light now
-			WRITE_COORD( vecSpot.x );
-			WRITE_COORD( vecSpot.y );
-			WRITE_COORD( vecSpot.z + 300 );
-			WRITE_SHORT( g_sModelIndexFireball );
-			WRITE_BYTE( 250 ); // scale * 10
-			WRITE_BYTE( 8  ); // framerate
-		MESSAGE_END();
-		*/
-
 		// fireball
 		MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, vecSpot );
 			WRITE_BYTE( TE_SPRITE );
@@ -361,7 +283,7 @@ void CApache :: DyingThink( void )
 
 		RadiusDamage( pev->origin, pev, pev, 300, CLASS_NONE, DMG_BLAST );
 
-		if (/*!(pev->spawnflags & SF_NOWRECKAGE) && */(pev->flags & FL_ONGROUND))
+		if (pev->flags & FL_ONGROUND)
 		{
 			CBaseEntity *pWreckage = Create( "cycler_wreckage", pev->origin, pev->angles );
 			// SET_MODEL( ENT(pWreckage->pev), STRING(pev->model) );
@@ -920,23 +842,6 @@ void CApache::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir
 }
 
 
-
-
-
-class CApacheHVR : public CGrenade
-{
-	void Spawn( void );
-	void Precache( void );
-	void EXPORT IgniteThink( void );
-	void EXPORT AccelerateThink( void );
-
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	int m_iTrail;
-	Vector m_vecForward;
-};
 LINK_ENTITY_TO_CLASS( hvr_rocket, CApacheHVR );
 
 TYPEDESCRIPTION	CApacheHVR::m_SaveData[] = 
@@ -1031,6 +936,3 @@ void CApacheHVR :: AccelerateThink( void  )
 
 	SetNextThink( 0.1 );
 }
-
-
-#endif

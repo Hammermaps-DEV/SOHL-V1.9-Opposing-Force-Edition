@@ -23,7 +23,8 @@
 #include	"animation.h"
 #include	"talkmonster.h"
 #include	"effects.h"
-#include "customentity.h"
+#include    "customentity.h"
+#include    "monster_genericmonster.h"
 
 // For holograms, make them not solid so the player can walk through them
 //LRC- this seems to interfere with SF_MONSTER_CLIP
@@ -45,30 +46,6 @@
 #define GUN_TORCH			1
 #define GUN_NONE			2
 
-class CGenericMonster : public CTalkMonster
-{
-public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	int ISoundMask ( void );
-	void KeyValue( KeyValueData *pkvd );
-	void Torch ( void );
-	void MakeGas( void );
-	void UpdateGas( void );
-	void KillGas( void );
-
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	virtual int HasCustomGibs( void ) { return m_iszGibModel; }
-
-          CBeam *m_pBeam;
-	int m_iszGibModel;
-};
 LINK_ENTITY_TO_CLASS( monster_generic, CGenericMonster );
 
 TYPEDESCRIPTION	CGenericMonster::m_SaveData[] = 

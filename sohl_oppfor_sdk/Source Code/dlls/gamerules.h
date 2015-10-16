@@ -18,6 +18,7 @@
 
 //LRC
 #define GAME_NAME "SoHL: Opposing-Force"
+#define GAME_NAME_TP "SoHL: Opposing-Force Teamplay"
 
 //#include "weapons.h"
 //#include "items.h"
