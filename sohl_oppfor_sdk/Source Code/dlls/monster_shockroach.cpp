@@ -185,7 +185,7 @@ void CShockRoach::PrescheduleThink(void) {
 //=========================================================
 void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case SR_AE_JUMPATTACK:
+		case SR_AE_JUMPATTACK: {
 			ClearBits(pev->flags, FL_ONGROUND);
 			UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
 			UTIL_MakeVectors(pev->angles);
@@ -217,16 +217,19 @@ void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 				if (distance > 650) {
 					vecJumpDir = vecJumpDir * (650.0 / distance);
 				}
-			} else {
+			}
+			else {
 				// jump hop, don't care where
 				vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
 			}
 
 			pev->velocity = vecJumpDir;
 			m_flNextAttack = gpGlobals->time + 2;
+		}
 		break;
-		default:
+		default: {
 			CBaseMonster::HandleAnimEvent(pEvent);
+		}
 		break;
 	}
 }
@@ -272,12 +275,14 @@ void CShockRoach::AttackSound(void) {
 void CShockRoach::StartTask(Task_t *pTask) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 	switch (pTask->iTask) {
-		case TASK_RANGE_ATTACK1:
+		case TASK_RANGE_ATTACK1: {
 			m_IdealActivity = ACT_RANGE_ATTACK1;
 			SetTouch(&CShockRoach::LeapTouch);
+		}
 		break;
-		default:
+		default: {
 			CHeadCrab::StartTask(pTask);
+		}
 		break;
 	}
 }
