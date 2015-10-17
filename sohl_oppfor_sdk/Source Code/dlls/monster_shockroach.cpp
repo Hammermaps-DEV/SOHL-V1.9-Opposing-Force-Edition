@@ -185,51 +185,45 @@ void CShockRoach::PrescheduleThink(void) {
 //=========================================================
 void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-	case SR_AE_JUMPATTACK: {
-		ClearBits(pev->flags, FL_ONGROUND);
-		UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
-		UTIL_MakeVectors(pev->angles);
+		case SR_AE_JUMPATTACK:
+			ClearBits(pev->flags, FL_ONGROUND);
+			UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
+			UTIL_MakeVectors(pev->angles);
 
-		Vector vecJumpDir;
-		if (m_hEnemy != NULL) {
-			float gravity = g_psv_gravity->value;
-			if (gravity <= 1)
-				gravity = 1;
+			Vector vecJumpDir;
+			if (m_hEnemy != NULL) {
+				float gravity = g_psv_gravity->value;
+				if (gravity <= 1)
+					gravity = 1;
 
-			// How fast does the headcrab need to travel to reach that height given gravity?
-			float height = (m_hEnemy->pev->origin.z + m_hEnemy->pev->view_ofs.z - pev->origin.z);
-			if (height < 16) {
-				height = 16;
-			}
+				// How fast does the headcrab need to travel to reach that height given gravity?
+				float height = (m_hEnemy->pev->origin.z + m_hEnemy->pev->view_ofs.z - pev->origin.z);
+				if (height < 16) {
+					height = 16;
+				}
 
-			float speed = sqrt(2 * gravity * height);
-			float time = speed / gravity;
+				float speed = sqrt(2 * gravity * height);
+				float time = speed / gravity;
 
-			// Scale the sideways velocity to get there at the right time
-			vecJumpDir = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - pev->origin);
-			vecJumpDir = vecJumpDir * (1.0 / time);
+				// Scale the sideways velocity to get there at the right time
+				vecJumpDir = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - pev->origin);
+				vecJumpDir = vecJumpDir * (1.0 / time);
 
-			// Speed to offset gravity at the desired height
-			vecJumpDir.z = speed;
+				// Speed to offset gravity at the desired height
+				vecJumpDir.z = speed;
 
-			// Don't jump too far/fast
-			float distance = vecJumpDir.Length();
-
-			if (distance > 650) {
-				vecJumpDir = vecJumpDir * (650.0 / distance);
-			}
-		}
-		else {
-			// jump hop, don't care where
-			vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
-		}
-			if (RANDOM_LONG(0, 1)) {
-				AttackSound();
+				// Don't jump too far/fast
+				float distance = vecJumpDir.Length();
+				if (distance > 650) {
+					vecJumpDir = vecJumpDir * (650.0 / distance);
+				}
+			} else {
+				// jump hop, don't care where
+				vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
 			}
 
 			pev->velocity = vecJumpDir;
 			m_flNextAttack = gpGlobals->time + 2;
-		}
 		break;
 		default:
 			CBaseMonster::HandleAnimEvent(pEvent);
@@ -279,11 +273,11 @@ void CShockRoach::StartTask(Task_t *pTask) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 	switch (pTask->iTask) {
 		case TASK_RANGE_ATTACK1:
-			AttackSound();
 			m_IdealActivity = ACT_RANGE_ATTACK1;
 			SetTouch(&CShockRoach::LeapTouch);
 		break;
 		default:
 			CHeadCrab::StartTask(pTask);
+		break;
 	}
 }
