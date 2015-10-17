@@ -24,14 +24,15 @@ public:
 	void EXPORT MonsterThink(void);
 	void Move(float flInterval);
 	void PickNewDest(int iCondition);
+	void EXPORT Touch(CBaseEntity *pOther);
 	void Killed(entvars_t *pevAttacker, int iGib);
-
-	float	m_flNextSmellTime;
-	int		Classify(void);
-	void	Look(int iDistance);
-	int		ISoundMask(void);
-
-	int		m_iMode;
+	float m_flLastLightLevel;
+	float m_flNextSmellTime;
+	int Classify(void) { return m_iClass ? m_iClass : CLASS_INSECT; }
+	void Look(int iDistance);
+	int ISoundMask(void) { return bits_SOUND_CARCASS | bits_SOUND_MEAT; }
+	BOOL m_fLightHacked;
+	int m_iMode;
 };
 
 #endif // MONSTER_RAT_H

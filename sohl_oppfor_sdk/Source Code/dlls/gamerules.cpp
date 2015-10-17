@@ -214,16 +214,47 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.snarkDmgBite = GetSkillCvar( "sk_snark_dmg_bite");
 	gSkillData.snarkDmgPop = GetSkillCvar( "sk_snark_dmg_pop");
 
-	// Zombie
-	gSkillData.zombieHealth = GetSkillCvar( "sk_zombie_health");
-	gSkillData.zombieDmgOneSlash = GetSkillCvar( "sk_zombie_dmg_one_slash");
-	gSkillData.zombieDmgBothSlash = GetSkillCvar( "sk_zombie_dmg_both_slash");
+	//=========================================================
+	// NPCs: Zombie,Zombie Soldier,Zombie Barney
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+
+	// Zombie Scientist
+	gSkillData.zombieHealth              = GetSkillCvar("sk_zombie_health");
+	gSkillData.zombieDmgOneSlash         = GetSkillCvar("sk_zombie_dmg_one_slash");
+	gSkillData.zombieDmgBothSlash        = GetSkillCvar("sk_zombie_dmg_both_slash");
+	gSkillData.zombieHead                = GetSkillCvar("sk_zombie_head"); //Hitgroup
+	gSkillData.zombieChest               = GetSkillCvar("sk_zombie_chest"); //Hitgroup
+	gSkillData.zombieStomach             = GetSkillCvar("sk_zombie_stomach"); //Hitgroup
+	gSkillData.zombieLeg                 = GetSkillCvar("sk_zombie_leg"); //Hitgroup
+	gSkillData.zombieArm                 = GetSkillCvar("sk_zombie_arm"); //Hitgroup
+
+	// Zombie Soldier
+	gSkillData.zombieSoldierHealth       = GetSkillCvar("sk_zombie_soldier_health");
+	gSkillData.zombieSoldierDmgOneSlash  = GetSkillCvar("sk_zombie_soldier_dmg_one_slash");
+	gSkillData.zombieSoldierDmgBothSlash = GetSkillCvar("sk_zombie_soldier_dmg_both_slash");
+	gSkillData.zombieSoldierHead         = GetSkillCvar("sk_zombie_soldier_head"); //Hitgroup
+	gSkillData.zombieSoldierChest        = GetSkillCvar("sk_zombie_soldier_chest"); //Hitgroup
+	gSkillData.zombieSoldierStomach      = GetSkillCvar("sk_zombie_soldier_stomach"); //Hitgroup
+	gSkillData.zombieSoldierLeg          = GetSkillCvar("sk_zombie_soldier_leg"); //Hitgroup
+	gSkillData.zombieSoldierArm          = GetSkillCvar("sk_zombie_soldier_arm"); //Hitgroup
+
+	// Zombie Barney
+	gSkillData.zombieBarneyHealth        = GetSkillCvar("sk_zombie_barney_health");
+	gSkillData.zombieBarneyDmgOneSlash   = GetSkillCvar("sk_zombie_barney_dmg_one_slash");
+	gSkillData.zombieBarneyDmgBothSlash  = GetSkillCvar("sk_zombie_barney_dmg_both_slash");
+	gSkillData.zombieBarneyHead          = GetSkillCvar("sk_zombie_barney_head"); //Hitgroup 
+	gSkillData.zombieBarneyChest         = GetSkillCvar("sk_zombie_barney_chest"); //Hitgroup
+	gSkillData.zombieBarneyStomach       = GetSkillCvar("sk_zombie_barney_stomach"); //Hitgroup
+	gSkillData.zombieBarneyLeg           = GetSkillCvar("sk_zombie_barney_leg"); //Hitgroup
+	gSkillData.zombieBarneyArm           = GetSkillCvar("sk_zombie_barney_arm"); //Hitgroup
+
+	//=========================================================
+	// NPCs: #########################
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 
 	// Opposing-Force
-	// Zombie Soldier
-	gSkillData.zombieSoldierHealth = GetSkillCvar( "sk_zombie_soldier_health");
-	gSkillData.zombieSoldierDmgOneSlash = GetSkillCvar( "sk_zombie_soldier_dmg_one_slash");
-	gSkillData.zombieSoldierDmgBothSlash = GetSkillCvar( "sk_zombie_soldier_dmg_both_slash");
 
 	// Ally Grunt
 	gSkillData.fgruntHealth = GetSkillCvar( "sk_hgrunt_ally_health");

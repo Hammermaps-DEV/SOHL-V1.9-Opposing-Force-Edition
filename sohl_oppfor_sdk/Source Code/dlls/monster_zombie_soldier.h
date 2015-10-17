@@ -12,36 +12,22 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// NPC: Soldier Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_ZOMBIE_SOLDIER_H
 #define MONSTER_ZOMBIE_SOLDIER_H
 
+// include
 #include "monster_zombie.h"
 
-class CZombieSoldier : public CZombie
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int IgnoreConditions(void);
-
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
-	void AttackSound(void);
-
-	static const char *pAttackSounds[];
-	static const char *pIdleSounds[];
-	static const char *pAlertSounds[];
-	static const char *pPainSounds[];
-	static const char *pAttackHitSounds[];
-	static const char *pAttackMissSounds[];
-
-	// No range attacks
-	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+// class definition
+class CZombieSoldier : public CZombie {
+	public:
+		// void
+		void Spawn(void);
+		void Precache(void);
 };
 
 #endif // MONSTER_ZOMBIE_SOLDIER_H

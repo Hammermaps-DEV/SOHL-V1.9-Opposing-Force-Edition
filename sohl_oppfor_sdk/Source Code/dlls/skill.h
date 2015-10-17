@@ -82,15 +82,47 @@ struct skilldata_t
 	float snarkDmgBite;
 	float snarkDmgPop;
 
+	//=========================================================
+	// NPCs: Zombie,Zombie Soldier,Zombie Barney
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+
+	// Zombie Scientist
 	float zombieHealth;
 	float zombieDmgOneSlash;
 	float zombieDmgBothSlash;
+	float zombieHead;
+	float zombieChest;
+	float zombieStomach;
+	float zombieLeg;
+	float zombieArm;
 
-	// Opposing-Force
+	// Zombie Soldier
 	float zombieSoldierHealth;
 	float zombieSoldierDmgOneSlash;
 	float zombieSoldierDmgBothSlash;
+	float zombieSoldierHead;
+	float zombieSoldierChest;
+	float zombieSoldierStomach;
+	float zombieSoldierLeg;
+	float zombieSoldierArm;
 
+	// Zombie Barney
+	float zombieBarneyHealth;
+	float zombieBarneyDmgOneSlash;
+	float zombieBarneyDmgBothSlash;
+	float zombieBarneyHead;
+	float zombieBarneyChest;
+	float zombieBarneyStomach;
+	float zombieBarneyLeg;
+	float zombieBarneyArm;
+
+	//=========================================================
+	// NPCs: #########################
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+
+	// Opposing-Force
 	float fgruntHealth;
 	float fgruntDmgKick;
 	float fgruntShotgunPellets;

@@ -31,6 +31,7 @@ class CZombie : public CBaseMonster {
 		void AlertSound(void);
 		void IdleSound(void);
 		void AttackSound(void);
+		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
 		// bool void
 		BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }
@@ -62,6 +63,14 @@ class CZombie : public CBaseMonster {
 		int m_flPitch = 100;
 		float m_flBulletDR = 0.0;
 		float m_flNextFlinch;
+
+		float m_flHitgroupHead = gSkillData.zombieHead;
+		float m_flHitgroupChest = gSkillData.zombieChest;
+		float m_flHitgroupStomach = gSkillData.zombieStomach;
+		float m_flHitgroupArm = gSkillData.zombieArm;
+		float m_flHitgroupLeg = gSkillData.zombieLeg;
+		float m_flDmgOneSlash = gSkillData.zombieDmgOneSlash;
+		float m_flDmgBothSlash = gSkillData.zombieDmgBothSlash;
 };
 
 #endif // MONSTER_ZOMBIE_H

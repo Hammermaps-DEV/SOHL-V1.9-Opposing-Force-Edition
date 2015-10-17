@@ -15,13 +15,14 @@
 //=========================================================
 // NPC: Scientist Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 17.10.2015
+// Version: 1.0 / Build: 00002 / Date: 17.10.2015
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
+#include	"weapons.h"
 #include	"monster_zombie.h"
 
 //=========================================================
@@ -147,6 +148,35 @@ void CZombie::Precache() {
 // TakeDamage - overridden for zombie, take XX% damage from bullets
 //=========================================================
 int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) {
+	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+		if (pEnt->IsPlayer()) {
+			pev->health = pev->max_health / 2;
+			if (flDamage > 0) //Override all damage
+				SetConditions(bits_COND_LIGHT_DAMAGE);
+
+			if (flDamage >= 20) //Override all damage
+				SetConditions(bits_COND_HEAVY_DAMAGE);
+
+			return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+		}
+
+		if (pevAttacker->owner) {
+			pEnt = CBaseEntity::Instance(pevAttacker->owner);
+			if (pEnt->IsPlayer()) { 
+				pev->health = pev->max_health / 2;
+				if (flDamage > 0) //Override all damage
+					SetConditions(bits_COND_LIGHT_DAMAGE);
+
+				if (flDamage >= 20) //Override all damage
+					SetConditions(bits_COND_HEAVY_DAMAGE);
+
+				return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+			}
+		}
+	}
+
+	// Take xx% damage from bullets
 	if ( bitsDamageType == DMG_BULLET && m_flBulletDR != 0) {
 		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
 		vecDir = vecDir.Normalize();
@@ -154,16 +184,55 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 		pev->velocity = pev->velocity + vecDir * flForce;
 		flDamage *= m_flBulletDR;
 	}
-
-	if(IsAlive()) { PainSound(); }
+	
 	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+}
+
+//=========================================================
+// TraceAttack - Damage based on Hitgroups
+//=========================================================
+void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
+	if (pev->takedamage) {
+		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
+		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+			if (pEnt->IsPlayer()) { return; }
+			if (pevAttacker->owner) {
+				pEnt = CBaseEntity::Instance(pevAttacker->owner);
+				if (pEnt->IsPlayer()) { return; }
+			}
+		}
+
+		switch (ptr->iHitgroup) {
+			case HITGROUP_HEAD:
+				flDamage = m_flHitgroupHead*flDamage;
+			break;
+			case HITGROUP_CHEST:
+				flDamage = m_flHitgroupChest*flDamage;
+			break;
+			case HITGROUP_STOMACH:
+				flDamage = m_flHitgroupStomach*flDamage;
+			break;
+			case HITGROUP_LEFTARM:
+			case HITGROUP_RIGHTARM:
+				flDamage = m_flHitgroupArm*flDamage;
+			break;
+			case HITGROUP_LEFTLEG:
+			case HITGROUP_RIGHTLEG:
+				flDamage = m_flHitgroupLeg*flDamage;
+			break;
+		}
+	}
+
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 }
 
 //=========================================================
 // IdleSound
 //=========================================================
-void CZombie::IdleSound(void)
-{
+void CZombie::IdleSound(void) {
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
 }
 
@@ -178,8 +247,7 @@ void CZombie::AlertSound(void) {
 // PainSound 
 //=========================================================
 void CZombie::PainSound(void) {
-	if (RANDOM_LONG(0,5) < 2)
-		EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(0, 9)));
+	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(0, 9)));
 }
 
 //=========================================================
@@ -203,7 +271,7 @@ void CZombie::AttackSound(void) {
 void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch( pEvent->event ) {
 		case ZOMBIE_AE_ATTACK_RIGHT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgOneSlash, DMG_SLASH );
+			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgOneSlash, DMG_SLASH );
 			if ( pHurt ) {
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
 					pHurt->pev->punchangle.z = -18;
@@ -219,7 +287,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		}
 		break;
 		case ZOMBIE_AE_ATTACK_LEFT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgOneSlash, DMG_SLASH );
+			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgOneSlash, DMG_SLASH );
 			if ( pHurt ) {
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
 					pHurt->pev->punchangle.z = 18;
@@ -235,7 +303,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		}
 		break;
 		case ZOMBIE_AE_ATTACK_BOTH: {
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, gSkillData.zombieDmgBothSlash, DMG_SLASH );
+			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgBothSlash, DMG_SLASH );
 			if ( pHurt ) {
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
 					pHurt->pev->punchangle.x = 5;

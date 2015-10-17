@@ -47,7 +47,7 @@
 //										8
 #define SF_MONSTER_PRISONER				16 // monster won't attack anyone, no one will attacke him.
 //										32
-//										64
+#define SF_MONSTER_INVINCIBLE			64 // dont take damage from player
 #define SF_MONSTER_NO_YELLOW_BLOBS		128 //LRC- if the monster is stuck, don't give errors or show yellow blobs.
 //LRC- wasn't implemented. #define	SF_MONSTER_WAIT_FOR_SCRIPT		128 //spawnflag that makes monsters wait to check for attacking until the script is done or they've been attacked
 #define SF_MONSTER_PREDISASTER			256	//this is a predisaster scientist or barney. Influences how they speak.

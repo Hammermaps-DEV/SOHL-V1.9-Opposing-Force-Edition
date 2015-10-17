@@ -12,36 +12,21 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// NPC: Barney Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_ZOMBIE_BARNEY_H
 #define MONSTER_ZOMBIE_BARNEY_H
 
+// include
 #include "monster_zombie.h"
 
-class CZombieBarney : public CZombie
-{
+class CZombieBarney : public CZombie {
 public:
+	// void
 	void Spawn(void);
 	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int IgnoreConditions(void);
-
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
-	void AttackSound(void);
-
-	static const char *pAttackSounds[];
-	static const char *pIdleSounds[];
-	static const char *pAlertSounds[];
-	static const char *pPainSounds[];
-	static const char *pAttackHitSounds[];
-	static const char *pAttackMissSounds[];
-
-	// No range attacks
-	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 };
 
 #endif // MONSTER_ZOMBIE_BARNEY_H
