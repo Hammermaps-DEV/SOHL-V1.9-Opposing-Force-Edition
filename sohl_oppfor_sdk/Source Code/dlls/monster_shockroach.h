@@ -12,14 +12,20 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
+//=========================================================
+// NPC: Shock-Roach * http://half-life.wikia.com/wiki/Shock_Roach
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_SHOCKROACH_H
 #define MONSTER_SHOCKROACH_H
 
+// include
 #include "monster_headcrab.h"
 
-class CShockRoach : public CHeadCrab
-{
+// class definition
+class CShockRoach : public CHeadCrab {
 	public:
+		// void
 		void Spawn(void);
 		void Precache(void);
 		void EXPORT LeapTouch(CBaseEntity *pOther);
@@ -27,22 +33,30 @@ class CShockRoach : public CHeadCrab
 		void DeathSound(void);
 		void IdleSound(void);
 		void AlertSound(void);
+		void AttackSound(void);
 		void PrescheduleThink(void);
 		void StartTask(Task_t* pTask);
 		void KeyValue(KeyValueData *pkvd);
 		void HandleAnimEvent(MonsterEvent_t *pEvent);
 
+		// int void
 		int Classify(void);
 
+		// virtual int
 		virtual int	Save(CSave &save);
 		virtual int	Restore(CRestore &restore);
+		virtual int GetVoicePitch(long random) { return m_flPitch + random; }
 
-		static	TYPEDESCRIPTION m_SaveData[];
+		// static
+		static TYPEDESCRIPTION m_SaveData[];
 
+	protected:
 		static const char *pIdleSounds[];
 		static const char *pAttackSounds[];
 
+		// vars
 		float m_flDie;
+		int m_flPitch = 100;
 		bool m_iDies = true;
 		bool m_iWeapon = true;
 };

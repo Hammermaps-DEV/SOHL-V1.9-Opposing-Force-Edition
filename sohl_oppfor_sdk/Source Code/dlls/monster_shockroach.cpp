@@ -15,7 +15,7 @@
 //=========================================================
 // NPC: Shock-Roach * http://half-life.wikia.com/wiki/Shock_Roach
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00003 / Date: 17.10.2015
+// Version: 1.0 / Build: 00004 / Date: 17.10.2015
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -30,10 +30,10 @@
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define	SR_AE_JUMPATTACK ( 2 )
+#define	SR_AE_JUMPATTACK	0x02
 
 //=========================================================
-// Monster's link to Class & Saverestore begins
+// Monster's link to Class & Saverestore Begins
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_shockroach, CShockRoach);
 
@@ -74,12 +74,16 @@ void CShockRoach::Spawn() {
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = gSkillData.sroachHealth;
+
+	if (pev->health == 0)
+		pev->health = gSkillData.sroachHealth;
+
 	pev->view_ofs = Vector(0, 0, 20);// position of the eyes relative to monster's origin.
-	pev->yaw_speed = 5;//´should we put this in the monster's changeanim function since turn rates may vary with state/anim?
+	pev->yaw_speed = 5;// should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_flDie = gpGlobals->time + gSkillData.sroachLifespan;
+	m_flPitch = 100; //basic voice pitch for this monster
 
 	MonsterInit();
 }
@@ -143,7 +147,7 @@ void CShockRoach::LeapTouch(CBaseEntity *pOther) {
 
 	// Don't hit if back on ground
 	if (!FBitSet(pev->flags, FL_ONGROUND)) {
-		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "shockroach/shock_bite.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+		EMIT_SOUND_DYN(edict(), CHAN_WEAPON, "shockroach/shock_bite.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
 
 		/* //Uncomment this when "WEAPON_SHOCKRIFLE" is interpreted!!!
 		// Give the shockrifle weapon to the player, if not already in possession.
@@ -181,45 +185,48 @@ void CShockRoach::PrescheduleThink(void) {
 //=========================================================
 void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case SR_AE_JUMPATTACK: {
-			ClearBits(pev->flags, FL_ONGROUND);
-			UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
-			UTIL_MakeVectors(pev->angles);
+	case SR_AE_JUMPATTACK: {
+		ClearBits(pev->flags, FL_ONGROUND);
+		UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
+		UTIL_MakeVectors(pev->angles);
 
-			Vector vecJumpDir;
-			if (m_hEnemy != NULL) {
-				float gravity = g_psv_gravity->value;
-				if (gravity <= 1)
-					gravity = 1;
+		Vector vecJumpDir;
+		if (m_hEnemy != NULL) {
+			float gravity = g_psv_gravity->value;
+			if (gravity <= 1)
+				gravity = 1;
 
-				// How fast does the headcrab need to travel to reach that height given gravity?
-				float height = (m_hEnemy->pev->origin.z + m_hEnemy->pev->view_ofs.z - pev->origin.z);
-				if (height < 16) {
-					height = 16;
-				}
-
-				float speed = sqrt(2 * gravity * height);
-				float time = speed / gravity;
-
-				// Scale the sideways velocity to get there at the right time
-				vecJumpDir = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - pev->origin);
-				vecJumpDir = vecJumpDir * (1.0 / time);
-
-				// Speed to offset gravity at the desired height
-				vecJumpDir.z = speed;
-
-				// Don't jump too far/fast
-				float distance = vecJumpDir.Length();
-
-				if (distance > 650) {
-					vecJumpDir = vecJumpDir * (650.0 / distance);
-				}
-			} else {
-				// jump hop, don't care where
-				vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
+			// How fast does the headcrab need to travel to reach that height given gravity?
+			float height = (m_hEnemy->pev->origin.z + m_hEnemy->pev->view_ofs.z - pev->origin.z);
+			if (height < 16) {
+				height = 16;
 			}
 
-			EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+			float speed = sqrt(2 * gravity * height);
+			float time = speed / gravity;
+
+			// Scale the sideways velocity to get there at the right time
+			vecJumpDir = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - pev->origin);
+			vecJumpDir = vecJumpDir * (1.0 / time);
+
+			// Speed to offset gravity at the desired height
+			vecJumpDir.z = speed;
+
+			// Don't jump too far/fast
+			float distance = vecJumpDir.Length();
+
+			if (distance > 650) {
+				vecJumpDir = vecJumpDir * (650.0 / distance);
+			}
+		}
+		else {
+			// jump hop, don't care where
+			vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
+		}
+			if (RANDOM_LONG(0, 1)) {
+				AttackSound();
+			}
+
 			pev->velocity = vecJumpDir;
 			m_flNextAttack = gpGlobals->time + 2;
 		}
@@ -234,35 +241,45 @@ void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 // IdleSound
 //=========================================================
 void CShockRoach::IdleSound(void) {
-	EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+	EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
 void CShockRoach::AlertSound(void) {
-	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_angry.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_angry.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 14)));
 }
 
 //=========================================================
-// AlertSound 
+// PainSound 
 //=========================================================
 void CShockRoach::PainSound(void) {
-	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_flinch.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_flinch.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 14)));
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
 void CShockRoach::DeathSound(void) {
-	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_die.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_die.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(0));
 }
 
+//=========================================================
+// AttackSound 
+//=========================================================
+void CShockRoach::AttackSound(void) {
+	EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+}
+
+//=========================================================
+// AI Schedules Specific to this monster
+//=========================================================
 void CShockRoach::StartTask(Task_t *pTask) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 	switch (pTask->iTask) {
 		case TASK_RANGE_ATTACK1:
-			EMIT_SOUND_DYN(edict(), CHAN_WEAPON, pAttackSounds[0], GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch());
+			AttackSound();
 			m_IdealActivity = ACT_RANGE_ATTACK1;
 			SetTouch(&CShockRoach::LeapTouch);
 		break;
