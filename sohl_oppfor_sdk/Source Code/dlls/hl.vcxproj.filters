@@ -411,6 +411,9 @@
     <ClCompile Include="monster_shockroach.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="monster_zombie_barney.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -714,6 +717,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="monster_shockroach.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_barney.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

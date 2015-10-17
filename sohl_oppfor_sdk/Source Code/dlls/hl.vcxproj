@@ -54,6 +54,7 @@
     <ClCompile Include="monster_recruit.cpp" />
     <ClCompile Include="monster_shockroach.cpp" />
     <ClCompile Include="monster_skeleton_dead.cpp" />
+    <ClCompile Include="monster_zombie_barney.cpp" />
     <ClCompile Include="monster_zombie_dead.cpp" />
     <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="monster_drillsergeant.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="monster_skeleton_dead.h" />
     <ClInclude Include="monster_tentacle.h" />
     <ClInclude Include="monster_zombie.h" />
+    <ClInclude Include="monster_zombie_barney.h" />
     <ClInclude Include="monster_zombie_dead.h" />
     <ClInclude Include="monster_zombie_soldier.h" />
     <ClInclude Include="monster_zombie_soldier_dead.h" />
