@@ -15,7 +15,7 @@
 //=========================================================
 // NPC: Soldier Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 17.10.2015
+// Version: 1.0 / Build: 00002 / Date: 18.10.2015
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -40,19 +40,8 @@ void CZombieSoldier :: Spawn() {
 	else
 		SET_MODEL(ENT(pev), "models/zombie_soldier.mdl");
 
-	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
-
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_GREEN;
-
 	if (pev->health == 0)
 		pev->health		= gSkillData.zombieSoldierHealth;
-
-	pev->view_ofs		= VEC_VIEW;// position of the eyes relative to monster's origin.
-	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
-	m_afCapability      = bits_CAP_DOORS_GROUP;
 
 	m_flHitgroupHead    = gSkillData.zombieSoldierHead;
 	m_flHitgroupChest   = gSkillData.zombieSoldierChest;
@@ -62,7 +51,7 @@ void CZombieSoldier :: Spawn() {
 	m_flDmgOneSlash     = gSkillData.zombieSoldierDmgOneSlash;
 	m_flDmgBothSlash    = gSkillData.zombieSoldierDmgBothSlash;
 
-	MonsterInit();
+	CZombie::Spawn();
 }
 
 //=========================================================
@@ -73,4 +62,6 @@ void CZombieSoldier :: Precache() {
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/zombie_soldier.mdl");
+
+	CZombie::Precache();
 }

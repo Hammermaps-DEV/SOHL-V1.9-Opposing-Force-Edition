@@ -23,24 +23,24 @@
 class CZombie : public CBaseMonster {
 	public:
 		// void
-		void Spawn(void);
-		void Precache(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
-		void PainSound(void);
-		void DeathSound(void);
-		void AlertSound(void);
-		void IdleSound(void);
-		void AttackSound(void);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		virtual void Spawn(void);
+		virtual void Precache(void);
+		virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
+		virtual void PainSound(void);
+		virtual void DeathSound(void);
+		virtual void AlertSound(void);
+		virtual void IdleSound(void);
+		virtual void AttackSound(void);
+		//virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
 		// bool void
-		BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }
-		BOOL CheckRangeAttack2(float flDot, float flDist) { return FALSE; }
+		virtual BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }
+		virtual BOOL CheckRangeAttack2(float flDot, float flDist) { return FALSE; }
 
 		// int void
-		int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-		int IgnoreConditions(void);
-		int Classify(void);
+		virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+		virtual int IgnoreConditions(void);
+		virtual int Classify(void);
 
 		// virtual int
 		virtual int	Save(CSave &save);
@@ -50,7 +50,6 @@ class CZombie : public CBaseMonster {
 		// static
 		static TYPEDESCRIPTION m_SaveData[];
 
-	protected:
 		static const char *pAttackSounds[];
 		static const char *pIdleSounds[];
 		static const char *pAlertSounds[];
@@ -60,17 +59,17 @@ class CZombie : public CBaseMonster {
 		static const char *pAttackMissSounds[];
 
 		// vars
+		bool m_flDebug = false;
 		int m_flPitch = 100;
 		float m_flBulletDR = 0.0;
 		float m_flNextFlinch;
-
-		float m_flHitgroupHead = gSkillData.zombieHead;
-		float m_flHitgroupChest = gSkillData.zombieChest;
-		float m_flHitgroupStomach = gSkillData.zombieStomach;
-		float m_flHitgroupArm = gSkillData.zombieArm;
-		float m_flHitgroupLeg = gSkillData.zombieLeg;
-		float m_flDmgOneSlash = gSkillData.zombieDmgOneSlash;
-		float m_flDmgBothSlash = gSkillData.zombieDmgBothSlash;
+		float m_flHitgroupHead;
+		float m_flHitgroupChest;
+		float m_flHitgroupStomach;
+		float m_flHitgroupArm;
+		float m_flHitgroupLeg;
+		float m_flDmgOneSlash;
+		float m_flDmgBothSlash;
 };
 
 #endif // MONSTER_ZOMBIE_H

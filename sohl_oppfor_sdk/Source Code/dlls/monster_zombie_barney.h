@@ -23,10 +23,10 @@
 #include "monster_zombie.h"
 
 class CZombieBarney : public CZombie {
-public:
-	// void
-	void Spawn(void);
-	void Precache(void);
+	public:
+		// void
+		void Spawn(void);
+		void Precache(void);
 };
 
 #endif // MONSTER_ZOMBIE_BARNEY_H
