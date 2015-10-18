@@ -13,54 +13,49 @@
 *
 ****/
 //=========================================================
-// DEAD Zombie PROP
+// PROP: DEAD Soldier Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+// Version: 1.0 / Build: 00001 / Date: 18.10.2015
 //=========================================================
-
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
 #include    "monster_zombie_soldier_dead.h"
 
-char *CDeadZombieSoldier::m_szPoses[] = { "dead_on_back", "dead_on_stomach" };
-
-void CDeadZombieSoldier::KeyValue(KeyValueData *pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "pose"))
-	{
-		m_iPose = atoi(pkvd->szValue);
-		pkvd->fHandled = TRUE;
-	}
-	else
-		CBaseMonster::KeyValue(pkvd);
-}
-
+//=========================================================
+// Monster's link to Class
+//=========================================================
 LINK_ENTITY_TO_CLASS(monster_zombie_soldier_dead, CDeadZombieSoldier);
 
 //=========================================================
-// ********** CDeadZombie SPAWN **********
+// Spawn DEAD-Soldier Zombie
 //=========================================================
-void CDeadZombieSoldier::Spawn(void)
-{
-	PRECACHE_MODEL("models/zombie_soldier.mdl");
-	SET_MODEL(ENT(pev), "models/zombie_soldier.mdl");
+void CDeadZombieSoldier::Spawn(void) {
+	Precache();
 
-	pev->effects = 0;
-	pev->yaw_speed = 8;
-	pev->sequence = 0;
-	pev->body = 1;
-	m_bloodColor = BLOOD_COLOR_RED;
+	if (pev->model)
+		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
+	else
+		SET_MODEL(ENT(pev), "models/zombie_soldier.mdl");
 
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
-
-	if (pev->sequence == -1)
-	{
+	if (pev->sequence == -1) {
 		ALERT(at_console, "Dead zombie soldier with bad pose\n");
 		pev->sequence = 0;
 		pev->effects = EF_BRIGHTFIELD;
 	}
 
-	// Corpses have less health
-	pev->health = 8;
+	CDeadZombie::Spawn();
+}
 
-	MonsterInitDead();
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CDeadZombieSoldier::Precache() {
+	if (pev->model)
+		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
+	else
+		PRECACHE_MODEL("models/zombie_soldier.mdl");
+
+	CDeadZombie::Precache();
 }

@@ -18,14 +18,11 @@
 
 #include "monster_zombie_dead.h"
 
-class CDeadZombieSoldier : public CDeadZombie
-{
-public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_HUMAN_MILITARY; }
-	void KeyValue(KeyValueData *pkvd);
-
-	static char *m_szPoses[2];
+class CDeadZombieSoldier : public CDeadZombie {
+	public:
+		// void
+		void Spawn(void);
+		void Precache(void);
 };
 
 #endif // MONSTER_ZOMBIE_SOLDIER_DEAD_

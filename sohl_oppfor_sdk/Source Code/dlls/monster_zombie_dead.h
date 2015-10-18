@@ -12,20 +12,29 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// PROP: DEAD Scientist Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_ZOMBIE_DEAD_H
 #define MONSTER_ZOMBIE_DEAD_H
 
-class CDeadZombie : public CBaseMonster
-{
-public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_HUMAN_MILITARY; }
+// class definition
+class CDeadZombie : public CBaseMonster {
+	public:
+		// void
+		virtual void Spawn(void);
+		virtual void Precache(void);
+		virtual void KeyValue(KeyValueData *pkvd);
 
-	void KeyValue(KeyValueData *pkvd);
+		// int void
+		virtual int	Classify(void);
 
-	int	m_iPose;// which sequence to display	-- temporary, don't need to save
-	static char *m_szPoses[2];
+		// static
+		static char *m_szPoses[2];
+
+		// vars
+		int	m_iPose;// which sequence to display
 };
 
 #endif // MONSTER_ZOMBIE_DEAD_H
