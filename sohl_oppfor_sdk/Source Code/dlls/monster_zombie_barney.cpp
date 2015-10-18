@@ -51,6 +51,8 @@ void CZombieBarney::Spawn() {
 	m_flDmgOneSlash     = gSkillData.zombieBarneyDmgOneSlash;
 	m_flDmgBothSlash    = gSkillData.zombieBarneyDmgBothSlash;
 
+	m_flDebug = false; //Debug Massages
+
 	CZombie::Spawn();
 }
 

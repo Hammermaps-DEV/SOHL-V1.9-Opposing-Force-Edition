@@ -51,6 +51,8 @@ void CZombieSoldier :: Spawn() {
 	m_flDmgOneSlash     = gSkillData.zombieSoldierDmgOneSlash;
 	m_flDmgBothSlash    = gSkillData.zombieSoldierDmgBothSlash;
 
+	m_flDebug = false; //Debug Massages
+
 	CZombie::Spawn();
 }
 
