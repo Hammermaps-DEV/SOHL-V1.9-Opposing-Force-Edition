@@ -414,6 +414,12 @@
     <ClCompile Include="monster_zombie_barney.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="proj_bolt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_pitdronespit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -720,6 +726,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="monster_zombie_barney.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_bolt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_pitdronespit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

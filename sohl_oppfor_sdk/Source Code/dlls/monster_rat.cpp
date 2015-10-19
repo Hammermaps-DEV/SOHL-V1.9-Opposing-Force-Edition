@@ -21,7 +21,7 @@
 #include "monsters.h"
 #include "schedule.h"
 #include "soundent.h"
-#include	"monster_rat.h"
+#include "monster_rat.h"
 
 #define RAT_IDLE			0
 #define RAT_BORED			1
@@ -81,9 +81,9 @@ void CRat::Precache()
 	else
 		PRECACHE_MODEL("models/bigrat.mdl");
 
-	PRECACHE_SOUND("roach/rch_die.wav");
-	PRECACHE_SOUND("roach/rch_walk.wav");
-	PRECACHE_SOUND("roach/rch_smash.wav");
+	PRECACHE_SOUND("rat/rat_die.wav");
+	PRECACHE_SOUND("rat/rat_walk.wav");
+	PRECACHE_SOUND("rat/rat_smash.wav");
 }
 
 void CRat::Killed(entvars_t *pevAttacker, int iGib)
@@ -93,9 +93,9 @@ void CRat::Killed(entvars_t *pevAttacker, int iGib)
 	pev->deadflag = DEAD_DEAD;
 
 	if (RANDOM_LONG(0, 4) == 1)
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "roach/rch_die.wav", 0.8, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
+		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "rat/rat_die.wav", 0.8, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
 	else
-		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "roach/rch_smash.wav", 0.7, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
+		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "rat/rat_smash.wav", 0.7, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
 
 	CSoundEnt::InsertSound(bits_SOUND_WORLD, pev->origin, 128, 1);
 	CBaseEntity *pOwner = CBaseEntity::Instance(pev->owner);
@@ -239,7 +239,7 @@ void CRat::PickNewDest(int iCondition)
 	m_Route[0].iType = bits_MF_TO_LOCATION;
 	m_movementGoal = RouteClassify(m_Route[0].iType);
 	if (RANDOM_LONG(0, 8) == 1)
-		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "roach/rch_walk.wav", 1, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
+		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "rat/rat_walk.wav", 1, ATTN_NORM, 0, 80 + RANDOM_LONG(0, 39));
 }
 
 void CRat::Move(float flInterval)

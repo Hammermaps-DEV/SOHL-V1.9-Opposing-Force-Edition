@@ -344,6 +344,46 @@ cvar_t	sk_zombie_barney_arm2 = { "sk_zombie_barney_arm2","0" };
 cvar_t	sk_zombie_barney_arm3 = { "sk_zombie_barney_arm3","0" };
 
 //=========================================================
+// NPCs: Pit Drone
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
+cvar_t	sk_pitdrone_health1 = { "sk_pitdrone_health1", "0" };
+cvar_t	sk_pitdrone_health2 = { "sk_pitdrone_health2", "0" };
+cvar_t	sk_pitdrone_health3 = { "sk_pitdrone_health3", "0" };
+
+cvar_t	sk_pitdrone_dmg_bite1 = { "sk_pitdrone_dmg_bite1", "0" };
+cvar_t	sk_pitdrone_dmg_bite2 = { "sk_pitdrone_dmg_bite2", "0" };
+cvar_t	sk_pitdrone_dmg_bite3 = { "sk_pitdrone_dmg_bite3", "0" };
+
+cvar_t	sk_pitdrone_dmg_whip1 = { "sk_pitdrone_dmg_whip1", "0" };
+cvar_t	sk_pitdrone_dmg_whip2 = { "sk_pitdrone_dmg_whip2", "0" };
+cvar_t	sk_pitdrone_dmg_whip3 = { "sk_pitdrone_dmg_whip3", "0" };
+
+cvar_t	sk_pitdrone_dmg_spit1 = { "sk_pitdrone_dmg_spit1", "0" };
+cvar_t	sk_pitdrone_dmg_spit2 = { "sk_pitdrone_dmg_spit2", "0" };
+cvar_t	sk_pitdrone_dmg_spit3 = { "sk_pitdrone_dmg_spit3", "0" };
+
+cvar_t	sk_pitdrone_head1 = { "sk_pitdrone_head1","0" };
+cvar_t	sk_pitdrone_head2 = { "sk_pitdrone_head2","0" };
+cvar_t	sk_pitdrone_head3 = { "sk_pitdrone_head3","0" };
+
+cvar_t	sk_pitdrone_chest1 = { "sk_pitdrone_chest1","0" };
+cvar_t	sk_pitdrone_chest2 = { "sk_pitdrone_chest2","0" };
+cvar_t	sk_pitdrone_chest3 = { "sk_pitdrone_chest3","0" };
+
+cvar_t	sk_pitdrone_stomach1 = { "sk_pitdrone_stomach1","0" };
+cvar_t	sk_pitdrone_stomach2 = { "sk_pitdrone_stomach2","0" };
+cvar_t	sk_pitdrone_stomach3 = { "sk_pitdrone_stomach3","0" };
+
+cvar_t	sk_pitdrone_leg1 = { "sk_pitdrone_leg1","0" };
+cvar_t	sk_pitdrone_leg2 = { "sk_pitdrone_leg2","0" };
+cvar_t	sk_pitdrone_leg3 = { "sk_pitdrone_leg3","0" };
+
+cvar_t	sk_pitdrone_arm1 = { "sk_pitdrone_arm1","0" };
+cvar_t	sk_pitdrone_arm2 = { "sk_pitdrone_arm2","0" };
+cvar_t	sk_pitdrone_arm3 = { "sk_pitdrone_arm3","0" };
+
+//=========================================================
 // NPCs: #########################
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
@@ -928,6 +968,50 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_zombie_barney_arm1);
 	CVAR_REGISTER(&sk_zombie_barney_arm2);
 	CVAR_REGISTER(&sk_zombie_barney_arm3);
+
+	//=========================================================
+	// NPCs: Pit Drone
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	CVAR_REGISTER(&sk_pitdrone_health1);
+	CVAR_REGISTER(&sk_pitdrone_health2);
+	CVAR_REGISTER(&sk_pitdrone_health3);
+
+	CVAR_REGISTER(&sk_pitdrone_dmg_bite1);
+	CVAR_REGISTER(&sk_pitdrone_dmg_bite2);
+	CVAR_REGISTER(&sk_pitdrone_dmg_bite3);
+
+	CVAR_REGISTER(&sk_pitdrone_dmg_whip1);
+	CVAR_REGISTER(&sk_pitdrone_dmg_whip2);
+	CVAR_REGISTER(&sk_pitdrone_dmg_whip3);
+
+	CVAR_REGISTER(&sk_pitdrone_dmg_spit1);
+	CVAR_REGISTER(&sk_pitdrone_dmg_spit2);
+	CVAR_REGISTER(&sk_pitdrone_dmg_spit3);
+
+	CVAR_REGISTER(&sk_pitdrone_dmg_spit1);
+	CVAR_REGISTER(&sk_pitdrone_dmg_spit2);
+	CVAR_REGISTER(&sk_pitdrone_dmg_spit3);
+
+	CVAR_REGISTER(&sk_pitdrone_head1);
+	CVAR_REGISTER(&sk_pitdrone_head2);
+	CVAR_REGISTER(&sk_pitdrone_head3);
+
+	CVAR_REGISTER(&sk_pitdrone_chest1);
+	CVAR_REGISTER(&sk_pitdrone_chest2);
+	CVAR_REGISTER(&sk_pitdrone_chest3);
+
+	CVAR_REGISTER(&sk_pitdrone_stomach1);
+	CVAR_REGISTER(&sk_pitdrone_stomach2);
+	CVAR_REGISTER(&sk_pitdrone_stomach3);
+
+	CVAR_REGISTER(&sk_pitdrone_leg1);
+	CVAR_REGISTER(&sk_pitdrone_leg2);
+	CVAR_REGISTER(&sk_pitdrone_leg3);
+
+	CVAR_REGISTER(&sk_pitdrone_arm1);
+	CVAR_REGISTER(&sk_pitdrone_arm2);
+	CVAR_REGISTER(&sk_pitdrone_arm3);
 
 	//=========================================================
 	// NPCs: #########################

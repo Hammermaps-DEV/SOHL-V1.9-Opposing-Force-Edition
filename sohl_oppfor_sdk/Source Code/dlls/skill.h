@@ -118,6 +118,20 @@ struct skilldata_t
 	float zombieBarneyArm;
 
 	//=========================================================
+	// NPCs: Pit Drone
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	float pitdroneHealth;
+	float pitdroneDmgBite;
+	float pitdroneDmgWhip;
+	float pitdroneDmgSpit;
+	float pitdroneHead;
+	float pitdroneChest;
+	float pitdroneStomach;
+	float pitdroneLeg;
+	float pitdroneArm;
+
+	//=========================================================
 	// NPCs: #########################
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================

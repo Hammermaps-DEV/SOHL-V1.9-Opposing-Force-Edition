@@ -259,7 +259,7 @@ void CShockRoach::PainSound(void) {
 // DeathSound 
 //=========================================================
 void CShockRoach::DeathSound(void) {
-	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_die.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(0));
+	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_die.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(1));
 }
 
 //=========================================================

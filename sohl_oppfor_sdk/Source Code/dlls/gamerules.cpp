@@ -250,6 +250,20 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieBarneyArm           = GetSkillCvar("sk_zombie_barney_arm"); //Hitgroup
 
 	//=========================================================
+	// NPCs: Pit Drone
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.pitdroneHealth			= GetSkillCvar("sk_pitdrone_health");
+	gSkillData.pitdroneDmgBite			= GetSkillCvar("sk_pitdrone_dmg_bite");
+	gSkillData.pitdroneDmgWhip			= GetSkillCvar("sk_pitdrone_dmg_whip");
+	gSkillData.pitdroneDmgSpit			= GetSkillCvar("sk_pitdrone_dmg_spit");
+	gSkillData.pitdroneHead				= GetSkillCvar("sk_pitdrone_head"); //Hitgroup 
+	gSkillData.pitdroneChest			= GetSkillCvar("sk_pitdrone_chest"); //Hitgroup
+	gSkillData.pitdroneStomach			= GetSkillCvar("sk_pitdrone_stomach"); //Hitgroup
+	gSkillData.pitdroneLeg				= GetSkillCvar("sk_pitdrone_leg"); //Hitgroup
+	gSkillData.pitdroneArm				= GetSkillCvar("sk_pitdrone_arm"); //Hitgroup
+
+	//=========================================================
 	// NPCs: #########################
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================

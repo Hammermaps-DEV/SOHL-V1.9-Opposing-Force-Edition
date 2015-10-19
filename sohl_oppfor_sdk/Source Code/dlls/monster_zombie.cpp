@@ -260,7 +260,7 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 // IdleSound
 //=========================================================
 void CZombie::IdleSound(void) {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
 }
 
 //=========================================================
@@ -281,7 +281,6 @@ void CZombie::PainSound(void) {
 // DeathSound 
 //=========================================================
 void CZombie::DeathSound(void) {
-	EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), 1.0, ATTN_IDLE, 0, GetVoicePitch(0));
 }
 
 //=========================================================
@@ -297,25 +296,6 @@ void CZombie::AttackSound(void) {
 //=========================================================
 void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch( pEvent->event ) {
-		case ZOMBIE_AE_ATTACK_RIGHT: {
-			if (m_flDebug)
-				ALERT(at_console, "%s:HandleAnimEvent:Slash right!\n", STRING(pev->classname));
-
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgOneSlash, DMG_SLASH );
-			if ( pHurt ) {
-				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
-					pHurt->pev->punchangle.z = -18;
-					pHurt->pev->punchangle.x = 5;
-					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
-				}
-
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5,5)));
-			} else
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5,5)));
-
-			if(RANDOM_LONG(0, 1)) { AttackSound(); }
-		}
-		break;
 		case ZOMBIE_AE_ATTACK_LEFT: {
 			if (m_flDebug)
 				ALERT(at_console, "%s:HandleAnimEvent:Slash left!\n", STRING(pev->classname));
@@ -323,7 +303,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgOneSlash, DMG_SLASH );
 			if ( pHurt ) {
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
-					pHurt->pev->punchangle.z = 18;
+					pHurt->pev->punchangle.z = -18;
 					pHurt->pev->punchangle.x = 5;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 100;
 				}
@@ -335,11 +315,31 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}
 		break;
+		case ZOMBIE_AE_ATTACK_RIGHT: {
+			if (m_flDebug)
+				ALERT(at_console, "%s:HandleAnimEvent:Slash right!\n", STRING(pev->classname));
+
+			CBaseEntity *pHurt = CheckTraceHullAttack(70, m_flDmgOneSlash, DMG_SLASH);
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.z = 18;
+					pHurt->pev->punchangle.x = 5;
+					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
+				}
+
+				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+			}
+			else
+				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+
+			if (RANDOM_LONG(0, 1)) { AttackSound(); }
+		}
+									 break;
 		case ZOMBIE_AE_ATTACK_BOTH: {
 			if (m_flDebug)
 				ALERT(at_console, "%s:HandleAnimEvent:Slash both!\n", STRING(pev->classname));
 
-			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgBothSlash, DMG_SLASH );
+			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgBothSlash, DMG_CLUB);
 			if ( pHurt ) {
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
 					pHurt->pev->punchangle.x = 5;
@@ -360,11 +360,11 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 }
 
 //=========================================================
-// AI Schedules Specific to this monster
+// IgnoreConditions
 //=========================================================
 int CZombie::IgnoreConditions(void) {
 	int iIgnore = CBaseMonster::IgnoreConditions();
-	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1)) {	
+	if ((m_Activity == ACT_MELEE_ATTACK1)) {	
 		if (m_flNextFlinch >= gpGlobals->time)
 			iIgnore |= (bits_COND_LIGHT_DAMAGE|bits_COND_HEAVY_DAMAGE);
 	}
