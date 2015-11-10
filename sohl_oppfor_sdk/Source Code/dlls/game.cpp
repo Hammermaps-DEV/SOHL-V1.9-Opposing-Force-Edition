@@ -454,6 +454,23 @@ cvar_t	sk_shockroach_lifespan1 = { "sk_shockroach_lifespan1", "0" };
 cvar_t	sk_shockroach_lifespan2 = { "sk_shockroach_lifespan2", "0" };
 cvar_t	sk_shockroach_lifespan3 = { "sk_shockroach_lifespan3", "0" };
 
+// Gonome
+cvar_t	sk_gonome_health1 = { "sk_gonome_health1", "0" };
+cvar_t	sk_gonome_health2 = { "sk_gonome_health2", "0" };
+cvar_t	sk_gonome_health3 = { "sk_gonome_health3", "0" };
+
+cvar_t	sk_gonome_dmg_one_slash1 = { "sk_gonome_dmg_one_slash1", "0" };
+cvar_t	sk_gonome_dmg_one_slash2 = { "sk_gonome_dmg_one_slash2", "0" };
+cvar_t	sk_gonome_dmg_one_slash3 = { "sk_gonome_dmg_one_slash3", "0" };
+
+cvar_t	sk_gonome_dmg_guts1 = { "sk_gonome_dmg_guts1", "0" };
+cvar_t	sk_gonome_dmg_guts2 = { "sk_gonome_dmg_guts2", "0" };
+cvar_t	sk_gonome_dmg_guts3 = { "sk_gonome_dmg_guts3", "0" };
+
+cvar_t	sk_gonome_dmg_one_bite1 = { "sk_gonome_dmg_one_bite1", "0" };
+cvar_t	sk_gonome_dmg_one_bite2 = { "sk_gonome_dmg_one_bite2", "0" };
+cvar_t	sk_gonome_dmg_one_bite3 = { "sk_gonome_dmg_one_bite3", "0" };
+
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
 cvar_t	sk_turret_health2 = {"sk_turret_health2","0"};
@@ -1083,6 +1100,23 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_shockroach_lifespan1);
 	CVAR_REGISTER(&sk_shockroach_lifespan2);
 	CVAR_REGISTER(&sk_shockroach_lifespan3);
+
+	// Gonome
+	CVAR_REGISTER(&sk_gonome_health1);
+	CVAR_REGISTER(&sk_gonome_health2);
+	CVAR_REGISTER(&sk_gonome_health3);
+
+	CVAR_REGISTER(&sk_gonome_dmg_one_slash1);
+	CVAR_REGISTER(&sk_gonome_dmg_one_slash2);
+	CVAR_REGISTER(&sk_gonome_dmg_one_slash3);
+
+	CVAR_REGISTER(&sk_gonome_dmg_guts1);
+	CVAR_REGISTER(&sk_gonome_dmg_guts2);
+	CVAR_REGISTER(&sk_gonome_dmg_guts3);
+
+	CVAR_REGISTER(&sk_gonome_dmg_one_bite1);
+	CVAR_REGISTER(&sk_gonome_dmg_one_bite2);
+	CVAR_REGISTER(&sk_gonome_dmg_one_bite3);
 
 	//Turret
 	CVAR_REGISTER ( &sk_turret_health1 );

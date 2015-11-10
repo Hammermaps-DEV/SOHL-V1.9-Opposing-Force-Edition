@@ -420,6 +420,9 @@
     <ClCompile Include="proj_pitdronespit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="proj_gonomespit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -732,6 +735,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="proj_pitdronespit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_gonomespit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

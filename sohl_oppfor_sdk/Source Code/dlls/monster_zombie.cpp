@@ -112,9 +112,7 @@ void CZombie::Spawn() {
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = bits_CAP_DOORS_GROUP;
-	m_flPitch = 100; //basic voice pitch for this monster
 	m_flBulletDR = 0.3; //damage from bullets
-
 	m_flDebug = false; //Debug Massages
 
 	m_flHitgroupHead = gSkillData.zombieHead;
@@ -260,34 +258,35 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 // IdleSound
 //=========================================================
 void CZombie::IdleSound(void) {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1.0, ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
 void CZombie::AlertSound(void) {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAlertSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 14)));
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAlertSounds);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
 void CZombie::PainSound(void) {
-	EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(0, 9)));
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
 void CZombie::DeathSound(void) {
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
 //=========================================================
 // AttackSound 
 //=========================================================
 void CZombie::AttackSound(void) {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAttackSounds);
 }
 
 //=========================================================
@@ -308,9 +307,9 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 100;
 				}
 
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5,5)));
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 			} else
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5,5)));
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 
 			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}
@@ -327,14 +326,12 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
 				}
 
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 			}
 			else
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
-
-			if (RANDOM_LONG(0, 1)) { AttackSound(); }
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 		}
-									 break;
+		break;
 		case ZOMBIE_AE_ATTACK_BOTH: {
 			if (m_flDebug)
 				ALERT(at_console, "%s:HandleAnimEvent:Slash both!\n", STRING(pev->classname));
@@ -342,13 +339,13 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			CBaseEntity *pHurt = CheckTraceHullAttack( 70, m_flDmgBothSlash, DMG_CLUB);
 			if ( pHurt ) {
 				if ( pHurt->pev->flags & (FL_MONSTER|FL_CLIENT) ) {
-					pHurt->pev->punchangle.x = 5;
+					pHurt->pev->punchangle.x = 20;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * -100;
 				}
 
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackHitSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5,5)));
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 			} else
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackMissSounds), 1.0, ATTN_NORM, 0, GetVoicePitch(RANDOM_LONG(-5,5)));
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 
 			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}

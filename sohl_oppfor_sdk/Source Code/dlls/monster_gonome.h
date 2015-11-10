@@ -18,21 +18,36 @@
 
 #include "monster_bullsquid.h"
 
-class CGonome : public CBullsquid
-{
+class CGonome : public CBullsquid {
 public:
-
 	void Spawn(void);
 	void Precache(void);
+	void SetYawSpeed(void);
+	int  ISoundMask(void);
 
 	int  Classify(void);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void IdleSound(void);
 	void PainSound(void);
 	void DeathSound(void);
 	void AlertSound(void);
+	void IdleSound(void);
 	void AttackSound(void);
 	void StartTask(Task_t *pTask);
+	void RunTask(Task_t *pTask);
+
+	int	Save(CSave &save);
+	int Restore(CRestore &restore);
+	static TYPEDESCRIPTION m_SaveData[];
+
+	Schedule_t *GetSchedule(void);
+	Schedule_t *GetScheduleOfType(int Type);
+
+	static const char *pAttackSounds[];
+	static const char *pIdleSounds[];
+	static const char *pPainSounds[];
+	static const char *pDeathSounds[];
+	static const char *pAttackHitSounds[];
+	static const char *pAttackMissSounds[];
 
 	BOOL CheckMeleeAttack1(float flDot, float flDist);
 	BOOL CheckMeleeAttack2(float flDot, float flDist);
@@ -42,6 +57,13 @@ public:
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	int IRelationship(CBaseEntity *pTarget);
 	int IgnoreConditions(void);
+	MONSTERSTATE GetIdealState(void);
+	CUSTOM_SCHEDULES;
+
+	int iGonomeSpitSprite;
+	float m_flLastHurtTime;// we keep track of this, because if something hurts a gonome, it will forget about its love of headcrabs for a while.
+	float m_flNextSpitTime;// last time the Gonome used the spit attack.
+	float m_flNextFlinch;
 };
 
 #endif // MONSTER_GONOME_H

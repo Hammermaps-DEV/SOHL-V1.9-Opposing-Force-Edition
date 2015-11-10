@@ -157,6 +157,11 @@ struct skilldata_t
 	float sroachDmgBite;
 	float sroachLifespan;
 
+	float gonomeHealth;
+	float gonomeDmgOneSlash;
+	float gonomeDmgGuts;
+	float gonomeDmgOneBite;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;

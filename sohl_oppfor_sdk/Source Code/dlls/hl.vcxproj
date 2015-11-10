@@ -59,6 +59,7 @@
     <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="monster_drillsergeant.cpp" />
     <ClCompile Include="monster_zombie_soldier_dead.cpp" />
+    <ClCompile Include="proj_gonomespit.cpp" />
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
     <ClCompile Include="rcallymonster.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="monster_zombie_soldier_dead.h" />
     <ClInclude Include="movewith.h" />
     <ClInclude Include="nodes.h" />
+    <ClInclude Include="proj_gonomespit.h" />
     <ClInclude Include="proj_pitdronespit.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />

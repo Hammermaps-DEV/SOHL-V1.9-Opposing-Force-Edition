@@ -295,6 +295,12 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.sroachDmgBite = GetSkillCvar("sk_shockroach_dmg_bite");
 	gSkillData.sroachLifespan = GetSkillCvar("sk_shockroach_lifespan");
 
+	// Gonome
+	gSkillData.gonomeHealth = GetSkillCvar("sk_gonome_health");
+	gSkillData.gonomeDmgOneSlash = GetSkillCvar("sk_gonome_dmg_one_slash");
+	gSkillData.gonomeDmgGuts = GetSkillCvar("sk_gonome_dmg_guts");
+	gSkillData.gonomeDmgOneBite = GetSkillCvar("sk_gonome_dmg_one_bite");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 

@@ -22,7 +22,6 @@
 // class definition
 class CZombie : public CBaseMonster {
 	public:
-		// void
 		virtual void Spawn(void);
 		virtual void Precache(void);
 		virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
@@ -33,21 +32,16 @@ class CZombie : public CBaseMonster {
 		virtual void AttackSound(void);
 		virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-		// bool void
 		virtual BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }
 		virtual BOOL CheckRangeAttack2(float flDot, float flDist) { return FALSE; }
 
-		// int void
 		virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 		virtual int IgnoreConditions(void);
 		virtual int Classify(void);
 
-		// virtual int
 		virtual int	Save(CSave &save);
 		virtual int	Restore(CRestore &restore);
-		virtual int GetVoicePitch(long random) { return m_flPitch + random; }
 
-		// static
 		static TYPEDESCRIPTION m_SaveData[];
 
 		static const char *pAttackSounds[];
@@ -58,9 +52,8 @@ class CZombie : public CBaseMonster {
 		static const char *pAttackHitSounds[];
 		static const char *pAttackMissSounds[];
 
-		// vars
-		bool m_flDebug = false;
-		int m_flPitch = 100;
+	protected:
+		BOOL m_flDebug = false;
 		float m_flBulletDR = 0.0;
 		float m_flNextFlinch;
 		float m_flHitgroupHead;

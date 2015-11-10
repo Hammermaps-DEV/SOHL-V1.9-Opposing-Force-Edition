@@ -133,7 +133,6 @@ void CSquidSpit :: Touch ( CBaseEntity *pOther )
 
 	if ( !pOther->pev->takedamage )
 	{
-
 		// make a splat on the wall
 		UTIL_TraceLine( pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT( pev ), &tr );
 
@@ -159,7 +158,7 @@ void CSquidSpit :: Touch ( CBaseEntity *pOther )
 	}
 	else
 	{
-		pOther->TakeDamage ( pev, pev, gSkillData.bullsquidDmgSpit, DMG_GENERIC );
+		pOther->TakeDamage ( pev, pev, gSkillData.bullsquidDmgSpit, DMG_POISON);
 	}
 
 	SetThink(&CSquidSpit :: SUB_Remove );

@@ -1,15 +1,23 @@
 #ifndef PIDDRONESPLIT_H
 #define PIDDRONESPLIT_H
 
-class CPitDroneSpit : public CBaseEntity {
+class CPitDroneSpit : public CBaseMonster
+{
 public:
 	void Spawn(void);
 	void Precache(void);
-	void EXPORT BubbleThink(void);
-	void EXPORT SpitTouch(CBaseEntity *pOther);
+	int	 Classify(void);
+	int  IRelationship(CBaseEntity *pTarget);
 
-	int Classify(void) { return	CLASS_ALIEN_BIOWEAPON; }
-	static CPitDroneSpit *SpitCreate(void);
+	void IgniteTrail(void);
+	void EXPORT StartTrack(void);
+	void EXPORT StartDart(void);
+	void EXPORT TrackTarget(void);
+	void EXPORT TrackTouch(CBaseEntity *pOther);
+	void EXPORT DartTouch(CBaseEntity *pOther);
+	void EXPORT DieTouch(CBaseEntity *pOther);
+
+	int iDroneSpitTrail;
 };
 
 #endif // PIDDRONESPLIT_H

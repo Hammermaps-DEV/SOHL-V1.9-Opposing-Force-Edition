@@ -23,9 +23,9 @@
 #include	"monsters.h"
 #include	"schedule.h"
 #include	"player.h"
+#include	"soundent.h"
+#include	"proj_gonomespit.h"
 #include	"monster_gonome.h"
-
-extern int iSquidSpitSprite;
 
 #define		GONOME_SPRINT_DIST	256 // how close the squid has to get before starting to sprint and refusing to swerve
 
@@ -36,6 +36,7 @@ extern int iSquidSpitSprite;
 #define		GONOME_TOLERANCE_MELEE2_DOT		0.7
 
 #define		GONOME_MELEE_ATTACK_RADIUS		70
+#define     GONOME_FLINCH_DELAY			    2
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -51,9 +52,90 @@ extern int iSquidSpitSprite;
 #define GONOME_AE_BITE4			( 22 )
 
 //=========================================================
+// monster-specific schedule types
+//=========================================================
+enum
+{
+	SCHED_GONOME_SMELLFOOD = LAST_COMMON_SCHEDULE + 1,
+	SCHED_GONOME_EAT,
+	SCHED_GONOME_SNIFF_AND_EAT,
+	SCHED_GONOME_WALLOW,
+};
+
+//=========================================================
+// monster-specific tasks
+//=========================================================
+enum
+{
+	TASK_GONOME_SMELLFOOD = LAST_COMMON_SCHEDULE + 1,
+};
+
+//=========================================================
 // CGonome
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_gonome, CGonome);
+
+TYPEDESCRIPTION	CGonome::m_SaveData[] =
+{
+	DEFINE_FIELD(CGonome, m_fCanThreatDisplay, FIELD_BOOLEAN),
+	DEFINE_FIELD(CGonome, m_flLastHurtTime, FIELD_TIME),
+	DEFINE_FIELD(CGonome, m_flNextSpitTime, FIELD_TIME),
+};
+
+IMPLEMENT_SAVERESTORE(CGonome, CBaseMonster);
+
+//=========================================================
+// Monster Sounds
+//=========================================================
+const char *CGonome::pAttackHitSounds[] = {
+	"zombie/claw_strike1.wav",
+	"zombie/claw_strike2.wav",
+	"zombie/claw_strike3.wav",
+};
+
+const char *CGonome::pAttackMissSounds[] = {
+	"zombie/claw_miss1.wav",
+	"zombie/claw_miss2.wav",
+};
+
+const char *CGonome::pAttackSounds[] = {
+	"gonome/gonome_melee1.wav",
+	"gonome/gonome_melee1.wav",
+};
+
+const char *CGonome::pIdleSounds[] = {
+	"gonome/gonome_idle1.wav",
+	"gonome/gonome_idle2.wav",
+	"gonome/gonome_idle3.wav",
+};
+
+const char *CGonome::pPainSounds[] = {
+	"gonome/gonome_pain1.wav",
+	"gonome/gonome_pain2.wav",
+	"gonome/gonome_pain3.wav",
+	"gonome/gonome_pain4.wav",
+};
+
+const char *CGonome::pDeathSounds[] = {
+	"gonome/gonome_death2.wav",
+	"gonome/gonome_death3.wav",
+	"gonome/gonome_death4.wav",
+};
+
+//=========================================================
+// ISoundMask - returns a bit mask indicating which types
+// of sounds this monster regards. In the base class implementation,
+// monsters care about all sounds, but no scents.
+//=========================================================
+int CGonome::ISoundMask(void)
+{
+	return	bits_SOUND_WORLD |
+			bits_SOUND_COMBAT |
+			bits_SOUND_CARCASS |
+			bits_SOUND_MEAT |
+			bits_SOUND_GARBAGE |
+			bits_SOUND_PLAYER;
+}
 
 //=========================================================
 // Classify - indicates this monster's place in the 
@@ -61,7 +143,7 @@ LINK_ENTITY_TO_CLASS(monster_gonome, CGonome);
 //=========================================================
 int	CGonome::Classify(void)
 {
-	return	CLASS_ALIEN_MONSTER;
+	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
@@ -69,7 +151,21 @@ int	CGonome::Classify(void)
 //=========================================================
 int CGonome::IgnoreConditions(void)
 {
-	return CBaseMonster::IgnoreConditions();
+	int iIgnore = CBaseMonster::IgnoreConditions();
+
+	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1))
+	{
+		if (m_flNextFlinch >= gpGlobals->time)
+			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
+	}
+
+	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH))
+	{
+		if (m_flNextFlinch < gpGlobals->time)
+			m_flNextFlinch = gpGlobals->time + GONOME_FLINCH_DELAY;
+	}
+
+	return iIgnore;
 }
 
 //=========================================================
@@ -189,18 +285,7 @@ BOOL CGonome::CheckMeleeAttack2(float flDot, float flDist)
 #define GONOME_ATTN_IDLE	(float)1.5
 void CGonome::IdleSound(void)
 {
-	switch (RANDOM_LONG(0, 2))
-	{
-	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_idle1.wav", 1, GONOME_ATTN_IDLE);
-		break;
-	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_idle2.wav", 1, GONOME_ATTN_IDLE);
-		break;
-	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_idle3.wav", 1, GONOME_ATTN_IDLE);
-		break;
-	}
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
@@ -208,23 +293,7 @@ void CGonome::IdleSound(void)
 //=========================================================
 void CGonome::PainSound(void)
 {
-	int iPitch = RANDOM_LONG(85, 120);
-
-	switch (RANDOM_LONG(0, 3))
-	{
-	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_pain1.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_pain2.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_pain3.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	case 3:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_pain4.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	}
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
@@ -232,20 +301,42 @@ void CGonome::PainSound(void)
 //=========================================================
 void CGonome::AlertSound(void)
 {
-	int iPitch = RANDOM_LONG(140, 160);
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
+}
 
-	switch (RANDOM_LONG(0, 2))
+//=========================================================
+// DeathSound 
+//=========================================================
+void CGonome::DeathSound(void) {
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
+}
+
+//=========================================================
+// AttackSound 
+//=========================================================
+void CGonome::AttackSound(void) {
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAttackSounds);
+}
+
+//=========================================================
+// SetYawSpeed - allows each sequence to have a different
+// turn rate associated with it.
+//=========================================================
+void CGonome::SetYawSpeed(void)
+{
+	int ys = 0;
+	switch (m_Activity)
 	{
-	case 0:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_idle1.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	case 1:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_idle2.wav", 1, ATTN_NORM, 0, iPitch);
-		break;
-	case 2:
-		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "gonome/gonome_idle3.wav", 1, ATTN_NORM, 0, iPitch);
+	case	ACT_WALK:			ys = 120;	break;
+	case	ACT_RUN:			ys = 120;	break;
+	case	ACT_IDLE:			ys = 120;	break;
+	case	ACT_RANGE_ATTACK1:	ys = 120;	break;
+	default:
+		ys = 120;
 		break;
 	}
+
+	pev->yaw_speed = ys;
 }
 
 //=========================================================
@@ -265,7 +356,6 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 
 			// !!!HACKHACK - the spot at which the spit originates (in front of the mouth) was measured in 3ds and hardcoded here.
 			// we should be able to read the position of bones at runtime for this info.
-
 
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
@@ -288,36 +378,51 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 			WRITE_COORD(vecSpitDir.x);	// dir
 			WRITE_COORD(vecSpitDir.y);
 			WRITE_COORD(vecSpitDir.z);
-			WRITE_SHORT(iSquidSpitSprite);	// model
+			WRITE_SHORT(iGonomeSpitSprite);	// model
 			WRITE_BYTE(15);			// count
 			WRITE_BYTE(210);			// speed
 			WRITE_BYTE(25);			// noise ( client will divide by 100 )
 			MESSAGE_END();
 
-			CSquidSpit::Shoot(pev, vecSpitOffset, vecSpitDir * 1200); // Default: 900
+			switch (RANDOM_LONG(0, 1)) {
+				case 0:
+					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack2.wav", 1, ATTN_NORM);
+				break;
+				case 1:
+					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack3.wav", 1, ATTN_NORM);
+				break;
+			}
+
+			CGonomeSpit::Shoot(pev, vecSpitOffset, vecSpitDir * 1200);
 		}
 		break;
-		case GONOME_AE_SLASH_LEFT:
-		{
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, 1 /*gSkillData.gonomeDmgOneSlash*/, DMG_CLUB);
-			if (pHurt)
-			{
-				pHurt->pev->punchangle.z = 20;
-				pHurt->pev->punchangle.x = 20;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
+		case GONOME_AE_SLASH_LEFT: {
+			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH);
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.z = 20;
+					pHurt->pev->punchangle.x = 20;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
+				}
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+			} else {
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 			}
 		}
 		break;
-		case GONOME_AE_SLASH_RIGHT:
-		{
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, 1 /*gSkillData.gonomeDmgOneSlash*/, DMG_CLUB);
-			if (pHurt)
-			{
-				pHurt->pev->punchangle.z = -20;
-				pHurt->pev->punchangle.x = 20;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
+		case GONOME_AE_SLASH_RIGHT: {
+			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH);
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.z = -20;
+					pHurt->pev->punchangle.x = 20;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
+				}
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+			} else {
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 			}
 		}
 		break;
@@ -330,7 +435,7 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 			int iPitch;
 
 			// SOUND HERE!
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_TOLERANCE_MELEE2_RANGE, 1/*gSkillData.gonomeDmgOneBite*/, DMG_SLASH);
+			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_TOLERANCE_MELEE2_RANGE, gSkillData.gonomeDmgOneBite, DMG_SLASH);
 
 			if (pHurt)
 			{
@@ -350,11 +455,14 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 				pHurt->pev->punchangle.x = RANDOM_LONG(-35, -45);
 				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * 50;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 50;
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+			} else {
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 			}
 		}
-	break;
-	default:
-		CBaseMonster::HandleAnimEvent(pEvent);
+		break;
+		default:
+			CBaseMonster::HandleAnimEvent(pEvent);
 	}
 }
 
@@ -365,14 +473,21 @@ void CGonome::Spawn()
 {
 	Precache();
 
-	SET_MODEL(ENT(pev), "models/gonome.mdl");
+	if (pev->model)
+		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
+	else
+		SET_MODEL(ENT(pev), "models/gonome.mdl");
+
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = 10; /*gSkillData.gonomeHealth;*/
+
+	if (pev->health == 0)
+		pev->health = gSkillData.gonomeHealth;
+
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
@@ -387,34 +502,19 @@ void CGonome::Spawn()
 //=========================================================
 void CGonome::Precache()
 {
-	PRECACHE_MODEL("models/gonome.mdl");
+	if (pev->model)
+		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
+	else
+		PRECACHE_MODEL("models/gonome.mdl");
 
-	PRECACHE_MODEL("sprites/bigspit.spr");// spit projectile.
+	iGonomeSpitSprite = PRECACHE_MODEL("sprites/blood_tinyspit.spr");// client side spittle.
 
-	iSquidSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr");// client side spittle.
-
-	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
-
-	PRECACHE_SOUND("gonome/gonome_death2.wav");
-	PRECACHE_SOUND("gonome/gonome_death3.wav");
-	PRECACHE_SOUND("gonome/gonome_death4.wav");
-
-	PRECACHE_SOUND("gonome/gonome_eat.wav");
-	PRECACHE_SOUND("gonome/gonome_idle1.wav");
-	PRECACHE_SOUND("gonome/gonome_idle2.wav");
-	PRECACHE_SOUND("gonome/gonome_idle3.wav");
+	PRECACHE_MODEL("sprites/blood_chnk.spr");// spit projectile.
 
 	PRECACHE_SOUND("gonome/gonome_jumpattack.wav");
 
-	PRECACHE_SOUND("gonome/gonome_melee1.wav");
-	PRECACHE_SOUND("gonome/gonome_melee2.wav");
-
-	PRECACHE_SOUND("gonome/gonome_pain1.wav");
-	PRECACHE_SOUND("gonome/gonome_pain2.wav");
-	PRECACHE_SOUND("gonome/gonome_pain3.wav");
-	PRECACHE_SOUND("gonome/gonome_pain4.wav");
-
 	PRECACHE_SOUND("gonome/gonome_run.wav");
+	PRECACHE_SOUND("gonome/gonome_eat.wav");
 
 	PRECACHE_SOUND("bullchicken/bc_acid1.wav");
 
@@ -423,32 +523,16 @@ void CGonome::Precache()
 
 	PRECACHE_SOUND("bullchicken/bc_spithit1.wav");
 	PRECACHE_SOUND("bullchicken/bc_spithit2.wav");
-}
 
-//=========================================================
-// DeathSound
-//=========================================================
-void CGonome::DeathSound(void)
-{
-	switch (RANDOM_LONG(0, 2))
-	{
-	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_death2.wav", 1, ATTN_NORM);
-		break;
-	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_death3.wav", 1, ATTN_NORM);
-		break;
-	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_death4.wav", 1, ATTN_NORM);
-		break;
-	}
-}
+	PRECACHE_SOUND("bullchicken/bc_attack2.wav");
+	PRECACHE_SOUND("bullchicken/bc_attack3.wav");
 
-//=========================================================
-// AttackSound
-//=========================================================
-void CGonome::AttackSound(void)
-{
+	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
+	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
+	PRECACHE_SOUND_ARRAY(pAttackSounds);
+	PRECACHE_SOUND_ARRAY(pIdleSounds);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pDeathSounds);
 }
 
 //========================================================
@@ -471,6 +555,305 @@ void CGonome::RunAI(void)
 
 }
 
+//========================================================
+// AI Schedules Specific to this monster
+//=========================================================
+
+// primary range attack
+Task_t	tlGonomeRangeAttack1[] =
+{
+	{ TASK_STOP_MOVING,			0 },
+	{ TASK_FACE_IDEAL,			(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
+};
+
+Schedule_t	slGonomeRangeAttack1[] =
+{
+	{
+		tlGonomeRangeAttack1,
+		ARRAYSIZE(tlGonomeRangeAttack1),
+	bits_COND_NEW_ENEMY |
+	bits_COND_ENEMY_DEAD |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_ENEMY_OCCLUDED |
+	bits_COND_NO_AMMO_LOADED,
+	0,
+	"Gonome Range Attack1"
+	},
+};
+
+// Chase enemy schedule
+Task_t tlGonomeChaseEnemy1[] =
+{
+	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_RANGE_ATTACK1 },// !!!OEM - this will stop nasty gonome oscillation.
+	{ TASK_GET_PATH_TO_ENEMY,	(float)0 },
+	{ TASK_RUN_PATH,			(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,	(float)0 },
+};
+
+Schedule_t slGonomeChaseEnemy[] =
+{
+	{
+		tlGonomeChaseEnemy1,
+		ARRAYSIZE(tlGonomeChaseEnemy1),
+	bits_COND_NEW_ENEMY |
+	bits_COND_ENEMY_DEAD |
+	bits_COND_SMELL_FOOD |
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_MELEE_ATTACK1 |
+	bits_COND_CAN_MELEE_ATTACK2 |
+	bits_COND_TASK_FAILED |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER |
+	bits_SOUND_MEAT,
+	"Gonome Chase Enemy"
+	},
+};
+
+
+// gonome walks to something tasty and eats it.
+Task_t tlGonomeEat[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_EAT,						(float)10 },// this is in case the gonome can't get to the food
+	{ TASK_STORE_LASTPOSITION,		(float)0 },
+	{ TASK_GET_PATH_TO_BESTSCENT,	(float)0 },
+	{ TASK_WALK_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT },
+	{ TASK_EAT,						(float)50 },
+	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0 },
+	{ TASK_WALK_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_CLEAR_LASTPOSITION,		(float)0 },
+};
+
+Schedule_t slGonomeEat[] =
+{
+	{
+		tlGonomeEat,
+		ARRAYSIZE(tlGonomeEat),
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_NEW_ENEMY	,
+
+	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+	// here or the monster won't detect these sounds at ALL while running this schedule.
+	bits_SOUND_MEAT |
+	bits_SOUND_CARCASS,
+	"GonomeEat"
+	}
+};
+
+// this is a bit different than just Eat. We use this schedule when the food is far away, occluded, or behind
+// the gonome. This schedule plays a sniff animation before going to the source of food.
+Task_t tlGonomeSniffAndEat[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_EAT,						(float)10 },// this is in case the gonome can't get to the food
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_DETECT_SCENT },
+	{ TASK_STORE_LASTPOSITION,		(float)0 },
+	{ TASK_GET_PATH_TO_BESTSCENT,	(float)0 },
+	{ TASK_WALK_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_EAT },
+	{ TASK_EAT,						(float)50 },
+	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0 },
+	{ TASK_WALK_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_CLEAR_LASTPOSITION,		(float)0 },
+};
+
+Schedule_t slGonomeSniffAndEat[] =
+{
+	{
+		tlGonomeSniffAndEat,
+		ARRAYSIZE(tlGonomeSniffAndEat),
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_NEW_ENEMY	,
+
+	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+	// here or the monster won't detect these sounds at ALL while running this schedule.
+	bits_SOUND_MEAT |
+	bits_SOUND_CARCASS,
+	"GonomeSniffAndEat"
+	}
+};
+
+// gonome does this to stinky things. 
+Task_t tlGonomeWallow[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_EAT,						(float)10 },// this is in case the gonome can't get to the stinkiness
+	{ TASK_STORE_LASTPOSITION,		(float)0 },
+	{ TASK_GET_PATH_TO_BESTSCENT,	(float)0 },
+	{ TASK_WALK_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_INSPECT_FLOOR },
+	{ TASK_EAT,						(float)50 },// keeps gonome from eating or sniffing anything else for a while.
+	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0 },
+	{ TASK_WALK_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_CLEAR_LASTPOSITION,		(float)0 },
+};
+
+Schedule_t slGonomeWallow[] =
+{
+	{
+		tlGonomeWallow,
+		ARRAYSIZE(tlGonomeWallow),
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_NEW_ENEMY	,
+
+	// even though HEAR_SOUND/SMELL FOOD doesn't break this schedule, we need this mask
+	// here or the monster won't detect these sounds at ALL while running this schedule.
+	bits_SOUND_GARBAGE,
+
+	"GonomeWallow"
+	}
+};
+
+DEFINE_CUSTOM_SCHEDULES(CGonome)
+{
+	slGonomeRangeAttack1,
+		slGonomeChaseEnemy,
+		slGonomeEat,
+		slGonomeSniffAndEat,
+		slGonomeWallow
+};
+
+IMPLEMENT_CUSTOM_SCHEDULES(CGonome, CBaseMonster);
+
+//=========================================================
+// GetSchedule 
+//=========================================================
+Schedule_t *CGonome::GetSchedule(void)
+{
+	switch (m_MonsterState)
+	{
+	case MONSTERSTATE_ALERT:
+	{
+
+		if (HasConditions(bits_COND_SMELL_FOOD))
+		{
+			CSound		*pSound;
+
+			pSound = PBestScent();
+
+			if (pSound && (!FInViewCone(&pSound->m_vecOrigin) || !FVisible(pSound->m_vecOrigin)))
+			{
+				// scent is behind or occluded
+				return GetScheduleOfType(SCHED_GONOME_SNIFF_AND_EAT);
+			}
+
+			// food is right out in the open. Just go get it.
+			return GetScheduleOfType(SCHED_GONOME_EAT);
+		}
+
+		if (HasConditions(bits_COND_SMELL))
+		{
+			// there's something stinky. 
+			CSound		*pSound;
+
+			pSound = PBestScent();
+			if (pSound)
+				return GetScheduleOfType(SCHED_GONOME_WALLOW);
+		}
+
+		break;
+	}
+	case MONSTERSTATE_COMBAT:
+	{
+		// dead enemy
+		if (HasConditions(bits_COND_ENEMY_DEAD))
+		{
+			// call base class, all code to handle dead enemies is centralized there.
+			return CBaseMonster::GetSchedule();
+		}
+
+		if (HasConditions(bits_COND_NEW_ENEMY))
+		{
+			if (m_fCanThreatDisplay && IRelationship(m_hEnemy) == R_HT)
+			{
+				return GetScheduleOfType(SCHED_WAKE_ANGRY);
+			}
+		}
+
+		if (HasConditions(bits_COND_SMELL_FOOD))
+		{
+			CSound		*pSound;
+
+			pSound = PBestScent();
+
+			if (pSound && (!FInViewCone(&pSound->m_vecOrigin) || !FVisible(pSound->m_vecOrigin)))
+			{
+				// scent is behind or occluded
+				return GetScheduleOfType(SCHED_GONOME_SNIFF_AND_EAT);
+			}
+
+			// food is right out in the open. Just go get it.
+			return GetScheduleOfType(SCHED_GONOME_EAT);
+		}
+
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
+		{
+			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
+		}
+
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
+		{
+			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+		}
+
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK2))
+		{
+			return GetScheduleOfType(SCHED_MELEE_ATTACK2);
+		}
+
+		return GetScheduleOfType(SCHED_CHASE_ENEMY);
+
+		break;
+	}
+	}
+
+	return CBaseMonster::GetSchedule();
+}
+
+//=========================================================
+// GetScheduleOfType
+//=========================================================
+Schedule_t* CGonome::GetScheduleOfType(int Type)
+{
+	switch (Type)
+	{
+	case SCHED_RANGE_ATTACK1:
+		return &slGonomeRangeAttack1[0];
+		break;
+	case SCHED_GONOME_EAT:
+		return &slGonomeEat[0];
+		break;
+	case SCHED_GONOME_SNIFF_AND_EAT:
+		return &slGonomeSniffAndEat[0];
+		break;
+	case SCHED_GONOME_WALLOW:
+		return &slGonomeWallow[0];
+		break;
+	case SCHED_CHASE_ENEMY:
+		return &slGonomeChaseEnemy[0];
+		break;
+	}
+
+	return CBaseMonster::GetScheduleOfType(Type);
+}
+
 //=========================================================
 // Start task - selects the correct activity and performs
 // any necessary calculations to start the next task on the
@@ -484,23 +867,55 @@ void CGonome::StartTask(Task_t *pTask)
 
 	switch (pTask->iTask)
 	{
-	case TASK_MELEE_ATTACK1:
-	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee1.wav", 1, ATTN_NORM);
-		CBaseMonster::StartTask(pTask);
-	}
-	break;
-
-	case TASK_MELEE_ATTACK2:
-	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee2.wav", 1, ATTN_NORM);
-		CBaseMonster::StartTask(pTask);
-	}
-	break;
-
-	default:
-		CBullsquid::StartTask(pTask);
+		case TASK_MELEE_ATTACK1:
+		{
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee1.wav", 1, ATTN_NORM);
+			CBaseMonster::StartTask(pTask);
+		}
+		break;
+		case TASK_MELEE_ATTACK2:
+		{
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee2.wav", 1, ATTN_NORM);
+			CBaseMonster::StartTask(pTask);
+		}
+		break;
+		case TASK_GET_PATH_TO_ENEMY:
+		{
+			if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy))
+			{
+				m_iTaskStatus = TASKSTATUS_COMPLETE;
+			}
+			else
+			{
+				ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
+				TaskFail();
+			}
+		}
+		break;
+		default:
+			CBullsquid::StartTask(pTask);
 		break;
 
 	}
+}
+
+//=========================================================
+// RunTask
+//=========================================================
+void CGonome::RunTask(Task_t *pTask)
+{
+	CBaseMonster::RunTask(pTask);
+}
+
+//=========================================================
+// GetIdealState - Overridden for Gonome to deal with
+// the feature that makes it lose interest in headcrabs for 
+// a while if something injures it. 
+//=========================================================
+MONSTERSTATE CGonome::GetIdealState(void)
+{
+	int	iConditions;
+	iConditions = IScheduleFlags();
+	m_IdealMonsterState = CBaseMonster::GetIdealState();
+	return m_IdealMonsterState;
 }
