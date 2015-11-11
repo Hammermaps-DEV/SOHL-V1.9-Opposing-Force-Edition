@@ -15,68 +15,71 @@
 //=========================================================
 // NPC: Pit Drone * http://half-life.wikia.com/wiki/Pit_Drone
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 19.10.2015
 //=========================================================
-
 #ifndef MONSTER_PITDRONE_H
 #define MONSTER_PITDRONE_H
 
+// class definition
 class CPitDrone : public CBaseMonster {
-	void Spawn(void);
-	void Precache(void);
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void CPitDrone::SetYawSpeed(void);
-	void KeyValue(KeyValueData *pkvd);
+	public:
+		void Spawn(void);
+		void Precache(void);
+		void HandleAnimEvent(MonsterEvent_t *pEvent);
+		void IdleSound(void);
+		void PainSound(void);
+		void AlertSound(void);
+		void DeathSound(void);
+		void AttackSound(void);
+		void AttackSoundSpike(void);
+		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		void UpdateHorns(void);
+		void SetYawSpeed(void);
+		void KeyValue(KeyValueData *pkvd);
+		void StopTalking(void);
+		void StartTask(Task_t *pTask);
+		void RunTask(Task_t *pTask);
+		void RunAI(void);
 
-	int Classify(void);
+		BOOL CheckRangeAttack1(float flDot, float flDist);
+		BOOL ShouldSpeak(void);
 
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	void IdleSound(void);
-	void PainSound(void);
-	void AlertSound(void);
-	void DeathSound(void);
-	void AttackSound(void);
-	void AttackSoundMiss(void);
-	void AttackSoundSpike(void);
-	void UpdateHorns(void);
-	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	int IRelationship(CBaseEntity *pTarget);
-	int IgnoreConditions(void);
-	void StopTalking(void);
-	BOOL ShouldSpeak(void);
-	Schedule_t* GetSchedule(void);
-	Schedule_t* GetScheduleOfType(int Type);
-	void StartTask(Task_t *pTask);
-	void RunTask(Task_t *pTask);
-	void RunAI(void);
-	CUSTOM_SCHEDULES;
-	MONSTERSTATE GetIdealState(void);
-	virtual int GetVoicePitch(long random) { return m_flPitch + random; }
+		int Classify(void);
+		int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+		int IRelationship(CBaseEntity *pTarget);
+		int IgnoreConditions(void);
 
-	BOOL m_fCanThreatDisplay;// this is so the squid only does the "I see a headcrab!" dance one time.
-	BOOL m_flDebug = false;
-	float	m_flNextSpitTime;// last time the PitDrone used the spit attack.
-	float	m_flLastHurtTime;
-	float	m_flNextSpeakTime;
-	float	m_flNextWordTime;
-	float	m_flNextFlinch;
-	float	m_flammo = 6;
-	float	m_flhorns;
-	int		m_iLastWord;
-	int		m_flPitch = 100;
+		virtual int	Save(CSave &save);
+		virtual int	Restore(CRestore &restore);
 
-	static const char *pIdleSounds[];
-	static const char *pAlertSounds[];
-	static const char *pPainSounds[];
-	static const char *pDieSounds[];
-	static const char *pAttackHitSounds[];
-	static const char *pAttackMissSounds[];
-	static const char *pAttackSoundsSpike[];
+		static	TYPEDESCRIPTION m_SaveData[];
 
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
+		static const char *pIdleSounds[];
+		static const char *pAlertSounds[];
+		static const char *pPainSounds[];
+		static const char *pDieSounds[];
+		static const char *pAttackHitSounds[];
+		static const char *pAttackHitStrikeSounds[];
+		static const char *pAttackMissSounds[];
+		static const char *pAttackSoundsSpike[];
+
+		Schedule_t* GetSchedule(void);
+		Schedule_t* GetScheduleOfType(int Type);
+		MONSTERSTATE GetIdealState(void);
+
+		CUSTOM_SCHEDULES;
+
+	protected:
+		BOOL    m_fCanThreatDisplay;
+		BOOL    m_flDebug = false;
+		int		m_iLastWord;
+		int		m_iSpitSprite;
+		float	m_flNextSpitTime;
+		float	m_flLastHurtTime;
+		float	m_flNextSpeakTime;
+		float	m_flNextWordTime;
+		float	m_flNextFlinch;
+		float	m_flammo = 6;
+		float	m_flhorns;
 };
 
 #endif // MONSTER_PITDRONE_H

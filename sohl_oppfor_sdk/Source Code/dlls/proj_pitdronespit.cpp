@@ -13,6 +13,11 @@
 *
 ****/
 
+//=========================================================
+// Projectile: Pit Drone Spit * http://half-life.wikia.com/wiki/Pit_Drone
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+// Version: 1.0 / Build: 00001 / Date: 11.11.2015
+//=========================================================
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -22,11 +27,25 @@
 #include	"proj_pitdronespit.h"
 
 //=========================================================
-// CPitDrone's spit projectile
+// Projectile's link to Class
 //=========================================================
 LINK_ENTITY_TO_CLASS(pitdronespit, CPitDroneSpit);
 
 //=========================================================
+// Projectile Sounds
+//=========================================================
+const char *CPitDroneSpit::pHitSounds[] = {
+	"weapons/xbow_hitbod1.wav",
+	"weapons/xbow_hitbod2.wav",
+};
+
+const char *CPitDroneSpit::pMissSounds[] = {
+	"weapons/xbow_hit1.wav",
+	"weapons/xbow_hit2.wav",
+};
+
+//=========================================================
+// Spawn
 //=========================================================
 void CPitDroneSpit::Spawn(void) {
 	Precache();
@@ -36,9 +55,9 @@ void CPitDroneSpit::Spawn(void) {
 	pev->solid = SOLID_BBOX;
 	pev->takedamage = DAMAGE_NO;
 	pev->flags |= FL_MONSTER;
-	pev->health = 1;// weak!
+	pev->health = 1;
 
-	m_flFieldOfView = 0.9; // +- 25 degrees
+	m_flFieldOfView = 0.9;
 
 	SET_MODEL(ENT(pev), "models/pit_drone_spike.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));
@@ -50,21 +69,18 @@ void CPitDroneSpit::Spawn(void) {
 	ResetSequenceInfo();
 }
 
+//=========================================================
+// Precache - precaches all resources
+//=========================================================
 void CPitDroneSpit::Precache() {
 	PRECACHE_MODEL("models/pit_drone_spike.mdl");
-
-	PRECACHE_SOUND("weapons/xbow_hitbod1.wav");
-	PRECACHE_SOUND("weapons/xbow_hitbod2.wav");
-
-	PRECACHE_SOUND("weapons/xbow_fly1.wav");
-	PRECACHE_SOUND("weapons/xbow_hit1.wav");
-	PRECACHE_SOUND("weapons/xbow_hit2.wav");
-
 	iDroneSpitTrail = PRECACHE_MODEL("sprites/spike_trail.spr");
+	PRECACHE_SOUND_ARRAY(pHitSounds);
+	PRECACHE_SOUND_ARRAY(pMissSounds);
 }
 
 //=========================================================
-// hornets will never get mad at each other, no matter who the owner is.
+// spits will never get mad at each other, no matter who the owner is.
 //=========================================================
 int CPitDroneSpit::IRelationship(CBaseEntity *pTarget) {
 	if (pTarget->pev->modelindex == pev->modelindex) {
@@ -75,15 +91,15 @@ int CPitDroneSpit::IRelationship(CBaseEntity *pTarget) {
 }
 
 //=========================================================
-// ID's Hornet as their owner
+// ID's Spit as their owner
 //=========================================================
 int CPitDroneSpit::Classify(void) {
 	if (m_iClass) return m_iClass;
-	return	CLASS_ALIEN_BIOWEAPON;
+	return CLASS_ALIEN_BIOWEAPON;
 }
 
 //=========================================================
-// StartTrack - starts a hornet out tracking its target
+// StartTrack - starts a spit out tracking its target
 //=========================================================
 void CPitDroneSpit::StartTrack(void) {
 	IgniteTrail();
@@ -93,11 +109,11 @@ void CPitDroneSpit::StartTrack(void) {
 }
 
 //=========================================================
-// StartDart - starts a hornet out just flying straight.
+// StartDart - starts a spit out just flying straight.
 //=========================================================
 void CPitDroneSpit::StartDart(void) {
 	IgniteTrail();
-	SetTouch(&CPitDroneSpit::DartTouch);
+	SetTouch(&CPitDroneSpit::DieTouch);
 	SetThink(&CPitDroneSpit::SUB_Remove);
 	SetNextThink(4);
 }
@@ -117,7 +133,7 @@ void CPitDroneSpit::IgniteTrail(void) {
 }
 
 //=========================================================
-// Hornet is flying, gently tracking target
+// Spit is flying, gently tracking target
 //=========================================================
 void CPitDroneSpit::TrackTarget(void) {
 	Vector	vecFlightDir;
@@ -135,7 +151,7 @@ void CPitDroneSpit::TrackTarget(void) {
 	if (m_hEnemy != NULL && FVisible(m_hEnemy)) {
 		m_vecEnemyLKP = m_hEnemy->BodyTarget(pev->origin);
 	} else {
-		m_vecEnemyLKP = m_vecEnemyLKP + pev->velocity * 600 * 0.1;
+		m_vecEnemyLKP = m_vecEnemyLKP + pev->velocity * 700 * 0.1;
 	}
 
 	vecDirToEnemy = (m_vecEnemyLKP - pev->origin).Normalize();
@@ -148,14 +164,7 @@ void CPitDroneSpit::TrackTarget(void) {
 	flDelta = DotProduct(vecFlightDir, vecDirToEnemy);
 	pev->velocity = (vecFlightDir + vecDirToEnemy).Normalize();
 
-	if (pev->owner && (pev->owner->v.flags & FL_MONSTER)) {
-		// random pattern only applies to hornets fired by monsters, not players. 
-		pev->velocity.x += RANDOM_FLOAT(-0.10, 0.10);// scramble the flight dir a bit.
-		pev->velocity.y += RANDOM_FLOAT(-0.10, 0.10);
-		pev->velocity.z += RANDOM_FLOAT(-0.10, 0.10);
-	}
-
-	pev->velocity = pev->velocity * 600;// do not have to slow down to turn.
+	pev->velocity = pev->velocity * 700;// do not have to slow down to turn.
 	SetNextThink(0.1);// fixed think time
 
 	pev->angles = UTIL_VecToAngles(pev->velocity);
@@ -172,7 +181,7 @@ void CPitDroneSpit::TrackTarget(void) {
 }
 
 //=========================================================
-// Tracking Hornet hit something
+// Tracking Spit hit something
 //=========================================================
 void CPitDroneSpit::TrackTouch(CBaseEntity *pOther) {
 	if (pOther->edict() == pev->owner || pOther->pev->modelindex == pev->modelindex) {
@@ -183,10 +192,6 @@ void CPitDroneSpit::TrackTouch(CBaseEntity *pOther) {
 	DieTouch(pOther);
 }
 
-void CPitDroneSpit::DartTouch(CBaseEntity *pOther) {
-	DieTouch(pOther);
-}
-
 void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 	if(pOther->pev->takedamage) {
 		TraceResult tr = UTIL_GetGlobalTrace();
@@ -194,19 +199,10 @@ void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 		pevOwner = VARS(pev->owner);
 		pev->velocity = Vector(0, 0, 0);
 
-		switch (RANDOM_LONG(0, 1)) {
-			case 0:
-				EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, RANDOM_FLOAT(90, 110));
-			break;
-			case 1:
-				EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/xbow_hitbod2.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, RANDOM_FLOAT(90, 110));
-			break;
-		}
-
-		// UNDONE: this needs to call TraceAttack instead
 		ClearMultiDamage();
 		pOther->TraceAttack(pevOwner, gSkillData.pitdroneDmgSpit, pev->velocity.Normalize(), &tr, DMG_GENERIC | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, pevOwner);
+		EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pHitSounds);
 		SetThink(&CPitDroneSpit::SUB_Remove);
 		SetNextThink(0);
 
@@ -214,21 +210,13 @@ void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 			Killed(pev, GIB_NEVER);
 		}
 	} else {
-		switch (RANDOM_LONG(0, 1)) {
-		case 0:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/xbow_hit1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, RANDOM_FLOAT(90, 110));
-			break;
-		case 1:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/xbow_hit2.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, RANDOM_FLOAT(90, 110));
-			break;
-		}
-
+		EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pMissSounds);
 		SetThink(&CPitDroneSpit::SUB_Remove);
 		SetNextThink(0);
 
 		if (FClassnameIs(pOther->pev, "worldspawn")) {
 			Vector vecDir = pev->velocity.Normalize();
-			UTIL_SetOrigin(this, pev->origin - vecDir * 12);
+			UTIL_SetOrigin(this, pev->origin - vecDir * 4);
 			pev->angles = UTIL_VecToAngles(vecDir);
 			pev->solid = SOLID_NOT;
 			pev->movetype = MOVETYPE_FLY;
@@ -236,10 +224,6 @@ void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 			pev->avelocity.z = 0;
 			pev->angles.z = RANDOM_LONG(0, 360);
 			SetNextThink(10);
-		}
-
-		if (pOther->IsBSPModel()) {
-			SetParent(pOther);//glue bolt with parent system
 		}
 	}
 }

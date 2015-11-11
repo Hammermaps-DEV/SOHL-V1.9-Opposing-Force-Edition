@@ -14,8 +14,10 @@ public:
 	void EXPORT StartDart(void);
 	void EXPORT TrackTarget(void);
 	void EXPORT TrackTouch(CBaseEntity *pOther);
-	void EXPORT DartTouch(CBaseEntity *pOther);
 	void EXPORT DieTouch(CBaseEntity *pOther);
+
+	static const char *pHitSounds[];
+	static const char *pMissSounds[];
 
 	int iDroneSpitTrail;
 };
