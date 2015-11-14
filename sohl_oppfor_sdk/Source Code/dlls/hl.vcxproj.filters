@@ -423,6 +423,9 @@
     <ClCompile Include="proj_gonomespit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="proj_voltigore_energy_ball.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -738,6 +741,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="proj_gonomespit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_voltigore_energy_ball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

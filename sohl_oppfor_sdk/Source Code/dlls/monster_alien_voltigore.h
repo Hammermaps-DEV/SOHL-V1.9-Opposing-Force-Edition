@@ -16,37 +16,7 @@
 #ifndef MONSTER_ALIEN_VOLTIGORE_H
 #define MONSTER_ALIEN_VOLTIGORE_H
 
-#define	VOLTIGORE_MAX_BEAMS		3
-
-class CVoltigoreEnergyBall : public CBaseEntity
-{
-public:
-	void Spawn(void);
-
-	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
-	void Touch(CBaseEntity *pOther);
-	void EXPORT Animate(void);
-	void EXPORT BeamThink(void);
-
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	void CreateBeams();
-	void ClearBeams();
-	void UpdateBeams();
-
-	int  m_maxFrame;
-
-	CBeam* m_pBeam[VOLTIGORE_MAX_BEAMS];
-	int m_iBeams;
-
-protected:
-
-	void CreateBeam(int nIndex, const Vector& vecPos, int width, int brightness);
-	void UpdateBeam(int nIndex, const Vector& vecPos);
-	void ClearBeam(int nIndex);
-};
+#define	VOLTIGORE_MAX_BEAMS	 3
 
 class CVoltigore : public CBaseMonster
 {
@@ -84,9 +54,14 @@ public:
 	float m_flLastHurtTime;
 	float m_flNextSpitTime; // last time the voltigore used the spit attack.
 	BOOL m_fShouldUpdateBeam;
-	CBeam* m_pBeam[3];
-	CSprite* m_pBeamGlow;
+	CBeam *m_pBeam[VOLTIGORE_MAX_BEAMS];
+	int m_iBeams;
+
+	CSprite *m_pBeamGlow;
+	CSprite *m_pSprite;
+	CBeam *pBeam;
 	int m_glowBrightness;
+	int m_iExplode;
 
 	static const char* pAlertSounds[];
 	static const char* pAttackMeleeSounds[];
@@ -105,7 +80,7 @@ public:
 
 
 	void CreateBeams();
-	void DestroyBeams();
+	void ClearBeams();
 	void UpdateBeams();
 
 	void CreateGlow();

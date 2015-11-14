@@ -13,26 +13,30 @@
 *
 ****/
 //=========================================================
-// Projectile: Spit for Gonome
+// Projectile: Energy Ball for Voltigore
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
-#ifndef GONOMESPLIT_H
-#define GONOMESPLIT_H
+#ifndef VOLTIGORE_ENERGY_BALL_H
+#define VOLTIGORE_ENERGY_BALL_H
 
-class CGonomeSpit : public CBaseEntity {
+class CVoltigoreEnergyBall : public CBaseEntity
+{
 public:
 	void Spawn(void);
-	void Precache(void);
+
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
-	void Touch(CBaseEntity *pOther);
+	void EXPORT Touch(CBaseEntity *pOther);
+	void EXPORT Think(void);
+	void Precache(void);
+	void Glow(void);
 	void EXPORT Animate(void);
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	int iGonomeSpitSprite;
-	int  m_maxFrame;
+	CSprite *m_pSprite;
+	int m_maxFrame;
 };
 
-#endif // GONOMESPLIT_H
+#endif // VOLTIGORE_ENERGY_BALL_H

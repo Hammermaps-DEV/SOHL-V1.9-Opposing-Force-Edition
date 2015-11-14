@@ -26,8 +26,7 @@
 //=========================================================
 LINK_ENTITY_TO_CLASS(gonomespit, CGonomeSpit);
 
-TYPEDESCRIPTION	CGonomeSpit::m_SaveData[] =
-{
+TYPEDESCRIPTION	CGonomeSpit::m_SaveData[] = {
 	DEFINE_FIELD(CGonomeSpit, m_maxFrame, FIELD_INTEGER),
 };
 
@@ -59,21 +58,16 @@ void CGonomeSpit::Precache() {
 	iGonomeSpitSprite = PRECACHE_MODEL("sprites/blood_tinyspit.spr");// client side spittle.
 }
 
-void CGonomeSpit::Animate(void)
-{
+void CGonomeSpit::Animate(void) {
 	SetNextThink(0.1);
-
-	if (pev->frame++)
-	{
-		if (pev->frame > m_maxFrame)
-		{
+	if (pev->frame++) {
+		if (pev->frame > m_maxFrame) {
 			pev->frame = 0;
 		}
 	}
 }
 
-void CGonomeSpit::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity)
-{
+void CGonomeSpit::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) {
 	CGonomeSpit *pGSpit = GetClassPtr((CGonomeSpit *)NULL);
 	pGSpit->Spawn();
 
@@ -103,8 +97,7 @@ void CGonomeSpit::Touch(CBaseEntity *pOther)
 			break;
 	}
 
-	if (!pOther->pev->takedamage)
-	{
+	if (!pOther->pev->takedamage) {
 		// make a splat on the wall
 		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
 		UTIL_DecalTrace(&tr, DECAL_BLOOD2 + RANDOM_LONG(0, 1));
@@ -123,9 +116,7 @@ void CGonomeSpit::Touch(CBaseEntity *pOther)
 		WRITE_BYTE(30);			// speed
 		WRITE_BYTE(80);			// noise ( client will divide by 100 )
 		MESSAGE_END();
-	}
-	else
-	{
+	} else {
 		pOther->TakeDamage(pev, pev, gSkillData.gonomeDmgGuts, DMG_POISON);
 	}
 

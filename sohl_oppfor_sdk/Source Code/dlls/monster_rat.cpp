@@ -21,6 +21,7 @@
 #include "monsters.h"
 #include "schedule.h"
 #include "soundent.h"
+#include "weapons.h"
 #include "monster_rat.h"
 
 #define RAT_IDLE			0
@@ -34,12 +35,16 @@ LINK_ENTITY_TO_CLASS(monster_rat, CRat);
 
 void CRat::Touch(CBaseEntity *pOther)
 {
-	if (pOther->pev->velocity == g_vecZero || !pOther->IsPlayer())
-		return;
 	Vector vecSpot;
 	TraceResult tr;
+	if (pOther->pev->velocity == g_vecZero || !pOther->IsPlayer()) {
+		return;
+	}
+
 	vecSpot = pev->origin + Vector(0, 0, 8);
 	UTIL_TraceLine(vecSpot, vecSpot + Vector(0, 0, -24), ignore_monsters, ENT(pev), &tr);
+	CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
+	PLAYBACK_EVENT_FULL(FEV_RELIABLE | FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), 1, 0, 0);
 	TakeDamage(pOther->pev, pOther->pev, pev->health, DMG_CRUSH);
 }
 
@@ -99,8 +104,10 @@ void CRat::Killed(entvars_t *pevAttacker, int iGib)
 
 	CSoundEnt::InsertSound(bits_SOUND_WORLD, pev->origin, 128, 1);
 	CBaseEntity *pOwner = CBaseEntity::Instance(pev->owner);
+
 	if (pOwner)
 		pOwner->DeathNotice(pev);
+
 	SetActivity(ACT_DIESIMPLE);
 	if (pev->health < 0)
 	{
