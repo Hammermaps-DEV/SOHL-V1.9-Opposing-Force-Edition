@@ -384,6 +384,42 @@ cvar_t	sk_pitdrone_arm2 = { "sk_pitdrone_arm2","0" };
 cvar_t	sk_pitdrone_arm3 = { "sk_pitdrone_arm3","0" };
 
 //=========================================================
+// NPCs: Voltigore
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
+cvar_t	sk_voltigore_health1 = { "sk_voltigore_health1", "0" };
+cvar_t	sk_voltigore_health2 = { "sk_voltigore_health2", "0" };
+cvar_t	sk_voltigore_health3 = { "sk_voltigore_health3", "0" };
+
+cvar_t	sk_voltigore_dmg_punch1 = { "sk_voltigore_dmg_punch1", "0" };
+cvar_t	sk_voltigore_dmg_punch2 = { "sk_voltigore_dmg_punch2", "0" };
+cvar_t	sk_voltigore_dmg_punch3 = { "sk_voltigore_dmg_punch3", "0" };
+
+cvar_t	sk_voltigore_dmg_beam1 = { "sk_voltigore_dmg_beam1", "0" };
+cvar_t	sk_voltigore_dmg_beam2 = { "sk_voltigore_dmg_beam2", "0" };
+cvar_t	sk_voltigore_dmg_beam3 = { "sk_voltigore_dmg_beam3", "0" };
+
+cvar_t	sk_voltigore_head1 = { "sk_voltigore_head1","0" };
+cvar_t	sk_voltigore_head2 = { "sk_voltigore_head2","0" };
+cvar_t	sk_voltigore_head3 = { "sk_voltigore_head3","0" };
+
+cvar_t	sk_voltigore_chest1 = { "sk_voltigore_chest1","0" };
+cvar_t	sk_voltigore_chest2 = { "sk_voltigore_chest2","0" };
+cvar_t	sk_voltigore_chest3 = { "sk_voltigore_chest3","0" };
+
+cvar_t	sk_voltigore_stomach1 = { "sk_voltigore_stomach1","0" };
+cvar_t	sk_voltigore_stomach2 = { "sk_voltigore_stomach2","0" };
+cvar_t	sk_voltigore_stomach3 = { "sk_voltigore_stomach3","0" };
+
+cvar_t	sk_voltigore_leg1 = { "sk_voltigore_leg1","0" };
+cvar_t	sk_voltigore_leg2 = { "sk_voltigore_leg2","0" };
+cvar_t	sk_voltigore_leg3 = { "sk_voltigore_leg3","0" };
+
+cvar_t	sk_voltigore_arm1 = { "sk_voltigore_arm1","0" };
+cvar_t	sk_voltigore_arm2 = { "sk_voltigore_arm2","0" };
+cvar_t	sk_voltigore_arm3 = { "sk_voltigore_arm3","0" };
+
+//=========================================================
 // NPCs: #########################
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
@@ -1029,6 +1065,42 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_pitdrone_arm1);
 	CVAR_REGISTER(&sk_pitdrone_arm2);
 	CVAR_REGISTER(&sk_pitdrone_arm3);
+
+	//=========================================================
+	// NPCs: Voltigore
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	CVAR_REGISTER(&sk_voltigore_health1);
+	CVAR_REGISTER(&sk_voltigore_health2);
+	CVAR_REGISTER(&sk_voltigore_health3);
+
+	CVAR_REGISTER(&sk_voltigore_dmg_punch1);
+	CVAR_REGISTER(&sk_voltigore_dmg_punch2);
+	CVAR_REGISTER(&sk_voltigore_dmg_punch3);
+
+	CVAR_REGISTER(&sk_voltigore_dmg_beam1);
+	CVAR_REGISTER(&sk_voltigore_dmg_beam2);
+	CVAR_REGISTER(&sk_voltigore_dmg_beam3);
+
+	CVAR_REGISTER(&sk_voltigore_head1);
+	CVAR_REGISTER(&sk_voltigore_head2);
+	CVAR_REGISTER(&sk_voltigore_head3);
+
+	CVAR_REGISTER(&sk_voltigore_chest1);
+	CVAR_REGISTER(&sk_voltigore_chest2);
+	CVAR_REGISTER(&sk_voltigore_chest3);
+
+	CVAR_REGISTER(&sk_voltigore_stomach1);
+	CVAR_REGISTER(&sk_voltigore_stomach2);
+	CVAR_REGISTER(&sk_voltigore_stomach3);
+
+	CVAR_REGISTER(&sk_voltigore_leg1);
+	CVAR_REGISTER(&sk_voltigore_leg2);
+	CVAR_REGISTER(&sk_voltigore_leg3);
+
+	CVAR_REGISTER(&sk_voltigore_arm1);
+	CVAR_REGISTER(&sk_voltigore_arm2);
+	CVAR_REGISTER(&sk_voltigore_arm3);
 
 	//=========================================================
 	// NPCs: #########################

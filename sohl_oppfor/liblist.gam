@@ -1,3 +1,4 @@
+gamedir "sohl_oppfor"
 game "SoHL: Opposing-Force"
 url_info ""
 version "1.9"

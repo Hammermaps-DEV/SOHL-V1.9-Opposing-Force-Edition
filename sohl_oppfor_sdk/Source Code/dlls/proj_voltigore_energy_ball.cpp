@@ -21,6 +21,7 @@
 #include	"util.h"
 #include	"cbase.h"
 #include	"effects.h"
+#include	"skill.h"
 #include	"decals.h"
 #include    "weapons.h"
 #include    "proj_voltigore_energy_ball.h"
@@ -52,7 +53,7 @@ void CVoltigoreEnergyBall::Spawn(void) {
 	SET_MODEL(ENT(pev), "sprites/glow_prp.spr");
 	pev->frame = 0;
 	pev->scale = 0.08;
-	pev->dmg = 1;//gSkillData.plrDmgDisplacer;
+	pev->dmg = gSkillData.voltigoreDmgBeam;
 
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 

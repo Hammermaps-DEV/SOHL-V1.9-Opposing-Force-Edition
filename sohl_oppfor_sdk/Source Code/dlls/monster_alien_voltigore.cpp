@@ -18,13 +18,20 @@
 // Version: 1.0 / Build: 00001 / Date: 14.11.2015
 //=========================================================
 #include	"extdll.h"
+#include	"plane.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"nodes.h"
-#include	"effects.h"
+#include	"schedule.h"
+#include	"animation.h"
+#include	"squadmonster.h"
+#include	"weapons.h"
+#include	"talkmonster.h"
 #include	"soundent.h"
-#include	"game.h"
+#include	"effects.h"
+#include	"customentity.h"
+#include	"scripted.h" //LRC
 #include    "monster_alien_voltigore.h"
 #include    "proj_voltigore_energy_ball.h"
 
@@ -106,7 +113,6 @@ const char* CVoltigore::pComSounds[] = {
 	"voltigore/voltigore_communicate3.wav",
 };
 
-
 const char* CVoltigore::pDeathSounds[] = {
 	"voltigore/voltigore_die1.wav",
 	"voltigore/voltigore_die2.wav",
@@ -147,17 +153,18 @@ void CVoltigore::Spawn() {
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/voltigore.mdl");
+
 	UTIL_SetSize(pev, Vector(-80, -80, 0), Vector(80, 80, 90));
 
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
-	pev->health = 20; /*gSkillData.voltigoreHealth;*/
+	pev->health = gSkillData.voltigoreHealth;
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
-
 	m_flNextSpitTime = gpGlobals->time;
+	m_flDebug = false; //Debug Massages
 
 	pev->view_ofs = Vector(0, 0, 90);
 
@@ -165,9 +172,14 @@ void CVoltigore::Spawn() {
 	m_pBeamGlow = NULL;
 
 	GlowOff();
-
-	// Create glow.
 	CreateGlow();
+
+	m_flHitgroupHead = gSkillData.voltigoreHead;
+	m_flHitgroupChest = gSkillData.voltigoreChest;
+	m_flHitgroupStomach = gSkillData.voltigoreStomach;
+	m_flHitgroupArm = gSkillData.voltigoreArm;
+	m_flHitgroupLeg = gSkillData.voltigoreLeg;
+	m_flDmgPunch = gSkillData.voltigoreDmgPunch;
 
 	MonsterInit();
 }
@@ -189,7 +201,7 @@ void CVoltigore::Precache() {
 	else
 		PRECACHE_MODEL("models/voltigore.mdl");
 
-	m_iExplode = PRECACHE_MODEL("sprites/blueflare1.spr");
+	m_iVgib = PRECACHE_MODEL("models/vgibs.mdl");
 
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMeleeSounds);
@@ -218,11 +230,67 @@ void CVoltigore::Precache() {
 }
 
 //=========================================================
+// TraceAttack - Damage based on Hitgroups
+//=========================================================
+void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
+	if (!IsAlive()) {
+		CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+		return;
+	}
+
+	if (pev->takedamage) {
+		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
+		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+			if (pEnt->IsPlayer()) { return; }
+			if (pevAttacker->owner) {
+				pEnt = CBaseEntity::Instance(pevAttacker->owner);
+				if (pEnt->IsPlayer()) { return; }
+			}
+		}
+
+		switch (ptr->iHitgroup) {
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+			flDamage = m_flHitgroupHead*flDamage;
+			break;
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			flDamage = m_flHitgroupChest*flDamage;
+			break;
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			flDamage = m_flHitgroupStomach*flDamage;
+			break;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm*flDamage;
+			break;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg*flDamage;
+			break;
+		}
+	}
+
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+}
+
+//=========================================================
 // IgnoreConditions 
 //=========================================================
 int CVoltigore::IgnoreConditions(void) {
 	int iIgnore = CBaseMonster::IgnoreConditions();
-
 	if (gpGlobals->time - m_flLastHurtTime <= 20) {
 		// haven't been hurt in 20 seconds, so let the voltigore care about stink. 
 		iIgnore = bits_COND_SMELL | bits_COND_SMELL_FOOD;
@@ -320,8 +388,7 @@ BOOL CVoltigore::CheckMeleeAttack1(float flDot, float flDist) {
 // is valid.
 //=========================================================
 BOOL CVoltigore::CheckMeleeAttack2(float flDot, float flDist) {
-	if (!HasConditions(bits_COND_CAN_MELEE_ATTACK1))		// The player & voltigore can be as much as their bboxes 
-	{													   // apart (48 * sqrt(3)) and he can still attack (85 is a little more than 48*sqrt(3))
+	if (!HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
 		return TRUE;
 	}
 	return FALSE;
@@ -330,17 +397,13 @@ BOOL CVoltigore::CheckMeleeAttack2(float flDot, float flDist) {
 //=========================================================
 //  FValidateHintType 
 //=========================================================
-BOOL CVoltigore::FValidateHintType(short sHint)
-{
+BOOL CVoltigore::FValidateHintType(short sHint) {
 	int i;
-
-	static short sVoltigoreHints[] =
-	{
+	static short sVoltigoreHints[] = {
 		HINT_WORLD_HUMAN_BLOOD,
 	};
 
-	for (i = 0; i < ARRAYSIZE(sVoltigoreHints); i++)
-	{
+	for (i = 0; i < ARRAYSIZE(sVoltigoreHints); i++) {
 		if (sVoltigoreHints[i] == sHint)
 		{
 			return TRUE;
@@ -368,45 +431,64 @@ int CVoltigore::ISoundMask(void) {
 //=========================================================
 // IdleSound 
 //=========================================================
-void CVoltigore::IdleSound(void)
-{
+void CVoltigore::IdleSound(void) {
+	if (RANDOM_LONG(0, 2) == 0) {
+		SENTENCEG_PlayRndSz(ENT(pev), "VLT_IDLE", 0.85, ATTN_NORM, 0, RANDOM_LONG(85, 120));
+	}
+
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1, ATTN_NORM);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CVoltigore::PainSound(void)
-{
+void CVoltigore::PainSound(void) {
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1, ATTN_NORM, 0, RANDOM_LONG(85, 120));
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CVoltigore::AlertSound(void)
-{
+void CVoltigore::AlertSound(void) {
+	if (m_hEnemy != NULL) {
+		SENTENCEG_PlayRndSz(ENT(pev), "VLT_ALERT", 0.85, ATTN_NORM, 0, RANDOM_LONG(85, 120));
+		CallForHelp("monster_voltigore", 512, m_hEnemy, m_vecEnemyLKP);
+	}
+
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAlertSounds), 1, ATTN_NORM, 0, RANDOM_LONG(140, 160));
+}
+
+//=========================================================
+// CallForHelp
+//=========================================================
+void CVoltigore::CallForHelp(char *szClassname, float flDist, EHANDLE hEnemy, Vector &vecLocation) {
+	CBaseEntity *pEntity = NULL;
+	while ((pEntity = UTIL_FindEntityByString(pEntity, "netname", STRING(pev->netname))) != NULL) {
+		float d = (pev->origin - pEntity->pev->origin).Length();
+		if (d < flDist) {
+			CBaseMonster *pMonster = pEntity->MyMonsterPointer();
+			if (pMonster)
+			{
+				pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
+				pMonster->PushEnemy(hEnemy, vecLocation);
+			}
+		}
+	}
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CVoltigore::SetYawSpeed(void)
-{
-	int ys;
-
-	ys = 0;
-
-	switch (m_Activity)
-	{
-	case	ACT_WALK:			ys = 90;	break;
-	case	ACT_RUN:			ys = 90;	break;
-	case	ACT_IDLE:			ys = 90;	break;
-	case	ACT_RANGE_ATTACK1:	ys = 90;	break;
-	default:
-		ys = 90;
+void CVoltigore::SetYawSpeed(void) {
+	int ys = 0;
+	switch (m_Activity) {
+		case	ACT_WALK:			ys = 90;	break;
+		case	ACT_RUN:			ys = 90;	break;
+		case	ACT_IDLE:			ys = 90;	break;
+		case	ACT_RANGE_ATTACK1:	ys = 90;	break;
+		default:
+			ys = 90;
 		break;
 	}
 
@@ -417,19 +499,13 @@ void CVoltigore::SetYawSpeed(void)
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CVoltigore::HandleAnimEvent(MonsterEvent_t *pEvent)
-{
-	switch (pEvent->event)
-	{
-		case VOLTIGORE_AE_ZAP_SHOOT:
-		{
+void CVoltigore::HandleAnimEvent(MonsterEvent_t *pEvent) {
+	switch (pEvent->event) {
+		case VOLTIGORE_AE_ZAP_SHOOT: {
 			Vector	vecSpitOffset;
 			Vector	vecSpitDir;
 
 			UTIL_MakeVectors(pev->angles);
-
-			// !!!HACKHACK - the spot at which the spit originates (in front of the mouth) was measured in 3ds and hardcoded here.
-			// we should be able to read the position of bones at runtime for this info.
 			vecSpitOffset = (gpGlobals->v_right * 8 + gpGlobals->v_forward * 37 + gpGlobals->v_up * 23);
 			vecSpitOffset = (pev->origin + vecSpitOffset);
 			vecSpitDir = ((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
@@ -440,11 +516,10 @@ void CVoltigore::HandleAnimEvent(MonsterEvent_t *pEvent)
 
 			// do stuff for this event.
 			AttackSound();
-
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "debris/zap4.wav", 1, ATTN_NORM, 0, 100 + m_iBeams * 10);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "voltigore/voltigore_attack_shock.wav", 1, ATTN_NORM, 0, 100 + m_iBeams * 10);
 			pev->skin = m_iBeams / 2;
 
-			CVoltigoreEnergyBall::Shoot(pev, vecSpitOffset, vecSpitDir * 900);
+			CVoltigoreEnergyBall::Shoot(pev, vecSpitOffset, vecSpitDir * 1000);
 
 			// turn the beam glow off.
 			ClearBeams();
@@ -452,68 +527,61 @@ void CVoltigore::HandleAnimEvent(MonsterEvent_t *pEvent)
 			m_fShouldUpdateBeam = FALSE;
 		}
 		break;
+		case VOLTIGORE_AE_CLAW: {
+			CBaseEntity *pHurt = CheckTraceHullAttack(120, m_flDmgPunch, DMG_CLUB | DMG_ALWAYSGIB);
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.z = -50;
+					pHurt->pev->punchangle.x = 35;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 160;
+					UTIL_ScreenShake(pHurt->pev->origin, 8.0, 1.5, 0.7, 2);
+				}
 
-
-	case VOLTIGORE_AE_CLAW:
-	{
-		CBaseEntity *pHurt = CheckTraceHullAttack(120, 1/*gSkillData.voltigoreDmgPunch*/, DMG_CLUB | DMG_ALWAYSGIB);
-		if (pHurt) {
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-				pHurt->pev->punchangle.z = -50;
-				pHurt->pev->punchangle.x = 35;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 160;
-				UTIL_ScreenShake(pHurt->pev->origin, 8.0, 1.5, 0.7, 2);
-			}
-
-			PrintBloodDecal(pHurt, pHurt->pev->origin, pHurt->pev->velocity, RANDOM_FLOAT(80, 90));
-			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeHitSounds);
-		} else
-			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeMissSounds);
-	}
-	break;
-
-	case VOLTIGORE_AE_CLAWRAKE:
-	{
-		CBaseEntity *pHurt = CheckTraceHullAttack(120, 1/*gSkillData.voltigoreDmgPunch*/, DMG_CLUB | DMG_ALWAYSGIB);
-		if (pHurt) {
-			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-				pHurt->pev->punchangle.x = 40;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 250;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 150;
-				UTIL_ScreenShake(pHurt->pev->origin, 8.0, 1.5, 0.7, 80);
-			}
-
-			PrintBloodDecal(pHurt, pHurt->pev->origin, Vector(0, 0, -1), 90);
-			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeHitSounds);
+				PrintBloodDecal(pHurt, pHurt->pev->origin, pHurt->pev->velocity, RANDOM_FLOAT(80, 90));
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeHitSounds);
+			} else
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeMissSounds);
 		}
-		else
-			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeMissSounds);
-	}
-	break;
-	case VOLTIGORE_AE_GIB:
-	case VOLTIGORE_AE_STEP: {
-		UTIL_ScreenShake(pev->origin, 8.0, 1.5, 0.7, 80);
-	}
-	break;
-	default:
-		CBaseMonster::HandleAnimEvent(pEvent);
+		break;
+		case VOLTIGORE_AE_CLAWRAKE: {
+			CBaseEntity *pHurt = CheckTraceHullAttack(120, m_flDmgPunch, DMG_CLUB | DMG_ALWAYSGIB);
+			if (pHurt) {
+				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+					pHurt->pev->punchangle.x = 40;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 250;
+					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 150;
+					UTIL_ScreenShake(pHurt->pev->origin, 8.0, 1.5, 0.7, 80);
+				}
+
+				PrintBloodDecal(pHurt, pHurt->pev->origin, Vector(0, 0, -1), 90);
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeHitSounds);
+			} else
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pMeleeMissSounds);
+		}
+		break;
+		case VOLTIGORE_AE_GIB:
+		case VOLTIGORE_AE_STEP: {
+			UTIL_ScreenShake(pev->origin, 8.0, 1.5, 0.7, 80);
+		}
+		break;
+		default:
+			CBaseMonster::HandleAnimEvent(pEvent);
+		break;
 	}
 }
 
 //=========================================================
 // DeathSound
 //=========================================================
-void CVoltigore::DeathSound(void)
-{
+void CVoltigore::DeathSound(void) {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), 1, ATTN_NORM);
 }
 
 //=========================================================
 // AttackSound
 //=========================================================
-void CVoltigore::AttackSound(void)
-{
+void CVoltigore::AttackSound(void) {
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "voltigore/voltigore_attack_shock.wav", 1, ATTN_NORM);
 }
 
@@ -522,16 +590,14 @@ void CVoltigore::AttackSound(void)
 //=========================================================
 
 // primary range attack
-Task_t	tlVoltigoreRangeAttack1[] =
-{
+Task_t	tlVoltigoreRangeAttack1[] = {
 	{ TASK_STOP_MOVING, 0 },
 	{ TASK_FACE_IDEAL, (float)0 },
 	{ TASK_RANGE_ATTACK1, (float)0 },
 	{ TASK_SET_ACTIVITY, (float)ACT_IDLE },
 };
 
-Schedule_t	slVoltigoreRangeAttack1[] =
-{
+Schedule_t	slVoltigoreRangeAttack1[] = {
 	{
 		tlVoltigoreRangeAttack1,
 		ARRAYSIZE(tlVoltigoreRangeAttack1),
@@ -546,16 +612,14 @@ Schedule_t	slVoltigoreRangeAttack1[] =
 };
 
 // Chase enemy schedule
-Task_t tlVoltigoreChaseEnemy1[] =
-{
+Task_t tlVoltigoreChaseEnemy1[] = {
 	{ TASK_SET_FAIL_SCHEDULE, (float)SCHED_RANGE_ATTACK1 },// !!!OEM - this will stop nasty voltigore oscillation.
 	{ TASK_GET_PATH_TO_ENEMY, (float)0 },
 	{ TASK_RUN_PATH, (float)0 },
 	{ TASK_WAIT_FOR_MOVEMENT, (float)0 },
 };
 
-Schedule_t slVoltigoreChaseEnemy[] =
-{
+Schedule_t slVoltigoreChaseEnemy[] = {
 	{
 		tlVoltigoreChaseEnemy1,
 		ARRAYSIZE(tlVoltigoreChaseEnemy1),
@@ -575,8 +639,7 @@ Schedule_t slVoltigoreChaseEnemy[] =
 };
 
 // Voltigore walks to something tasty and eats it.
-Task_t tlVoltigoreEat[] =
-{
+Task_t tlVoltigoreEat[] = {
 	{ TASK_STOP_MOVING, (float)0 },
 	{ TASK_EAT, (float)10 },// this is in case the voltigore can't get to the food
 	{ TASK_STORE_LASTPOSITION, (float)0 },
@@ -593,8 +656,7 @@ Task_t tlVoltigoreEat[] =
 	{ TASK_CLEAR_LASTPOSITION, (float)0 },
 };
 
-Schedule_t slVoltigoreEat[] =
-{
+Schedule_t slVoltigoreEat[] = {
 	{
 		tlVoltigoreEat,
 		ARRAYSIZE(tlVoltigoreEat),
@@ -612,8 +674,7 @@ Schedule_t slVoltigoreEat[] =
 
 // this is a bit different than just Eat. We use this schedule when the food is far away, occluded, or behind
 // the voltigore. This schedule plays a sniff animation before going to the source of food.
-Task_t tlVoltigoreSniffAndEat[] =
-{
+Task_t tlVoltigoreSniffAndEat[] = {
 	{ TASK_STOP_MOVING, (float)0 },
 	{ TASK_EAT, (float)10 },// this is in case the voltigore can't get to the food
 	{ TASK_PLAY_SEQUENCE, (float)ACT_DETECT_SCENT },
@@ -631,8 +692,7 @@ Task_t tlVoltigoreSniffAndEat[] =
 	{ TASK_CLEAR_LASTPOSITION, (float)0 },
 };
 
-Schedule_t slVoltigoreSniffAndEat[] =
-{
+Schedule_t slVoltigoreSniffAndEat[] = {
 	{
 		tlVoltigoreSniffAndEat,
 		ARRAYSIZE(tlVoltigoreSniffAndEat),
@@ -648,8 +708,7 @@ Schedule_t slVoltigoreSniffAndEat[] =
 	}
 };
 
-DEFINE_CUSTOM_SCHEDULES(CVoltigore)
-{
+DEFINE_CUSTOM_SCHEDULES(CVoltigore) {
 	slVoltigoreRangeAttack1,
 		slVoltigoreChaseEnemy,
 		slVoltigoreEat,
@@ -661,63 +720,48 @@ IMPLEMENT_CUSTOM_SCHEDULES(CVoltigore, CBaseMonster);
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t *CVoltigore::GetSchedule(void)
-{
-	switch (m_MonsterState)
-	{
-	case MONSTERSTATE_ALERT:
-	{
-		if (HasConditions(bits_COND_SMELL_FOOD))
-		{
-			CSound		*pSound;
+Schedule_t *CVoltigore::GetSchedule(void) {
+	switch (m_MonsterState) {
+		case MONSTERSTATE_ALERT: {
+			if (HasConditions(bits_COND_SMELL_FOOD)) {
+				CSound		*pSound;
+				pSound = PBestScent();
+				if (pSound && (!FInViewCone(&pSound->m_vecOrigin) || !FVisible(pSound->m_vecOrigin))) {
+					// scent is behind or occluded
+					return GetScheduleOfType(SCHED_VOLTIGORE_SNIFF_AND_EAT);
+				}
 
-			pSound = PBestScent();
-
-			if (pSound && (!FInViewCone(&pSound->m_vecOrigin) || !FVisible(pSound->m_vecOrigin)))
-			{
-				// scent is behind or occluded
-				return GetScheduleOfType(SCHED_VOLTIGORE_SNIFF_AND_EAT);
+				// food is right out in the open. Just go get it.
+				return GetScheduleOfType(SCHED_VOLTIGORE_EAT);
+			}
+		break;
+		}
+		case MONSTERSTATE_COMBAT: {
+			// dead enemy
+			if (HasConditions(bits_COND_ENEMY_DEAD)) {
+				// call base class, all code to handle dead enemies is centralized there.
+				return CBaseMonster::GetSchedule();
 			}
 
-			// food is right out in the open. Just go get it.
-			return GetScheduleOfType(SCHED_VOLTIGORE_EAT);
+			if (HasConditions(bits_COND_NEW_ENEMY)) {
+				return GetScheduleOfType(SCHED_WAKE_ANGRY);
+			}
+
+			if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+				return GetScheduleOfType(SCHED_RANGE_ATTACK1);
+			}
+
+			if (HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
+				return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+			}
+
+			if (HasConditions(bits_COND_CAN_MELEE_ATTACK2)) {
+				return GetScheduleOfType(SCHED_MELEE_ATTACK2);
+			}
+
+			return GetScheduleOfType(SCHED_CHASE_ENEMY);
 		}
 		break;
-	}
-	case MONSTERSTATE_COMBAT:
-	{
-		// dead enemy
-		if (HasConditions(bits_COND_ENEMY_DEAD))
-		{
-			// call base class, all code to handle dead enemies is centralized there.
-			return CBaseMonster::GetSchedule();
-		}
-
-		if (HasConditions(bits_COND_NEW_ENEMY))
-		{
-			return GetScheduleOfType(SCHED_WAKE_ANGRY);
-		}
-
-
-		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1))
-		{
-			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
-		}
-
-		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1))
-		{
-			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
-		}
-
-		if (HasConditions(bits_COND_CAN_MELEE_ATTACK2))
-		{
-			return GetScheduleOfType(SCHED_MELEE_ATTACK2);
-		}
-
-		return GetScheduleOfType(SCHED_CHASE_ENEMY);
-
-		break;
-	}
 	}
 
 	return CBaseMonster::GetSchedule();
@@ -726,21 +770,19 @@ Schedule_t *CVoltigore::GetSchedule(void)
 //=========================================================
 // GetScheduleOfType
 //=========================================================
-Schedule_t* CVoltigore::GetScheduleOfType(int Type)
-{
-	switch (Type)
-	{
-	case SCHED_RANGE_ATTACK1:
-		return &slVoltigoreRangeAttack1[0];
+Schedule_t* CVoltigore::GetScheduleOfType(int Type) {
+	switch (Type) {
+		case SCHED_RANGE_ATTACK1:
+			return &slVoltigoreRangeAttack1[0];
 		break;
-	case SCHED_VOLTIGORE_EAT:
-		return &slVoltigoreEat[0];
+		case SCHED_VOLTIGORE_EAT:
+			return &slVoltigoreEat[0];
 		break;
-	case SCHED_VOLTIGORE_SNIFF_AND_EAT:
-		return &slVoltigoreSniffAndEat[0];
+		case SCHED_VOLTIGORE_SNIFF_AND_EAT:
+			return &slVoltigoreSniffAndEat[0];
 		break;
-	case SCHED_CHASE_ENEMY:
-		return &slVoltigoreChaseEnemy[0];
+		case SCHED_CHASE_ENEMY:
+			return &slVoltigoreChaseEnemy[0];
 		break;
 	}
 
@@ -754,41 +796,33 @@ Schedule_t* CVoltigore::GetScheduleOfType(int Type)
 // know explicitly when the last attempt to chase the enemy
 // failed, since that impacts its attack choices.
 //=========================================================
-void CVoltigore::StartTask(Task_t *pTask)
-{
+void CVoltigore::StartTask(Task_t *pTask) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
+	switch (pTask->iTask) {
+		case TASK_RANGE_ATTACK1: {
+			CreateBeams();
 
-	switch (pTask->iTask)
-	{
-	case TASK_RANGE_ATTACK1:
-	{
-		CreateBeams();
+			GlowOn(255);
+			m_fShouldUpdateBeam = TRUE;
 
-		GlowOn(255);
-		m_fShouldUpdateBeam = TRUE;
-
-		// Play the beam 'glow' sound.
-		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "debris/beamstart1.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
-
-		CBaseMonster::StartTask(pTask);
-	}
-	break;
-	case TASK_GET_PATH_TO_ENEMY:
-	{
-		if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy))
-		{
-			m_iTaskStatus = TASKSTATUS_COMPLETE;
+			// Play the beam 'glow' sound.
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "debris/zap4.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "debris/beamstart1.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
+			CBaseMonster::StartTask(pTask);
 		}
-		else
-		{
-			ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
-			TaskFail();
+		break;
+		case TASK_GET_PATH_TO_ENEMY: {
+			if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy)) {
+				m_iTaskStatus = TASKSTATUS_COMPLETE;
+			} else {
+				ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
+				TaskFail();
+			}
 		}
-	}
-	break;
+		break;
 
-	default:
-		CBaseMonster::StartTask(pTask);
+		default:
+			CBaseMonster::StartTask(pTask);
 		break;
 	}
 }
@@ -799,46 +833,67 @@ void CVoltigore::StartTask(Task_t *pTask)
 // the feature that makes it lose interest in headcrabs for 
 // a while if something injures it. 
 //=========================================================
-MONSTERSTATE CVoltigore::GetIdealState(void)
-{
+MONSTERSTATE CVoltigore::GetIdealState(void) {
 	m_IdealMonsterState = CBaseMonster::GetIdealState();
 	return m_IdealMonsterState;
 }
 
-void CVoltigore::Killed(entvars_t *pevAttacker, int iGib)
-{
+void CVoltigore::Killed(entvars_t *pevAttacker, int iGib) {
 	ClearBeams();
 	DestroyGlow();
+	DieBlast();
+
+	Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
+
+	// gibs
+	vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
+	WRITE_BYTE(TE_BREAKMODEL);
+	WRITE_COORD(vecSpot.x);
+	WRITE_COORD(vecSpot.y);
+	WRITE_COORD(vecSpot.z);
+	WRITE_COORD(100);
+	WRITE_COORD(100);
+	WRITE_COORD(32);
+	WRITE_COORD(0);
+	WRITE_COORD(0);
+	WRITE_COORD(200);
+	WRITE_BYTE(8);
+	WRITE_SHORT(m_iVgib);	//model id#
+	WRITE_BYTE(5);
+	WRITE_BYTE(200);// 10.0 seconds
+	WRITE_BYTE(BREAK_FLESH);
+	MESSAGE_END();
+
+	SetThink(&CVoltigore::SUB_Remove);
+	SetNextThink(0.1);
+
 	CBaseMonster::Killed(pevAttacker, iGib);
 }
 
-void CVoltigore::CreateBeams()
-{
+void CVoltigore::CreateBeams() {
 	Vector vecStart, vecEnd, vecAngles;
 	GetAttachment(3, vecStart, vecAngles);
 
 	if (m_iBeams >= VOLTIGORE_MAX_BEAMS)
 		return;
 
-	for (int i = 0; i < VOLTIGORE_MAX_BEAMS; i++)
-	{
+	for (int i = 0; i < VOLTIGORE_MAX_BEAMS; i++) {
 		m_pBeam[i] = CBeam::BeamCreate("sprites/lgtning.spr", 30);
 		if (!m_pBeam[i])
 			return;
 
 		GetAttachment(i, vecEnd, vecAngles);
-
 		m_pBeam[i]->PointsInit(vecStart, vecEnd);
 		m_pBeam[i]->SetColor(125, 61, 177);
 		m_pBeam[i]->SetBrightness(255);
-		m_pBeam[i]->SetNoise(0);
-		m_pBeam[i]->SetFlags(SF_BEAM_SHADEIN /*| SF_BEAM_SHADEOUT*/);
+		m_pBeam[i]->SetNoise(80);
+		m_pBeam[i]->SetFlags(SF_BEAM_SHADEIN);
 		m_iBeams++;
 	}
 }
 
-void CVoltigore::UpdateBeams()
-{
+void CVoltigore::UpdateBeams() {
 	Vector vecStart, vecEnd, vecAngles, vecDis;
 	GetAttachment(3, vecStart, vecAngles);
 
@@ -855,8 +910,7 @@ void CVoltigore::UpdateBeams()
 	WRITE_BYTE(0);		// decay * 0.1
 	MESSAGE_END();
 
-	for (int i = 0; i < VOLTIGORE_MAX_BEAMS; i++)
-	{
+	for (int i = 0; i < VOLTIGORE_MAX_BEAMS; i++) {
 		GetAttachment(i, vecEnd, vecAngles);
 		m_pBeam[i]->SetStartPos(vecStart);
 		m_pBeam[i]->SetEndPos(vecEnd);
@@ -866,15 +920,14 @@ void CVoltigore::UpdateBeams()
 	pBeam = CBeam::BeamCreate("sprites/lgtning.spr", 10);
 	pBeam->PointEntInit(vecStart, entindex());
 	pBeam->SetColor(125, 61, 177);
-	pBeam->SetNoise(70);
+	pBeam->SetNoise(80);
 	pBeam->SetBrightness(200);
 	pBeam->SetWidth(30);
 	pBeam->SetScrollRate(35);
 	pBeam->LiveForTime(0.3);
 }
 
-void CVoltigore::CreateGlow()
-{
+void CVoltigore::CreateGlow() {
 	m_pBeamGlow = CSprite::SpriteCreate("sprites/glow04.spr", pev->origin, FALSE);
 	m_pBeamGlow->SetTransparency(kRenderGlow, 255, 255, 255, 0, kRenderFxNoDissipation);
 	m_pBeamGlow->SetAttachment(edict(), 4);
@@ -888,8 +941,7 @@ void CVoltigore::CreateGlow()
 	m_pSprite->pev->flags |= FL_SKIPLOCALHOST;
 }
 
-void CVoltigore::DestroyGlow()
-{
+void CVoltigore::DestroyGlow() {
 	if (m_pBeamGlow) {
 		UTIL_Remove(m_pBeamGlow);
 		m_pBeamGlow = NULL;
@@ -901,10 +953,8 @@ void CVoltigore::DestroyGlow()
 	}
 }
 
-void CVoltigore::GlowUpdate()
-{
-	if (m_pBeamGlow)
-	{
+void CVoltigore::GlowUpdate() {
+	if (m_pBeamGlow) {
 		m_pBeamGlow->pev->renderamt = UTIL_Approach(m_glowBrightness, m_pBeamGlow->pev->renderamt, 100);
 		if (m_pBeamGlow->pev->renderamt == 0)
 			m_pBeamGlow->pev->effects |= EF_NODRAW;
@@ -914,8 +964,7 @@ void CVoltigore::GlowUpdate()
 		UTIL_SetOrigin(m_pBeamGlow, pev->origin);
 	}
 
-	if (m_pSprite)
-	{
+	if (m_pSprite) {
 		m_pSprite->pev->renderamt = UTIL_Approach(m_glowBrightness, m_pSprite->pev->renderamt, 100);
 		if (m_pSprite->pev->renderamt == 0)
 			m_pSprite->pev->effects |= EF_NODRAW;
@@ -926,23 +975,19 @@ void CVoltigore::GlowUpdate()
 	}
 }
 
-void CVoltigore::GlowOff(void)
-{
+void CVoltigore::GlowOff(void) {
 	m_glowBrightness = 0;
 }
 
-void CVoltigore::GlowOn(int level)
-{
+void CVoltigore::GlowOn(int level) {
 	m_glowBrightness = level;
 }
 
-void CVoltigore::PrintBloodDecal(CBaseEntity* pHurt, const Vector& vecOrigin, const Vector& vecVelocity, float maxDist, int bloodColor)
-{
+void CVoltigore::PrintBloodDecal(CBaseEntity* pHurt, const Vector& vecOrigin, const Vector& vecVelocity, float maxDist, int bloodColor) {
 	if (!pHurt)
 		return;
 
-	if (bloodColor == DONT_BLEED)
-	{
+	if (bloodColor == DONT_BLEED) {
 		CBaseMonster* pMonster = pHurt->MyMonsterPointer();
 		if (pMonster)
 			bloodColor = pMonster->m_bloodColor;
@@ -963,6 +1008,49 @@ void CVoltigore::ClearBeams() {
 
 	m_iBeams = 0;
 	pev->skin = 0;
+}
 
-	STOP_SOUND(ENT(pev), CHAN_WEAPON, "debris/zap4.wav");
+void CVoltigore::DieBlast() {
+	int iTimes = 0;
+	int iDrawn = 0;
+	TraceResult tr;
+	Vector vecDest;
+	CBeam *pBeam;
+	pev->origin.z = pev->origin.z + 64;
+
+	while (iDrawn<12 && iTimes<(12 * 3)) {
+		vecDest = 90 * (Vector(RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1)).Normalize());
+		UTIL_TraceLine(pev->origin, pev->origin + vecDest, ignore_monsters, NULL, &tr);
+		if (tr.flFraction != 1.0) {
+			// we hit something.
+			iDrawn++;
+			pBeam = CBeam::BeamCreate("sprites/plasma.spr", 200);
+			pBeam->PointsInit(tr.vecEndPos, pev->origin);
+			pBeam->SetStartPos(tr.vecEndPos);
+			pBeam->SetEndPos(pev->origin);
+			pBeam->SetColor(125, 61, 177);
+			pBeam->SetNoise(80);
+			pBeam->SetBrightness(255);
+			pBeam->SetWidth(30);
+			pBeam->SetScrollRate(35);
+			pBeam->LiveForTime(0.4);
+		}
+		iTimes++;
+	}
+
+	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(16);		// radius * 0.1
+	WRITE_BYTE(225);     // R
+	WRITE_BYTE(115);     // G
+	WRITE_BYTE(255);     // B
+	WRITE_BYTE(8);		// time * 10
+	WRITE_BYTE(0);		// decay * 0.1
+	MESSAGE_END();
+
+	pev->origin.z = pev->origin.z - 64;
+	SetNextThink(0.5);
 }

@@ -264,6 +264,19 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.pitdroneArm				= GetSkillCvar("sk_pitdrone_arm"); //Hitgroup
 
 	//=========================================================
+	// NPCs: Voltigore
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.voltigoreHealth			= GetSkillCvar("sk_voltigore_health");
+	gSkillData.voltigoreDmgPunch		= GetSkillCvar("sk_voltigore_dmg_punch");
+	gSkillData.voltigoreDmgBeam			= GetSkillCvar("sk_voltigore_dmg_beam");
+	gSkillData.voltigoreHead			= GetSkillCvar("sk_voltigore_head"); //Hitgroup 
+	gSkillData.voltigoreChest			= GetSkillCvar("sk_voltigore_chest"); //Hitgroup
+	gSkillData.voltigoreStomach			= GetSkillCvar("sk_voltigore_stomach"); //Hitgroup
+	gSkillData.voltigoreLeg				= GetSkillCvar("sk_voltigore_leg"); //Hitgroup
+	gSkillData.voltigoreArm			    = GetSkillCvar("sk_voltigore_arm"); //Hitgroup
+
+	//=========================================================
 	// NPCs: #########################
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================

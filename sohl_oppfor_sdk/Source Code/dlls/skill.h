@@ -132,6 +132,19 @@ struct skilldata_t
 	float pitdroneArm;
 
 	//=========================================================
+	// NPCs: Voltigore
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	float voltigoreHealth;
+	float voltigoreDmgPunch;
+	float voltigoreDmgBeam;
+	float voltigoreHead;
+	float voltigoreChest;
+	float voltigoreStomach;
+	float voltigoreLeg;
+	float voltigoreArm;
+
+	//=========================================================
 	// NPCs: #########################
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================

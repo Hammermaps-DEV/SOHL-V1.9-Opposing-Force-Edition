@@ -16,15 +16,20 @@
 // voltigore
 //=========================================================
 #include	"extdll.h"
+#include	"plane.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
-#include	"schedule.h"
 #include	"nodes.h"
-#include	"effects.h"
-#include	"decals.h"
+#include	"schedule.h"
+#include	"animation.h"
+#include	"squadmonster.h"
+#include	"weapons.h"
+#include	"talkmonster.h"
 #include	"soundent.h"
-#include	"game.h"
+#include	"effects.h"
+#include	"customentity.h"
+#include	"scripted.h" //LRC
 #include    "monster_alien_babyvoltigore.h"
 
 //=========================================================
