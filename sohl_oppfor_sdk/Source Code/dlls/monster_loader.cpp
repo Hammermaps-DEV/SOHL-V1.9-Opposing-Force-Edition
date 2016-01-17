@@ -26,6 +26,14 @@
 #include    "customentity.h"
 #include	"monster_loader.h"
 
+//TODO: 
+/*
+spawnflags(Flags) =
+[
+4 : "Not solid" : 0
+]
+*/
+
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================

@@ -16,7 +16,7 @@
 #ifndef MONSTER_DRILLSERGEANT_H
 #define MONSTER_DRILLSERGEANT_H
 
-class CDrillsergeant : public CBaseMonster
+class CDrillsergeant : public CTalkMonster
 {
 public:
 	void Spawn(void);

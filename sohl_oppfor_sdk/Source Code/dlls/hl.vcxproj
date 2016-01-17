@@ -15,6 +15,8 @@
     <ClCompile Include="..\pm_shared\pm_debug.c" />
     <ClCompile Include="..\pm_shared\pm_math.c" />
     <ClCompile Include="..\pm_shared\pm_shared.c" />
+    <ClCompile Include="env_electrified_wire.cpp" />
+    <ClCompile Include="env_rope_segment.cpp" />
     <ClCompile Include="monster_aflock.cpp" />
     <ClCompile Include="monster_agrunt.cpp" />
     <ClCompile Include="airtank.cpp" />
@@ -29,6 +31,7 @@
     <ClCompile Include="monster_barnacle.cpp" />
     <ClCompile Include="monster_barney.cpp" />
     <ClCompile Include="monster_barney_dead.cpp" />
+    <ClCompile Include="monster_barniel.cpp" />
     <ClCompile Include="monster_bigmomma.cpp" />
     <ClCompile Include="monster_bloater.cpp" />
     <ClCompile Include="bmodels.cpp" />
@@ -55,6 +58,9 @@
     <ClCompile Include="monster_shockroach.cpp" />
     <ClCompile Include="monster_skeleton_dead.cpp" />
     <ClCompile Include="monster_zombie_barney.cpp" />
+    <ClCompile Include="monster_zombie_barney_dead.cpp" />
+    <ClCompile Include="monster_zombie_construction.cpp" />
+    <ClCompile Include="monster_zombie_construction_dead.cpp" />
     <ClCompile Include="monster_zombie_dead.cpp" />
     <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="monster_drillsergeant.cpp" />
@@ -229,6 +235,9 @@
     <ClInclude Include="monster_tentacle.h" />
     <ClInclude Include="monster_zombie.h" />
     <ClInclude Include="monster_zombie_barney.h" />
+    <ClInclude Include="monster_zombie_barney_dead.h" />
+    <ClInclude Include="monster_zombie_construction.h" />
+    <ClInclude Include="monster_zombie_construction_dead.h" />
     <ClInclude Include="monster_zombie_dead.h" />
     <ClInclude Include="monster_zombie_soldier.h" />
     <ClInclude Include="monster_zombie_soldier_dead.h" />

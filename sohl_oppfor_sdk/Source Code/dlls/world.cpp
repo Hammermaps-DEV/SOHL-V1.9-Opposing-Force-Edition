@@ -473,6 +473,7 @@ extern DLL_GLOBAL BOOL		g_fGameOver;
 float g_flWeaponCheat; 
 
 BOOL g_startSuit; //LRC
+BOOL g_allowGJump;
 
 void CWorld :: Spawn( void )
 {
@@ -725,6 +726,11 @@ void CWorld :: KeyValue( KeyValueData *pkvd )
 		pkvd->fHandled = TRUE;
 	}
 //LRC- ends
+	else if (FStrEq(pkvd->szKeyName, "allow_sp_gjump"))
+	{
+		g_allowGJump = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
 	else
 		CBaseEntity::KeyValue( pkvd );
 }

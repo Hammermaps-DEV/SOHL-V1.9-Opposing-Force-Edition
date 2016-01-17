@@ -256,7 +256,6 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 
 	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
 	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
-	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 

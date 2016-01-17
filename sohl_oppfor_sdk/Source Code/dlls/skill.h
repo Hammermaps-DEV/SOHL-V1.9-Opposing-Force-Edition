@@ -107,6 +107,16 @@ struct skilldata_t
 	float zombieSoldierLeg;
 	float zombieSoldierArm;
 
+	// Zombie Construction
+	float zombieConstructionHealth;
+	float zombieConstructionDmgOneSlash;
+	float zombieConstructionDmgBothSlash;
+	float zombieConstructionHead;
+	float zombieConstructionChest;
+	float zombieConstructionStomach;
+	float zombieConstructionLeg;
+	float zombieConstructionArm;
+
 	// Zombie Barney
 	float zombieBarneyHealth;
 	float zombieBarneyDmgOneSlash;

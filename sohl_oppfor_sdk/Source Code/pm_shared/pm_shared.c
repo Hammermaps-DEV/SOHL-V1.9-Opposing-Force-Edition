@@ -2661,22 +2661,22 @@ void PM_Jump (void)
 	{
 		case 0: pmove->punchangle[ 2 ] = -3; //10
 				pmove->punchangle[ 0 ] = -3; 
-				pmove->PM_PlaySound( CHAN_BODY, "player/jump01.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+				pmove->PM_PlaySound( CHAN_BODY, "player/pl_jump01.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );
 		break; 
 
 		case 1: pmove->punchangle[ 2 ] = 2; 
 				pmove->punchangle[ 0 ] = 2; 
-				pmove->PM_PlaySound( CHAN_BODY, "player/jump02.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+				pmove->PM_PlaySound( CHAN_BODY, "player/pl_jump02.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );
 		break; 
 
 	 	case 2: pmove->punchangle[ 2 ] = -3; 
 				pmove->punchangle[ 0 ] = -3; 
-				pmove->PM_PlaySound( CHAN_BODY, "player/jump03.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+				pmove->PM_PlaySound( CHAN_BODY, "player/pl_jump03.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );
 		break; 
 	
 		case 3: pmove->punchangle[ 2 ] = 1; 
 				pmove->punchangle[ 0 ] = 1; 
-				pmove->PM_PlaySound( CHAN_BODY, "player/jump04.wav", 1, ATTN_NORM, 0, PITCH_NORM );
+				pmove->PM_PlaySound( CHAN_BODY, "player/pl_jump04.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );
 		break;
 	}
 

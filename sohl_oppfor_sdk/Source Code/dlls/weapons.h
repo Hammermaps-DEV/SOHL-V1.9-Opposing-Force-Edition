@@ -83,7 +83,7 @@ public:
 #define WEAPON_PYTHON			3
 #define WEAPON_GENERIC			4
 #define WEAPON_MP5				5
-#define WEAPON_DEBUG                           	6 //G-Cont. weapon for hunt bugs. he-he-he
+#define WEAPON_DEBUG            6
 #define WEAPON_CROSSBOW			7
 #define WEAPON_SHOTGUN			8
 #define WEAPON_RPG				9

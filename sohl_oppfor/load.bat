@@ -4,4 +4,4 @@ ECHO.
 ECHO Please wait Spirit of Half-Life: Opposing-Force Edition is loading...
 ECHO.
 cd..
-hl -dev -console -game sohl_oppfor +map gruntbattledemo +fps_max 50
+hl -dev -console -game sohl_oppfor

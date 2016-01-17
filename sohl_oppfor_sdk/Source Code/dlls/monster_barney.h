@@ -12,57 +12,70 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// NPC: Barney * http://half-life.wikia.com/wiki/Barney_Calhoun
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_BARNEY_H
 #define MONSTER_BARNEY_H
 
-class CBarney : public CTalkMonster
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  ISoundMask(void);
-	void BarneyFirePistol(void);
-	void AlertSound(void);
-	int  Classify(void);
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
+// class definition
+class CBarney : public CTalkMonster {
+	public:
+		void Spawn(void);
+		void Precache(void);
+		void SetYawSpeed(void);
+		int  ISoundMask(void);
+		void Fire9mmPistol(void);
+		void AlertSound(void);
+		int  Classify(void);
+		void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void RunTask(Task_t *pTask);
-	void StartTask(Task_t *pTask);
-	virtual int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+		void RunTask(Task_t *pTask);
+		void StartTask(Task_t *pTask);
+		virtual int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+		int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+		BOOL CheckRangeAttack1(float flDot, float flDist);
 
-	void DeclineFollowing(void);
+		void DeclineFollowing(void);
 
-	// Override these to set behavior
-	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *GetSchedule(void);
-	MONSTERSTATE GetIdealState(void);
+		Schedule_t *GetScheduleOfType(int Type);
+		Schedule_t *GetSchedule(void);
+		MONSTERSTATE GetIdealState(void);
 
-	void DeathSound(void);
-	void PainSound(void);
+		void DeathSound(void);
+		void PainSound(void);
 
-	void TalkInit(void);
+		void TalkInit(void);
 
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	void Killed(entvars_t *pevAttacker, int iGib);
+		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		void Killed(entvars_t *pevAttacker, int iGib);
 
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
+		virtual int	Save(CSave &save);
+		virtual int	Restore(CRestore &restore);
 
-	int		m_iBaseBody; //LRC - for barneys with different bodies
-	BOOL	m_fGunDrawn;
-	float	m_painTime;
-	float	m_checkAttackTime;
-	BOOL	m_lastAttackCheck;
+		static TYPEDESCRIPTION m_SaveData[];
 
-	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
+		static const char *pPainSounds[];
+		static const char *pDeathSounds[];
+		static const char *pAttackSounds[];
 
-	CUSTOM_SCHEDULES;
+		int		m_iBaseBody;
+		BOOL	m_fGunDrawn;
+		float	m_painTime;
+		float	m_checkAttackTime;
+		BOOL	m_lastAttackCheck;
+		float	m_flPlayerDamage;
+
+		CUSTOM_SCHEDULES;
+
+	protected:
+		BOOL m_flDebug = false;
+		float m_flHitgroupHead;
+		float m_flHitgroupChest;
+		float m_flHitgroupStomach;
+		float m_flHitgroupArm;
+		float m_flHitgroupLeg;
 };
 
 #endif // MONSTER_BARNEY_H

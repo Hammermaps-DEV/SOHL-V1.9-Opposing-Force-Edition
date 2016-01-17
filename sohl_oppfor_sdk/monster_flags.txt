@@ -7,18 +7,8 @@ ADD: * monster dont take damage from player "Invincible" *
     2 : "Gag"   : 0
     4 : "MonsterClip" : 0
     16: "Prisoner"    : 0
-					64: "Invincible for Player" : 0
+    64: "Invincible for Player" : 0
     128: "WaitForScript"  : 0
     256: "Pre-Disaster"   : 0
     512: "Fade Corpse"  : 0
   ]
-
-
-@PointClass base(Monster, Sequence) studio("models/zombie.mdl") = monster_zombie_dead : "Dead Zombie"
-[
-    pose(Choices) : "Pose" : 0 =
-    [
-        0 : "On back"
-        1 : "On stomach"
-    ]
-]

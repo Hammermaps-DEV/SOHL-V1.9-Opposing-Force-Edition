@@ -239,6 +239,16 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieSoldierLeg          = GetSkillCvar("sk_zombie_soldier_leg"); //Hitgroup
 	gSkillData.zombieSoldierArm          = GetSkillCvar("sk_zombie_soldier_arm"); //Hitgroup
 
+	// Zombie Construction
+	gSkillData.zombieConstructionHealth  = GetSkillCvar("sk_zombie_construction_health");
+	gSkillData.zombieConstructionDmgOneSlash = GetSkillCvar("sk_zombie_construction_dmg_one_slash");
+	gSkillData.zombieConstructionDmgBothSlash = GetSkillCvar("sk_zombie_construction_dmg_both_slash");
+	gSkillData.zombieConstructionHead    = GetSkillCvar("sk_zombie_construction_head"); //Hitgroup
+	gSkillData.zombieConstructionChest   = GetSkillCvar("sk_zombie_construction_chest"); //Hitgroup
+	gSkillData.zombieConstructionStomach = GetSkillCvar("sk_zombie_construction_stomach"); //Hitgroup
+	gSkillData.zombieConstructionLeg     = GetSkillCvar("sk_zombie_construction_leg"); //Hitgroup
+	gSkillData.zombieConstructionArm     = GetSkillCvar("sk_zombie_construction_arm"); //Hitgroup
+
 	// Zombie Barney
 	gSkillData.zombieBarneyHealth        = GetSkillCvar("sk_zombie_barney_health");
 	gSkillData.zombieBarneyDmgOneSlash   = GetSkillCvar("sk_zombie_barney_dmg_one_slash");

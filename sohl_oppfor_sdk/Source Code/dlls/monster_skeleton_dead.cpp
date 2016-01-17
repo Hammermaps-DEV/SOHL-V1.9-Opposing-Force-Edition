@@ -23,14 +23,11 @@
 
 char *CSkeleton::m_szPoses[] = { "s_onback", "s_sitting", "dead_against_wall", "dead_stomach" };
 
-void CSkeleton::KeyValue(KeyValueData *pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "pose"))
-	{
+void CSkeleton::KeyValue(KeyValueData *pkvd) {
+	if (FStrEq(pkvd->szKeyName, "pose")) {
 		m_iPose = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	}
-	else
+	} else
 		CBaseMonster::KeyValue(pkvd);
 }
 
@@ -39,8 +36,7 @@ LINK_ENTITY_TO_CLASS(monster_skeleton_dead, CSkeleton);
 //=========================================================
 // ********** Skeleton SPAWN **********
 //=========================================================
-void CSkeleton::Spawn(void)
-{
+void CSkeleton::Spawn(void) {
 	PRECACHE_MODEL("models/skeleton.mdl");
 	SET_MODEL(ENT(pev), "models/skeleton.mdl");
 
@@ -52,8 +48,7 @@ void CSkeleton::Spawn(void)
 
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 
-	if (pev->sequence == -1)
-	{
+	if (pev->sequence == -1) {
 		ALERT(at_console, "Skeleton with bad pose\n");
 		pev->sequence = 0;
 		pev->effects = EF_BRIGHTFIELD;

@@ -34,6 +34,7 @@
 #define		PFLAG_DUCKING		( 1<<3 )		// In the process of ducking, but totally squatted yet
 #define		PFLAG_USING			( 1<<4 )		// Using a continuous entity
 #define		PFLAG_OBSERVER		( 1<<5 )		// player is locked in stationary cam mode. Spectators can move, observers can't.
+#define		PFLAG_ON_ROPE		( 1<<6 )		//Added Physics flag for grapple
 
 //
 // generic player

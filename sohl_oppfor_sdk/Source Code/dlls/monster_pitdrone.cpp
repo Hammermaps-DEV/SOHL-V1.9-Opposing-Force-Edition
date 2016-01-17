@@ -18,7 +18,7 @@
 //=========================================================
 // NPC: Pit Drone * http://half-life.wikia.com/wiki/Pit_Drone
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00002 / Date: 11.11.2015
+// Version: 1.0 / Build: 00003 / Date: 17.01.2016
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -307,7 +307,6 @@ void CPitDrone::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDi
 
 	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
 	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
-	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 

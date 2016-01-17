@@ -20,6 +20,7 @@
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
+#include	"talkmonster.h"
 #include	"schedule.h"
 #include	"weapons.h"
 #include	"monster_drillsergeant.h"
@@ -34,7 +35,7 @@ TYPEDESCRIPTION	CDrillsergeant::m_SaveData[] =
 	DEFINE_FIELD( CDrillsergeant, m_hTalkTarget, FIELD_EHANDLE ),
 	DEFINE_FIELD( CDrillsergeant, m_flTalkTime, FIELD_TIME ),
 };
-IMPLEMENT_SAVERESTORE( CDrillsergeant, CBaseMonster );
+IMPLEMENT_SAVERESTORE( CDrillsergeant, CTalkMonster);
 
 
 //=========================================================
@@ -98,6 +99,7 @@ void CDrillsergeant :: Spawn()
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL( ENT(pev), "models/drill.mdl" );
+
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid			= SOLID_SLIDEBOX;
@@ -120,6 +122,9 @@ void CDrillsergeant :: Precache()
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL( "models/drill.mdl" );
+
+	TalkInit();
+	CTalkMonster::Precache();
 }	
 
 

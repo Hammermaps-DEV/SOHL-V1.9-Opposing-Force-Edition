@@ -224,11 +224,13 @@ void CGenericMonster :: Spawn()
 //=========================================================
 void CGenericMonster :: Precache()
 {
-	CTalkMonster::Precache();
-	TalkInit();
 	PRECACHE_MODEL( (char *)STRING(pev->model) );
+
 	if (m_iszGibModel)
 		PRECACHE_MODEL( (char*)STRING(m_iszGibModel) ); //LRC
+
+	TalkInit();
+	CTalkMonster::Precache();
 }	
 
 //=========================================================

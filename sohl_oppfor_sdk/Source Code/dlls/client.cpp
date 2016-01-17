@@ -794,10 +794,10 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/pl_grass3.wav");
 	PRECACHE_SOUND("player/pl_grass4.wav");
 
-	PRECACHE_SOUND("player/jump01.wav");	// jump sounds
-	PRECACHE_SOUND("player/jump02.wav");
-	PRECACHE_SOUND("player/jump03.wav");
-	PRECACHE_SOUND("player/jump04.wav");
+	PRECACHE_SOUND("player/pl_jump01.wav");	// jump sounds
+	PRECACHE_SOUND("player/pl_jump02.wav");
+	PRECACHE_SOUND("player/pl_jump03.wav");
+	PRECACHE_SOUND("player/pl_jump04.wav");
 
 	PRECACHE_SOUND("plats/train_use1.wav");		// use a train
 

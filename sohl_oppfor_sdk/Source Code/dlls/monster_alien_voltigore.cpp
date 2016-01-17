@@ -15,7 +15,7 @@
 //=========================================================
 // NPC: Voltigore * http://half-life.wikia.com/wiki/Voltigore
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 14.11.2015
+// Version: 1.0 / Build: 00002 / Date: 17.01.2016
 //=========================================================
 #include	"extdll.h"
 #include	"plane.h"
@@ -282,7 +282,6 @@ void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 
 	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
 	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
-	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 

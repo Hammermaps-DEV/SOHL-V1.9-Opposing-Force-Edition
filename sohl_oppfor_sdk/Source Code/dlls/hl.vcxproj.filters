@@ -426,6 +426,24 @@
     <ClCompile Include="proj_voltigore_energy_ball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="env_electrified_wire.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="env_rope_segment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barniel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_construction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_construction_dead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_barney_dead.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -744,6 +762,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="proj_voltigore_energy_ball.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_construction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_construction_dead.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_barney_dead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

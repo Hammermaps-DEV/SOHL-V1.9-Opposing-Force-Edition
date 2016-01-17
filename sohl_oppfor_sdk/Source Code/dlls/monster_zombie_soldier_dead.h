@@ -12,12 +12,16 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// PROP: DEAD Soldier Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_ZOMBIE_SOLDIER_DEAD_H
 #define MONSTER_ZOMBIE_SOLDIER_DEAD_H
 
 #include "monster_zombie_dead.h"
 
+// class definition
 class CDeadZombieSoldier : public CDeadZombie {
 	public:
 		// void

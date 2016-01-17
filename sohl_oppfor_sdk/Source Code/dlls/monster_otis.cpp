@@ -233,25 +233,6 @@ void COtis::TalkInit()
 	m_voicePitch = 100;
 }
 
-
-static BOOL IsFacing(entvars_t *pevTest, const Vector &reference)
-{
-	Vector vecDir = (reference - pevTest->origin);
-	vecDir.z = 0;
-	vecDir = vecDir.Normalize();
-	Vector forward, angle;
-	angle = pevTest->v_angle;
-	angle.x = 0;
-	UTIL_MakeVectorsPrivate(angle, forward, NULL, NULL);
-	// He's facing me, he meant it
-	if (DotProduct(forward, vecDir) > 0.96)	// +/- 15 degrees or so
-	{
-		return TRUE;
-	}
-	return FALSE;
-}
-
-
 int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	// make sure friends talk about it if player hurts talkmonsters...
@@ -268,7 +249,7 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 		if (m_hEnemy == NULL)
 		{
 			// If the player was facing directly at me, or I'm already suspicious, get mad
-			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) || IsFacing(pevAttacker, pev->origin))
+			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) || UTIL_IsFacing(pevAttacker, pev->origin))
 			{
 				// Alright, now I'm pissed!
 				PlaySentence("OT_MAD", 4, VOL_NORM, ATTN_NORM);
