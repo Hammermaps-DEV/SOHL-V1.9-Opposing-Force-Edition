@@ -31,7 +31,8 @@
 #define CHAR_TEX_FLESH		'F'
 
 // Opposing-Force
-#define CHAR_TEX_SNOW		'N'
+#define CHAR_TEX_DEEP_SNOW	'U'
+#define CHAR_TEX_SNOW		'O'
 #define CHAR_TEX_GRASS		'Z'
 
 #endif // !PM_MATERIALSH

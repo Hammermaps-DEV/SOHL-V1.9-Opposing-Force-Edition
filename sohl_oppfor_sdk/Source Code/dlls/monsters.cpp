@@ -2651,6 +2651,7 @@ void CBaseMonster :: StepSound( void )
 		break;
 
 	// Opposing-Force
+	case CHAR_TEX_DEEP_SNOW:
 	case CHAR_TEX_SNOW:
 		fvol = fWalking ? 0.2 : 0.5;
 		rgsz[0] = "player/pl_snow1.wav";

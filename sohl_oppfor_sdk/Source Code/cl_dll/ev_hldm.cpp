@@ -199,6 +199,7 @@ float EV_HLDM_PlayTextureSound( int idx, pmtrace_t *ptr, float *vecSrc, float *v
 		cnt = 4;
 		break;
 	// Opposing-Force
+	case CHAR_TEX_DEEP_SNOW:
 	case CHAR_TEX_SNOW: fvol = 0.9; fvolbar = 0.2;
 		rgsz[0] = "player/pl_snow1.wav";
 		rgsz[1] = "player/pl_snow3.wav";

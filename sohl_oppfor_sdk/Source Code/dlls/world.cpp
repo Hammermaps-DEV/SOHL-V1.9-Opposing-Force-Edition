@@ -20,6 +20,7 @@
 
 */
 
+#include "pm_shared.h"
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -491,6 +492,9 @@ void CWorld :: Precache( void )
 
 	g_pLastSpawn = NULL;
 
+	//Game Options Register
+	CVAR_SET_FLOAT("player_jump_punchangle", 1);
+
 	CVAR_SET_STRING("sv_gravity", "800"); // 67ft/sec
 	CVAR_SET_STRING("sv_stepsize", "18");
 	CVAR_SET_STRING("room_type", "0");// clear DSP
@@ -529,7 +533,6 @@ void CWorld :: Precache( void )
 
 // player precaches     
 	W_Precache ();									// get weapon precaches
-
 	ClientPrecache();
 
 // sounds used from C physics code
