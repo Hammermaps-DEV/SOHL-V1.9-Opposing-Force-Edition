@@ -773,5 +773,8 @@
     <ClInclude Include="monster_zombie_barney_dead.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="monster_barniel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

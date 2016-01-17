@@ -69,6 +69,51 @@ cvar_t	sk_barney_health1	= {"sk_barney_health1","0"};
 cvar_t	sk_barney_health2	= {"sk_barney_health2","0"};
 cvar_t	sk_barney_health3	= {"sk_barney_health3","0"};
 
+cvar_t	sk_barney_head1 = { "sk_barney_head1","0" };
+cvar_t	sk_barney_head2 = { "sk_barney_head2","0" };
+cvar_t	sk_barney_head3 = { "sk_barney_head3","0" };
+
+cvar_t	sk_barney_chest1 = { "sk_barney_chest1","0" };
+cvar_t	sk_barney_chest2 = { "sk_barney_chest2","0" };
+cvar_t	sk_barney_chest3 = { "sk_barney_chest3","0" };
+
+cvar_t	sk_barney_stomach1 = { "sk_barney_stomach1","0" };
+cvar_t	sk_barney_stomach2 = { "sk_barney_stomach2","0" };
+cvar_t	sk_barney_stomach3 = { "sk_barney_stomach3","0" };
+
+cvar_t	sk_barney_leg1 = { "sk_barney_leg1","0" };
+cvar_t	sk_barney_leg2 = { "sk_barney_leg2","0" };
+cvar_t	sk_barney_leg3 = { "sk_barney_leg3","0" };
+
+cvar_t	sk_barney_arm1 = { "sk_barney_arm1","0" };
+cvar_t	sk_barney_arm2 = { "sk_barney_arm2","0" };
+cvar_t	sk_barney_arm3 = { "sk_barney_arm3","0" };
+
+// Barniel
+cvar_t	sk_barniel_health1 = { "sk_barniel_health1","0" };
+cvar_t	sk_barniel_health2 = { "sk_barniel_health2","0" };
+cvar_t	sk_barniel_health3 = { "sk_barniel_health3","0" };
+
+cvar_t	sk_barniel_head1 = { "sk_barniel_head1","0" };
+cvar_t	sk_barniel_head2 = { "sk_barniel_head2","0" };
+cvar_t	sk_barniel_head3 = { "sk_barniel_head3","0" };
+
+cvar_t	sk_barniel_chest1 = { "sk_barniel_chest1","0" };
+cvar_t	sk_barniel_chest2 = { "sk_barniel_chest2","0" };
+cvar_t	sk_barniel_chest3 = { "sk_barniel_chest3","0" };
+
+cvar_t	sk_barniel_stomach1 = { "sk_barniel_stomach1","0" };
+cvar_t	sk_barniel_stomach2 = { "sk_barniel_stomach2","0" };
+cvar_t	sk_barniel_stomach3 = { "sk_barniel_stomach3","0" };
+
+cvar_t	sk_barniel_leg1 = { "sk_barniel_leg1","0" };
+cvar_t	sk_barniel_leg2 = { "sk_barniel_leg2","0" };
+cvar_t	sk_barniel_leg3 = { "sk_barniel_leg3","0" };
+
+cvar_t	sk_barniel_arm1 = { "sk_barniel_arm1","0" };
+cvar_t	sk_barniel_arm2 = { "sk_barniel_arm2","0" };
+cvar_t	sk_barniel_arm3 = { "sk_barniel_arm3","0" };
+
 // Bullsquid
 cvar_t	sk_bullsquid_health1 = {"sk_bullsquid_health1","0"};
 cvar_t	sk_bullsquid_health2 = {"sk_bullsquid_health2","0"};
@@ -781,6 +826,51 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_barney_health2 );
 	CVAR_REGISTER ( &sk_barney_health3 );
 
+	CVAR_REGISTER(&sk_barney_head1);
+	CVAR_REGISTER(&sk_barney_head2);
+	CVAR_REGISTER(&sk_barney_head3);
+
+	CVAR_REGISTER(&sk_barney_chest1);
+	CVAR_REGISTER(&sk_barney_chest2);
+	CVAR_REGISTER(&sk_barney_chest3);
+
+	CVAR_REGISTER(&sk_barney_stomach1);
+	CVAR_REGISTER(&sk_barney_stomach2);
+	CVAR_REGISTER(&sk_barney_stomach3);
+
+	CVAR_REGISTER(&sk_barney_leg1);
+	CVAR_REGISTER(&sk_barney_leg2);
+	CVAR_REGISTER(&sk_barney_leg3);
+
+	CVAR_REGISTER(&sk_barney_arm1);
+	CVAR_REGISTER(&sk_barney_arm2);
+	CVAR_REGISTER(&sk_barney_arm3);
+
+	// Barniel
+	CVAR_REGISTER(&sk_barniel_health1);
+	CVAR_REGISTER(&sk_barniel_health2);
+	CVAR_REGISTER(&sk_barniel_health3);
+
+	CVAR_REGISTER(&sk_barniel_head1);
+	CVAR_REGISTER(&sk_barniel_head2);
+	CVAR_REGISTER(&sk_barniel_head3);
+
+	CVAR_REGISTER(&sk_barniel_chest1);
+	CVAR_REGISTER(&sk_barniel_chest2);
+	CVAR_REGISTER(&sk_barniel_chest3);
+
+	CVAR_REGISTER(&sk_barniel_stomach1);
+	CVAR_REGISTER(&sk_barniel_stomach2);
+	CVAR_REGISTER(&sk_barniel_stomach3);
+
+	CVAR_REGISTER(&sk_barniel_leg1);
+	CVAR_REGISTER(&sk_barniel_leg2);
+	CVAR_REGISTER(&sk_barniel_leg3);
+
+	CVAR_REGISTER(&sk_barniel_arm1);
+	CVAR_REGISTER(&sk_barniel_arm2);
+	CVAR_REGISTER(&sk_barniel_arm3);
+
 	// Bullsquid
 	CVAR_REGISTER ( &sk_bullsquid_health1 );
 	CVAR_REGISTER ( &sk_bullsquid_health2 );
@@ -1440,5 +1530,6 @@ void GameDLLInit( void )
 	// END REGISTER CVARS FOR SKILL LEVEL STUFF
 	SERVER_COMMAND( "exec skill.cfg\n" );
 	SERVER_COMMAND( "exec skill_opfor.cfg\n" ); // Opposing-Force
+	SERVER_COMMAND( "exec skill_hitgroups.cfg\n"); // Hitgroups
 }
 

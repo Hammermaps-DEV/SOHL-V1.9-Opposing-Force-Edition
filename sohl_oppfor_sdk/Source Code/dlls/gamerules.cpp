@@ -144,7 +144,20 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.apacheHealth = GetSkillCvar( "sk_apache_health");
 
 	// Barney
-	gSkillData.barneyHealth = GetSkillCvar( "sk_barney_health");
+	gSkillData.barneyHealth  = GetSkillCvar("sk_barney_health");
+	gSkillData.barneyHead    = GetSkillCvar("sk_barney_head"); //Hitgroup
+	gSkillData.barneyChest   = GetSkillCvar("sk_barney_chest"); //Hitgroup
+	gSkillData.barneyStomach = GetSkillCvar("sk_barney_stomach"); //Hitgroup
+	gSkillData.barneyLeg     = GetSkillCvar("sk_barney_leg"); //Hitgroup
+	gSkillData.barneyArm     = GetSkillCvar("sk_barney_arm"); //Hitgroup
+
+	// Barniel
+	gSkillData.barnielHealth  = GetSkillCvar("sk_barniel_health");
+	gSkillData.barnielHead    = GetSkillCvar("sk_barniel_head"); //Hitgroup
+	gSkillData.barnielChest   = GetSkillCvar("sk_barniel_chest"); //Hitgroup
+	gSkillData.barnielStomach = GetSkillCvar("sk_barniel_stomach"); //Hitgroup
+	gSkillData.barnielLeg     = GetSkillCvar("sk_barniel_leg"); //Hitgroup
+	gSkillData.barnielArm     = GetSkillCvar("sk_barniel_arm"); //Hitgroup
 
 	// Big Momma
 	gSkillData.bigmommaHealthFactor = GetSkillCvar( "sk_bigmomma_health_factor" );

@@ -19,37 +19,40 @@
 #ifndef MONSTER_BARNEY_H
 #define MONSTER_BARNEY_H
 
+// include
+#include "talkmonster.h"
+
 // class definition
 class CBarney : public CTalkMonster {
 	public:
-		void Spawn(void);
-		void Precache(void);
-		void SetYawSpeed(void);
-		int  ISoundMask(void);
-		void Fire9mmPistol(void);
-		void AlertSound(void);
-		int  Classify(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
+		virtual void Spawn(void);
+		virtual void Precache(void);
+		virtual void SetYawSpeed(void);
+		virtual int  ISoundMask(void);
+		virtual void Fire9mmPistol(void);
+		virtual void AlertSound(void);
+		virtual int  Classify(void);
+		virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-		void RunTask(Task_t *pTask);
-		void StartTask(Task_t *pTask);
+		virtual void RunTask(Task_t *pTask);
+		virtual void StartTask(Task_t *pTask);
 		virtual int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-		int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-		BOOL CheckRangeAttack1(float flDot, float flDist);
+		virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+		virtual BOOL CheckRangeAttack1(float flDot, float flDist);
 
-		void DeclineFollowing(void);
+		virtual void DeclineFollowing(void);
 
-		Schedule_t *GetScheduleOfType(int Type);
-		Schedule_t *GetSchedule(void);
-		MONSTERSTATE GetIdealState(void);
+		virtual Schedule_t *GetScheduleOfType(int Type);
+		virtual Schedule_t *GetSchedule(void);
+		virtual MONSTERSTATE GetIdealState(void);
 
-		void DeathSound(void);
-		void PainSound(void);
+		virtual void DeathSound(void);
+		virtual void PainSound(void);
 
-		void TalkInit(void);
+		virtual void TalkInit(void);
 
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-		void Killed(entvars_t *pevAttacker, int iGib);
+		virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		virtual void Killed(entvars_t *pevAttacker, int iGib);
 
 		virtual int	Save(CSave &save);
 		virtual int	Restore(CRestore &restore);
@@ -68,7 +71,6 @@ class CBarney : public CTalkMonster {
 		float	m_flPlayerDamage;
 
 		CUSTOM_SCHEDULES;
-
 	protected:
 		BOOL m_flDebug = false;
 		float m_flHitgroupHead;

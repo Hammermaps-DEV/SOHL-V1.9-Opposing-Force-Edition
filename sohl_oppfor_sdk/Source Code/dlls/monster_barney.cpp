@@ -21,7 +21,6 @@
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
-#include	"talkmonster.h"
 #include	"schedule.h"
 #include	"defaultai.h"
 #include	"scripted.h"
@@ -108,11 +107,11 @@ void CBarney::Spawn() {
 
 	m_flDebug = false; //Debug Massages
 
-	m_flHitgroupHead = gSkillData.zombieHead;
-	m_flHitgroupChest = gSkillData.zombieChest;
-	m_flHitgroupStomach = gSkillData.zombieStomach;
-	m_flHitgroupArm = gSkillData.zombieArm;
-	m_flHitgroupLeg = gSkillData.zombieLeg;
+	m_flHitgroupHead = gSkillData.barneyHead;
+	m_flHitgroupChest = gSkillData.barneyChest;
+	m_flHitgroupStomach = gSkillData.barneyStomach;
+	m_flHitgroupArm = gSkillData.barneyArm;
+	m_flHitgroupLeg = gSkillData.barneyLeg;
 
 	MonsterInit();
 	SetUse(&CBarney::FollowerUse);
@@ -264,14 +263,14 @@ void CBarney::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
 				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = m_flHitgroupChest*flDamage / 2;
+					flDamage = (m_flHitgroupChest*flDamage) / 2;
 				}
 			break;
 			case HITGROUP_STOMACH:
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
 				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = m_flHitgroupStomach*flDamage / 2;
+					flDamage = (m_flHitgroupStomach*flDamage) / 2;
 				}
 			break;
 			case HITGROUP_LEFTARM:

@@ -667,17 +667,21 @@ void CScientist :: Precache( void )
 // Init talk data
 void CScientist :: TalkInit()
 {
-	
 	CTalkMonster::TalkInit();
 
 	// scientist will try to talk to friends in this order:
-
 	m_szFriends[0] = "monster_scientist";
 	m_szFriends[1] = "monster_sitting_scientist";
-	m_szFriends[2] = "monster_barney";
+	m_szFriends[2] = "monster_cleansuit_scientist";
+	m_szFriends[3] = "monster_sitting_cleansuit_scientist";
+	m_szFriends[4] = "monster_barney";
+	m_szFriends[5] = "monster_otis";
+	m_szFriends[6] = "monster_barniel";
+	m_szFriends[7] = "monster_human_grunt_ally";
+	m_szFriends[8] = "monster_human_torch_ally";
+	m_szFriends[9] = "monster_human_medic_ally";
 
 	// scientists speach group names (group names are in sentences.txt)
-
 	if (!m_iszSpeakAs)
 	{
 		m_szGrp[TLK_ANSWER]  =	"SC_ANSWER";

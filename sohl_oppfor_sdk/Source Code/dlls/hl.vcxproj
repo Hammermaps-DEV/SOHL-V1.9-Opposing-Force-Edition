@@ -195,6 +195,7 @@
     <ClInclude Include="monster_barnacle.h" />
     <ClInclude Include="monster_barney.h" />
     <ClInclude Include="monster_barney_dead.h" />
+    <ClInclude Include="monster_barniel.h" />
     <ClInclude Include="monster_bigmomma.h" />
     <ClInclude Include="monster_bloater.h" />
     <ClInclude Include="monster_bullsquid.h" />

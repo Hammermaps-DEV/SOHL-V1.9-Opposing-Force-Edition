@@ -27,7 +27,21 @@ struct skilldata_t
 
 	float apacheHealth;
 	
+	//Barney
 	float barneyHealth;
+	float barneyHead;
+	float barneyChest;
+	float barneyStomach;
+	float barneyLeg;
+	float barneyArm;
+
+	//Barniel
+	float barnielHealth;
+	float barnielHead;
+	float barnielChest;
+	float barnielStomach;
+	float barnielLeg;
+	float barnielArm;
 
 	float bigmommaHealthFactor;		// Multiply each node's health by this
 	float bigmommaDmgSlash;			// melee attack damage

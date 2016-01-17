@@ -2054,7 +2054,16 @@ void CEnvCustomize :: Affect (CBaseEntity *pTarget, USE_TYPE useType)
 	}
 	if (m_voicePitch > 0)
 	{
-		if (FClassnameIs(pTarget->pev,"monster_barney") || FClassnameIs(pTarget->pev,"monster_scientist") || FClassnameIs(pTarget->pev,"monster_sitting_scientist"))
+		if (FClassnameIs(pTarget->pev,"monster_barney") || 
+			FClassnameIs(pTarget->pev,"monster_barniel") ||
+			FClassnameIs(pTarget->pev, "monster_otis") ||
+			FClassnameIs(pTarget->pev,"monster_scientist") || 
+			FClassnameIs(pTarget->pev,"monster_sitting_scientist") ||
+			FClassnameIs(pTarget->pev, "monster_cleansuit_scientist") ||
+			FClassnameIs(pTarget->pev, "monster_sitting_cleansuit_scientist") ||
+			FClassnameIs(pTarget->pev, "monster_human_grunt_ally") ||
+			FClassnameIs(pTarget->pev, "monster_human_torch_ally") ||
+			FClassnameIs(pTarget->pev, "monster_human_medic_ally"))
 		{
 			((CTalkMonster*)pTarget)->m_voicePitch = m_voicePitch;
 			if (pev->spawnflags & SF_CUSTOM_DEBUG)

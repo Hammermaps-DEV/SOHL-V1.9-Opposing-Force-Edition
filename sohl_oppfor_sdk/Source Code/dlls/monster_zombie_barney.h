@@ -22,6 +22,7 @@
 // include
 #include "monster_zombie.h"
 
+// class definition
 class CZombieBarney : public CZombie {
 	public:
 		// void

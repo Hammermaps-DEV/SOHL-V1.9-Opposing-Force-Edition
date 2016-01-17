@@ -57,9 +57,12 @@ IMPLEMENT_SAVERESTORE( CRCAllyMonster, CBaseMonster );
 char *CRCAllyMonster::m_szFriends[TLK_CFRIENDS] = 
 {
 	"monster_barney",
+	"monster_barniel",
 	"monster_otis",
 	"monster_scientist",
 	"monster_sitting_scientist",
+	"monster_cleansuit_scientist",
+	"monster_sitting_cleansuit_scientist",
 	"monster_human_grunt_ally",
 	"monster_human_torch_ally",
 	"monster_human_medic_ally",
