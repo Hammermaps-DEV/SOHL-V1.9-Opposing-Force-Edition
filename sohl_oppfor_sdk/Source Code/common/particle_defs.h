@@ -60,6 +60,32 @@ const char SPARK_PARTICLE[MAX_PARTICLE_PATH] = "particles/spark01.tga";
 const char WHITE_SMOKE_PARTICLE[MAX_PARTICLE_PATH] = "particles/smoke3.tga";
 const char BROWN_SMOKE_PARTICLE[MAX_PARTICLE_PATH] = "particles/brownsmoke.tga";
 
+//new add
+const char BLOOD_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_blood.txt";
+const char FIRE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_fire.txt";
+const char DROP_SMOKE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_drop.txt";
+const char DEFAULT_CHUNK_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impacts_chunks.txt";
+const char DEFAULT_IMPACT_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impacts_smoke.txt";
+const char DEFAULT_SMOKE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_smoke.txt";
+const char SMOKE_BENG_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_smoke_beng.txt";
+const char SMOKE_TRACER_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_smoke_tracer.txt";
+const char WAVES_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_waves.txt";
+const char FIRE_FINAL_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_fire_final.txt";
+const char SMOKE_FINAL_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_fire_smoke.txt";
+const char IMPACT_BLUE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_blue.txt";
+const char IMPACT_RED_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_red.txt";
+const char IMPACT_YELLOW_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_yellow.txt";
+const char IMPACT_BROWN_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_brown.txt";
+const char IMPACT_BLACK_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_black.txt";
+const char IMPACT_GREEN_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_green_core.txt";
+const char IMPACT_HUMAN_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_flesh_human.txt";
+const char IMPACT_HUMAN_CORE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_flesh_human_core.txt";
+const char IMPACT_ALIEN_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_flesh_alien.txt";
+const char IMPACT_ALIEN_CORE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_flesh_alien_core.txt";
+const char IMPACT_WOOD_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_wood.txt";
+const char IMPACT_WOOD_CORE_PARTICLE[MAX_PARTICLE_PATH] = "particles/engine/e_impact_wood_core.txt";
+
+
 // maximum life of particle systems in seconds
 const unsigned int FLINTLOCK_SMOKE_SYSTEM_LIFE = 10;
 const unsigned int BARREL_SMOKE_SYSTEM_LIFE = 9;
@@ -78,14 +104,43 @@ const unsigned int PERCENT = 100;
 // define the threshold for the mapped particle
 const unsigned int PARTICLE_THRESHOLD_START = 130;
 const unsigned int PARTICLE_THRESHOLD_END = 280;
-const unsigned int GRASS_THRESHOLD_START = 600;
-const unsigned int GRASS_THRESHOLD_END = 1000;
 
 const unsigned int iDefaultExplosion = 1;
 const unsigned int iDefaultRedSmoke = 2;
 const unsigned int iDefaultBlueSmoke = 3;
-const unsigned int iDefaultCannonSmoke = 4;
+const unsigned int iDefaultCannonSmoke = 4;//not used
 
+const unsigned int iDefaultBlood = 5;//blood spray
+const unsigned int iDefaultFire = 6;//fire on monsters
+const unsigned int iDefaultDrop = 7;//light smoke when the monster or weapon falls down
+const unsigned int iDefaultWallSmoke = 8;//when a bullet or something impacts it (default)
+const unsigned int iDefaultSmoke = 9;//smoke emited by smoke grenade
+const unsigned int iDefaultBangalorSmoke = 10;//smoke emited by flash grenade
+const unsigned int iDefaultTracerSmoke = 11;//smoke emited by grenades or rp grenade
+const unsigned int iDefaultWaves = 12;//waves
+const unsigned int iDefaultFinalFire = 13;//the monster is placed in their final position, start burn it
+const unsigned int iDefaultFinalSmoke = 14;//well, we need some smoke for that fire... :)
+
+const unsigned int iDefaultHitBlue = 15;//when a bullet or something impacts it (blue)
+const unsigned int iDefaultHitRed = 16;//when a bullet or something impacts it (red)
+const unsigned int iDefaultHitYellow = 17;//when a bullet or something impacts it (yellow)
+const unsigned int iDefaultHitBrown = 18;//when a bullet or something impacts it (brown)
+const unsigned int iDefaultHitBlack = 19;//when a bullet or something impacts it (black)
+const unsigned int iDefaultHitGreen = 20;//when a bullet or something impacts it (green)
+const unsigned int iDefaultHitFleshRed = 21;//when a bullet or something impacts a body (human)
+const unsigned int iDefaultHitFleshYellow = 22;//when a bullet or something impacts a body (alien)
+const unsigned int iDefaultHitWood1 = 23;//when a bullet or something impacts a wood 1(default brown color)
+const unsigned int iDefaultHitWood2 = 24;//when a bullet or something impacts a wood 2(default brown color)
+const unsigned int iDefaultScorch = 25;//repalces a decal
+const unsigned int iDefaultBloodRedPit = 26;//Emit red blood when dead
+const unsigned int iDefaultBloodGreenPit = 27;//Emit Yellow blood when dead
+const unsigned int iDefaultHitSlime = 28;//Yellow water burst
+const unsigned int iDefaultWallSmokeLong = 29;//when a bullet or something impacts it (long version)
+const unsigned int iDefaultWaterSplash = 30;//when a bullet or something impacts water
+const unsigned int iDefaultGasCanister = 31;//when a bullet a gas canister
+const unsigned int iDefaultTeleportWave = 32;//teleport effect used by env_warpball
+const unsigned int iDefaultTeleportWave2 = 33;//teleport effect 2 used by env_warpball
+const unsigned int iDefaultTeleportWave3 = 34;//teleport effect 3 used by env_warpball
 
 // defines the shape of where the particles are emitted
 typedef enum  {
@@ -207,29 +262,6 @@ struct mapped_particle_system {
 	unsigned int iId;
 };
 
-// holds details about a single texture in the grass particle system
-struct grass_particle_system {
-	vec3_t vAbsMin;
-	vec3_t vAbsMax;
-	float flLeaningMin;
-	float flLeaningMax;
-	float flWaveSpeed;
-	float Yaw;
-
-	float flSize;
-	unsigned int iTransparency;
-	unsigned int iCount;
-	bool bLOD;
-	bool bDropOnGround;
-	bool bIgnoreSort;
-
-	// and from the server
-	vec3_t vPostion;
-	vec3_t vDirection;
-	unsigned int iId;
-	char sParticleTexture[MAX_PARTICLE_PATH];
-};
-
 // contains all the basic attributes for a particle
 struct base_particle {
 	base_particle() { pTexture = NULL; }
@@ -272,12 +304,6 @@ struct particle_system_management {
 	vec3_t vAbsMax;
 
 	unsigned int iID;
-};
-
-// holds the array of particles and the corresponding system for each set
-struct grass_particle_types {
-	grass_particle_system *pSystem;
-	particle_texture_s *pParticleTexture;
 };
 
 // holds an entry for the particle cache

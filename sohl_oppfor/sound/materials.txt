@@ -1,7 +1,7 @@
 // Half-Life Texture Types.  Modify this file only if texture names are changed!
 //  'M' metal, 'V' ventillation, 'D' dirt, 'S' slosh liquid 
 //  'T' tile, 'G' grate (Concrete is the default), 'W' wood, 'P' computer, 'Y' glass
-//  'O' snow
+//  'O' snow, 'U' deep snow, 'Z' grass
 // NOTE: only the first 12 characters of the texture name are used
 // NOTE: a maximum of 512 textures may be tagged in this file
 
@@ -418,7 +418,7 @@ Y GLASSGREEEN
 
 O SNOW_01
 O SNOW_02
-O SNOW_03
+U SNOW_03
 
 D BOOT_DIRT_01
 D BOOT_GRASS_01

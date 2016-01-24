@@ -89,7 +89,7 @@ struct HUDLIST {
 //
 //-----------------------------------------------------
 //
-#include "..\game_shared\voice_status.h"
+#include "voice_status.h"
 #include "hud_spectator.h"
 
 
@@ -626,12 +626,15 @@ public:
 
 	int m_iHUDColor; //LRC
 
+	char* HandleServerString(char* szServerMsg);
+
 private:
 	// the memory for these arrays are allocated in the first call to CHud::VidInit(), when the hud.txt and associated sprites are loaded.
 	// freed in ~CHud()
 	HL_HSPRITE *m_rghSprites;	/*[HUD_SPRITE_COUNT]*/			// the sprites loaded from hud.txt
 	wrect_t *m_rgrcRects;	/*[HUD_SPRITE_COUNT]*/
 	char *m_rgszSpriteNames; /*[HUD_SPRITE_COUNT][MAX_SPRITE_NAME_LENGTH]*/
+	char m_szString[2048];
 
 	struct cvar_s *default_fov;
 public:
@@ -695,7 +698,7 @@ public:
 	void _cdecl MsgFunc_SetSkin( const char *pszName, int iSize, void *pbuf );
 	void _cdecl MsgFunc_SetMirror( const char *pszName, int iSize, void *pbuf );
 	void _cdecl MsgFunc_ResetMirror( const char *pszName, int iSize, void *pbuf );
-    	void _cdecl MsgFunc_AddShine( const char *pszName, int iSize, void *pbuf );    		//LRC
+    void _cdecl MsgFunc_AddShine( const char *pszName, int iSize, void *pbuf );    		//LRC
 
 	// Screen information
 	SCREENINFO	m_scrinfo;
@@ -706,7 +709,6 @@ public:
 
 	// sprite indexes
 	int m_HUD_number_0;
-
 
 	void AddHudElem(CHudBase *p);
 

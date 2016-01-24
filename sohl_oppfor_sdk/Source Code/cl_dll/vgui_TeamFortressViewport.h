@@ -529,6 +529,7 @@ public:
 	int MsgFunc_TeamInfo( const char *pszName, int iSize, void *pbuf );
 	int MsgFunc_Spectator( const char *pszName, int iSize, void *pbuf );
 	int MsgFunc_AllowSpec( const char *pszName, int iSize, void *pbuf );
+	int MsgFunc_Particles(const char *pszName, int iSize, void *pbuf);
 
 	// Input
 	bool SlotInput( int iSlot );

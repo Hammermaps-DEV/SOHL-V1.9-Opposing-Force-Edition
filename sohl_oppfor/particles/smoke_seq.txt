@@ -1,0 +1,42 @@
+starting_particles 0
+new_particles_per_second 5
+texture particles/smoke01.tga
+
+scale 0.1
+growth 0.8
+
+lifetime 5
+lifetime_var 5
+
+rotation_speed 30
+gravity 0.0
+
+starting_velocity_x 0
+starting_velocity_y 1
+starting_velocity_z 1
+velocity_var_x 1
+velocity_var_y 1
+velocity_var_z 1
+
+damping 0.0
+transparency 150
+
+system_life 19
+
+display_mode 32
+
+emitter_shape point
+
+anim_speed over_life	
+fps 10
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+loop_behaviour hold_last	
+collision bounce
+falloff half
+
+wind 0
+fade_in 1
+fade_out 1
+light_check once

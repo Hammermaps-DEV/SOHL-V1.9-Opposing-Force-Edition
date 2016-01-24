@@ -37,6 +37,7 @@
 #include "hltv.h"
 #include "effects.h" //LRC
 #include "movewith.h" //LRC
+#include "particle_emitter.h"
 
 // #define DUCKFIX
 
@@ -200,6 +201,7 @@ int gmsgSetBody = 0;//change body for view weapon model
 int gmsgSetSkin = 0;//change skin for view weapon model
 int gmsgSetMirror = 0;//set mirror
 int gmsgResetMirror = 0;
+int gmsgParticles = 0; // particle system
 
 void LinkUserMessages( void )
 {
@@ -261,6 +263,7 @@ void LinkUserMessages( void )
 	gmsgSetSkin = REG_USER_MSG("SetSkin", 1);
 	gmsgSetMirror = REG_USER_MSG("SetMirror", 10);
 	gmsgResetMirror = REG_USER_MSG("ResetMirror", 0);
+	gmsgParticles = REG_USER_MSG("Particles", -1);
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
@@ -3640,6 +3643,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "item_suit" );
 		GiveNamedItem( "item_battery" );
 		GiveNamedItem( "weapon_crowbar" );
+		GiveNamedItem( "weapon_knife" );
 		GiveNamedItem( "weapon_9mmhandgun" );
 		GiveNamedItem( "ammo_9mmclip" );
 		GiveNamedItem( "weapon_shotgun" );

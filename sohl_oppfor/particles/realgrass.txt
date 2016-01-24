@@ -1,0 +1,72 @@
+
+texture particles/realgras03.tga
+
+scale 10.0
+leaning_max 110.0
+leaning_min 65.0
+wave_speed 3.0
+particles 5
+transparency 255
+lod 1
+ignore_sort 0
+randomize 1
+random_modifier 10
+
+new_particle
+
+texture particles/realgras04.tga
+scale 10.0
+leaning_max 65.0
+leaning_min 110.0
+wave_speed 3.0
+particles 5
+transparency 255
+lod 1
+ignore_sort 0
+randomize 1
+random_modifier 10
+
+new_particle
+
+
+texture particles/realgras05.tga
+scale 10.0
+leaning_max 65.0
+leaning_min 110.0
+wave_speed 3.0
+particles 5
+transparency 255
+lod 1
+ignore_sort 0
+randomize 1
+random_modifier 10
+
+new_particle
+
+texture particles/realgras06.tga
+scale 10.0
+leaning_max 65.0
+leaning_min 110.0
+wave_speed 3.0
+particles 20
+transparency 255
+
+lod 1
+
+ignore_sort 0
+randomize 1
+random_modifier 10
+
+new_particle
+
+texture particles/realgras06.tga
+scale 10.0
+leaning_max 65.0
+leaning_min 110.0
+wave_speed 3.0
+particles 5
+transparency 255
+lod 1
+ignore_sort 0
+randomize 1
+random_modifier 10

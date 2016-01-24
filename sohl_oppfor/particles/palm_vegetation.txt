@@ -1,0 +1,10 @@
+texture particles/palm01.tga
+scale 200.0
+leaning_max 105.0
+leaning_min 75.0
+wave_speed 5.0
+particles 40
+transparency 255
+lod 1
+randomize 1
+random_modifier 50

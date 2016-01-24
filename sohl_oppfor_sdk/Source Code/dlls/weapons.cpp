@@ -38,11 +38,11 @@ extern int gEvilImpulse101;
 #define NOT_USED 255
 
 DLL_GLOBAL	short		g_sModelIndexLaser;// holds the index for the laser beam
-DLL_GLOBAL  	const char 	*g_pModelNameLaser = "sprites/laserbeam.spr";
-DLL_GLOBAL	short    		g_sModelIndexLaserDot;// holds the index for the laser beam dot
-DLL_GLOBAL	short    		g_sModelIndexFireball;// holds the index for the fireball
-DLL_GLOBAL	short    		g_sModelIndexSmoke;// holds the index for the smoke cloud
-DLL_GLOBAL	short    		g_sModelIndexWExplosion;// holds the index for the underwater explosion
+DLL_GLOBAL  const char 	*g_pModelNameLaser = "sprites/laserbeam.spr";
+DLL_GLOBAL	short    	g_sModelIndexLaserDot;// holds the index for the laser beam dot
+DLL_GLOBAL	short    	g_sModelIndexFireball;// holds the index for the fireball
+DLL_GLOBAL	short    	g_sModelIndexSmoke;// holds the index for the smoke cloud
+DLL_GLOBAL	short    	g_sModelIndexWExplosion;// holds the index for the underwater explosion
 DLL_GLOBAL	short		g_sModelIndexBubbles;// holds the index for the bubbles model
 DLL_GLOBAL	short		g_sModelIndexBloodDrop;// holds the sprite index for the initial blood
 DLL_GLOBAL	short		g_sModelIndexBloodSpray;// holds the sprite index for splattered blood
@@ -419,6 +419,9 @@ void W_Precache(void)
 	// crowbar
 	UTIL_PrecacheOtherWeapon( "weapon_crowbar" );
 
+	// knife
+	UTIL_PrecacheOtherWeapon("weapon_knife");
+
 	// glock
 	UTIL_PrecacheOtherWeapon( "weapon_9mmhandgun" );
 	UTIL_PrecacheOther( "ammo_9mmclip" );
@@ -485,8 +488,8 @@ void W_Precache(void)
 	g_sModelIndexLaser = PRECACHE_MODEL( (char *)g_pModelNameLaser );
 	g_sModelIndexLaserDot = PRECACHE_MODEL("sprites/laserdot.spr");
 	m_usPlayEmptySound = PRECACHE_EVENT( 1, "events/tripfire.sc" );
-	m_usDecals = PRECACHE_EVENT(1, "events/glock2.sc");
-	m_usEfx = PRECACHE_EVENT(1, "events/mp52.sc");
+	m_usDecals = PRECACHE_EVENT(1, "events/decals.sc");
+	m_usEfx = PRECACHE_EVENT(1, "events/explode.sc");
 	
 	// used by explosions
 	PRECACHE_MODEL ("models/grenade.mdl");
@@ -502,6 +505,9 @@ void W_Precache(void)
 
 	PRECACHE_SOUND ("weapons/bullet_hit1.wav");	// hit by bullet
 	PRECACHE_SOUND ("weapons/bullet_hit2.wav");	// hit by bullet
+
+	PRECACHE_SOUND("items/9mmclip1.wav");
+	PRECACHE_SOUND("items/9mmclip2.wav");
 	
 	PRECACHE_SOUND ("items/weapondrop1.wav");// weapon falls to the ground
 
@@ -1721,4 +1727,48 @@ void CBasePlayerWeapon::PrintState( void )
 //	ALERT( at_debug, "m_finsr:  %i\n", m_fInSpecialReload );
 
 	ALERT( at_debug, "m_iclip:  %i\n", m_iClip );
+}
+
+//Used by crowbar,knife & pipewrench
+void FindHullIntersection(const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity) {
+	int			i, j, k;
+	float		distance;
+	float		*minmaxs[2] = { mins, maxs };
+	TraceResult tmpTrace;
+	Vector		vecHullEnd = tr.vecEndPos;
+	Vector		vecEnd;
+
+	distance = 1e6f;
+
+	vecHullEnd = vecSrc + ((vecHullEnd - vecSrc) * 2);
+	UTIL_TraceLine(vecSrc, vecHullEnd, dont_ignore_monsters, pEntity, &tmpTrace);
+	if (tmpTrace.flFraction < 1.0) {
+		tr = tmpTrace;
+		return;
+	}
+
+	for (i = 0; i < 2; i++) {
+		for (j = 0; j < 2; j++) {
+			for (k = 0; k < 2; k++) {
+				vecEnd.x = vecHullEnd.x + minmaxs[i][0];
+				vecEnd.y = vecHullEnd.y + minmaxs[j][1];
+				vecEnd.z = vecHullEnd.z + minmaxs[k][2];
+
+				UTIL_TraceLine(vecSrc, vecEnd, dont_ignore_monsters, pEntity, &tmpTrace);
+				if (tmpTrace.flFraction < 1.0) {
+					float thisDistance = (tmpTrace.vecEndPos - vecSrc).Length();
+					if (thisDistance < distance) {
+						tr = tmpTrace;
+						distance = thisDistance;
+					}
+				}
+			}
+		}
+	}
+}
+
+//Calculate the Weapons sequence length in frames / fps
+float CalculateWeaponTime(float frames, float fps) {
+	float CalculateTime = 0.0;
+	return CalculateTime = (frames/fps);
 }

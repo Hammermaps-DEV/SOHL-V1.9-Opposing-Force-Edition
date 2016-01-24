@@ -34,6 +34,7 @@
 #include "vgui_scorepanel.h"
 #include "rain.h"
 #include "com_weapons.h"
+#include "particle_header.h"
 
 class CHLVoiceStatusHelper : public IVoiceStatusHelper
 {
@@ -148,6 +149,13 @@ int __MsgFunc_SetSkin(const char *pszName, int iSize, void *pbuf)
 {
 	gHUD.MsgFunc_SetSkin( pszName, iSize, pbuf );
 	return 1;
+}
+
+int __MsgFunc_Particles(const char *pszName, int iSize, void *pbuf)
+{
+	if (gViewPort)
+		return gViewPort->MsgFunc_Particles(pszName, iSize, pbuf);
+	return 0;
 }
 
 int __MsgFunc_SetMirror(const char *pszName, int iSize, void *pbuf)
@@ -351,9 +359,6 @@ int __MsgFunc_AllowSpec(const char *pszName, int iSize, void *pbuf)
 // This is called every time the DLL is loaded
 void CHud :: Init( void )
 {
-#ifdef ENGINE_DEBUG
-	CONPRINT("## CHud::Init\n");
-#endif
 	HOOK_MESSAGE( Logo );
 	HOOK_MESSAGE( ResetHUD );
 	HOOK_MESSAGE( GameMode );
@@ -372,6 +377,7 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( SetSkin );//change skin for view weapon model
 	HOOK_MESSAGE( SetMirror );
 	HOOK_MESSAGE( ResetMirror );
+	HOOK_MESSAGE( Particles );
 	
 	// TFFree CommandMenu
 	HOOK_COMMAND( "+commandmenu", OpenCommandMenu );
@@ -418,6 +424,12 @@ void CHud :: Init( void )
 
 	cl_rollangle = gEngfuncs.pfnRegisterVariable("cl_rollangle", "0.65", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "300", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+
+	//Particles System
+	CVAR_CREATE("r_particles", "0", FCVAR_ARCHIVE);
+	g_ParticleCount = gEngfuncs.pfnRegisterVariable("cl_particlecount", "100", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	g_ParticleDebug = gEngfuncs.pfnRegisterVariable("cl_particledebug", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
+	g_ParticleSorts = gEngfuncs.pfnRegisterVariable("cl_particlesorts", "3", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 
 	m_pSpriteList = NULL;
 	m_pShinySurface = NULL; //LRC
@@ -467,9 +479,8 @@ void CHud :: Init( void )
 // cleans up memory allocated for m_rg* arrays
 CHud :: ~CHud()
 {
-#ifdef ENGINE_DEBUG
-	CONPRINT("## CHud::destructor\n");
-#endif
+	delete pParticleManager;
+	pParticleManager = NULL;
 	delete [] m_rghSprites;
 	delete [] m_rgrcRects;
 	delete [] m_rgszSpriteNames;
@@ -496,6 +507,7 @@ CHud :: ~CHud()
 		}
 		m_pHudList = NULL;
 	}
+
 	ServersShutdown();
 }
 
@@ -517,9 +529,6 @@ int CHud :: GetSpriteIndex( const char *SpriteName )
 
 void CHud :: VidInit( void )
 {
-#ifdef ENGINE_DEBUG
-	CONPRINT("## CHud::VidInit\n");
-#endif
 	m_scrinfo.iSize = sizeof(m_scrinfo);
 	GetScreenInfo(&m_scrinfo);
 
@@ -631,6 +640,16 @@ void CHud :: VidInit( void )
 	m_StatusIcons.VidInit();
 	GetClientVoiceMgr()->VidInit();
 	m_Particle.VidInit(); // (LRC) -- 30/08/02 November235: Particles to Order
+
+	if(pParticleManager)
+		delete pParticleManager;
+
+	pParticleManager = new CParticleSystemManager;
+	pParticleManager->PrecacheTextures();
+
+	gEngfuncs.Con_Printf("Spirit of Half-Life: Revision Build 1.9\n");
+	gEngfuncs.Con_Printf("Opposing-Force Edition by Hammermaps.de\n");
+	gEngfuncs.Con_Printf("https://github.com/Hammermaps-DEV/SOHL-V1.9-Opposing-Force-Edition\n");
 }
 
 int CHud::MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf)
@@ -817,3 +836,35 @@ float CHud::GetSensitivity( void )
 {
 	return m_flMouseSensitivity;
 }
+
+// fixes the buffer overrun in hl
+char* CHud::HandleServerString(char *szServerMsg)
+{
+	char szString[2048];
+	szString[sizeof(szString)-1] = '\0';
+
+	if(szServerMsg == NULL)
+	{
+		gEngfuncs.pfnConsolePrint("Null string being sent\n");
+		return NULL;
+	}
+	
+	else
+	{
+		int iResult = sizeof(szString)-1;
+		iResult = _snprintf(szString, iResult, "%s\0", szServerMsg);
+
+		if(iResult < 0)
+		{
+			gEngfuncs.pfnConsolePrint("Bigger than allowed string being sent\n");
+			return NULL;
+		}
+		else
+		{
+			szString[sizeof(szString)-1] = '\0';
+			_snprintf(m_szString, sizeof(m_szString)-1, "%s", szString);
+			return (char*)m_szString;
+		}
+	}
+}
+

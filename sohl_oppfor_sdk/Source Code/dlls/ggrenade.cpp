@@ -26,6 +26,9 @@
 #include "nodes.h"
 #include "soundent.h"
 #include "decals.h"
+#include "particle_defs.h"
+
+extern int gmsgParticles;//define external message
 
 
 //===================grenade
@@ -84,6 +87,20 @@ void CGrenade::Explode( TraceResult *pTrace, int bitsDamageType )
 		WRITE_BYTE( TE_EXPLFLAG_NONE );
 	MESSAGE_END();
 */
+	if (CVAR_GET_FLOAT("r_particles") != 0) {
+		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(pev->origin.x);
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(iDefaultExplosion);
+		MESSAGE_END();
+	}
+
 	CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, NORMAL_EXPLOSION_VOLUME, 3.0 );
 	entvars_t *pevOwner;
 	if ( pev->owner )

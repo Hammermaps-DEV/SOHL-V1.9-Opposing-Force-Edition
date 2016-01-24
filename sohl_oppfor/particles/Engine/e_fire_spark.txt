@@ -1,0 +1,41 @@
+starting_particles 0
+new_particles_per_second 0
+texture particles/fire04.tga
+
+scale 0.1
+growth 2
+
+
+lifetime 0.5
+lifetime_var 0
+
+gravity 0.0
+rotation_speed 20
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 0.0
+velocity_var_y 0.0
+velocity_var_z 0.0
+
+starting_frame 1
+ending_frame 14
+frames_in_image 14
+
+damping 0
+
+transparency 255
+
+display_mode 24
+
+system_life 1
+
+fps 10
+
+wind 1
+
+fade_out 1
+collision off
+light_check never

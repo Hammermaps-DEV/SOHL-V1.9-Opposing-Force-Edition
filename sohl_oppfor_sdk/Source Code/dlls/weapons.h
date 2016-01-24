@@ -79,24 +79,25 @@ public:
 
 #define WEAPON_NONE				0
 #define WEAPON_CROWBAR			1
-#define WEAPON_GLOCK			2
-#define WEAPON_PYTHON			3
-#define WEAPON_GENERIC			4
-#define WEAPON_MP5				5
-#define WEAPON_DEBUG            6
-#define WEAPON_CROSSBOW			7
-#define WEAPON_SHOTGUN			8
-#define WEAPON_RPG				9
-#define WEAPON_GAUSS			10
-#define WEAPON_EGON				11
-#define WEAPON_HORNETGUN			12
-#define WEAPON_HANDGRENADE			13
-#define WEAPON_TRIPMINE			14
-#define WEAPON_SATCHEL			15
-#define WEAPON_SNARK			16
+#define WEAPON_KNIFE			2
+#define WEAPON_GLOCK			3
+#define WEAPON_PYTHON			4
+#define WEAPON_GENERIC			5
+#define WEAPON_MP5				6
+#define WEAPON_DEBUG            7
+#define WEAPON_CROSSBOW			8
+#define WEAPON_SHOTGUN			9
+#define WEAPON_RPG				10
+#define WEAPON_GAUSS			11
+#define WEAPON_EGON				12
+#define WEAPON_HORNETGUN		13
+#define WEAPON_HANDGRENADE		14
+#define WEAPON_TRIPMINE			15
+#define WEAPON_SATCHEL			16
+#define WEAPON_SNARK			17
 
 //SOHL - Opposing-Force
-#define WEAPON_M249			17
+#define WEAPON_M249				18
 
 
 #define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
@@ -110,6 +111,7 @@ public:
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
 #define CROWBAR_WEIGHT		0
+#define KNIFE_WEIGHT		5
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15
 #define MP5_WEIGHT			15
@@ -118,8 +120,8 @@ public:
 #define RPG_WEIGHT			20
 #define GAUSS_WEIGHT		20
 #define EGON_WEIGHT			20
-#define HORNETGUN_WEIGHT		10
-#define HANDGRENADE_WEIGHT		5
+#define HORNETGUN_WEIGHT	10
+#define HANDGRENADE_WEIGHT	5
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
@@ -394,6 +396,7 @@ public:
 	float	m_flNextPrimaryAttack;								// soonest time ItemPostFrame will call PrimaryAttack
 	float	m_flNextSecondaryAttack;							// soonest time ItemPostFrame will call SecondaryAttack
 	float	m_flTimeWeaponIdle;								// soonest time ItemPostFrame will call WeaponIdle
+	float	m_flTimeWeaponIdleLock;							// lock idle animations for seconds 
 	float	m_flTimeUpdate;									// special time for additional effects
 	float	m_flChargeTime;									// max charge time - used displacer and gauss
 	float	m_flShockTime;									// shock time - play sound effects. don't save
@@ -457,6 +460,8 @@ extern void DecalGunshot( TraceResult *pTrace, int iBulletType );
 extern void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage);
 extern int DamageDecal( CBaseEntity *pEntity, int bitsDamageType );
 extern void RadiusDamage( Vector vecSrc, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, float flRadius, int iClassIgnore, int bitsDamageType );
+extern void FindHullIntersection(const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity); //Used by crowbar,knife & pipewrench
+extern float CalculateWeaponTime(float frames, float fps);
 
 typedef struct 
 {

@@ -185,7 +185,7 @@ Schedule_t	slTorchFollow[] =
 {
 	{
 		tlTorchFollow,
-		ARRAYSIZE ( tlTorchFollow ),
+		HL_ARRAYSIZE ( tlTorchFollow ),
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
@@ -207,7 +207,7 @@ Schedule_t	slTorchFaceTarget[] =
 {
 	{
 		tlTorchFaceTarget,
-		ARRAYSIZE ( tlTorchFaceTarget ),
+		HL_ARRAYSIZE ( tlTorchFaceTarget ),
 		bits_COND_CLIENT_PUSH	|
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
@@ -232,7 +232,7 @@ Schedule_t	slTorchIdleStand[] =
 {
 	{ 
 		tlTorchIdleStand,
-		ARRAYSIZE ( tlTorchIdleStand ), 
+		HL_ARRAYSIZE ( tlTorchIdleStand ), 
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
@@ -266,7 +266,7 @@ Schedule_t	slTorchFail[] =
 {
 	{
 		tlTorchFail,
-		ARRAYSIZE ( tlTorchFail ),
+		HL_ARRAYSIZE ( tlTorchFail ),
 		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2 |
 		bits_COND_CAN_MELEE_ATTACK1 |
@@ -291,7 +291,7 @@ Schedule_t	slTorchCombatFail[] =
 {
 	{
 		tlTorchCombatFail,
-		ARRAYSIZE ( tlTorchCombatFail ),
+		HL_ARRAYSIZE ( tlTorchCombatFail ),
 		bits_COND_CAN_RANGE_ATTACK1	|
 		bits_COND_CAN_RANGE_ATTACK2,
 		0,
@@ -319,7 +319,7 @@ Schedule_t	slTorchVictoryDance[] =
 {
 	{ 
 		tlTorchVictoryDance,
-		ARRAYSIZE ( tlTorchVictoryDance ), 
+		HL_ARRAYSIZE ( tlTorchVictoryDance ), 
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE,
@@ -344,7 +344,7 @@ Schedule_t slTorchEstablishLineOfFire[] =
 {
 	{ 
 		tlTorchEstablishLineOfFire,
-		ARRAYSIZE ( tlTorchEstablishLineOfFire ),
+		HL_ARRAYSIZE ( tlTorchEstablishLineOfFire ),
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_CAN_RANGE_ATTACK1	|
@@ -373,7 +373,7 @@ Schedule_t	slTorchFoundEnemy[] =
 {
 	{ 
 		tlTorchFoundEnemy,
-		ARRAYSIZE ( tlTorchFoundEnemy ), 
+		HL_ARRAYSIZE ( tlTorchFoundEnemy ), 
 		bits_COND_HEAR_SOUND,
 		
 		bits_SOUND_DANGER,
@@ -397,7 +397,7 @@ Schedule_t	slTorchCombatFace[] =
 {
 	{ 
 		tlTorchCombatFace1,
-		ARRAYSIZE ( tlTorchCombatFace1 ), 
+		HL_ARRAYSIZE ( tlTorchCombatFace1 ), 
 		bits_COND_NEW_ENEMY				|
 		bits_COND_ENEMY_DEAD			|
 		bits_COND_CAN_RANGE_ATTACK1		|
@@ -437,7 +437,7 @@ Schedule_t	slTorchSignalSuppress[] =
 {
 	{ 
 		tlTorchSignalSuppress,
-		ARRAYSIZE ( tlTorchSignalSuppress ), 
+		HL_ARRAYSIZE ( tlTorchSignalSuppress ), 
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -474,7 +474,7 @@ Schedule_t	slTorchSuppress[] =
 {
 	{ 
 		tlTorchSuppress,
-		ARRAYSIZE ( tlTorchSuppress ), 
+		HL_ARRAYSIZE ( tlTorchSuppress ), 
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -504,7 +504,7 @@ Schedule_t	slTorchWaitInCover[] =
 {
 	{ 
 		tlTorchWaitInCover,
-		ARRAYSIZE ( tlTorchWaitInCover ), 
+		HL_ARRAYSIZE ( tlTorchWaitInCover ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_HEAR_SOUND		|
 		bits_COND_CAN_RANGE_ATTACK1	|
@@ -537,7 +537,7 @@ Schedule_t	slTorchTakeCover[] =
 {
 	{ 
 		tlTorchTakeCover1,
-		ARRAYSIZE ( tlTorchTakeCover1 ), 
+		HL_ARRAYSIZE ( tlTorchTakeCover1 ), 
 		0,
 		0,
 		"TakeCover"
@@ -563,7 +563,7 @@ Schedule_t	slTorchGrenadeCover[] =
 {
 	{ 
 		tlTorchGrenadeCover1,
-		ARRAYSIZE ( tlTorchGrenadeCover1 ), 
+		HL_ARRAYSIZE ( tlTorchGrenadeCover1 ), 
 		0,
 		0,
 		"GrenadeCover"
@@ -585,7 +585,7 @@ Schedule_t	slTorchTossGrenadeCover[] =
 {
 	{ 
 		tlTorchTossGrenadeCover1,
-		ARRAYSIZE ( tlTorchTossGrenadeCover1 ), 
+		HL_ARRAYSIZE ( tlTorchTossGrenadeCover1 ), 
 		0,
 		0,
 		"TossGrenadeCover"
@@ -610,7 +610,7 @@ Schedule_t	slTorchTakeCoverFromBestSound[] =
 {
 	{ 
 		tlTorchTakeCoverFromBestSound,
-		ARRAYSIZE ( tlTorchTakeCoverFromBestSound ), 
+		HL_ARRAYSIZE ( tlTorchTakeCoverFromBestSound ), 
 		0,
 		0,
 		"GruntTakeCoverFromBestSound"
@@ -636,7 +636,7 @@ Schedule_t slTorchHideReload[] =
 {
 	{
 		tlTorchHideReload,
-		ARRAYSIZE ( tlTorchHideReload ),
+		HL_ARRAYSIZE ( tlTorchHideReload ),
 		bits_COND_HEAVY_DAMAGE	|
 		bits_COND_HEAR_SOUND,
 
@@ -660,7 +660,7 @@ Schedule_t	slTorchSweep[] =
 {
 	{ 
 		tlTorchSweep,
-		ARRAYSIZE ( tlTorchSweep ), 
+		HL_ARRAYSIZE ( tlTorchSweep ), 
 		
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
@@ -702,7 +702,7 @@ Schedule_t	slTorchRangeAttack1A[] =
 {
 	{ 
 		tlTorchRangeAttack1A,
-		ARRAYSIZE ( tlTorchRangeAttack1A ), 
+		HL_ARRAYSIZE ( tlTorchRangeAttack1A ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -742,7 +742,7 @@ Schedule_t	slTorchRangeAttack1B[] =
 {
 	{ 
 		tlTorchRangeAttack1B,
-		ARRAYSIZE ( tlTorchRangeAttack1B ), 
+		HL_ARRAYSIZE ( tlTorchRangeAttack1B ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -772,7 +772,7 @@ Schedule_t	slTorchRangeAttack2[] =
 {
 	{ 
 		tlTorchRangeAttack2,
-		ARRAYSIZE ( tlTorchRangeAttack2 ), 
+		HL_ARRAYSIZE ( tlTorchRangeAttack2 ), 
 		0,
 		0,
 		"RangeAttack2"
@@ -794,7 +794,7 @@ Schedule_t	slTorchRepel[] =
 {
 	{ 
 		tlTorchRepel,
-		ARRAYSIZE ( tlTorchRepel ), 
+		HL_ARRAYSIZE ( tlTorchRepel ), 
 		bits_COND_SEE_ENEMY			|
 		bits_COND_NEW_ENEMY			|
 		bits_COND_LIGHT_DAMAGE		|
@@ -823,7 +823,7 @@ Schedule_t	slTorchRepelAttack[] =
 {
 	{ 
 		tlTorchRepelAttack,
-		ARRAYSIZE ( tlTorchRepelAttack ), 
+		HL_ARRAYSIZE ( tlTorchRepelAttack ), 
 		bits_COND_ENEMY_OCCLUDED,
 		0,
 		"Repel Attack"
@@ -847,7 +847,7 @@ Schedule_t	slTorchRepelLand[] =
 {
 	{ 
 		tlTorchRepelLand,
-		ARRAYSIZE ( tlTorchRepelLand ), 
+		HL_ARRAYSIZE ( tlTorchRepelLand ), 
 		bits_COND_SEE_ENEMY			|
 		bits_COND_NEW_ENEMY			|
 		bits_COND_LIGHT_DAMAGE		|

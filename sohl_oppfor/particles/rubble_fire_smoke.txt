@@ -1,0 +1,29 @@
+starting_particles 0
+new_particles_per_second 5
+scale 0.9
+lifetime 6
+gravity 0
+growth 0.8
+rotation_speed 30.0
+
+starting_velocity_x -0.0
+starting_velocity_y -0.0
+starting_velocity_z 1.3
+
+velocity_var_x 0.0
+velocity_var_y 0.0
+velocity_var_z 1.0
+damping 0.2
+
+transparency 210
+system_life -1
+
+emitter_shape point
+
+collision bounce
+fade_out 1
+fade_in 1
+wind 1
+smoke 0
+light_check every_sort
+

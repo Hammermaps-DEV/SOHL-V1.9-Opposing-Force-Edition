@@ -1,0 +1,44 @@
+starting_particles 0
+new_particles_per_second 0
+
+texture particles/engine/blood_alien.tga
+
+
+scale 0.3
+growth 0.0
+lifetime 1
+
+lifetime_var 1
+
+rotation_speed 50
+gravity 11
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 1
+velocity_var_y 1
+velocity_var_z 1
+
+transparency 255
+
+system_life 2
+display_mode 32
+	
+
+starting_frame 1
+
+ending_frame 1
+
+frames_in_image 1
+
+falloff none
+
+fade_in 0
+
+fade_out 1
+
+
+
+wind 1

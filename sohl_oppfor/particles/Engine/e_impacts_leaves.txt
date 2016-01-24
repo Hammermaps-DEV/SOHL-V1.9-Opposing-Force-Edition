@@ -1,0 +1,41 @@
+texture particles/leaf05.tga
+starting_particles 5
+new_particles_per_second 0
+scale 0.1
+growth 0.0
+lifetime 5
+lifetime_var 5
+gravity 2
+rotation_speed 0
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 5.00
+velocity_var_y 5.00
+velocity_var_z 5.00
+
+damping 3
+
+emitter_shape plane
+
+plane_x_length 0
+plane_y_length 0
+
+display_mode 32
+transparency 255
+rotation_velocity_pitch 0
+rotation_velocity_yaw 0
+rotation_velocity_roll 0
+rotation_velocity_var_pitch 900
+rotation_velocity_var_yaw 900
+rotation_velocity_var_roll 900
+particle_align none
+light_check every_sort
+
+collision particles/vg_leaves02b.txt
+fade_out 0
+fade_in 0
+wind 1
+system_life 10

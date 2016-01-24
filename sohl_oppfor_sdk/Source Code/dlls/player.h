@@ -15,7 +15,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-
 #include "pm_materials.h"
 
 #define PLAYER_FATAL_FALL_SPEED		1024// approx 60 feet
@@ -87,6 +86,8 @@ enum sbar_data
 };
 
 #define CHAT_INTERVAL 1.0f
+
+class CParticleEmitter;
 
 class CBasePlayer : public CBaseMonster
 {
@@ -184,6 +185,9 @@ public:
 	BOOL				m_fOnTarget;
 	int					m_iDeaths;
 	float				m_iRespawnFrames;	// used in PlayerDeathThink() to make sure players can always respawn
+	bool				m_bSpawnPS;
+	float				m_flLastPSSpawn;
+	CParticleEmitter	*pLastPSSpawned;
 
 	int m_lastx, m_lasty;  // These are the previous update's crosshair angles, DON"T SAVE/RESTORE
 

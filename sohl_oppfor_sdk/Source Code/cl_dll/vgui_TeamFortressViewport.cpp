@@ -45,9 +45,10 @@
 #include "in_defs.h"
 #include "parsemsg.h"
 #include "pm_shared.h"
-#include "../engine/keydefs.h"
+#include "keydefs.h"
 #include "demo.h"
 #include "demo_api.h"
+#include "particle_header.h"
 
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
@@ -594,6 +595,11 @@ TeamFortressViewport::TeamFortressViewport(int x,int y,int wide,int tall) : Pane
 //-----------------------------------------------------------------------------
 void TeamFortressViewport::Initialize( void )
 {
+	// Force each menu to Initialize
+	
+	// BP - Clear Particle Systems
+	pParticleManager->RemoveSystems();	
+
 	// Force each menu to Initialize
 	if (m_pTeamMenu)
 	{
@@ -1563,7 +1569,7 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 	if ( iTextToShow == SHOW_MOTD )
 	{
 		if (!m_szServerName || !m_szServerName[0])
-			strcpy( cTitle, "Half-Life" );
+			strcpy( cTitle, "SoHL: Opposing-Force" );
 		else
 			strncpy( cTitle, m_szServerName, MAX_TITLE_LENGTH );
 		cTitle[MAX_TITLE_LENGTH-1] = 0;
@@ -2015,6 +2021,55 @@ void CDragNDropHandler::mouseReleased(MouseCode code,Panel* panel)
 	App::getInstance()->setMouseCapture(null);
 }
 
+int TeamFortressViewport::MsgFunc_Particles(const char *pszName, int iSize, void *pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+
+	particle_system_management pSystem;
+	pSystem.iID = READ_SHORT();
+	bool bTurnOff = (!!(READ_BYTE()));
+
+	// turn off means deleting the system client side
+	if (bTurnOff == true) {
+		pParticleManager->RemoveSystem(pSystem.iID);
+	}
+	else {
+		// read the rest of the msg in
+		pSystem.vPosition.x = READ_COORD();
+		pSystem.vPosition.y = READ_COORD();
+		pSystem.vPosition.z = READ_COORD();
+		pSystem.vDirection.x = READ_COORD();
+		pSystem.vDirection.y = READ_COORD();
+		pSystem.vDirection.z = READ_COORD();
+		unsigned int iPresetSystem = READ_SHORT();
+
+		// to reinit particle on runtime we hijack preset 9999
+		if (iPresetSystem == 9999)
+		{
+			// BP - Clear Particle Systems	
+			pParticleManager->RemoveParticles();
+			pParticleManager->RemoveTextures();
+			pParticleManager->RemoveSystems();
+			return 1;
+		}
+
+		// no present, we just create according to the file
+		if (iPresetSystem == 0) {
+			char sDefinitionFile[256];
+			_snprintf(sDefinitionFile, sizeof(sDefinitionFile) - 1, "%s\0", READ_STRING());
+
+			// create system
+			pParticleManager->CreateMappedPS(sDefinitionFile, &pSystem);
+		}
+		else {
+			// create according to the presets
+			pParticleManager->CreatePresetPS(iPresetSystem, &pSystem);
+		}
+	}
+
+	return 1;
+}
+
 //================================================================
 // Number Key Input
 bool TeamFortressViewport::SlotInput( int iSlot )
@@ -2213,7 +2268,7 @@ int TeamFortressViewport::MsgFunc_MOTD( const char *pszName, int iSize, void *pb
 
 	int roomInArray = sizeof(m_szMOTD) - strlen(m_szMOTD) - 1;
 
-	strncat( m_szMOTD, READ_STRING(), roomInArray >= 0 ? roomInArray : 0 );
+	strncat( m_szMOTD, gHUD.HandleServerString(READ_STRING()), roomInArray >= 0 ? roomInArray : 0 );
 	m_szMOTD[ sizeof(m_szMOTD)-1 ] = '\0';
 
 	// don't show MOTD for HLTV spectators
@@ -2225,21 +2280,21 @@ int TeamFortressViewport::MsgFunc_MOTD( const char *pszName, int iSize, void *pb
 	return 1;
 }
 
-int TeamFortressViewport::MsgFunc_BuildSt( const char *pszName, int iSize, void *pbuf )
+int TeamFortressViewport::MsgFunc_BuildSt(const char *pszName, int iSize, void *pbuf)
 {
-	BEGIN_READ( pbuf, iSize );
+	BEGIN_READ(pbuf, iSize);
 
 	m_iBuildState = READ_BYTE();
 
 	// Force the menu to update
-	UpdateCommandMenu( m_StandardMenu );
+	UpdateCommandMenu(m_StandardMenu);
 
 	return 1;
 }
 
-int TeamFortressViewport::MsgFunc_RandomPC( const char *pszName, int iSize, void *pbuf )
+int TeamFortressViewport::MsgFunc_RandomPC(const char *pszName, int iSize, void *pbuf)
 {
-	BEGIN_READ( pbuf, iSize );
+	BEGIN_READ(pbuf, iSize);
 
 	m_iRandomPC = READ_BYTE();
 
@@ -2293,7 +2348,7 @@ int TeamFortressViewport::MsgFunc_TeamScore( const char *pszName, int iSize, voi
 	char *TeamName = READ_STRING();
 
 	// find the team matching the name
-	int i = 1;
+	int i;
 	for ( i = 1; i <= m_pScoreBoard->m_iNumTeams; i++ )
 	{
 		if ( !stricmp( TeamName, g_TeamInfo[i].name ) )

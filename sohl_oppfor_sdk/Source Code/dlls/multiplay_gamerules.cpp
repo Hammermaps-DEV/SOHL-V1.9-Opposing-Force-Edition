@@ -139,6 +139,10 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = 25;
 
+	// Crowbar whack
+	gSkillData.plrDmgKnife = 10;
+	gSkillData.plrDmgKnifeCharge = 40;
+
 	// Glock Round
 	gSkillData.plrDmg9MM = 12;
 
@@ -574,6 +578,7 @@ void CHalfLifeMultiplay :: PlayerSpawn( CBasePlayer *pPlayer )
 	if ( addDefault )
 	{
 		pPlayer->GiveNamedItem( "weapon_crowbar" );
+		pPlayer->GiveNamedItem( "weapon_knife" );
 		pPlayer->GiveNamedItem( "weapon_9mmhandgun" );
 		pPlayer->GiveAmmo( 68, "9mm", _9MM_MAX_CARRY );// 4 full reloads
 	}

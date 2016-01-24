@@ -4546,78 +4546,76 @@ LINK_ENTITY_TO_CLASS( env_fog, CEnvFog );
 //=========================================================
 LINK_ENTITY_TO_CLASS( env_sky, CPointEntity );
 
-
-
 //=========================================================
 // LRC - env_particle, uses the aurora particle system
 //=========================================================
-#define SF_PARTICLE_ON 1
+#define SF_START_ON 1
 
-class CParticle : public CPointEntity
+class CBaseParticle : public CPointEntity
 {
 public:
-	void Spawn( void );
-	void Activate( void );
-	void Precache( void );
-	void DesiredAction( void );
-	void EXPORT Think( void );
-
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void Spawn(void);
+	void Precache(void) { pev->netname = UTIL_PrecacheAurora(pev->message); }
+	void KeyValue(KeyValueData *pkvd);
+	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void Switch(CBaseEntity *pActivator);
 };
 
-LINK_ENTITY_TO_CLASS( env_particle, CParticle );
-
-void CParticle::Spawn( void )
+void CBaseParticle::KeyValue(KeyValueData *pkvd)
 {
-	pev->solid		= SOLID_NOT;
-
-	pev->movetype		= MOVETYPE_NOCLIP;
-
-	pev->renderfx       	= kRenderFxEntInPVS;
-	pev->renderamt		= 128;
-	pev->rendermode		= kRenderTransTexture;
-
-	// 'body' determines whether the effect is active or not
-	pev->body		= (pev->spawnflags & SF_PARTICLE_ON) != 0;
-
-	Precache();
-
-	UTIL_SetOrigin(this, pev->origin);
-	SET_MODEL(edict(), "sprites/null.spr");
-}
-
-
-void CParticle::Precache( void )
-{
-	PRECACHE_MODEL("sprites/null.spr");
-}
-
-void CParticle::Activate( void )
-{
-	CPointEntity::Activate();
-	UTIL_DesiredAction(this);
-}
-
-void CParticle::DesiredAction( void )
-{
-	pev->nextthink = gpGlobals->time + 1;
-}
-
-void CParticle::Think( void )
-{
-	MESSAGE_BEGIN( MSG_ALL, gmsgParticle );
-		WRITE_ENTITY( entindex() );
-		WRITE_STRING( STRING(pev->message) );
-	MESSAGE_END();
-}
-
-void CParticle::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
-	if ( ShouldToggle( useType, pev->body ) )
+	if (FStrEq(pkvd->szKeyName, "aurora"))
 	{
-		pev->body = !pev->body;
+		pev->message = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else	CPointEntity::KeyValue(pkvd);
+}
+
+void CBaseParticle::Switch(CBaseEntity *pActivator)
+{
+	if (pev->target)
+	{
+		CBaseEntity *pTarget = UTIL_FindEntityByTargetname(NULL, STRING(pev->target), pActivator);
+		while (pTarget)
+		{
+			UTIL_SetAurora(pTarget, pev->netname);
+			pTarget = UTIL_FindEntityByTargetname(pTarget, STRING(pev->target), pActivator);
+		}
+	}
+	else
+	{
+		UTIL_SetAurora(this, pev->netname);
 	}
 }
+
+void CBaseParticle::Spawn(void)
+{
+	Precache();
+	SET_MODEL(edict(), "sprites/null.spr");
+	UTIL_SetOrigin(this, pev->origin);
+	pev->solid = SOLID_NOT;
+	if (pev->spawnflags & SF_START_ON) pev->body = TRUE;
+}
+
+void CBaseParticle::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+{
+	if (useType == USE_TOGGLE)
+	{
+		if (pev->body) useType = USE_OFF;
+		else useType = USE_ON;
+	}
+	if (useType == USE_ON)
+	{
+		pev->body = TRUE;
+		Switch(pActivator);
+	}
+	else if (useType == USE_OFF)
+	{
+		pev->body = FALSE;
+		Switch(pActivator);
+	}
+}
+LINK_ENTITY_TO_CLASS(env_particle, CBaseParticle);
 
 //=========================================================
 // G-Cont - env_mirror, mirroring models and decals

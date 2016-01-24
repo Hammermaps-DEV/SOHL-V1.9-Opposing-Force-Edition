@@ -1,0 +1,42 @@
+starting_particles 25
+new_particles_per_second 25
+texture particles/glow01.tga
+
+scale 0.1
+growth 2
+
+lifetime_var 2
+lifetime 2
+
+gravity 0.0
+rotation_speed 2222
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 0.1
+velocity_var_y 0.1
+velocity_var_z 0.1
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+
+//damping 0.05
+
+transparency 50
+
+display_mode 24
+
+emitter_shape plane
+
+plane_x_length 1
+plane_y_length 1
+
+wind 0
+fade_out 1
+collision bounce
+light_check never
+system_life -1
+ignore_sort 1

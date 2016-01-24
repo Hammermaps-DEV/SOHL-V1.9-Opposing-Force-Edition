@@ -9,8 +9,9 @@
 
 #include "hud.h"
 #include "cl_util.h"
-#include "windows.h"
-#include "gl/gl.h"
+#include <windows.h>
+#include <gl/gl.h>
+#include <gl/glaux.h>
 
 // Triangle rendering apis are in gEngfuncs.pTriAPI
 
@@ -22,6 +23,8 @@
 #include "rain.h" 
 #include "com_model.h"
 #include "studio_util.h"
+#define HULL_PLANE_SKIP
+#include "particle_header.h"
 
 #define DLLEXPORT __declspec( dllexport )
 
@@ -30,10 +33,6 @@ extern "C"
 	void DLLEXPORT HUD_DrawNormalTriangles( void );
 	void DLLEXPORT HUD_DrawTransparentTriangles( void );
 };
-
-	
-	
-
 
 extern float g_fFogColor[4];
 extern float g_fStartDist;
@@ -51,7 +50,8 @@ int UseTexture(HL_HSPRITE &hsprSpr, char * str)
 		hsprSpr = SPR_Load( sz );
 	}
 
-	return gEngfuncs.pTriAPI->SpriteTexture( (struct model_s *)gEngfuncs.GetSpritePointer( hsprSpr ), 0 );
+	return 0;
+	//return gEngfuncs.pTriAPI->SpriteTexture( (struct model_s *)gEngfuncs.GetSpritePointer( hsprSpr ), 0 );
 }
 
 
@@ -137,79 +137,6 @@ void CShinySurface::Draw(const vec3_t &org)
 		gEngfuncs.pTriAPI->Vertex3f  (	m_fMaxX,	m_fMinY,	m_fZ+0.02	);
 	gEngfuncs.pTriAPI->End();
 }
-
-//
-//-----------------------------------------------------
-//
-
-
-//LRCT
-//#define TEST_IT
-#if defined( TEST_IT )
-
-/*
-=================
-Draw_Triangles
-
-Example routine.  Draws a sprite offset from the player origin.
-=================
-*/
-void Draw_Triangles( void )
-{
-	cl_entity_t *player;
-	vec3_t org;
-
-	// Load it up with some bogus data
-	player = gEngfuncs.GetLocalPlayer();
-	if ( !player )
-		return;
-
-	org = player->origin;
-
-	org.x += 50;
-	org.y += 50;
-
-	if (gHUD.m_hsprCursor == 0)
-	{
-		char sz[256];
-//LRCT		sprintf( sz, "sprites/cursor.spr" );
-		sprintf( sz, "sprites/bubble.spr" ); //LRCT
-		gHUD.m_hsprCursor = SPR_Load( sz );
-	}
-
-	if ( !gEngfuncs.pTriAPI->SpriteTexture( (struct model_s *)gEngfuncs.GetSpritePointer( gHUD.m_hsprCursor ), 0 ))
-	{
-		return;
-	}
-	
-	// Create a triangle, sigh
-	gEngfuncs.pTriAPI->RenderMode( kRenderNormal );
-	gEngfuncs.pTriAPI->CullFace( TRI_NONE );
-	gEngfuncs.pTriAPI->Begin( TRI_QUADS );
-	// Overload p->color with index into tracer palette, p->packedColor with brightness
-	gEngfuncs.pTriAPI->Color4f( 1.0, 1.0, 1.0, 1.0 );
-	// UNDONE: This gouraud shading causes tracers to disappear on some cards (permedia2)
-	gEngfuncs.pTriAPI->Brightness( 1 );
-	gEngfuncs.pTriAPI->TexCoord2f( 0, 0 );
-	gEngfuncs.pTriAPI->Vertex3f( org.x, org.y, org.z );
-
-	gEngfuncs.pTriAPI->Brightness( 1 );
-	gEngfuncs.pTriAPI->TexCoord2f( 0, 1 );
-	gEngfuncs.pTriAPI->Vertex3f( org.x, org.y + 50, org.z );
-
-	gEngfuncs.pTriAPI->Brightness( 1 );
-	gEngfuncs.pTriAPI->TexCoord2f( 1, 1 );
-	gEngfuncs.pTriAPI->Vertex3f( org.x + 50, org.y + 50, org.z );
-
-	gEngfuncs.pTriAPI->Brightness( 1 );
-	gEngfuncs.pTriAPI->TexCoord2f( 1, 0 );
-	gEngfuncs.pTriAPI->Vertex3f( org.x + 50, org.y, org.z );
-
-	gEngfuncs.pTriAPI->End();
-	gEngfuncs.pTriAPI->RenderMode( kRenderNormal );
-}
-
-#endif
 
 void RenderFog ( void )
 {
@@ -341,6 +268,8 @@ void DrawRain( void )
 			Drip = nextdDrip;
 		}
 	}
+
+return;
 }
 
 /*
@@ -413,10 +342,6 @@ Non-transparent triangles-- add them here
 void DLLEXPORT HUD_DrawNormalTriangles( void )
 {
 	gHUD.m_Spectator.DrawOverview();
-	
-#if defined( TEST_IT )
-//	Draw_Triangles();
-#endif
 }
 
 /*
@@ -427,9 +352,21 @@ Render any triangles with transparent rendermode needs here
 =================
 */
 extern ParticleSystemManager* g_pParticleSystems; // LRC
+class CException;
 
 void DLLEXPORT HUD_DrawTransparentTriangles( void )
 {
+	try {
+		pParticleManager->UpdateSystems();
+	}
+	catch (CException *e) {
+		e;
+		e = NULL;
+		gEngfuncs.Con_Printf("There was a serious error within the particle engine. Particles will return on map change\n");
+		delete pParticleManager;
+		pParticleManager = NULL;
+	}
+
    	//22/03/03 LRC: shiny surfaces
 	if (gHUD.m_pShinySurface)
 		gHUD.m_pShinySurface->DrawAll(v_origin);
@@ -446,8 +383,4 @@ void DLLEXPORT HUD_DrawTransparentTriangles( void )
 	ProcessRain();
 	DrawRain();
 	DrawFXObjects();
-
-#if defined( TEST_IT )
-//	Draw_Triangles();
-#endif
 }

@@ -1,0 +1,52 @@
+starting_particles 0
+new_particles_per_second 100
+
+texture particles/water_splash02.tga
+
+scale 0.5
+growth 1
+
+lifetime 0.5
+lifetime_var 0
+
+rotation_speed 111
+
+gravity 9
+
+starting_velocity_x 3
+starting_velocity_y 0
+starting_velocity_z 0.0
+
+velocity_var_x 0.5
+velocity_var_y 0.5
+velocity_var_z 0.1
+
+damping 0.1
+
+transparency 255
+
+system_life -1.0
+
+display_mode 32
+
+
+
+anim_speed over_life
+fps 10
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+loop_behaviour hold_last
+
+//collision particles/rb_water_splash.txt
+
+falloff none
+light_check never
+
+wind 0
+
+fade_in 0
+fade_out 0
+
+smoke 0
+ignore_sort 1

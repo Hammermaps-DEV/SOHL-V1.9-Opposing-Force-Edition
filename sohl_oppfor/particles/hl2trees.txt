@@ -1,0 +1,9 @@
+texture particles/tree_card_clump.tga
+scale 100
+leaning_max 90
+leaning_min 90
+wave_speed 5
+particles 200
+transparency 255
+lod 1
+drop_on_ground 1

@@ -1,0 +1,56 @@
+texture particles/tree/tree01.tga
+scale 300
+leaning_max 90
+leaning_min 90
+wave_speed 0
+particles 20
+transparency 255
+lod 0
+drop_on_ground 1
+randomize 1
+random_modifier 100
+ignore_sort 0
+
+new_particle
+
+texture particles/tree/tree02.tga
+scale 300
+leaning_max 90
+leaning_min 90
+wave_speed 0
+particles 20
+transparency 255
+lod 0
+drop_on_ground 1
+randomize 1
+random_modifier 100
+ignore_sort 0
+
+new_particle
+
+texture particles/tree/tree03.tga
+scale 300
+leaning_max 90
+leaning_min 90
+wave_speed 0
+particles 20
+transparency 255
+lod 0
+drop_on_ground 1
+randomize 1
+random_modifier 100
+ignore_sort 0
+new_particle
+
+texture particles/tree/tree04.tga
+scale 300
+leaning_max 90
+leaning_min 90
+wave_speed 0
+particles 20
+transparency 255
+lod 0
+drop_on_ground 1
+randomize 1
+random_modifier 100
+ignore_sort 0

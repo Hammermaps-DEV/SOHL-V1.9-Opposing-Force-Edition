@@ -252,6 +252,7 @@ public:
 	void KeyValue( KeyValueData *pkvd );
 	void Activate( void );
 	void DesiredAction( void );
+    void Spawn (void);
           
 	int ObjectCaps( void ) { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	virtual int		Save( CSave &save );
@@ -291,6 +292,9 @@ void CAutoTrigger::KeyValue( KeyValueData *pkvd )
 		case 2:
 			triggerType = USE_TOGGLE;
 			break;
+		case 3:
+			triggerType = USE_KILL;
+			break;
 		default:
 			triggerType = USE_ON;
 			break;
@@ -301,6 +305,20 @@ void CAutoTrigger::KeyValue( KeyValueData *pkvd )
 		CBaseDelay::KeyValue( pkvd );
 }
 
+void CAutoTrigger::Spawn (void)
+{
+	//Override HACK for c5a1 (stars effect on final scene with g-man)
+	CBaseEntity *pTarget;
+	pTarget = UTIL_FindEntityByTarget( NULL, STRING(pev->target) );
+	if ( pTarget == UTIL_FindEntityByTarget( NULL, "warp_train") || pTarget == UTIL_FindEntityByTarget( NULL, "hoop_1"))
+	{
+		if(!triggerType) 
+		{
+			ALERT(at_aiconsole, "DEBUG: trigger_auto \"%s\": m_triggerType set to USE_ON.\n", STRING(pev->target));
+			triggerType = USE_ON;
+		}
+	}
+}
 void CAutoTrigger::Activate( void )
 {
 //	ALERT(at_console, "trigger_auto targetting \"%s\": activate\n", STRING(pev->target));

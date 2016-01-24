@@ -1,0 +1,39 @@
+starting_particles 0
+new_particles_per_second 60
+texture particles/snow02.tga
+
+scale 0.05
+growth 0.0
+
+lifetime_var 0.0
+lifetime 7
+
+gravity -8.0
+rotation_speed 20
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z -2.5
+
+velocity_var_x 0.5
+velocity_var_y 0.5
+velocity_var_z 0.0
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+
+damping 0.1
+transparency 255
+display_mode 32
+emitter_shape around_player
+plane_x_length 800
+plane_y_length 800
+
+wind 0
+
+fade_out 1
+fade_in 0
+
+collision stuck
+light_check never

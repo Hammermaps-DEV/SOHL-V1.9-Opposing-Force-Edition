@@ -31,8 +31,6 @@
 
 #define MAX_CLIENTS         32
 #define MAX_EDICTS          900
-#define MAX_MAP_VERTS       65535
-#define MAX_MAP_TRIANGLES   32768   //this is right ?
 
 #define MAX_MODEL_NAME      64
 #define MAX_MAP_HULLS       4

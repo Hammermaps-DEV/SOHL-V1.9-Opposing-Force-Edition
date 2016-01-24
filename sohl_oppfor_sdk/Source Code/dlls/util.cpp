@@ -19,7 +19,6 @@
   Utility code.  Really not optional after all.
 
 */
-
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -3280,5 +3279,86 @@ void UTIL_WhiteSparks(const Vector &origin, const Vector &direction, int color, 
 	WRITE_SHORT(count);	// count
 	WRITE_SHORT(speed);
 	WRITE_SHORT(velocityRange);	// Random velocity modifier
+	MESSAGE_END();
+}
+
+// open materials.txt,  get size, alloc space, 
+// save in array.  Only works first time called, 
+// ignored on subsequent calls.
+char *UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize)
+{
+	// Bullet-proofing
+	if (!pMemFile || !pBuffer)
+		return NULL;
+
+	if (filePos >= fileSize)
+		return NULL;
+
+	int i = filePos;
+	int last = fileSize;
+
+	// fgets always NULL terminates, so only read bufferSize-1 characters
+	if (last - filePos > (bufferSize - 1))
+		last = filePos + (bufferSize - 1);
+
+	int stop = 0;
+
+	// Stop at the next newline (inclusive) or end of buffer
+	while (i < last && !stop)
+	{
+		if (pMemFile[i] == '\n')
+			stop = 1;
+		i++;
+	}
+
+	// If we actually advanced the pointer, copy it over
+	if (i != filePos)
+	{
+		// We read in size bytes
+		int size = i - filePos;
+		// copy it out
+		memcpy(pBuffer, pMemFile + filePos, sizeof(byte)*size);
+
+		// If the buffer isn't full, terminate (this is always true)
+		if (size < bufferSize)
+			pBuffer[size] = 0;
+
+		// Update file pointer
+		filePos = i;
+		return pBuffer;
+	}
+
+	// No data read, bail
+	return NULL;
+}
+
+//========================================================================
+// Precaches aurora particle and set it - Ku2zoff
+//========================================================================
+int UTIL_PrecacheAurora(string_t s) { return UTIL_PrecacheAurora((char *)STRING(s)); }
+int UTIL_PrecacheAurora(const char *s)
+{
+	char path[128]; //path length
+	sprintf(path, "particles/%s.aur", s);
+
+	byte *data = LOAD_FILE_FOR_ME(path, NULL);
+	if (data)
+	{
+		FREE_FILE(data);
+		return ALLOC_STRING(path);
+	}
+	else //otherwise
+	{
+		if (!s || !*s)ALERT(at_console, "Warning: Aurora not specified!\n", s);
+		else ALERT(at_console, "Warning: Aurora %s not found!\n", s);
+		return MAKE_STRING("aurora/error.aur");
+	}
+}
+
+void UTIL_SetAurora(CBaseEntity *pAttach, int aur, int attachment)
+{
+	MESSAGE_BEGIN(MSG_ALL, gmsgParticle);
+	WRITE_SHORT(pAttach->entindex());
+	WRITE_STRING(STRING(aur));
 	MESSAGE_END();
 }

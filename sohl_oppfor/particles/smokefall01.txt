@@ -1,0 +1,40 @@
+starting_particles 30
+
+new_particles_per_second 2.5
+
+scale 4.0
+
+texture particles/mist01.tga
+
+lifetime 20
+
+gravity 0.1
+
+growth 0.2
+
+rotation_speed 0.0
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.4
+velocity_var_x 0.0
+velocity_var_y 0.0
+velocity_var_z -0.5
+damping 0
+
+transparency 180
+
+system_life -1
+
+emitter_shape plane
+
+collision off
+
+fade_out 1
+
+fade_in 1
+
+wind 0
+
+smoke 1
+light_check every_sort

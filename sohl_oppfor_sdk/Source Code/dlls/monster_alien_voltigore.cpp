@@ -402,7 +402,7 @@ BOOL CVoltigore::FValidateHintType(short sHint) {
 		HINT_WORLD_HUMAN_BLOOD,
 	};
 
-	for (i = 0; i < ARRAYSIZE(sVoltigoreHints); i++) {
+	for (i = 0; i < HL_ARRAYSIZE(sVoltigoreHints); i++) {
 		if (sVoltigoreHints[i] == sHint)
 		{
 			return TRUE;
@@ -599,7 +599,7 @@ Task_t	tlVoltigoreRangeAttack1[] = {
 Schedule_t	slVoltigoreRangeAttack1[] = {
 	{
 		tlVoltigoreRangeAttack1,
-		ARRAYSIZE(tlVoltigoreRangeAttack1),
+		HL_ARRAYSIZE(tlVoltigoreRangeAttack1),
 	bits_COND_NEW_ENEMY |
 	bits_COND_ENEMY_DEAD |
 	bits_COND_HEAVY_DAMAGE |
@@ -621,7 +621,7 @@ Task_t tlVoltigoreChaseEnemy1[] = {
 Schedule_t slVoltigoreChaseEnemy[] = {
 	{
 		tlVoltigoreChaseEnemy1,
-		ARRAYSIZE(tlVoltigoreChaseEnemy1),
+		HL_ARRAYSIZE(tlVoltigoreChaseEnemy1),
 	bits_COND_NEW_ENEMY |
 	bits_COND_ENEMY_DEAD |
 	bits_COND_SMELL_FOOD |
@@ -658,7 +658,7 @@ Task_t tlVoltigoreEat[] = {
 Schedule_t slVoltigoreEat[] = {
 	{
 		tlVoltigoreEat,
-		ARRAYSIZE(tlVoltigoreEat),
+		HL_ARRAYSIZE(tlVoltigoreEat),
 	bits_COND_LIGHT_DAMAGE |
 	bits_COND_HEAVY_DAMAGE |
 	bits_COND_NEW_ENEMY,
@@ -694,7 +694,7 @@ Task_t tlVoltigoreSniffAndEat[] = {
 Schedule_t slVoltigoreSniffAndEat[] = {
 	{
 		tlVoltigoreSniffAndEat,
-		ARRAYSIZE(tlVoltigoreSniffAndEat),
+		HL_ARRAYSIZE(tlVoltigoreSniffAndEat),
 	bits_COND_LIGHT_DAMAGE |
 	bits_COND_HEAVY_DAMAGE |
 	bits_COND_NEW_ENEMY,

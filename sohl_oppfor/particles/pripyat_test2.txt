@@ -1,0 +1,9 @@
+texture particles/IMG_0663.tga
+scale 1
+leaning_max 90
+leaning_min 90
+wave_speed 0
+particles 1
+transparency 255
+lod 1
+drop_on_ground 0

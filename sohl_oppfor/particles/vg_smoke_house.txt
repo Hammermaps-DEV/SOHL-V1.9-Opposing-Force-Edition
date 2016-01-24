@@ -1,0 +1,46 @@
+starting_particles 0
+
+new_particles_per_second 3
+
+texture particles/darksmoke05.tga
+
+scale 0.5
+
+growth 2
+
+lifetime 2.0
+
+lifetime_var 0.8
+
+gravity 0.0
+
+rotation_speed 8
+
+starting_velocity_x 0.3
+
+starting_velocity_y 0.3
+
+starting_velocity_z 0.8
+
+
+velocity_var_x 0.2
+
+velocity_var_y 0.2
+
+velocity_var_z 0.6
+
+
+damping 0
+transparency 190
+
+
+wind 1
+
+
+fade_out 1
+
+fade_in 1
+
+collision off
+
+light_check once

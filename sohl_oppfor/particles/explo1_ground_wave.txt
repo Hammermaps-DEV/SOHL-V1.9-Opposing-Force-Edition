@@ -1,0 +1,40 @@
+texture particles/exp_glow.tga
+starting_particles 0
+new_particles_per_second 0.0
+
+scale 2
+growth 20
+
+lifetime 0.2
+lifetime_var 0
+
+gravity 0
+rotation_speed 0
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+velocity_var_x 0.00
+velocity_var_y 0.00
+velocity_var_z 0.00
+
+damping 0.0
+emitter_shape point
+display_mode 24
+transparency 255
+
+system_life 0.2
+
+rotation_velocity_pitch 0
+rotation_velocity_yaw 0
+rotation_velocity_roll 0
+rotation_velocity_var_pitch 0
+rotation_velocity_var_yaw 0
+rotation_velocity_var_roll 0
+particle_align planar
+light_check none
+collision off
+
+fade_out 1
+fade_in 0
+wind 0
+ignore_sort 1

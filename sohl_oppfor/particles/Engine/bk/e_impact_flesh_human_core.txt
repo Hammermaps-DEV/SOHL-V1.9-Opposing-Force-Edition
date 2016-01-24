@@ -1,0 +1,44 @@
+starting_particles 4
+new_particles_per_second 0
+texture particles/engine/blood_human_core.tga
+
+
+scale 0.05
+growth 0.6
+
+lifetime 0.4
+lifetime_var 0.2
+rotation_speed 33
+gravity 0
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 0.0
+velocity_var_y 0.0
+velocity_var_z 0.0
+
+transparency 255
+
+system_life 0.6
+display_mode 32
+	
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+falloff none
+fade_in 0
+fade_out 1
+wind 0
+light_check once
+
+//emitter_shape plane
+emitter_shape point
+
+//plane_x_length 2
+//plane_y_length 2
+
+randomize 1
+random_modifier 0.1

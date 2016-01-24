@@ -330,6 +330,7 @@ extern BOOL			UTIL_IsValidEntity( edict_t *pent );
 extern BOOL			UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 );
 extern BOOL			UTIL_IsFacing( entvars_t *pevTest, const Vector &reference ); //LRC
 extern void			UTIL_WhiteSparks(const Vector &origin, const Vector &direction, int color, int count, int speed, int velocityRange);
+extern char			*UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize);
 
 // Use for ease-in, ease-out style interpolation (accel/decel)
 extern float		UTIL_SplineFraction( float value, float scale );
@@ -613,5 +614,10 @@ int HaveCamerasInPVS( edict_t* edict );
 BOOL IsMultiplayer ( void );
 Vector UTIL_MirrorVector( Vector angles );
 Vector UTIL_MirrorPos ( Vector endpos );
+
+// Ku2zoff - Particle System
+int UTIL_PrecacheAurora(string_t s);
+int UTIL_PrecacheAurora(const char *s);
+void UTIL_SetAurora(CBaseEntity *pAttach, int aur, int attachment = 0);
 
 #endif //UTIL_H

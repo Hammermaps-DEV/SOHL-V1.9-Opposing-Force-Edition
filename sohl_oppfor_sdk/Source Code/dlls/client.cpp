@@ -52,6 +52,7 @@ extern int giPrecacheGrunt;
 extern int gmsgSayText;
 extern int gmsgHUDColor;
 extern int gmsgCamData; // for trigger_viewset
+extern int gmsgParticles;
 
 extern int g_teamplay;
 DLL_GLOBAL int g_serveractive = 0;
@@ -83,6 +84,13 @@ called when a player connects to a server
 */
 BOOL ClientConnect( edict_t *pEntity, const char *pszName, const char *pszAddress, char szRejectReason[ 128 ]  )
 {
+	if(!(pEntity->v.flags & FL_FAKECLIENT)) // Check that client isn't a bot, for future using
+	{
+		// load mapname.cfg
+		char szCommand[128];
+		sprintf(szCommand, "exec mapconfig/%s.cfg\n", STRING(gpGlobals->mapname));
+		CLIENT_COMMAND(pEntity, szCommand);
+	}
 	return g_pGameRules->ClientConnected( pEntity, pszName, pszAddress, szRejectReason );
 
 // a client connecting during an intermission can cause problems
@@ -499,6 +507,28 @@ void ClientCommand( edict_t *pEntity )
 		// g-cont. VModEnable at top the cases broke VoiceMod system in multiplayer
 		// you don't know about it Laurie!
 		return;
+	}
+	//BP particle system reiniting
+	else if (FStrEq(pcmd, "reinit_particles"))
+	{
+		// clear all particlesystems with this hijacked message
+		CBasePlayer * pPlayer = GetClassPtr((CBasePlayer *)pev);
+		MESSAGE_BEGIN(MSG_ONE, gmsgParticles, NULL, pPlayer->pev);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(9999);
+		WRITE_STRING("");
+		MESSAGE_END();
+
+		pPlayer->m_bSpawnPS = true;
+		pPlayer->m_flLastPSSpawn = 0.0;
+		pPlayer->pLastPSSpawned = NULL;
 	}
 	else
 	{
@@ -1204,6 +1234,11 @@ int AddToFullPack( struct entity_state_s *state, int e, edict_t *ent, edict_t *h
 		state->health		= ent->v.health;
 	}
 
+	if(ent->v.flags & FL_FLY) {
+		state->oldbuttons	= 1;
+	} else	
+		state->oldbuttons	= 0;
+ 
 	return 1;
 }
 

@@ -36,33 +36,25 @@
 // Global engine <-> studio model rendering code interface
 engine_studio_api_t IEngineStudio;
 
-/////////////////////
-// Implementation of CStudioModelRenderer.h
-
 // The adjusted pointer to the shadow function
-void (*GL_StudioDrawShadow)(void);
+void(*GL_StudioDrawShadow)(void);
 
 // This needs to be a function so that when GL_StudioDrawShadow() returns, the
 // stack isn't trashed.  It needs to be __declspec(naked) so the compiler doesn't
 // emit any prolog/epilog code (we do that ourselves in the asm block).
-
-__declspec(naked) void DrawShadows(void)
+__declspec(naked) void HackShadows(void)
 {
-
 	// GL_StudioDrawShadows calls this, but the adjusted pointer skips it.
 	// We need to call it ourselves (although I can't see any difference if we don't...)
 	// We're only called from StudioRenderFinal_Hardware, so the gl call is Ok.
-
-	glDepthMask( 1 );
-	_asm 
-	{
+	//	glDepthMask( 1 );
+	_asm {
 		// Must save ecx! GL_StudioDrawShadow will attempt to pop it when it returns
 		push ecx;
 		// Must jmp, not call so when GL_StudioDrawShadow returns it pulls the return
 		// address of this function (i.e. it will return to wherever we were called from)
-		jmp [GL_StudioDrawShadow];
+		jmp[GL_StudioDrawShadow];
 	}
-
 }
 
 /*
@@ -87,7 +79,7 @@ void CStudioModelRenderer::Init( void )
 	m_plighttransform		= (float (*)[MAXSTUDIOBONES][3][4])IEngineStudio.StudioGetLightTransform();
 	m_paliastransform		= (float (*)[3][4])IEngineStudio.StudioGetAliasTransform();
 	m_protationmatrix		= (float (*)[3][4])IEngineStudio.StudioGetRotationMatrix();
-	b_PlayerMarkerParsed 		= false;
+	b_PlayerMarkerParsed 	= false;
 }
 
 /*
@@ -1216,6 +1208,7 @@ int CStudioModelRenderer::StudioDrawModel( int flags )
 
 		m_pCurrentEntity = IEngineStudio.GetCurrentEntity();
 	}
+
 	if (m_pCurrentEntity->curstate.renderfx == kRenderFxDeadPlayer)
 	{
 		entity_state_t deadplayer;
@@ -1995,6 +1988,7 @@ void CStudioModelRenderer::StudioRenderFinal_Hardware( void )
 {
 	int i;
 	int rendermode;
+	int iShadows = CVAR_GET_FLOAT("r_shadows");
 
 	rendermode = IEngineStudio.GetForceFaceFlags() ? kRenderTransAdd : m_pCurrentEntity->curstate.rendermode;
 	IEngineStudio.SetupRenderer( rendermode );
@@ -2009,25 +2003,26 @@ void CStudioModelRenderer::StudioRenderFinal_Hardware( void )
 	}
 	else
 	{
-		for (i=0 ; i < m_pStudioHeader->numbodyparts ; i++)
+		for (i = 0; i < m_pStudioHeader->numbodyparts; i++)
 		{
-			IEngineStudio.StudioSetupModel( i, (void **)&m_pBodyPart, (void **)&m_pSubModel );
+			IEngineStudio.StudioSetupModel(i, (void **)&m_pBodyPart, (void **)&m_pSubModel);
 
 			if (m_fDoInterp)
 			{
 				// interpolation messes up bounding boxes.
-				m_pCurrentEntity->trivial_accept = 0; 
+				m_pCurrentEntity->trivial_accept = 0;
 			}
 
-			IEngineStudio.GL_SetRenderMode( rendermode );
+			IEngineStudio.GL_SetRenderMode(rendermode);
 			IEngineStudio.StudioDrawPoints();
-			// Set the pointer to skip the code that checks the locked r_shadows cvar
-			GL_StudioDrawShadow = (void(*)(void))(((unsigned int)IEngineStudio.GL_StudioDrawShadow)+32);
-			// Don't draw shadows from v_models
-			if (CVAR_GET_FLOAT("r_shadows") == 1 && gEngfuncs.GetViewModel() != m_pCurrentEntity)
+
+			if (iShadows == 1)
 			{
-				DrawShadows();
+				GL_StudioDrawShadow = (void(*)(void))(((unsigned int)IEngineStudio.GL_StudioDrawShadow) + 32);
+				HackShadows();
 			}
+
+			IEngineStudio.GL_StudioDrawShadow();
 		}
 	}
 

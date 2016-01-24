@@ -1,0 +1,41 @@
+starting_particles 50
+new_particles_per_second 0
+texture particles/engine/bloodpit_red.tga
+
+scale 0.5
+growth 0.4
+
+lifetime_var 0.5
+lifetime 0.5
+
+gravity 0.25
+rotation_speed 2
+
+starting_velocity_x 0
+starting_velocity_y 0
+starting_velocity_z 6
+
+velocity_var_x 1.5
+velocity_var_y 1.5
+velocity_var_z 5.5
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+
+damping 2
+
+transparency 100
+
+display_mode 32
+
+emitter_shape plane
+plane_x_length 50
+plane_y_length 50
+
+wind 0
+fade_out 1
+collision off
+light_check never
+system_life 1
+ignore_sort 1

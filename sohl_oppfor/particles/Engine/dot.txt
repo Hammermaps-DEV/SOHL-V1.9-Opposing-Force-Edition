@@ -1,0 +1,39 @@
+starting_particles 0
+new_particles_per_second 0.0
+texture particles/dot.tga
+
+scale 0.25
+
+growth 0
+lifetime 5
+lifetime_var 0
+rotation_speed 0.0
+gravity 0.0
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+velocity_var_x 0.0
+velocity_var_y 0.0
+velocity_var_z 0.0
+damping 0
+transparency 255
+system_life 5
+display_mode 24
+
+emitter_shape point
+plane_x_length 0
+plane_y_length 0
+
+anim_speed over_life
+fps 10
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+loop_behaviour hold_last
+collision off
+falloff none
+wind 0
+fade_in 0
+fade_out 0
+smoke 0
+light_check never

@@ -4269,6 +4269,106 @@
 	]
 ]
 //NEW 1.9
+@PointClass base(Monster) size(-16 -16 0, 16 16 72) studio("models/zombie_soldier_helmet.mdl") = monster_zombie_soldier_helmet : "Soldier Helmet Zombie" [
+	sequence(Choices) : "Animation Sequence (editor)" : 10 =
+	[
+		0 : "idle1"
+		1 : "turn left"
+		2 : "turn right"
+		3 : "flinch small"
+		4 : "flinch"
+		5 : "big flinch"
+		6 : "getup"
+		7 : "falling"
+		8 : "attack1"
+		9 : "attack2"
+		10 : "walk"
+		11 : "laflinch"
+		12 : "raflinch"
+		13 : "llflinch"
+		14 : "rlflinch"
+		15 : "dieheadshot"
+		16 : "dieheadshot2"
+		17 : "diesimple"
+		18 : "dieback"
+		19 : "dieforward"
+		20 : "pause"
+		21 : "bust through wall"
+		22 : "kick punnch wall"
+		23 : "bust window"
+		24 : "soda"
+		25 : "slide idle"
+		26 : "slide wall"
+		27 : "ventclimbidle"
+		28 : "vent climb"
+		29 : "deadidle"
+		30 : "dead wall"
+		31 : "freaksitdie"
+		32 : "freaksit"
+		33 : "eatbodytable"
+		34 : "eatbody"
+		35 : "eatbodystand"
+		36 : "ripdoor"
+		37 : "pull Scientist"
+		38 : "eating"
+		39 : "eat to stand"
+		40 : "vent z idle"
+		41 : "vent c1a3"
+		42 : "haul zombie"
+		43 : "c2a3 snack getup"
+	]
+]
+//NEW 1.9
+@PointClass base(Monster) size(-16 -16 0, 16 16 72) studio("models/zombie_blackop.mdl") = monster_zombie_blackop : "Blackop Zombie" [
+	sequence(Choices) : "Animation Sequence (editor)" : 10 =
+	[
+		0 : "idle1"
+		1 : "turn left"
+		2 : "turn right"
+		3 : "flinch small"
+		4 : "flinch"
+		5 : "big flinch"
+		6 : "getup"
+		7 : "falling"
+		8 : "attack1"
+		9 : "attack2"
+		10 : "walk"
+		11 : "laflinch"
+		12 : "raflinch"
+		13 : "llflinch"
+		14 : "rlflinch"
+		15 : "dieheadshot"
+		16 : "dieheadshot2"
+		17 : "diesimple"
+		18 : "dieback"
+		19 : "dieforward"
+		20 : "pause"
+		21 : "bust through wall"
+		22 : "kick punnch wall"
+		23 : "bust window"
+		24 : "soda"
+		25 : "slide idle"
+		26 : "slide wall"
+		27 : "ventclimbidle"
+		28 : "vent climb"
+		29 : "deadidle"
+		30 : "dead wall"
+		31 : "freaksitdie"
+		32 : "freaksit"
+		33 : "eatbodytable"
+		34 : "eatbody"
+		35 : "eatbodystand"
+		36 : "ripdoor"
+		37 : "pull Scientist"
+		38 : "eating"
+		39 : "eat to stand"
+		40 : "vent z idle"
+		41 : "vent c1a3"
+		42 : "haul zombie"
+		43 : "c2a3 snack getup"
+	]
+]
+//NEW 1.9
 @PointClass base(Monster) size(-16 -16 0, 16 16 72) studio("models/zombie_barney.mdl") = monster_zombie_barney : "Barney Zombie" [
 	sequence(Choices) : "Animation Sequence (editor)" : 10 =
 	[
@@ -4374,8 +4474,7 @@
 	pose(choices) : "Pose" : 0 =
 	[
 		0 : "On back"
-		1 : "On side"
-		2 : "On stomach"
+		1 : "On stomach"
 	]
 ]
 //NEW 1.9
@@ -4384,8 +4483,25 @@
 	pose(choices) : "Pose" : 0 =
 	[
 		0 : "On back"
-		1 : "On side"
-		2 : "On stomach"
+		1 : "On stomach"
+	]
+]
+//NEW 1.9
+@PointClass base(Targetname, Angles, RenderFields, Appearflags) size(-16 -16 0, 16 16 72) studio("models/zombie_blackop.mdl") = monster_zombie_blackop_dead : "Dead Blackop Zombie" 
+[
+	pose(choices) : "Pose" : 0 =
+	[
+		0 : "On back"
+		1 : "On stomach"
+	]
+]
+//NEW 1.9
+@PointClass base(Targetname, Angles, RenderFields, Appearflags) size(-16 -16 0, 16 16 72) studio("models/zombie_soldier_helmet.mdl") = monster_zombie_soldier_helmet_dead : "Dead Soldier Helmet Zombie" 
+[
+	pose(choices) : "Pose" : 0 =
+	[
+		0 : "On back"
+		1 : "On stomach"
 	]
 ]
 //NEW 1.9
@@ -4394,8 +4510,7 @@
 	pose(choices) : "Pose" : 0 =
 	[
 		0 : "On back"
-		1 : "On side"
-		2 : "On stomach"
+		1 : "On stomach"
 	]
 ]
 //NEW 1.9
@@ -4404,8 +4519,7 @@
 	pose(choices) : "Pose" : 0 =
 	[
 		0 : "On back"
-		1 : "On side"
-		2 : "On stomach"
+		1 : "On stomach"
 	]
 ]
 //NEW 1.9
@@ -6195,7 +6309,6 @@
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_crowbar.mdl") = weapon_crowbar : "Crowbar" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_egon.mdl") = weapon_egon : "Egon Gun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_gauss.mdl") = weapon_gauss : "Gauss Gun" []
-@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_9mmhandgun.mdl") = weapon_glock : "9mm Handgun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_grenade.mdl") = weapon_handgrenade : "Handgrenade Ammo" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_hgun.mdl") = weapon_hornetgun : "Hornet Gun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_9mmar.mdl") = weapon_mp5 : "9mm Assault Rifle" []
@@ -6251,4 +6364,4 @@
 	m_flWindY(integer) : "Wind Y" : 0 
 	m_flRandX(integer) : "Rand X" : 0 
 	m_flRandY(integer) : "Rand Y" : 0 
-] 
+]

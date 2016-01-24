@@ -1,0 +1,69 @@
+starting_particles 1
+
+new_particles_per_second 0.0
+
+texture particles/ripples01.tga
+
+
+scale 0.1
+
+growth 0.5
+
+lifetime 2
+
+lifetime_var 0.5
+
+rotation_speed 10.0
+
+gravity 0.0
+starting_velocity_x 0.0
+
+starting_velocity_y 0.0
+
+starting_velocity_z 0
+
+velocity_var_x 0
+
+velocity_var_y 0
+
+velocity_var_z 0
+
+damping 0
+
+transparency 150
+
+system_life 3
+
+display_mode 24
+
+emitter_shape point		
+
+plane_x_length 5		
+
+plane_y_length 5
+
+anim_speed over_life
+
+fps 10
+
+starting_frame 1
+
+ending_frame 1
+
+frames_in_image 1
+
+loop_behaviour hold_last
+
+particle_align planar
+
+collision off
+
+falloff none
+
+wind 0
+
+fade_in 0
+
+fade_out 1
+
+smoke 0

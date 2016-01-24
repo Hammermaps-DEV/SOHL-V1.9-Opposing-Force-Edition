@@ -27,10 +27,6 @@
 #include "gamerules.h"
 #include "locus.h"
 
-
-static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize );
-
-
 // ==================== GENERIC AMBIENT SOUND ======================================
 
 // runtime pitch shift and volume fadein/out structure
@@ -1463,7 +1459,7 @@ void SENTENCEG_Init()
 		return;
 
 	// for each line in the file...
-	while ( memfgets(pMemFile, fileSize, filePos, buffer, 511) != NULL )
+	while (UTIL_memfgets(pMemFile, fileSize, filePos, buffer, 511) != NULL )
 	{
 		// skip whitespace
 		i = 0;
@@ -1657,58 +1653,6 @@ int gcTextures = 0;
 char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];	// texture names
 char grgchTextureType[CTEXTURESMAX];						// parallel array of texture types
 
-// open materials.txt,  get size, alloc space, 
-// save in array.  Only works first time called, 
-// ignored on subsequent calls.
-
-static char *memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize )
-{
-	// Bullet-proofing
-	if ( !pMemFile || !pBuffer )
-		return NULL;
-
-	if ( filePos >= fileSize )
-		return NULL;
-
-	int i = filePos;
-	int last = fileSize;
-
-	// fgets always NULL terminates, so only read bufferSize-1 characters
-	if ( last - filePos > (bufferSize-1) )
-		last = filePos + (bufferSize-1);
-
-	int stop = 0;
-
-	// Stop at the next newline (inclusive) or end of buffer
-	while ( i < last && !stop )
-	{
-		if ( pMemFile[i] == '\n' )
-			stop = 1;
-		i++;
-	}
-
-
-	// If we actually advanced the pointer, copy it over
-	if ( i != filePos )
-	{
-		// We read in size bytes
-		int size = i - filePos;
-		// copy it out
-		memcpy( pBuffer, pMemFile + filePos, sizeof(byte)*size );
-		
-		// If the buffer isn't full, terminate (this is always true)
-		if ( size < bufferSize )
-			pBuffer[size] = 0;
-
-		// Update file pointer
-		filePos = i;
-		return pBuffer;
-	}
-
-	// No data read, bail
-	return NULL;
-}
-
 
 void TEXTURETYPE_Init()
 {
@@ -1731,7 +1675,7 @@ void TEXTURETYPE_Init()
 		return;
 
 	// for each line in the file...
-	while (memfgets(pMemFile, fileSize, filePos, buffer, 511) != NULL && (gcTextures < CTEXTURESMAX))
+	while (UTIL_memfgets(pMemFile, fileSize, filePos, buffer, 511) != NULL && (gcTextures < CTEXTURESMAX))
 	{
 		// skip whitespace
 		i = 0;

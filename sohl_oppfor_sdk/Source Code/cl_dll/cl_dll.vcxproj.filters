@@ -150,6 +150,24 @@
     <ClInclude Include="..\pm_shared\pm_shared.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="particles\particle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle_header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle_systems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\particle_texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="particles\system_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\particle_defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vgui_TeamFortressViewport.cpp">
@@ -357,6 +375,24 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\game_shared\vgui_listbox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\mapped_particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\mapped_particles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\particle_systems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\system_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\tga_loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

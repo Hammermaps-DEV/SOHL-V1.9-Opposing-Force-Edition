@@ -1,0 +1,38 @@
+//Fire spawned when a monster starts burning
+
+starting_particles 0
+new_particles_per_second 0
+texture particles/fire04.tga
+
+scale 0.8
+growth -1.0
+
+system_life 0.5
+
+lifetime_var 0
+lifetime 0.5
+
+gravity 0.0
+rotation_speed 20
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 4.0
+
+velocity_var_x 0.5
+velocity_var_y 0.5
+velocity_var_z 3.0
+
+starting_frame 1
+ending_frame 14
+frames_in_image 16
+fps 20
+
+transparency 180
+display_mode 24
+
+wind 1
+
+fade_out 1
+collision off
+light_check never

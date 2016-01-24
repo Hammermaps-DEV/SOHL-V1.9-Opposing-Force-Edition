@@ -1,0 +1,41 @@
+//This version emites a new smoke type. As you can see
+//it's the same as default smoke. If you want you can
+//change it by a new different particle, or just change
+//the settings to stay longer, for example.
+//Do whatever. 
+
+starting_particles 20
+new_particles_per_second 0
+texture particles/engine/fleck_cement1.tga
+
+scale 0.07
+growth 0
+lifetime 1.0
+lifetime_var 0.5
+rotation_speed 480
+gravity 15
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 10
+velocity_var_y 10
+velocity_var_z 10
+
+transparency 255
+damping 4
+
+system_life 1.5
+display_mode 32
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+falloff none
+fade_in 0
+fade_out 1
+
+collision bounce
+light_check once
+wind 0

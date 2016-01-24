@@ -26,8 +26,8 @@
 #include "cl_entity.h"
 #include "vgui_TeamFortressViewport.h"
 #include "vgui_ScorePanel.h"
-#include "..\game_shared\vgui_helpers.h"
-#include "..\game_shared\vgui_loadtga.h"
+#include "vgui_helpers.h"
+#include "vgui_loadtga.h"
 #include "vgui_SpectatorPanel.h"
 
 hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine

@@ -252,7 +252,7 @@ Schedule_t	slFGruntFollow[] =
 {
 	{
 		tlFGruntFollow,
-		ARRAYSIZE ( tlFGruntFollow ),
+		HL_ARRAYSIZE ( tlFGruntFollow ),
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
@@ -274,7 +274,7 @@ Schedule_t	slFGruntFaceTarget[] =
 {
 	{
 		tlFGruntFaceTarget,
-		ARRAYSIZE ( tlFGruntFaceTarget ),
+		HL_ARRAYSIZE ( tlFGruntFaceTarget ),
 		bits_COND_CLIENT_PUSH	|
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
@@ -299,7 +299,7 @@ Schedule_t	slFGruntIdleStand[] =
 {
 	{ 
 		tlFGruntIdleStand,
-		ARRAYSIZE ( tlFGruntIdleStand ), 
+		HL_ARRAYSIZE ( tlFGruntIdleStand ), 
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
@@ -333,7 +333,7 @@ Schedule_t	slFGruntFail[] =
 {
 	{
 		tlFGruntFail,
-		ARRAYSIZE ( tlFGruntFail ),
+		HL_ARRAYSIZE ( tlFGruntFail ),
 		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2 |
 		bits_COND_CAN_MELEE_ATTACK1 |
@@ -358,7 +358,7 @@ Schedule_t	slFGruntCombatFail[] =
 {
 	{
 		tlFGruntCombatFail,
-		ARRAYSIZE ( tlFGruntCombatFail ),
+		HL_ARRAYSIZE ( tlFGruntCombatFail ),
 		bits_COND_CAN_RANGE_ATTACK1	|
 		bits_COND_CAN_RANGE_ATTACK2,
 		0,
@@ -386,7 +386,7 @@ Schedule_t	slFGruntVictoryDance[] =
 {
 	{ 
 		tlFGruntVictoryDance,
-		ARRAYSIZE ( tlFGruntVictoryDance ), 
+		HL_ARRAYSIZE ( tlFGruntVictoryDance ), 
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE,
@@ -411,7 +411,7 @@ Schedule_t slFGruntEstablishLineOfFire[] =
 {
 	{ 
 		tlFGruntEstablishLineOfFire,
-		ARRAYSIZE ( tlFGruntEstablishLineOfFire ),
+		HL_ARRAYSIZE ( tlFGruntEstablishLineOfFire ),
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_CAN_RANGE_ATTACK1	|
@@ -440,7 +440,7 @@ Schedule_t	slFGruntFoundEnemy[] =
 {
 	{ 
 		tlFGruntFoundEnemy,
-		ARRAYSIZE ( tlFGruntFoundEnemy ), 
+		HL_ARRAYSIZE ( tlFGruntFoundEnemy ), 
 		bits_COND_HEAR_SOUND,
 		
 		bits_SOUND_DANGER,
@@ -464,7 +464,7 @@ Schedule_t	slFGruntCombatFace[] =
 {
 	{ 
 		tlFGruntCombatFace1,
-		ARRAYSIZE ( tlFGruntCombatFace1 ), 
+		HL_ARRAYSIZE ( tlFGruntCombatFace1 ), 
 		bits_COND_NEW_ENEMY				|
 		bits_COND_ENEMY_DEAD			|
 		bits_COND_CAN_RANGE_ATTACK1		|
@@ -504,7 +504,7 @@ Schedule_t	slFGruntSignalSuppress[] =
 {
 	{ 
 		tlFGruntSignalSuppress,
-		ARRAYSIZE ( tlFGruntSignalSuppress ), 
+		HL_ARRAYSIZE ( tlFGruntSignalSuppress ), 
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -541,7 +541,7 @@ Schedule_t	slFGruntSuppress[] =
 {
 	{ 
 		tlFGruntSuppress,
-		ARRAYSIZE ( tlFGruntSuppress ), 
+		HL_ARRAYSIZE ( tlFGruntSuppress ), 
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -571,7 +571,7 @@ Schedule_t	slFGruntWaitInCover[] =
 {
 	{ 
 		tlFGruntWaitInCover,
-		ARRAYSIZE ( tlFGruntWaitInCover ), 
+		HL_ARRAYSIZE ( tlFGruntWaitInCover ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_HEAR_SOUND		|
 		bits_COND_CAN_RANGE_ATTACK1	|
@@ -604,7 +604,7 @@ Schedule_t	slFGruntTakeCover[] =
 {
 	{ 
 		tlFGruntTakeCover1,
-		ARRAYSIZE ( tlFGruntTakeCover1 ), 
+		HL_ARRAYSIZE ( tlFGruntTakeCover1 ), 
 		0,
 		0,
 		"TakeCover"
@@ -630,7 +630,7 @@ Schedule_t	slFGruntGrenadeCover[] =
 {
 	{ 
 		tlFGruntGrenadeCover1,
-		ARRAYSIZE ( tlFGruntGrenadeCover1 ), 
+		HL_ARRAYSIZE ( tlFGruntGrenadeCover1 ), 
 		0,
 		0,
 		"GrenadeCover"
@@ -652,7 +652,7 @@ Schedule_t	slFGruntTossGrenadeCover[] =
 {
 	{ 
 		tlFGruntTossGrenadeCover1,
-		ARRAYSIZE ( tlFGruntTossGrenadeCover1 ), 
+		HL_ARRAYSIZE ( tlFGruntTossGrenadeCover1 ), 
 		0,
 		0,
 		"TossGrenadeCover"
@@ -677,7 +677,7 @@ Schedule_t	slFGruntTakeCoverFromBestSound[] =
 {
 	{ 
 		tlFGruntTakeCoverFromBestSound,
-		ARRAYSIZE ( tlFGruntTakeCoverFromBestSound ), 
+		HL_ARRAYSIZE ( tlFGruntTakeCoverFromBestSound ), 
 		0,
 		0,
 		"FGruntTakeCoverFromBestSound"
@@ -703,7 +703,7 @@ Schedule_t slFGruntHideReload[] =
 {
 	{
 		tlFGruntHideReload,
-		ARRAYSIZE ( tlFGruntHideReload ),
+		HL_ARRAYSIZE ( tlFGruntHideReload ),
 		bits_COND_HEAVY_DAMAGE	|
 		bits_COND_HEAR_SOUND,
 
@@ -727,7 +727,7 @@ Schedule_t	slFGruntSweep[] =
 {
 	{ 
 		tlFGruntSweep,
-		ARRAYSIZE ( tlFGruntSweep ), 
+		HL_ARRAYSIZE ( tlFGruntSweep ), 
 		
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
@@ -769,7 +769,7 @@ Schedule_t	slFGruntRangeAttack1A[] =
 {
 	{ 
 		tlFGruntRangeAttack1A,
-		ARRAYSIZE ( tlFGruntRangeAttack1A ), 
+		HL_ARRAYSIZE ( tlFGruntRangeAttack1A ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -809,7 +809,7 @@ Schedule_t	slFGruntRangeAttack1B[] =
 {
 	{ 
 		tlFGruntRangeAttack1B,
-		ARRAYSIZE ( tlFGruntRangeAttack1B ), 
+		HL_ARRAYSIZE ( tlFGruntRangeAttack1B ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -839,7 +839,7 @@ Schedule_t	slFGruntRangeAttack2[] =
 {
 	{ 
 		tlFGruntRangeAttack2,
-		ARRAYSIZE ( tlFGruntRangeAttack2 ), 
+		HL_ARRAYSIZE ( tlFGruntRangeAttack2 ), 
 		0,
 		0,
 		"RangeAttack2"
@@ -860,7 +860,7 @@ Schedule_t	slFGruntRepel[] =
 {
 	{ 
 		tlFGruntRepel,
-		ARRAYSIZE ( tlFGruntRepel ), 
+		HL_ARRAYSIZE ( tlFGruntRepel ), 
 		bits_COND_SEE_ENEMY			|
 		bits_COND_NEW_ENEMY			|
 		bits_COND_LIGHT_DAMAGE		|
@@ -888,7 +888,7 @@ Schedule_t	slFGruntRepelAttack[] =
 {
 	{ 
 		tlFGruntRepelAttack,
-		ARRAYSIZE ( tlFGruntRepelAttack ), 
+		HL_ARRAYSIZE ( tlFGruntRepelAttack ), 
 		bits_COND_ENEMY_OCCLUDED,
 		0,
 		"Repel Attack"
@@ -912,7 +912,7 @@ Schedule_t	slFGruntRepelLand[] =
 {
 	{ 
 		tlFGruntRepelLand,
-		ARRAYSIZE ( tlFGruntRepelLand ), 
+		HL_ARRAYSIZE ( tlFGruntRepelLand ), 
 		bits_COND_SEE_ENEMY			|
 		bits_COND_NEW_ENEMY			|
 		bits_COND_LIGHT_DAMAGE		|
@@ -942,7 +942,7 @@ Schedule_t	slFGruntFindMedic[] =
 {
 	{ 
 		tlFGruntFindMedic,
-		ARRAYSIZE ( tlFGruntFindMedic ), 
+		HL_ARRAYSIZE ( tlFGruntFindMedic ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_SEE_FEAR			|
 		bits_COND_LIGHT_DAMAGE		|

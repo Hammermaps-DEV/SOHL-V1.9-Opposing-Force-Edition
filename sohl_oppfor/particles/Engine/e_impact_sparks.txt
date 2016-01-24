@@ -1,0 +1,42 @@
+starting_particles 100
+new_particles_per_second 0
+texture particles/engine/sparks01.tga
+
+scale 0.01
+growth 0
+lifetime 0.2
+lifetime_var 0.1
+rotation_speed 444
+gravity 10
+
+starting_velocity_x 0
+starting_velocity_y 0
+starting_velocity_z 0
+
+velocity_var_x 30
+velocity_var_y 30
+velocity_var_z 30
+
+transparency 255
+damping 0
+
+//emitter_shape plane
+
+//plane_x_length 10
+//plane_y_length 10
+
+system_life 0.3
+display_mode 24
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+falloff none
+fade_in 0
+fade_out 1
+collision bounce
+light_check none
+wind 0
+
+randomize 1
+random_modifier 0.01

@@ -1,0 +1,40 @@
+starting_particles 1
+new_particles_per_second 0
+
+texture particles/engine/particle_white.tga
+
+scale 0.1
+growth 1
+
+lifetime 2
+lifetime_var 3
+
+rotation_speed 44
+gravity 0
+
+starting_velocity_x 0
+starting_velocity_y 0
+starting_velocity_z 0
+
+velocity_var_x 0
+velocity_var_y 0
+velocity_var_z 0
+
+damping 0
+
+transparency 255
+
+system_life 5
+
+display_mode 32	
+
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+falloff none
+fade_in 0
+fade_out 1
+collision none
+light_check once
+wind 1

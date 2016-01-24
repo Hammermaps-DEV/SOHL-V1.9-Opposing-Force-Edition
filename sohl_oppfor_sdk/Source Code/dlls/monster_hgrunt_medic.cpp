@@ -227,7 +227,7 @@ Schedule_t	slMedicFollow[] =
 {
 	{
 		tlMedicFollow,
-		ARRAYSIZE ( tlMedicFollow ),
+		HL_ARRAYSIZE( tlMedicFollow ),
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
@@ -250,7 +250,7 @@ Schedule_t	slMedicFaceTarget[] =
 {
 	{
 		tlMedicFaceTarget,
-		ARRAYSIZE ( tlMedicFaceTarget ),
+		HL_ARRAYSIZE( tlMedicFaceTarget ),
 		bits_COND_CLIENT_PUSH	|
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
@@ -276,7 +276,7 @@ Schedule_t	slMedicIdleStand[] =
 {
 	{ 
 		tlMedicIdleStand,
-		ARRAYSIZE ( tlMedicIdleStand ), 
+		HL_ARRAYSIZE( tlMedicIdleStand ),
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
@@ -311,7 +311,7 @@ Schedule_t	slMedicFail[] =
 {
 	{
 		tlMedicFail,
-		ARRAYSIZE ( tlMedicFail ),
+		HL_ARRAYSIZE( tlMedicFail ),
 		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2 |
 		bits_COND_CAN_MELEE_ATTACK1 |
@@ -337,7 +337,7 @@ Schedule_t	slMedicCombatFail[] =
 {
 	{
 		tlMedicCombatFail,
-		ARRAYSIZE ( tlMedicCombatFail ),
+		HL_ARRAYSIZE ( tlMedicCombatFail ),
 		bits_COND_CAN_RANGE_ATTACK1	|
 		bits_COND_CAN_RANGE_ATTACK2,
 		0,
@@ -365,7 +365,7 @@ Schedule_t	slMedicVictoryDance[] =
 {
 	{ 
 		tlMedicVictoryDance,
-		ARRAYSIZE ( tlMedicVictoryDance ), 
+		HL_ARRAYSIZE ( tlMedicVictoryDance ), 
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_MEDIC_HEAL	|
@@ -391,7 +391,7 @@ Schedule_t slMedicEstablishLineOfFire[] =
 {
 	{ 
 		tlMedicEstablishLineOfFire,
-		ARRAYSIZE ( tlMedicEstablishLineOfFire ),
+		HL_ARRAYSIZE ( tlMedicEstablishLineOfFire ),
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_CAN_RANGE_ATTACK1	|
@@ -420,7 +420,7 @@ Schedule_t	slMedicFoundEnemy[] =
 {
 	{ 
 		tlMedicFoundEnemy,
-		ARRAYSIZE ( tlMedicFoundEnemy ), 
+		HL_ARRAYSIZE ( tlMedicFoundEnemy ), 
 		bits_COND_HEAR_SOUND,
 		
 		bits_SOUND_DANGER,
@@ -444,7 +444,7 @@ Schedule_t	slMedicCombatFace[] =
 {
 	{ 
 		tlMedicCombatFace1,
-		ARRAYSIZE ( tlMedicCombatFace1 ), 
+		HL_ARRAYSIZE ( tlMedicCombatFace1 ), 
 		bits_COND_NEW_ENEMY				|
 		bits_COND_ENEMY_DEAD			|
 		bits_COND_CAN_RANGE_ATTACK1		|
@@ -484,7 +484,7 @@ Schedule_t	slMedicSignalSuppress[] =
 {
 	{ 
 		tlMedicSignalSuppress,
-		ARRAYSIZE ( tlMedicSignalSuppress ), 
+		HL_ARRAYSIZE ( tlMedicSignalSuppress ), 
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -521,7 +521,7 @@ Schedule_t	slMedicSuppress[] =
 {
 	{ 
 		tlMedicSuppress,
-		ARRAYSIZE ( tlMedicSuppress ), 
+		HL_ARRAYSIZE ( tlMedicSuppress ), 
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -551,7 +551,7 @@ Schedule_t	slMedicWaitInCover[] =
 {
 	{ 
 		tlMedicWaitInCover,
-		ARRAYSIZE ( tlMedicWaitInCover ), 
+		HL_ARRAYSIZE ( tlMedicWaitInCover ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_HEAR_SOUND		|
 		bits_COND_CAN_RANGE_ATTACK1	|
@@ -584,7 +584,7 @@ Schedule_t	slMedicTakeCover[] =
 {
 	{ 
 		tlMedicTakeCover1,
-		ARRAYSIZE ( tlMedicTakeCover1 ), 
+		HL_ARRAYSIZE ( tlMedicTakeCover1 ), 
 		0,
 		0,
 		"TakeCover"
@@ -610,7 +610,7 @@ Schedule_t	slMedicGrenadeCover[] =
 {
 	{ 
 		tlMedicGrenadeCover1,
-		ARRAYSIZE ( tlMedicGrenadeCover1 ), 
+		HL_ARRAYSIZE ( tlMedicGrenadeCover1 ), 
 		0,
 		0,
 		"GrenadeCover"
@@ -632,7 +632,7 @@ Schedule_t	slMedicTossGrenadeCover[] =
 {
 	{ 
 		tlMedicTossGrenadeCover1,
-		ARRAYSIZE ( tlMedicTossGrenadeCover1 ), 
+		HL_ARRAYSIZE ( tlMedicTossGrenadeCover1 ), 
 		0,
 		0,
 		"TossGrenadeCover"
@@ -657,7 +657,7 @@ Schedule_t	slMedicTakeCoverFromBestSound[] =
 {
 	{ 
 		tlMedicTakeCoverFromBestSound,
-		ARRAYSIZE ( tlMedicTakeCoverFromBestSound ), 
+		HL_ARRAYSIZE ( tlMedicTakeCoverFromBestSound ), 
 		0,
 		0,
 		"GruntTakeCoverFromBestSound"
@@ -683,7 +683,7 @@ Schedule_t slMedicHideReload[] =
 {
 	{
 		tlMedicHideReload,
-		ARRAYSIZE ( tlMedicHideReload ),
+		HL_ARRAYSIZE ( tlMedicHideReload ),
 		bits_COND_HEAVY_DAMAGE	|
 		bits_COND_HEAR_SOUND,
 
@@ -707,7 +707,7 @@ Schedule_t	slMedicSweep[] =
 {
 	{ 
 		tlMedicSweep,
-		ARRAYSIZE ( tlMedicSweep ), 
+		HL_ARRAYSIZE ( tlMedicSweep ), 
 		
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
@@ -750,7 +750,7 @@ Schedule_t	slMedicRangeAttack1A[] =
 {
 	{ 
 		tlMedicRangeAttack1A,
-		ARRAYSIZE ( tlMedicRangeAttack1A ), 
+		HL_ARRAYSIZE ( tlMedicRangeAttack1A ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -790,7 +790,7 @@ Schedule_t	slMedicRangeAttack1B[] =
 {
 	{ 
 		tlMedicRangeAttack1B,
-		ARRAYSIZE ( tlMedicRangeAttack1B ), 
+		HL_ARRAYSIZE ( tlMedicRangeAttack1B ), 
 		bits_COND_NEW_ENEMY			|
 		bits_COND_ENEMY_DEAD		|
 		bits_COND_HEAVY_DAMAGE		|
@@ -820,7 +820,7 @@ Schedule_t	slMedicRangeAttack2[] =
 {
 	{ 
 		tlMedicRangeAttack2,
-		ARRAYSIZE ( tlMedicRangeAttack2 ), 
+		HL_ARRAYSIZE ( tlMedicRangeAttack2 ), 
 		0,
 		0,
 		"RangeAttack2"
@@ -842,7 +842,7 @@ Schedule_t	slMedicRepel[] =
 {
 	{ 
 		tlMedicRepel,
-		ARRAYSIZE ( tlMedicRepel ), 
+		HL_ARRAYSIZE ( tlMedicRepel ), 
 		bits_COND_SEE_ENEMY			|
 		bits_COND_NEW_ENEMY			|
 		bits_COND_LIGHT_DAMAGE		|
@@ -871,7 +871,7 @@ Schedule_t	slMedicRepelAttack[] =
 {
 	{ 
 		tlMedicRepelAttack,
-		ARRAYSIZE ( tlMedicRepelAttack ), 
+		HL_ARRAYSIZE ( tlMedicRepelAttack ), 
 		bits_COND_ENEMY_OCCLUDED,
 		0,
 		"Repel Attack"
@@ -895,7 +895,7 @@ Schedule_t	slMedicRepelLand[] =
 {
 	{ 
 		tlMedicRepelLand,
-		ARRAYSIZE ( tlMedicRepelLand ), 
+		HL_ARRAYSIZE ( tlMedicRepelLand ), 
 		bits_COND_SEE_ENEMY			|
 		bits_COND_NEW_ENEMY			|
 		bits_COND_LIGHT_DAMAGE		|
@@ -927,7 +927,7 @@ Schedule_t	slMedicHeal[] =
 {
 	{
 		tlMedicHeal,
-		ARRAYSIZE ( tlMedicHeal ),
+		HL_ARRAYSIZE ( tlMedicHeal ),
 		0,	// Don't interrupt or he'll end up running around with a needle all the time
 		0,
 		"Heal"
@@ -1071,7 +1071,7 @@ void CMedic :: GibMonster ( void )
 		CBaseEntity *pGun;
 		if ( pev->weapons == MEDIC_PISTOL )
 		{
-			pGun = DropItem( "weapon_glock", vecGunPos, vecGunAngles );
+			pGun = DropItem( "weapon_9mmhandgun", vecGunPos, vecGunAngles );
 		}
 		if ( pev->weapons == MEDIC_EAGLE )
 		{
@@ -1504,7 +1504,7 @@ void CMedic :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			// now spawn a gun.
 				if ( pev->weapons == MEDIC_PISTOL )
 				{
-					DropItem( "weapon_glock", vecGunPos, vecGunAngles );
+					DropItem( "weapon_9mmhandgun", vecGunPos, vecGunAngles );
 				}
 				if ( pev->weapons == MEDIC_EAGLE )
 				{

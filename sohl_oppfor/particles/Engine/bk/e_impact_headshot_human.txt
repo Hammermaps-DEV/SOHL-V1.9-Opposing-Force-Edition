@@ -1,0 +1,37 @@
+starting_particles 10
+new_particles_per_second 0
+texture particles/engine/particle_blood_splat01.tga
+
+scale 0.1
+growth 0.1
+lifetime 2
+lifetime_var 1
+rotation_speed 20
+gravity 6
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 2.0
+
+velocity_var_x 1.0
+velocity_var_y 1.0
+velocity_var_z 1.0
+
+damping 4
+
+transparency 255
+
+system_life 3
+display_mode 32	
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+falloff none
+fade_in 0
+fade_out 1
+
+collision particles/engine/e_blood_drips.txt
+
+wind 0
+light_check once

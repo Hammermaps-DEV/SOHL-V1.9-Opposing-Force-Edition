@@ -39,8 +39,6 @@
 #define DLLEXPORT /* */
 #endif
 
-#define HL_ARRAYSIZE(p)	(sizeof(p)/sizeof(p[0]))
-
 typedef enum
 	{
 	at_notice,
@@ -383,6 +381,8 @@ typedef struct
 	short			fieldSize;
 	short			flags;
 } TYPEDESCRIPTION;
+
+#define HL_ARRAYSIZE(p)	(sizeof(p)/sizeof(p[0]))
 
 typedef struct 
 {

@@ -1,0 +1,31 @@
+starting_particles 10
+//2
+new_particles_per_second 10
+scale 0.5
+texture particles/smoke3.tga
+//20
+lifetime 8
+gravity 0.5
+growth 0.5
+rotation_speed 0.0
+starting_velocity_x 0.00
+starting_velocity_y 0.00
+starting_velocity_z 0.00
+velocity_var_x 1
+velocity_var_y 0.15
+velocity_var_z 0.0
+damping 0
+transparency 33
+system_life -1
+
+emitter_shape plane
+//emitter_shape around_player
+
+plane_x_length 500
+plane_y_length 1500
+collision bounce
+fade_out 1
+fade_in 1
+wind 0
+smoke 0
+//light_check once

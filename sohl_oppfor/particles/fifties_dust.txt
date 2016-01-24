@@ -1,0 +1,31 @@
+starting_particles 30
+new_particles_per_second 0
+texture particles/dust01.tga
+
+scale 0.5
+lifetime 15
+gravity 0
+growth 0.5
+
+rotation_speed 20.0
+
+starting_velocity_x 1
+starting_velocity_y 0
+starting_velocity_z 0
+
+velocity_var_x 0.3
+velocity_var_y 0.3
+velocity_var_z 1.5
+
+damping 0.5
+
+transparency 110
+system_life 30
+emitter_shape plane
+plane_x_length 50
+plane_y_length 50
+collision bounce
+fade_out 1
+fade_in 0
+wind 0
+smoke 0

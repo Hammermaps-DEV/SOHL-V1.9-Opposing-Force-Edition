@@ -1,0 +1,39 @@
+starting_particles 2
+new_particles_per_second 0
+
+scale 0.1
+
+texture particles/water_splash04.tga
+lifetime 0.5
+lifetime_var 0.5
+
+gravity 2
+
+growth 0.02
+
+rotation_speed 5
+
+damping 0.5
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 0.3
+velocity_var_y 0.3
+velocity_var_z 1.0
+
+transparency 100
+display_mode 24
+
+system_life 1
+
+collision off
+fade_out 1
+fade_in 0
+wind 0
+//particle_align locked_z
+
+randomize 1
+random_modifier 0.1
+

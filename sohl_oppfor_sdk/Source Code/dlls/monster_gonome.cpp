@@ -572,7 +572,7 @@ Schedule_t	slGonomeRangeAttack1[] =
 {
 	{
 		tlGonomeRangeAttack1,
-		ARRAYSIZE(tlGonomeRangeAttack1),
+		HL_ARRAYSIZE(tlGonomeRangeAttack1),
 	bits_COND_NEW_ENEMY |
 	bits_COND_ENEMY_DEAD |
 	bits_COND_HEAVY_DAMAGE |
@@ -596,7 +596,7 @@ Schedule_t slGonomeChaseEnemy[] =
 {
 	{
 		tlGonomeChaseEnemy1,
-		ARRAYSIZE(tlGonomeChaseEnemy1),
+		HL_ARRAYSIZE(tlGonomeChaseEnemy1),
 	bits_COND_NEW_ENEMY |
 	bits_COND_ENEMY_DEAD |
 	bits_COND_SMELL_FOOD |
@@ -636,7 +636,7 @@ Schedule_t slGonomeEat[] =
 {
 	{
 		tlGonomeEat,
-		ARRAYSIZE(tlGonomeEat),
+		HL_ARRAYSIZE(tlGonomeEat),
 	bits_COND_LIGHT_DAMAGE |
 	bits_COND_HEAVY_DAMAGE |
 	bits_COND_NEW_ENEMY	,
@@ -674,7 +674,7 @@ Schedule_t slGonomeSniffAndEat[] =
 {
 	{
 		tlGonomeSniffAndEat,
-		ARRAYSIZE(tlGonomeSniffAndEat),
+		HL_ARRAYSIZE(tlGonomeSniffAndEat),
 	bits_COND_LIGHT_DAMAGE |
 	bits_COND_HEAVY_DAMAGE |
 	bits_COND_NEW_ENEMY	,
@@ -708,7 +708,7 @@ Schedule_t slGonomeWallow[] =
 {
 	{
 		tlGonomeWallow,
-		ARRAYSIZE(tlGonomeWallow),
+		HL_ARRAYSIZE(tlGonomeWallow),
 	bits_COND_LIGHT_DAMAGE |
 	bits_COND_HEAVY_DAMAGE |
 	bits_COND_NEW_ENEMY	,

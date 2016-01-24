@@ -1,0 +1,46 @@
+starting_particles 0
+new_particles_per_second 0
+texture particles/water_splash04.tga
+
+scale 0.05
+growth 0.2
+lifetime 1
+
+lifetime_var 0.2
+rotation_speed 190
+gravity 10
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 3
+velocity_var_x 1
+velocity_var_y 1
+velocity_var_z 1
+damping 2.0
+transparency 190
+system_life 1.2
+display_mode 32
+
+emitter_shape point		
+plane_x_length 5		
+plane_y_length 5
+anim_speed over_life
+fps 10
+
+starting_frame 1
+
+ending_frame 1
+
+frames_in_image 1
+
+loop_behaviour hold_last
+
+collision particles/dirtdust.txt
+falloff none
+
+wind 0
+
+fade_in 0
+
+fade_out 1
+
+smoke 0

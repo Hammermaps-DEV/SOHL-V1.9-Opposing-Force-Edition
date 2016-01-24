@@ -1,0 +1,37 @@
+starting_particles 10
+new_particles_per_second 0
+texture particles/engine/fleck_cement1.tga
+
+
+scale 0.03
+growth 0
+lifetime 0.5
+lifetime_var 0.5
+rotation_speed 333
+gravity 15
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 10
+velocity_var_y 10
+velocity_var_z 10
+
+transparency 255
+
+system_life 1
+display_mode 32	
+
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+falloff none
+fade_in 0
+fade_out 1
+collision bounce
+light_check once
+wind 0
+
+randomize 1
+random_modifier 0.1

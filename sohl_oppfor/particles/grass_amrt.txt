@@ -1,0 +1,96 @@
+
+texture particles/realgras03.tga
+
+
+scale 11
+leaning_max 110.0
+
+leaning_min 65.0
+
+wave_speed 3.0
+
+particles 50
+
+transparency 255
+
+lod 1
+
+
+
+new_particle
+
+
+texture particles/realgras04.tga
+
+scale 11
+
+leaning_max 65.0
+
+leaning_min 110.0
+
+wave_speed 3.0
+
+particles 50
+transparency 255
+
+lod 1
+
+
+
+new_particle
+
+
+texture particles/realgras05.tga
+
+scale 11
+leaning_max 65.0
+
+leaning_min 110.0
+
+wave_speed 3.0
+
+particles 50
+transparency 255
+
+lod 1
+
+
+
+new_particle
+
+
+texture particles/realgras07.tga
+
+scale 11
+
+leaning_max 65.0
+
+leaning_min 110.0
+
+wave_speed 3.0
+
+particles 50
+
+transparency 255
+
+lod 1
+
+
+
+new_particle
+
+texture particles/longgrass02.tga
+
+scale 11
+
+leaning_max 65.0
+
+leaning_min 110.0
+
+wave_speed 3.0
+
+particles 50
+
+transparency 255
+
+lod 1

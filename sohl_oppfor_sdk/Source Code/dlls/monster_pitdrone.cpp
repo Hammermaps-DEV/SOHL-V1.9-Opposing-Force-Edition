@@ -654,7 +654,7 @@ Task_t	tlPDroneRangeAttack1[] = {
 Schedule_t	slPDroneRangeAttack1[] = {
 	{
 		tlPDroneRangeAttack1,
-		ARRAYSIZE(tlPDroneRangeAttack1),
+		HL_ARRAYSIZE(tlPDroneRangeAttack1),
 		bits_COND_NEW_ENEMY |
 		bits_COND_ENEMY_DEAD |
 		bits_COND_HEAVY_DAMAGE |
@@ -676,7 +676,7 @@ Task_t tlPDroneChaseEnemy1[] = {
 Schedule_t slPDroneChaseEnemy[] = {
 	{
 		tlPDroneChaseEnemy1,
-		ARRAYSIZE(tlPDroneChaseEnemy1),
+		HL_ARRAYSIZE(tlPDroneChaseEnemy1),
 		bits_COND_NEW_ENEMY |
 		bits_COND_ENEMY_DEAD |
 		bits_COND_SMELL_FOOD |
@@ -713,7 +713,7 @@ Task_t tlPDroneEat[] = {
 Schedule_t slPDroneEat[] = {
 	{
 		tlPDroneEat,
-		ARRAYSIZE(tlPDroneEat),
+		HL_ARRAYSIZE(tlPDroneEat),
 		bits_COND_LIGHT_DAMAGE |
 		bits_COND_HEAVY_DAMAGE |
 		bits_COND_NEW_ENEMY,
@@ -748,7 +748,7 @@ Task_t tlPDroneSniffAndEat[] = {
 Schedule_t slPDroneSniffAndEat[] = {
 	{
 		tlPDroneSniffAndEat,
-		ARRAYSIZE(tlPDroneSniffAndEat),
+		HL_ARRAYSIZE(tlPDroneSniffAndEat),
 		bits_COND_LIGHT_DAMAGE |
 		bits_COND_HEAVY_DAMAGE |
 		bits_COND_NEW_ENEMY,
@@ -779,7 +779,7 @@ Task_t tlPDroneWallow[] = {
 Schedule_t slPDroneWallow[] = {
 	{
 		tlPDroneWallow,
-		ARRAYSIZE(tlPDroneWallow),
+		HL_ARRAYSIZE(tlPDroneWallow),
 		bits_COND_LIGHT_DAMAGE |
 		bits_COND_HEAVY_DAMAGE |
 		bits_COND_NEW_ENEMY,

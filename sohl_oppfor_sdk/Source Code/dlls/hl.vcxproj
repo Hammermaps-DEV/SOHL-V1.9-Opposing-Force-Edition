@@ -15,6 +15,14 @@
     <ClCompile Include="..\pm_shared\pm_debug.c" />
     <ClCompile Include="..\pm_shared\pm_math.c" />
     <ClCompile Include="..\pm_shared\pm_shared.c" />
+    <ClCompile Include="ammo_357.cpp" />
+    <ClCompile Include="ammo_9mmbox.cpp" />
+    <ClCompile Include="ammo_9mmclip.cpp" />
+    <ClCompile Include="ammo_buckshot.cpp" />
+    <ClCompile Include="ammo_crossbow.cpp" />
+    <ClCompile Include="ammo_mp5clip.cpp" />
+    <ClCompile Include="ammo_mp5grenades.cpp" />
+    <ClCompile Include="ammo_rpgclip.cpp" />
     <ClCompile Include="env_electrified_wire.cpp" />
     <ClCompile Include="env_rope_segment.cpp" />
     <ClCompile Include="monster_aflock.cpp" />
@@ -59,12 +67,17 @@
     <ClCompile Include="monster_skeleton_dead.cpp" />
     <ClCompile Include="monster_zombie_barney.cpp" />
     <ClCompile Include="monster_zombie_barney_dead.cpp" />
+    <ClCompile Include="monster_zombie_blackop.cpp" />
+    <ClCompile Include="monster_zombie_blackop_dead.cpp" />
     <ClCompile Include="monster_zombie_construction.cpp" />
     <ClCompile Include="monster_zombie_construction_dead.cpp" />
     <ClCompile Include="monster_zombie_dead.cpp" />
     <ClCompile Include="monster_zombie_soldier.cpp" />
     <ClCompile Include="monster_drillsergeant.cpp" />
     <ClCompile Include="monster_zombie_soldier_dead.cpp" />
+    <ClCompile Include="monster_zombie_soldier_helmet.cpp" />
+    <ClCompile Include="monster_zombie_soldier_helmet_dead.cpp" />
+    <ClCompile Include="particle_emitter.cpp" />
     <ClCompile Include="proj_gonomespit.cpp" />
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
@@ -114,6 +127,7 @@
     <ClCompile Include="monsterstate.cpp" />
     <ClCompile Include="mortar.cpp" />
     <ClCompile Include="movewith.cpp" />
+    <ClCompile Include="weapon_knife.cpp" />
     <ClCompile Include="weapon_m249.cpp" />
     <ClCompile Include="weapon_mp5.cpp" />
     <ClCompile Include="multiplay_gamerules.cpp" />
@@ -237,13 +251,18 @@
     <ClInclude Include="monster_zombie.h" />
     <ClInclude Include="monster_zombie_barney.h" />
     <ClInclude Include="monster_zombie_barney_dead.h" />
+    <ClInclude Include="monster_zombie_blackop.h" />
+    <ClInclude Include="monster_zombie_blackop_dead.h" />
     <ClInclude Include="monster_zombie_construction.h" />
     <ClInclude Include="monster_zombie_construction_dead.h" />
     <ClInclude Include="monster_zombie_dead.h" />
     <ClInclude Include="monster_zombie_soldier.h" />
     <ClInclude Include="monster_zombie_soldier_dead.h" />
+    <ClInclude Include="monster_zombie_soldier_helmet.h" />
+    <ClInclude Include="monster_zombie_soldier_helmet_dead.h" />
     <ClInclude Include="movewith.h" />
     <ClInclude Include="nodes.h" />
+    <ClInclude Include="particle_emitter.h" />
     <ClInclude Include="proj_gonomespit.h" />
     <ClInclude Include="proj_pitdronespit.h" />
     <ClInclude Include="plane.h" />
@@ -266,6 +285,14 @@
     <ClInclude Include="util.h" />
     <ClInclude Include="vector.h" />
     <ClInclude Include="weapons.h" />
+    <ClInclude Include="weapon_crossbow.h" />
+    <ClInclude Include="weapon_crowbar.h" />
+    <ClInclude Include="weapon_glock.h" />
+    <ClInclude Include="weapon_knife.h" />
+    <ClInclude Include="weapon_mp5.h" />
+    <ClInclude Include="weapon_python.h" />
+    <ClInclude Include="weapon_rpg.h" />
+    <ClInclude Include="weapon_shotgun.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1C9F46EB-3FE6-41D1-9108-B30FCA334712}</ProjectGuid>

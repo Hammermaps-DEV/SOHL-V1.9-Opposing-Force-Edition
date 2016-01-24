@@ -607,6 +607,15 @@ cvar_t	sk_plr_crowbar1 = {"sk_plr_crowbar1","0"};
 cvar_t	sk_plr_crowbar2 = {"sk_plr_crowbar2","0"};
 cvar_t	sk_plr_crowbar3 = {"sk_plr_crowbar3","0"};
 
+// Knife whack
+cvar_t	sk_plr_knife1 = { "sk_plr_knife1","0" };
+cvar_t	sk_plr_knife2 = { "sk_plr_knife2","0" };
+cvar_t	sk_plr_knife3 = { "sk_plr_knife3","0" };
+
+cvar_t	sk_plr_knife_charge1 = { "sk_plr_knife_charge1","0" };
+cvar_t	sk_plr_knife_charge2 = { "sk_plr_knife_charge2","0" };
+cvar_t	sk_plr_knife_charge3 = { "sk_plr_knife_charge3","0" };
+
 // Glock Round
 cvar_t	sk_plr_9mm_bullet1 = {"sk_plr_9mm_bullet1","0"};
 cvar_t	sk_plr_9mm_bullet2 = {"sk_plr_9mm_bullet2","0"};
@@ -1363,6 +1372,15 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_plr_crowbar1 );
 	CVAR_REGISTER ( &sk_plr_crowbar2 );
 	CVAR_REGISTER ( &sk_plr_crowbar3 );
+
+	// Knife whack
+	CVAR_REGISTER(&sk_plr_knife1);
+	CVAR_REGISTER(&sk_plr_knife2);
+	CVAR_REGISTER(&sk_plr_knife3);
+
+	CVAR_REGISTER(&sk_plr_knife_charge1);
+	CVAR_REGISTER(&sk_plr_knife_charge2);
+	CVAR_REGISTER(&sk_plr_knife_charge3);
 
 	// Glock Round
 	CVAR_REGISTER ( &sk_plr_9mm_bullet1 );

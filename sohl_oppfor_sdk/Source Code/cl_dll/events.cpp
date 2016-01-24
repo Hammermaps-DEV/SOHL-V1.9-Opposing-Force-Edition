@@ -13,16 +13,16 @@ extern "C"
 {
 	void EV_FireNull(event_args_t *args);
 	void EV_FireCrowbar(event_args_t *args);
+	void EV_FireKnife(event_args_t *args);
 	void EV_PlayEmptySound( struct event_args_s *args );
-	void EV_FireGlock1( struct event_args_s *args  );
+	void EV_FireGlock( struct event_args_s *args  );
 	void EV_FireMP5( struct event_args_s *args  );
 	void EV_FirePython( struct event_args_s *args  );
 	void EV_FireGauss( struct event_args_s *args  );
 	void EV_SpinGauss( struct event_args_s *args  );
 	void EV_EgonFire( struct event_args_s *args );
 	void EV_EgonStop( struct event_args_s *args );
-	void EV_FireShotGunSingle( struct event_args_s *args  );
-	void EV_FireShotGunDouble( struct event_args_s *args  );
+	void EV_FireShotGun( struct event_args_s *args  );
 	void EV_SnarkFire( struct event_args_s *args );
 	void EV_TrainPitchAdjust( struct event_args_s *args );
 	void EV_Decals( struct event_args_s *args );
@@ -50,12 +50,12 @@ void EV_HookEvents( void )
 {
 	gEngfuncs.pfnHookEvent( "events/null.sc",				EV_FireNull);
 	gEngfuncs.pfnHookEvent( "events/crowbar.sc",			EV_FireCrowbar);
+	gEngfuncs.pfnHookEvent( "events/knife.sc",				EV_FireKnife);
 	gEngfuncs.pfnHookEvent( "events/tripfire.sc",			EV_PlayEmptySound );
-	gEngfuncs.pfnHookEvent( "events/glock1.sc",				EV_FireGlock1 );
-	gEngfuncs.pfnHookEvent( "events/shotgun1.sc",			EV_FireShotGunSingle );
-	gEngfuncs.pfnHookEvent( "events/shotgun2.sc",			EV_FireShotGunDouble );
+	gEngfuncs.pfnHookEvent( "events/glock.sc",				EV_FireGlock );
+	gEngfuncs.pfnHookEvent( "events/shotgun.sc",			EV_FireShotGun);
 	gEngfuncs.pfnHookEvent( "events/mp5.sc",				EV_FireMP5 );
-	gEngfuncs.pfnHookEvent( "events/mp52.sc",				EV_Explode );
+	gEngfuncs.pfnHookEvent( "events/explode.sc",			EV_Explode );
 	gEngfuncs.pfnHookEvent( "events/python.sc",				EV_FirePython );
 	gEngfuncs.pfnHookEvent( "events/gauss.sc",				EV_FireGauss );
 	gEngfuncs.pfnHookEvent( "events/gaussspin.sc",			EV_SpinGauss );
@@ -63,7 +63,7 @@ void EV_HookEvents( void )
 	gEngfuncs.pfnHookEvent( "events/egon_stop.sc",			EV_EgonStop );
 	gEngfuncs.pfnHookEvent( "events/train.sc",				EV_TrainPitchAdjust );
 	gEngfuncs.pfnHookEvent( "events/snarkfire.sc",			EV_SnarkFire );
-	gEngfuncs.pfnHookEvent( "events/glock2.sc",				EV_Decals );
+	gEngfuncs.pfnHookEvent( "events/decals.sc",				EV_Decals );
 
 	// SOHL - Opposing-Force
 	gEngfuncs.pfnHookEvent( "events/m249.sc",				EV_FireM249 );

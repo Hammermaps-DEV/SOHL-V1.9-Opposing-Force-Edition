@@ -1,0 +1,50 @@
+// The Battle Grounds Particle System Emitter Definition File
+//=======================================================================================//
+// All lines started with // will be ignored by BG
+// so that you can add notes to yourself or others in these files.
+// All settings start with the setting name.  The actual setting value follows after a space.
+
+//=======================================================================================//
+
+starting_particles 4
+new_particles_per_second 0.0
+texture particles/dirt01.tga
+scale 0.5
+growth 1.0
+lifetime 1
+lifetime_var 1
+rotation_speed 22
+gravity 4.5
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 4.5
+
+velocity_var_x .6
+velocity_var_y .6
+velocity_var_z 0
+
+damping 0
+
+transparency 200
+
+system_life 2.0	
+	
+display_mode 32
+
+emitter_shape plane
+plane_x_length 50		
+plane_y_length 50
+anim_speed over_life
+
+fps 10
+starting_frame 1
+ending_frame 1
+frames_in_image 1
+loop_behaviour hold_last	
+collision off
+falloff none	
+wind 0
+fade_in 0
+fade_out 1
+smoke 0
+light_check once

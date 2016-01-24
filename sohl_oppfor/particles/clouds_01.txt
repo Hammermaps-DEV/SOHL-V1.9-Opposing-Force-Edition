@@ -1,0 +1,24 @@
+starting_particles 200
+new_particles_per_second 80
+scale 9
+texture particles/smoke02.tga
+lifetime 5
+gravity 0
+growth 0
+starting_velocity_x 0.0
+starting_velocity_y 2.0
+starting_velocity_z 10.0
+velocity_var_x 0.0
+velocity_var_y 0.0
+velocity_var_z 5.0
+transparency 200
+
+system_life -1
+
+emitter_shape plane
+plane_x_length 5000
+plane_y_length 5000
+collision off
+fade_out 1
+fade_in 1
+wind 1

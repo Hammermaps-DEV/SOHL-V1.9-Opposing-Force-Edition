@@ -87,7 +87,7 @@ vec3_t		v_origin, v_angles, v_cl_angles, v_sim_org, v_lastAngles;
 float		v_frametime, v_lastDistance;	
 float		v_cameraRelaxAngle	= 5.0f;
 float		v_cameraFocusAngle	= 35.0f;
-int		v_cameraMode = CAM_MODE_FOCUS;
+int		    v_cameraMode = CAM_MODE_FOCUS;
 qboolean		v_resetCamera = 1;
 int		pause = 0;
 
@@ -785,7 +785,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 	if ( cl_vsmoothing && cl_vsmoothing->value &&
 		( pparams->smoothing && ( pparams->maxclients > 1 ) ) )
 	{
-		int foundidx;
+		int foundidx = 0;
 		int i;
 		float t;
 
@@ -978,7 +978,7 @@ void V_GetChaseOrigin( float * angles, float * origin, float distance, float * r
 	vec3_t	vecEnd;
 	vec3_t	forward;
 	vec3_t	vecStart;
-	pmtrace_t * trace;
+	pmtrace_t * trace = NULL;
 	int maxLoops = 8;
 
 	int ignoreent = -1;	// first, ignore no entity
@@ -1315,8 +1315,6 @@ void V_GetDirectedChasePosition(cl_entity_t	 * ent1, cl_entity_t * ent2,float * 
 
 void V_GetChasePos(cl_entity_t *ent, float *cl_angles, float *origin, float *angles)
 {
-
-	
 	if (!ent)
 	{
 		// just copy a save in-map position
@@ -1469,6 +1467,7 @@ int V_FindViewModelByWeaponModel(int weaponindex)
 	{
 		{ "models/p_crossbow.mdl",		"models/v_crossbow.mdl"			},
 		{ "models/p_crowbar.mdl",		"models/v_crowbar.mdl"			},
+		{ "models/p_knife.mdl",			"models/v_knife.mdl"			},
 		{ "models/p_egon.mdl",			"models/v_egon.mdl"				},
 		{ "models/p_gauss.mdl",			"models/v_gauss.mdl"			},
 		{ "models/p_9mmhandgun.mdl",	"models/v_9mmhandgun.mdl"		},

@@ -1,0 +1,45 @@
+starting_particles 2
+new_particles_per_second 0
+
+texture particles/chunk.tga
+
+scale 0.03
+growth 0
+lifetime 10
+
+lifetime_var 0.2
+
+rotation_speed 222
+gravity 9.81
+starting_velocity_x 0.0
+
+starting_velocity_y 0.0
+
+starting_velocity_z 0
+transparency 255
+system_life 5
+
+display_mode 32
+		
+
+plane_x_length 5		
+
+plane_y_length 5
+
+starting_frame 1
+
+ending_frame 1
+
+frames_in_image 1
+
+collision bounce
+
+falloff none
+
+wind 0
+
+fade_in 0
+
+fade_out 1
+
+smoke 0

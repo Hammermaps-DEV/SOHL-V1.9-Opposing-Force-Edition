@@ -1,0 +1,45 @@
+starting_particles 3
+new_particles_per_second 0
+
+texture particles/engine/particle_yellow.tga
+
+
+scale 0.5
+growth 0.5
+
+lifetime 0.8
+
+lifetime_var 0.2
+
+rotation_speed 128
+gravity 0
+
+starting_velocity_x 0.0
+starting_velocity_y 0.0
+starting_velocity_z 0.0
+
+velocity_var_x 1.5
+velocity_var_y 1.5
+velocity_var_z 1.5
+
+transparency 66
+
+system_life 1
+
+display_mode 32
+	
+
+starting_frame 1
+
+ending_frame 1
+
+frames_in_image 1
+
+falloff none
+
+fade_in 0
+
+fade_out 1
+collision bounce
+light_check every_short
+wind 1
