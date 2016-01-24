@@ -150,6 +150,7 @@ BOOL CGlock::Deploy() {
 // Holster
 //=========================================================
 void CGlock::Holster() {
+	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)GLOCK_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
 		CalculateWeaponTime((int)GLOCK_HOLSTER::frames, (int)GLOCK_HOLSTER::fps);

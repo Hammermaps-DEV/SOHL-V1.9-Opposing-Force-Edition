@@ -181,6 +181,7 @@ BOOL CMP5::Deploy() {
 // Holster
 //=========================================================
 void CMP5::Holster( void ) {
+	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)MP5_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
 		CalculateWeaponTime((int)MP5_HOLSTER::frames, (int)MP5_HOLSTER::fps);

@@ -208,6 +208,7 @@ BOOL CShotgun::Deploy( ) {
 // Holster
 //=========================================================
 void CShotgun::Holster( ) {
+	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)SHOTGUN_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
 		CalculateWeaponTime((int)SHOTGUN_HOLSTER::frames, (int)SHOTGUN_HOLSTER::fps);

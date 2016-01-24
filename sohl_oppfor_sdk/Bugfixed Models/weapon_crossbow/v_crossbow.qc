@@ -47,7 +47,7 @@ $sequence "idle2" "idle2" fps 30
 $sequence "fidget1" "fidget1" fps 30 
 $sequence "fire" "fire" fps 60 { event 5004 25 "weapons/xbow_reload1.wav" } 
 $sequence "fire_last" "fire_last" fps 30 
-$sequence "reload" "reload" fps 30 
+$sequence "reload" "reload" fps 30 { event 5004 12 "weapons/reload2.wav" } { event 5004 46 "weapons/reload3.wav" } { event 5004 69 "weapons/xbow_reload1.wav" } 
 $sequence "draw1" "draw1" fps 30 
 $sequence "draw2" "draw2" fps 30 
 $sequence "holster1" "holster1" fps 25 
