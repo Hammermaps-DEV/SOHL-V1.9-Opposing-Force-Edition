@@ -561,6 +561,32 @@ void CWorld :: Precache( void )
 	PRECACHE_SOUND ("weapons/ric4.wav");
 	PRECACHE_SOUND ("weapons/ric5.wav");
 
+	//Bullet Impact
+	PRECACHE_SOUND("debris/glass_impact_bullet1.wav"); //glass impact
+	PRECACHE_SOUND("debris/glass_impact_bullet2.wav"); //glass impact
+	PRECACHE_SOUND("debris/glass_impact_bullet3.wav"); //glass impact
+	PRECACHE_SOUND("debris/glass_impact_bullet4.wav"); //glass impact
+
+	PRECACHE_SOUND("debris/wood_impact_bullet1.wav");  //wood impact
+	PRECACHE_SOUND("debris/wood_impact_bullet2.wav");  //wood impact
+	PRECACHE_SOUND("debris/wood_impact_bullet3.wav");  //wood impact
+	PRECACHE_SOUND("debris/wood_impact_bullet4.wav");  //wood impact
+
+	PRECACHE_SOUND("debris/metal_impact_bullet1.wav");  //metal impact
+	PRECACHE_SOUND("debris/metal_impact_bullet2.wav");  //metal impact
+	PRECACHE_SOUND("debris/metal_impact_bullet3.wav");  //metal impact
+	PRECACHE_SOUND("debris/metal_impact_bullet4.wav");  //metal impact
+
+	PRECACHE_SOUND("debris/concrete_impact_bullet1.wav");  //concrete impact
+	PRECACHE_SOUND("debris/concrete_impact_bullet2.wav");  //concrete impact
+	PRECACHE_SOUND("debris/concrete_impact_bullet3.wav");  //concrete impact
+	PRECACHE_SOUND("debris/concrete_impact_bullet4.wav");  //concrete impact
+
+	PRECACHE_SOUND("debris/tile_impact_bullet1.wav");  //tile impact
+	PRECACHE_SOUND("debris/tile_impact_bullet2.wav");  //tile impact
+	PRECACHE_SOUND("debris/tile_impact_bullet3.wav");  //tile impact
+	PRECACHE_SOUND("debris/tile_impact_bullet4.wav");  //tile impact
+
 	PRECACHE_MODEL( "sprites/null.spr" ); //LRC
 //
 // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.

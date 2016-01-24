@@ -47,10 +47,11 @@ $hbox 0 "Bip01 R Finger0" 0.000000 -0.940000 -1.000000 2.450000 0.390000 0.54000
 $hbox 0 "R_Arm_bone" -2.620000 -2.640000 -2.290000 2.060000 2.490000 7.990000
 
 // 6 animation sequence(s)
-$sequence "idle" "idle" fps 30 loop 
-$sequence "fidget" "fidget" fps 15 loop 
-$sequence "draw1" "draw1" fps 30 
-$sequence "holster1" "holster1" fps 30 
+$sequence "idle1" "idle1" fps 30
+$sequence "idle2" "idle2" fps 30 
+$sequence "fidget" "fidget" fps 15 
+$sequence "draw" "draw" fps 30 
+$sequence "holster" "holster" fps 30 
 $sequence "fire" "fire" fps 30 { event 5004 1 "weapons/glauncher2.wav" } 
 $sequence "reload" "reload" fps 30 { event 5004 38 "weapons/g_bounce1.wav" } 
 

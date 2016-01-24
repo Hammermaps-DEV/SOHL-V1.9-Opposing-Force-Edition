@@ -486,6 +486,12 @@
     <ClCompile Include="weapon_knife.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="proj_plrocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ammo_gaussclip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -855,6 +861,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="weapon_knife.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_plrocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_gauss.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

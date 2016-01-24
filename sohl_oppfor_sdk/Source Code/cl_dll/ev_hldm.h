@@ -39,21 +39,6 @@ enum m249_e
 	SAW_SHOOT3
 };
 
-#define	GAUSS_PRIMARY_CHARGE_VOLUME	256// how loud gauss is while charging
-#define GAUSS_PRIMARY_FIRE_VOLUME	450// how loud gauss is when discharged
-
-enum gauss_e {
-	GAUSS_IDLE = 0,
-	GAUSS_IDLE2,
-	GAUSS_FIDGET,
-	GAUSS_SPINUP,
-	GAUSS_SPIN,
-	GAUSS_FIRE,
-	GAUSS_FIRE2,
-	GAUSS_HOLSTER,
-	GAUSS_DRAW
-};
-
 vec3_t EV_HLDM_GetMirroredPosition(int mirror_index, vec3_t pos);
 void EV_HLDM_GunshotDecalTrace( pmtrace_t *pTrace, char *decalName );
 void EV_HLDM_DecalGunshot( pmtrace_t *pTrace, int iBulletType );

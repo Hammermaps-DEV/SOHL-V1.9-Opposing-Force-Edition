@@ -414,6 +414,7 @@ public:
 	int		m_iDefaultAmmo;// how much ammo you get when you pick up this weapon as placed by a level designer.
 	int		m_iLastSkin;
 	int		m_iBody;
+	int		m_iSkin;
 	int		m_iLastBody;
 	BOOL		b_Restored;//restore body and skin after save/load
 	BOOL		AnimRestore;//restore sound and animation after save/load

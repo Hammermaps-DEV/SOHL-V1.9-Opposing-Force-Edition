@@ -20,6 +20,7 @@
     <ClCompile Include="ammo_9mmclip.cpp" />
     <ClCompile Include="ammo_buckshot.cpp" />
     <ClCompile Include="ammo_crossbow.cpp" />
+    <ClCompile Include="ammo_gaussclip.cpp" />
     <ClCompile Include="ammo_mp5clip.cpp" />
     <ClCompile Include="ammo_mp5grenades.cpp" />
     <ClCompile Include="ammo_rpgclip.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="proj_gonomespit.cpp" />
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
+    <ClCompile Include="proj_plrocket.cpp" />
     <ClCompile Include="proj_voltigore_energy_ball.cpp" />
     <ClCompile Include="rcallymonster.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
@@ -268,6 +270,7 @@
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="proj_bolt.h" />
+    <ClInclude Include="proj_plrocket.h" />
     <ClInclude Include="proj_voltigore_energy_ball.h" />
     <ClInclude Include="rcallymonster.h" />
     <ClInclude Include="saverestore.h" />
@@ -287,6 +290,7 @@
     <ClInclude Include="weapons.h" />
     <ClInclude Include="weapon_crossbow.h" />
     <ClInclude Include="weapon_crowbar.h" />
+    <ClInclude Include="weapon_gauss.h" />
     <ClInclude Include="weapon_glock.h" />
     <ClInclude Include="weapon_knife.h" />
     <ClInclude Include="weapon_mp5.h" />
