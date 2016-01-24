@@ -8,19 +8,6 @@
 #if !defined ( EV_HLDMH )
 #define EV_HLDMH
 
-enum shotgun_e {
-	SHOTGUN_SM_IDLE = 0,
-	SHOTGUN_SHOOT,
-	SHOTGUN_SHOOT_BIG,
-	SHOTGUN_RELOAD,
-	SHOTGUN_PUMP,
-	SHOTGUN_START_RELOAD,
-	SHOTGUN_DRAW,
-	SHOTGUN_REHOLSTER,
-	SHOTGUN_IDLE4,
-	SHOTGUN_DEEPIDLE
-};
-
 // bullet types
 typedef	enum
 {

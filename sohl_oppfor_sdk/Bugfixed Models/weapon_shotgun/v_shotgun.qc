@@ -35,9 +35,11 @@ $hbox 0 "Bip01 R Finger0" 0.000000 -0.940000 -1.000000 2.450000 0.390000 0.54000
 $hbox 0 "R_Arm_bone" -2.620000 -2.640000 -2.290000 2.060000 2.490000 7.990000
 
 // 8 animation sequence(s)
-$sequence "sm_idle" "sm_idle" fps 9 loop 
+$sequence "idle1" "idle1" fps 9
+$sequence "idle2" "idle2" fps 12 
+$sequence "idle3" "idle3" fps 9
 $sequence "draw" "draw" fps 24 
-$sequence "reholster" "reholster" fps 30 
+$sequence "holster" "holster" fps 30 
 $sequence "shoot" "shoot" fps 30 { event 5001 0 "41" } { event 5004 14 "weapons/scock1.wav" } 
 $sequence "shoot_big" "shoot_big" fps 30 {
   { event 5001 0 "41" } 

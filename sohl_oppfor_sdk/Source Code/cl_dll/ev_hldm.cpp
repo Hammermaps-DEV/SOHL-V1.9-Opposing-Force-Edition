@@ -42,6 +42,7 @@
 #include "weapon_glock.h"
 #include "weapon_python.h"
 #include "weapon_mp5.h"
+#include "weapon_shotgun.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -1186,7 +1187,6 @@ void EV_FireM249(event_args_t *args)
 //		 SAW END
 //======================
 
-
 //======================
 //	  SHOTGUN START
 //======================
@@ -1215,10 +1215,10 @@ void EV_FireShotGun( event_args_t *args ) {
 	if ( EV_IsLocal( idx ) ) {
 		EV_MuzzleFlash();
 		if (!args->iparam2) {
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(SHOTGUN_SHOOT, args->iparam1);
+			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SHOTGUN_SHOOT::sequence, args->iparam1);
 			V_PunchAxis(0, -5.0);
 		} else {
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(SHOTGUN_SHOOT_BIG, args->iparam1);
+			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SHOTGUN_SHOOT_BIG::sequence, args->iparam1);
 			V_PunchAxis(0, -10.0);
 		}
 	}

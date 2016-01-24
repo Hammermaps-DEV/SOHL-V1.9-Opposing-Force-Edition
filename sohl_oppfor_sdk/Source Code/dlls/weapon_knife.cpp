@@ -116,8 +116,7 @@ void CKnife::Charge(bool Swing) {
 				m_fInAttack = 2;
 			}
 		} 
-	}
-	else {
+	} else {
 		if(m_flTimeWeaponIdle < UTIL_WeaponTimeBase()) {
 			TraceResult tr;
 			UTIL_MakeVectors(m_pPlayer->pev->v_angle);
