@@ -44,6 +44,7 @@
 #include "weapon_mp5.h"
 #include "weapon_shotgun.h"
 #include "weapon_gauss.h"
+#include "weapon_pipewrench.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -57,11 +58,12 @@ vec3_t previousorigin;//egon use this
 
 extern cvar_t *cl_lw;
 
-extern "C"
-{
+extern "C" {
 	// HLDM
 	void EV_FireNull(event_args_t *args);
 	void EV_FireCrowbar(struct event_args_s *args);
+	void EV_FireWrenchSmall(struct event_args_s *args);
+	void EV_FireWrenchLarge(struct event_args_s *args);
 	void EV_FireKnife(struct event_args_s *args);
 	void EV_FireGlock( struct event_args_s *args  );
 	void EV_FireMP5( struct event_args_s *args  );
@@ -939,16 +941,13 @@ void EV_FireCrowbar(event_args_t *args) {
 		int fHitWorld = TRUE;
   		pHit = gEngfuncs.pEventAPI->EV_GetPhysent( tr.ent );
   		
-		if (pHit) {
-			if ( args->bparam1 ) {	// play thwack or smack sound
-				switch(gEngfuncs.pfnRandomLong(0,2)) {
-					case 0: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/cbar_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/cbar_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/cbar_hitbod3.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-				}
-				fHitWorld = FALSE;
-				args->bparam1 = FALSE; //hit monster
+		if (pHit && args->bparam1) {
+			switch(gEngfuncs.pfnRandomLong(0,2)) {
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/cbar_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/cbar_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+				case 2: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/cbar_hitbod3.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
 			}
+			fHitWorld = FALSE;
 		}
 
 		if (fHitWorld) {
@@ -969,10 +968,201 @@ void EV_FireCrowbar(event_args_t *args) {
 //	   CROWBAR END 
 //======================
 //======================
+//	   PIPE_WRENCH START
+//======================
+void EV_FireWrenchSmall(struct event_args_s *args) {
+	int idx;
+	vec3_t origin;
+	vec3_t angles;
+	vec3_t velocity;
+	vec3_t up, right, forward;
+	physent_t *pHit;
+	pmtrace_t tr;
+
+	idx = args->entindex;
+	VectorCopy(args->angles, angles);
+	VectorCopy(args->origin, origin);
+	vec3_t vecSrc, vecEnd;
+
+	AngleVectors(angles, forward, right, up);
+
+	EV_GetGunPosition(args, vecSrc, origin);
+	vecEnd = vecSrc + forward * 32;
+
+	//make trace 
+	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+	gEngfuncs.pEventAPI->EV_PushPMStates();
+	gEngfuncs.pEventAPI->EV_SetSolidPlayers(idx - 1);
+	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+	gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tr);
+	gEngfuncs.pEventAPI->EV_PopPMStates();
+
+	if (tr.fraction >= 1.0) {
+		gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+		gEngfuncs.pEventAPI->EV_PushPMStates();
+		gEngfuncs.pEventAPI->EV_SetSolidPlayers(idx - 1);
+		gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+		gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tr);
+		gEngfuncs.pEventAPI->EV_PopPMStates();
+
+		if (tr.fraction < 1.0) {
+			// Calculate the point of intersection of the line (or hull) and the object we hit
+			// This is and approximation of the "best" intersection
+			pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
+
+			if (!pHit || pHit->solid == SOLID_BSP)
+				EV_HLDM_FindHullIntersection(idx, vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
+			vecEnd = tr.endpos;	// This is the point on the actual surface (the hull could have hit space)
+		}
+	}
+
+	if (tr.fraction >= 1.0) {
+		if (args->iparam2) {
+			if (EV_IsLocal(idx)) {
+				// miss
+				switch (args->bparam2) {
+					case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACK1MISS::sequence, args->iparam1); break;
+					case 1: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACK2MISS::sequence, args->iparam1); break;
+					case 2: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACK3MISS::sequence, args->iparam1); break;
+				}
+			}
+
+			// play wiff or swish sound
+			switch (gEngfuncs.pfnRandomLong(0, 1)) {
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF)); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF)); break;
+			}
+		}
+	}
+	else {
+		if (EV_IsLocal(idx)) {
+			switch (args->bparam2) {
+				case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACK1::sequence, args->iparam1); break;
+				case 1: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACK2::sequence, args->iparam1); break;
+				case 2: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACK3::sequence, args->iparam1); break;
+			}
+		}
+
+		// play thwack, smack, or dong sound
+		float flVol = 1.0;
+		int fHitWorld = TRUE;
+		pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
+
+		if (pHit && args->bparam1) {
+			switch (gEngfuncs.pfnRandomLong(0, 1)) {
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+			}
+			fHitWorld = FALSE;
+		}
+
+		if (fHitWorld) {
+			float fvolbar = EV_HLDM_PlayTextureSound(idx, &tr, vecSrc, vecSrc + (vecEnd - vecSrc) * 2, BULLET_PLAYER_CROWBAR);
+
+			// also play crowbar strike
+			switch (gEngfuncs.pfnRandomLong(0, 1)) {
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3)); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3)); break;
+			}
+
+			// delay the decal a bit
+			EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
+		}
+	}
+}
+
+void EV_FireWrenchLarge(struct event_args_s *args) {
+	int idx;
+	vec3_t origin;
+	vec3_t angles;
+	vec3_t velocity;
+	vec3_t up, right, forward;
+	physent_t *pHit;
+	pmtrace_t tr;
+
+	idx = args->entindex;
+	VectorCopy(args->angles, angles);
+	VectorCopy(args->origin, origin);
+	vec3_t vecSrc, vecEnd;
+
+	AngleVectors(angles, forward, right, up);
+
+	EV_GetGunPosition(args, vecSrc, origin);
+	vecEnd = vecSrc + forward * 32;
+
+	//make trace 
+	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+	gEngfuncs.pEventAPI->EV_PushPMStates();
+	gEngfuncs.pEventAPI->EV_SetSolidPlayers(idx - 1);
+	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+	gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tr);
+	gEngfuncs.pEventAPI->EV_PopPMStates();
+
+	if (tr.fraction >= 1.0) {
+		gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+		gEngfuncs.pEventAPI->EV_PushPMStates();
+		gEngfuncs.pEventAPI->EV_SetSolidPlayers(idx - 1);
+		gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+		gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tr);
+		gEngfuncs.pEventAPI->EV_PopPMStates();
+
+		if (tr.fraction < 1.0) {
+			// Calculate the point of intersection of the line (or hull) and the object we hit
+			// This is and approximation of the "best" intersection
+			pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
+
+			if (!pHit || pHit->solid == SOLID_BSP)
+				EV_HLDM_FindHullIntersection(idx, vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX);
+			vecEnd = tr.endpos;	// This is the point on the actual surface (the hull could have hit space)
+		}
+	}
+
+	if (tr.fraction >= 1.0) {
+		if (EV_IsLocal(idx)) {
+			// miss
+			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACKBIGMISS::sequence, args->iparam1);
+		}
+
+		// play wiff or swish sound
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_miss.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF));
+	} else {
+		if (EV_IsLocal(idx)) {
+			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)PIPE_WRENCH_ATTACKBIGHIT::sequence, args->iparam1);
+		}
+
+		// play thwack, smack, or dong sound
+		float flVol = 1.0;
+		int fHitWorld = TRUE;
+		pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
+		if (pHit && args->bparam1) {
+			switch (gEngfuncs.pfnRandomLong(0, 1)) {
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+			}
+			fHitWorld = FALSE;
+		}
+
+		if (fHitWorld) {
+			float fvolbar = EV_HLDM_PlayTextureSound(idx, &tr, vecSrc, vecSrc + (vecEnd - vecSrc) * 2, BULLET_PLAYER_CROWBAR);
+			// also play crowbar strike
+			switch (gEngfuncs.pfnRandomLong(0, 1)) {
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hit1.wav", fvolbar, ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3)); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hit2.wav", fvolbar, ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong(0, 3)); break;
+			}
+
+			// delay the decal a bit
+			EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
+		}
+	}
+}
+//======================
+//	   PIPE_WRENCH END 
+//======================
+
+//======================
 //	   KNIFE START
 //======================
-void EV_FireKnife(event_args_t *args)
-{
+void EV_FireKnife(event_args_t *args) {
 	int idx;
 	vec3_t origin;
 	vec3_t angles;
@@ -1051,16 +1241,12 @@ void EV_FireKnife(event_args_t *args)
 			int fHitWorld = TRUE;
 			pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
 
-			if (pHit) {
-				if (args->bparam1) {	// play thwack or smack sound
-					switch (gEngfuncs.pfnRandomLong(0, 1))
-					{
+			if (pHit && args->bparam1) {
+				switch (gEngfuncs.pfnRandomLong(0, 1)) {
 					case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
 					case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-					}
-					fHitWorld = FALSE;
-					args->bparam1 = FALSE; //hit monster
 				}
+				fHitWorld = FALSE;
 			}
 
 			if (fHitWorld) {
@@ -1103,15 +1289,12 @@ void EV_FireKnife(event_args_t *args)
 				int fHitWorld = TRUE;
 				pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
 
-				if (pHit) {
-					if (args->bparam1) {	// play thwack or smack sound
-						switch (gEngfuncs.pfnRandomLong(0, 1)) {
-							case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-							case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-						}
-						fHitWorld = FALSE;
-						args->bparam1 = FALSE; //hit monster
+				if (pHit && args->bparam1) {
+					switch (gEngfuncs.pfnRandomLong(0, 1)) {
+						case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+						case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
 					}
+					fHitWorld = FALSE;
 				}
 
 				if (fHitWorld) {

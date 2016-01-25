@@ -1467,6 +1467,7 @@ int V_FindViewModelByWeaponModel(int weaponindex)
 	{
 		{ "models/p_crossbow.mdl",		"models/v_crossbow.mdl"			},
 		{ "models/p_crowbar.mdl",		"models/v_crowbar.mdl"			},
+		{ "models/p_pipe_wrench.mdl",	"models/v_pipe_wrench.mdl"      },
 		{ "models/p_knife.mdl",			"models/v_knife.mdl"			},
 		{ "models/p_egon.mdl",			"models/v_egon.mdl"				},
 		{ "models/p_gauss.mdl",			"models/v_gauss.mdl"			},

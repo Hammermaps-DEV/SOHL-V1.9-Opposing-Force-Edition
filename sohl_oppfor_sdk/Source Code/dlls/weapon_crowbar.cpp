@@ -35,7 +35,7 @@ LINK_ENTITY_TO_CLASS(weapon_crowbar, CCrowbar);
 //=========================================================
 // Spawn Crowbar
 //=========================================================
-void CCrowbar::Spawn( ) {
+void CCrowbar::Spawn(void) {
 	Precache( );
 	m_iId = WEAPON_CROWBAR;
 
@@ -48,7 +48,7 @@ void CCrowbar::Spawn( ) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CCrowbar::Precache( void ) {
+void CCrowbar::Precache(void) {
 	PRECACHE_MODEL("models/v_crowbar.mdl");
 	PRECACHE_MODEL("models/w_crowbar.mdl");
 	PRECACHE_MODEL("models/p_crowbar.mdl");
@@ -83,9 +83,9 @@ int CCrowbar::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack - Call the frist Attack
 //=========================================================
-void CCrowbar::PrimaryAttack() {
-	if (!Swing(TRUE)) { 
-		Swing(FALSE);
+void CCrowbar::PrimaryAttack(void) {
+	if (!CCrowbar::Swing(TRUE)) {
+		CCrowbar::Swing(FALSE);
 	}
 
 	m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.2;
@@ -94,7 +94,7 @@ void CCrowbar::PrimaryAttack() {
 //=========================================================
 // SecondaryAttack - Call the second Attack
 //=========================================================
-void CCrowbar::SecondaryAttack() {
+void CCrowbar::SecondaryAttack(void) {
 	CCrowbar::PrimaryAttack(); //Call PrimaryAttack
 }
 
@@ -188,7 +188,7 @@ int CCrowbar::Swing( int fFirst ) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CCrowbar::Deploy() {
+BOOL CCrowbar::Deploy(void) {
 	return DefaultDeploy("models/v_crowbar.mdl", "models/p_crowbar.mdl", (int)CROWBAR_DRAW::sequence,
 		"crowbar", CalculateWeaponTime((int)CROWBAR_DRAW::frames, (int)CROWBAR_DRAW::fps));
 }
@@ -196,7 +196,7 @@ BOOL CCrowbar::Deploy() {
 //=========================================================
 // Holster
 //=========================================================
-void CCrowbar::Holster() {
+void CCrowbar::Holster(void) {
 	SendWeaponAnim((int)CROWBAR_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 
 		CalculateWeaponTime((int)CROWBAR_HOLSTER::frames, (int)CROWBAR_HOLSTER::fps);
@@ -205,7 +205,7 @@ void CCrowbar::Holster() {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CCrowbar:: WeaponIdle( void ) {
+void CCrowbar:: WeaponIdle(void) {
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
 		return;

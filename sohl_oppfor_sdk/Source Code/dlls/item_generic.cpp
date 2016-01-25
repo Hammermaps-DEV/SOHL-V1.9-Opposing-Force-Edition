@@ -54,7 +54,7 @@ void CItemGeneric::Spawn(void) {
 
 	// Call startup sequence to look for a sequence to play.
 	SetThink(&CItemGeneric::StartupThink);
-	pev->nextthink = gpGlobals->time + 0.1f;
+	pev->nextthink = UTIL_WeaponTimeBase() + 0.1f;
 }
 
 //=========================================================

@@ -55,7 +55,7 @@ class CCrowbar : public CBasePlayerWeapon {
 
 		//Animations
 		BOOL Deploy(void);
-		void Holster();
+		void Holster(void);
 		void WeaponIdle(void);
 
 		//Vars

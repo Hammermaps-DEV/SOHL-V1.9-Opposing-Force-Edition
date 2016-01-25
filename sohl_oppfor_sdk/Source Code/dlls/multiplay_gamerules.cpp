@@ -139,7 +139,10 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = 25;
 
-	// Crowbar whack
+	// Pipe-Wrench
+	gSkillData.plrDmgWrench = 30;
+
+	// Knife whack
 	gSkillData.plrDmgKnife = 10;
 	gSkillData.plrDmgKnifeCharge = 40;
 

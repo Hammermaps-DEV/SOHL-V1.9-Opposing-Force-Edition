@@ -9,10 +9,11 @@
 #include "cl_util.h"
 #include "event_api.h"
 
-extern "C"
-{
+extern "C" {
 	void EV_FireNull(event_args_t *args);
 	void EV_FireCrowbar(event_args_t *args);
+	void EV_FireWrenchSmall(struct event_args_s *args);
+	void EV_FireWrenchLarge(struct event_args_s *args);
 	void EV_FireKnife(event_args_t *args);
 	void EV_PlayEmptySound( struct event_args_s *args );
 	void EV_FireGlock( struct event_args_s *args  );
@@ -46,10 +47,11 @@ That was what we were going to do, but we ran out of time...oh well.
 ======================
 */
 
-void EV_HookEvents( void )
-{
+void EV_HookEvents( void ) {
 	gEngfuncs.pfnHookEvent( "events/null.sc",				EV_FireNull);
 	gEngfuncs.pfnHookEvent( "events/crowbar.sc",			EV_FireCrowbar);
+	gEngfuncs.pfnHookEvent( "events/wrench_small.sc",		EV_FireWrenchSmall);
+	gEngfuncs.pfnHookEvent( "events/wrench_large.sc",		EV_FireWrenchLarge);
 	gEngfuncs.pfnHookEvent( "events/knife.sc",				EV_FireKnife);
 	gEngfuncs.pfnHookEvent( "events/tripfire.sc",			EV_PlayEmptySound );
 	gEngfuncs.pfnHookEvent( "events/glock.sc",				EV_FireGlock );

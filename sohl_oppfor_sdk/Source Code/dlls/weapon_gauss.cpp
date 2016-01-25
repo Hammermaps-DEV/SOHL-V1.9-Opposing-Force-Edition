@@ -190,6 +190,7 @@ void CGauss::SecondaryAttack()
 			}			
 		}
 	}
+
 	if(!AnimRestore)
 	{
 		if(m_fInAttack == 1) SendWeaponAnim((int)GAUSS_SPINUP::sequence);

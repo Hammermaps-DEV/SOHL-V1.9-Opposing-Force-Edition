@@ -607,6 +607,11 @@ cvar_t	sk_plr_crowbar1 = {"sk_plr_crowbar1","0"};
 cvar_t	sk_plr_crowbar2 = {"sk_plr_crowbar2","0"};
 cvar_t	sk_plr_crowbar3 = {"sk_plr_crowbar3","0"};
 
+// Pipe Wrench
+cvar_t	sk_plr_pipewrench1 = { "sk_plr_pipewrench1","0" };
+cvar_t	sk_plr_pipewrench2 = { "sk_plr_pipewrench2","0" };
+cvar_t	sk_plr_pipewrench3 = { "sk_plr_pipewrench3","0" };
+
 // Knife whack
 cvar_t	sk_plr_knife1 = { "sk_plr_knife1","0" };
 cvar_t	sk_plr_knife2 = { "sk_plr_knife2","0" };
@@ -1372,6 +1377,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_plr_crowbar1 );
 	CVAR_REGISTER ( &sk_plr_crowbar2 );
 	CVAR_REGISTER ( &sk_plr_crowbar3 );
+
+	// Pipe Wrench
+	CVAR_REGISTER(&sk_plr_pipewrench1);
+	CVAR_REGISTER(&sk_plr_pipewrench2);
+	CVAR_REGISTER(&sk_plr_pipewrench3);
 
 	// Knife whack
 	CVAR_REGISTER(&sk_plr_knife1);

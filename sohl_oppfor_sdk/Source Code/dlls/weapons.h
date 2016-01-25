@@ -80,24 +80,25 @@ public:
 #define WEAPON_NONE				0
 #define WEAPON_CROWBAR			1
 #define WEAPON_KNIFE			2
-#define WEAPON_GLOCK			3
-#define WEAPON_PYTHON			4
-#define WEAPON_GENERIC			5
-#define WEAPON_MP5				6
-#define WEAPON_DEBUG            7
-#define WEAPON_CROSSBOW			8
-#define WEAPON_SHOTGUN			9
-#define WEAPON_RPG				10
-#define WEAPON_GAUSS			11
-#define WEAPON_EGON				12
-#define WEAPON_HORNETGUN		13
-#define WEAPON_HANDGRENADE		14
-#define WEAPON_TRIPMINE			15
-#define WEAPON_SATCHEL			16
-#define WEAPON_SNARK			17
+#define WEAPON_PIPEWRENCH		3
+#define WEAPON_GLOCK			4
+#define WEAPON_PYTHON			5
+#define WEAPON_GENERIC			6
+#define WEAPON_MP5				7
+#define WEAPON_DEBUG            8
+#define WEAPON_CROSSBOW			9
+#define WEAPON_SHOTGUN			10
+#define WEAPON_RPG				11
+#define WEAPON_GAUSS			12
+#define WEAPON_EGON				13
+#define WEAPON_HORNETGUN		14
+#define WEAPON_HANDGRENADE		15
+#define WEAPON_TRIPMINE			16
+#define WEAPON_SATCHEL			17
+#define WEAPON_SNARK			18
 
 //SOHL - Opposing-Force
-#define WEAPON_M249				18
+#define WEAPON_M249				19
 
 
 #define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
@@ -111,6 +112,7 @@ public:
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
 #define CROWBAR_WEIGHT		0
+#define PIPEWRENCH_WEIGHT	0
 #define KNIFE_WEIGHT		5
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15

@@ -34,15 +34,15 @@ $hbox 0 "Bip01 R Hand" -1.310000 -1.230000 -5.220000 5.090000 2.800000 19.870001
 
 // 15 animation sequence(s)
 $sequence "idle1" "idle1" fps 30 
-$sequence "idle2" "idle2" fps 30 loop 
-$sequence "idle3" "idle3" fps 30 loop 
+$sequence "idle2" "idle2" fps 30 
+$sequence "idle3" "idle3" fps 30 
 $sequence "draw" "draw" fps 30 
 $sequence "holster" "holster" fps 30 
-$sequence "attack1hit" "attack1hit" fps 30 
+$sequence "attack1" "attack1" fps 30 
 $sequence "attack1miss" "attack1miss" fps 30 
-$sequence "attack2hit" "attack2hit" fps 30 
+$sequence "attack2" "attack2" fps 30 
 $sequence "attack2miss" "attack2miss" fps 30 
-$sequence "attack3hit" "attack3hit" fps 30 
+$sequence "attack3" "attack3" fps 30 
 $sequence "attack3miss" "attack3miss" fps 30 
 $sequence "attackbigwind" "attackbigwind" fps 30 
 $sequence "attackbighit" "attackbighit" fps 30 

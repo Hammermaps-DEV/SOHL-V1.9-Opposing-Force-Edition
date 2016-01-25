@@ -148,6 +148,7 @@
     <ClCompile Include="plats.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="playermonster.cpp" />
+    <ClCompile Include="weapon_pipewrench.cpp" />
     <ClCompile Include="weapon_python.cpp" />
     <ClCompile Include="monster_rat.cpp" />
     <ClCompile Include="monster_roach.cpp" />
@@ -302,6 +303,7 @@
     <ClInclude Include="weapon_glock.h" />
     <ClInclude Include="weapon_knife.h" />
     <ClInclude Include="weapon_mp5.h" />
+    <ClInclude Include="weapon_pipewrench.h" />
     <ClInclude Include="weapon_python.h" />
     <ClInclude Include="weapon_rpg.h" />
     <ClInclude Include="weapon_shotgun.h" />

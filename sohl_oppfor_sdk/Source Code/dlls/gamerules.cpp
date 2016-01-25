@@ -351,6 +351,9 @@ void CGameRules::RefreshSkillData ( void )
 	// Crowbar whack
 	gSkillData.plrDmgCrowbar = GetSkillCvar( "sk_plr_crowbar");
 
+	// pipe wrench
+	gSkillData.plrDmgWrench = GetSkillCvar("sk_plr_pipewrench");
+
 	// Knife whack
 	gSkillData.plrDmgKnife = GetSkillCvar("sk_plr_knife");
 	gSkillData.plrDmgKnifeCharge = GetSkillCvar("sk_plr_knife_charge");
