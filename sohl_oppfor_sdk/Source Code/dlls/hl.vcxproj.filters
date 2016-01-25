@@ -495,9 +495,6 @@
     <ClCompile Include="monster_geneworm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="monster_massn.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="item_generic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
