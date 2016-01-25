@@ -1,0 +1,61 @@
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+****/
+
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "weapons.h"
+#include "player.h"
+#include "skill.h"
+#include "items.h"
+
+extern int gmsgItemPickup;
+extern int gEvilImpulse101;
+
+#define SF_SUIT_SHORTLOGON		0x0001
+
+class CItemSuit : public CItem {
+	void Spawn(void) {
+		Precache();
+		SET_MODEL(ENT(pev), "models/w_suit.mdl");
+		CItem::Spawn();
+	}
+
+	void Precache(void) {
+		PRECACHE_MODEL("models/w_suit.mdl");
+	}
+
+	BOOL MyTouch(CBasePlayer *pPlayer) {
+		if (pPlayer->pev->deadflag != DEAD_NO) {
+			return FALSE;
+		}
+
+		if (pPlayer->m_iHideHUD & ITEM_SUIT)
+			return FALSE;
+
+		if (!gEvilImpulse101)//g-cont. do not play logon sentence at evil impulse
+		{
+			if (pev->spawnflags & SF_SUIT_SHORTLOGON)
+				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0"); // short version of suit logon,
+			else 
+				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx"); // long version of suit logon
+		}
+
+		pPlayer->m_iHideHUD |= ITEM_SUIT;
+		return TRUE;
+	}
+};
+
+LINK_ENTITY_TO_CLASS(item_suit, CItemSuit);

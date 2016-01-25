@@ -4816,41 +4816,14 @@
 //NEW 1.9
 @PointClass base(Targetx, Targetname) = trigger_playerfreeze : "Trigger Player Freeze" []
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+//NEW 1.9
+@PointClass base(Targetx, Weapon) = item_generic : "Generic scenery item"
+[
+	model(studio) : "Model" : "models/egg.mdl"
+	sequencename(string) : "Sequence Name" : "idle"
+	skin(integer) : "Skin" : 0
+	body(integer) : "Body" : 0
+]
 
 @PointClass base(Targetname, MoveWith) size(-16 -16 -16, 16 16 16) = monstermaker : "Monster Maker"
 [	

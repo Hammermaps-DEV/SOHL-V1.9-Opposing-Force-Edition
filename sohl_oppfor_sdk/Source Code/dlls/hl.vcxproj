@@ -26,6 +26,12 @@
     <ClCompile Include="ammo_rpgclip.cpp" />
     <ClCompile Include="env_electrified_wire.cpp" />
     <ClCompile Include="env_rope_segment.cpp" />
+    <ClCompile Include="item_antidote.cpp" />
+    <ClCompile Include="item_battery.cpp" />
+    <ClCompile Include="item_generic.cpp" />
+    <ClCompile Include="item_longjump.cpp" />
+    <ClCompile Include="item_security.cpp" />
+    <ClCompile Include="item_suit.cpp" />
     <ClCompile Include="monster_aflock.cpp" />
     <ClCompile Include="monster_agrunt.cpp" />
     <ClCompile Include="airtank.cpp" />
@@ -51,6 +57,7 @@
     <ClCompile Include="combat.cpp" />
     <ClCompile Include="monster_cleansuit_scientist.cpp" />
     <ClCompile Include="monster_controller.cpp" />
+    <ClCompile Include="monster_geneworm.cpp" />
     <ClCompile Include="monster_gonome.cpp" />
     <ClCompile Include="monster_gonome_dead.cpp" />
     <ClCompile Include="monster_hevsuit_dead.cpp" />
@@ -59,6 +66,7 @@
     <ClCompile Include="monster_hgrunt_torch.cpp" />
     <ClCompile Include="monster_houndeye_dead.cpp" />
     <ClCompile Include="monster_loader.cpp" />
+    <ClCompile Include="monster_massn.cpp" />
     <ClCompile Include="monster_otis.cpp" />
     <ClCompile Include="monster_otis_dead.cpp" />
     <ClCompile Include="monster_pitdrone.cpp" />
@@ -197,6 +205,7 @@
     <ClInclude Include="gamerules.h" />
     <ClInclude Include="hornet.h" />
     <ClInclude Include="items.h" />
+    <ClInclude Include="item_generic.h" />
     <ClInclude Include="locus.h" />
     <ClInclude Include="maprules.h" />
     <ClInclude Include="monsterevent.h" />
