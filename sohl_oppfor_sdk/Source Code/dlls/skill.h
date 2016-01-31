@@ -92,6 +92,14 @@ struct skilldata_t
 
 	float scientistHealth;
 
+	//Construction
+	float constructionHealth;
+	float constructionHead;
+	float constructionChest;
+	float constructionStomach;
+	float constructionLeg;
+	float constructionArm;
+
 	float snarkHealth;
 	float snarkDmgBite;
 	float snarkDmgPop;

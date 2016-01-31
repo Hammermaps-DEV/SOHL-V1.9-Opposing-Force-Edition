@@ -222,6 +222,14 @@ void CGameRules::RefreshSkillData ( void )
 	// Scientist
 	gSkillData.scientistHealth = GetSkillCvar( "sk_scientist_health");
 
+	// Construction
+	gSkillData.constructionHealth = GetSkillCvar("sk_construction_health");
+	gSkillData.constructionHead = GetSkillCvar("sk_construction_head"); //Hitgroup
+	gSkillData.constructionChest = GetSkillCvar("sk_construction_chest"); //Hitgroup
+	gSkillData.constructionStomach = GetSkillCvar("sk_construction_stomach"); //Hitgroup
+	gSkillData.constructionLeg = GetSkillCvar("sk_construction_leg"); //Hitgroup
+	gSkillData.constructionArm = GetSkillCvar("sk_construction_arm"); //Hitgroup
+
 	// Snark
 	gSkillData.snarkHealth = GetSkillCvar( "sk_snark_health");
 	gSkillData.snarkDmgBite = GetSkillCvar( "sk_snark_dmg_bite");

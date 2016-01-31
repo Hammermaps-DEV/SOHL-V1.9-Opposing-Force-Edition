@@ -26,6 +26,7 @@
     <ClCompile Include="ammo_rpgclip.cpp" />
     <ClCompile Include="env_electrified_wire.cpp" />
     <ClCompile Include="env_rope_segment.cpp" />
+    <ClCompile Include="grapple_tonguetip.cpp" />
     <ClCompile Include="item_antidote.cpp" />
     <ClCompile Include="item_battery.cpp" />
     <ClCompile Include="item_generic.cpp" />
@@ -56,6 +57,7 @@
     <ClCompile Include="client.cpp" />
     <ClCompile Include="combat.cpp" />
     <ClCompile Include="monster_cleansuit_scientist.cpp" />
+    <ClCompile Include="monster_construction.cpp" />
     <ClCompile Include="monster_controller.cpp" />
     <ClCompile Include="monster_geneworm.cpp" />
     <ClCompile Include="monster_gonome.cpp" />
@@ -111,6 +113,7 @@
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="weapon_glock.cpp" />
     <ClCompile Include="monster_gman.cpp" />
+    <ClCompile Include="weapon_grapple.cpp" />
     <ClCompile Include="weapon_handgrenade.cpp" />
     <ClCompile Include="monster_hassassin.cpp" />
     <ClCompile Include="monster_headcrab.cpp" />
@@ -203,6 +206,7 @@
     <ClInclude Include="func_break.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
+    <ClInclude Include="grapple_tonguetip.h" />
     <ClInclude Include="hornet.h" />
     <ClInclude Include="items.h" />
     <ClInclude Include="item_generic.h" />
@@ -225,6 +229,7 @@
     <ClInclude Include="monster_bloater.h" />
     <ClInclude Include="monster_bullsquid.h" />
     <ClInclude Include="monster_cleansuit_scientist.h" />
+    <ClInclude Include="monster_construction.h" />
     <ClInclude Include="monster_controller.h" />
     <ClInclude Include="monster_drillsergeant.h" />
     <ClInclude Include="monster_flyingmonster.h" />
@@ -301,6 +306,7 @@
     <ClInclude Include="weapon_crowbar.h" />
     <ClInclude Include="weapon_gauss.h" />
     <ClInclude Include="weapon_glock.h" />
+    <ClInclude Include="weapon_grapple.h" />
     <ClInclude Include="weapon_knife.h" />
     <ClInclude Include="weapon_mp5.h" />
     <ClInclude Include="weapon_pipewrench.h" />

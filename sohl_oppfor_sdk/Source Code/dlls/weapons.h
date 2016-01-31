@@ -79,26 +79,27 @@ public:
 
 #define WEAPON_NONE				0
 #define WEAPON_CROWBAR			1
-#define WEAPON_KNIFE			2
-#define WEAPON_PIPEWRENCH		3
-#define WEAPON_GLOCK			4
-#define WEAPON_PYTHON			5
-#define WEAPON_GENERIC			6
-#define WEAPON_MP5				7
-#define WEAPON_DEBUG            8
-#define WEAPON_CROSSBOW			9
-#define WEAPON_SHOTGUN			10
-#define WEAPON_RPG				11
-#define WEAPON_GAUSS			12
-#define WEAPON_EGON				13
-#define WEAPON_HORNETGUN		14
-#define WEAPON_HANDGRENADE		15
-#define WEAPON_TRIPMINE			16
-#define WEAPON_SATCHEL			17
-#define WEAPON_SNARK			18
+#define WEAPON_PIPEWRENCH		2
+#define WEAPON_KNIFE			3
+#define WEAPON_GRAPPLE			4
+#define WEAPON_GLOCK			5
+#define WEAPON_PYTHON			6
+#define WEAPON_GENERIC			7
+#define WEAPON_MP5				8
+#define WEAPON_DEBUG            9
+#define WEAPON_CROSSBOW			0
+#define WEAPON_SHOTGUN			11
+#define WEAPON_RPG				12
+#define WEAPON_GAUSS			13
+#define WEAPON_EGON				14
+#define WEAPON_HORNETGUN		15
+#define WEAPON_HANDGRENADE		16
+#define WEAPON_TRIPMINE			17
+#define WEAPON_SATCHEL			18
+#define WEAPON_SNARK			19
 
 //SOHL - Opposing-Force
-#define WEAPON_M249				19
+#define WEAPON_M249				20
 
 
 #define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
@@ -114,6 +115,7 @@ public:
 #define CROWBAR_WEIGHT		0
 #define PIPEWRENCH_WEIGHT	0
 #define KNIFE_WEIGHT		5
+#define GRAPPLE_WEIGHT		0
 #define GLOCK_WEIGHT		10
 #define PYTHON_WEIGHT		15
 #define MP5_WEIGHT			15

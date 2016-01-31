@@ -12,17 +12,22 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// NPC: Cleansuit - Scientist
+// http://half-life.wikia.com/wiki/Black_Mesa_Science_Team
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_CLEANSUIT_SCIENTIST_H
 #define MONSTER_CLEANSUIT_SCIENTIST_H
 
-#include "monster_scientist.h"
+class CCleansuitScientist : public CScientist {
+	public:
+		void Spawn(void);
+		void Precache(void);
+		void RunTask(Task_t *pTask);
+		void StartTask(Task_t *pTask);
 
-class CCleansuitScientist : public CScientist
-{
-public:
-	void Spawn(void);
-	void Precache(void);
+		CUSTOM_SCHEDULES;
 };
 
 #endif // MONSTER_CLEANSUIT_SCIENTIST_H

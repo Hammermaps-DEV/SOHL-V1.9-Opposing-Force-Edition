@@ -127,7 +127,7 @@ void CRpgRocket::IgniteThink(void)
 	pev->effects |= EF_LIGHT;
 
 	CreateTrail();
-	m_flIgniteTime = gpGlobals->time;
+	m_flIgniteTime = UTIL_WeaponTimeBase();
 
 	// set to follow laser spot
 	SetThink(&CRpgRocket::FollowThink);
@@ -192,7 +192,7 @@ void CRpgRocket::FollowThink(void)
 
 	// this acceleration and turning math is totally wrong, but it seems to respond well so don't change it.
 	float flSpeed = pev->velocity.Length();
-	if (gpGlobals->time - m_flIgniteTime < 1.0) {
+	if (UTIL_WeaponTimeBase() - m_flIgniteTime < 1.0) {
 		pev->velocity = pev->velocity * 0.2 + vecTarget * (flSpeed * 0.8 + 400);
 		if (pev->waterlevel == 3 && pev->watertype > CONTENT_FLYFIELD) {
 			// go slow underwater

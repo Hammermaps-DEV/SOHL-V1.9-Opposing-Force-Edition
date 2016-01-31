@@ -31,34 +31,6 @@
 #define		NUM_SCIENTIST_HEADS		4 // four heads available for scientist model
 enum { HEAD_GLASSES = 0, HEAD_EINSTEIN = 1, HEAD_LUTHER = 2, HEAD_SLICK = 3 };
 
-enum
-{
-	SCHED_HIDE = LAST_TALKMONSTER_SCHEDULE + 1,
-	SCHED_FEAR,
-	SCHED_PANIC,
-	SCHED_STARTLE,
-	SCHED_TARGET_CHASE_SCARED,
-	SCHED_TARGET_FACE_SCARED,
-};
-
-enum
-{
-	TASK_SAY_HEAL = LAST_TALKMONSTER_TASK + 1,
-	TASK_HEAL,
-	TASK_SAY_FEAR,
-	TASK_RUN_PATH_SCARED,
-	TASK_SCREAM,
-	TASK_RANDOM_SCREAM,
-	TASK_MOVE_TO_TARGET_RANGE_SCARED,
-};
-
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
-#define		SCIENTIST_AE_HEAL		( 1 )
-#define		SCIENTIST_AE_NEEDLEON	( 2 )
-#define		SCIENTIST_AE_NEEDLEOFF	( 3 )
-
 //=======================================================
 // Scientist
 //=======================================================
@@ -352,7 +324,6 @@ Schedule_t	slFear[] =
 	},
 };
 
-
 DEFINE_CUSTOM_SCHEDULES( CScientist )
 {
 	slFollow,
@@ -611,13 +582,16 @@ void CScientist :: Spawn( void )
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/scientist.mdl");
+
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_RED;
+
 	if (pev->health == 0)
 		pev->health			= gSkillData.scientistHealth;
+
 	pev->view_ofs		= Vector ( 0, 0, 50 );// position of the eyes relative to monster's origin.
 	m_flFieldOfView		= VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello
 	m_MonsterState		= MONSTERSTATE_NONE;
@@ -651,6 +625,7 @@ void CScientist :: Precache( void )
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/scientist.mdl");
+
 	PRECACHE_SOUND("scientist/sci_pain1.wav");
 	PRECACHE_SOUND("scientist/sci_pain2.wav");
 	PRECACHE_SOUND("scientist/sci_pain3.wav");
@@ -664,7 +639,9 @@ void CScientist :: Precache( void )
 	CTalkMonster::Precache();
 }	
 
+//=========================================================
 // Init talk data
+//=========================================================
 void CScientist :: TalkInit()
 {
 	CTalkMonster::TalkInit();
@@ -674,12 +651,13 @@ void CScientist :: TalkInit()
 	m_szFriends[1] = "monster_sitting_scientist";
 	m_szFriends[2] = "monster_cleansuit_scientist";
 	m_szFriends[3] = "monster_sitting_cleansuit_scientist";
-	m_szFriends[4] = "monster_barney";
-	m_szFriends[5] = "monster_otis";
-	m_szFriends[6] = "monster_barniel";
-	m_szFriends[7] = "monster_human_grunt_ally";
-	m_szFriends[8] = "monster_human_torch_ally";
-	m_szFriends[9] = "monster_human_medic_ally";
+	m_szFriends[4] = "monster_construction";
+	m_szFriends[5] = "monster_barney";
+	m_szFriends[6] = "monster_otis";
+	m_szFriends[7] = "monster_barniel";
+	m_szFriends[8] = "monster_human_grunt_ally";
+	m_szFriends[9] = "monster_human_torch_ally";
+	m_szFriends[10] = "monster_human_medic_ally";
 
 	// scientists speach group names (group names are in sentences.txt)
 	if (!m_iszSpeakAs)
@@ -721,10 +699,10 @@ void CScientist :: TalkInit()
 	switch (pev->body % 3)
 	{
 	default:
-	case HEAD_GLASSES:	m_voicePitch = 105; break;	//glasses
-	case HEAD_EINSTEIN: m_voicePitch = 100; break;	//einstein
-	case HEAD_LUTHER:	m_voicePitch = 95;  break;	//luther
-	case HEAD_SLICK:	m_voicePitch = 100;  break;//slick
+		case HEAD_GLASSES:	m_voicePitch = 105; break;	//glasses
+		case HEAD_EINSTEIN: m_voicePitch = 100; break;	//einstein
+		case HEAD_LUTHER:	m_voicePitch = 95;  break;	//luther
+		case HEAD_SLICK:	m_voicePitch = 100;  break;//slick
 	}
 }
 
@@ -740,7 +718,6 @@ int CScientist :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, f
 	// make sure friends talk about it if player hurts scientist...
 	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
-
 
 //=========================================================
 // ISoundMask - returns a bit mask indicating which types
@@ -767,11 +744,11 @@ void CScientist :: PainSound ( void )
 
 	switch (RANDOM_LONG(0,4))
 	{
-	case 0: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 1: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 2: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 3: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain4.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
-	case 4: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain5.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+		case 0: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain1.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+		case 1: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain2.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+		case 2: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain3.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+		case 3: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain4.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
+		case 4: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "scientist/sci_pain5.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
 	}
 }
 

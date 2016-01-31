@@ -118,6 +118,7 @@ void CBaseEntity::UpdateOnRemove( void )
 // Convenient way to delay removing oneself
 void CBaseEntity :: SUB_Remove( void )
 {
+	PreRemoval();
 	UpdateOnRemove();
 	if (pev->health > 0)
 	{

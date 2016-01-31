@@ -516,6 +516,15 @@
     <ClCompile Include="weapon_pipewrench.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="grapple_tonguetip.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_grapple.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_construction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -897,6 +906,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="weapon_pipewrench.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="grapple_tonguetip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_grapple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_construction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

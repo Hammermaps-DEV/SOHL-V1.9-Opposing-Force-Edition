@@ -2131,6 +2131,7 @@ void UTIL_Remove( CBaseEntity *pEntity )
 	if ( !pEntity )
 		return;
 
+	pEntity->PreRemoval();
 	pEntity->UpdateOnRemove();
 	pEntity->pev->flags |= FL_KILLME;
 	pEntity->pev->targetname = 0;

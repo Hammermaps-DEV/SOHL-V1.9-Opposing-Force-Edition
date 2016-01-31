@@ -271,6 +271,31 @@ cvar_t	sk_scientist_health1 = {"sk_scientist_health1","0"};
 cvar_t	sk_scientist_health2 = {"sk_scientist_health2","0"};
 cvar_t	sk_scientist_health3 = {"sk_scientist_health3","0"};
 
+// Construction
+cvar_t	sk_construction_health1 = { "sk_construction_health1","0" };
+cvar_t	sk_construction_health2 = { "sk_construction_health2","0" };
+cvar_t	sk_construction_health3 = { "sk_construction_health3","0" };
+
+cvar_t	sk_construction_head1 = { "sk_construction_head1","0" };
+cvar_t	sk_construction_head2 = { "sk_construction_head2","0" };
+cvar_t	sk_construction_head3 = { "sk_construction_head3","0" };
+
+cvar_t	sk_construction_chest1 = { "sk_construction_chest1","0" };
+cvar_t	sk_construction_chest2 = { "sk_construction_chest2","0" };
+cvar_t	sk_construction_chest3 = { "sk_construction_chest3","0" };
+
+cvar_t	sk_construction_stomach1 = { "sk_construction_stomach1","0" };
+cvar_t	sk_construction_stomach2 = { "sk_construction_stomach2","0" };
+cvar_t	sk_construction_stomach3 = { "sk_construction_stomach3","0" };
+
+cvar_t	sk_construction_leg1 = { "sk_construction_leg1","0" };
+cvar_t	sk_construction_leg2 = { "sk_construction_leg2","0" };
+cvar_t	sk_construction_leg3 = { "sk_construction_leg3","0" };
+
+cvar_t	sk_construction_arm1 = { "sk_construction_arm1","0" };
+cvar_t	sk_construction_arm2 = { "sk_construction_arm2","0" };
+cvar_t	sk_construction_arm3 = { "sk_construction_arm3","0" };
+
 // Snark
 cvar_t	sk_snark_health1 = {"sk_snark_health1","0"};
 cvar_t	sk_snark_health2 = {"sk_snark_health2","0"};
@@ -1041,6 +1066,32 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_scientist_health1 );
 	CVAR_REGISTER ( &sk_scientist_health2 );
 	CVAR_REGISTER ( &sk_scientist_health3 );
+
+	// Construction
+	CVAR_REGISTER(&sk_construction_health1);
+	CVAR_REGISTER(&sk_construction_health2);
+	CVAR_REGISTER(&sk_construction_health3);
+
+
+	CVAR_REGISTER(&sk_construction_head1);
+	CVAR_REGISTER(&sk_construction_head2);
+	CVAR_REGISTER(&sk_construction_head3);
+
+	CVAR_REGISTER(&sk_construction_chest1);
+	CVAR_REGISTER(&sk_construction_chest2);
+	CVAR_REGISTER(&sk_construction_chest3);
+
+	CVAR_REGISTER(&sk_construction_stomach1);
+	CVAR_REGISTER(&sk_construction_stomach2);
+	CVAR_REGISTER(&sk_construction_stomach3);
+
+	CVAR_REGISTER(&sk_construction_leg1);
+	CVAR_REGISTER(&sk_construction_leg2);
+	CVAR_REGISTER(&sk_construction_leg3);
+
+	CVAR_REGISTER(&sk_construction_arm1);
+	CVAR_REGISTER(&sk_construction_arm2);
+	CVAR_REGISTER(&sk_construction_arm3);
 
 	// Snark
 	CVAR_REGISTER ( &sk_snark_health1 );

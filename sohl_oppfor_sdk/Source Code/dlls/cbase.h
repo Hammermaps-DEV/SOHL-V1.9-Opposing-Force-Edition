@@ -342,6 +342,9 @@ public:
 
 	void UpdateOnRemove( void );
 
+	// Called before entity removal.
+	virtual void PreRemoval(void) { return; }
+
 	// common member functions
 	void EXPORT SUB_Remove( void );
 	void EXPORT SUB_DoNothing( void );

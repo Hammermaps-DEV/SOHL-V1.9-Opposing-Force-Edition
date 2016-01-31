@@ -1863,6 +1863,9 @@ void CHFGrunt :: Precache()
 	PRECACHE_SOUND("fgrunt/death5.wav");
 	PRECACHE_SOUND("fgrunt/death6.wav");
 	
+	PRECACHE_SOUND("weapons/m4_fire1.wav");
+	PRECACHE_SOUND("weapons/m4_fire2.wav");
+
 	PRECACHE_SOUND("fgrunt/medic.wav");
 
 	PRECACHE_SOUND("hgrunt/gr_reload1.wav");

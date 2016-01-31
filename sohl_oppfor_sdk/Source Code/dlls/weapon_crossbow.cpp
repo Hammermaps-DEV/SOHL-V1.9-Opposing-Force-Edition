@@ -99,12 +99,10 @@ void CCrossbow::PrimaryAttack(void) {
 //=========================================================
 // FireSniperBolt * only in Multiplayer
 //=========================================================
-void CCrossbow::FireSniperBolt()
-{
+void CCrossbow::FireSniperBolt() {
 	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.75;
 
-	if (m_iClip == 0)
-	{
+	if (m_iClip == 0) {
 		PlayEmptySound();
 		return;
 	}
@@ -146,9 +144,7 @@ void CCrossbow::FireSniperBolt()
 		ClearMultiDamage();
 		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, m_pPlayer->pev);
-	}
-	else
-	{
+	} else {
 		// create a bolt
 		CBolt *pBolt = CBolt::BoltCreate();
 		pBolt->pev->origin = tr.vecEndPos - vecDir * 10;
@@ -159,19 +155,15 @@ void CCrossbow::FireSniperBolt()
 
 		EMIT_SOUND(pBolt->edict(), CHAN_WEAPON, "weapons/xbow_hit1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM);
 
-		if (UTIL_PointContents(tr.vecEndPos) != CONTENTS_WATER)
-		{
+		if (UTIL_PointContents(tr.vecEndPos) != CONTENTS_WATER) {
 			UTIL_Sparks(tr.vecEndPos);
 		}
 
-		if (FClassnameIs(tr.pHit, "worldspawn"))
-		{
+		if (FClassnameIs(tr.pHit, "worldspawn")) {
 			// let the bolt sit around for a while if it hit static architecture
-			pBolt->pev->nextthink = gpGlobals->time + 5.0;
-		}
-		else
-		{
-			pBolt->pev->nextthink = gpGlobals->time;
+			pBolt->pev->nextthink = UTIL_WeaponTimeBase() + 5.0;
+		} else {
+			pBolt->pev->nextthink = UTIL_WeaponTimeBase();
 		}
 	}
 }
