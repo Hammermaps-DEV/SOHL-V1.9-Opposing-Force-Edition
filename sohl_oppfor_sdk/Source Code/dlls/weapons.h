@@ -106,7 +106,7 @@ public:
 
 #define WEAPON_CYCLER			31	// ?????
 
-#define MAX_WEAPONS				32
+#define MAX_WEAPONS				45
 
 #define MAX_NORMAL_BATTERY			100
 

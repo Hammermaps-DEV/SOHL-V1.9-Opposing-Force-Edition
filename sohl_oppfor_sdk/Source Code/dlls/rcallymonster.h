@@ -74,6 +74,7 @@ typedef enum
 	TLK_STARE,
 	TLK_USE,
 	TLK_UNUSE,
+	TLK_DECLINE, //LRC- refuse to accompany
 	TLK_STOP,
 	TLK_NOSHOOT,
 	TLK_HELLO,
@@ -149,7 +150,6 @@ public:
 	void			RunTask( Task_t *pTask );
 	void			HandleAnimEvent( MonsterEvent_t *pEvent );
 	void			PrescheduleThink( void );
-	
 
 	// Conversations / communication
 	int				GetVoicePitch( void );
@@ -194,6 +194,8 @@ public:
 	float		m_useTime;						// Don't allow +USE until this time
 	int			m_iszUse;						// Custom +USE sentence group (follow)
 	int			m_iszUnUse;						// Custom +USE sentence group (stop following)
+	int			m_iszDecline;					// Custom +USE sentence group (refuse to follow) LRC
+	int			m_iszSpeakAs;					// Change the prefix for all this monster's speeches LRC
 
 	float		m_flLastSaidSmelled;// last time we talked about something that stinks
 	float		m_flStopTalkTime;// when in the future that I'll be done saying this sentence.
@@ -256,6 +258,13 @@ public:
 	MONSTERSTATE GetIdealState ( void );
 
 	CUSTOM_SCHEDULES;
+
+	BOOL m_flDebug = false;
+	float m_flHitgroupHead;
+	float m_flHitgroupChest;
+	float m_flHitgroupStomach;
+	float m_flHitgroupArm;
+	float m_flHitgroupLeg;
 };
 
 

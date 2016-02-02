@@ -491,8 +491,8 @@ int CHudAmmo::MsgFunc_AmmoX(const char *pszName, int iSize, void *pbuf)
 {
 	BEGIN_READ( pbuf, iSize );
 
-	int iIndex = READ_BYTE();
-	int iCount = READ_BYTE();
+	int iIndex = READ_SHORT();
+	int iCount = READ_SHORT();
 
 	gWR.SetAmmo( iIndex, abs(iCount) );
 

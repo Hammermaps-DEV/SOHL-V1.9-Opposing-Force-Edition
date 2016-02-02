@@ -15,7 +15,7 @@
 #ifndef CDLL_DLL_H
 #define CDLL_DLL_H
 
-#define MAX_WEAPONS			32
+#define MAX_WEAPONS			45
 #define WEAPON_CYCLER		31
 
 #define MAX_WEAPON_SLOTS	7	// hud item selection slots

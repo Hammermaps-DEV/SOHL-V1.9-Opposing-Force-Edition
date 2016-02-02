@@ -291,9 +291,9 @@ void WeaponFlash ( const Vector &vecOrigin )
          WRITE_COORD( vecOrigin.y );
          WRITE_COORD( vecOrigin.z );
          WRITE_BYTE( m_iRadius );     // radius
-         WRITE_BYTE( 255 );     // R
-         WRITE_BYTE( 192 );     // G
-         WRITE_BYTE( 64 );     // B
+		 WRITE_BYTE( 255 );     // R
+		 WRITE_BYTE( 255 );     // G
+		 WRITE_BYTE( 128 );     // B
          WRITE_BYTE( 0 );     // life * 10
          WRITE_BYTE( 0 ); // decay
     MESSAGE_END();

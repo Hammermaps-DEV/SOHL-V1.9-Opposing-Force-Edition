@@ -1615,6 +1615,14 @@ void CMedic :: Spawn()
 	m_flNextPainTime	= gpGlobals->time;
 	m_flHealAnount		= gSkillData.medicHeal;
 
+	m_flDebug           = false; //Debug Massages
+
+	m_flHitgroupHead    = gSkillData.fgruntHead;
+	m_flHitgroupChest   = gSkillData.fgruntChest;
+	m_flHitgroupStomach = gSkillData.fgruntStomach;
+	m_flHitgroupArm     = gSkillData.fgruntArm;
+	m_flHitgroupLeg     = gSkillData.fgruntLeg;
+
 	m_afCapability		= bits_CAP_HEAR | bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 	m_hHealTarget		= NULL;
 	m_fEnemyEluded		= FALSE;

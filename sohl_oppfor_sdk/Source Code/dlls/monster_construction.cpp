@@ -15,7 +15,7 @@
 //=========================================================
 // NPC: Construction * Gus
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 31.01.2016
+// Version: 1.0 / Build: 00002 / Date: 02.02.2016
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -78,7 +78,6 @@ void CConstruction::Spawn(void) {
 	if (pev->health == 0)
 		pev->health = gSkillData.constructionHealth;
 
-	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so scientists will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
@@ -112,7 +111,6 @@ void CConstruction::Precache(void) {
 	PRECACHE_SOUND("scientist/sci_pain5.wav");
 
 	TalkInit();
-
 	CScientist::Precache();
 }
 
@@ -316,4 +314,30 @@ void CConstruction::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector v
 	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
 	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
 	CScientist::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+}
+
+//=========================================================
+// MoveExecute - Hack for Construction Model
+//=========================================================
+void CConstruction::MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval) {
+	if (m_IdealActivity != m_movementActivity)
+		m_IdealActivity = m_movementActivity;
+
+	switch (m_Activity) {
+		case ACT_WALK:
+			m_flGroundSpeed = 55;
+		break;
+		case ACT_RUN:
+			m_flGroundSpeed = 190;
+		break;
+	}
+
+	float flTotal = m_flGroundSpeed * pev->framerate * flInterval;
+	float flStep;
+	while (flTotal > 0.001) {
+		// don't walk more than 16 units or stairs stop working
+		flStep = V_min(16.0, flTotal);
+		UTIL_MoveToOrigin(ENT(pev), m_Route[m_iRouteIndex].vecLocation, flStep, MOVE_NORMAL);
+		flTotal -= flStep;
+	}
 }

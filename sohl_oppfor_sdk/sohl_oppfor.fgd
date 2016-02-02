@@ -4602,6 +4602,7 @@
 	spawnflags(Flags) =
 	[
 		32 : "SquadLeader" : 0
+		1024: "Don't Drop Gun" : 0
 	]
 	netname(string) : "Squad Name"
 	weapons(Choices) : "Weapons" : 3 =
@@ -4630,6 +4631,8 @@
     spawnflags(Flags) =
     [
         32 : "SquadLeader" : 0
+		512: "Don't Drop Explosives" : 0
+		1024: "Don't Drop Gun" : 0
     ]
 
     weapons(Choices) : "Weapons" : 3 =
@@ -4694,6 +4697,7 @@
     spawnflags(Flags) =
     [
         32 : "SquadLeader" : 0
+		1024: "Don't Drop Gun" : 0
     ]
 
     head(Choices) : "Heads" : -1 =
@@ -4718,6 +4722,7 @@
 	spawnflags(Flags) =
 	[
 		32 : "SquadLeader" : 0
+		1024: "Don't Drop Gun" : 0
 	]
 	weapons(Choices) : "Weapons" : 1 =
 		[

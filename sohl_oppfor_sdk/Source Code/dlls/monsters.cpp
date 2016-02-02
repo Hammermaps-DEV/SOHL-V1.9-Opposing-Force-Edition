@@ -1918,7 +1918,7 @@ void CBaseMonster::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir, f
 		UTIL_MoveToOrigin ( ENT(pev), m_Route[ m_iRouteIndex ].vecLocation, flStep, MOVE_NORMAL );
 		flTotal -= flStep;
 	}
-	// ALERT( at_console, "dist %f\n", m_flGroundSpeed * pev->framerate * flInterval );
+	//ALERT( at_console, "dist %f\n", m_flGroundSpeed * pev->framerate * flInterval );
 }
 
 
@@ -2463,7 +2463,6 @@ float	CBaseMonster::FlYawDiff ( void )
 	return UTIL_AngleDiff( pev->ideal_yaw, flCurrentYaw );
 }
 
-
 //=========================================================
 // Changeyaw - turns a monster towards its ideal_yaw
 //=========================================================
@@ -2805,17 +2804,9 @@ Vector CBaseMonster :: GetGunPosition( )
 	return vecSrc;
 }
 
-
-
-
-
 //=========================================================
 // NODE GRAPH
 //=========================================================
-
-
-
-
 
 //=========================================================
 // FGetNodeRoute - tries to build an entire node path from

@@ -457,6 +457,7 @@ void CHalfLifeMultiplay :: InitHUD( CBasePlayer *pl )
 	MESSAGE_END();
 
 	SendMOTDToClient( pl->edict() );
+	ExecuteMapCFG();
 
 	// loop through all active players and send their score info to the new client
 	for ( int i = 1; i <= gpGlobals->maxClients; i++ )
@@ -1657,8 +1658,7 @@ void CHalfLifeMultiplay :: ChangeLevel( void )
 #define MAX_MOTD_CHUNK	  60
 #define MAX_MOTD_LENGTH   1536 // (MAX_MOTD_CHUNK * 4)
 
-void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client )
-{
+void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client ) {
 	// read from the MOTD.txt file
 	int length, char_count = 0;
 	char *pFileList;
@@ -1699,6 +1699,24 @@ void CHalfLifeMultiplay :: SendMOTDToClient( edict_t *client )
 	}
 
 	FREE_FILE( aFileList );
+}
+
+void CHalfLifeMultiplay::ExecuteMapCFG(void) {
+	char szFilename1[100] = "";
+	char szFilename2[100] = "";
+	const char *szMapName1 = (STRING(gpGlobals->mapname));
+	strcpy(szFilename1, "maps/");
+	strcat(szFilename1, szMapName1);
+	strcat(szFilename1, ".cfg");
+	strcpy(szFilename2, "exec ");
+	strcat(szFilename2, szFilename1);
+	strcat(szFilename2, "\n");
+	if (UTIL_FileExists(szFilename1)) {
+		SERVER_COMMAND(szFilename2);
+		ALERT(at_notice, "MapConfig: '%s' has loaded\n", szFilename1);
+	} else {
+		ALERT(at_notice, "MapConfig: '%s' not found\n", szFilename1);
+	}
 }
 	
 

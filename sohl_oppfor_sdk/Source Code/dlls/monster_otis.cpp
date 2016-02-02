@@ -89,7 +89,10 @@ void COtis::BarneyFirePistol(void)
 	SetBlending(0, angDir.x);
 	pev->effects = EF_MUZZLEFLASH;
 
+	Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 100) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
 	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_PLAYER_357);
+	WeaponFlash(vecShootOrigin);
 
 	int pitchShift = RANDOM_LONG(0, 20);
 
@@ -184,6 +187,8 @@ void COtis::Precache()
 	PRECACHE_MODEL("models/otis.mdl");
 
 	PRECACHE_SOUND("barney/desert_eagle_fire.wav");
+
+	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
 
 	PRECACHE_SOUND("barney/ba_pain1.wav");
 	PRECACHE_SOUND("barney/ba_pain2.wav");

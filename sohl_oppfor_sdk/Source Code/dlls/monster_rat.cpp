@@ -33,8 +33,7 @@
 
 LINK_ENTITY_TO_CLASS(monster_rat, CRat);
 
-void CRat::Touch(CBaseEntity *pOther)
-{
+void CRat::Touch(CBaseEntity *pOther) {
 	Vector vecSpot;
 	TraceResult tr;
 	if (pOther->pev->velocity == g_vecZero || !pOther->IsPlayer()) {
@@ -48,15 +47,13 @@ void CRat::Touch(CBaseEntity *pOther)
 	TakeDamage(pOther->pev, pOther->pev, pev->health, DMG_CRUSH);
 }
 
-void CRat::SetYawSpeed(void)
-{
+void CRat::SetYawSpeed(void) {
 	int ys;
 	ys = 120;
 	pev->yaw_speed = ys;
 }
 
-void CRat::Spawn()
-{
+void CRat::Spawn() {
 	Precache();
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model));
@@ -79,8 +76,7 @@ void CRat::Spawn()
 	m_flNextSmellTime = gpGlobals->time;
 }
 
-void CRat::Precache()
-{
+void CRat::Precache() {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model));
 	else
@@ -91,8 +87,7 @@ void CRat::Precache()
 	PRECACHE_SOUND("rat/rat_smash.wav");
 }
 
-void CRat::Killed(entvars_t *pevAttacker, int iGib)
-{
+void CRat::Killed(entvars_t *pevAttacker, int iGib) {
 	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;
 	pev->deadflag = DEAD_DEAD;

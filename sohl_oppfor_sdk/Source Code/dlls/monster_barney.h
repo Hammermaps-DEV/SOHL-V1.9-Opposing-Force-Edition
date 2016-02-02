@@ -78,6 +78,7 @@ class CBarney : public CTalkMonster {
 		float m_flHitgroupStomach;
 		float m_flHitgroupArm;
 		float m_flHitgroupLeg;
+		int	  m_iBrassShell;
 };
 
 #endif // MONSTER_BARNEY_H

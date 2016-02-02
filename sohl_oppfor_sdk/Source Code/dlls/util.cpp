@@ -19,6 +19,7 @@
   Utility code.  Really not optional after all.
 
 */
+#include <sys/stat.h>
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -3333,12 +3334,16 @@ char *UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, i
 	return NULL;
 }
 
+bool UTIL_FileExists(char *name) {
+	struct stat buffer;
+	return (stat(name, &buffer) == 0);
+}
+
 //========================================================================
 // Precaches aurora particle and set it - Ku2zoff
 //========================================================================
 int UTIL_PrecacheAurora(string_t s) { return UTIL_PrecacheAurora((char *)STRING(s)); }
-int UTIL_PrecacheAurora(const char *s)
-{
+int UTIL_PrecacheAurora(const char *s) {
 	char path[128]; //path length
 	sprintf(path, "particles/%s.aur", s);
 
@@ -3356,8 +3361,7 @@ int UTIL_PrecacheAurora(const char *s)
 	}
 }
 
-void UTIL_SetAurora(CBaseEntity *pAttach, int aur, int attachment)
-{
+void UTIL_SetAurora(CBaseEntity *pAttach, int aur, int attachment) {
 	MESSAGE_BEGIN(MSG_ALL, gmsgParticle);
 	WRITE_SHORT(pAttach->entindex());
 	WRITE_STRING(STRING(aur));

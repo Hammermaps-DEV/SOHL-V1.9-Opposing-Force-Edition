@@ -143,7 +143,10 @@ void CGameRules::RefreshSkillData ( void )
 	// Apache 
 	gSkillData.apacheHealth = GetSkillCvar( "sk_apache_health");
 
-	// Barney
+	//=========================================================
+	// NPCs: Barney
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.barneyHealth  = GetSkillCvar("sk_barney_health");
 	gSkillData.barneyHead    = GetSkillCvar("sk_barney_head"); //Hitgroup
 	gSkillData.barneyChest   = GetSkillCvar("sk_barney_chest"); //Hitgroup
@@ -151,7 +154,10 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.barneyLeg     = GetSkillCvar("sk_barney_leg"); //Hitgroup
 	gSkillData.barneyArm     = GetSkillCvar("sk_barney_arm"); //Hitgroup
 
-	// Barniel
+	//=========================================================
+	// NPCs: Barniel
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.barnielHealth  = GetSkillCvar("sk_barniel_health");
 	gSkillData.barnielHead    = GetSkillCvar("sk_barniel_head"); //Hitgroup
 	gSkillData.barnielChest   = GetSkillCvar("sk_barniel_chest"); //Hitgroup
@@ -222,7 +228,10 @@ void CGameRules::RefreshSkillData ( void )
 	// Scientist
 	gSkillData.scientistHealth = GetSkillCvar( "sk_scientist_health");
 
-	// Construction
+	//=========================================================
+	// NPCs: Construction
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.constructionHealth = GetSkillCvar("sk_construction_health");
 	gSkillData.constructionHead = GetSkillCvar("sk_construction_head"); //Hitgroup
 	gSkillData.constructionChest = GetSkillCvar("sk_construction_chest"); //Hitgroup
@@ -236,11 +245,9 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.snarkDmgPop = GetSkillCvar( "sk_snark_dmg_pop");
 
 	//=========================================================
-	// NPCs: Zombie,Zombie Soldier,Zombie Barney
+	// NPCs: Zombie Scientist
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================
-
-	// Zombie Scientist
 	gSkillData.zombieHealth              = GetSkillCvar("sk_zombie_health");
 	gSkillData.zombieDmgOneSlash         = GetSkillCvar("sk_zombie_dmg_one_slash");
 	gSkillData.zombieDmgBothSlash        = GetSkillCvar("sk_zombie_dmg_both_slash");
@@ -250,7 +257,10 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieLeg                 = GetSkillCvar("sk_zombie_leg"); //Hitgroup
 	gSkillData.zombieArm                 = GetSkillCvar("sk_zombie_arm"); //Hitgroup
 
-	// Zombie Soldier
+	//=========================================================
+	// NPCs: Zombie Soldier
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.zombieSoldierHealth       = GetSkillCvar("sk_zombie_soldier_health");
 	gSkillData.zombieSoldierDmgOneSlash  = GetSkillCvar("sk_zombie_soldier_dmg_one_slash");
 	gSkillData.zombieSoldierDmgBothSlash = GetSkillCvar("sk_zombie_soldier_dmg_both_slash");
@@ -260,7 +270,10 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieSoldierLeg          = GetSkillCvar("sk_zombie_soldier_leg"); //Hitgroup
 	gSkillData.zombieSoldierArm          = GetSkillCvar("sk_zombie_soldier_arm"); //Hitgroup
 
-	// Zombie Construction
+	//=========================================================
+	// NPCs: Zombie Construction
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.zombieConstructionHealth  = GetSkillCvar("sk_zombie_construction_health");
 	gSkillData.zombieConstructionDmgOneSlash = GetSkillCvar("sk_zombie_construction_dmg_one_slash");
 	gSkillData.zombieConstructionDmgBothSlash = GetSkillCvar("sk_zombie_construction_dmg_both_slash");
@@ -270,7 +283,10 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.zombieConstructionLeg     = GetSkillCvar("sk_zombie_construction_leg"); //Hitgroup
 	gSkillData.zombieConstructionArm     = GetSkillCvar("sk_zombie_construction_arm"); //Hitgroup
 
-	// Zombie Barney
+	//=========================================================
+	// NPCs: Zombie Barney
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.zombieBarneyHealth        = GetSkillCvar("sk_zombie_barney_health");
 	gSkillData.zombieBarneyDmgOneSlash   = GetSkillCvar("sk_zombie_barney_dmg_one_slash");
 	gSkillData.zombieBarneyDmgBothSlash  = GetSkillCvar("sk_zombie_barney_dmg_both_slash");
@@ -308,38 +324,54 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.voltigoreArm			    = GetSkillCvar("sk_voltigore_arm"); //Hitgroup
 
 	//=========================================================
-	// NPCs: #########################
+	// NPCs: Ally Grunt
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================
+	gSkillData.fgruntHealth				= GetSkillCvar("sk_hgrunt_ally_health");
+	gSkillData.fgruntDmgKick			= GetSkillCvar("sk_hgrunt_ally_kick");
+	gSkillData.fgruntShotgunPellets		= GetSkillCvar("sk_hgrunt_ally_pellets");
+	gSkillData.fgruntGrenadeSpeed		= GetSkillCvar("sk_hgrunt_ally_gspeed");
+	gSkillData.fgruntHead				= GetSkillCvar("sk_hgrunt_ally_head"); //Hitgroup 
+	gSkillData.fgruntChest				= GetSkillCvar("sk_hgrunt_ally_chest"); //Hitgroup
+	gSkillData.fgruntStomach			= GetSkillCvar("sk_hgrunt_ally_stomach"); //Hitgroup
+	gSkillData.fgruntLeg				= GetSkillCvar("sk_hgrunt_ally_leg"); //Hitgroup
+	gSkillData.fgruntArm				= GetSkillCvar("sk_hgrunt_ally_arm"); //Hitgroup
 
-	// Opposing-Force
-
-	// Ally Grunt
-	gSkillData.fgruntHealth = GetSkillCvar( "sk_hgrunt_ally_health");
-	gSkillData.fgruntDmgKick = GetSkillCvar( "sk_hgrunt_ally_kick");
-	gSkillData.fgruntShotgunPellets = GetSkillCvar( "sk_hgrunt_ally_pellets");
-	gSkillData.fgruntGrenadeSpeed = GetSkillCvar( "sk_hgrunt_ally_gspeed");
-
-	// Ally Grunt Medic
+	//=========================================================
+	// NPCs: Ally Grunt Medic
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.medicHealth = GetSkillCvar( "sk_medic_ally_health");
 	gSkillData.medicDmgKick = GetSkillCvar( "sk_medic_ally_kick");
 	gSkillData.medicHeal = GetSkillCvar( "sk_medic_ally_heal");
 
-	// Ally Grunt Torch
+	//=========================================================
+	// NPCs: Ally Grunt Torch
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.torchHealth = GetSkillCvar( "sk_torch_ally_health");
 	gSkillData.torchDmgKick = GetSkillCvar( "sk_torch_ally_kick");
 
-	// Pitworm
+	//=========================================================
+	// NPCs: Pitworm
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.pwormHealth = GetSkillCvar("sk_pitworm_health");
 	gSkillData.pwormDmgSwipe = GetSkillCvar("sk_pitworm_dmg_swipe");
 	gSkillData.pwormDmgBeam = GetSkillCvar("sk_pitworm_dmg_beam");
 
-	// Shock Roach
+	//=========================================================
+	// NPCs: Shock Roach
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.sroachHealth = GetSkillCvar("sk_shockroach_health");
 	gSkillData.sroachDmgBite = GetSkillCvar("sk_shockroach_dmg_bite");
 	gSkillData.sroachLifespan = GetSkillCvar("sk_shockroach_lifespan");
 
-	// Gonome
+	//=========================================================
+	// NPCs: Gonome
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.gonomeHealth = GetSkillCvar("sk_gonome_health");
 	gSkillData.gonomeDmgOneSlash = GetSkillCvar("sk_gonome_dmg_one_slash");
 	gSkillData.gonomeDmgGuts = GetSkillCvar("sk_gonome_dmg_guts");

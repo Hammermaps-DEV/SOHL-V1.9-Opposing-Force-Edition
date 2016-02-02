@@ -12,112 +12,125 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
-
+//=========================================================
+// NPC: Human Grunt Ally
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_HGRUNT_OPFOR_H
 #define MONSTER_HGRUNT_OPFOR_H
 
-class CHFGrunt : public CRCAllyMonster
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  ISoundMask(void);
-	int  Classify(void);
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void CheckAmmo(void);
-	void SetActivity(Activity NewActivity);
-	void RunTask(Task_t *pTask);
-	void StartTask(Task_t *pTask);
-	void KeyValue(KeyValueData *pkvd);
-	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	BOOL FCanCheckAttacks(void);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	void DeclineFollowing(void);
-	void PrescheduleThink(void);
-	Vector GetGunPosition(void);
-	void Shoot(void);
-	void Shotgun(void);
-	void M249(void);
-	// Override these to set behavior
-	CBaseEntity	*Kick(void);
-	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *GetSchedule(void);
-	MONSTERSTATE GetIdealState(void);
+// include
+#include "rcallymonster.h"
 
-	void DeathSound(void);
-	void PainSound(void);
-	void GibMonster(void);
-	void TalkInit(void);
+// class definition
+class CHFGrunt : public CRCAllyMonster {
+	public:
+		void Spawn(void);
+		void Precache(void);
+		void SetYawSpeed(void);
+		int  ISoundMask(void);
+		int  Classify(void);
+		void HandleAnimEvent(MonsterEvent_t *pEvent);
+		void CheckAmmo(void);
+		void SetActivity(Activity NewActivity);
+		void RunTask(Task_t *pTask);
+		void StartTask(Task_t *pTask);
+		void KeyValue(KeyValueData *pkvd);
+		virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+		BOOL FCanCheckAttacks(void);
+		BOOL CheckRangeAttack1(float flDot, float flDist);
+		BOOL CheckRangeAttack2(float flDot, float flDist);
+		BOOL CheckMeleeAttack1(float flDot, float flDist);
+		void DeclineFollowing(void);
+		void PrescheduleThink(void);
+		Vector GetGunPosition(void);
 
-	BOOL FOkToSpeak(void);
-	void JustSpoke(void);
+		// Shoots
+		void Shoot(void);
+		void Shotgun(void);
+		void M249(void);
 
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	void Killed(entvars_t *pevAttacker, int iGib);
-	int IRelationship(CBaseEntity *pTarget);
+		// Override these to set behavior
+		CBaseEntity	*Kick(void);
+		Schedule_t *GetScheduleOfType(int Type);
+		Schedule_t *GetSchedule(void);
+		MONSTERSTATE GetIdealState(void);
 
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
+		void DeathSound(void);
+		void PainSound(void);
+		void GibMonster(void);
+		void TalkInit(void);
 
-	// UNDONE: What is this for?  It isn't used?
-	float	m_flPlayerDamage;// how much pain has the player inflicted on me?
+		BOOL FOkToSpeak(void);
+		void JustSpoke(void);
 
-							 // checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
-							 // not every server frame.
-	float m_flNextGrenadeCheck;
-	float m_flNextPainTime;
-	float m_flLastEnemySightTime;
-	float m_flMedicWaitTime;
+		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+		void Killed(entvars_t *pevAttacker, int iGib);
+		int IRelationship(CBaseEntity *pTarget);
 
-	float	m_flLinkToggle;// how much pain has the player inflicted on me?
+		virtual int		Save(CSave &save);
+		virtual int		Restore(CRestore &restore);
+		static	TYPEDESCRIPTION m_SaveData[];
 
-	Vector	m_vecTossVelocity;
+		// UNDONE: What is this for?  It isn't used?
+		float	m_flPlayerDamage;// how much pain has the player inflicted on me?
 
-	BOOL	m_fThrowGrenade;
-	BOOL	m_fStanding;
-	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
-	BOOL	m_fImmortal;
-	int		m_cClipSize;
+								 // checking the feasibility of a grenade toss is kind of costly, so we do it every couple of seconds,
+								 // not every server frame.
+		float m_flNextGrenadeCheck;
+		float m_flNextPainTime;
+		float m_flLastEnemySightTime;
+		float m_flMedicWaitTime;
 
-	int		m_iBrassShell;
-	int		m_iShotgunShell;
+		float	m_flLinkToggle;// how much pain has the player inflicted on me?
 
-	int		m_iSentence;
-	int		m_iHead;
+		Vector	m_vecTossVelocity;
 
-	int		m_iM249Shell;
-	int		m_iM249Link;
+		BOOL	m_fThrowGrenade;
+		BOOL	m_fStanding;
+		BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
+		BOOL	m_fImmortal;
+		int		m_cClipSize;
 
-	static const char *pGruntSentences[];
+		int		m_iBrassShell;
+		int		m_iShotgunShell;
 
-	CUSTOM_SCHEDULES;
+		int		m_iSentence;
+		int		m_iHead;
+
+		int		m_iM249Shell;
+		int		m_iM249Link;
+
+		static const char *pGruntSentences[];
+		static const char *pPainSounds[];
+		static const char *pDeathSounds[];
+		static const char *pAttackSoundsSAW[];
+		static const char *pAttackSounds9MM[];
+
+		CUSTOM_SCHEDULES;
 };
 
-class CHFGruntRepel : public CBaseMonster
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	int m_iSpriteTexture;	// Don't save, precache
+// class definition
+class CHFGruntRepel : public CBaseMonster {
+	public:
+		void Spawn(void);
+		void Precache(void);
+		void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+		int m_iSpriteTexture;	// Don't save, precache
 };
 
-class CDeadFGrunt : public CBaseMonster
-{
-public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+// class definition
+class CDeadFGrunt : public CBaseMonster {
+	public:
+		void Spawn(void);
+		int	Classify(void) { return	CLASS_PLAYER_ALLY; }
 
-	void KeyValue(KeyValueData *pkvd);
+		void KeyValue(KeyValueData *pkvd);
 
-	int		m_iHead;
-	int	m_iPose;// which sequence to display
-	static char *m_szPoses[7];
+		int		m_iHead;
+		int	m_iPose;// which sequence to display
+		static char *m_szPoses[7];
 };
 
 #endif // MONSTER_HGRUNT_OPFOR_H

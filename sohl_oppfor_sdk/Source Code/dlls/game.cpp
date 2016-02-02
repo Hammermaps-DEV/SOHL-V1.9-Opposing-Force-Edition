@@ -545,6 +545,26 @@ cvar_t	sk_hgrunt_ally_gspeed1 = {"sk_hgrunt_ally_gspeed1","0"};
 cvar_t	sk_hgrunt_ally_gspeed2 = {"sk_hgrunt_ally_gspeed2","0"};
 cvar_t	sk_hgrunt_ally_gspeed3 = {"sk_hgrunt_ally_gspeed3","0"};
 
+cvar_t	sk_hgrunt_ally_head1 = { "sk_hgrunt_ally_head1","0" };
+cvar_t	sk_hgrunt_ally_head2 = { "sk_hgrunt_ally_head2","0" };
+cvar_t	sk_hgrunt_ally_head3 = { "sk_hgrunt_ally_head3","0" };
+
+cvar_t	sk_hgrunt_ally_chest1 = { "sk_hgrunt_ally_chest1","0" };
+cvar_t	sk_hgrunt_ally_chest2 = { "sk_hgrunt_ally_chest2","0" };
+cvar_t	sk_hgrunt_ally_chest3 = { "sk_hgrunt_ally_chest3","0" };
+
+cvar_t	sk_hgrunt_ally_stomach1 = { "sk_hgrunt_ally_stomach1","0" };
+cvar_t	sk_hgrunt_ally_stomach2 = { "sk_hgrunt_ally_stomach2","0" };
+cvar_t	sk_hgrunt_ally_stomach3 = { "sk_hgrunt_ally_stomach3","0" };
+
+cvar_t	sk_hgrunt_ally_leg1 = { "sk_hgrunt_ally_leg1","0" };
+cvar_t	sk_hgrunt_ally_leg2 = { "sk_hgrunt_ally_leg2","0" };
+cvar_t	sk_hgrunt_ally_leg3 = { "sk_hgrunt_ally_leg3","0" };
+
+cvar_t	sk_hgrunt_ally_arm1 = { "sk_hgrunt_ally_arm1","0" };
+cvar_t	sk_hgrunt_ally_arm2 = { "sk_hgrunt_ally_arm2","0" };
+cvar_t	sk_hgrunt_ally_arm3 = { "sk_hgrunt_ally_arm3","0" };
+
 // Ally Grunt Medic
 cvar_t	sk_medic_ally_health1 = {"sk_medic_ally_health1","0"};
 cvar_t	sk_medic_ally_health2 = {"sk_medic_ally_health2","0"};
@@ -1326,21 +1346,41 @@ void GameDLLInit( void )
 
 	// Opposing-Force
 	// Ally Grunt
-	CVAR_REGISTER ( &sk_hgrunt_ally_health1 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_health2 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_health3 );
+	CVAR_REGISTER (&sk_hgrunt_ally_health1);
+	CVAR_REGISTER (&sk_hgrunt_ally_health2);
+	CVAR_REGISTER (&sk_hgrunt_ally_health3);
 
-	CVAR_REGISTER ( &sk_hgrunt_ally_kick1 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_kick2 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_kick3 );
+	CVAR_REGISTER (&sk_hgrunt_ally_kick1);
+	CVAR_REGISTER (&sk_hgrunt_ally_kick2);
+	CVAR_REGISTER (&sk_hgrunt_ally_kick3);
 
-	CVAR_REGISTER ( &sk_hgrunt_ally_pellets1 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_pellets2 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_pellets3 );
+	CVAR_REGISTER (&sk_hgrunt_ally_pellets1);
+	CVAR_REGISTER (&sk_hgrunt_ally_pellets2);
+	CVAR_REGISTER (&sk_hgrunt_ally_pellets3);
 
-	CVAR_REGISTER ( &sk_hgrunt_ally_gspeed1 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_gspeed2 );
-	CVAR_REGISTER ( &sk_hgrunt_ally_gspeed3 );
+	CVAR_REGISTER (&sk_hgrunt_ally_gspeed1);
+	CVAR_REGISTER (&sk_hgrunt_ally_gspeed2);
+	CVAR_REGISTER (&sk_hgrunt_ally_gspeed3);
+
+	CVAR_REGISTER(&sk_hgrunt_ally_head1);
+	CVAR_REGISTER(&sk_hgrunt_ally_head2);
+	CVAR_REGISTER(&sk_hgrunt_ally_head3);
+
+	CVAR_REGISTER(&sk_hgrunt_ally_chest1);
+	CVAR_REGISTER(&sk_hgrunt_ally_chest2);
+	CVAR_REGISTER(&sk_hgrunt_ally_chest3);
+
+	CVAR_REGISTER(&sk_hgrunt_ally_stomach1);
+	CVAR_REGISTER(&sk_hgrunt_ally_stomach2);
+	CVAR_REGISTER(&sk_hgrunt_ally_stomach3);
+
+	CVAR_REGISTER(&sk_hgrunt_ally_leg1);
+	CVAR_REGISTER(&sk_hgrunt_ally_leg2);
+	CVAR_REGISTER(&sk_hgrunt_ally_leg3);
+
+	CVAR_REGISTER(&sk_hgrunt_ally_arm1);
+	CVAR_REGISTER(&sk_hgrunt_ally_arm2);
+	CVAR_REGISTER(&sk_hgrunt_ally_arm3);
 
 	// Ally Grunt Medic
 	CVAR_REGISTER ( &sk_medic_ally_health1 );

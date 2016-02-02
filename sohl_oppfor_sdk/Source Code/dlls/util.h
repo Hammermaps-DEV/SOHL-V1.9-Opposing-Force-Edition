@@ -614,6 +614,7 @@ int HaveCamerasInPVS( edict_t* edict );
 BOOL IsMultiplayer ( void );
 Vector UTIL_MirrorVector( Vector angles );
 Vector UTIL_MirrorPos ( Vector endpos );
+bool UTIL_FileExists(char *name);
 
 // Ku2zoff - Particle System
 int UTIL_PrecacheAurora(string_t s);

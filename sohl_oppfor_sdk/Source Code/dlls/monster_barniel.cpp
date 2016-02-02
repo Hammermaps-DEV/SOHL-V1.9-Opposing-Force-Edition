@@ -15,7 +15,7 @@
 //=========================================================
 // NPC: Female Barney * Barniel * http://half-life.wikia.com/wiki/Barney_Calhoun
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 17.01.2016
+// Version: 1.0 / Build: 00002 / Date: 01.02.2016
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -80,6 +80,8 @@ void CBarniel::Precache() {
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/barniel.mdl");
+
+	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pPainSounds);
@@ -291,10 +293,12 @@ void CBarniel::Fire9mmPistol(void) {
 	else
 		pitchShift -= 5;
 
+	Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 100) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
 	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
 	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barniel/bn_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
-
 	WeaponFlash(vecShootOrigin);
+
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	m_cAmmoLoaded--;
 }

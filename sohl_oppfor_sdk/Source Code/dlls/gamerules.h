@@ -359,6 +359,7 @@ protected:
 	float m_flIntermissionEndTime;
 	BOOL m_iEndIntermissionButtonHit;
 	void SendMOTDToClient( edict_t *client );
+	void ExecuteMapCFG(void);
 };
 
 extern DLL_GLOBAL CGameRules*	g_pGameRules;

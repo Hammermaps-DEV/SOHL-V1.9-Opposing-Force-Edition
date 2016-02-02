@@ -26,6 +26,7 @@ class CConstruction : public CScientist
 
 		void TalkInit(void);
 		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		void MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval);
 
 		CUSTOM_SCHEDULES;
 

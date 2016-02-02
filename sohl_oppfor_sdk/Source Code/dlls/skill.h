@@ -186,6 +186,11 @@ struct skilldata_t
 	float fgruntDmgKick;
 	float fgruntShotgunPellets;
 	float fgruntGrenadeSpeed;
+	float fgruntHead;
+	float fgruntChest;
+	float fgruntStomach;
+	float fgruntArm;
+	float fgruntLeg;
 
 	float medicHealth;
 	float medicDmgKick;

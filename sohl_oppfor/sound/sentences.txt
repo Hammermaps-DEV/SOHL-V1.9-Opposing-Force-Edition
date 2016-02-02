@@ -1,4 +1,4 @@
-// HALF-LIFE SPEECH SYSTEM SENTENCES. DO NOT MODIFY THIS FILE! Max of 1023 sentences.
+// HALF-LIFE SPEECH SYSTEM SENTENCES. Max of 1536 sentences.
 
 // HUMAN GRUNTS
 HG_GREN0 sentences/HG_GREN0
@@ -550,6 +550,175 @@ OF1A5_BARN1 barney/OF1A5_BA01
 OF1A5_BARN2 barney/OF1A5_BA02
 BA_ZOMBIE2 barney/c1a2_ba_2zomb
 BA_ZOMBIE4 barney/c1a2_ba_4zomb
+
+// GUS
+GUS_OK0 scientist/alright
+GUS_OK1 scientist/fine
+GUS_OK2 scientist/hopeyouknow
+GUS_OK3 scientist/leadtheway
+GUS_OK4 scientist/letsgo
+GUS_OK5 scientist/yesletsgo
+GUS_OK6 scientist/yes3
+
+GUS_WAIT0 scientist/beenaburden
+GUS_WAIT1 scientist/slowingyou
+GUS_WAIT2 scientist/reconsider
+GUS_WAIT3 scientist/whyleavehere
+GUS_WAIT4 scientist/illwaithere
+GUS_WAIT5 scientist/istay
+GUS_WAIT6 scientist/illwait
+
+GUS_STOP0 scientist/stop1
+GUS_STOP1 scientist/stop2
+GUS_STOP2 scientist/stop4
+
+GUS_STARE0 scientist/yees
+GUS_STARE1 scientist/areyouthink
+GUS_STARE2 scientist/noidea
+
+GUS_HELLO0 scientist/hellothere
+GUS_HELLO1 scientist/greetings2
+GUS_HELLO2 scientist/hello
+GUS_HELLO3 scientist/goodtoseeyou
+
+GUS_ANSWER0 scientist/notsure
+GUS_ANSWER1 scientist/notcertain
+GUS_ANSWER2 scientist/perhaps
+GUS_ANSWER3 scientist/whocansay
+GUS_ANSWER4 scientist/inconclusive
+GUS_ANSWER5 scientist/theoretically
+GUS_ANSWER6 scientist/whyaskme
+GUS_ANSWER7 scientist/lowervoice
+GUS_ANSWER8 scientist/ofcourse
+GUS_ANSWER9 scientist/absolutely
+GUS_ANSWER10 scientist/yes
+GUS_ANSWER11 scientist/ibelieveso
+GUS_ANSWER12 scientist/right
+GUS_ANSWER13 scientist/imsure
+GUS_ANSWER14 scientist/positively
+GUS_ANSWER15 scientist/nodoubt
+GUS_ANSWER16 scientist/yees
+GUS_ANSWER17 scientist/ofcoursenot
+GUS_ANSWER18 scientist/absolutelynot
+GUS_ANSWER19 scientist/noo
+GUS_ANSWER20 scientist/idontthinkso
+GUS_ANSWER21 scientist/completelywrong
+GUS_ANSWER22 scientist/cantbeserious
+GUS_ANSWER23 scientist/dontknow
+GUS_ANSWER24 scientist/ridiculous
+GUS_ANSWER25 scientist/shutup
+GUS_ANSWER26 scientist/noguess
+GUS_ANSWER27 scientist/stopasking
+GUS_ANSWER28 scientist/justasked
+GUS_ANSWER29 scientist/repeat
+
+GUS_QUESTION0 scientist/everseen
+GUS_QUESTION1 scientist/needsleep
+GUS_QUESTION2 scientist/areyouthink
+GUS_QUESTION3 scientist/evergetout
+GUS_QUESTION4 scientist/rightwayout
+GUS_QUESTION5 scientist/cantbeworse
+GUS_QUESTION6 scientist/rescueus
+GUS_QUESTION7 scientist/fascinating
+GUS_QUESTION8 scientist/stimulating
+GUS_QUESTION9 scientist/luckwillchange
+GUS_QUESTION10 scientist/hearsomething
+GUS_QUESTION11 scientist/doyousmell
+GUS_QUESTION12 scientist/uselessphd
+GUS_QUESTION13 scientist/waithere
+GUS_QUESTION14 scientist/survival
+GUS_QUESTION15 scientist/headcrab
+GUS_QUESTION16 scientist/goodpaper
+GUS_QUESTION17 scientist/catchone
+GUS_QUESTION18 scientist/dinner
+GUS_QUESTION19 scientist/alientrick
+GUS_QUESTION20 scientist/alienappeal
+GUS_QUESTION21 scientist/rumorclean
+GUS_QUESTION22 scientist/nothostile
+GUS_QUESTION23 scientist/announcer
+GUS_QUESTION24 scientist/smellburn
+GUS_QUESTION25 scientist/noidea
+GUS_QUESTION26 scientist/whatnext
+
+GUS_IDLE0 scientist/ipredictedthis
+GUS_IDLE1 scientist/containfail
+GUS_IDLE2 scientist/chaostheory
+GUS_IDLE3 scientist/howinteresting
+GUS_IDLE4 scientist/neverseen
+GUS_IDLE5 scientist/peculiarmarks
+GUS_IDLE6 scientist/whoresponsible
+GUS_IDLE7 scientist/nogrant
+GUS_IDLE8 scientist/bloodsample
+GUS_IDLE9 scientist/administrator
+GUS_IDLE10 scientist/improbable
+GUS_IDLE11 scientist/organicmatter
+GUS_IDLE12 scientist/lambdalab
+GUS_IDLE13 scientist/ihearsomething
+
+GUS_NOGO scientist/dontgothere
+
+GUS_MONST0 scientist/seeheadcrab
+GUS_MONST1 scientist/importantspecies
+
+GUS_HEAR0 scientist/ihearsomething
+GUS_HEAR1 scientist/didyouhear
+GUS_HEAR2 scientist/whatissound
+
+GUS_SMELL0 scientist/somethingfoul
+GUS_SMELL1 scientist/odorfromyou
+GUS_SMELL2 scientist/peculiarodor
+GUS_SMELL3 scientist/stench
+
+GUS_WOUND0 scientist/iwounded
+GUS_WOUND1 scientist/iwounded2
+
+GUS_MORTAL0 scientist/iwoundedbad
+GUS_MORTAL1 scientist/iwounded2
+
+GUS_CUREA scientist/youlookbad
+GUS_CUREB scientist/youwounded
+GUS_CUREC scientist/youneedmedic
+
+GUS_PLFEAR0 scientist/whatyoudoing
+GUS_PLFEAR1 scientist/canttakemore
+GUS_PLFEAR2 scientist/madness
+GUS_PLFEAR3 scientist/noplease
+GUS_PLFEAR4 scientist/getoutofhere
+GUS_PLFEAR5 scientist/sorryimleaving
+
+GUS_FEAR0 scientist/nooo
+GUS_FEAR1 scientist/startle2
+GUS_FEAR2 scientist/startle1 nooo
+GUS_FEAR3 scientist/dontwantdie
+GUS_FEAR4 scientist/getoutalive
+GUS_FEAR5 scientist/startle3
+GUS_FEAR6 scientist/startle4
+GUS_FEAR7 scientist/startle5
+GUS_FEAR8 scientist/startle6
+GUS_FEAR9 scientist/startle7
+GUS_FEAR10 scientist/startle8
+GUS_FEAR11 scientist/startle9
+GUS_FEAR12 scientist/startle1
+
+GUS_SCREAM0 scientist/sci_fear1
+GUS_SCREAM1 scientist/sci_fear2
+GUS_SCREAM2 scientist/sci_fear3
+GUS_SCREAM3 scientist/sci_fear4
+GUS_SCREAM4 scientist/sci_fear5
+GUS_SCREAM5 scientist/sci_fear6
+GUS_SCREAM6 scientist/sci_fear7
+GUS_SCREAM7 scientist/sci_fear8
+GUS_SCREAM8 scientist/sci_fear9
+GUS_SCREAM9 scientist/sci_fear10
+GUS_SCREAM10 scientist/sci_fear11
+GUS_SCREAM11 scientist/sci_fear12
+GUS_SCREAM12 scientist/sci_fear13
+GUS_SCREAM13 scientist/sci_fear14
+GUS_SCREAM14 scientist/sci_fear15
+
+GUS_SCARED0 scientist/whatyoudoing
+GUS_SCARED1 scientist/stopattacking
+GUS_SCARED2 scientist/youinsane
 
 // SCIENTIST
 

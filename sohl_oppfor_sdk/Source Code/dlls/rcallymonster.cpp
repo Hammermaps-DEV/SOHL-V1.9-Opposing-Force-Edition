@@ -12,6 +12,9 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
+//=========================================================
+// Squadmonster  functions
+//=========================================================
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -30,8 +33,6 @@
 //=========================================================
 float	CRCAllyMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 
-// NOTE: m_voicePitch & m_szGrp should be fixed up by precache each save/restore
-
 TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] = 
 {
 	DEFINE_FIELD( CRCAllyMonster, m_bitsSaid, FIELD_INTEGER ),
@@ -39,6 +40,8 @@ TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] =
 	DEFINE_FIELD( CRCAllyMonster, m_useTime, FIELD_TIME ),
 	DEFINE_FIELD( CRCAllyMonster, m_iszUse, FIELD_STRING ),
 	DEFINE_FIELD( CRCAllyMonster, m_iszUnUse, FIELD_STRING ),
+	DEFINE_FIELD( CRCAllyMonster, m_iszDecline, FIELD_STRING ), //LRC
+	DEFINE_FIELD( CRCAllyMonster, m_iszSpeakAs, FIELD_STRING ), //LRC
 	DEFINE_FIELD( CRCAllyMonster, m_flLastSaidSmelled, FIELD_TIME ),
 	DEFINE_FIELD( CRCAllyMonster, m_flStopTalkTime, FIELD_TIME ),
 	DEFINE_FIELD( CRCAllyMonster, m_hTalkTarget, FIELD_EHANDLE ),
@@ -731,6 +734,7 @@ void CRCAllyMonster::ShutUpFriends( void )
 		}
 	}
 }
+
 float CRCAllyMonster::TargetDistance( void )
 {
 	// If we lose the player, or he dies, return a really large distance
@@ -739,7 +743,6 @@ float CRCAllyMonster::TargetDistance( void )
 
 	return (m_hTargetEnt->pev->origin - pev->origin).Length();
 }
-
 
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
@@ -773,6 +776,63 @@ void CRCAllyMonster :: TalkInit( void )
 	// when a level is loaded, nobody will talk (time is reset to 0)
 
 	CRCAllyMonster::g_talkWaitTime = 0;
+
+	if (m_iszSpeakAs) //LRC: changing voice groups for monsters
+	{
+		char szBuf[64];
+		strcpy(szBuf,STRING(m_iszSpeakAs));
+		strcat(szBuf,"_");
+		char *szAssign = &(szBuf[strlen(szBuf)]);
+
+		//LRC - this is pretty dodgy; test with save/restore.
+		strcpy(szAssign,"ANSWER");
+		m_szGrp[TLK_ANSWER]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"QUESTION");
+		m_szGrp[TLK_QUESTION]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"IDLE");
+		m_szGrp[TLK_IDLE]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"STARE");
+		m_szGrp[TLK_STARE]  = STRING(ALLOC_STRING(szBuf));
+		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+			strcpy(szAssign,"PFOLLOW");
+		else
+			strcpy(szAssign,"OK");
+		m_szGrp[TLK_USE]  = STRING(ALLOC_STRING(szBuf));
+		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+			strcpy(szAssign,"PWAIT");
+		else
+			strcpy(szAssign,"WAIT");
+		m_szGrp[TLK_UNUSE]  = STRING(ALLOC_STRING(szBuf));
+		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+			strcpy(szAssign,"POK");
+		else
+			strcpy(szAssign,"NOTOK");
+		m_szGrp[TLK_DECLINE]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"STOP");
+		m_szGrp[TLK_STOP]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"NOSHOOT");
+		m_szGrp[TLK_NOSHOOT]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"HELLO");
+		m_szGrp[TLK_HELLO]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"PLHURT1");
+		m_szGrp[TLK_PLHURT1]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"PLHURT2");
+		m_szGrp[TLK_PLHURT2]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"PLHURT3");
+		m_szGrp[TLK_PLHURT3]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"PHELLO");
+		m_szGrp[TLK_PHELLO]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"PIDLE");
+		m_szGrp[TLK_PIDLE]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"PQUESTION");
+		m_szGrp[TLK_PQUESTION]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"SMELL");
+		m_szGrp[TLK_SMELL]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"WOUND");
+		m_szGrp[TLK_WOUND]  = STRING(ALLOC_STRING(szBuf));
+		strcpy(szAssign,"MORTAL");
+		m_szGrp[TLK_MORTAL]  = STRING(ALLOC_STRING(szBuf));
+	}
 
 	m_voicePitch = 100;
 }	
@@ -854,7 +914,6 @@ int CRCAllyMonster :: GetVoicePitch( void )
 	return m_voicePitch + RANDOM_LONG(0,3);
 }
 
-
 void CRCAllyMonster :: Touch( CBaseEntity *pOther )
 {
 	// Did the player touch me?
@@ -877,8 +936,6 @@ void CRCAllyMonster :: Touch( CBaseEntity *pOther )
 		}
 	}
 }
-
-
 
 //=========================================================
 // IdleRespond
@@ -1400,45 +1457,57 @@ void CRCAllyMonster::StartFollowing( CBaseEntity *pLeader )
 
 BOOL CRCAllyMonster::CanFollow( void )
 {
-	if ( m_MonsterState == MONSTERSTATE_SCRIPT )
+	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
-		if ( !m_pCine->CanInterrupt() )
+		if (!m_pCine->CanInterrupt())
 			return FALSE;
 	}
-	
-	if ( !IsAlive() )
+
+	if (!IsAlive())
 		return FALSE;
 
-	return !IsFollowing();
+	return TRUE;
 }
 
+//LRC- rewritten
 void CRCAllyMonster :: FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	// Don't allow use during a scripted_sentence
-	if ( m_useTime > gpGlobals->time )
+	if (m_useTime > gpGlobals->time)
 		return;
 
-	if ( pCaller != NULL && pCaller->IsPlayer() )
-	{
-		// Pre-disaster followers can't be used
-		if ( pev->spawnflags & SF_MONSTER_PREDISASTER )
-		{
-			DeclineFollowing();
-		}
-		else if ( CanFollow() )
-		{
+	//ALERT(at_console,"Talkmonster was Used: ");
 
-			if ( m_afMemory & bits_MEMORY_PROVOKED )
-				ALERT( at_console, "I'm not following you, you evil person!\n" );
+	// CanFollow is now true if the monster could physically follow anyone
+	if (pCaller != NULL && pCaller->IsPlayer() && CanFollow())
+	{
+		if (!IsFollowing())
+		{
+			// Pre-disaster followers can't be used unless they've got a master to override their behaviour...
+			if (IsLockedByMaster() || (pev->spawnflags & SF_MONSTER_PREDISASTER && !m_sMaster))
+			{
+				//ALERT(at_console,"Decline\n");
+				DeclineFollowing();
+			}
 			else
 			{
-				StartFollowing( pCaller );
-				SetBits(m_bitsSaid, bit_saidHelloPlayer);	// Don't say hi after you've started following
+				if (m_afMemory & bits_MEMORY_PROVOKED)
+				{
+					//ALERT(at_console,"Fail\n");
+					ALERT(at_aiconsole, "I'm not following you, you evil person!\n");
+				}
+				else
+				{
+					//ALERT(at_console,"Start\n");
+					StartFollowing(pCaller);
+					SetBits(m_bitsSaid, bit_saidHelloPlayer);	// Don't say hi after you've started following
+				}
 			}
 		}
 		else
 		{
-			StopFollowing( TRUE );
+			//ALERT(at_console,"Stop\n");
+			StopFollowing(TRUE);
 		}
 	}
 }
@@ -1469,18 +1538,31 @@ void CRCAllyMonster::KeyValue( KeyValueData *pkvd )
 		m_iszUnUse = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
-	else 
-		CBaseMonster::KeyValue( pkvd );
+	else if (FStrEq(pkvd->szKeyName, "RefusalSentence")) //LRC
+	{
+		m_iszDecline = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "SpeakAs")) //LRC
+	{
+		m_iszSpeakAs = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseMonster::KeyValue(pkvd);
 }
 
 
 void CRCAllyMonster::Precache( void )
 {
-	if ( m_iszUse )
-		m_szGrp[TLK_USE] = STRING( m_iszUse );
-	if ( m_iszUnUse )
-		m_szGrp[TLK_UNUSE] = STRING( m_iszUnUse );
+	if (m_iszUse)
+		m_szGrp[TLK_USE] = STRING(m_iszUse);
+	if (m_iszUnUse)
+		m_szGrp[TLK_UNUSE] = STRING(m_iszUnUse);
+	if (m_iszDecline) //LRC
+		m_szGrp[TLK_DECLINE] = STRING(m_iszDecline);
 }
+
 //=========================================================
 // OccupySlot - if any slots of the passed slots are 
 // available, the monster will be assigned to one.
