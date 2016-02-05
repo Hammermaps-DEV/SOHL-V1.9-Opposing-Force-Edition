@@ -1,1 +1,0 @@
-$ALERT	"Null event\n"

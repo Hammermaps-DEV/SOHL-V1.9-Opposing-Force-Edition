@@ -1,0 +1,3 @@
+pak0.pak -> Configs, Aurora, Events & GFX
+pak1.pak -> Models, Sounds & Sprites
+pak2.pak -> Textures & Maps
