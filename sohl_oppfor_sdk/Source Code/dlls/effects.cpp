@@ -4081,7 +4081,7 @@ void CEnvDecal::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 		case 3: iTexture = DECAL_YBLOOD1	+	RANDOM_LONG(0,5); break;
 		case 4: iTexture = DECAL_GLASSBREAK1+	RANDOM_LONG(0,2); break;
 		case 5: iTexture = DECAL_BIGSHOT1	+	RANDOM_LONG(0,4); break;
-		case 6: iTexture = DECAL_SCORCH1	+	RANDOM_LONG(0,1); break;
+		case 6: iTexture = DECAL_SCORCH1	+	RANDOM_LONG(0,2); break;
 		case 7: iTexture = DECAL_SPIT1		+	RANDOM_LONG(0,1); break;
 	}
 

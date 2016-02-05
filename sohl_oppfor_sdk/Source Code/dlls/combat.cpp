@@ -31,6 +31,9 @@
 #include "func_break.h"
 #include "pm_materials.h"
 #include "../engine/studio.h" //LRC
+#include "particle_defs.h"
+
+extern int gmsgParticles;//define external message
 
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 extern DLL_GLOBAL int			g_iSkillLevel;
@@ -1020,6 +1023,10 @@ int CBaseMonster :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker,
 			}
 		}
 
+		if ((bitsDamageType & DMG_ENERGYBEAM) && FClassnameIs(pevAttacker, "shock")) {
+			GlowShellOn(Vector(0, 255, 255), .5f);
+		}
+
 		if ( pevAttacker->flags & (FL_MONSTER | FL_CLIENT) )
 		{// only if the attack was a monster or client!
 			
@@ -1089,6 +1096,10 @@ int CBaseMonster :: DeadTakeDamage( entvars_t *pevInflictor, entvars_t *pevAttac
 		pev->health -= flDamage * 0.1;
 	}
 	
+	if ((bitsDamageType & DMG_ENERGYBEAM) && FClassnameIs(pevAttacker, "shock")) {
+		GlowShellOn(Vector(0, 255, 255), .5f);
+	}
+
 	return 1;
 }
 
@@ -1372,32 +1383,6 @@ void CBaseEntity::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vec
 	}
 }
 
-
-/*
-//=========================================================
-// TraceAttack
-//=========================================================
-void CBaseMonster::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
-{
-	Vector vecOrigin = ptr->vecEndPos - vecDir * 4;
-
-	ALERT ( at_console, "%d\n", ptr->iHitgroup );
-
-
-	if ( pev->takedamage )
-	{
-		AddMultiDamage( pevAttacker, this, flDamage, bitsDamageType );
-
-		int blood = BloodColor();
-		
-		if ( blood != DONT_BLEED )
-		{
-			SpawnBlood(vecOrigin, blood, flDamage);// a little surface blood.
-		}
-	}
-}
-*/
-
 //=========================================================
 // TraceAttack
 //=========================================================
@@ -1500,6 +1485,7 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 			case BULLET_MONSTER_MP5:
 			case BULLET_MONSTER_9MM:
 			case BULLET_MONSTER_12MM:
+			case BULLET_MONSTER_357:
 			case BULLET_PLAYER_556:
 			default:
 				MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, vecTracerSrc );
@@ -1585,6 +1571,14 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 					PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pEntity->entindex(), 6, 0, 0 );
 					//DecalGunshot( &tr, iBulletType );
 				}
+				break;
+
+			case BULLET_MONSTER_357:
+				pEntity->TraceAttack(pevAttacker, gSkillData.plrDmg357, vecDir, &tr, DMG_BULLET);
+
+				TEXTURETYPE_PlaySound(&tr, vecSrc, vecEnd, iBulletType);
+				DecalGunshot(&tr, iBulletType);
+
 				break;
 
 			case BULLET_NONE: // FIX 
@@ -1789,11 +1783,50 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 
 		// make bullet trails
 		UTIL_BubbleTrail( vecSrc, tr.vecEndPos, (flDistance * tr.flFraction) / 64.0 );
+
+		// make water splash
+		if (CVAR_GET_FLOAT("cl_expdetail") != 0) {
+			BulletWaterImpact(vecSrc, tr.vecEndPos);
+		}
 	}
 
 	ApplyMultiDamage(pev, pevAttacker);
 
 	return Vector( x * vecSpread.x, y * vecSpread.y, 0.0 );
+}
+
+void CBaseEntity::BulletWaterImpact(Vector vecSrc, Vector vecEnd)
+{
+	if ((POINT_CONTENTS(vecEnd) == CONTENTS_WATER && POINT_CONTENTS(vecSrc) == CONTENTS_WATER)
+		|| (POINT_CONTENTS(vecEnd) != CONTENTS_WATER && POINT_CONTENTS(vecSrc) != CONTENTS_WATER))
+		return;
+
+	float x = vecEnd.x - vecSrc.x;
+	float y = vecEnd.y - vecSrc.y;
+	float z = vecEnd.z - vecSrc.z;
+	float len = sqrt(x * x + y * y + z * z);
+
+	Vector vecTemp = Vector((vecEnd.x + vecSrc.x) / 2, (vecEnd.y + vecSrc.y) / 2, (vecEnd.z + vecSrc.z) / 2);
+
+	// We hit the water surface
+	if (len <= 1) {
+		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+			WRITE_SHORT(0);
+			WRITE_BYTE(0);
+			WRITE_COORD(vecSrc.x);
+			WRITE_COORD(vecSrc.y);
+			WRITE_COORD(vecSrc.z);
+			WRITE_COORD(vecEnd.x);
+			WRITE_COORD(vecEnd.y);
+			WRITE_COORD(vecEnd.z);
+			WRITE_SHORT(iImpactWater);
+		MESSAGE_END();
+	} else {
+		if (POINT_CONTENTS(vecTemp) != POINT_CONTENTS(vecSrc))
+			BulletWaterImpact(vecSrc, vecTemp);
+		else
+			BulletWaterImpact(vecTemp, vecEnd);
+	}
 }
 
 void CBaseEntity :: TraceBleed( float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType )

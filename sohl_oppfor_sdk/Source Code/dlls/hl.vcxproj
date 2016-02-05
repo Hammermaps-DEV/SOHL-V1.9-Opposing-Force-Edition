@@ -92,6 +92,7 @@
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
     <ClCompile Include="proj_plrocket.cpp" />
+    <ClCompile Include="proj_shock.cpp" />
     <ClCompile Include="proj_voltigore_energy_ball.cpp" />
     <ClCompile Include="rcallymonster.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
@@ -99,6 +100,7 @@
     <ClCompile Include="defaultai.cpp" />
     <ClCompile Include="func_doors.cpp" />
     <ClCompile Include="effects.cpp" />
+    <ClCompile Include="weapon_eagle.cpp" />
     <ClCompile Include="weapon_egon.cpp" />
     <ClCompile Include="explode.cpp" />
     <ClCompile Include="monster_flyingmonster.cpp" />
@@ -160,6 +162,7 @@
     <ClCompile Include="schedule.cpp" />
     <ClCompile Include="monster_scientist.cpp" />
     <ClCompile Include="scripted.cpp" />
+    <ClCompile Include="weapon_shockrifle.cpp" />
     <ClCompile Include="weapon_shotgun.cpp" />
     <ClCompile Include="singleplay_gamerules.cpp" />
     <ClCompile Include="skill.cpp" />
@@ -285,6 +288,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="proj_bolt.h" />
     <ClInclude Include="proj_plrocket.h" />
+    <ClInclude Include="proj_shock.h" />
     <ClInclude Include="proj_voltigore_energy_ball.h" />
     <ClInclude Include="rcallymonster.h" />
     <ClInclude Include="saverestore.h" />
@@ -304,14 +308,17 @@
     <ClInclude Include="weapons.h" />
     <ClInclude Include="weapon_crossbow.h" />
     <ClInclude Include="weapon_crowbar.h" />
+    <ClInclude Include="weapon_eagle.h" />
     <ClInclude Include="weapon_gauss.h" />
     <ClInclude Include="weapon_glock.h" />
     <ClInclude Include="weapon_grapple.h" />
+    <ClInclude Include="weapon_hornetgun.h" />
     <ClInclude Include="weapon_knife.h" />
     <ClInclude Include="weapon_mp5.h" />
     <ClInclude Include="weapon_pipewrench.h" />
     <ClInclude Include="weapon_python.h" />
     <ClInclude Include="weapon_rpg.h" />
+    <ClInclude Include="weapon_shockrifle.h" />
     <ClInclude Include="weapon_shotgun.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -363,7 +370,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..\dlls;..\engine;..\common;..\pm_shared;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\dlls;..\engine;..\common;..\game_shared;..\pm_shared;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;QUIVER;VOXEL;QUAKE2;VALVE_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <MinimalRebuild>true</MinimalRebuild>
@@ -381,6 +388,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4005;4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

@@ -22,7 +22,7 @@
 #include "player.h"
 #include "hornet.h"
 #include "gamerules.h"
-
+#include "weapon_hornetgun.h"
 
 enum hgun_e {
 	HGUN_IDLE1 = 0,
@@ -39,25 +39,6 @@ enum firemode_e
 	FIREMODE_FAST
 };
 
-class CHgun : public CBasePlayerWeapon
-{
-public:
-	void Spawn( void );
-	void Precache( void );
-	int GetItemInfo(ItemInfo *p);
-
-	void PrimaryAttack( void );
-	void SecondaryAttack( void );
-	BOOL Deploy( void );
-	BOOL IsUseable( void ){ return TRUE; };
-	void Holster( );
-	void Reload( void );
-	void WeaponIdle( void );
-	float m_flNextAnimTime;
-
-	float m_flRechargeTime;
-	int m_iFirePhase;// don't save me.
-};
 LINK_ENTITY_TO_CLASS( weapon_hornetgun, CHgun );
 
 void CHgun::Spawn( )

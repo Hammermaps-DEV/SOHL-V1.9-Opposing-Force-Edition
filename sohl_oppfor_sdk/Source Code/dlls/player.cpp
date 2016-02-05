@@ -1908,6 +1908,9 @@ void CBasePlayer::UpdateStatusBar()
 
 void CBasePlayer::PreThink(void)
 {
+	if (m_afPhysicsFlags & PFLAG_ON_GRAPPLE) // If we are on a grapple
+		pev->velocity = (m_MyGrapple->pev->origin - pev->origin) * 2;
+
 	int buttonsChanged = (m_afButtonLast ^ pev->button);	// These buttons have changed this frame
 
 	// Debounced button codes for pressed/released
@@ -3646,6 +3649,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "weapon_pipewrench" );
 		GiveNamedItem( "weapon_knife" );
 		GiveNamedItem( "weapon_grapple" ); 
+		GiveNamedItem( "weapon_shockrifle" );
 		GiveNamedItem( "weapon_9mmhandgun" );
 		GiveNamedItem( "ammo_9mmclip" );
 		GiveNamedItem( "weapon_shotgun" );
@@ -3655,6 +3659,7 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "ammo_ARgrenades" );
 		GiveNamedItem( "weapon_handgrenade" );
 		GiveNamedItem( "weapon_tripmine" );
+		GiveNamedItem( "weapon_eagle" );
 		GiveNamedItem( "weapon_357" );
 		GiveNamedItem( "ammo_357" );
 		GiveNamedItem( "weapon_crossbow" );

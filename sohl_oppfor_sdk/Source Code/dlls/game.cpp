@@ -762,6 +762,15 @@ cvar_t	sk_hornet_dmg1 = {"sk_hornet_dmg1","0"};
 cvar_t	sk_hornet_dmg2 = {"sk_hornet_dmg2","0"};
 cvar_t	sk_hornet_dmg3 = {"sk_hornet_dmg3","0"};
 
+// SHOCKROACH
+cvar_t	sk_plr_shockroachs1 = { "sk_plr_shockroachs1", "0" };
+cvar_t	sk_plr_shockroachs2 = { "sk_plr_shockroachs2", "0" };
+cvar_t	sk_plr_shockroachs3 = { "sk_plr_shockroachs3", "0" };
+
+cvar_t	sk_plr_shockroachm1 = { "sk_plr_shockroachm1", "0" };
+cvar_t	sk_plr_shockroachm2 = { "sk_plr_shockroachm2", "0" };
+cvar_t	sk_plr_shockroachm3 = { "sk_plr_shockroachm3", "0" };
+
 // HEALTH/CHARGE
 cvar_t	sk_suitcharger1	= { "sk_suitcharger1","0" };
 cvar_t	sk_suitcharger2	= { "sk_suitcharger2","0" };		
@@ -1578,6 +1587,15 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_hornet_dmg1 );
 	CVAR_REGISTER ( &sk_hornet_dmg2 );
 	CVAR_REGISTER ( &sk_hornet_dmg3 );
+
+	// SHOCKROACH
+	CVAR_REGISTER(&sk_plr_shockroachs1);
+	CVAR_REGISTER(&sk_plr_shockroachs2);
+	CVAR_REGISTER(&sk_plr_shockroachs3);
+
+	CVAR_REGISTER(&sk_plr_shockroachm1);
+	CVAR_REGISTER(&sk_plr_shockroachm2);
+	CVAR_REGISTER(&sk_plr_shockroachm3);
 
 	// HEALTH/SUIT CHARGE DISTRIBUTION
 	CVAR_REGISTER ( &sk_suitcharger1 );

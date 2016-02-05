@@ -194,6 +194,73 @@ void CEnvExplosion::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 	if ( !( pev->spawnflags & SF_ENVEXPLOSION_NOFIREBALL ) )
 	{
 		PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usEfx, 0.0, (float *)&pev->origin, (float *)&g_vecZero, pev->dmg, 0.0, 0, 0, 0, 0 );
+		
+		if (CVAR_GET_FLOAT("cl_expdetail") != 0) {
+				MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+				WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_SHORT(g_sModelIndexFireball_0);
+				WRITE_BYTE(((BYTE)m_spriteScale - 50) * 3); // scale * 10 -50
+				WRITE_BYTE(35); // framerate
+				WRITE_BYTE(TE_EXPLFLAG_NONE);
+				MESSAGE_END();
+
+				MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+				WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_SHORT(g_sModelIndexFireball_1);
+				WRITE_BYTE(((BYTE)m_spriteScale - 50) * 3); // scale * 10 -50
+				WRITE_BYTE(35); // framerate 15
+				WRITE_BYTE(TE_EXPLFLAG_NONE);
+				MESSAGE_END();
+
+				// create explosion particle system
+				if (CVAR_GET_FLOAT("r_particles") != 0) {
+					MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+					WRITE_SHORT(0);
+					WRITE_BYTE(0);
+					WRITE_COORD(pev->origin.x);
+					WRITE_COORD(pev->origin.y);
+					WRITE_COORD(pev->origin.z);
+					WRITE_COORD(0);
+					WRITE_COORD(0);
+					WRITE_COORD(0);
+					WRITE_SHORT(iExplosionDefault);
+					MESSAGE_END();
+				}
+
+				// Big Explosion
+				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_GLOWSPRITE);//Big Flare Effect
+				WRITE_COORD(pev->origin.x); //where to make the sprite appear on x axis
+				WRITE_COORD(pev->origin.y);//where to make the sprite appear on y axis
+				WRITE_COORD(pev->origin.z);//where to make the sprite appear on zaxis
+				WRITE_SHORT(g_sModelIndexFireballFlash); //Name of the sprite to use, as defined at begining of tut
+				WRITE_BYTE(1); // scale
+				WRITE_BYTE(30); // framerate 15
+				WRITE_BYTE(80); // brightness
+				MESSAGE_END();
+			}
+
+			switch (RANDOM_LONG(0, 4)) {
+				case 0:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode1.wav", 1, ATTN_NORM);	break;
+				case 1:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode2.wav", 1, ATTN_NORM);	break;
+				case 2:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode3.wav", 1, ATTN_NORM);	break;
+				case 3:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode4.wav", 1, ATTN_NORM);	break;
+				case 4:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode5.wav", 1, ATTN_NORM);	break;
+			}
+
+			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000);
+
+			switch (RANDOM_LONG(0, 2)) {
+				case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);	break;
+				case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);	break;
+				case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);	break;
+			}
 	}
 	else
 	{
@@ -209,20 +276,6 @@ void CEnvExplosion::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 		MESSAGE_END();
 	}
 
-	if (CVAR_GET_FLOAT("r_particles") != 0) {
-		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-		WRITE_SHORT(0);
-		WRITE_BYTE(0);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_COORD(0);
-		WRITE_COORD(0);
-		WRITE_COORD(0);
-		WRITE_SHORT(iDefaultExplosion);
-		MESSAGE_END();
-	}
-
 	// do damage
 	if ( !( pev->spawnflags & SF_ENVEXPLOSION_NODAMAGE ) )
 	{
@@ -235,28 +288,70 @@ void CEnvExplosion::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 	// draw sparks
 	if ( !( pev->spawnflags & SF_ENVEXPLOSION_NOSPARKS ) )
 	{
-		int sparkCount = RANDOM_LONG(0,3);
+		int sparkCount = RANDOM_LONG(0, 3);
+		Vector mirpos = UTIL_MirrorPos(pev->origin);
 
-		for ( int i = 0; i < sparkCount; i++ )
-		{
-			Create( "spark_shower", pev->origin, tr.vecPlaneNormal, NULL );
-		}
+		for (int i = 0; i < sparkCount; i++)
+			Create("spark_shower", pev->origin, tr.vecPlaneNormal, NULL);
+
+		if (mirpos != Vector(0, 0, 0))
+			for (int i = 0; i < sparkCount; i++)
+				Create("spark_shower", mirpos, tr.vecPlaneNormal, NULL);
 	}
 }
 
 void CEnvExplosion::Smoke( void )
 {
-	if ( !( pev->spawnflags & SF_ENVEXPLOSION_NOSMOKE ) )
-	{
-		MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, pev->origin );
-			WRITE_BYTE( TE_SMOKE );
-			WRITE_COORD( pev->origin.x );
-			WRITE_COORD( pev->origin.y );
-			WRITE_COORD( pev->origin.z );
-			WRITE_SHORT( g_sModelIndexSmoke );
-			WRITE_BYTE( (BYTE)m_spriteScale ); // scale * 10
-			WRITE_BYTE( 12  ); // framerate
-		MESSAGE_END();
+	if ( !( pev->spawnflags & SF_ENVEXPLOSION_NOSMOKE ) ) {
+		if (CVAR_GET_FLOAT("r_particles") != 0) {
+			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+			WRITE_BYTE(TE_SMOKE);
+			WRITE_COORD(pev->origin.x);
+			WRITE_COORD(pev->origin.y);
+			WRITE_COORD(pev->origin.z);
+			WRITE_SHORT(g_sModelIndexSmoke);
+			WRITE_BYTE(((BYTE)m_spriteScale - 50) * 0.80); // scale * 10
+			WRITE_BYTE(12); // framerate
+			MESSAGE_END();
+
+			Vector mirpos = UTIL_MirrorPos(pev->origin);
+			if (mirpos != Vector(0, 0, 0))
+			{
+				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_SMOKE);
+				WRITE_COORD(mirpos.x);
+				WRITE_COORD(mirpos.y);
+				WRITE_COORD(mirpos.z);
+				WRITE_SHORT(g_sModelIndexSmoke);
+				WRITE_BYTE(((BYTE)m_spriteScale - 50) * 0.80); // scale * 10
+				WRITE_BYTE(12); // framerate
+				MESSAGE_END();
+			}
+		} else {
+			MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+			WRITE_BYTE(TE_SMOKE);
+			WRITE_COORD(pev->origin.x);
+			WRITE_COORD(pev->origin.y);
+			WRITE_COORD(pev->origin.z);
+			WRITE_SHORT(g_sModelIndexSmoke);
+			WRITE_BYTE((BYTE)m_spriteScale); // scale * 10
+			WRITE_BYTE(12); // framerate
+			MESSAGE_END();
+
+			Vector mirpos = UTIL_MirrorPos(pev->origin);
+			if (mirpos != Vector(0, 0, 0))
+			{
+				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_SMOKE);
+				WRITE_COORD(mirpos.x);
+				WRITE_COORD(mirpos.y);
+				WRITE_COORD(mirpos.z);
+				WRITE_SHORT(g_sModelIndexSmoke);
+				WRITE_BYTE((BYTE)m_spriteScale); // scale * 10
+				WRITE_BYTE(12); // framerate
+				MESSAGE_END();
+			}
+		}
 	}
 	
 	if ( !(pev->spawnflags & SF_ENVEXPLOSION_REPEATABLE) )

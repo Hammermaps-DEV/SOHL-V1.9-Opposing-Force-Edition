@@ -2047,8 +2047,8 @@ int TeamFortressViewport::MsgFunc_Particles(const char *pszName, int iSize, void
 		if (iPresetSystem == 9999)
 		{
 			// BP - Clear Particle Systems	
-			pParticleManager->RemoveParticles();
-			pParticleManager->RemoveTextures();
+			//pParticleManager->RemoveParticles();
+			//pParticleManager->RemoveTextures();
 			pParticleManager->RemoveSystems();
 			return 1;
 		}

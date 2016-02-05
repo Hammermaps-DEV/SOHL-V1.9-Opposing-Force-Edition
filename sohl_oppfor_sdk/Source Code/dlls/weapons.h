@@ -84,22 +84,22 @@ public:
 #define WEAPON_GRAPPLE			4
 #define WEAPON_GLOCK			5
 #define WEAPON_PYTHON			6
-#define WEAPON_GENERIC			7
-#define WEAPON_MP5				8
-#define WEAPON_DEBUG            9
-#define WEAPON_CROSSBOW			0
-#define WEAPON_SHOTGUN			11
-#define WEAPON_RPG				12
-#define WEAPON_GAUSS			13
-#define WEAPON_EGON				14
-#define WEAPON_HORNETGUN		15
-#define WEAPON_HANDGRENADE		16
-#define WEAPON_TRIPMINE			17
-#define WEAPON_SATCHEL			18
-#define WEAPON_SNARK			19
-
-//SOHL - Opposing-Force
-#define WEAPON_M249				20
+#define WEAPON_EAGLE			7
+#define WEAPON_GENERIC			8
+#define WEAPON_MP5				9
+#define WEAPON_DEBUG            10
+#define WEAPON_CROSSBOW			11
+#define WEAPON_SHOTGUN			12
+#define WEAPON_RPG				13
+#define WEAPON_GAUSS			14
+#define WEAPON_EGON				15
+#define WEAPON_HORNETGUN		16
+#define WEAPON_HANDGRENADE		17
+#define WEAPON_TRIPMINE			18
+#define WEAPON_SATCHEL			19
+#define WEAPON_SNARK			20
+#define WEAPON_M249				21
+#define WEAPON_SHOCKRIFLE		22
 
 
 #define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
@@ -129,9 +129,9 @@ public:
 #define SNARK_WEIGHT		5
 #define SATCHEL_WEIGHT		-10
 #define TRIPMINE_WEIGHT		-10
-
-//SOHL - Opposing-Force
 #define M249_WEIGHT			25
+#define SHOCKRIFLE_WEIGHT	10
+#define EAGLE_WEIGHT		15
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -146,8 +146,7 @@ public:
 #define SNARK_MAX_CARRY		15
 #define HORNET_MAX_CARRY		8
 #define M203_GRENADE_MAX_CARRY	10
-
-//SOHL - Opposing-Force
+#define SHOCK_MAX_CARRY		10
 #define _556_MAX_CARRY			200
 
 // the maximum amount of ammo each weapon's clip can hold
@@ -168,9 +167,8 @@ public:
 #define SATCHEL_MAX_CLIP		WEAPON_NOCLIP
 #define TRIPMINE_MAX_CLIP		WEAPON_NOCLIP
 #define SNARK_MAX_CLIP		WEAPON_NOCLIP
-
-//SOHL - Opposing-Force
-#define M249_MAX_CLIP	50
+#define M249_MAX_CLIP		50
+#define EAGLE_MAX_CLIP		7
 
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE			17
@@ -188,9 +186,9 @@ public:
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
 #define HIVEHAND_DEFAULT_GIVE		8
-
-//SOHL - Opposing-Force
 #define M249_DEFAULT_GIVE			50
+#define SHOCKRIFLE_DEFAULT_GIVE		10
+#define EAGLE_DEFAULT_GIVE			7
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -221,6 +219,7 @@ typedef	enum
 	//SOHL - Opposing-Force
 	BULLET_PLAYER_556, // m249
 
+	BULLET_MONSTER_357,
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
 	BULLET_MONSTER_12MM,
@@ -445,7 +444,7 @@ extern DLL_GLOBAL	short		g_sModelIndexLaserDot;// holds the index for the laser 
 extern DLL_GLOBAL	short		g_sModelIndexFireball;// holds the index for the fireball
 extern DLL_GLOBAL	short		g_sModelIndexSmoke;// holds the index for the smoke cloud
 extern DLL_GLOBAL	short		g_sModelIndexWExplosion;// holds the index for the underwater explosion
-extern DLL_GLOBAL	short    		g_sModelIndexBubbles;// holds the index for the bubbles model
+extern DLL_GLOBAL	short    	g_sModelIndexBubbles;// holds the index for the bubbles model
 extern DLL_GLOBAL	short		g_sModelIndexBloodDrop;// holds the sprite index for blood drops
 extern DLL_GLOBAL	short		g_sModelIndexBloodSpray;// holds the sprite index for blood spray (bigger)
 extern DLL_GLOBAL	short		g_sModelIndexNullModel; //null model index
@@ -453,9 +452,15 @@ extern DLL_GLOBAL	short		g_sModelIndexErrorModel;//error model index
 extern DLL_GLOBAL	short		g_sModelIndexNullSprite;//null sprite index
 extern DLL_GLOBAL	short		g_sModelIndexErrorSprite;//error sprite index
 extern DLL_GLOBAL	short		g_sSoundIndexNullSound;//null sound index
+extern DLL_GLOBAL	short		g_sModelIndexFireball_0;
+extern DLL_GLOBAL	short		g_sModelIndexFireball_1;
+extern DLL_GLOBAL	short		g_sModelIndexFireballFlash;
+extern DLL_GLOBAL	short		g_sGrenadeGib;
+
 extern DLL_GLOBAL	unsigned short	g_usEventIndexNullEvent;//null event index
 extern DLL_GLOBAL 	unsigned short 	m_usDecals;	    //Decal event
 extern DLL_GLOBAL 	unsigned short 	m_usEfx;	    //special effects event (rocket trail, explosion e.t.c.)
+
 
 extern void ClearMultiDamage(void);
 extern void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker );
@@ -476,7 +481,6 @@ typedef struct
 } MULTIDAMAGE;
 
 extern MULTIDAMAGE gMultiDamage;
-
 
 #define LOUD_GUN_VOLUME			1000
 #define NORMAL_GUN_VOLUME		600

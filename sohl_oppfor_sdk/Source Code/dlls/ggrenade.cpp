@@ -28,12 +28,11 @@
 #include "decals.h"
 #include "particle_defs.h"
 
+#define EXP_SCALE		100
 extern int gmsgParticles;//define external message
 
 
 //===================grenade
-
-
 LINK_ENTITY_TO_CLASS( grenade, CGrenade );
 
 // Grenades flagged with this will be triggered when the owner calls detonateSatchelCharges
@@ -53,7 +52,7 @@ void CGrenade::Explode( Vector vecSrc, Vector vecAim )
 // UNDONE: temporary scorching for PreAlpha - find a less sleazy permenant solution.
 void CGrenade::Explode( TraceResult *pTrace, int bitsDamageType )
 {
-	float		flRndSound;// sound randomizer
+	float	flRndSound;// sound randomizer
 
 	pev->model = iStringNull;//invisible
 	pev->solid = SOLID_NOT;// intangible
@@ -61,44 +60,118 @@ void CGrenade::Explode( TraceResult *pTrace, int bitsDamageType )
 	pev->takedamage = DAMAGE_NO;
 
 	// Pull out of the wall a bit
-	if ( pTrace->flFraction != 1.0 )
-	{
+	if ( pTrace->flFraction != 1.0 ) {
 		pev->origin = pTrace->vecEndPos + (pTrace->vecPlaneNormal * (pev->dmg - 24) * 0.6);
 	}
 
 	int iContents = UTIL_PointContents ( pev->origin );
 	PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usEfx, 0.0, (float *)&pev->origin, (float *)&g_vecZero, pev->dmg, 0.0, 0, 0, iContents != CONTENTS_WATER ? 0 : 1, 0 );
 
-/*	MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, pev->origin );
-		WRITE_BYTE( TE_EXPLOSION );		// This makes a dynamic light and the explosion sprites/sound
-		WRITE_COORD( pev->origin.x );	// Send to PAS because of the sound
-		WRITE_COORD( pev->origin.y );
-		WRITE_COORD( pev->origin.z );
-		if (iContents != CONTENTS_WATER)
-		{
-			WRITE_SHORT( g_sModelIndexFireball );
+	if (CVAR_GET_FLOAT("cl_expdetail") != 0) {
+		if (iContents != CONTENTS_WATER) {
+			MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+				WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_SHORT(g_sModelIndexFireball_0);
+				WRITE_BYTE((EXP_SCALE/*pev->dmg*/ - 80) * 0.60); // scale * 10 -50
+				WRITE_BYTE(35); // framerate
+				WRITE_BYTE(TE_EXPLFLAG_NONE);
+			MESSAGE_END();
+
+			MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+				WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_SHORT(g_sModelIndexFireball_1);
+				WRITE_BYTE((EXP_SCALE/*pev->dmg*/ - 50) * 0.60); // scale * 10 -50
+				WRITE_BYTE(35); // framerate 15
+				WRITE_BYTE(TE_EXPLFLAG_NONE);
+			MESSAGE_END();
+
+			// create explosion particle system
+			if (CVAR_GET_FLOAT("r_particles") != 0) {
+				MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+					WRITE_SHORT(0);
+					WRITE_BYTE(0);
+					WRITE_COORD(pev->origin.x);
+					WRITE_COORD(pev->origin.y);
+					WRITE_COORD(pev->origin.z);
+					WRITE_COORD(0);
+					WRITE_COORD(0);
+					WRITE_COORD(0);
+					WRITE_SHORT(iExplosionDefault);
+				MESSAGE_END();
+			}
+
+			// Big Explosion
+			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
+				WRITE_BYTE(TE_GLOWSPRITE);//Big Flare Effect
+				WRITE_COORD(pev->origin.x); //where to make the sprite appear on x axis
+				WRITE_COORD(pev->origin.y);//where to make the sprite appear on y axis
+				WRITE_COORD(pev->origin.z);//where to make the sprite appear on zaxis
+				WRITE_SHORT(g_sModelIndexFireballFlash); //Name of the sprite to use, as defined at begining of tut
+				WRITE_BYTE(1); // scale
+				WRITE_BYTE(30); // framerate 15
+				WRITE_BYTE(80); // brightness
+			MESSAGE_END();
+
+			TraceResult tr;
+			tr.vecEndPos = pev->origin;
+			tr.vecPlaneNormal = -1 * pev->velocity.Normalize();
 		}
-		else
-		{
-			WRITE_SHORT( g_sModelIndexWExplosion );
+
+		if (iContents != CONTENTS_WATER) {
+			switch (RANDOM_LONG(0, 4)) {
+				case 0:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode1.wav", 1, ATTN_NORM);	break;
+				case 1:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode2.wav", 1, ATTN_NORM);	break;
+				case 2:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode3.wav", 1, ATTN_NORM);	break;
+				case 3:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode4.wav", 1, ATTN_NORM);	break;
+				case 4:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode5.wav", 1, ATTN_NORM);	break;
+			}
 		}
-		WRITE_BYTE( (pev->dmg - 50) * .60  ); // scale * 10
-		WRITE_BYTE( 15  ); // framerate
-		WRITE_BYTE( TE_EXPLFLAG_NONE );
-	MESSAGE_END();
-*/
-	if (CVAR_GET_FLOAT("r_particles") != 0) {
-		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-		WRITE_SHORT(0);
-		WRITE_BYTE(0);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_COORD(0);
-		WRITE_COORD(0);
-		WRITE_COORD(0);
-		WRITE_SHORT(iDefaultExplosion);
-		MESSAGE_END();
+
+		UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000);
+
+		Vector vecSpot;// shard origin
+		Vector vecVelocity;// shard velocity
+		CGib *pGib = GetClassPtr((CGib *)NULL);
+
+		pGib->m_bloodColor = DONT_BLEED;
+		pGib->pev->origin = pev->origin;
+		pGib->pev->velocity = UTIL_RandomBloodVector() * RANDOM_FLOAT(300, 500);
+
+		vecSpot = pev->origin + Vector(0, 0, 8);//move up a bit, and trace down.
+		UTIL_RandomBloodVector() * RANDOM_FLOAT(300, 500);
+
+		if (CVAR_GET_FLOAT("sv_grenadegib") == 1) {
+			if (iContents != CONTENTS_WATER) {
+				//Granate Gibs
+				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
+					WRITE_BYTE(TE_BREAKMODEL);
+					// position
+					WRITE_COORD(vecSpot.x);
+					WRITE_COORD(vecSpot.y);
+					WRITE_COORD(vecSpot.z);
+
+					WRITE_COORD(pev->size.x);
+					WRITE_COORD(pev->size.y);
+					WRITE_COORD(pev->size.z);
+
+					WRITE_COORD(RANDOM_FLOAT(10, 30));
+					WRITE_COORD(RANDOM_FLOAT(10, 30));
+					WRITE_COORD(RANDOM_FLOAT(10, 30));
+
+					WRITE_BYTE(RANDOM_FLOAT(15, 30));
+					WRITE_SHORT(g_sGrenadeGib);	//model id# //puede dar error esto!
+					WRITE_BYTE(35); //2
+					WRITE_BYTE(15);// 1 seconds
+					WRITE_BYTE(BREAK_CONCRETE);//no?
+				MESSAGE_END();
+			}
+		}
 	}
 
 	CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, NORMAL_EXPLOSION_VOLUME, 3.0 );
@@ -109,18 +182,13 @@ void CGrenade::Explode( TraceResult *pTrace, int bitsDamageType )
 		pevOwner = NULL;
 
 	pev->owner = NULL; // can't traceline attack owner if this is set
-
 	RadiusDamage ( pev, pevOwner, pev->dmg, CLASS_NONE, bitsDamageType );
           
-          CBaseEntity *pHit = CBaseEntity::Instance( pTrace->pHit );
-	
+	CBaseEntity *pHit = CBaseEntity::Instance( pTrace->pHit );
 	PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&pTrace->vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), 0, 0, 0 );
-	//UTIL_DecalTrace( pTrace, DECAL_SCORCH2 );
-
 	flRndSound = RANDOM_FLOAT( 0 , 1 );
 
-	switch ( RANDOM_LONG( 0, 2 ) )
-	{
+	switch ( RANDOM_LONG( 0, 2 ) ) {
 		case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);	break;
 		case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);	break;
 		case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);	break;
@@ -131,8 +199,7 @@ void CGrenade::Explode( TraceResult *pTrace, int bitsDamageType )
 	pev->velocity = g_vecZero;
 	SetNextThink( 0.3 );
 
-	if (iContents != CONTENTS_WATER)
-	{
+	if (iContents != CONTENTS_WATER) {
 		int sparkCount = RANDOM_LONG(0,3);
 		Vector mirpos = UTIL_MirrorPos(pev->origin);
 		
@@ -145,26 +212,22 @@ void CGrenade::Explode( TraceResult *pTrace, int bitsDamageType )
 	}
 }
 
-
 void CGrenade::Smoke( void )
 {
-	if (UTIL_PointContents ( pev->origin ) == CONTENTS_WATER)
-	{
+	if (UTIL_PointContents ( pev->origin ) == CONTENTS_WATER) {
 		UTIL_Bubbles( pev->origin - Vector( 64, 64, 64 ), pev->origin + Vector( 64, 64, 64 ), 100 );
-	}
-	else
-	{
+	} else {
 		MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, pev->origin );
 			WRITE_BYTE( TE_SMOKE );
 			WRITE_COORD( pev->origin.x );
 			WRITE_COORD( pev->origin.y );
 			WRITE_COORD( pev->origin.z );
 			WRITE_SHORT( g_sModelIndexSmoke );
-			WRITE_BYTE( (pev->dmg - 50) * 0.80 ); // scale * 10
-			WRITE_BYTE( 12  ); // framerate
+			WRITE_BYTE( (pev->dmg - 50) * 0.80); // scale * 10
+			WRITE_BYTE( 12 ); // framerate
 		MESSAGE_END();
 
-	         	Vector mirpos = UTIL_MirrorPos(pev->origin); 
+	    Vector mirpos = UTIL_MirrorPos(pev->origin); 
 		if(mirpos != Vector(0,0,0))
 		{
 			MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, pev->origin );
@@ -174,10 +237,11 @@ void CGrenade::Smoke( void )
 				WRITE_COORD( mirpos.z );
 				WRITE_SHORT( g_sModelIndexSmoke );
 				WRITE_BYTE( (pev->dmg - 50) * 0.80 ); // scale * 10
-				WRITE_BYTE( 12  ); // framerate
+				WRITE_BYTE( 12 ); // framerate
 			MESSAGE_END();
 		}		
 	}
+
 	UTIL_Remove( this );
 }
 
@@ -185,7 +249,6 @@ void CGrenade::Killed( entvars_t *pevAttacker, int iGib )
 {
 	Detonate( );
 }
-
 
 // Timed grenade, this think is called when time runs out.
 void CGrenade::DetonateUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )

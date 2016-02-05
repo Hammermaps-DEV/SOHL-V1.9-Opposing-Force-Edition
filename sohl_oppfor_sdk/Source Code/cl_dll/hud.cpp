@@ -422,6 +422,10 @@ void CHud :: Init( void )
 	cl_lw = gEngfuncs.pfnGetCvarPointer( "cl_lw" );
 	RainInfo = gEngfuncs.pfnRegisterVariable( "cl_raininfo", "0", 0 );
 
+	//Explosion Effects
+	CVAR_CREATE("sv_grenadegib", "0", FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_expdetail", "0", FCVAR_ARCHIVE);
+
 	cl_rollangle = gEngfuncs.pfnRegisterVariable("cl_rollangle", "0.65", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "300", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 

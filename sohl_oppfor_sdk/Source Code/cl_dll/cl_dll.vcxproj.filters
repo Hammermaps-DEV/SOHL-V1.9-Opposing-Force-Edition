@@ -168,6 +168,9 @@
     <ClInclude Include="..\common\particle_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\engine\eiface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vgui_TeamFortressViewport.cpp">
@@ -393,6 +396,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="particles\tga_loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\grass_particles.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="particles\grass_particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

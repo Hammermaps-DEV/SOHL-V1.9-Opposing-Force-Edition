@@ -1,34 +1,20 @@
-/*
-    Copyright 2001 to 2004. The Battle Grounds Team and Contributors
-
-    This file is part of the Battle Grounds Modification for Half-Life.
-
-    The Battle Grounds Modification for Half-Life is free software;
-    you can redistribute it and/or modify it under the terms of the
-    GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 2.1 of the License, or
-    (at your option) any later version.
-
-    The Battle Grounds Modification for Half-Life is distributed in
-    the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-    even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-    for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with The Battle Grounds Modification for Half-Life;
-    if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-    Suite 330, Boston, MA  02111-1307  USA
-
-    You must obey the GNU Lesser General Public License in all respects for
-    all of the code used other than code distributed with the Half-Life
-    SDK developed by Valve.  If you modify this file, you may extend this
-    exception to your version of the file, but you are not obligated to do so.
-    If you do not wish to do so, delete this exception statement from your
-    version.
-*/
-
-// declaration of the different particle system types
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	This product contains software technology licensed from:
+*	The Battle Grounds Team and Contributors.
+*
+****/
 #ifndef PARTICLE_SYSTEMS_H
 #define PARTICLE_SYSTEMS_H
 
@@ -40,7 +26,7 @@ protected:
 	float m_flLastDraw;
 
 	// the id of the particle
-	unsigned int m_iID;
+	int	m_iID;
 	// how long the system has been alive for
 	float m_flSystemsAge;
 	// the age when the grim reaper will come for this particle system
@@ -126,6 +112,11 @@ class CBrownSmokeParticleSystem : public CParticleSystem
 	friend class CParticleSystemManager;
 	CBrownSmokeParticleSystem(vec3_t vPosition, vec3_t vDirection);
 };
+class CMuzzleFlashParticleSystem : public CParticleSystem
+{
+	friend class CParticleSystemManager;
+	CMuzzleFlashParticleSystem(vec3_t vPosition, vec3_t vDirection, int iType);
+};
 
 // creates a particle system based on what the mapper wants
 class CMappedParticleSystem : public CParticleSystem
@@ -147,5 +138,30 @@ protected:
 public:
 	CMappedParticleSystem( char *sParticleDefinition, particle_system_management *pSysDetails );
 	~CMappedParticleSystem();
+};
+
+// creates a block of grass for the mapper
+class CGrassParticleSystem : public CParticleSystem
+{
+	friend class CParticleSystemManager;
+
+	// the file from which all our settings are loaded
+	char *m_sParticleFile;
+	// container for all particle types
+	// all particles of that type are contained within
+	vector<grass_particle_types*> m_cGrassTypes;
+
+	// give all values in the system defaults before loading the file
+	grass_particle_system *CreateDefaultParticleSystem( void );
+	// parse the defintion file
+	bool LoadParticleDefinition( particle_system_management *pSysDetails );
+protected:
+	// tests whether this system is ready to die
+	virtual inline bool TestSystem( void ) { return !(m_flSystemMaxAge == 0.01); }
+	// adds a new particle to this system
+	inline void AddParticle( CParticle *pParticle, grass_particle_types *pGrassType );
+public:
+	CGrassParticleSystem( char *sParticleDefinition, particle_system_management *pSysDetails);
+	~CGrassParticleSystem();
 };
 #endif

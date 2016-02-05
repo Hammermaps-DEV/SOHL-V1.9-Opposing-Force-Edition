@@ -63,6 +63,13 @@ DLL_DECALLIST gDecals[] = {
 	{ "{lambda06", 0 },		// DECAL_LAMBDA6
 	{ "{scorch1", 0 },		// DECAL_SCORCH1
 	{ "{scorch2", 0 },		// DECAL_SCORCH2
+	{ "{scorch3", 0 },		// DECAL_SCORCH3
+	{ "{ofscorch1", 0 },	// DECAL_OFSCORCH1
+	{ "{ofscorch2", 0 },	// DECAL_OFSCORCH2
+	{ "{ofscorch3", 0 },	// DECAL_OFSCORCH3
+	{ "{ofscorch4", 0 },	// DECAL_OFSCORCH4
+	{ "{ofscorch5", 0 },	// DECAL_OFSCORCH5
+	{ "{ofscorch6", 0 },	// DECAL_OFSCORCH6
 	{ "{blood1", 0 },		// DECAL_BLOOD1
 	{ "{blood2", 0 },		// DECAL_BLOOD2
 	{ "{blood3", 0 },		// DECAL_BLOOD3
@@ -586,6 +593,10 @@ void CWorld :: Precache( void )
 	PRECACHE_SOUND("debris/tile_impact_bullet2.wav");  //tile impact
 	PRECACHE_SOUND("debris/tile_impact_bullet3.wav");  //tile impact
 	PRECACHE_SOUND("debris/tile_impact_bullet4.wav");  //tile impact
+
+	PRECACHE_SOUND("debris/water_impact_bullet1.wav");  //water impact
+	PRECACHE_SOUND("debris/water_impact_bullet2.wav");  //water impact
+	PRECACHE_SOUND("debris/water_impact_bullet3.wav");  //water impact
 
 	PRECACHE_MODEL( "sprites/null.spr" ); //LRC
 //

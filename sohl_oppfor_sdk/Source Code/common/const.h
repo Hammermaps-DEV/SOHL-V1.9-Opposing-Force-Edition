@@ -321,7 +321,7 @@
 // coord, coord, coord (pos) 
 // byte (radius in 10's) 
 // byte byte byte (color)
-// byte (brightness)
+//LRC - ignore this, they're lying // byte (brightness)
 // byte (life in 10's)
 // byte (decay rate in 10's)
 

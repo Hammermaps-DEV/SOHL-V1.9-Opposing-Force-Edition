@@ -16,26 +16,26 @@
 #ifndef GRAPPLE_TONGUETIP_H
 #define GRAPPLE_TONGUETIP_H
 
-class CGrapple;
-
-class CGrappleTonguetip : public CBaseEntity
+class CGrappleHook : public CBaseEntity
 {
-	public:
-		virtual int		Save(CSave &save);
-		virtual int		Restore(CRestore &restore);
-		static	TYPEDESCRIPTION m_SaveData[];
+public:
+	void Spawn(void);
+	void Precache(void);
+	void EXPORT Move(void);
+	void EXPORT Hit(CBaseEntity*);
+	void Killed(entvars_t *pev, int gib);
 
-		void Spawn(void);
-		void FlyThink(void);
-		void HitThink(void);
-		void TipTouch(CBaseEntity* pOther);
-		void PreRemoval(void);
+	static	CGrappleHook* Create(Vector Pos, Vector Aim, CBasePlayer* Owner);
 
-		CGrapple* m_pMyGrappler;
+	int		m_Chain;
+	int		m_iIsMoving;
+	int		m_iTrail_Length;
+	int		m_iHitMonster;	// Fograin92: Used to handle what monster type we did hit
+	BOOL	bPullBack;		// Fograin92: Used to "pull-back" tongue after miss or release
 
-	private:
-		static CGrappleTonguetip* CreateTip(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
-		friend class CGrapple;
+	CBasePlayer *myowner;
+	CBaseEntity *myHitMonster;	// Fograin92: Pointer to our monster
+	CBeam		*m_pTongue;		// Fograin92: New tongue
 };
 
 #endif // GRAPPLE_TONGUETIP_H

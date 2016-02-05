@@ -237,6 +237,7 @@ struct skilldata_t
 	float plrDmgSatchel;
 	float plrDmgTripmine;
 	float plrDmgM249;
+	float plrDmgShock;
 	
 // weapons shared by monsters
 	float monDmg9MM;
@@ -244,6 +245,7 @@ struct skilldata_t
 	float monDmg12MM;
 	float monDmgHornet;
 	float monDmgM249;
+	float monDmgShockroach;
 
 // health/suit charge
 	float suitchargerCapacity;

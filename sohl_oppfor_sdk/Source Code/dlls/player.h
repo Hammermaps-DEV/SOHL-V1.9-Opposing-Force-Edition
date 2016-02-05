@@ -36,6 +36,7 @@
 #define		PFLAG_ON_ROPE		( 1<<6 )		//Added Physics flag for grapple
 #define		PFLAG_LATCHING		( 1<<6 )		// Player is latching to a target
 #define		PFLAG_ATTACHED		( 1<<7 )		// Player is attached by a barnacle tongue tip
+#define		PFLAG_ON_GRAPPLE 	( 1<<8 ) 		// Added Physics flag for grapple
 
 //
 // generic player
@@ -179,6 +180,12 @@ public:
 	CBasePlayerItem *m_pClientActiveItem;  // client version of the active item
 	CBasePlayerItem *m_pLastItem;
 	CBasePlayerItem *m_pNextItem;
+
+	// Grappling hook
+	bool m_pGrappleExists;
+	bool m_pGrapplePullBack;
+	CBaseEntity *m_MyGrapple;
+
 	// shared ammo slots
 	int	m_rgAmmo[MAX_AMMO_SLOTS];
 	int	m_rgAmmoLast[MAX_AMMO_SLOTS];

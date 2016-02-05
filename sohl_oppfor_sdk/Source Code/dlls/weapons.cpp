@@ -51,6 +51,13 @@ DLL_GLOBAL	short		g_sModelIndexErrorModel;//error model index
 DLL_GLOBAL	short		g_sModelIndexNullSprite;//null sprite index
 DLL_GLOBAL	short		g_sModelIndexErrorSprite;//error sprite index
 DLL_GLOBAL	short		g_sSoundIndexNullSound;//null sound index
+
+DLL_GLOBAL	short		g_sModelIndexFireball_0;
+DLL_GLOBAL	short		g_sModelIndexFireball_1;
+DLL_GLOBAL	short		g_sModelIndexFireballFlash;
+
+DLL_GLOBAL	short		g_sGrenadeGib;
+
 DLL_GLOBAL	unsigned short	g_usEventIndexNullEvent;//null event index
 DLL_GLOBAL 	unsigned short 	m_usDecals;	//Decal event
 DLL_GLOBAL 	unsigned short 	m_usEfx;		//special effects event (rocket trail, explosion e.t.c.)	
@@ -259,13 +266,11 @@ void DecalGunshot( TraceResult *pTrace, int iBulletType )
 		case BULLET_MONSTER_9MM:
 		case BULLET_PLAYER_MP5:
 		case BULLET_MONSTER_MP5:
-
-		//SOHL - Opposing-Force
 		case BULLET_PLAYER_556:
 		case BULLET_MONSTER_556:
-
 		case BULLET_PLAYER_BUCKSHOT:
 		case BULLET_PLAYER_357:
+		case BULLET_MONSTER_357:
 		case BULLET_MONSTER_12MM:
 		default:
 			// smoke and decal
@@ -396,11 +401,11 @@ void W_Precache(void)
 
 	//g-cont. init safe precaching system
 	//WARNING!!! this is critical stuff! do not edit this
-	g_sSoundIndexNullSound = g_engfuncs.pfnPrecacheSound ("common/null.wav");
-	g_sModelIndexNullModel = g_engfuncs.pfnPrecacheModel ("models/null.mdl");
-	g_sModelIndexErrorModel = g_engfuncs.pfnPrecacheModel ("models/error.mdl");
-	g_sModelIndexNullSprite = g_engfuncs.pfnPrecacheModel ("sprites/null.spr");
-	g_sModelIndexErrorSprite = g_engfuncs.pfnPrecacheModel ("sprites/error.spr");
+	g_sSoundIndexNullSound =	PRECACHE_SOUND("common/null.wav");
+	g_sModelIndexNullModel =	PRECACHE_MODEL("models/null.mdl");
+	g_sModelIndexErrorModel =	PRECACHE_MODEL("models/error.mdl");
+	g_sModelIndexNullSprite =	PRECACHE_MODEL("sprites/null.spr");
+	g_sModelIndexErrorSprite =	PRECACHE_MODEL("sprites/error.spr");
 
 	// custom items...
 
@@ -428,6 +433,9 @@ void W_Precache(void)
 	// grapple
 	UTIL_PrecacheOtherWeapon( "weapon_grapple" );
 
+	//shockrifle
+	UTIL_PrecacheOtherWeapon("weapon_shockrifle");
+
 	// glock
 	UTIL_PrecacheOtherWeapon( "weapon_9mmhandgun" );
 	UTIL_PrecacheOther( "ammo_9mmclip" );
@@ -437,6 +445,9 @@ void W_Precache(void)
 	UTIL_PrecacheOtherWeapon( "weapon_9mmAR" );
 	UTIL_PrecacheOther( "ammo_9mmAR" );
 	UTIL_PrecacheOther( "ammo_ARgrenades" );
+
+	// eagle
+	UTIL_PrecacheOtherWeapon("weapon_eagle");
 
 	// python
 	UTIL_PrecacheOtherWeapon( "weapon_357" );
@@ -484,12 +495,23 @@ void W_Precache(void)
 		UTIL_PrecacheOther( "weaponbox" );// container for dropped deathmatch weapons
 	}
 	
+	//Explosion Effects
+	PRECACHE_MODEL("sprites/explosion_0.spr");
+	PRECACHE_MODEL("sprites/explosion_1.spr");
+	PRECACHE_MODEL("sprites/explosion_2.spr");
+	PRECACHE_MODEL("sprites/explosion_3.spr");
+
 	g_sModelIndexFireball = PRECACHE_MODEL ("sprites/zerogxplode.spr");// fireball
 	g_sModelIndexWExplosion = PRECACHE_MODEL ("sprites/WXplo1.spr");// underwater fireball
 	g_sModelIndexSmoke = PRECACHE_MODEL ("sprites/steam1.spr");// smoke
 	g_sModelIndexBubbles = PRECACHE_MODEL ("sprites/bubble.spr");//bubbles
 	g_sModelIndexBloodSpray = PRECACHE_MODEL ("sprites/bloodspray.spr"); // initial blood
 	g_sModelIndexBloodDrop = PRECACHE_MODEL ("sprites/blood.spr"); // splattered blood 
+
+	g_sModelIndexFireball_0 = PRECACHE_MODEL("sprites/explosion_ext0.spr");
+	g_sModelIndexFireball_1 = PRECACHE_MODEL("sprites/explosion_ext1.spr");
+	g_sModelIndexFireballFlash = PRECACHE_MODEL("sprites/explosion_flash.spr");
+	g_sGrenadeGib = PRECACHE_MODEL("models/grenade_gibs.mdl");
 
 	g_sModelIndexLaser = PRECACHE_MODEL( (char *)g_pModelNameLaser );
 	g_sModelIndexLaserDot = PRECACHE_MODEL("sprites/laserdot.spr");
@@ -1160,9 +1182,9 @@ BOOL CBasePlayerWeapon :: PlayEmptySound( int iSoundType )
 	//2 - electro sound 2
 	//3 - flashlight sound
 	//4 - no sound
+	//5 - shockroach angry
 
-	if (m_iPlayEmptySound)
-	{
+	if (m_iPlayEmptySound) {
 		PLAYBACK_EVENT_FULL( 0, m_pPlayer->edict(), m_usPlayEmptySound, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, iSoundType, 0, 0, 0 );
 		m_iPlayEmptySound = 0;
 		return FALSE;

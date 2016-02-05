@@ -47,7 +47,7 @@ class CGlock : public CBasePlayerWeapon {
 
 		//Animations
 		BOOL Deploy(void);
-		void Holster();
+		void Holster(void);
 		void Reload(void);
 		void WeaponIdle(void);
 	private:

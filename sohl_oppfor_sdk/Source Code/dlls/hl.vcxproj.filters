@@ -525,6 +525,15 @@
     <ClCompile Include="monster_construction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="proj_shock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_shockrifle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_eagle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="animation.h">
@@ -915,6 +924,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="monster_construction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_shock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_shockrifle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_hornetgun.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_eagle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

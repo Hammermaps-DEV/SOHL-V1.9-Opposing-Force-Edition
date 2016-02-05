@@ -1,34 +1,20 @@
-/*
-    Copyright 2001 to 2004. The Battle Grounds Team and Contributors
-
-    This file is part of the Battle Grounds Modification for Half-Life.
-
-    The Battle Grounds Modification for Half-Life is free software;
-    you can redistribute it and/or modify it under the terms of the
-    GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 2.1 of the License, or
-    (at your option) any later version.
-
-    The Battle Grounds Modification for Half-Life is distributed in
-    the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-    even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-    for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with The Battle Grounds Modification for Half-Life;
-    if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-    Suite 330, Boston, MA  02111-1307  USA
-
-    You must obey the GNU Lesser General Public License in all respects for
-    all of the code used other than code distributed with the Half-Life
-    SDK developed by Valve.  If you modify this file, you may extend this
-    exception to your version of the file, but you are not obligated to do so.
-    If you do not wish to do so, delete this exception statement from your
-    version.
-*/
-
-// definition of the mapped particle
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	This product contains software technology licensed from:
+*	The Battle Grounds Team and Contributors.
+*
+****/
 #include "hud.h"
 #include "cl_util.h"
 #include <string.h>
@@ -51,7 +37,7 @@ CMappedParticle::CMappedParticle(mapped_particle_system *pSystem, particle_textu
 	InitValues();
 }
 
-// loads the values the mapper set
+// Loads the values the mapper set
 void CMappedParticle::InitValues( void )
 {
 	sParticle.vPosition = pSys->vPostion;
@@ -72,21 +58,29 @@ void CMappedParticle::InitValues( void )
 	sParticle.flAge = 0.0f;
 	sParticle.flMaxAge = pSys->flParticleLife + gEngfuncs.pfnRandomFloat( -pSys->flParticleLifeVariation, pSys->flParticleLifeVariation );
 
-	sParticle.flSize = pSys->flParticleScaleSize;
+	if(pSys->bUseRandom == true)
+		sParticle.flSize = pSys->flParticleScaleSize + gEngfuncs.pfnRandomFloat( 0.0, pSys->fRandomVal );
+	else
+		sParticle.flSize = pSys->flParticleScaleSize;
+
 	sParticle.flGrowth = pSys->flScaleIncreasePerSecond;
 	sParticle.flScale = 30.0f;
 
-	if(pSys->iSystemShape == SHAPE_PLANE) {
+	if(pSys->iSystemShape == SHAPE_PLANE)
+	{
 		sParticle.vPosition.x = sParticle.vPosition.x + gEngfuncs.pfnRandomFloat( -(float)(pSys->iPlaneXLength/2), (float)(pSys->iPlaneXLength/2));
 		sParticle.vPosition.y = sParticle.vPosition.y + gEngfuncs.pfnRandomFloat( -(float)(pSys->iPlaneYLength/2), (float)(pSys->iPlaneYLength/2));
-	} else if(pSys->iSystemShape == SHAPE_AROUND_PLAYER) {
+	}
+	else if(pSys->iSystemShape == SHAPE_AROUND_PLAYER)
+	{
 		cl_entity_t* m_pPlayer = gEngfuncs.GetLocalPlayer();
 		sParticle.vPosition.x = (m_pPlayer->origin.x + gEngfuncs.pfnRandomFloat( -(float)(pSys->iPlaneXLength), pSys->iPlaneXLength ));
 		sParticle.vPosition.y = (m_pPlayer->origin.y + gEngfuncs.pfnRandomFloat( -(float)(pSys->iPlaneYLength), pSys->iPlaneYLength));
 		sParticle.vPosition.z = (m_pPlayer->origin.z + 450.0);
 	}
 
-	if(pSys->bWindy == true) {
+	if(pSys->bWindy == true)
+	{
 		sParticle.vWind.x = gEngfuncs.pfnRandomFloat( 0.01f,0.74f );
 		sParticle.vWind.y = gEngfuncs.pfnRandomFloat( 0.01f,0.81f );
 		sParticle.vWind.z = gEngfuncs.pfnRandomFloat( 0.01f,0.64f );
@@ -100,7 +94,8 @@ void CMappedParticle::InitValues( void )
 	bWindChanged = false;
 	bIgnoreParticle = false;
 
-	for(int i = 0; i < 3; i++) {
+	for(int i = 0; i < 3; i++)
+	{
 		bCollisionChecked[i] = false;
 		iCollisionTimer[i] = 0;
 	}
@@ -116,9 +111,7 @@ void CMappedParticle::InitValues( void )
 	vNormal.y = 0;
 	vNormal.z = 0;
 
-	// check lightlevel once when the particle is spawned
-//	if (pSys->iParticleLightCheck == NO_CHECK)
-		
+	// Check lightlevel once when the particle is spawned
 	if (pSys->iParticleLightCheck == CHECK_ONCE)
 	{
 		// great thanks go to Sneaky_Bastard and randomnine for helping me alot to finding 
@@ -152,7 +145,9 @@ void CMappedParticle::InitValues( void )
 
 }
 
-// draws a mapped particle
+// Draws a mapped particle
+//extern void RenderFog ( void );	// Fograin92: Disabled
+//extern void BlackFog ( bool GL = true );	// Fograin92: Disabled
 void CMappedParticle::Draw( void )
 {
 	if(bIgnoreParticle)
@@ -164,20 +159,23 @@ void CMappedParticle::Draw( void )
 	Vector vForward, vRight, vUp, vDir;
 	AngleVectors(v_angles, vForward, vRight, vUp );
 	vDir = ( sParticle.vPosition - flPlayerOrigin ).Normalize( );
-	if ( DotProduct ( vDir, vForward ) < 0 )
-		return;
+
+	// Fograin92: Disabled because bullshit happens
+	//if ( DotProduct ( vDir, vForward ) < 0 )
+	//	return;
 
 	int iHealth = 0;
 
-	// fading in happens in the first half of the particles lifetime
-	if (pSys->bFadeIn && ((sParticle.flAge / sParticle.flMaxAge) < 0.5)) {
+	// Fading in happens in the first half of the particles lifetime
+	if (pSys->bFadeIn && ((sParticle.flAge / sParticle.flMaxAge) < 0.5))
+	{
 		iHealth = (sParticle.flAge * sParticle.iTransparency / (sParticle.flMaxAge / 2));
 		if (iHealth < 0)
 			return;
-
 	} 
-	// fading out happens in the second half of the particles lifetime
-	else if (pSys->bFadeOut && ((sParticle.flAge / sParticle.flMaxAge) > 0.5)) {
+	// Fading out happens in the second half of the particles lifetime
+	else if (pSys->bFadeOut && ((sParticle.flAge / sParticle.flMaxAge) > 0.5))
+	{
 		iHealth = sParticle.iTransparency - ((sParticle.flAge - (sParticle.flMaxAge / 2)) * sParticle.iTransparency / (sParticle.flMaxAge / 2));
 		if (iHealth < 0)
 			return;
@@ -193,7 +191,9 @@ void CMappedParticle::Draw( void )
 	}
 
 	// fade out particles that are closer to the player if smoke is true
-	if (pSys->bSmoke) {
+	/*
+	if (pSys->bSmoke)
+	{
 		float flThresholdStartSqrd = (PARTICLE_THRESHOLD_START * PARTICLE_THRESHOLD_START);
 		float flThresholdEndSqrd = (PARTICLE_THRESHOLD_END * PARTICLE_THRESHOLD_END);
 
@@ -207,6 +207,7 @@ void CMappedParticle::Draw( void )
 			iHealth *= flTransparencyFactor;
 		}
 	}
+	*/
 
 	vec3_t vPoint, vPosition;
 
@@ -216,23 +217,28 @@ void CMappedParticle::Draw( void )
 	// particle aligning
 	// We then get the view angles for the player so that we can "billboard" the sprites 
 	if (pSys->iParticleAlign == PLAYER_VIEW)
+	{
+		if(g_iUser1 == OBS_IN_EYE || g_iUser1 == OBS_CHASE_LOCKED)
 		{
-		if(g_iUser1 == OBS_IN_EYE || g_iUser1 == OBS_CHASE_LOCKED) {
 			cl_entity_t* pEnt = gEngfuncs.GetEntityByIndex( g_iUser2 );
 			VectorCopy(pEnt->angles, vNormal);
 			vNormal[0]*=-3.0f; // no idea view.cpp said "see CL_ProcessEntityUpdate()"
-		} else {
+		}
+		else
+		{
 			vNormal = v_angles;
 		}
 	}
 
-	if (pSys->iParticleAlign == PLANAR) {
+	if (pSys->iParticleAlign == PLANAR)
+	{
 		vNormal.x = 90;
 		vNormal.y = 0;
 		vNormal.z = 0;
 	}
 	
-	if (pSys->iParticleAlign == LOCKED_Z) {
+	if (pSys->iParticleAlign == LOCKED_Z)
+	{
 		if(g_iUser1 == OBS_IN_EYE || g_iUser1 == OBS_CHASE_LOCKED) {
 			cl_entity_t* pEnt = gEngfuncs.GetEntityByIndex( g_iUser2 );
 			VectorCopy(pEnt->angles, vNormal);
@@ -246,14 +252,17 @@ void CMappedParticle::Draw( void )
 
 	if (pSys->iParticleAlign == NO_ALIGN)
 	{
-	// do nothing ;)	
+		// do nothing ;)	
+		/*	vNormal.x = 0;
+			vNormal.y = 0;
+			vNormal.z = 0;*/
 	}
 
 	if (pSys->iParticleAlign == VELOCITY_VECTOR)
 	{
-	// todo
-	// no idea how to solve that yet
-	// will be an intensive night of maths I guess :)
+		// todo
+		// no idea how to solve that yet
+		// will be an intensive night of maths I guess :)
 	}
 	 
 	if (!(pSys->iParticleAlign == NO_ALIGN))
@@ -279,47 +288,53 @@ void CMappedParticle::Draw( void )
 	co04 = flInverse * (int)( (iCurrentFrame) % ((int)sqrt((float)iNumFrames)) + 1);
 
 	if (pSys->iDisplayMode == TWENTY_FOUR_BIT_ADDITIVE)
+	{
+		//BlackFog();	// Fograin92: Disabled
 		glColor3ub(iHealth, iHealth, iHealth);
+	}
 	else
+	{
+		//RenderFog();	// Fograin92: Disabled
 		glColor4ub(sParticle.iRed, sParticle.iGreen, sParticle.iBlue,iHealth); 
+	}
 
 	// Finally, we draw the particle
-	glBindTexture(GL_TEXTURE_2D, (*sParticle.pTexture->iID));
+	glBindTexture(GL_TEXTURE_2D, sParticle.pTexture->iID);
 	glBegin(GL_QUADS);
 
-	glTexCoord2f(co01, co02);
-	VectorMA ( vPosition, (sParticle.flSize * sParticle.flScale), vUp, vPoint);
-	VectorMA ( vPoint, (-sParticle.flSize * sParticle.flScale), vRight, vPoint);
-	glVertex3fv(vPoint);
+		glTexCoord2f(co01, co02);
+		VectorMA ( vPosition, (sParticle.flSize * sParticle.flScale), vUp, vPoint);
+		VectorMA ( vPoint, (-sParticle.flSize * sParticle.flScale), vRight, vPoint);
+		glVertex3fv(vPoint);
 
-   	glTexCoord2f(co04, co02);
-	VectorMA ( vPosition, (sParticle.flSize * sParticle.flScale), vUp, vPoint);
-	VectorMA ( vPoint, (sParticle.flSize * sParticle.flScale), vRight, vPoint);
-	glVertex3fv(vPoint);
+   		glTexCoord2f(co04, co02);
+		VectorMA ( vPosition, (sParticle.flSize * sParticle.flScale), vUp, vPoint);
+		VectorMA ( vPoint, (sParticle.flSize * sParticle.flScale), vRight, vPoint);
+		glVertex3fv(vPoint);
 
-	glTexCoord2f(co04, co03); 
-	VectorMA ( vPosition, (-sParticle.flSize * sParticle.flScale), vUp, vPoint);
-	VectorMA ( vPoint, (sParticle.flSize * sParticle.flScale), vRight, vPoint);
-	glVertex3fv(vPoint); 
+		glTexCoord2f(co04, co03); 
+		VectorMA ( vPosition, (-sParticle.flSize * sParticle.flScale), vUp, vPoint);
+		VectorMA ( vPoint, (sParticle.flSize * sParticle.flScale), vRight, vPoint);
+		glVertex3fv(vPoint); 
 
-	glTexCoord2f(co01, co03);
-	VectorMA ( vPosition, (-sParticle.flSize * sParticle.flScale), vUp, vPoint);
-	VectorMA ( vPoint, (-sParticle.flSize * sParticle.flScale), vRight, vPoint);
-	glVertex3fv(vPoint);    
+		glTexCoord2f(co01, co03);
+		VectorMA ( vPosition, (-sParticle.flSize * sParticle.flScale), vUp, vPoint);
+		VectorMA ( vPoint, (-sParticle.flSize * sParticle.flScale), vRight, vPoint);
+		glVertex3fv(vPoint);    
 
 	glEnd();
 }
 
-// updates the internals of a mapped particle
+// Updates the internals of a mapped particle
 void CMappedParticle::Update( float flTimeSinceLastDraw )
 {
 	flParticleTime += flTimeSinceLastDraw;
 
-	// limit to at least 1 sort per second as 0 sorts can cause problems 
+	// Limit to at least 1 sort per second as 0 sorts can cause problems 
 	if (g_ParticleSorts->value == 0)
 		g_ParticleSorts->value = 1;
 
-	// update distance between particle and player g_ParticleSorts times a second
+	// Update distance between particle and player g_ParticleSorts times a second
 	float flTimeSinceLastSort = (gEngfuncs.GetClientTime() - sParticle.flLastSort);
 	if(flTimeSinceLastSort == 0 || (((int)(1 / flTimeSinceLastSort)) < g_ParticleSorts->value))
 	{
@@ -358,7 +373,7 @@ void CMappedParticle::Update( float flTimeSinceLastDraw )
 		}
 	}
 
-	// dont draw the particle if smoke is enabled and its close to the player
+	// Dont draw the particle if smoke is enabled and its close to the player
 	if (pSys->bSmoke == true)
 	{
 		if (sParticle.flSquareDistanceToPlayer < (PARTICLE_THRESHOLD_START*PARTICLE_THRESHOLD_START))
@@ -382,18 +397,26 @@ void CMappedParticle::Update( float flTimeSinceLastDraw )
 	}	
 	
 	// if we're using a custom mode for displaying our texture
-	if (pSys->iFPS != 0) {
-		if (pSys->iAnimSpeed == CUSTOM) {
-			if (pSys->iAnimBehaviour == LOOP) {
-				while (flParticleTime > (1.0f / pSys->iFPS)) {
+	if (pSys->iFPS != 0)
+	{
+		if (pSys->iAnimSpeed == CUSTOM)
+		{
+			if (pSys->iAnimBehaviour == LOOP)
+			{
+				/*
+				// Fograin92: This is causing game freeze (TOFIX)
+				while (flParticleTime > (1.0f / pSys->iFPS))
+				{
 					iCurrentFrame++;
 					flParticleTime -= (1.0f / pSys->iFPS);
 				}
 
 				if (iCurrentFrame > (pSys->iEndingFrame - 1))
 					iCurrentFrame = (pSys->iStartingFrame - 1);
-
-			} else if (pSys->iAnimBehaviour == REVERSE_LOOP) {
+					*/
+			}
+			else if (pSys->iAnimBehaviour == REVERSE_LOOP)
+			{
 				bool bCountUp = true;
 
 				if (iCurrentFrame >= (pSys->iEndingFrame - 1))
@@ -410,7 +433,10 @@ void CMappedParticle::Update( float flTimeSinceLastDraw )
 
 					flParticleTime -= (1.0f / pSys->iFPS);
 				}
-			} else { // once_through
+			}
+			else
+			{
+				// once_through
 				while (flParticleTime > (1.0f / pSys->iFPS))
 				{
 					iCurrentFrame++;
@@ -429,10 +455,11 @@ void CMappedParticle::Update( float flTimeSinceLastDraw )
 	if (pSys->iAnimSpeed == ANIMATE_OVER_LIFE && sParticle.flMaxAge)
 		iCurrentFrame = (pSys->iEndingFrame) * (sParticle.flAge / sParticle.flMaxAge);
 	
-	if (flTimeSinceLastDraw < 0) // how the hell can the time between updates be less than nothing?
+	if (flTimeSinceLastDraw < 0) // how the hell can the time between updates be less than nothing?	// Fograin92: This is GoldSRC, time travels are possible here
 		flTimeSinceLastDraw = -flTimeSinceLastDraw;
 
-	if (pSys->flVelocityDampening > 0.01) {
+	if (pSys->flVelocityDampening > 0.01)
+	{
 		sParticle.vVelocity.x *= ( 1 / ( 1 + fabsf(pSys->flVelocityDampening * flTimeSinceLastDraw * sParticle.vVelocity.x)));
 		sParticle.vVelocity.y *= ( 1 / ( 1 + fabsf(pSys->flVelocityDampening * flTimeSinceLastDraw * sParticle.vVelocity.y)));
 		sParticle.vVelocity.z *= ( 1 / ( 1 + fabsf(pSys->flVelocityDampening * flTimeSinceLastDraw * sParticle.vVelocity.z)));
@@ -440,7 +467,8 @@ void CMappedParticle::Update( float flTimeSinceLastDraw )
 	
 	sParticle.vVelocity.z -= pSys->flGravity * flTimeSinceLastDraw;
 
-	if (pSys->bWindy) {
+	if (pSys->bWindy)
+	{
 		sParticle.vVelocity.x += (sParticle.vWind.x * flTimeSinceLastDraw);
 		sParticle.vVelocity.y += (sParticle.vWind.y * flTimeSinceLastDraw);
 		sParticle.vVelocity.z += (sParticle.vWind.z * flTimeSinceLastDraw);
@@ -450,7 +478,8 @@ void CMappedParticle::Update( float flTimeSinceLastDraw )
 	
 	sParticle.flSize += flTimeSinceLastDraw * sParticle.flGrowth;
 	sParticle.flCurrentRotation += flTimeSinceLastDraw * sParticle.flRotation;
-	while (sParticle.flCurrentRotation > 360) {
+	while (sParticle.flCurrentRotation > 360)
+	{
 		sParticle.flCurrentRotation -= 360;
 	}
  	
@@ -464,34 +493,35 @@ bool CMappedParticle::Test( void )
 		return false;
 
 	int i = 0;
-	for (i  = 0; i < 3; i++) {
-		if (bCollisionChecked[i]) {
+	for (i  = 0; i < 3; i++)
+	{
+		if (bCollisionChecked[i])
+		{
 			iCollisionTimer[i]--;
 			if (iCollisionTimer[i] < 1)
 				bCollisionChecked[i] = false;
 		}
 	}
 
-	if (pSys->iParticleCollision != PARTICLE_PASS_THROUGH) {
+	if (pSys->iParticleCollision != PARTICLE_PASS_THROUGH)
+	{
 		// Now we create four test vectors and copy origin into each one
 		vec3_t vTest[6];
 		for( i = 0; i < 6; i++ )
 			VectorCopy( sParticle.vPosition, vTest[i] );
 
 		// We then set the test vectors
-		vTest[0].z -= 5; // down
-		vTest[1].x += 5;  // x+
-		vTest[2].x -= 5; // x-
-		vTest[3].y += 5; // y+
-		vTest[4].y -= 5; // y-
-		vTest[5].z += 5; // up
-
+		vTest[0].z -= 5;	// down
+		vTest[1].x += 5;	// x+
+		vTest[2].x -= 5;	// x-
+		vTest[3].y += 5;	// y+
+		vTest[4].y -= 5;	// y-
+		vTest[5].z += 5;	// up
 
 		bool bCollX = false;
 		bool bCollY = false;
 		bool bCollZ = false;
 
-		
 		// This long test basically checks whether any of the test vectors are in solid ground 
 		// It also checks if the particle is in the sky, in which case we do NOT want to do these solid tests
 				
@@ -507,8 +537,8 @@ bool CMappedParticle::Test( void )
 		gEngfuncs.PM_PointContents( vTest[4], NULL ) == CONTENTS_SOLID)
 			bCollZ = true;
 
-		if ((bCollX == true || bCollY == true || bCollZ == true) && (pSys->iParticleCollision == PARTICLE_STUCK)) {
-			
+		if ((bCollX == true || bCollY == true || bCollZ == true) && (pSys->iParticleCollision == PARTICLE_STUCK))
+		{
 			sParticle.vWind.z = 0;
 			pSys->flGravity = 0;
 			vNormal.x = 0;
@@ -520,6 +550,7 @@ bool CMappedParticle::Test( void )
 			pSys->vRotationVelVarMax.x = 0.0f;
 			pSys->vRotationVelVarMax.y = 0.0f;
 			pSys->vRotationVelVarMax.z = 0.0f;
+
 			if (pSys->bWindy == true && (bWindChanged == false))
 			{
 				sParticle.vVelocity.x = gEngfuncs.pfnRandomFloat( (0.01*(cos(10*sParticle.vPosition.y)+1)), (0.3*(sin(10*sParticle.vPosition.x)+1))); 
@@ -527,7 +558,9 @@ bool CMappedParticle::Test( void )
 				sParticle.vVelocity.z = gEngfuncs.pfnRandomFloat( 0.01f, (0.3*cos(10*sParticle.vPosition.y)+1));
 				sParticle.flRotation = gEngfuncs.pfnRandomFloat( -100, 100);
 				bWindChanged = true;
-			} else if (pSys->bWindy == false) {
+			}
+			else if (pSys->bWindy == false)
+			{
 				sParticle.vVelocity = Vector(0, 0, 0); 
 				sParticle.flRotation = 0.0;			
 			}
@@ -536,25 +569,35 @@ bool CMappedParticle::Test( void )
 		if ((bCollX == true || bCollY == true || bCollZ == true) && (pSys->iParticleCollision == PARTICLE_DIE))
 			return false;
 
-		if(pSys->iParticleCollision == PARTICLE_BOUNCE) {
-			if (bCollZ) {
-				if (bCollisionChecked[0] != true) { //  bounce up/down particle
+		if(pSys->iParticleCollision == PARTICLE_BOUNCE)
+		{
+			if (bCollZ)
+			{
+				if (bCollisionChecked[0] != true)
+				{
+					//  bounce up/down particle
 					sParticle.vVelocity.z *= -0.3;
 					bCollisionChecked[0] = true;
 					iCollisionTimer[0] = 5;
 				}
 			}			
 
-			if (bCollX) {
-				if (bCollisionChecked[1] != true) { //  bounce x particle
+			if (bCollX)
+			{
+				if (bCollisionChecked[1] != true)
+				{
+					//  bounce x particle
 					sParticle.vVelocity.x *= -0.3;
 					bCollisionChecked[1] = true;
 					iCollisionTimer[1] = 5;
 				}
 			}
 		
-			if (bCollY) {
-				if (bCollisionChecked[2] != true) { //  bounce y particle
+			if (bCollY)
+			{
+				if (bCollisionChecked[2] != true)
+				{
+					//  bounce y particle
 					sParticle.vVelocity.y *= -0.3;
 					bCollisionChecked[2] = true;
 					iCollisionTimer[2] = 5;
@@ -563,9 +606,11 @@ bool CMappedParticle::Test( void )
 		}
 
 		// specifically for rain
-		if((bCollX == true || bCollY == true || bCollZ == true) && pSys->iParticleCollision == PARTICLE_SPLASH) {
+		if((bCollX == true || bCollY == true || bCollZ == true) && pSys->iParticleCollision == PARTICLE_SPLASH) 
+		{
 			// big splash for water and a ripple
-			if(gEngfuncs.PM_PointContents(sParticle.vPosition, NULL) == CONTENT_WATER) {
+			if(gEngfuncs.PM_PointContents(sParticle.vPosition, NULL) == CONTENT_WATER)
+			{
 				particle_system_management pSystem;
 				pSystem.vDirection = -sParticle.vDirection;
 				pSystem.vPosition = sParticle.vPosition;
@@ -575,7 +620,8 @@ bool CMappedParticle::Test( void )
 				if ( iWater >= 0 && iWater < MAX_PHYSENTS )
 				{
 					cl_entity_t* pWater = gEngfuncs.GetEntityByIndex( iWater );
-					if(pWater && pWater->model != NULL) {
+					if(pWater && pWater->model != NULL)
+					{
 						pSystem.vPosition.z  = pWater->curstate.origin.z + pWater->model->maxs.z;
 					}
 				}
@@ -589,7 +635,8 @@ bool CMappedParticle::Test( void )
 		}
 
 		// create a new system bounced off the position this one hit
-		if((bCollX == true || bCollY == true || bCollZ == true) && pSys->iParticleCollision == PARTICLE_NEW_SYSTEM) {
+		if((bCollX == true || bCollY == true || bCollZ == true) && pSys->iParticleCollision == PARTICLE_NEW_SYSTEM)
+		{
 			// create the new system with the current position and direction of our old one
 			particle_system_management pSystem;
 			pSystem.vDirection = sParticle.vDirection;
@@ -608,12 +655,14 @@ bool CMappedParticle::Test( void )
 					pSystem.vDirection.y *= -1;
 
 			// create a ripple no matter what falls into the water
-			if(gEngfuncs.PM_PointContents(sParticle.vPosition, NULL) == CONTENT_WATER) {
+			if(gEngfuncs.PM_PointContents(sParticle.vPosition, NULL) == CONTENT_WATER)
+			{
 				int iWater = gEngfuncs.PM_WaterEntity(pSystem.vPosition);
 				if ( iWater >= 0 && iWater < MAX_PHYSENTS )
 				{
 					cl_entity_t* pWater = gEngfuncs.GetEntityByIndex( iWater );
-					if(pWater && pWater->model != NULL) {
+					if(pWater && pWater->model != NULL)
+					{
 						pSystem.vPosition.z  = pWater->curstate.origin.z + pWater->model->maxs.z;
 					}
 				}
@@ -633,9 +682,12 @@ bool CMappedParticle::Test( void )
 void CMappedParticle::Prepare( void )
 {
 	glEnable(GL_COLOR_MATERIAL);
-	if (pSys->iDisplayMode == TWENTY_FOUR_BIT_ADDITIVE) {
+	if (pSys->iDisplayMode == TWENTY_FOUR_BIT_ADDITIVE)
+	{
 		glBlendFunc(GL_ONE,GL_ONE);
-	} else {
+	}
+	else
+	{
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 }

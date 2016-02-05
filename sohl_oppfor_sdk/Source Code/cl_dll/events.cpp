@@ -28,9 +28,9 @@ extern "C" {
 	void EV_TrainPitchAdjust( struct event_args_s *args );
 	void EV_Decals( struct event_args_s *args );
 	void EV_Explode( struct event_args_s *args );
-
-	// SOHL - Opposing-Force
 	void EV_FireM249(struct event_args_s *args);
+	void EV_ShockFire(struct event_args_s *args);
+	void EV_FireEagle(struct event_args_s *args);
 }
 
 /*
@@ -66,7 +66,7 @@ void EV_HookEvents( void ) {
 	gEngfuncs.pfnHookEvent( "events/train.sc",				EV_TrainPitchAdjust );
 	gEngfuncs.pfnHookEvent( "events/snarkfire.sc",			EV_SnarkFire );
 	gEngfuncs.pfnHookEvent( "events/decals.sc",				EV_Decals );
-
-	// SOHL - Opposing-Force
 	gEngfuncs.pfnHookEvent( "events/m249.sc",				EV_FireM249 );
+	gEngfuncs.pfnHookEvent( "events/shock.sc",				EV_ShockFire );
+	gEngfuncs.pfnHookEvent( "events/eagle.sc",				EV_FireEagle);
 }

@@ -45,6 +45,8 @@
 #include "weapon_shotgun.h"
 #include "weapon_gauss.h"
 #include "weapon_pipewrench.h"
+#include "weapon_shockrifle.h"
+#include "weapon_eagle.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -78,9 +80,9 @@ extern "C" {
 	void EV_PlayEmptySound( struct event_args_s *args );
 	void EV_Decals( struct event_args_s *args );
 	void EV_Explode( struct event_args_s *args );
-
-	// SOHL - Opposing-Force
 	void EV_FireM249(struct event_args_s *args);
+	void EV_ShockFire(struct event_args_s *args);
+	void EV_FireEagle(struct event_args_s *args);
 }
 
 #define VECTOR_CONE_1DEGREES Vector( 0.00873, 0.00873, 0.00873 )
@@ -688,6 +690,7 @@ void EV_HLDM_DecalGunshot( pmtrace_t *pTrace, int iBulletType )
 		case BULLET_MONSTER_556:
 		case BULLET_PLAYER_BUCKSHOT:
 		case BULLET_PLAYER_357:
+		case BULLET_MONSTER_357:
 		default:
 			// smoke and decal
 			EV_HLDM_GunshotDecalTrace( pTrace, EV_HLDM_DamageDecal( pe ) );
@@ -729,6 +732,7 @@ int EV_HLDM_CheckTracer( int idx, float *vecSrc, float *end, float *forward, flo
 		case BULLET_PLAYER_MP5:
 		case BULLET_MONSTER_MP5:
 		case BULLET_PLAYER_556:
+		case BULLET_MONSTER_357:
 		case BULLET_MONSTER_556:
 		case BULLET_MONSTER_9MM:
 		case BULLET_MONSTER_12MM:
@@ -761,8 +765,8 @@ void EV_PlayEmptySound( event_args_s *args )
 	if (args->iparam1 == 2) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/button11.wav",     0.8, ATTN_NORM, 0, args->iparam2);
 	if (args->iparam1 == 3) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/lightswitch2.wav", 0.8, ATTN_NORM, 0, args->iparam2);
 	if (args->iparam1 == 4) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "weapons/shotgun_empty.wav", 0.8, ATTN_NORM, 0, args->iparam2);
+	if (args->iparam1 == 5) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "shockroach/shock_angry.wav", 0.8, ATTN_NORM, 0, args->iparam2);
 }
-
 
 /*
 ================
@@ -1640,6 +1644,56 @@ void EV_FirePython( event_args_t *args ) {
 //======================
 
 //======================
+//	DESERT EAGLE START 
+//======================
+void EV_FireEagle(event_args_t *args) {
+	int idx;
+	vec3_t origin;
+	vec3_t angles;
+	vec3_t velocity;
+	int empty;
+
+	vec3_t ShellVelocity;
+	vec3_t ShellOrigin;
+	int shell;
+	vec3_t vecSrc, vecAiming;
+	vec3_t up, right, forward;
+
+	idx = args->entindex;
+	VectorCopy(args->origin, origin);
+	VectorCopy(args->angles, angles);
+	VectorCopy(args->velocity, velocity);
+
+	empty = args->bparam1;
+	AngleVectors(angles, forward, right, up);
+
+	shell = gEngfuncs.pEventAPI->EV_FindModelIndex("models/shell.mdl");
+
+	if (EV_IsLocal(idx)) {
+		cl_entity_s *view = gEngfuncs.GetViewModel();
+		gEngfuncs.pEventAPI->EV_WeaponAnimation(empty ? (int)EAGLE_SHOOT_EMPTY::sequence : (int)EAGLE_SHOOT::sequence, args->iparam1);
+		EV_MuzzleFlash();
+		V_PunchAxis(0, -6.0);
+	}
+
+	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4);
+	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell, TE_BOUNCE_SHELL);
+
+	// Play fire sound.
+	gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/desert_eagle_fire.wav", gEngfuncs.pfnRandomFloat(0.8, 0.9), ATTN_NORM, 0, PITCH_NORM);
+
+	EV_GetGunPosition(args, vecSrc, origin);
+
+	VectorCopy(forward, vecAiming);
+
+	EV_Dynamic_MuzzleFlash(vecSrc, 1.5 + gEngfuncs.pfnRandomFloat(-0.2, 0.2));
+	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_357, 0, 0, args->fparam1, args->fparam2);
+}
+//======================
+//	 DESERT EAGLE END 
+//======================
+
+//======================
 //	   GAUSS START 
 //======================
 #define SND_CHANGE_PITCH	(1<<7)		// duplicated in protocol.h change sound pitch
@@ -2274,12 +2328,18 @@ void EV_Explode( struct event_args_s *args )
 	int m_iExplodeSprite;
 	vec3_t mirpos = EV_MirrorPos(args->origin); 	
 
-	if(args->bparam1)//water explosion
+	if(args->bparam1)
 		m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/WXplo1.spr" );
-         	else	m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/zerogxplode.spr" ); 
+	else {
+		switch (gEngfuncs.pfnRandomLong(0, 3)) {
+			case 0: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_0.spr"); break;
+			case 1: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_1.spr"); break;
+			case 2: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_2.spr"); break;
+			case 3: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_3.spr"); break;
+		}
+	}
 
 	gEngfuncs.pEfxAPI->R_Explosion( args->origin, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES );
-
 	if(mirpos != vec3_t(0,0,0))
 		gEngfuncs.pEfxAPI->R_Explosion( mirpos, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND | TE_EXPLFLAG_NOPARTICLES );
 }
@@ -2332,6 +2392,72 @@ void EV_SnarkFire( event_args_t *args )
 }
 //======================
 //	   SQUEAK END
+//======================
+
+//======================
+//	   SHOCKRIFLE START
+//======================
+void EV_ShockFire(event_args_t *args) {
+	int idx;
+	vec3_t origin;
+	idx = args->entindex;
+	VectorCopy(args->origin, origin);
+
+	// Primary attack.
+	if (!(int)args->iparam1) {
+		//Only play the weapon anims if I shot it.
+		if (EV_IsLocal(idx)) {
+			V_PunchAxis(0, gEngfuncs.pfnRandomLong(0, 2));
+			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SHOCKRIFLE_SHOOT::sequence, 1);
+		}
+
+		// Play fire sound.
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM, 0, 100);
+	}
+	else // Play weapon effects.
+	{
+		int iBeamModelIndex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/lgtning.spr");
+		cl_entity_t * vm = gEngfuncs.GetViewModel();
+		if (vm)
+		{
+			// Valid viewmodel.
+
+			gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction(false, true);
+
+			// Store off the old count
+			gEngfuncs.pEventAPI->EV_PushPMStates();
+
+			for (int i = 1; i < 4; i++)
+			{
+				BEAM* pBeam = gEngfuncs.pEfxAPI->R_BeamPoints(
+					(float*)&vm->attachment[0],
+					(float*)&vm->attachment[i],
+					iBeamModelIndex,
+					0.01f,
+					1.1f,
+					0.3f,
+					230 + gEngfuncs.pfnRandomFloat(20, 30),
+					10,
+					0,
+					10,
+					0.0f,
+					1.0f,
+					1.0f);
+
+				if (pBeam)
+				{
+					pBeam->flags |= (FBEAM_SHADEIN | FBEAM_SHADEOUT);
+					pBeam->startEntity = vm->index;
+					pBeam->endEntity = vm->index;
+				}
+			}
+
+			gEngfuncs.pEventAPI->EV_PopPMStates();
+		}
+	}
+}
+//======================
+//	   SHOCKRIFLE END
 //======================
 
 //======================

@@ -41,7 +41,6 @@ LINK_ENTITY_TO_CLASS( weapon_9mmAR, CMP5 );
 //=========================================================
 void CMP5::Spawn( ) {
 	Precache();
-	m_iId = WEAPON_MP5;
 
 	SET_MODEL(ENT(pev), "models/w_9mmAR.mdl");
 	m_iDefaultAmmo = MP5_DEFAULT_GIVE;
@@ -124,7 +123,7 @@ void CMP5::PrimaryAttack() {
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
 	} else {
-		PlayEmptySound( ); Reload();
+		PlayEmptySound( );
 		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
 	}
 }

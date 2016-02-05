@@ -350,6 +350,24 @@ public:
 		/*ALERT(at_console, "monster CR: %f/%f = %f\n", pev->health, pev->max_health, pev->health / pev->max_health);*/
 		return pev->health / pev->max_health;
 	}
+
+	//
+	// Glowshell effects
+	//
+	void	GlowShellOn(Vector color, float flDuration);
+
+	void	GlowShellOff(void);
+	void	GlowShellUpdate(void);
+
+	float	m_glowShellStartTime;
+	float	m_glowShellDuration;
+	Vector  m_glowShellColor;
+	BOOL	m_glowShellUpdate;
+
+	Vector	m_prevRenderColor;
+	int		m_prevRenderFx;
+	int		m_prevRenderMode;
+	int		m_prevRenderAmt;
 };
 
 

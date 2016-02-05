@@ -30,6 +30,10 @@
 
 using namespace vgui;
 
+
+extern int cam_thirdperson;
+
+
 #define VOICE_MODEL_INTERVAL		0.3
 #define SCOREBOARD_BLINK_FREQUENCY	0.3	// How often to blink the scoreboard icons.
 #define SQUELCHOSCILLATE_PER_SECOND	2.0f

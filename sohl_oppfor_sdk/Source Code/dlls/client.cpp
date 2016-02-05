@@ -742,8 +742,6 @@ void ClientPrecache( void )
 	// setup precaches always needed
 	PRECACHE_SOUND("player/sprayer.wav");			// spray paint sound for PreAlpha
 
-	// PRECACHE_SOUND("player/pl_jumpland2.wav");		// UNDONE: play 2x step sound
-
 	PRECACHE_SOUND("player/pl_fallpain2.wav");
 	PRECACHE_SOUND("player/pl_fallpain3.wav");
 
@@ -860,6 +858,16 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/geiger3.wav");
 	PRECACHE_SOUND("player/geiger2.wav");
 	PRECACHE_SOUND("player/geiger1.wav");
+
+	// explosions sounds
+	PRECACHE_SOUND("explosions/explode1.wav");
+	PRECACHE_SOUND("explosions/explode2.wav");
+	PRECACHE_SOUND("explosions/explode3.wav");
+	PRECACHE_SOUND("explosions/explode4.wav");
+	PRECACHE_SOUND("explosions/explode5.wav");
+	PRECACHE_SOUND("explosions/explode_dist1.wav");
+	PRECACHE_SOUND("explosions/explode_dist2.wav");
+	PRECACHE_SOUND("explosions/explode_dist3.wav");
 
 	if (giPrecacheGrunt)
 		UTIL_PrecacheOther("monster_human_grunt");

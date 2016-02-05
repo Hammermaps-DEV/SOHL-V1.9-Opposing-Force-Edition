@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
 *
 *	This product contains software technology licensed from Id
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
@@ -12,88 +12,53 @@
 *   without written permission from Valve LLC.
 *
 ****/
+//=========================================================
+// Weapon: Barnacle * http://half-life.wikia.com/wiki/Barnacle_Grapple
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 
-enum bgrap_e {
-	BGRAP_BREATHE = 0,
-	BGRAP_LONGIDLE,
-	BGRAP_SHORTIDLE,
-	BGRAP_COUGH,
-	BGRAP_DOWN,
-	BGRAP_UP,
-	BGRAP_FIRE,
-	BGRAP_FIREWAITING,
-	BGRAP_FIREREACHED,
-	BGRAP_FIRETRAVEL,
-	BGRAP_FIRERELEASE,
+#ifndef WEAPON_GRAPPLE_H
+#define WEAPON_GRAPPLE_H
+
+//Model Animations | Sequence-ID | Frames | FPS
+enum class GRAPPLE_BREATHE		{ sequence = 0,  frames = 78,  fps = 30 };
+enum class GRAPPLE_LONGIDLE		{ sequence = 1,  frames = 301, fps = 30 };
+enum class GRAPPLE_SHORTIDLE	{ sequence = 2,  frames = 41,  fps = 30 };
+enum class GRAPPLE_COUGH		{ sequence = 3,  frames = 139, fps = 30 };
+enum class GRAPPLE_HOLSTER		{ sequence = 4,  frames = 41,  fps = 30 };
+enum class GRAPPLE_DRAW			{ sequence = 5,  frames = 31,  fps = 30 };
+enum class GRAPPLE_FIRE			{ sequence = 6,  frames = 17,  fps = 30 };
+enum class GRAPPLE_FIREWAITING	{ sequence = 7,  frames = 17,  fps = 30 };
+enum class GRAPPLE_FIREREACHED	{ sequence = 8,  frames = 141, fps = 30 };
+enum class GRAPPLE_FIRETRAVEL	{ sequence = 9,  frames = 31,  fps = 45 };
+enum class GRAPPLE_FIRERELEASE	{ sequence = 10, frames = 31,  fps = 30 };
+
+#ifndef CLIENT_DLL //Only in Server-DLL
+//Barnacle Base-Class | Base | Attack | Animations | Vars | Events
+class CGrapple : public CBasePlayerWeapon {
+	public:
+		//Base
+		void Spawn(void);
+		void Precache(void);
+		int GetItemInfo(ItemInfo *p);
+
+		//Attack
+		void PrimaryAttack(void);
+		void SecondaryAttack(void) { PrimaryAttack(); };
+
+		//Animations
+		BOOL Deploy();
+		void Holster(void);
+		void WeaponIdle(void);
+		BOOL ShouldWeaponIdle(void) { return TRUE; }; //Call WeaponIdle Loop
+		void StopSounds(void);
+		void EXPORT FlyThink(void);
+		void EXPORT PukeGibs(void);
+	private:
+		//Vars
+		bool StartIdle;
+		bool PrimaryAttackEnd;
 };
+#endif
 
-class CGrappleTonguetip;
-class CGrapple : public CBasePlayerWeapon
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	int iItemSlot(void) { return 1; }
-	int GetItemInfo(ItemInfo *p);
-
-	void PrimaryAttack(void);
-	BOOL Deploy(void);
-	void Holster(void);
-	void WeaponIdle(void);
-	void ItemPostFrame(void);
-
-	virtual BOOL ShouldWeaponIdle(void) { return TRUE; }
-
-	void Fire(void);
-	void FireWait(void);
-	void FireReach(void);
-	void FireTravel(void);
-	void FireRelease(void);
-
-	void Fire2(void);
-
-	void OnTongueTipHitSurface(const Vector& vecTarget);
-	void OnTongueTipHitEntity(CBaseEntity* pEntity);
-
-	void StartPull(void);
-	void StopPull(void);
-	void Pull(void);
-
-	BOOL IsTongueColliding(const Vector& vecShootOrigin, const Vector& vecTipPos);
-	void CheckFireEligibility(void);
-	BOOL CheckTargetProximity(void);
-
-	void CreateTongueTip(void);
-	void DestroyTongueTip(void);
-	void UpdateTongueTip(void);
-
-	void CreateBeam(CBaseEntity* pTongueTip);
-	void DestroyBeam(void);
-	void UpdateBeam(void);
-
-	void StartPullSound(void);
-	void UpdatePullSound(void);
-	void ResetPullSound(void);
-
-	BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted);
-
-	enum GRAPPLE_FIRESTATE
-	{
-		FIRESTATE_NONE = 0,
-		FIRESTATE_FIRE,
-		FIRESTATE_FIRE2,
-		FIRESTATE_WAIT,
-		FIRESTATE_REACH,
-		FIRESTATE_TRAVEL,
-		FIRESTATE_RELEASE,
-	};
-
-	int		m_iFirestate;
-	int		m_iHitFlags;
-	BOOL	m_fTipHit;
-	CGrappleTonguetip* m_pTongueTip;
-	CBeam*	m_pBeam;
-	float	m_flNextPullSoundTime;
-	BOOL	m_fPlayPullSound;
-private:
-};
+#endif // WEAPON_GRAPPLE_H

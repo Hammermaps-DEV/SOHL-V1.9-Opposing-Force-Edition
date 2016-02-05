@@ -50,11 +50,11 @@ $hbox 0 "Hands biped R Finger11" 0.000000 -0.800000 0.000000 1.136840 0.250000 1
 $hbox 0 "Hands biped R Finger31" 0.000000 -0.800000 -0.560000 1.230000 0.360000 0.580000
 
 // 11 animation sequence(s)
-$sequence "idle1" "idle1" fps 30 loop 
-$sequence "idle2" "idle2" fps 24 loop 
-$sequence "idle3" "idle3" fps 30 loop 
-$sequence "idle4" "idle4" fps 30 loop 
-$sequence "idle5" "idle5" fps 30 loop 
+$sequence "idle1" "idle1" fps 30 
+$sequence "idle2" "idle2" fps 24 
+$sequence "idle3" "idle3" fps 30 
+$sequence "idle4" "idle4" fps 30 
+$sequence "idle5" "idle5" fps 30 
 $sequence "shoot" "shoot" fps 30 { event 5001 0 "11" } 
 $sequence "shoot_empty" "shoot_empty" fps 27 { event 5001 0 "11" } 
 $sequence "reload" "reload" fps 25 { event 5004 1 "weapons/desert_eagle_reload.wav" } 

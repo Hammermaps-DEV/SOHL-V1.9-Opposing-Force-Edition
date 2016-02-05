@@ -58,16 +58,16 @@ $hbox 0 "Bone27" -4.260000 0.000000 -0.630000 5.430000 5.273280 2.420000
 $hbox 0 "Bone28" -0.640000 -2.630000 -0.550000 2.050000 6.180000 3.560000
 
 // 11 animation sequence(s)
-$sequence "breathe" "breathe" fps 30 loop 
-$sequence "longidle" "longidle" fps 30 
-$sequence "shortidle" "shortidle" fps 30 
-$sequence "cough" "cough" fps 30 
+$sequence "breathe" "breathe" fps 30
+$sequence "longidle" "longidle" fps 30 { event 5004 78 "barnacle/bcl_chew1.wav" } { event 5004 78 "barnacle/bcl_chew1.wav" }
+$sequence "shortidle" "shortidle" fps 30
+$sequence "cough" "cough" fps 30 { event 5004 1 "weapons/bgrapple_cough.wav" }
 $sequence "down" "down" fps 30 
 $sequence "up" "up" fps 30 { event 5004 1 "weapons/alienweap_draw.wav" } 
-$sequence "fire" "fire" fps 30 loop 
-$sequence "firewaiting" "firewaiting" fps 30 loop 
-$sequence "firereached" "firereached" fps 30 loop 
-$sequence "firetravel" "firetravel" fps 45 loop 
-$sequence "firerelease" "firerelease" fps 30 loop 
+$sequence "fire" "fire" fps 30 
+$sequence "firewaiting" "firewaiting" fps 30 loop
+$sequence "firereached" "firereached" fps 30 loop
+$sequence "firetravel" "firetravel" fps 45 
+$sequence "firerelease" "firerelease" fps 30 
 
 // End of QC script.

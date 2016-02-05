@@ -386,6 +386,9 @@ void CGameRules::RefreshSkillData ( void )
 	// Sentry Turret
 	gSkillData.sentryHealth = GetSkillCvar( "sk_sentry_health");
 
+	// Shockroach
+	gSkillData.monDmgShockroach = GetSkillCvar("sk_plr_shockroachm");
+
 // PLAYER WEAPONS
 
 	// Crowbar whack
@@ -447,6 +450,10 @@ void CGameRules::RefreshSkillData ( void )
 
 	// M249
 	gSkillData.plrDmgM249 = GetSkillCvar("sk_plr_556_bullet");
+
+	// Shockroach
+	gSkillData.plrDmgShock = GetSkillCvar("sk_plr_shockroachs");
+
 
 	// PLAYER HORNET
 // Up to this point, player hornet damage and monster hornet damage were both using

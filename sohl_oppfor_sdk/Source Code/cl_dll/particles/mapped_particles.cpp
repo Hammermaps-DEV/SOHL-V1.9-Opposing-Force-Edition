@@ -1,35 +1,20 @@
-/*
-    Copyright 2001 to 2004. The Battle Grounds Team and Contributors
-
-    This file is part of the Battle Grounds Modification for Half-Life.
-
-    The Battle Grounds Modification for Half-Life is free software;
-    you can redistribute it and/or modify it under the terms of the
-    GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 2.1 of the License, or
-    (at your option) any later version.
-
-    The Battle Grounds Modification for Half-Life is distributed in
-    the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-    even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-    for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with The Battle Grounds Modification for Half-Life;
-    if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-    Suite 330, Boston, MA  02111-1307  USA
-
-    You must obey the GNU Lesser General Public License in all respects for
-    all of the code used other than code distributed with the Half-Life
-    SDK developed by Valve.  If you modify this file, you may extend this
-    exception to your version of the file, but you are not obligated to do so.
-    If you do not wish to do so, delete this exception statement from your
-    version.
-*/
-
-// definition of the mapped particle system
-
+/***
+*
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	This product contains software technology licensed from:
+*	The Battle Grounds Team and Contributors.
+*
+****/
 #include "hud.h"
 #include "cl_util.h"
 #include <string.h>
@@ -147,7 +132,7 @@ void CMappedParticleSystem::CreateDefaultParticleSystem( void )
 	m_pSystem->flNewParticlesPerSecond = 5.0;
 	m_pSystem->iGenerationFalloff = NO_FALLOFF;
 
-	_snprintf(m_pSystem->sParticleTexture, MAX_PARTICLE_PATH, "particles/smoke1.tga");
+	_snprintf(m_pSystem->sParticleTexture, MAX_PARTICLE_PATH, "materials/fx/smoke1.tga");
 
 	m_pSystem->flParticleScaleSize = 1.0;
 	m_pSystem->flScaleIncreasePerSecond = 1.0;
@@ -175,14 +160,13 @@ void CMappedParticleSystem::CreateDefaultParticleSystem( void )
 
 	m_pSystem->iAnimBehaviour = ONCE_THROUGH;
 	m_pSystem->iAnimSpeed = ANIMATE_OVER_LIFE;
-	m_pSystem->iFPS = 10;
+	m_pSystem->iFPS = 30;
 	m_pSystem->iStartingFrame = 1;
 	m_pSystem->iEndingFrame = 1;
 	m_pSystem->iFramesPerTexture = 1;
 
 	m_pSystem->iParticleCollision = PARTICLE_PASS_THROUGH;
 	_snprintf(m_pSystem->sParticleNewSys, MAX_PARTICLE_PATH, "");
-
 	m_pSystem->iParticleLightCheck = NO_CHECK;
 	
 	m_pSystem->iParticleAlign = PLAYER_VIEW;
@@ -499,6 +483,14 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 		// ignore_sort - Do not sort these particles with the rest ( saves cpu time )
 		else if(!stricmp(sSetting, "ignore_sort")) {
 			m_pSystem->bIgnoreSort = (!!(atoi(sValue)));
+		}
+		// randomize - set different scales based on iRandomVal's value
+		else if(!stricmp(sSetting, "randomize")) {
+			m_pSystem->bUseRandom = (!!(atoi(sValue)));
+		}
+		// different scales values
+		else if(!stricmp(sSetting, "random_modifier")) {
+			m_pSystem->fRandomVal = atof(sValue);
 		}
 		// catch all to accomodate for my spelling at first and then mapper's spelling later on
 		else {

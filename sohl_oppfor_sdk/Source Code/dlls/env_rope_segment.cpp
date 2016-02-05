@@ -23,28 +23,96 @@
 #include	"player.h"
 #include	"weapons.h"
 
-class CRope : public CBaseMonster {
+#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
+
+class CRopeSegment : public CBaseEntity
+{
 public:
-	//Define the class and all the functions we need.
-	void Spawn(void);
-	void Precache(void);
-	int  Classify(void);
-	void KeyValue(KeyValueData *pkvd);
-	void RopePendulum(int);	//Pendulum on rope. 1/-1 aka forward/back 
-	void EXPORT RopeTouch(CBaseEntity *pOther); //so we know when we hit something
-	void EXPORT RopeThink(void);
-	void EXPORT SegmentThink(void);
-
-	virtual CRope *RopeCreate(int loop);
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
-
+	int		Save(CSave &save);
+	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	CBaseEntity *RopeTouchEnt(float *pflLength);
-	CBaseEntity *pList[10];
+	void Spawn(void);
 
-	Vector m_vPlayerHangOrigin, m_start, m_end;
+	void EXPORT SegmentThink(void);
+	void EXPORT SegmentTouch(CBaseEntity* pOther);
+
+	CRopeSegment* m_pNext;
+	CRopeSegment* m_pPrev;
+
+	Vector m_vecJointPos;
+};
+
+LINK_ENTITY_TO_CLASS(rope_segment, CRopeSegment);
+
+TYPEDESCRIPTION CRopeSegment::m_SaveData[] =
+{
+	DEFINE_FIELD(CRopeSegment, m_pNext, FIELD_CLASSPTR),
+	DEFINE_FIELD(CRopeSegment, m_pPrev, FIELD_CLASSPTR),
+	DEFINE_FIELD(CRopeSegment, m_vecJointPos, FIELD_POSITION_VECTOR),
+};
+
+IMPLEMENT_SAVERESTORE(CRopeSegment, CBaseEntity);
+
+void CRopeSegment::Spawn(void)
+{
+	SET_MODEL(ENT(pev), "models/rope16.mdl");
+
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
+	pev->gravity = 0.0f;
+
+	m_pPrev = NULL;
+	m_pNext = NULL;
+	m_vecJointPos = Vector(0, 0, 0);
+
+	SetTouch(&CRopeSegment::Touch);
+	SetThink(&CRopeSegment::SegmentThink);
+	pev->nextthink = gpGlobals->time + 0.1f;
+}
+
+void CRopeSegment::SegmentThink(void)
+{
+	pev->nextthink = gpGlobals->time + 0.1f;
+}
+
+void CRopeSegment::SegmentTouch(CBaseEntity* pOther)
+{
+	ALERT(at_console, "Touched segment!\n");
+
+	SetTouch(NULL);
+}
+
+#define MAX_ROPE_SEGMENTS 64
+
+class CRope : public CBaseEntity {
+public:
+	int		Save(CSave &save);
+	int		Restore(CRestore &restore);
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	void KeyValue(KeyValueData* pkvd);
+	void Spawn(void);
+	void Precache(void);
+
+	void EXPORT StartupThink(void);
+	void EXPORT RopeThink(void);
+
+	void CreateSegments();
+	void DestroySegments();
+
+	int FindClosestSegment(Vector& vecTo, float epsilon, int iMin, int iMax);
+
+	CRopeSegment*	m_pSegments[MAX_ROPE_SEGMENTS];
+
+	int				m_nSegments;
+	BOOL			m_fEnabled;
+
+	string_t	m_iszBodyModel;
+	string_t	m_iszEndingModel;
+
+	void ApplyFunctor(void(*functor)(CRopeSegment* pSegment), int startIndex, int endIndex);
+	void ApplyFunctor(void(*functor)(CRopeSegment* pSegment));
 
 	int j;
 	int m_iSegments;
@@ -52,32 +120,22 @@ public:
 	int m_yforce;
 	int m_xforce;
 	int m_loop = 0;
+	int m_disable = 0;
 
 	float m_ilightningfrequency;
 	float m_ibodysparkfrequency;
 	float m_isparkfrequency;
-
-	bool m_disable;
-	string_t m_BodyModel;
-	string_t m_EndingModel;
-	
-
-	BOOL m_iCount;
-	BOOL m_fRopeActive;
-	BOOL m_fRopeExtended;
-
-	CRope *pSegment[100];	//100 segments in limit (8-800ich; 16-1600ich; 24-2400ich;32-3200ich).
-	CRope *pNewSegment;
 };
+
 //LINK_ENTITY_TO_CLASS(env_electrified_wire, CRope);
-//LINK_ENTITY_TO_CLASS(env_rope, CRope);
+LINK_ENTITY_TO_CLASS(env_rope, CRope);
 
 TYPEDESCRIPTION	CRope::m_SaveData[] =
 {
 	DEFINE_FIELD(CRope, m_iSegments, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE(CRope, CBaseMonster);
+IMPLEMENT_SAVERESTORE(CRope, CBaseEntity);
 
 void CRope::KeyValue(KeyValueData *pkvd)
 {
@@ -88,12 +146,12 @@ void CRope::KeyValue(KeyValueData *pkvd)
 	}
 	if (FStrEq(pkvd->szKeyName, "bodymodel"))
 	{
-		m_BodyModel = ALLOC_STRING(pkvd->szValue);
+		m_iszBodyModel = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	if (FStrEq(pkvd->szKeyName, "endingmodel"))
 	{
-		m_EndingModel = ALLOC_STRING(pkvd->szValue);
+		m_iszEndingModel = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	if (FStrEq(pkvd->szKeyName, "disable"))
@@ -133,304 +191,187 @@ void CRope::KeyValue(KeyValueData *pkvd)
 	}
 	else
 	{
-		CBaseMonster::KeyValue(pkvd);
+		CBaseEntity::KeyValue(pkvd);
 	}
 }
 
-CRope *CRope::RopeCreate(int m_loop)
+void CRope::Spawn(void)
 {
-	// Lets make a new Rope
-	CRope *pRope = GetClassPtr((CRope *)NULL);
-	pRope->pev->classname = MAKE_STRING("segments");
-	pRope->m_loop = m_loop;
-	pRope->Spawn();
-	return pRope;
+	Precache();
+
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
+	pev->effects = 0;
+
+	for (int i = 0; i < MAX_ROPE_SEGMENTS; i++)
+		m_pSegments[i] = NULL;
+
+	SetThink(&CRope::StartupThink);
+	pev->nextthink = gpGlobals->time + 0.1;
 }
 
-void CRope::Spawn()
+void CRope::Precache(void)
 {
-	PRECACHE_MODEL("models/wire_blue8.mdl");
 
-	PRECACHE_SOUND("items/grab_rope.wav");
-	PRECACHE_SOUND("items/rope1.wav");
-	PRECACHE_SOUND("items/rope2.wav");
-	PRECACHE_SOUND("items/rope3.wav");
-
-	pev->solid = SOLID_TRIGGER;
-	pev->movetype = MOVETYPE_PUSH;
-	//	pev->movetype = MOVETYPE_FOLLOW;								//BUGBUG! MUST BE IT!!!
-	//	pev->aiment = g_engfuncs.pfnPEntityOfEntIndex( m_iSegments );	//BUGBUG! MUST BE SOME HERE...
-
-	//lower grav to make up for the engine not being able to
-	// calculate wind resistance.
-	pev->gravity = 0.5;
-
-	ALERT(at_console, "Set Segments %d\n", m_loop);
-	ALERT(at_console, "Set Model: %s\n", m_BodyModel);
-
-	SET_MODEL(ENT(pev),"models/rope16.mdl");
-
-	//if(!m_loop && !m_iSegments)
-		//SET_MODEL(ENT(pev),STRING(m_EndingModel));
-	//else
-	//	SET_MODEL(ENT(pev),STRING(m_BodyModel));
-
-	Vector vecDir = pev->velocity.Normalize();
-	UTIL_SetOrigin(this, pev->origin - vecDir * 12);
-	pev->angles = UTIL_VecToAngles(vecDir);
-	pev->velocity = Vector(0, 0, 0);
-	pev->avelocity.z = 0;
-	pev->angles.x = 180;
-	pev->angles.y = 180;
-	pev->angles.z = 90;
-
-	UTIL_SetSize(pev, Vector(-1, -1, -1), Vector(1, 1, 1));
-
-	pev->nextthink = gpGlobals->time + 0.001;
-	SetThink(&CRope::RopeThink);
-	SetTouch(&CRope::RopeTouch);
-}
-
-// Precache is used only to continue after a game has loaded.
-void CRope::Precache()
-{
 	PRECACHE_MODEL("models/rope16.mdl");
-	PRECACHE_MODEL( (char *)STRING(m_BodyModel) );
-	PRECACHE_MODEL( (char *)STRING(m_EndingModel) );
+	PRECACHE_MODEL("models/rope24.mdl");
+	PRECACHE_MODEL("models/rope32.mdl");
+
+	UTIL_PrecacheOther("rope_segment");
+}
+
+void CRope::StartupThink(void)
+{
+	pev->nextthink = gpGlobals->time + 0.1;
+
+	CreateSegments();
+
 	SetThink(&CRope::RopeThink);
-	Think();
 }
 
-int CRope::Classify(void)
+//===============================================
+// Use binary search for closest point.
+//===============================================
+int CRope::FindClosestSegment(Vector& vecTo, float epsilon, int iMin, int iMax)
 {
-	return  CLASS_NONE;
-}
-
-CBaseEntity *CRope::RopeTouchEnt(float *pflLength)
-{
-	TraceResult	tr;
-	float	length;
-
-	// trace once to hit architecture and see if the tongue needs to change position.
-	UTIL_TraceLine(pev->origin, pev->origin - Vector(0, 0, 2048), ignore_monsters, ENT(pev), &tr);
-	length = fabs(pev->origin.z - tr.vecEndPos.z);
-	if (pflLength)
+	if (iMax < iMin)
+		return -1;
+	else
 	{
-		*pflLength = length;
-	}
+		int middle = iMin + ((iMax - iMin) / 2);
 
-	Vector delta = Vector(5, 5, 0);
-	Vector mins = pev->origin - delta;
-	Vector maxs = pev->origin + delta;
-	maxs.z = pev->origin.z;
-	mins.z -= length;
-
-	int count = UTIL_EntitiesInBox(pList, 10, mins, maxs, (FL_CLIENT | FL_MONSTER));
-	if (count)
-	{
-		for (int i = 0; i < count; i++)
+		if (vecTo.z >(m_pSegments[middle]->pev->origin.z + epsilon))
 		{
-			// only clients and monsters
-			if (pList[i] != this && IRelationship(pList[i]) > R_NO && pList[i]->pev->deadflag == DEAD_NO)
-			{
-				return pList[i];
-			}
+			return FindClosestSegment(vecTo, epsilon, iMin, middle - 1); // Higher ropes are at vector head.
+		}
+		else if (vecTo.z < (m_pSegments[middle]->pev->origin.z - epsilon))
+		{
+			return FindClosestSegment(vecTo, epsilon, middle + 1, iMax); // Lower ropes are at vector tail.
+		}
+		else
+		{
+			return middle;
 		}
 	}
+}
 
-	return NULL;
+static void Functor_SetSegmentFxGlow(CRopeSegment* pSegment)
+{
+	pSegment->pev->renderfx = kRenderFxGlowShell;
+}
+
+static void Functor_SetSegmentFxNormal(CRopeSegment* pSegment)
+{
+	pSegment->pev->renderfx = kRenderFxNone;
 }
 
 void CRope::RopeThink(void)
 {
-	if (!m_fRopeActive)
-	{
-		CBaseEntity *pTouchEnt;
-		float flLength;
-
-		pTouchEnt = RopeTouchEnt(&flLength);
-		for (int i = 1; i < m_iSegments; i++) {
-			Vector vecSrc;
-			Vector vecDir = pev->velocity.Normalize();
-			pSegment[j] = CRope::RopeCreate(i);
-			if (!m_iCount)
-			{
-				GetAttachment(0, vecSrc, vecDir);
-			} else {
-				j = j - 1;
-				pSegment[j]->GetAttachment(0, vecSrc, vecDir);
-				j = j + 1;
-			}
-
-			//set it's angle and velocity and stuff
-			pSegment[j]->pev->origin = vecSrc;
-			pSegment[j]->pev->angles = UTIL_VecToAngles(vecDir);
-			pSegment[j]->pev->angles.x = 180;
-			pSegment[j]->pev->angles.y = 180;
-			pSegment[j]->pev->angles.z = 90;
-			pSegment[j]->pev->velocity = Vector(0, 0, 0);
-			pSegment[j]->pev->speed = 0;
-			pSegment[j]->pev->owner = edict();
-
-			UTIL_SetSize(pSegment[j]->pev, Vector(-1, -1, -1), Vector(1, 1, 1));
-
-			m_iCount = TRUE;
-			j++;
-		}
-
-		m_fRopeActive = TRUE;
-	}
-
-	if (m_fRopeExtended)
-	{
-		ALERT(at_console, "Segment reached VOID, removed\n");
-
-		SetThink(&CRope::SUB_Remove);
-
-		m_fRopeExtended = FALSE;
-	}
-
-	SetNextThink(1.0);
-}
-
-void CRope::RopePendulum(int)
-{
-	return;
-}
-
-void CRope::SegmentThink(void)
-{
-	ALERT(at_console, "SEGMENT THINKS\n");
-	SetThink(NULL);
-
-	switch (RANDOM_LONG(0, 2))
-	{
-		case 0:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "items/rope1.wav", 1, ATTN_NORM);	break;
-		case 1:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "items/rope2.wav", 1, ATTN_NORM);	break;
-		case 2:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "items/rope3.wav", 1, ATTN_NORM);	break;
-	}
-
-	edict_t* pEntFind;
-	pEntFind = FIND_ENTITY_BY_CLASSNAME(NULL, "segments");
-
-	CBaseEntity *pEnt = Instance(pEntFind);
-
-	pEnt->pev->angles.x = RANDOM_LONG(178, 180);
-	pEnt->pev->angles.y = RANDOM_LONG(178, 180);
-	pEnt->pev->angles.z = RANDOM_LONG(88, 91);
-
-	// set destdelta to the vector needed to move
-	Vector vecDestDelta = m_end - pEnt->pev->angles;
-
-	pEnt->pev->avelocity = vecDestDelta;
-	pEnt->pev->angles = UTIL_VecToAngles(pev->velocity);
-	pEnt->pev->nextthink = pEnt->pev->ltime + 1;
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-void CRope::RopeTouch(CBaseEntity *pOther)
-{
-	SetThink(NULL);
-
-	if (pOther->IsPlayer())
-	{
-
-		//	ALERT(at_console, "TOUCH\n");
-
-		CBasePlayer *pPlayer = (CBasePlayer *)pOther;
-
-		Vector vecSrc = pPlayer->pev->origin;
-		Vector vecAiming = gpGlobals->v_forward;
-		Vector vecTarget = gpGlobals->v_forward;
-		Vector vecDir;
-
-		if ((pPlayer->pev->button & IN_JUMP))
-		{
-			//Traceline does to... We use it to find where to jump at.	
-			TraceResult tr;
-			UTIL_TraceLine(vecSrc, vecSrc + vecDir, ignore_monsters, ENT(pev), &tr);
-
-			float flSpeed = pPlayer->pev->velocity.Length();
-
-			vecDir = tr.vecEndPos - pPlayer->pev->origin;
-			vecTarget = vecDir;
-			pPlayer->pev->velocity = (pPlayer->pev->velocity * 1 + vecTarget * (flSpeed * 0.2 + 400)).Normalize() * 350;
-			pPlayer->pev->movetype = MOVETYPE_WALK;
-			pPlayer->pev->gravity = 1;
-
-			return;
-		}
-		else 	if ((pPlayer->pev->button & IN_FORWARD))
-		{
-			//Traceline does to... We use it to find where to jump at.	
-			TraceResult tr;
-			UTIL_TraceLine(pPlayer->pev->origin, pPlayer->pev->origin + vecAiming, ignore_monsters, ENT(pev), &tr);
-
-			float flSpeed = pPlayer->pev->velocity.Length();
-
-			vecDir = tr.vecEndPos - pPlayer->pev->origin;
-			vecTarget = vecDir;
-			pPlayer->pev->velocity = (pPlayer->pev->velocity * 0.2 + vecTarget * (flSpeed * 0.2 + 400)).Normalize() * 350;
-			pPlayer->pev->velocity.x = 0;
-			pPlayer->pev->velocity.y = 0;
-			pPlayer->pev->movetype = MOVETYPE_WALK;
-			pPlayer->pev->gravity = 0;
-
-			return;
-		}
-		else	if ((pPlayer->pev->button & IN_BACK))
-		{
-			//Traceline does to... We use it to find where to jump at.	
-			TraceResult tr;
-			UTIL_TraceLine(pPlayer->pev->origin, pPlayer->pev->origin + vecAiming, ignore_monsters, ENT(pev), &tr);
-
-			float flSpeed = pPlayer->pev->velocity.Length();
-
-			vecDir = tr.vecEndPos - pPlayer->pev->origin;
-			vecTarget = vecDir;
-			pPlayer->pev->velocity = (pPlayer->pev->velocity * 0.2 + vecTarget * (flSpeed * 0.2 + 400)).Normalize() * -350;
-			pPlayer->pev->velocity.x = 0;
-			pPlayer->pev->velocity.y = 0;
-			pPlayer->pev->movetype = MOVETYPE_WALK;
-			pPlayer->pev->gravity = 0;
-
-			return;
-		}
-
-
-		Vector m_vPlayerHangOrigin;
-		m_vPlayerHangOrigin = pPlayer->pev->origin;
-
-		if (!pPlayer->pev->button) // Passive or undone keys, must be hang.
-		{
-			//	   ALERT(at_console, "HANG\n");
-
-			//	   m_vPlayerHangOrigin = pPlayer->pev->origin;
-
-			//Stop the player from moving so he can hang.
-			pPlayer->pev->origin = m_vPlayerHangOrigin;
-			pPlayer->pev->velocity = Vector(0, 0, 0);
-			pPlayer->pev->gravity = 0;
-			pPlayer->pev->speed = 0;
-			int flSpeed = 0;
-
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "items/grab_rope.wav", 1, ATTN_NORM);
-
-		}
-	}
-	//	SetNextThink(0.5);
-
 	pev->nextthink = gpGlobals->time + 0.1;
-	SetThink(&CRope::SegmentThink);
+
+	CBaseEntity* pEntity = UTIL_PlayerByIndex(1);
+	if (pEntity)
+	{
+		if ((pEntity->pev->origin - pev->origin).Length() > 384)
+			return;
+
+		ApplyFunctor(Functor_SetSegmentFxNormal);
+
+		int index = FindClosestSegment(((CBasePlayer*)pEntity)->GetGunPosition(), 16, 0, m_nSegments - 1);
+		if (index >= 0 && index < m_nSegments)
+		{
+			CRopeSegment* pClosestSegment = m_pSegments[index];
+
+			if (pClosestSegment)
+			{
+				pClosestSegment->SetTouch(&CRopeSegment::SegmentTouch);
+				pClosestSegment->pev->renderfx = kRenderFxGlowShell;
+				pClosestSegment->pev->rendercolor = Vector(255, 0, 0);
+				ALERT(at_console, "Rope joint closest is %d at %f\n", index, pClosestSegment->pev->origin.z);
+			}
+		}
+	}
+}
+
+//===============================================
+// Create all rope segments.
+//===============================================
+void CRope::CreateSegments()
+{
+	CRopeSegment* pRopeSegment = NULL;
+	Vector down = Vector(0, 0, -1);
+	Vector angles = Vector(0, 0, -90);
+
+	Vector joint;
+
+	joint = pev->origin + (down * 16);
+
+	m_pSegments[0] = (CRopeSegment*)CBaseEntity::Create(
+		"rope_segment",
+		joint,
+		angles);
+
+	m_pSegments[0]->m_vecJointPos = joint;
+
+	m_pSegments[0]->m_pPrev = NULL;
+
+	int i;
+	for (i = 1; i < m_nSegments; i++)
+	{
+		joint = pev->origin + (down * 16 * i);
+
+		m_pSegments[i] = (CRopeSegment*)CBaseEntity::Create("rope_segment", joint, angles);
+
+		m_pSegments[i]->m_vecJointPos = joint;
+
+		m_pSegments[i - 1]->m_pNext = m_pSegments[i];
+		m_pSegments[i]->m_pPrev = m_pSegments[i - 1];
+		m_pSegments[i]->m_pNext = NULL;
+	}
+}
+
+//===============================================
+// Destroy all rope segments
+//===============================================
+void CRope::DestroySegments(void)
+{
+	int i;
+	for (i = 0; i < m_nSegments; i++)
+	{
+		if (m_pSegments[i])
+		{
+			UTIL_Remove(m_pSegments[i]);
+			m_pSegments[i] = NULL;
+		}
+	}
+}
+
+//===============================================
+// Apply a functor to a range of segments.
+//===============================================
+void CRope::ApplyFunctor(void(*functor)(CRopeSegment* pSegment), int startIndex, int endIndex)
+{
+	// No functor? Return.
+	if (!functor)
+		return;
+
+	// To pass -1 as value for endindex means to apply the functor to all segments.
+	int endindex = (endIndex != -1) ? endIndex : (m_nSegments - 1);
+
+	// Apply functor to all segments.
+	int i;
+	for (i = 0; i <= endindex; i++)
+	{
+		// Apply functor.
+		if (m_pSegments[i])
+			functor(m_pSegments[i]);
+	}
+}
+
+//===============================================
+// Apply a functor to all segments.
+//===============================================
+void CRope::ApplyFunctor(void(*functor)(CRopeSegment* pSegment))
+{
+	ApplyFunctor(functor, 0, -1);
 }

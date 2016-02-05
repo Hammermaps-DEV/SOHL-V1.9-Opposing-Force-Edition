@@ -1470,6 +1470,7 @@ int V_FindViewModelByWeaponModel(int weaponindex)
 		{ "models/p_pipe_wrench.mdl",	"models/v_pipe_wrench.mdl"      },
 		{ "models/p_knife.mdl",			"models/v_knife.mdl"			},
 		{ "models/p_bgrap.mdl",			"models/v_bgrap.mdl"			},
+		{ "models/p_shock.mdl",			"models/v_shock.mdl"			},
 		{ "models/p_egon.mdl",			"models/v_egon.mdl"				},
 		{ "models/p_gauss.mdl",			"models/v_gauss.mdl"			},
 		{ "models/p_9mmhandgun.mdl",	"models/v_9mmhandgun.mdl"		},
@@ -1483,9 +1484,8 @@ int V_FindViewModelByWeaponModel(int weaponindex)
 		{ "models/p_tripmine.mdl",		"models/v_tripmine.mdl"			},
 		{ "models/p_satchel_radio.mdl",	"models/v_satchel_radio.mdl"	},
 		{ "models/p_satchel.mdl",		"models/v_satchel.mdl"			},
-
-		//SOHL - Opposing-Force
 		{ "models/p_saw.mdl",			"models/v_saw.mdl"				},
+		{ "models/p_desert_eagle.mdl",	"models/v_desert_eagle.mdl"     },
 
 		{ NULL, 				NULL 				} 
 	};

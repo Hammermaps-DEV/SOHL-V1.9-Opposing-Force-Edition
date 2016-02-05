@@ -15,7 +15,7 @@
 //=========================================================
 // Weapon: Glock 17 * http://half-life.wikia.com/wiki/Glock_17
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 23.01.2016
+// Version: 1.0 / Build: 00002 / Date: 05.02.2016
 //=========================================================
 
 #include "extdll.h"
@@ -36,9 +36,8 @@ LINK_ENTITY_TO_CLASS( weapon_9mmhandgun, CGlock );
 //=========================================================
 // Spawn Glock 17
 //=========================================================
-void CGlock::Spawn( ) {
+void CGlock::Spawn(void) {
 	Precache();
-	m_iId = WEAPON_GLOCK;
 
 	SET_MODEL(ENT(pev), "models/w_9mmhandgun.mdl");
 	m_iDefaultAmmo = GLOCK_DEFAULT_GIVE;
@@ -99,49 +98,49 @@ void CGlock::SecondaryAttack( void ) {
 // GlockFire
 //=========================================================
 void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim) {
-	//don't fire underwater
-	if (m_iClip && m_pPlayer->pev->waterlevel != 3) {
-		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
-		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
-		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
-
-		m_iClip--;
-
-		Vector vecSrc = m_pPlayer->GetGunPosition();
-		Vector vecAiming;
-
-		// player "shoot" animation
-		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
-
-		if (fUseAutoAim) {
-			vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
-		} else {
-			vecAiming = gpGlobals->v_forward;
+	if (m_iClip <= 0) {
+		if (m_fFireOnEmpty) {
+			PlayEmptySound();
+			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
 		}
 
-		Vector vecDir;
-		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, Vector(flSpread, flSpread, flSpread), 8192, BULLET_PLAYER_9MM, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
-
-		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireGlock, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, m_iClip, 0);
-
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-
-		if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
-			// HEV suit - indicate out of ammo condition
-			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
-		}
+		return;
 	}
-	else {
-		PlayEmptySound(); Reload();
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7;
+
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
+	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
+	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
+	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
+
+	m_iClip--;
+	
+	Vector vecSrc = m_pPlayer->GetGunPosition();
+	Vector vecAiming;
+	
+	if (fUseAutoAim) {
+		vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
+	} else {
+		vecAiming = gpGlobals->v_forward;
+	}
+
+	Vector vecDir;
+	vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, Vector(flSpread, flSpread, flSpread), 8192, BULLET_PLAYER_9MM, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
+
+	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireGlock, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, m_iClip ? 0 : 1, 0);
+
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
+	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+
+	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
+		// HEV suit - indicate out of ammo condition
+		m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 	}
 }
 
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CGlock::Deploy() {
+BOOL CGlock::Deploy(void) {
 	return DefaultDeploy("models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", (int)GLOCK_DRAW::sequence,
 		"onehanded", CalculateWeaponTime((int)GLOCK_DRAW::frames, (int)GLOCK_DRAW::fps));
 }
@@ -149,7 +148,7 @@ BOOL CGlock::Deploy() {
 //=========================================================
 // Holster
 //=========================================================
-void CGlock::Holster() {
+void CGlock::Holster(void) {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)GLOCK_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
@@ -179,6 +178,7 @@ void CGlock::Reload(void) {
 // WeaponIdle Animation
 //=========================================================
 void CGlock::WeaponIdle( void ) {
+	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
 			m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
 		return;

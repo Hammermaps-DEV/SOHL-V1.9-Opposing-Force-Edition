@@ -6295,6 +6295,18 @@
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_shotgun.mdl") = weapon_shotgun : "Shotgun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_sqknest.mdl") = weapon_snark : "Squeak Grenade" []
 @PointClass base(Weapon, Targetx, RenderFields) size(-16 -16 -5, 16 16 27) = weapon_tripmine : "Tripmine Ammo" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_desert_eagle.mdl") = weapon_eagle : "Desert Eagle" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_bgrap.mdl") = weapon_grapple : "Barnacle Grapple" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_knife.mdl") = weapon_knife : "Knife" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_saw.mdl") = weapon_m249 : "M249 SAW" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_pipe_wrench.mdl") = weapon_pipewrench : "Pipe Wrench" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_shock.mdl") = weapon_shockrifle : "Shock Roach" []
 
 @PointClass base(Weapon, Targetx, RenderFields) = world_items : "World Items" 
 [

@@ -24,7 +24,7 @@
 #define	KNIFE_BODYHIT_VOLUME 128
 #define	KNIFE_WALLHIT_VOLUME 512
 
-#define	KNIFE_ATTACK_BOOST   50
+#define	KNIFE_ATTACK_BOOST   60
 
 //Model Animations | Sequence-ID | Frames | FPS
 enum class KNIFE_IDLE1		 { sequence = 0,  frames = 36, fps = 13 };

@@ -265,6 +265,7 @@ void CRpg::ShutdownScreen ( void ) {
 		m_pSpot = NULL;
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_off.wav", 1, ATTN_NORM);
 	}
+
 	if(m_pMirSpot) {
 		m_pMirSpot->Killed( NULL, GIB_NEVER );
 		m_pMirSpot = NULL;
