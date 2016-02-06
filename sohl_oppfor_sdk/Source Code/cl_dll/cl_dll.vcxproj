@@ -65,7 +65,6 @@
     <ClInclude Include="wrect.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\interface.cpp" />
     <ClCompile Include="..\game_shared\vgui_checkbutton2.cpp" />
     <ClCompile Include="..\game_shared\vgui_grid.cpp" />
     <ClCompile Include="..\game_shared\vgui_helpers.cpp" />
@@ -79,6 +78,7 @@
     <ClCompile Include="..\pm_shared\pm_debug.c" />
     <ClCompile Include="..\pm_shared\pm_math.c" />
     <ClCompile Include="..\pm_shared\pm_shared.c" />
+    <ClCompile Include="..\public\interface.cpp" />
     <ClCompile Include="ammo.cpp" />
     <ClCompile Include="ammohistory.cpp" />
     <ClCompile Include="ammo_secondary.cpp" />
@@ -208,7 +208,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\cl_dll;..\cl_dll\particles;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\public;..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\cl_dll;..\cl_dll\particles;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>

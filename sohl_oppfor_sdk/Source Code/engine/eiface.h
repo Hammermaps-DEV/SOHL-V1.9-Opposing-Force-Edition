@@ -15,6 +15,8 @@
 #ifndef EIFACE_H
 #define EIFACE_H
 
+#include "archtypes.h"     // DAL
+
 #ifdef HLDEMO_BUILD
 #define INTERFACE_VERSION       001
 #else  // !HLDEMO_BUILD, i.e., regular version of HL
@@ -24,6 +26,7 @@
 #include <stdio.h>
 #include "custom.h"
 #include "cvardef.h"
+#include "Sequence.h"
 //
 // Defines entity interface between engine and DLLs.
 // This header file included by engine files and DLL files.
@@ -33,11 +36,13 @@
 // This is conveniently done for them in extdll.h
 //
 
+/*
 #ifdef _WIN32
 #define DLLEXPORT __stdcall
 #else
-#define DLLEXPORT /* */
+#define DLLEXPORT  __attribute__ ((visibility("default")))
 #endif
+*/
 
 typedef enum
 	{
@@ -64,9 +69,10 @@ typedef enum
 // For integrity checking of content on clients
 typedef enum
 {
-	force_exactfile,			// File on client must exactly match server's file
-	force_model_samebounds,		// For model files only, the geometry must fit in the same bbox
-	force_model_specifybounds,	// For model files only, the geometry must fit in the specified bbox
+	force_exactfile,					// File on client must exactly match server's file
+	force_model_samebounds,				// For model files only, the geometry must fit in the same bbox
+	force_model_specifybounds,			// For model files only, the geometry must fit in the specified bbox
+	force_model_specifybounds_if_avail,	// For Steam model files only, the geometry must fit in the specified bbox (if the file is available)
 } FORCE_TYPE;
 
 // Returned by TraceLine
@@ -99,6 +105,7 @@ typedef struct
 } CDStatus;
 
 #include "../common/crc.h"
+
 
 // Engine hands this to DLLs for functionality callbacks
 typedef struct enginefuncs_s
@@ -165,8 +172,8 @@ typedef struct enginefuncs_s
 	void		(*pfnCVarSetFloat)			(const char *szVarName, float flValue);
 	void		(*pfnCVarSetString)			(const char *szVarName, const char *szValue);
 	void		(*pfnAlertMessage)			(ALERT_TYPE atype, char *szFmt, ...);
-	void		(*pfnEngineFprintf)			(FILE *pfile, char *szFmt, ...);
-	void*		(*pfnPvAllocEntPrivateData)	(edict_t *pEdict, long cb);
+	void		(*pfnEngineFprintf)			(void *pfile, char *szFmt, ...);
+	void*		(*pfnPvAllocEntPrivateData)	(edict_t *pEdict, int32 cb);
 	void*		(*pfnPvEntPrivateData)		(edict_t *pEdict);
 	void		(*pfnFreeEntPrivateData)	(edict_t *pEdict);
 	const char*	(*pfnSzFromIndex)			(int iString);
@@ -181,8 +188,8 @@ typedef struct enginefuncs_s
 	int			(*pfnRegUserMsg)			(const char *pszName, int iSize);
 	void		(*pfnAnimationAutomove)		(const edict_t* pEdict, float flTime);
 	void		(*pfnGetBonePosition)		(const edict_t* pEdict, int iBone, float *rgflOrigin, float *rgflAngles );
-	unsigned long (*pfnFunctionFromName)	( const char *pName );
-	const char *(*pfnNameForFunction)		( unsigned long function );
+	uint32 (*pfnFunctionFromName)	( const char *pName );
+	const char *(*pfnNameForFunction)		( uint32 function );
 	void		(*pfnClientPrintf)			( edict_t* pEdict, PRINT_TYPE ptype, const char *szMsg ); // JOHN: engine callbacks so game DLL can print messages to individual clients
 	void		(*pfnServerPrint)			( const char *szMsg );
 	const char *(*pfnCmd_Args)				( void );		// these 3 added 
@@ -193,7 +200,7 @@ typedef struct enginefuncs_s
 	void        (*pfnCRC32_ProcessBuffer)   (CRC32_t *pulCRC, void *p, int len);
 	void		(*pfnCRC32_ProcessByte)     (CRC32_t *pulCRC, unsigned char ch);
 	CRC32_t		(*pfnCRC32_Final)			(CRC32_t pulCRC);
-	long		(*pfnRandomLong)			(long  lLow,  long  lHigh);
+	int32		(*pfnRandomLong)			(int32  lLow,  int32  lHigh);
 	float		(*pfnRandomFloat)			(float flLow, float flHigh);
 	void		(*pfnSetView)				(const edict_t *pClient, const edict_t *pViewent );
 	float		(*pfnTime)					( void );
@@ -264,7 +271,38 @@ typedef struct enginefuncs_s
 	qboolean	(*pfnVoice_SetClientListening)(int iReceiver, int iSender, qboolean bListen);
 
 	const char *(*pfnGetPlayerAuthId)		( edict_t *e );
+
+	// PSV: Added for CZ training map
+//	const char *(*pfnKeyNameForBinding)		( const char* pBinding );
+	
+	sequenceEntry_s*	(*pfnSequenceGet)			( const char* fileName, const char* entryName );
+	sentenceEntry_s*	(*pfnSequencePickSentence)	( const char* groupName, int pickMethod, int *picked );
+
+	// LH: Give access to filesize via filesystem
+	int			(*pfnGetFileSize)			( char *filename );
+
+	unsigned int (*pfnGetApproxWavePlayLen) (const char *filepath);
+	// MDC: Added for CZ career-mode
+	int			(*pfnIsCareerMatch)			( void );
+
+	// BGC: return the number of characters of the localized string referenced by using "label"
+	int			(*pfnGetLocalizedStringLength)(const char *label);
+
+	// BGC: added to facilitate persistent storage of tutor message decay values for
+	// different career game profiles.  Also needs to persist regardless of mp.dll being
+	// destroyed and recreated.
+	void (*pfnRegisterTutorMessageShown)(int mid);
+	int (*pfnGetTimesTutorMessageShown)(int mid);
+	void (*ProcessTutorMessageDecayBuffer)(int *buffer, int bufferLength);
+	void (*ConstructTutorMessageDecayBuffer)(int *buffer, int bufferLength);
+	void (*ResetTutorMessageDecayData)( void );
+
+	void (*pfnQueryClientCvarValue)( const edict_t *player, const char *cvarName );
+	void (*pfnQueryClientCvarValue2)( const edict_t *player, const char *cvarName, int requestID );
+	int (*pfnCheckParm)( const char *pchCmdLineToken, char **ppnext );
 } enginefuncs_t;
+
+
 // ONLY ADD NEW FUNCTIONS TO THE END OF THIS STRUCT.  INTERFACE VERSION IS FROZEN AT 138
 
 // Passed to pfnKeyValue
@@ -273,8 +311,9 @@ typedef struct KeyValueData_s
 	char	*szClassName;	// in: entity classname
 	char	*szKeyName;		// in: name of key
 	char	*szValue;		// in: value of key
-	long	fHandled;		// out: DLL sets to true if key-value pair was understood
+	int32	fHandled;		// out: DLL sets to true if key-value pair was understood
 } KeyValueData;
+
 
 typedef struct
 {
@@ -359,7 +398,7 @@ typedef enum _fieldtypes
 	FIELD_TYPECOUNT,		// MUST BE LAST
 } FIELDTYPE;
 
-#ifndef offsetof
+#if !defined(offsetof)  && !defined(GNUC)
 #define offsetof(s,m)	(size_t)&(((s *)0)->m)
 #endif
 
@@ -483,6 +522,8 @@ typedef struct
 	void			(*pfnOnFreeEntPrivateData)(edict_t *pEnt);
 	void			(*pfnGameShutdown)(void);
 	int				(*pfnShouldCollide)( edict_t *pentTouched, edict_t *pentOther );
+	void			(*pfnCvarValue)( const edict_t *pEnt, const char *value );
+	void			(*pfnCvarValue2)( const edict_t *pEnt, int requestID, const char *cvarName, const char *value );
 } NEW_DLL_FUNCTIONS;
 typedef int	(*NEW_DLL_FUNCTIONS_FN)( NEW_DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion );
 

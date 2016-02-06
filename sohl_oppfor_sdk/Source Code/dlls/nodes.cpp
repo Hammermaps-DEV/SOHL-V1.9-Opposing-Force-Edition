@@ -16,8 +16,6 @@
 // nodes.cpp - AI node tree stuff.
 //=========================================================
 
-#include <sys/stat.h>
-#include <sys/types.h>
 
 #include	"extdll.h"
 #include	"util.h"
@@ -26,6 +24,13 @@
 #include	"nodes.h"
 #include	"animation.h"
 #include	"doors.h"
+
+#if !defined ( _WIN32 )
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h> // mkdir
+#endif
 
 #define	HULL_STEP_SIZE 16// how far the test hull moves on each step
 #define	NODE_HEIGHT	8	// how high to lift nodes off the ground after we drop them all (make stair/ramp mapping easier)

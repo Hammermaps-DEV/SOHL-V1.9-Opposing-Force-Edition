@@ -2259,7 +2259,11 @@ static int gSizes[FIELD_TYPECOUNT] =
 	sizeof(float)*3,	// FIELD_POSITION_VECTOR
 	sizeof(int *),		// FIELD_POINTER
 	sizeof(int),		// FIELD_INTEGER
+#ifdef GNUC
+	sizeof(int *)*2,		// FIELD_FUNCTION
+#else
 	sizeof(int *),		// FIELD_FUNCTION
+#endif
 	sizeof(int),		// FIELD_BOOLEAN
 	sizeof(short),		// FIELD_SHORT
 	sizeof(char),		// FIELD_CHARACTER
@@ -2563,15 +2567,15 @@ void CSave :: WritePositionVector( const char *pname, const float *value, int co
 }
 
 
-void CSave :: WriteFunction( const char* cname, const char *pname, const int *data, int count )
+void CSave::WriteFunction(const char* cname, const char *pname, const int *data, int count)
 {
 	const char *functionName;
 
-	functionName = NAME_FOR_FUNCTION( *data );
-	if ( functionName )
-		BufferField( pname, strlen(functionName) + 1, functionName );
+	functionName = NAME_FOR_FUNCTION(*data);
+	if (functionName)
+		BufferField(pname, strlen(functionName) + 1, functionName);
 	else
-		ALERT( at_error, "Member \"%s\" of \"%s\" contains an invalid function pointer %p!", pname, cname, *data );
+		ALERT(at_error, "Member \"%s\" of \"%s\" contains an invalid function pointer %p!", pname, cname, *data);
 }
 
 

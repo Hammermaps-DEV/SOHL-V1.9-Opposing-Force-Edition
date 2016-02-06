@@ -20,6 +20,7 @@
 
 #include <string.h>
 
+#include "archtypes.h"
 #include "activity.h"
 #include "enginecallback.h"
 
@@ -43,8 +44,8 @@ inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, ent
 extern globalvars_t				*gpGlobals;
 
 // Use this instead of ALLOC_STRING on constant strings
-#define STRING(offset)		(const char *)(gpGlobals->pStringBase + (int)offset)
-#define MAKE_STRING(str)	((int)str - (int)STRING(0))
+#define STRING(offset)		((const char *)(gpGlobals->pStringBase + (unsigned int)(offset)))
+#define MAKE_STRING(str)	((int)(str) - (int)(STRING(0)))
 
 inline edict_t *FIND_ENTITY_BY_CLASSNAME(edict_t *entStart, const char *pszName) 
 {
@@ -94,19 +95,23 @@ typedef int BOOL;
 #define M_PI			3.14159265358979323846
 
 // Keeps clutter down a bit, when declaring external entity/global method prototypes
-#define DECLARE_GLOBAL_METHOD(MethodName)  extern void DLLEXPORT MethodName( void )
-#define GLOBAL_METHOD(funcname)					void DLLEXPORT funcname(void)
+#define DECLARE_GLOBAL_METHOD(MethodName)  extern void UTIL_DLLEXPORT MethodName( void )
+#define GLOBAL_METHOD(funcname)					void UTIL_DLLEXPORT funcname(void)
+
+#ifndef UTIL_DLLEXPORT
+#ifdef _WIN32
+#define UTIL_DLLEXPORT _declspec( dllexport )
+#else
+#define UTIL_DLLEXPORT __attribute__ ((visibility("default")))
+#endif
+#endif
 
 // This is the glue that hooks .MAP entity class names to our CPP classes
 // The _declspec forces them to be exported by name so we can do a lookup with GetProcAddress()
 // The function is used to intialize / allocate the object for the entity
-#ifdef _WIN32
 #define LINK_ENTITY_TO_CLASS(mapClassName,DLLClassName) \
-	extern "C" _declspec( dllexport ) void mapClassName( entvars_t *pev ); \
+	extern "C" UTIL_DLLEXPORT void mapClassName( entvars_t *pev ); \
 	void mapClassName( entvars_t *pev ) { GetClassPtr( (DLLClassName *)pev ); }
-#else
-#define LINK_ENTITY_TO_CLASS(mapClassName,DLLClassName) extern "C" void mapClassName( entvars_t *pev ); void mapClassName( entvars_t *pev ) { GetClassPtr( (DLLClassName *)pev ); }
-#endif
 
 
 //
@@ -448,7 +453,7 @@ extern DLL_GLOBAL int			g_Language;
 #define LFO_RANDOM			3
 
 // func_rotating
-#define SF_BRUSH_ROTATE_Y_AXIS		0 //!?! (LRC)
+#define SF_BRUSH_ROTATE_Y_AXIS		0
 #define SF_BRUSH_ROTATE_INSTANT		1
 #define SF_BRUSH_ROTATE_BACKWARDS	2
 #define SF_BRUSH_ROTATE_Z_AXIS		4

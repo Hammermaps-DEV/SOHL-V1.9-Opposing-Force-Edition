@@ -338,9 +338,6 @@
     <ClCompile Include="vgui_SpectatorPanel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\interface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\game_shared\vgui_slider2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -402,6 +399,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="particles\grass_particle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\public\interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

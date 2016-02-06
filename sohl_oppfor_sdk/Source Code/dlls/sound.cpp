@@ -16,7 +16,6 @@
 // sound.cpp 
 //=========================================================
 
-#include <ctype.h>
 
 #include "extdll.h"
 #include "util.h"
@@ -26,6 +25,10 @@
 #include "talkmonster.h"
 #include "gamerules.h"
 #include "locus.h"
+
+#if !defined ( _WIN32 )
+#include <ctype.h>
+#endif
 
 // ==================== GENERIC AMBIENT SOUND ======================================
 

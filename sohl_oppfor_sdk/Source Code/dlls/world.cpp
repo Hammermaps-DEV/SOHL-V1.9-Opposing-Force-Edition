@@ -20,7 +20,6 @@
 
 */
 
-#include "pm_shared.h"
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -34,6 +33,7 @@
 #include "weapons.h"
 #include "gamerules.h"
 #include "teamplay_gamerules.h"
+#include "pm_shared.h"
 #include "movewith.h" //LRC
 
 extern CGraph WorldGraph;
@@ -475,7 +475,6 @@ LINK_ENTITY_TO_CLASS( worldspawn, CWorld );
 #define SF_WORLD_DARK		0x0001		// Fade from black at startup
 #define SF_WORLD_TITLE		0x0002		// Display game title at startup
 #define SF_WORLD_FORCETEAM	0x0004		// Force teams
-//#define SF_WORLD_STARTSUIT	0x0008		// LRC- Start this level with an HEV suit!
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
 float g_flWeaponCheat; 

@@ -18,6 +18,10 @@
 #pragma once
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+	
 typedef struct con_nprint_s
 {
 	int		index;			// Row #
@@ -27,5 +31,8 @@ typedef struct con_nprint_s
 
 void Con_NPrintf( int idx, char *fmt, ... );
 void Con_NXPrintf( struct con_nprint_s *info, char *fmt, ... );
+#ifdef __cplusplus
+}
+#endif
 
 #endif

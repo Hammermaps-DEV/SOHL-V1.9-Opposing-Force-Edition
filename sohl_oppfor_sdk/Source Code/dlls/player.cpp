@@ -34,6 +34,7 @@
 #include "decals.h"
 #include "gamerules.h"
 #include "game.h"
+#include "pm_shared.h"
 #include "hltv.h"
 #include "effects.h" //LRC
 #include "movewith.h" //LRC
@@ -70,12 +71,6 @@ extern CGraph	WorldGraph;
 
 #define	FLASH_DRAIN_TIME	 1.2 //100 units/3 minutes
 #define	FLASH_CHARGE_TIME	 0.2 // 100 units/20 seconds  (seconds per unit)
-
-//#ifdef XENWARRIOR
-//  float g_fEnvFadeTime = 0;    // flashlight can't be used until this time expires.
-//							// this is just a big hack, doesn't work with saverestore, etc...
-//							// Doing it properly would just be effort.
-//#endif
 
 // Global Savedata for player
 TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
@@ -125,7 +120,7 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD( CBasePlayer, m_fInitHUD, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CBasePlayer, m_tbdPrev, FIELD_TIME ),
 
-	DEFINE_FIELD( CBasePlayer, m_pTank, FIELD_EHANDLE ), // NB: this points to a CFuncTank*Controls* now. --LRC
+	DEFINE_FIELD( CBasePlayer, m_pTank, FIELD_EHANDLE ),
 	DEFINE_FIELD( CBasePlayer, m_iHideHUD, FIELD_INTEGER ),
 	DEFINE_FIELD( CBasePlayer, m_iFOV, FIELD_INTEGER ),
 	DEFINE_FIELD( CBasePlayer, viewEntity, FIELD_STRING),
@@ -2908,7 +2903,7 @@ void CBasePlayer::Spawn( void )
 	m_flNextAttack	= UTIL_WeaponTimeBase();
 	StartSneaking();
 
-	m_iFlashBattery = 0; //discharge flashlight at start
+	m_iFlashBattery = 99;
 	m_flFlashLightTime = 1; // force first message
 
 // dont let uninitialized value here hurt the player
@@ -3016,7 +3011,7 @@ int CBasePlayer::Save( CSave &save )
 	if ( !CBaseMonster::Save(save) )
 		return 0;
 
-	return save.WriteFields( "cPLAYER", "PLAYER", this, m_playerSaveData, HL_ARRAYSIZE(m_playerSaveData) );
+	return save.WriteFields("cPLAYER", "PLAYER", this, m_playerSaveData, HL_ARRAYSIZE(m_playerSaveData));
 }
 
 
@@ -4199,7 +4194,10 @@ void CBasePlayer :: UpdateClientData( void )
 
 	if (pev->health != m_iClientHealth)
 	{
-		int iHealth = V_max( pev->health, 0 );  // make sure that no negative health values are sent
+		#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
+		int iHealth = clamp( pev->health, 0, 255 );  // make sure that no negative health values are sent
+		if ( pev->health > 0.0f && pev->health <= 1.0f )
+			iHealth = 1;
 
 		// send "health" update message
 		MESSAGE_BEGIN( MSG_ONE, gmsgHealth, NULL, pev );
@@ -4212,13 +4210,12 @@ void CBasePlayer :: UpdateClientData( void )
 
 	if (pev->armorvalue != m_iClientBattery)
 	{
+		m_iClientBattery = pev->armorvalue;
 		ASSERT( gmsgBattery > 0 );
 		// send "health" update message
 		MESSAGE_BEGIN( MSG_ONE, gmsgBattery, NULL, pev );
 			WRITE_SHORT( (int)pev->armorvalue);
 		MESSAGE_END();
-
-		m_iClientBattery = pev->armorvalue;
 	}
 
 	if (pev->dmg_take || pev->dmg_save || m_bitsHUDDamage != m_bitsDamageType)
@@ -4874,7 +4871,8 @@ void CBasePlayer::DropPlayerItem ( char *pszItemName )
 		// item we want to drop and hit a BREAK;  pWeapon is the item.
 		if ( pWeapon )
 		{
-			g_pGameRules->GetNextBestWeapon( this, pWeapon );
+			if ( !g_pGameRules->GetNextBestWeapon( this, pWeapon ) )
+				return; // can't drop the item they asked for, may be our last item or something we can't holster
 
 			UTIL_MakeVectors ( pev->angles );
 

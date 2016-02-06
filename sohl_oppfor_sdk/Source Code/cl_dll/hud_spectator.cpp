@@ -587,9 +587,6 @@ void CHudSpectator::DirectorMessage( int iSize, void *pbuf )
 							gViewPort->UpdateSpectatorPanel();
 							break;
 
-		case DRC_CMD_FADE:		
-							break;
-
 		case DRC_CMD_STUFFTEXT:
 							ClientCmd( READ_STRING() );
 							break;
