@@ -31,6 +31,7 @@
     <ClInclude Include="demo.h" />
     <ClInclude Include="eventscripts.h" />
     <ClInclude Include="ev_hldm.h" />
+    <ClInclude Include="exports.h" />
     <ClInclude Include="GameStudioModelRenderer.h" />
     <ClInclude Include="health.h" />
     <ClInclude Include="hud.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="StudioModelRenderer.h" />
     <ClInclude Include="studio_util.h" />
     <ClInclude Include="tf_defs.h" />
+    <ClInclude Include="tri.h" />
     <ClInclude Include="util_vector.h" />
     <ClInclude Include="vgui_ConsolePanel.h" />
     <ClInclude Include="vgui_ControlConfigPanel.h" />
@@ -208,7 +210,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\public;..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\cl_dll;..\cl_dll\particles;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external;..\public;..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\cl_dll;..\cl_dll\particles;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;WIN32;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -232,7 +234,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;wsock32.lib;opengl32.lib;glu32.lib;../utils/vgui/lib/vgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;wsock32.lib;opengl32.lib;glu32.lib;../utils/vgui/lib/vgui.lib;../external/lib/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\debug\client.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>

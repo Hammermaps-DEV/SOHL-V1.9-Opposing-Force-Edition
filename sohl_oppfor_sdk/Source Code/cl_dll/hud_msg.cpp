@@ -20,6 +20,7 @@
 #include "parsemsg.h"
 #include "r_efx.h"
 #include "rain.h"
+#include "particleman.h"
 
 //LRC - the fogging fog
 vec3_t FogColor;
@@ -30,6 +31,7 @@ int g_iFinalEndDist;   //for fading
 float g_fFadeDuration; //negative = fading out
 
 #define MAX_CLIENTS 32
+extern IParticleMan *g_pParticleMan;
 extern rain_properties Rain;
 
 /// USER-DEFINED SERVER MESSAGE HANDLERS
@@ -86,6 +88,9 @@ void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 			pList->p->InitHUDData();
 		pList = pList->pNext;
 	}
+
+	if (g_pParticleMan)
+		g_pParticleMan->ResetParticles();
 }
 
 //LRC

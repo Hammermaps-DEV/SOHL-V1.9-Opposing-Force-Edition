@@ -12,13 +12,12 @@
 #include <windows.h>
 #include <gl/gl.h>
 #include <gl/glaux.h>
-
-// Triangle rendering apis are in gEngfuncs.pTriAPI
-
 #include "const.h"
 #include "entity_state.h"
 #include "cl_entity.h"
 #include "triangleapi.h"
+#include "exports.h"
+#include "tri.h"
 #include "particlemgr.h"
 #include "rain.h" 
 #include "com_model.h"
@@ -329,9 +328,6 @@ void DrawFXObjects( void )
 	}
 }
 
-
-
-
 /*
 =================
 HUD_DrawNormalTriangles
@@ -339,7 +335,7 @@ HUD_DrawNormalTriangles
 Non-transparent triangles-- add them here
 =================
 */
-void DLLEXPORT HUD_DrawNormalTriangles( void )
+void CL_DLLEXPORT HUD_DrawNormalTriangles( void )
 {
 	gHUD.m_Spectator.DrawOverview();
 }
@@ -354,14 +350,11 @@ Render any triangles with transparent rendermode needs here
 extern ParticleSystemManager* g_pParticleSystems; // LRC
 class CException;
 
-void DLLEXPORT HUD_DrawTransparentTriangles( void )
+void CL_DLLEXPORT HUD_DrawTransparentTriangles( void )
 {
 	try {
 		pParticleManager->UpdateSystems();
-	}
-	catch (CException *e) {
-		e;
-		e = NULL;
+	} catch (CException *e) {
 		gEngfuncs.Con_Printf("There was a serious error within the particle engine. Particles will return on map change\n");
 		delete pParticleManager;
 		pParticleManager = NULL;
@@ -383,4 +376,7 @@ void DLLEXPORT HUD_DrawTransparentTriangles( void )
 	ProcessRain();
 	DrawRain();
 	DrawFXObjects();
+
+	if ( g_pParticleMan )
+		 g_pParticleMan->Update();
 }

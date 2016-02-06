@@ -171,6 +171,12 @@
     <ClInclude Include="..\engine\eiface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="exports.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tri.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vgui_TeamFortressViewport.cpp">
