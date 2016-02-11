@@ -68,12 +68,12 @@ void CRopeSegment::Spawn(void)
 
 	SetTouch(&CRopeSegment::Touch);
 	SetThink(&CRopeSegment::SegmentThink);
-	pev->nextthink = gpGlobals->time + 0.1f;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1f;
 }
 
 void CRopeSegment::SegmentThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1f;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1f;
 }
 
 void CRopeSegment::SegmentTouch(CBaseEntity* pOther)
@@ -207,7 +207,7 @@ void CRope::Spawn(void)
 		m_pSegments[i] = NULL;
 
 	SetThink(&CRope::StartupThink);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 }
 
 void CRope::Precache(void)
@@ -222,7 +222,7 @@ void CRope::Precache(void)
 
 void CRope::StartupThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 
 	CreateSegments();
 
@@ -267,7 +267,7 @@ static void Functor_SetSegmentFxNormal(CRopeSegment* pSegment)
 
 void CRope::RopeThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 
 	CBaseEntity* pEntity = UTIL_PlayerByIndex(1);
 	if (pEntity)

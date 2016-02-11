@@ -198,9 +198,9 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 	// if the player doesn't have the suit, or there is no juice left, make the deny noise
 	if ((m_iJuice <= 0) || (!(pPlayer->m_iHideHUD & ITEM_SUIT)))
 	{
-		if (m_flSoundTime <= gpGlobals->time)
+		if (m_flSoundTime <= UTIL_GlobalTimeBase())
 		{
-			m_flSoundTime = gpGlobals->time + 0.62;
+			m_flSoundTime = UTIL_GlobalTimeBase() + 0.62;
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshotno1.wav", 1.0, ATTN_NORM );
 		}
 
@@ -211,7 +211,7 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 	SetThink(&CWallHealth::Off);
 
 	// Time to recharge yet?
-	if (m_flNextCharge >= gpGlobals->time)
+	if (m_flNextCharge >= UTIL_GlobalTimeBase())
 		return;
 
 	// Play the on sound or the looping charging sound
@@ -219,10 +219,10 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 	{
 		m_iOn++;
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/medshot4.wav", 1.0, ATTN_NORM );
-		m_flSoundTime = 0.56 + gpGlobals->time;
+		m_flSoundTime = 0.56 + UTIL_GlobalTimeBase();
 	}
 
-	if ((m_iOn == 1) && (m_flSoundTime <= gpGlobals->time))
+	if ((m_iOn == 1) && (m_flSoundTime <= UTIL_GlobalTimeBase()))
 	{
 		m_iOn++;
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/medcharge4.wav", 1.0, ATTN_NORM );
@@ -235,7 +235,7 @@ void CWallHealth::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 	}
 
 	// govern the rate of charge
-	m_flNextCharge = gpGlobals->time + 0.1;
+	m_flNextCharge = UTIL_GlobalTimeBase() + 0.1;
 }
 
 void CWallHealth::Recharge(void)

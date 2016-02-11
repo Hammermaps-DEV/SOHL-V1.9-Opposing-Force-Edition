@@ -139,7 +139,7 @@ void CParticleEmitter::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 		else {
 			// increment the count just in case
 			iID = ++iParticleIDCount;
-			flTimeTurnedOn = gpGlobals->time;
+			flTimeTurnedOn = UTIL_GlobalTimeBase();
 
 			// tell everyone of our new ps
 			MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
@@ -224,7 +224,7 @@ bool CParticleEmitter::IsTriggered( CBaseEntity* ) {
 		return true;
 
 	// the time the system life + the time it was turned on is in the future
-	if(atof(sValue) + flTimeTurnedOn + 0.1 > gpGlobals->time)
+	if(atof(sValue) + flTimeTurnedOn + 0.1 > UTIL_GlobalTimeBase())
 		return true;
 
 	// not in the future so its dead

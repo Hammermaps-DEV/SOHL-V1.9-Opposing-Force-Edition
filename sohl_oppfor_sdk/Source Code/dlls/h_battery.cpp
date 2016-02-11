@@ -145,9 +145,9 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	// if the player doesn't have the suit, or there is no juice left, make the deny noise
 	if ((m_iJuice <= 0) || (!(pPlayer->m_iHideHUD & ITEM_SUIT)))
 	{
-		if (m_flSoundTime <= gpGlobals->time)
+		if (m_flSoundTime <= UTIL_GlobalTimeBase())
 		{
-			m_flSoundTime = gpGlobals->time + 0.62;
+			m_flSoundTime = UTIL_GlobalTimeBase() + 0.62;
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeno1.wav", 0.85, ATTN_NORM );
 		}
 		return;
@@ -157,7 +157,7 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	SetThink(&CRecharge::Off);
 
 	// Time to recharge yet?
-	if (m_flNextCharge >= gpGlobals->time)
+	if (m_flNextCharge >= UTIL_GlobalTimeBase())
 		return;
 
 	// Make sure that we have a caller
@@ -175,10 +175,10 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	{
 		m_iOn++;
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/suitchargeok1.wav", 0.85, ATTN_NORM );
-		m_flSoundTime = 0.56 + gpGlobals->time;
+		m_flSoundTime = 0.56 + UTIL_GlobalTimeBase();
 	}
 
-	if ((m_iOn == 1) && (m_flSoundTime <= gpGlobals->time))
+	if ((m_iOn == 1) && (m_flSoundTime <= UTIL_GlobalTimeBase()))
 	{
 		m_iOn++;
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, "items/suitcharge1.wav", 0.85, ATTN_NORM );
@@ -191,7 +191,7 @@ void CRecharge::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	}
 
 	// govern the rate of charge
-	m_flNextCharge = gpGlobals->time + 0.1;
+	m_flNextCharge = UTIL_GlobalTimeBase() + 0.1;
 }
 
 void CRecharge::Recharge(void)

@@ -87,7 +87,7 @@ void CEagle::PrimaryAttack(void) {
 	if (m_iClip <= 0) {
 		if (m_fFireOnEmpty) {
 			PlayEmptySound();
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
+			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.2;
 		}
 
 		return;
@@ -119,8 +119,8 @@ void CEagle::PrimaryAttack(void) {
 
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFireEagle, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, 0, 0, m_iClip ? 0 : 1, 0);
 
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + flCycleTime;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + flCycleTime;
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
 		// HEV suit - indicate out of ammo condition
@@ -143,7 +143,7 @@ void CEagle::SecondaryAttack(void) {
 		ShutdownSpot();
 	}
 
-	m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
+	m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3;
 }
 
 //=========================================================
@@ -161,7 +161,7 @@ void CEagle::Holster(void) {
 	ShutdownSpot();
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)EAGLE_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)EAGLE_HOLSTER::frames, (int)EAGLE_HOLSTER::fps);
 }
 
@@ -185,7 +185,7 @@ void CEagle::Reload(void) {
 			CalculateWeaponTime((int)EAGLE_RELOAD_NOT_EMPTY::frames, (int)EAGLE_RELOAD_NOT_EMPTY::fps));
 	}
 
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 }
 
 //=========================================================
@@ -194,8 +194,8 @@ void CEagle::Reload(void) {
 void CEagle::WeaponIdle(void) {
 	UpdateSpot();
 	float flTime = 0.0;
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -205,32 +205,32 @@ void CEagle::WeaponIdle(void) {
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.2) {
 			iAnim = (int)EAGLE_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE1::frames, (int)EAGLE_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.3) {
 			iAnim = (int)EAGLE_IDLE2::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE2::frames, (int)EAGLE_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.5) {
 			iAnim = (int)EAGLE_IDLE3::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE3::frames, (int)EAGLE_IDLE3::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.7) {
 			iAnim = (int)EAGLE_IDLE4::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE4::frames, (int)EAGLE_IDLE4::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.9) {
 			iAnim = (int)EAGLE_IDLE5::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE5::frames, (int)EAGLE_IDLE5::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else {
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-			m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
 
 		SendWeaponAnim(iAnim);

@@ -160,10 +160,10 @@ void CCycler :: Think( void )
 	{
 		// ResetSequenceInfo();
 		// hack to avoid reloading model every frame
-		pev->animtime = gpGlobals->time;
+		pev->animtime = UTIL_GlobalTimeBase();
 		pev->framerate = 1.0;
 		m_fSequenceFinished = FALSE;
-		m_flLastEventCheck = gpGlobals->time;
+		m_flLastEventCheck = UTIL_GlobalTimeBase();
 		pev->frame = 0;
 		if (!m_animate)
 			pev->framerate = 0.0;	// FIX: don't reset framerate
@@ -257,7 +257,7 @@ void CCyclerSprite::Spawn( void )
 	pev->frame			= 0;
 	SetNextThink( 0.1 );
 	m_animate			= 1;
-	m_lastTime			= gpGlobals->time;
+	m_lastTime			= UTIL_GlobalTimeBase();
 
 	PRECACHE_MODEL( (char *)STRING(pev->model) );
 	SET_MODEL( ENT(pev), STRING(pev->model) );
@@ -269,10 +269,10 @@ void CCyclerSprite::Spawn( void )
 void CCyclerSprite::Think( void )
 {
 	if ( ShouldAnimate() )
-		Animate( pev->framerate * (gpGlobals->time - m_lastTime) );
+		Animate( pev->framerate * (UTIL_GlobalTimeBase() - m_lastTime) );
 
 	SetNextThink( 0.1 );
-	m_lastTime = gpGlobals->time;
+	m_lastTime = UTIL_GlobalTimeBase();
 }
 
 
@@ -438,7 +438,7 @@ BOOL CWeaponCycler::Deploy( )
 
 void CWeaponCycler::Holster( )
 {
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 1.0;
 	SendWeaponAnim( pev->button );
 }
 
@@ -446,7 +446,7 @@ void CWeaponCycler::PrimaryAttack()
 {
 	SendWeaponAnim( pev->sequence );
 
-	m_flNextPrimaryAttack = gpGlobals->time + 0.5;
+	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 }
 
 
@@ -454,7 +454,7 @@ void CWeaponCycler::SecondaryAttack( void )
 {
 	SendWeaponAnim( pev->team );
 
-	m_flNextSecondaryAttack = gpGlobals->time + 0.5;
+	m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.5;
 }
 
 // Flaming Wreakage
@@ -496,7 +496,7 @@ void CWreckage::Spawn( void )
 	}
 	// pev->scale = 5.0;
 
-	m_flStartTime		= gpGlobals->time;
+	m_flStartTime		= UTIL_GlobalTimeBase();
 }
 
 void CWreckage::Precache( )
@@ -512,12 +512,12 @@ void CWreckage::Think( void )
 
 	if (pev->dmgtime)
 	{
-		if (pev->dmgtime < gpGlobals->time)
+		if (pev->dmgtime < UTIL_GlobalTimeBase())
 		{
 			UTIL_Remove( this );
 			return;
 		}
-		else if (RANDOM_FLOAT( 0, pev->dmgtime - m_flStartTime ) > pev->dmgtime - gpGlobals->time)
+		else if (RANDOM_FLOAT( 0, pev->dmgtime - m_flStartTime ) > pev->dmgtime - UTIL_GlobalTimeBase())
 		{
 			return;
 		}

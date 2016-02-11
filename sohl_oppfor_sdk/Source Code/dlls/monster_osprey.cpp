@@ -166,7 +166,7 @@ void COsprey :: FindAllThink( void )
 	}
 	SetThink(&COsprey :: FlyThink );
 	SetNextThink( 0.1 );
-	m_startTime = gpGlobals->time;
+	m_startTime = UTIL_GlobalTimeBase();
 }
 
 
@@ -274,7 +274,7 @@ void COsprey :: HoverThink( void )
 
 	if (i == 4)
 	{
-		m_startTime = gpGlobals->time;
+		m_startTime = UTIL_GlobalTimeBase();
 		SetThink(&COsprey :: FlyThink );
 	}
 
@@ -338,7 +338,7 @@ void COsprey::FlyThink( void )
 		UpdateGoal( );
 	}
 
-	if (gpGlobals->time > m_startTime + m_dTime)
+	if (UTIL_GlobalTimeBase() > m_startTime + m_dTime)
 	{
 		if (m_pGoalEnt->pev->speed == 0)
 		{
@@ -359,7 +359,7 @@ void COsprey::FlyThink( void )
 
 void COsprey::Flight( )
 {
-	float t = (gpGlobals->time - m_startTime);
+	float t = (UTIL_GlobalTimeBase() - m_startTime);
 	float scale = 1.0 / m_dTime;
 	
 	float f = UTIL_SplineFraction( t * scale, 1.0 );
@@ -474,7 +474,7 @@ void COsprey :: Killed( entvars_t *pevAttacker, int iGib )
 	pev->health = 0;
 	pev->takedamage = DAMAGE_NO;
 
-	m_startTime = gpGlobals->time + 4.0;
+	m_startTime = UTIL_GlobalTimeBase() + 4.0;
 }
 
 void COsprey::CrashTouch( CBaseEntity *pOther )
@@ -483,7 +483,7 @@ void COsprey::CrashTouch( CBaseEntity *pOther )
 	if ( pOther->pev->solid == SOLID_BSP) 
 	{
 		SetTouch( NULL );
-		m_startTime = gpGlobals->time;
+		m_startTime = UTIL_GlobalTimeBase();
 		SetNextThink( 0 );
 		m_velocity = pev->velocity;
 	}
@@ -498,7 +498,7 @@ void COsprey :: DyingThink( void )
 	pev->avelocity = pev->avelocity * 1.02;
 
 	// still falling?
-	if (m_startTime > gpGlobals->time )
+	if (m_startTime > UTIL_GlobalTimeBase() )
 	{
 		UTIL_MakeAimVectors( pev->angles );
 		ShowDamage( );

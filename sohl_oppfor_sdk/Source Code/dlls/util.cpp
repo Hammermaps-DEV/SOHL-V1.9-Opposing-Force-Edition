@@ -206,8 +206,7 @@ unsigned short PRECACHE_EVENT( int type, const char* psz )
 	return g_engfuncs.pfnPrecacheEvent( type, "events/null.sc" );
 }
 
-float UTIL_WeaponTimeBase( void )
-{
+float UTIL_GlobalTimeBase( void ) {
 	return gpGlobals->time;
 }
 
@@ -331,8 +330,8 @@ void UTIL_ParametricRocket( entvars_t *pev, Vector vecOrigin, Vector vecAngles, 
 	{
 		travelTime = vecTravel.Length() / pev->velocity.Length();
 	}
-	pev->starttime = gpGlobals->time;
-	pev->impacttime = gpGlobals->time + travelTime;
+	pev->starttime = UTIL_GlobalTimeBase();
+	pev->impacttime = UTIL_GlobalTimeBase() + travelTime;
 }
 
 int g_groupmask = 0;

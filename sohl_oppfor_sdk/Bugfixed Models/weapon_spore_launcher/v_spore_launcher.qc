@@ -54,8 +54,8 @@ $hbox 0 "Bip01 L Finger31" 0.000000 -0.650000 -0.560000 1.136841 0.500000 0.4600
 $hbox 0 "Sphere01" -1.920000 -2.530000 -1.930000 1.920000 2.510000 1.920000
 
 // 9 animation sequence(s)
-$sequence "idle" "idle" fps 30 loop 
-$sequence "fidget" "fidget" fps 30 loop 
+$sequence "idle" "idle" fps 30 
+$sequence "fidget" "fidget" fps 30 
 $sequence "reload_reach" "reload_reach" fps 30 
 $sequence "reload_load" "reload_load" fps 30 
 $sequence "reload_aim" "reload_aim" fps 30 

@@ -24,7 +24,7 @@
 #include	"squadmonster.h"
 #include	"weapons.h"
 #include	"soundent.h"
-#include	"hornet.h"
+#include	"proj_hornet.h"
 #include	"scripted.h"
 #include	"monster_agrunt.h"
 
@@ -171,10 +171,10 @@ void CAGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecD
 	if ( ptr->iHitgroup == 10 && (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)))
 	{
 		// hit armor
-		if ( pev->dmgtime != gpGlobals->time || (RANDOM_LONG(0,10) < 1) )
+		if ( pev->dmgtime != UTIL_GlobalTimeBase() || (RANDOM_LONG(0,10) < 1) )
 		{
 			UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT( 1, 2) );
-			pev->dmgtime = gpGlobals->time;
+			pev->dmgtime = UTIL_GlobalTimeBase();
 		}
 
 		if ( RANDOM_LONG( 0, 1 ) == 0 )
@@ -217,7 +217,7 @@ void CAGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecD
 //=========================================================
 void CAGrunt::StopTalking( void )
 {
-	m_flNextWordTime = m_flNextSpeakTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
+	m_flNextWordTime = m_flNextSpeakTime = UTIL_GlobalTimeBase() + 10 + RANDOM_LONG(0, 10);
 }
 
 //=========================================================
@@ -225,7 +225,7 @@ void CAGrunt::StopTalking( void )
 //=========================================================
 BOOL CAGrunt::ShouldSpeak( void )
 {
-	if ( m_flNextSpeakTime > gpGlobals->time )
+	if ( m_flNextSpeakTime > UTIL_GlobalTimeBase() )
 	{
 		// my time to talk is still in the future.
 		return FALSE;
@@ -239,7 +239,7 @@ BOOL CAGrunt::ShouldSpeak( void )
 			// if not going to talk because of this, put the talk time 
 			// into the future a bit, so we don't talk immediately after 
 			// going into combat
-			m_flNextSpeakTime = gpGlobals->time + 3;
+			m_flNextSpeakTime = UTIL_GlobalTimeBase() + 3;
 			return FALSE;
 		}
 	}
@@ -254,7 +254,7 @@ void CAGrunt :: PrescheduleThink ( void )
 {
 	if ( ShouldSpeak() )
 	{
-		if ( m_flNextWordTime < gpGlobals->time )
+		if ( m_flNextWordTime < UTIL_GlobalTimeBase() )
 		{
 			int num = -1;
 
@@ -276,7 +276,7 @@ void CAGrunt :: PrescheduleThink ( void )
 			}
 			else
 			{
-				m_flNextWordTime = gpGlobals->time + RANDOM_FLOAT( 0.5, 1 );
+				m_flNextWordTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.5, 1 );
 			}
 		}
 	}
@@ -317,12 +317,12 @@ void CAGrunt :: AttackSound ( void )
 //=========================================================
 void CAGrunt :: PainSound ( void )
 {
-	if ( m_flNextPainTime > gpGlobals->time )
+	if ( m_flNextPainTime > UTIL_GlobalTimeBase() )
 	{
 		return;
 	}
 
-	m_flNextPainTime = gpGlobals->time + 0.6;
+	m_flNextPainTime = UTIL_GlobalTimeBase() + 0.6;
 
 	StopTalking();
 
@@ -545,7 +545,7 @@ void CAGrunt :: Spawn()
 
 	m_HackedGunPos		= Vector( 24, 64, 48 );
 
-	m_flNextSpeakTime	= m_flNextWordTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
+	m_flNextSpeakTime	= m_flNextWordTime = UTIL_GlobalTimeBase() + 10 + RANDOM_LONG(0, 10);
 
 
 	MonsterInit();
@@ -882,7 +882,7 @@ BOOL CAGrunt :: CheckMeleeAttack1 ( float flDot, float flDist )
 //=========================================================
 BOOL CAGrunt :: CheckRangeAttack1 ( float flDot, float flDist )
 {
-	if ( gpGlobals->time < m_flNextHornetAttackCheck )
+	if ( UTIL_GlobalTimeBase() < m_flNextHornetAttackCheck )
 	{
 		return m_fCanHornetAttack;
 	}
@@ -901,13 +901,13 @@ BOOL CAGrunt :: CheckRangeAttack1 ( float flDot, float flDist )
 
 		if ( tr.flFraction == 1.0 || tr.pHit == m_hEnemy->edict() )
 		{
-			m_flNextHornetAttackCheck = gpGlobals->time + RANDOM_FLOAT( 2, 5 );
+			m_flNextHornetAttackCheck = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 2, 5 );
 			m_fCanHornetAttack = TRUE;
 			return m_fCanHornetAttack;
 		}
 	}
 	
-	m_flNextHornetAttackCheck = gpGlobals->time + 0.2;// don't check for half second if this check wasn't successful
+	m_flNextHornetAttackCheck = UTIL_GlobalTimeBase() + 0.2;// don't check for half second if this check wasn't successful
 	m_fCanHornetAttack = FALSE;
 	return m_fCanHornetAttack;
 }

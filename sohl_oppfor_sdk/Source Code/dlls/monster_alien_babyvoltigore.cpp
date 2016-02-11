@@ -63,7 +63,7 @@ void CBabyVoltigore::Spawn()
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
 
-	m_flNextSpitTime = gpGlobals->time;
+	m_flNextSpitTime = UTIL_GlobalTimeBase();
 
 	pev->view_ofs = Vector(0, 0, 64);
 

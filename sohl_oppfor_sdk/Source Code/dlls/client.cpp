@@ -173,10 +173,10 @@ void ClientKill( edict_t *pEntity )
 
 	CBasePlayer *pl = (CBasePlayer*) CBasePlayer::Instance( pev );
 
-	if ( pl->m_fNextSuicideTime > gpGlobals->time )
+	if ( pl->m_fNextSuicideTime > UTIL_GlobalTimeBase() )
 		return;  // prevent suiciding too ofter
 
-	pl->m_fNextSuicideTime = gpGlobals->time + 1;  // don't let them suicide for 5 seconds after suiciding
+	pl->m_fNextSuicideTime = UTIL_GlobalTimeBase() + 1;  // don't let them suicide for 5 seconds after suiciding
 
 	// have the player kill themself
 	pev->health = 0;
@@ -354,7 +354,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	CBasePlayer* player = GetClassPtr((CBasePlayer *)pev);
 
 	//Not yet.
-	if ( player->m_flNextChatTime > gpGlobals->time )
+	if ( player->m_flNextChatTime > UTIL_GlobalTimeBase() )
 		 return;
 
 	if ( !stricmp( pcmd, cpSay) || !stricmp( pcmd, cpSayTeam ) )
@@ -409,7 +409,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	strcat( text, "\n" );
 
 
-	player->m_flNextChatTime = gpGlobals->time + CHAT_INTERVAL;
+	player->m_flNextChatTime = UTIL_GlobalTimeBase() + CHAT_INTERVAL;
 
 	// loop through all players
 	// Start with the first player.

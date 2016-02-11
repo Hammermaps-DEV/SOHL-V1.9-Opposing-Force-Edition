@@ -168,12 +168,17 @@ void DrawRain( void )
 	if (FirstChainDrip.p_Next == NULL)
 		return; // no drips to draw
 
+	if (gHUD.ProcessWeather->value == 0.0)
+		return; // no drips to draw
+
 	HL_HSPRITE hsprTexture;
 	const model_s *pTexture;
 	float visibleHeight = Rain.globalHeight - SNOWFADEDIST;
 
 	if (Rain.weatherMode == 0)
 		hsprTexture = LoadSprite( "sprites/hi_rain.spr" ); // load rain sprite
+	else if (Rain.weatherMode == 2)
+		hsprTexture = LoadSprite( "sprites/fx_dust.spr" ); // load dust sprite
 	else 
 		hsprTexture = LoadSprite( "sprites/snowflake.spr" ); // load snow sprite
 
@@ -225,7 +230,47 @@ void DrawRain( void )
 			Drip = nextdDrip;
 		}
 	}
+	else if ( Rain.weatherMode == 2 ) // draw dust
+	{ 
+		vec3_t normal;
+		gEngfuncs.GetViewAngles((float*)normal);
 
+		float matrix[3][4];
+		AngleMatrix (normal, matrix);	// calc view matrix
+
+		while (Drip != NULL)
+		{
+			cl_drip* nextdDrip = Drip->p_Next;
+
+			matrix[0][3] = Drip->origin[0]; // write origin to matrix
+			matrix[1][3] = Drip->origin[1];
+			matrix[2][3] = Drip->origin[2];
+
+			// apply start fading effect
+			float alpha = (Drip->origin[2] <= visibleHeight) ? Drip->alpha : ((Rain.globalHeight - Drip->origin[2]) / (float)SNOWFADEDIST) * Drip->alpha;
+					
+		// --- draw quad --------------------------
+			gEngfuncs.pTriAPI->Color4f( 1.0, 1.0, 1.0, alpha );
+			gEngfuncs.pTriAPI->Begin( TRI_QUADS );
+
+				gEngfuncs.pTriAPI->TexCoord2f( 0, 0 );
+				SetPoint(0, DUST_SPRITE_HALFSIZE ,DUST_SPRITE_HALFSIZE, matrix);
+
+				gEngfuncs.pTriAPI->TexCoord2f( 0, 1 );
+				SetPoint(0, DUST_SPRITE_HALFSIZE ,-DUST_SPRITE_HALFSIZE, matrix);
+
+				gEngfuncs.pTriAPI->TexCoord2f( 1, 1 );
+				SetPoint(0, -DUST_SPRITE_HALFSIZE ,-DUST_SPRITE_HALFSIZE, matrix);
+
+				gEngfuncs.pTriAPI->TexCoord2f( 1, 0 );
+				SetPoint(0, -DUST_SPRITE_HALFSIZE ,DUST_SPRITE_HALFSIZE, matrix);
+				
+			gEngfuncs.pTriAPI->End();
+		// --- draw quad end ----------------------
+
+			Drip = nextdDrip;
+		}
+	}
 	else	// draw snow
 	{ 
 		vec3_t normal;
@@ -267,8 +312,6 @@ void DrawRain( void )
 			Drip = nextdDrip;
 		}
 	}
-
-return;
 }
 
 /*

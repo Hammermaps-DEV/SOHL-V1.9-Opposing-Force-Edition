@@ -2002,7 +2002,7 @@ void CSpeaker :: SpeakerThink( void )
 
 
 	// Wait for the talkmonster to finish first.
-	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
+	if (UTIL_GlobalTimeBase() <= CTalkMonster::g_talkWaitTime)
 	{
 		AbsoluteNextThink( CTalkMonster::g_talkWaitTime + RANDOM_FLOAT( 5, 10 ) );
 		return;
@@ -2048,7 +2048,7 @@ void CSpeaker :: SpeakerThink( void )
 		// set next announcement time for random 5 to 10 minute delay
 		SetNextThink( RANDOM_FLOAT(ANNOUNCE_MINUTES_MIN * 60.0, ANNOUNCE_MINUTES_MAX * 60.0) );
 
-		CTalkMonster::g_talkWaitTime = gpGlobals->time + 5;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
+		CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + 5;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 	}
 
 	return;

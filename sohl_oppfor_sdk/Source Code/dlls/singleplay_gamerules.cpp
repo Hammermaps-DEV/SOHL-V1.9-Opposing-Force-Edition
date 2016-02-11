@@ -159,7 +159,7 @@ BOOL CHalfLifeRules :: FPlayerCanRespawn( CBasePlayer *pPlayer )
 //=========================================================
 float CHalfLifeRules :: FlPlayerSpawnTime( CBasePlayer *pPlayer )
 {
-	return gpGlobals->time;//now!
+	return UTIL_GlobalTimeBase();//now!
 }
 
 //=========================================================

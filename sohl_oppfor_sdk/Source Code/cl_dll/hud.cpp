@@ -423,14 +423,16 @@ void CHud :: Init( void )
 	RainInfo = gEngfuncs.pfnRegisterVariable( "cl_raininfo", "0", 0 );
 
 	//Explosion Effects
-	CVAR_CREATE("sv_grenadegib", "0", FCVAR_ARCHIVE);
-	CVAR_CREATE("cl_expdetail", "0", FCVAR_ARCHIVE);
+	CVAR_CREATE("sv_grenadegib", "1", FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_expdetail", "1", FCVAR_ARCHIVE);
+
+	CVAR_CREATE("cl_idleswaying", "1", FCVAR_ARCHIVE);
 
 	cl_rollangle = gEngfuncs.pfnRegisterVariable("cl_rollangle", "0.65", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "300", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 
 	//Particles System
-	CVAR_CREATE("r_particles", "0", FCVAR_ARCHIVE);
+	CVAR_CREATE("r_particles", "1", FCVAR_ARCHIVE);
 	g_ParticleCount = gEngfuncs.pfnRegisterVariable("cl_particlecount", "100", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	g_ParticleDebug = gEngfuncs.pfnRegisterVariable("cl_particledebug", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	g_ParticleSorts = gEngfuncs.pfnRegisterVariable("cl_particlesorts", "3", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);

@@ -28,6 +28,7 @@
 #include "player.h"
 #include "soundent.h"
 #include "gamerules.h"
+#include "proj_grenade.h"
 #include "weapon_mp5.h"
 
 //=========================================================
@@ -112,11 +113,11 @@ void CMP5::PrimaryAttack() {
 
 		PLAYBACK_EVENT_FULL( 0, m_pPlayer->edict(), m_usMP5, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0 );
 
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.1;
-		if ( m_flNextPrimaryAttack < UTIL_WeaponTimeBase() )
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.2;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.1;
+		if ( m_flNextPrimaryAttack < UTIL_GlobalTimeBase() )
+			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.2;
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 
 		if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
 			// HEV suit - indicate out of ammo condition
@@ -124,7 +125,7 @@ void CMP5::PrimaryAttack() {
 		}
 	} else {
 		PlayEmptySound( );
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
 
@@ -138,7 +139,7 @@ void CMP5::SecondaryAttack( void ) {
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 		m_pPlayer->m_iExtraSoundTypes = bits_SOUND_DANGER;
-		m_pPlayer->m_flStopExtraSoundTime = UTIL_WeaponTimeBase() + 0.2;
+		m_pPlayer->m_flStopExtraSoundTime = UTIL_GlobalTimeBase() + 0.2;
 			
 		m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
 
@@ -153,10 +154,10 @@ void CMP5::SecondaryAttack( void ) {
 		SendWeaponAnim((int)MP5_GRENADE::sequence);
 		m_pPlayer->pev->punchangle.x -= 10;
 	
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)MP5_GRENADE::frames, (int)MP5_GRENADE::fps);
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 
 		if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] <= 0) {
 			// HEV suit - indicate out of ammo condition
@@ -164,7 +165,7 @@ void CMP5::SecondaryAttack( void ) {
 		}
 	} else {
 		PlayEmptySound( );
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
 
@@ -182,7 +183,7 @@ BOOL CMP5::Deploy() {
 void CMP5::Holster( void ) {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)MP5_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)MP5_HOLSTER::frames, (int)MP5_HOLSTER::fps);
 }
 
@@ -197,15 +198,15 @@ void CMP5::Reload( void ) {
 	DefaultReload(GLOCK_MAX_CLIP, (int)MP5_RELOAD::sequence,
 		CalculateWeaponTime((int)MP5_RELOAD::frames, (int)MP5_RELOAD::fps));
 
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 }
 
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
 void CMP5::WeaponIdle( void ) {
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -215,12 +216,12 @@ void CMP5::WeaponIdle( void ) {
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.3) {
 			iAnim = (int)MP5_IDLE::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)MP5_IDLE::frames, (int)MP5_IDLE::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else {
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-			m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
 
 		SendWeaponAnim(iAnim);

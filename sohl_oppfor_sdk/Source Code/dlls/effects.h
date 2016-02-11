@@ -88,7 +88,7 @@ public:
 	{ 
 		SetThink(&CSprite ::AnimateUntilDead); 
 		pev->framerate = framerate;
-		pev->dmgtime = gpGlobals->time + (m_maxFrame / framerate); 
+		pev->dmgtime = UTIL_GlobalTimeBase() + (m_maxFrame / framerate); 
 		SetNextThink( 0 );
 	}
 
@@ -181,7 +181,7 @@ public:
 	inline void	BeamDamageInstant( TraceResult *ptr, float damage ) 
 	{ 
 		pev->dmg = damage; 
-		pev->dmgtime = gpGlobals->time - 1;
+		pev->dmgtime = UTIL_GlobalTimeBase() - 1;
 		BeamDamage(ptr); 
 	}
 };

@@ -488,7 +488,7 @@ void CLightning::Spawn( void )
 	pev->solid = SOLID_NOT;							// Remove model & collisions
 	Precache( );
 
-	pev->dmgtime = gpGlobals->time;
+	pev->dmgtime = UTIL_GlobalTimeBase();
 
 	//LRC- a convenience for mappers. Will this mess anything up?
 	if (pev->rendercolor == g_vecZero)
@@ -635,7 +635,7 @@ void CLightning::ToggleUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 		if ( pev->dmg > 0 )
 		{
 			SetNextThink( 0 );
-			pev->dmgtime = gpGlobals->time;
+			pev->dmgtime = UTIL_GlobalTimeBase();
 		}
 	}
 }
@@ -817,7 +817,7 @@ void CBeam::BeamDamage( TraceResult *ptr )
 			if (pev->dmg > 0)
 			{         if(pev->frags == 0)pev->frags = DMG_ENERGYBEAM;
 				ClearMultiDamage();
-				pHit->TraceAttack( pev, pev->dmg * (gpGlobals->time - pev->dmgtime), (ptr->vecEndPos - pev->origin).Normalize(), ptr, pev->frags );
+				pHit->TraceAttack( pev, pev->dmg * (UTIL_GlobalTimeBase() - pev->dmgtime), (ptr->vecEndPos - pev->origin).Normalize(), ptr, pev->frags );
 				ApplyMultiDamage( pev, pev );
 				if ( pev->spawnflags & SF_BEAM_DECALS )
 				{
@@ -828,11 +828,11 @@ void CBeam::BeamDamage( TraceResult *ptr )
 			else
 			{
 				//LRC - beams that heal people
-				pHit->TakeHealth( -(pev->dmg * (gpGlobals->time - pev->dmgtime)), DMG_GENERIC );
+				pHit->TakeHealth( -(pev->dmg * (UTIL_GlobalTimeBase() - pev->dmgtime)), DMG_GENERIC );
 			}
 		}
 	}
-	pev->dmgtime = gpGlobals->time;
+	pev->dmgtime = UTIL_GlobalTimeBase();
 }
 
 //LRC - used to be DamageThink, but now it's more general.
@@ -1272,7 +1272,7 @@ void CLaser::TurnOn( void )
 	if ( m_pEndSprite )
 		m_pEndSprite->TurnOn();
 
-	pev->dmgtime = gpGlobals->time;
+	pev->dmgtime = UTIL_GlobalTimeBase();
 
 	if ( pev->spawnflags & SF_BEAM_SHADEIN )
 		SetFlags( BEAM_FSHADEIN );
@@ -1449,16 +1449,16 @@ void CGlow::Spawn( void )
 	if ( m_maxFrame > 1.0 && pev->framerate != 0 )
 		SetNextThink( 0.1 );
 
-	m_lastTime = gpGlobals->time;
+	m_lastTime = UTIL_GlobalTimeBase();
 }
 
 
 void CGlow::Think( void )
 {
-	Animate( pev->framerate * (gpGlobals->time - m_lastTime) );
+	Animate( pev->framerate * (UTIL_GlobalTimeBase() - m_lastTime) );
 
 	SetNextThink( 0.1 );
-	m_lastTime			= gpGlobals->time;
+	m_lastTime			= UTIL_GlobalTimeBase();
 }
 
 
@@ -1543,15 +1543,15 @@ CSprite *CSprite::SpriteCreate( const char *pSpriteName, const Vector &origin, B
 
 void CSprite::AnimateThink( void )
 {
-	Animate( pev->framerate * (gpGlobals->time - m_lastTime) );
+	Animate( pev->framerate * (UTIL_GlobalTimeBase() - m_lastTime) );
 
 	SetNextThink( 0.1 );
-	m_lastTime			= gpGlobals->time;
+	m_lastTime			= UTIL_GlobalTimeBase();
 }
 
 void CSprite::AnimateUntilDead( void )
 {
-	if ( gpGlobals->time > pev->dmgtime )
+	if ( UTIL_GlobalTimeBase() > pev->dmgtime )
 		UTIL_Remove(this);
 	else
 	{
@@ -1567,13 +1567,13 @@ void CSprite::Expand( float scaleSpeed, float fadeSpeed )
 	SetThink(&CSprite:: ExpandThink );
 
 	SetNextThink( 0 );
-	m_lastTime		= gpGlobals->time;
+	m_lastTime		= UTIL_GlobalTimeBase();
 }
 
 
 void CSprite::ExpandThink( void )
 {
-	float frametime = gpGlobals->time - m_lastTime;
+	float frametime = UTIL_GlobalTimeBase() - m_lastTime;
 	pev->scale += pev->speed * frametime;
 	pev->renderamt -= pev->health * frametime;
 	if ( pev->renderamt <= 0 )
@@ -1584,7 +1584,7 @@ void CSprite::ExpandThink( void )
 	else
 	{
 		SetNextThink( 0.1 );
-		m_lastTime			= gpGlobals->time;
+		m_lastTime			= UTIL_GlobalTimeBase();
 	}
 }
 
@@ -1629,7 +1629,7 @@ void CSprite::TurnOn( void )
 	{
 		SetThink(&CSprite:: AnimateThink );
 		SetNextThink( 0 );
-		m_lastTime = gpGlobals->time;
+		m_lastTime = UTIL_GlobalTimeBase();
 	}
 	pev->frame = 0;
 }
@@ -1796,9 +1796,9 @@ void CEnvModel::Think( void )
 		switch (iTemp)
 		{
 //		case 1: // loop
-//			pev->animtime = gpGlobals->time;
+//			pev->animtime = UTIL_GlobalTimeBase();
 //			m_fSequenceFinished = FALSE;
-//			m_flLastEventCheck = gpGlobals->time;
+//			m_flLastEventCheck = UTIL_GlobalTimeBase();
 //			pev->frame = 0;
 //			break;
 		case 2: // change state
@@ -2051,7 +2051,7 @@ CBaseEntity *CGibShooter :: CreateGib ( Vector vecPos, Vector vecVel )
 
 	pGib->pev->body = RANDOM_LONG ( 1, pev->body - 1 );// avoid throwing random amounts of the 0th gib. (skull).
 
-	float thinkTime = pGib->m_fNextThink - gpGlobals->time;
+	float thinkTime = pGib->m_fNextThink - UTIL_GlobalTimeBase();
 
 	pGib->m_lifeTime = (m_flGibLife * RANDOM_FLOAT( 0.95, 1.05 ));	// +/- 5%
 	if ( pGib->m_lifeTime < thinkTime )
@@ -2153,11 +2153,11 @@ public:
 
 void CShot :: Touch ( CBaseEntity *pOther )
 {
-	if (pev->teleport_time > gpGlobals->time)
+	if (pev->teleport_time > UTIL_GlobalTimeBase())
 		return;
 	// don't fire too often in collisions!
 	// teleport_time is the soonest this can be touched again.
-	pev->teleport_time = gpGlobals->time + 0.1;
+	pev->teleport_time = UTIL_GlobalTimeBase() + 0.1;
 
 	if (pev->netname)
 		FireTargets( STRING(pev->netname), this, this, USE_TOGGLE, 0 );
@@ -2341,7 +2341,7 @@ CBaseEntity *CEnvShooter :: CreateGib ( Vector vecPos, Vector vecVel )
 //			ALERT( at_console, "randomly choosed skin %i\n", pGib->pev->skin );
 		}
 
-		float thinkTime = pGib->m_fNextThink - gpGlobals->time;
+		float thinkTime = pGib->m_fNextThink - UTIL_GlobalTimeBase();
 
 		pGib->m_lifeTime = (m_flGibLife * RANDOM_FLOAT( 0.95, 1.05 ));	// +/- 5%
 
@@ -2425,7 +2425,7 @@ CBaseEntity *CEnvShooter :: CreateGib ( Vector vecPos, Vector vecVel )
 		{
 			if (m_flGibLife)
 			{
-				pShot->pev->dmgtime = gpGlobals->time + m_flGibLife;
+				pShot->pev->dmgtime = UTIL_GlobalTimeBase() + m_flGibLife;
 				pShot->SetThink(& CSprite::AnimateUntilDead );
 			}
 			else
@@ -2433,7 +2433,7 @@ CBaseEntity *CEnvShooter :: CreateGib ( Vector vecPos, Vector vecVel )
 				pShot->SetThink(& CSprite::AnimateThink );
 			}
 			pShot->SetNextThink( 0 );
-			pShot->m_lastTime = gpGlobals->time;
+			pShot->m_lastTime = UTIL_GlobalTimeBase();
 			return pShot;
 		}
 	}
@@ -4070,19 +4070,19 @@ public:
 
 LINK_ENTITY_TO_CLASS( env_decal, CEnvDecal );
 
-void CEnvDecal::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
+void CEnvDecal::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) {
 	int iTexture = 0;
 
-	switch(pev->impulse)
-	{
-		case 1: iTexture = DECAL_GUNSHOT1	+	RANDOM_LONG(0,4); break;
-		case 2: iTexture = DECAL_BLOOD1		+	RANDOM_LONG(0,5); break;
-		case 3: iTexture = DECAL_YBLOOD1	+	RANDOM_LONG(0,5); break;
-		case 4: iTexture = DECAL_GLASSBREAK1+	RANDOM_LONG(0,2); break;
-		case 5: iTexture = DECAL_BIGSHOT1	+	RANDOM_LONG(0,4); break;
-		case 6: iTexture = DECAL_SCORCH1	+	RANDOM_LONG(0,2); break;
-		case 7: iTexture = DECAL_SPIT1		+	RANDOM_LONG(0,1); break;
+	switch(pev->impulse) {
+		case 1: iTexture = DECAL_GUNSHOT1	 +	RANDOM_LONG(0,4); break;
+		case 2: iTexture = DECAL_BLOOD1		 +	RANDOM_LONG(0,5); break;
+		case 3: iTexture = DECAL_YBLOOD1	 +	RANDOM_LONG(0,5); break;
+		case 4: iTexture = DECAL_GLASSBREAK1 +	RANDOM_LONG(0,2); break;
+		case 5: iTexture = DECAL_BIGSHOT1	 +	RANDOM_LONG(0,4); break;
+		case 6: iTexture = DECAL_SCORCH1	 +	RANDOM_LONG(0,2); break;
+		case 7: iTexture = DECAL_SPIT1		 +	RANDOM_LONG(0,1); break;
+		case 8: iTexture = DECAL_OFSCORCH1   +  RANDOM_LONG(0,5); break;
+		case 9: iTexture = DECAL_SPORESPLAT1 +  RANDOM_LONG(0,2); break;
 	}
 
 	if (pev->impulse)
@@ -4214,7 +4214,7 @@ void CEnvBeverage::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	pev->health--;
 
 	//SetThink (SUB_Remove);
-	//pev->nextthink = gpGlobals->time;
+	//pev->nextthink = UTIL_GlobalTimeBase();
 }
 
 void CEnvBeverage::Spawn( void )
@@ -4429,7 +4429,7 @@ extern int gmsgSetFog;
 
 void CEnvFog :: TurnOn ( void )
 {
-//	ALERT(at_console, "Fog turnon %f\n", gpGlobals->time);
+//	ALERT(at_console, "Fog turnon %f\n", UTIL_GlobalTimeBase());
 
 	pev->spawnflags |= SF_FOG_ACTIVE;
 
@@ -4479,7 +4479,7 @@ void CEnvFog :: TurnOff ( void )
 // regardless of what nextthink time is specified.
 void CEnvFog :: ResumeThink ( void )
 {
-//	ALERT(at_console, "Fog resume %f\n", gpGlobals->time);
+//	ALERT(at_console, "Fog resume %f\n", UTIL_GlobalTimeBase());
 	SetThink(&CEnvFog ::FadeInDone);
 	SetNextThink(0.1);
 }
@@ -4809,8 +4809,8 @@ void CRainModify::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 		pPlayer->Rain_ideal_windX = Rain_windX;
 		pPlayer->Rain_ideal_windY = Rain_windY;
 
-		pPlayer->Rain_endFade = gpGlobals->time + fadeTime;
-		pPlayer->Rain_nextFadeUpdate = gpGlobals->time + 1;
+		pPlayer->Rain_endFade = UTIL_GlobalTimeBase() + fadeTime;
+		pPlayer->Rain_nextFadeUpdate = UTIL_GlobalTimeBase() + 1;
 	}
 	else
 	{

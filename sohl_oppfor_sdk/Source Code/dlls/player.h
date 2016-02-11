@@ -220,9 +220,9 @@ public:
 	virtual int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual void	Killed( entvars_t *pevAttacker, int iGib );
 	virtual Vector BodyTarget( const Vector &posSrc ) { return Center( ) + pev->view_ofs * RANDOM_FLOAT( 0.5, 1.1 ); };		// position to shoot at
-	virtual void StartSneaking( void ) { m_tSneaking = gpGlobals->time - 1; }
-	virtual void StopSneaking( void ) { m_tSneaking = gpGlobals->time + 30; }
-	virtual BOOL IsSneaking( void ) { return m_tSneaking <= gpGlobals->time; }
+	virtual void StartSneaking( void ) { m_tSneaking = UTIL_GlobalTimeBase() - 1; }
+	virtual void StopSneaking( void ) { m_tSneaking = UTIL_GlobalTimeBase() + 30; }
+	virtual BOOL IsSneaking( void ) { return m_tSneaking <= UTIL_GlobalTimeBase(); }
 	virtual BOOL IsAlive( void ) { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	virtual BOOL ShouldFadeOnDeath( void ) { return FALSE; }
 	virtual	BOOL IsPlayer( void ) { return TRUE; }			// Spectators should return FALSE for this, they aren't "players" as far as game logic is concerned
@@ -236,7 +236,7 @@ public:
 	void RenewItems(void);
 	void PackDeadPlayerItems( void );
 	void RemoveAllItems( BOOL removeSuit );
-	void RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iEgon, int iSatchel, int iSnark, int iTrip, int iGren, int iHornet, int iCycler );
+	void RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iEgon, int iSatchel, int iSnark, int iTrip, int iGren, int iHornet, int iCycler, int iShock, int iSpore);
 	void RemoveAmmo( const char* szName, int iAmount );
 	BOOL SwitchWeapon( CBasePlayerItem *pWeapon );
 

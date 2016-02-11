@@ -28,6 +28,7 @@
 #include "player.h"
 #include "gamerules.h"
 #include "weapon_rpg.h"
+#include "proj_grenade.h"
 #include "proj_plrocket.h"
 
 //=========================================================
@@ -117,12 +118,12 @@ void CRpg::PrimaryAttack() {
 		pRocket->pev->velocity = pRocket->pev->velocity + gpGlobals->v_forward * DotProduct(m_pPlayer->pev->velocity, gpGlobals->v_forward);
 
 		m_iClip--;
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)RPG_FIRE::frames, (int)RPG_FIRE::fps);
 		m_flTimeWeaponIdle = m_flNextPrimaryAttack;
 	} else {
 		PlayEmptySound();
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7;//no longer indicate fps :)
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.7;//no longer indicate fps :)
 	}
 
 	UpdateSpot();
@@ -141,7 +142,7 @@ void CRpg::SecondaryAttack() {
 		ShutdownScreen();//simply call shutdown function
 	}
 
-	m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
+	m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3;
 }
 
 //=========================================================
@@ -160,7 +161,7 @@ void CRpg::Holster( ) {
 	ShutdownScreen();//set skin to 0 manually
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)RPG_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)RPG_HOLSTER::frames, (int)RPG_HOLSTER::fps);
 }
 
@@ -185,7 +186,7 @@ void CRpg::Reload( void ) {
 		DefaultReload(RPG_MAX_CLIP, (int)RPG_RELOAD::sequence,
 			CalculateWeaponTime((int)RPG_RELOAD::frames, (int)RPG_RELOAD::fps));
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 	}	
 }
 
@@ -230,7 +231,7 @@ void CRpg::UpdateSpot( void ) {
 // UpdateScreen
 //=========================================================
 void CRpg::UpdateScreen ( void ) {
-	if ( m_flTimeUpdate > UTIL_WeaponTimeBase() ) return;
+	if ( m_flTimeUpdate > UTIL_GlobalTimeBase() ) return;
 
 	if (m_pSpot) {
 		if ( m_iChargeLevel) {
@@ -252,7 +253,7 @@ void CRpg::UpdateScreen ( void ) {
 	else 
 		pev->skin = 0;
 
-	m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.3;
+	m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.3;
 }
 
 //=========================================================
@@ -277,29 +278,29 @@ void CRpg::ShutdownScreen ( void ) {
 //=========================================================
 void CRpg::WeaponIdle( void ) {
 	UpdateSpot( ); //m_iSkin;
-	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ) return;
+	if ( m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ) return;
 
 	if (m_iClip && !m_iOverloadLevel) {
 		int iAnim;
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
 			iAnim = (int)RPG_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)RPG_IDLE1::frames, (int)RPG_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.7) {
 			iAnim = (int)RPG_IDLE2::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)RPG_IDLE2::frames, (int)RPG_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.9) {
 			iAnim = (int)RPG_FIDGET::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)RPG_FIDGET::frames, (int)RPG_FIDGET::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else {
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-			m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
 
 		SendWeaponAnim(iAnim);

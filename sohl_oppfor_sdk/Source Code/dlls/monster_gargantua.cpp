@@ -87,7 +87,7 @@ void CStomp::Spawn( void )
 {
 	SetNextThink( 0 );
 	pev->classname = MAKE_STRING("garg_stomp");
-	pev->dmgtime = gpGlobals->time;
+	pev->dmgtime = UTIL_GlobalTimeBase();
 
 	pev->framerate = 30;
 	pev->model = MAKE_STRING(GARG_STOMP_SPRITE_NAME);
@@ -128,7 +128,7 @@ void CStomp::Think( void )
 	pev->framerate = pev->framerate + (gpGlobals->frametime) * 1500;
 	
 	// Move and spawn trails
-	while ( gpGlobals->time - pev->dmgtime > STOMP_INTERVAL )
+	while ( UTIL_GlobalTimeBase() - pev->dmgtime > STOMP_INTERVAL )
 	{
 		pev->origin = pev->origin + pev->movedir * pev->speed * STOMP_INTERVAL;
 		for ( int i = 0; i < 2; i++ )
@@ -464,7 +464,7 @@ void CGargantua :: FlameUpdate( void )
 			m_pFlame[i]->SetStartPos( trace.vecEndPos );
 			m_pFlame[i+2]->SetStartPos( (vecStart * 0.6) + (trace.vecEndPos * 0.4) );
 
-			if ( trace.flFraction != 1.0 && gpGlobals->time > m_streakTime )
+			if ( trace.flFraction != 1.0 && UTIL_GlobalTimeBase() > m_streakTime )
 			{
 				StreakSplash( trace.vecEndPos, trace.vecPlaneNormal, 6, 20, 50, 400 );
 				streaks = TRUE;
@@ -492,7 +492,7 @@ void CGargantua :: FlameUpdate( void )
 		}
 	}
 	if ( streaks )
-		m_streakTime = gpGlobals->time;
+		m_streakTime = UTIL_GlobalTimeBase();
 }
 
 
@@ -586,7 +586,7 @@ void CGargantua :: PrescheduleThink( void )
 {
 	if ( !HasConditions( bits_COND_SEE_ENEMY ) )
 	{
-		m_seeTime = gpGlobals->time + 5;
+		m_seeTime = UTIL_GlobalTimeBase() + 5;
 		EyeOff();
 	}
 	else
@@ -664,8 +664,8 @@ void CGargantua :: Spawn()
 	m_pEyeGlow->SetTransparency( kRenderGlow, 255, 255, 255, 0, kRenderFxNoDissipation );
 	m_pEyeGlow->SetAttachment( edict(), 1 );
 	EyeOff();
-	m_seeTime = gpGlobals->time + 5;
-	m_flameTime = gpGlobals->time + 2;
+	m_seeTime = UTIL_GlobalTimeBase() + 5;
+	m_flameTime = UTIL_GlobalTimeBase() + 2;
 }
 
 
@@ -735,10 +735,10 @@ void CGargantua::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 	// UNDONE: Hit group specific damage?
 	if ( bitsDamageType & (GARG_DAMAGE|DMG_BLAST) )
 	{
-		if ( m_painSoundTime < gpGlobals->time )
+		if ( m_painSoundTime < UTIL_GlobalTimeBase() )
 		{
 			EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pPainSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM );
-			m_painSoundTime = gpGlobals->time + RANDOM_FLOAT( 2.5, 4 );
+			m_painSoundTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 2.5, 4 );
 		}
 	}
 
@@ -746,10 +746,10 @@ void CGargantua::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 
 	if ( bitsDamageType == 0)
 	{
-		if ( pev->dmgtime != gpGlobals->time || (RANDOM_LONG(0,100) < 20) )
+		if ( pev->dmgtime != UTIL_GlobalTimeBase() || (RANDOM_LONG(0,100) < 20) )
 		{
 			UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT(0.5,1.5) );
-			pev->dmgtime = gpGlobals->time;
+			pev->dmgtime = UTIL_GlobalTimeBase();
 //			if ( RANDOM_LONG(0,100) < 25 )
 //				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, pRicSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pRicSounds)-1) ], 1.0, ATTN_NORM, 0, PITCH_NORM );
 		}
@@ -834,7 +834,7 @@ BOOL CGargantua::CheckMeleeAttack2( float flDot, float flDist )
 {
 //	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
 
-	if ( gpGlobals->time > m_flameTime )
+	if ( UTIL_GlobalTimeBase() > m_flameTime )
 	{
 		if (flDot >= 0.8 && flDist > GARG_ATTACKDIST)
 		{
@@ -857,7 +857,7 @@ BOOL CGargantua::CheckMeleeAttack2( float flDot, float flDist )
 //=========================================================
 BOOL CGargantua::CheckRangeAttack1( float flDot, float flDist )
 {
-	if ( gpGlobals->time > m_seeTime )
+	if ( UTIL_GlobalTimeBase() > m_seeTime )
 	{
 		if (flDot >= 0.7 && flDist > GARG_ATTACKDIST)
 		{
@@ -910,7 +910,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t *pEvent)
 
 	case GARG_AE_STOMP:
 		StompAttack();
-		m_seeTime = gpGlobals->time + 12;
+		m_seeTime = UTIL_GlobalTimeBase() + 12;
 		break;
 
 	case GARG_AE_BREATHE:
@@ -988,8 +988,8 @@ void CGargantua::StartTask( Task_t *pTask )
 	{
 	case TASK_FLAME_SWEEP:
 		FlameCreate();
-		m_flWaitFinished = gpGlobals->time + pTask->flData;
-		m_flameTime = gpGlobals->time + 6;
+		m_flWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
+		m_flameTime = UTIL_GlobalTimeBase() + 6;
 		m_flameX = 0;
 		m_flameY = 0;
 		break;
@@ -1005,8 +1005,8 @@ void CGargantua::StartTask( Task_t *pTask )
 		if ( m_pCine->IsAction() && m_pCine->m_fAction == 3)
 		{
 			FlameCreate();
-			m_flWaitFinished = gpGlobals->time + 4.5;
-			m_flameTime = gpGlobals->time + 6;
+			m_flWaitFinished = UTIL_GlobalTimeBase() + 4.5;
+			m_flameTime = UTIL_GlobalTimeBase() + 6;
 			m_flameX = 0;
 			m_flameY = 0;
 		}
@@ -1015,7 +1015,7 @@ void CGargantua::StartTask( Task_t *pTask )
 		break;
 
 	case TASK_DIE:
-		m_flWaitFinished = gpGlobals->time + 1.6;
+		m_flWaitFinished = UTIL_GlobalTimeBase() + 1.6;
 		DeathEffect();
 		// FALL THROUGH
 	default: 
@@ -1032,7 +1032,7 @@ void CGargantua::RunTask( Task_t *pTask )
 	switch ( pTask->iTask )
 	{
 	case TASK_DIE:
-		if ( gpGlobals->time > m_flWaitFinished )
+		if ( UTIL_GlobalTimeBase() > m_flWaitFinished )
 		{
 			pev->renderfx = kRenderFxExplode;
 			pev->rendercolor.x = 255;
@@ -1121,7 +1121,7 @@ void CGargantua::RunTask( Task_t *pTask )
 			break;
 		}
 	case TASK_FLAME_SWEEP:
-		if ( gpGlobals->time > m_flWaitFinished )
+		if ( UTIL_GlobalTimeBase() > m_flWaitFinished )
 		{
 			FlameDestroy();
 			TaskComplete();
@@ -1160,7 +1160,7 @@ void CGargantua::RunTask( Task_t *pTask )
 				m_flWaitFinished -= 0.5;
 				m_flameTime -= 0.5;
 			}
-			// FlameControls( angles.x + 2 * sin(gpGlobals->time*8), angles.y + 28 * sin(gpGlobals->time*8.5) );
+			// FlameControls( angles.x + 2 * sin(UTIL_GlobalTimeBase()*8), angles.y + 28 * sin(UTIL_GlobalTimeBase()*8.5) );
 			FlameControls( angles.x, angles.y );
 		}
 		break;
@@ -1246,7 +1246,7 @@ CSpiral *CSpiral::Create( const Vector &origin, float height, float radius, floa
 
 void CSpiral::Think( void )
 {
-	float time = gpGlobals->time - pev->dmgtime;
+	float time = UTIL_GlobalTimeBase() - pev->dmgtime;
 
 	while ( time > SPIRAL_INTERVAL )
 	{

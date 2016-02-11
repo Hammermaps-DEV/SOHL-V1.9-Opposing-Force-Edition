@@ -22,6 +22,7 @@
 #include	"soundent.h"
 #include	"customentity.h"
 #include	"decals.h"
+#include	"proj_grenade.h"
 #include	"monster_hgrunt_torch.h"
 
 //=========================================================
@@ -132,7 +133,7 @@ enum
 BOOL CTorch :: FOkToSpeak( void )
 {
 // if someone else is talking, don't speak
-	if (gpGlobals->time <= CRCAllyMonster::g_talkWaitTime)
+	if (UTIL_GlobalTimeBase() <= CRCAllyMonster::g_talkWaitTime)
 		return FALSE;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
@@ -155,7 +156,7 @@ void CTorch::Killed( entvars_t *pevAttacker, int iGib )
 //=========================================================
 void CTorch :: JustSpoke( void )
 {
-	CRCAllyMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
+	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = TORCH_SENT_NONE;
 }
 
@@ -1076,11 +1077,11 @@ void CTorch :: PrescheduleThink ( void )
 		if ( HasConditions ( bits_COND_SEE_ENEMY ) )
 		{
 			// update the squad's last enemy sighting time.
-			MySquadLeader()->m_flLastEnemySightTime = gpGlobals->time;
+			MySquadLeader()->m_flLastEnemySightTime = UTIL_GlobalTimeBase();
 		}
 		else
 		{
-			if ( gpGlobals->time - MySquadLeader()->m_flLastEnemySightTime > 5 )
+			if ( UTIL_GlobalTimeBase() - MySquadLeader()->m_flLastEnemySightTime > 5 )
 			{
 				// been a while since we've seen the enemy
 				MySquadLeader()->m_fEnemyEluded = TRUE;
@@ -1189,7 +1190,7 @@ BOOL CTorch :: CheckRangeAttack2 ( float flDot, float flDist )
 	}
 
 	// assume things haven't changed too much since last time
-	if (gpGlobals->time < m_flNextGrenadeCheck )
+	if (UTIL_GlobalTimeBase() < m_flNextGrenadeCheck )
 	{
 		return m_fThrowGrenade;
 	}
@@ -1227,7 +1228,7 @@ BOOL CTorch :: CheckRangeAttack2 ( float flDot, float flDist )
 		if (SquadMemberInRange( vecTarget, 256 ))
 		{
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
-			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 			m_fThrowGrenade = FALSE;
 			return m_fThrowGrenade;	//AJH need this or it is overridden later.
 		}
@@ -1236,7 +1237,7 @@ BOOL CTorch :: CheckRangeAttack2 ( float flDot, float flDist )
 	if ( ( vecTarget - pev->origin ).Length2D() <= 256 )
 	{
 		// crap, I don't want to blow myself up
-		m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		m_fThrowGrenade = FALSE;
 		return m_fThrowGrenade;
 	}
@@ -1251,14 +1252,14 @@ BOOL CTorch :: CheckRangeAttack2 ( float flDot, float flDist )
 		// throw a hand grenade
 		m_fThrowGrenade = TRUE;
 		// don't check again for a while.
-		m_flNextGrenadeCheck = gpGlobals->time; // 1/3 second.
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase(); // 1/3 second.
 	}
 	else
 	{
 		// don't throw
 		m_fThrowGrenade = FALSE;
 		// don't check again for a while.
-		m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 	}
 	return m_fThrowGrenade;
 }
@@ -1496,11 +1497,10 @@ void CTorch :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		case TORCH_AE_GREN_TOSS:
 		{
 			UTIL_MakeVectors( pev->angles );
-			// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
-			CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, 3.5 );
+			CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, RANDOM_FLOAT(1.5, 3));
 
 			m_fThrowGrenade = FALSE;
-			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 			// !!!LATER - when in a group, only try to throw grenade if ordered.
 		}
 		break;
@@ -1508,7 +1508,7 @@ void CTorch :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		case TORCH_AE_GREN_DROP:
 		{
 			UTIL_MakeVectors( pev->angles );
-			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3 );
+			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, RANDOM_FLOAT(1.5, 2));
 		}
 		break;
 
@@ -1573,8 +1573,8 @@ void CTorch :: Spawn()
 	pev->view_ofs		= Vector ( 0, 0, 50 );// position of the eyes relative to monster's origin.
 	m_flFieldOfView		= VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState		= MONSTERSTATE_NONE;
-	m_flNextGrenadeCheck = gpGlobals->time + 1;
-	m_flNextPainTime	= gpGlobals->time;
+	m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1;
+	m_flNextPainTime	= UTIL_GlobalTimeBase();
 
 	m_flDebug = false; //Debug Massages
 
@@ -1682,7 +1682,7 @@ void CTorch :: TalkInit()
 //=========================================================
 void CTorch :: PainSound ( void )
 {
-	if ( gpGlobals->time > m_flNextPainTime )
+	if ( UTIL_GlobalTimeBase() > m_flNextPainTime )
 	{
 		switch ( RANDOM_LONG(0,5) )
 		{
@@ -1693,7 +1693,7 @@ void CTorch :: PainSound ( void )
 			case 4: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/gr_pain5.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
 			case 5: EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/gr_pain6.wav", 1, ATTN_NORM, 0, GetVoicePitch()); break;
 		}
-		m_flNextPainTime = gpGlobals->time + 1;
+		m_flNextPainTime = UTIL_GlobalTimeBase() + 1;
 	}
 }
 
@@ -2435,7 +2435,7 @@ void CTorchRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 	pBeam->SetFlags( BEAM_FSOLID );
 	pBeam->SetColor( 255, 255, 255 );
 	pBeam->SetThink( &CBeam :: SUB_Remove );
-	pBeam->pev->nextthink = gpGlobals->time + -4096.0 * tr.flFraction / pGrunt->pev->velocity.z + 0.5;
+	pBeam->pev->nextthink = UTIL_GlobalTimeBase() + -4096.0 * tr.flFraction / pGrunt->pev->velocity.z + 0.5;
 
 	UTIL_Remove( this );
 }

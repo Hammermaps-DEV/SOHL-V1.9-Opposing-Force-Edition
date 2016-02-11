@@ -1547,6 +1547,8 @@
 		4 : "Glass cracks"
 		6 : "Scorch marks"
 		7 : "Bullsquid splat"
+		8 : "Electric marks" //NEW 1.9
+		9 : "Spore splat" //NEW 1.9
 		0 : "Custom (see below)"
 	]
 	noise(sprite) : "Custom decal texture"
@@ -4743,6 +4745,20 @@
 	]
 ]
 //NEW 1.9
+@PointClass base(Monster, Sequence) studio("models/strooper.mdl") = monster_shocktrooper : "Shock Trooper" 
+[
+    netname(string) : "Squad Name"
+    spawnflags(Flags) =
+    [
+        32 : "SquadLeader" : 0
+    ]
+    weapons(Choices) : "Weapons" : 3 =
+    [
+        1 : "Shockrifle"
+        3 : "Shockrifle + Spore Grenade"
+    ]
+]
+//NEW 1.9
 @PointClass base(Monster,TalkMonster) studio("models/drill.mdl") = monster_drillsergeant : "Drill Sergeant" []
 //NEW 1.9
 @PointClass base(Monster) studio("models/cleansuit_scientist.mdl") = monster_sitting_cleansuit_scientist : "Sitting Cleansuit Scientist" 
@@ -5293,14 +5309,14 @@
 	//NEW 0.6
 	//* In each of these fields, either choose a preset value from the menu, or else specify
 	//* a number of bullets to remove (e.g. 8).
-      bullets(choices) : "Take 9mm bullets" : 0 =
+    bullets(choices) : "Take 9mm bullets" : 0 =
 	[
 		0: "All"
 		-2: "All except clips"
 		-1: "Empty clips only"
 		-3: "None"
 	]
-      magnum(choices) : "Take 357 bullets" : 0 =
+    magnum(choices) : "Take 357 bullets" : 0 =
 	[
 		0: "All"
 		-2: "All except clip"
@@ -5326,21 +5342,21 @@
 		0: "All"
 		-1: "None"
 	]
-      rockets(choices) : "Take rockets" : 0 =
+    rockets(choices) : "Take rockets" : 0 =
 	[
 		0: "All"
 		-2: "All except clip"
 		-1: "Empty clip only"
 		-3: "None"
 	]
-      uranium(choices) : "Take uranium ammo" : 0 =
+    uranium(choices) : "Take uranium ammo" : 0 =
 	[
 		0: "All"
 		-2: "All except clips"
 		-1: "Empty clips only"
 		-3: "None"
 	]
-      satchels(choices) : "Take satchel charges" : 0 =
+    satchels(choices) : "Take satchel charges" : 0 =
 	[
 		0: "All"
 		-1: "None"
@@ -5365,6 +5381,19 @@
 		0: "Gun & ammo"
 		-3: "Ammo"
 		-1: "None"
+	]
+	shockroach(choices) : "Take Shock-Roach Gun" : 0 =
+	[
+		0: "Gun & ammo"
+		-3: "Ammo"
+		-1: "None"
+	]
+    spores(choices) : "Take spore ammo" : 0 =
+	[
+		0: "All"
+		-2: "All except clip"
+		-1: "Empty clip only"
+		-3: "None"
 	]
 	spawnflags(Flags) =
 	[
@@ -6307,6 +6336,8 @@
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_pipe_wrench.mdl") = weapon_pipewrench : "Pipe Wrench" []
 //NEW 1.9
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_shock.mdl") = weapon_shockrifle : "Shock Roach" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_spore_launcher.mdl") = weapon_sporelauncher : "Spore Launcher" []
 
 @PointClass base(Weapon, Targetx, RenderFields) = world_items : "World Items" 
 [
@@ -6334,6 +6365,12 @@
 @PointClass base(Targetname, Angles, RenderFields) size(-40 -40 0, 40 40 120 ) studio("models/fungus.mdl")= xen_spore_medium : "Xen Spore (medium)" []
 @PointClass base(Targetname, Angles, RenderFields) size(-16 -16 0, 16 16 64 ) studio("models/fungus(small).mdl")= xen_spore_small : "Xen Spore (small)" []
 @PointClass base(Targetname, Angles, RenderFields) size(-24 -24 0, 24 24 188 ) studio("models/tree.mdl")= xen_tree : "Xen Tree" []
+
+//NEW 1.9 
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/spore.mdl") = ammo_spore : "Spore" []
+
+//NEW 1.9 
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/spore_ammo.mdl") = ammo_spore_plant : "Spore Plant" []
 
 //NEW 1.5 
 @PointClass iconsprite("sprites/env.spr") = rain_settings : "Constant map settings" 

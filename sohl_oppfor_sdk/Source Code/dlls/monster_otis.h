@@ -12,39 +12,44 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
+//=========================================================
+// NPC: Otis * http://half-life.wikia.com/wiki/Otis_Laurey
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 
 #ifndef MONSTER_OTIS_H
 #define MONSTER_OTIS_H
 
+// include
 #include "monster_barney.h"
 
-class COtis : public CBarney
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	void BarneyFirePistol(void);
-	void KeyValue(KeyValueData *pkvd);
-	void AlertSound(void);
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
+// class definition
+class COtis : public CBarney {
+	public:
+		void Spawn(void);
+		void Precache(void);
+		void FirePistol(void);
+		void KeyValue(KeyValueData *pkvd);
+		void AlertSound(void);
+		void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+		int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-	void DeclineFollowing(void);
+		void DeclineFollowing(void);
 
-	// Override these to set behavior
-	Schedule_t *GetSchedule(void);
+		Schedule_t *GetSchedule(void);
 
-	void TalkInit(void);
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	void Killed(entvars_t *pevAttacker, int iGib);
+		void TalkInit(void);
+		void Killed(entvars_t *pevAttacker, int iGib);
 
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
+		virtual int	Save(CSave &save);
+		virtual int	Restore(CRestore &restore);
+		static	TYPEDESCRIPTION m_SaveData[];
 
-	BOOL	m_fSuspicious;
-	int		head;
+		static const char *pAttackSounds[];
+
+		int	head;
 };
 
 #endif // MONSTER_OTIS_H

@@ -143,7 +143,7 @@ public:
 
 	BOOL CanLayCrab(void)
 	{
-		if (m_crabTime < gpGlobals->time && m_crabCount < BIG_MAXCHILDREN)
+		if (m_crabTime < UTIL_GlobalTimeBase() && m_crabCount < BIG_MAXCHILDREN)
 		{
 			// Don't spawn crabs inside each other
 			Vector mins = pev->origin - Vector(32, 32, 0);

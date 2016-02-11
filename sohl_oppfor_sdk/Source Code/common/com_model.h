@@ -5,6 +5,20 @@
 // $NoKeywords: $
 //=============================================================================
 
+
+//  06/25/2002 MAH
+//  This header file has been modified to now include the proper BSP model
+//  structure definitions for each of the two Quakeworld client renderers:
+//  software mode and GL mode. Originally, Valve only supplied it with
+//  the software mode definitions, which caused General Protection Fault's
+//  when accessing members of the structures that are different between
+//  the two versions.  These are: 'mnode_t', 'mleaf_t', 'msurface_t' and
+//  'texture_t'. To select the GL hardware rendering versions of these
+//  structures, define 'HARDWARE_MODE' as a preprocessor symbol, otherwise
+//  it will default to software mode as supplied.
+
+#define HARDWARE_MODE
+
 // com_model.h
 #if !defined( COM_MODEL_H )
 #define COM_MODEL_H
@@ -17,6 +31,8 @@
 
 #define MAX_CLIENTS			32
 #define	MAX_EDICTS			900
+#define MAX_MAP_VERTS       65535
+#define MAX_MAP_TRIANGLES   32768   //this is right ?
 
 #define MAX_MODEL_NAME		64
 #define MAX_MAP_HULLS		4
@@ -70,6 +86,9 @@ typedef struct
 } dmodel_t;
 
 // plane_t structure
+// 06/23/2002 MAH
+// This structure is the same in QW source files
+//  'model.h' and 'gl_model.h'
 typedef struct mplane_s
 {
 	vec3_t	normal;			// surface normal
@@ -84,12 +103,21 @@ typedef struct
 	vec3_t		position;
 } mvertex_t;
 
+// 06/23/2002 MAH
+// This structure is the same in QW source files
+//  'model.h' and 'gl_model.h'
 typedef struct
 {
 	unsigned short	v[2];
 	unsigned int	cachededgeoffset;
 } medge_t;
 
+
+#ifndef     HARDWARE_MODE
+//  06/23/2002 MAH
+//  This structure is different between hardware and software mode
+//
+// software mode - QW 'model.h'
 typedef struct texture_s
 {
 	char		name[16];
@@ -102,6 +130,27 @@ typedef struct texture_s
 	unsigned	paloffset;
 } texture_t;
 
+#else
+//
+//  hardware mode - QW 'gl_model.h'
+typedef struct texture_s
+{
+    char        name[16];
+    unsigned    width, height;
+    int         gl_texturenum;
+    struct msurface_s   *texturechain;  // for gl_texsort drawing
+    int         anim_total;             // total tenths in sequence ( 0 = no)
+    int         anim_min, anim_max;     // time for this frame min <=time< max
+    struct texture_s *anim_next;        // in the animation sequence
+    struct texture_s *alternate_anims;  // bmodels in frmae 1 use these
+    unsigned    offsets[MIPLEVELS];     // four mip maps stored
+} texture_t;
+
+#endif
+
+// 06/23/2002 MAH
+// This structure is the same in QW source files
+//  'model.h' and 'gl_model.h'
 typedef struct
 {
 	float		vecs[2][4];		// [s/t] unit vectors in world space. 
@@ -112,6 +161,28 @@ typedef struct
 	int			flags;			// sky or slime, no lightmap or 256 subdivision
 } mtexinfo_t;
 
+#ifdef  HARDWARE_MODE
+// 06/23/2002 MAH
+// This structure is only need for hardware rendering
+#define VERTEXSIZE  7
+
+typedef struct glpoly_s
+{
+	struct  glpoly_s    *next;
+	struct  glpoly_s    *chain;
+	int     numverts;
+	int     flags;          	// for SURF_UNDERWATER
+	float verts[4][VERTEXSIZE];   // variable sized (xyz s1t1 s2t2)
+} glpoly_t;
+
+#endif
+
+
+#ifndef HARDWARE_MODE
+//  06/23/2002 MAH
+//  This structure is different between hardware and software mode
+//
+//  Software Mode - QW 'model.h'
 typedef struct mnode_s
 {
 // common with leaf
@@ -119,6 +190,28 @@ typedef struct mnode_s
 	int			visframe;		// node needs to be traversed if current
 	
 	short		minmaxs[6];		// for bounding box culling
+
+
+    struct mnode_s  *parent;
+
+// node specific
+    mplane_t    *plane;
+    struct mnode_s  *children[2];
+
+    unsigned short      firstsurface;
+    unsigned short      numsurfaces;
+} mnode_t;
+
+#else
+//
+//  hardware mode - QW 'gl_model.h'
+typedef struct mnode_s
+{
+// common with leaf
+    int             contents;       // 0, to differentiate from leafs
+    int             visframe;       // node needs to be traversed if current
+
+    float           minmaxs[6];     // for bounding box culling
 
 	struct mnode_s	*parent;
 
@@ -129,6 +222,9 @@ typedef struct mnode_s
 	unsigned short		firstsurface;
 	unsigned short		numsurfaces;
 } mnode_t;
+
+#endif
+
 
 typedef struct msurface_s	msurface_t;
 typedef struct decal_s		decal_t;
@@ -147,6 +243,11 @@ struct decal_s
 	short		entityIndex;	// Entity this is attached to
 };
 
+#ifndef HARDWARE_MODE
+//  06/23/2002 MAH
+//  This structure is different between hardware and software mode
+//
+//  Software Mode - QW 'model.h'
 typedef struct mleaf_s
 {
 // common with node
@@ -166,7 +267,33 @@ typedef struct mleaf_s
 	int			key;			// BSP sequence number for leaf's contents
 	byte		ambient_sound_level[NUM_AMBIENTS];
 } mleaf_t;
+#else
+//
+//  hardware renderer - QW 'gl_model.h'
+typedef struct mleaf_s
+{
+// common with node
+    int         contents;       // wil be a negative contents number
+    int         visframe;       // node needs to be traversed if current
 
+    float       minmaxs[6];     // for bounding box culling
+
+    struct mnode_s  *parent;
+
+// leaf specific
+    byte        *compressed_vis;
+    struct efrag_s  *efrags;
+
+    msurface_t  **firstmarksurface;
+    int         nummarksurfaces;
+    int         key;            // BSP sequence number for leaf's contents
+    byte        ambient_sound_level[NUM_AMBIENTS];
+} mleaf_t;
+#endif
+
+#ifndef     HARDWARE_MODE
+//
+//  software renderer - QW 'model.h'
 struct msurface_s
 {
 	int			visframe;		// should be drawn when node is crossed
@@ -182,6 +309,9 @@ struct msurface_s
 	int			numedges;	// are backwards edges
 	
 // surface generation data
+// 06/23/2002 MAH
+// WARNING: this structure is not defined anywhere in the HL SDK 2.2
+//  headers.   See Quakeworld client software mode source for this
 	struct surfcache_s	*cachespots[MIPLEVELS];
 
 	short		texturemins[2]; // smallest s/t position on the surface.
@@ -193,17 +323,70 @@ struct msurface_s
 	byte		styles[MAXLIGHTMAPS]; // index into d_lightstylevalue[] for animated lights 
 									  // no one surface can be effected by more than 4 
 									  // animated lights.
-	color24		*samples;
+    color24     *samples;           // actual light map data for this surface
 	
 	decal_t		*pdecals;
 };
 
+#else
+//
+//  hardware renderer - QW 'gl_model.h'
+//  06/23/2002 2230 MAH
+//  WARNING - the above indicates this structure was modified
+//      for Half-Life this structure needs VERIFICATION
+//  06/23/2002 2300 MAH - the below version for hardware agrees
+//      with a hexadecimal data dump of these structures taken
+//      from a running game.
+typedef struct msurface_s
+{
+    int         visframe;       // should be drawn when node is crossed
+
+    mplane_t    *plane;
+    int         flags;
+
+    int         firstedge;  // look up in model->surfedges[], negative numbers
+    int         numedges;   // are backwards edges
+
+    short       texturemins[2];
+    short       extents[2];
+
+    int         light_s, light_t;           // gl lightmap coordinates
+
+    glpoly_t    *polys;                     // multiple if warped
+    struct msurface_s   *texturechain;
+
+    mtexinfo_t  *texinfo;
+
+// lighting info
+    int         dlightframe;
+    int         dlightbits;
+
+    int         lightmaptexturenum;
+    byte        styles[MAXLIGHTMAPS];
+    int         cached_light[MAXLIGHTMAPS]; // values currently used in lightmap
+    qboolean    cached_dlight;              // true if dynamic light in cache
+
+//  byte        *samples;                   // [numstyles*surfsize]
+    color24     *samples;                   // note: this is the actual lightmap data for this surface
+    decal_t     *pdecals;
+
+} msurface_t;
+#endif
+
+//
+//  06/23/2002 MAH
+//  Note: this structure is exactly the same in QW software
+//      and hardware renderers QW - 'bspfile.h'
 typedef struct
 {
 	int			planenum;
 	short		children[2];	// negative numbers are contents
 } dclipnode_t;
 
+//
+//  06/23/2002 MAH
+//  Note: this structure is exactly the same in QW software
+//      and hardware renderers 'model.h' and 'gl_model.h'
 typedef struct hull_s
 {
 	dclipnode_t	*clipnodes;
@@ -224,49 +407,49 @@ typedef struct cache_user_s
 
 typedef struct model_s
 {
-	char		name[ MAX_MODEL_NAME ];
-	qboolean	needload;		// bmodels and sprites don't cache normally
+    char        name[ MAX_MODEL_NAME ];     // +0x000
+    qboolean    needload;                   // +0x040   bmodels and sprites don't cache normally
 
-	modtype_t	type;
-	int			numframes;
-	synctype_t	synctype;
+    modtype_t   type;                       // +0x044
+    int         numframes;                  // +0x048
+    synctype_t  synctype;                   // +0x04C
 	
-	int			flags;
+    int         flags;                      // +0x050
 
 //
 // volume occupied by the model
 //		
-	vec3_t		mins, maxs;
-	float		radius;
+    vec3_t      mins, maxs;                 // +0x054, +060
+    float       radius;                     // +0x06C
 
 //
 // brush model
 //
-	int			firstmodelsurface, nummodelsurfaces;
+    int         firstmodelsurface, nummodelsurfaces;    // +0x070, +0x074
 
-	int			numsubmodels;
-	dmodel_t	*submodels;
+    int         numsubmodels;               // +0x078
+    dmodel_t    *submodels;                 // +0x07C
 
-	int			numplanes;
-	mplane_t	*planes;
+    int         numplanes;                  // +0x080
+    mplane_t    *planes;                    // +0x084
 
-	int			numleafs;		// number of visible leafs, not counting 0
-	struct mleaf_s		*leafs;
+    int                 numleafs;           // +0x088      number of visible leafs, not counting 0
+    struct mleaf_s      *leafs;             // +0x08C
 
-	int			numvertexes;
-	mvertex_t	*vertexes;
+    int         numvertexes;                // +0x090
+    mvertex_t   *vertexes;                  // +0x094
 
-	int			numedges;
-	medge_t		*edges;
+    int         numedges;                   // +0x098
+    medge_t     *edges;                     // +0x09C
 
-	int			numnodes;
-	mnode_t		*nodes;
+    int         numnodes;                   // +0x0A0
+    mnode_t     *nodes;                     // +0x0A4
 
-	int			numtexinfo;
-	mtexinfo_t	*texinfo;
+    int         numtexinfo;                 // +0x0A8
+    mtexinfo_t  *texinfo;                   // +0x0AC
 
-	int			numsurfaces;
-	msurface_t	*surfaces;
+    int         numsurfaces;                // +0x0B0
+    msurface_t  *surfaces;                  // +0x0B4
 
 	int			numsurfedges;
 	int			*surfedges;
@@ -310,6 +493,9 @@ typedef struct auxvert_s
 	float	fv[3];		// viewspace x, y
 } auxvert_t;
 
+//
+// ------------------  Player Model Animation Info ----------------
+//
 #include "custom.h"
 
 #define	MAX_INFO_STRING			256
@@ -348,4 +534,6 @@ typedef struct player_info_s
 	customization_t customdata;
 } player_info_t;
 
-#endif // #define COM_MODEL_H
+extern mvertex_t *globalVertexTable;
+
+#endif // #if !defined(COM_MODEL_H)

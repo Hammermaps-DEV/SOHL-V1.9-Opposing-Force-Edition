@@ -315,7 +315,7 @@ void CFuncShine :: DesiredAction( void )
 	if (pev->message && pev->renderamt)
 	{
 //		ALERT(at_console, "Prepare think\n");
-		pev->nextthink = gpGlobals->time + 1.5;
+		pev->nextthink = UTIL_GlobalTimeBase() + 1.5;
 	}
 }
 
@@ -634,7 +634,7 @@ void CFuncRotating :: Precache( void )
 
 void CFuncRotating :: WaitForStart()
 {
-	if (gpGlobals->time > 1) // has the client started yet?
+	if (UTIL_GlobalTimeBase() > 1) // has the client started yet?
 	{
 		SUB_CallUseToggle();
 	}
@@ -1001,7 +1001,7 @@ void CPendulum :: PendulumUse( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 	{
 		SetNextThink(0.1); // start the pendulum moving
 		SetThink(&CPendulum ::SwingThink);
-		m_time = gpGlobals->time;		// Save time to calculate dt
+		m_time = UTIL_GlobalTimeBase();		// Save time to calculate dt
 		m_dampSpeed = m_maxSpeed;
 	}
 }
@@ -1030,7 +1030,7 @@ void CPendulum::Blocked( CBaseEntity *pOther )
 			Use( NULL, NULL, USE_OFF, 0 );
 		}
 	}
-	m_time = gpGlobals->time;
+	m_time = UTIL_GlobalTimeBase();
 }
 
 void CPendulum :: SwingThink( void )
@@ -1038,8 +1038,8 @@ void CPendulum :: SwingThink( void )
 	float delta, dt;
 	
 	delta = CBaseToggle :: AxisDelta( pev->spawnflags, pev->angles, m_center );
-	dt = gpGlobals->time - m_time;	// How much time has passed?
-	m_time = gpGlobals->time;		// Remember the last time called
+	dt = UTIL_GlobalTimeBase() - m_time;	// How much time has passed?
+	m_time = UTIL_GlobalTimeBase();		// Remember the last time called
 
 	if ( delta > 0 && m_accel > 0 )
 		pev->speed -= m_accel * dt;	// Integrate velocity

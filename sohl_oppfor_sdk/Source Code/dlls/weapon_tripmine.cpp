@@ -21,6 +21,7 @@
 #include "player.h"
 #include "effects.h"
 #include "gamerules.h"
+#include "proj_grenade.h"
 
 #define	TRIPMINE_PRIMARY_VOLUME		450
 
@@ -114,12 +115,12 @@ void CTripmineGrenade :: Spawn( void )
 	if (pev->spawnflags & 1)
 	{
 		// power up quickly
-		m_flPowerUp = gpGlobals->time + 1.0;
+		m_flPowerUp = UTIL_GlobalTimeBase() + 1.0;
 	}
 	else
 	{
 		// power up in 2.5 seconds
-		m_flPowerUp = gpGlobals->time + 2.5;
+		m_flPowerUp = UTIL_GlobalTimeBase() + 2.5;
 	}
 
 	SetThink(&CTripmineGrenade :: PowerupThink );
@@ -213,7 +214,7 @@ void CTripmineGrenade :: PowerupThink( void  )
 		SetNextThink( 0.1 );
 		return;
 	}
-	if (gpGlobals->time > m_flPowerUp)
+	if (UTIL_GlobalTimeBase() > m_flPowerUp)
 	{
 		// make solid
 		pev->solid = SOLID_BBOX;
@@ -325,7 +326,7 @@ void CTripmineGrenade :: BeamBreakThink( void  )
 
 int CTripmineGrenade :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
 {
-	if (gpGlobals->time < m_flPowerUp && flDamage < pev->health)
+	if (UTIL_GlobalTimeBase() < m_flPowerUp && flDamage < pev->health)
 	{
 		// disable
 		// Create( "weapon_tripmine", pev->origin + m_vecDir * 24, pev->angles );
@@ -408,8 +409,8 @@ BOOL CTripmine::Deploy( )
 void CTripmine::Holster( )
 {
 	//don't play holster animation if ammo is out
-	if(m_iBody)m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase();
-	else m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+	if(m_iBody)m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase();
+	else m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
 
 	if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
@@ -454,14 +455,14 @@ void CTripmine::PrimaryAttack( void )
 		}
 	}
 
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT( 10, 15 );
-	m_flTimeUpdate =  UTIL_WeaponTimeBase() + RANDOM_FLOAT( 0.5, 1.0 ); //time to deploy next tripmine
+	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3;
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 10, 15 );
+	m_flTimeUpdate =  UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.5, 1.0 ); //time to deploy next tripmine
 }
 
 void CTripmine::WeaponIdle( void )
 {
-	if ( m_flTimeUpdate < UTIL_WeaponTimeBase() && m_iBody)
+	if ( m_flTimeUpdate < UTIL_GlobalTimeBase() && m_iBody)
 	{
 		if ( m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0 )
 		{
@@ -475,28 +476,28 @@ void CTripmine::WeaponIdle( void )
 		}
 	}
 
-	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() )return;
+	if ( m_flTimeWeaponIdle > UTIL_GlobalTimeBase() )return;
 	int iAnim;
 	float flRand = RANDOM_FLOAT( 0, 1 );
 	if (flRand <= 0.25)
 	{
 		iAnim = TRIPMINE_IDLE1;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 90.0 / 30.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 90.0 / 30.0;
 	}
 	else if (flRand <= 0.75)
 	{
 		iAnim = TRIPMINE_IDLE2;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 60.0 / 30.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 60.0 / 30.0;
 	}
 	else if (flRand <= 0.85)
 	{
 		iAnim = TRIPMINE_FIDGET;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 100.0 / 30.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 100.0 / 30.0;
 	}
 	else
 	{
        		iAnim = TRIPMINE_ARM1;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 45.0 / 15.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 45.0 / 15.0;
 	}
 	SendWeaponAnim( iAnim );
 }

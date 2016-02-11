@@ -62,7 +62,7 @@ LINK_ENTITY_TO_CLASS( squidspit, CSquidSpit );
 
 TYPEDESCRIPTION	CSquidSpit::m_SaveData[] = 
 {
-	DEFINE_FIELD( CSquidSpit, m_maxFrame, FIELD_INTEGER ),
+	DEFINE_FIELD( CSquidSpit, m_maxFrame, FIELD_INTEGER )
 };
 
 IMPLEMENT_SAVERESTORE( CSquidSpit, CBaseEntity );
@@ -194,7 +194,7 @@ int CBullsquid::IgnoreConditions ( void )
 {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
-	if ( gpGlobals->time - m_flLastHurtTime <= 20 )
+	if ( UTIL_GlobalTimeBase() - m_flLastHurtTime <= 20 )
 	{
 		// haven't been hurt in 20 seconds, so let the squid care about stink. 
 		// Er, more like, we HAVE been hurt in the last 20 seconds, so DON'T let it care about food. --LRC
@@ -221,7 +221,7 @@ int CBullsquid::IgnoreConditions ( void )
 //=========================================================
 int CBullsquid::IRelationship ( CBaseEntity *pTarget )
 {
-	if ( gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs ( pTarget->pev, "monster_headcrab" ) )
+	if ( UTIL_GlobalTimeBase() - m_flLastHurtTime < 5 && FClassnameIs ( pTarget->pev, "monster_headcrab" ) )
 	{
 		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab, 
 		// tell squid to disregard crab. 
@@ -242,7 +242,7 @@ int CBullsquid :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, f
 
 	// if the squid is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
-	if ( m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && gpGlobals->time - m_flLastHurtTime > 3 )
+	if ( m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3 )
 	{
 		flDist = ( pev->origin - m_hEnemy->pev->origin ).Length2D();
 		
@@ -260,7 +260,7 @@ int CBullsquid :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, f
 	if ( !FClassnameIs ( pevAttacker, "monster_headcrab" ) )
 	{
 		// don't forget about headcrabs if it was a headcrab that hurt the squid.
-		m_flLastHurtTime = gpGlobals->time;
+		m_flLastHurtTime = UTIL_GlobalTimeBase();
 	}
 
 	return CBaseMonster :: TakeDamage ( pevInflictor, pevAttacker, flDamage, bitsDamageType );
@@ -277,7 +277,7 @@ BOOL CBullsquid :: CheckRangeAttack1 ( float flDot, float flDist )
 		return FALSE;
 	}
 
-	if ( flDist > 64 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpitTime )
+	if ( flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime )
 	{
 		if ( m_hEnemy != NULL )
 		{
@@ -291,12 +291,12 @@ BOOL CBullsquid :: CheckRangeAttack1 ( float flDot, float flDist )
 		if ( IsMoving() )
 		{
 			// don't spit again for a long time, resume chasing enemy.
-			m_flNextSpitTime = gpGlobals->time + 5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 5;
 		}
 		else
 		{
 			// not moving, so spit again pretty soon.
-			m_flNextSpitTime = gpGlobals->time + 0.5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 0.5;
 		}
 
 		return TRUE;
@@ -635,19 +635,22 @@ void CBullsquid :: Spawn()
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/bullsquid.mdl");
+
 	UTIL_SetSize( pev, Vector( -32, -32, 0 ), Vector( 32, 32, 64 ) );
 
 	pev->solid			= SOLID_SLIDEBOX;
 	pev->movetype		= MOVETYPE_STEP;
 	m_bloodColor		= BLOOD_COLOR_GREEN;
 	pev->effects		= 0;
+
 	if (pev->health == 0)
 		pev->health			= gSkillData.bullsquidHealth;
+
 	m_flFieldOfView		= 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
 
 	m_fCanThreatDisplay	= TRUE;
-	m_flNextSpitTime = gpGlobals->time;
+	m_flNextSpitTime = UTIL_GlobalTimeBase();
 
 	MonsterInit();
 }

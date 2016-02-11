@@ -296,10 +296,10 @@ void CGenericMonster::MakeGas( void )
 			UTIL_DecalTrace(&tr, 28 + RANDOM_LONG(0,4));
 		}
 	}
-	// m_flNextAttack = gpGlobals->time + RANDOM_FLOAT( 0.5, 4.0 );
+	// m_flNextAttack = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.5, 4.0 );
 	if ( int gas = 1 )
 	{
-		pev->nextthink = gpGlobals->time;
+		pev->nextthink = UTIL_GlobalTimeBase();
 	}
 }
 

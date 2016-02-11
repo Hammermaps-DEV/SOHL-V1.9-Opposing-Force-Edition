@@ -26,7 +26,7 @@
 
 #include "vgui_TeamFortressViewport.h"
 
-#define MAX_MENU_STRING	512
+#define MAX_MENU_STRING	1024
 char g_szMenuString[MAX_MENU_STRING];
 char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 

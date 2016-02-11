@@ -41,6 +41,7 @@
 #include	"effects.h"
 #include	"customentity.h"
 #include	"scripted.h" //LRC
+#include	"proj_grenade.h"
 #include	"monster_hgrunt.h"
 
 int g_fGruntQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
@@ -276,7 +277,7 @@ int CHGrunt :: ISoundMask ( void )
 BOOL CHGrunt :: FOkToSpeak( void )
 {
 // if someone else is talking, don't speak
-	if (gpGlobals->time <= CTalkMonster::g_talkWaitTime)
+	if (UTIL_GlobalTimeBase() <= CTalkMonster::g_talkWaitTime)
 		return FALSE;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
@@ -299,7 +300,7 @@ BOOL CHGrunt :: FOkToSpeak( void )
 //=========================================================
 void CHGrunt :: JustSpoke( void )
 {
-	CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(1.5, 2.0);
+	CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = HGRUNT_SENT_NONE;
 }
 
@@ -314,11 +315,11 @@ void CHGrunt :: PrescheduleThink ( void )
 		if ( HasConditions ( bits_COND_SEE_ENEMY ) )
 		{
 			// update the squad's last enemy sighting time.
-			MySquadLeader()->m_flLastEnemySightTime = gpGlobals->time;
+			MySquadLeader()->m_flLastEnemySightTime = UTIL_GlobalTimeBase();
 		}
 		else
 		{
-			if ( gpGlobals->time - MySquadLeader()->m_flLastEnemySightTime > 5 )
+			if ( UTIL_GlobalTimeBase() - MySquadLeader()->m_flLastEnemySightTime > 5 )
 			{
 				// been a while since we've seen the enemy
 				MySquadLeader()->m_fEnemyEluded = TRUE;
@@ -428,7 +429,7 @@ BOOL CHGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 
 	// assume things haven't changed too much since last time
-	if (gpGlobals->time < m_flNextGrenadeCheck ) {
+	if (UTIL_GlobalTimeBase() < m_flNextGrenadeCheck ) {
 		return m_fThrowGrenade;
 	}
 
@@ -464,14 +465,14 @@ BOOL CHGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	if ( InSquad() ) {
 		if (SquadMemberInRange( vecTarget, 256 )) {
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
-			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 			m_fThrowGrenade = FALSE;
 		}
 	}
 	
 	if ( ( vecTarget - pev->origin ).Length2D() <= 256 ) {
 		// crap, I don't want to blow myself up
-		m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		m_fThrowGrenade = FALSE;
 		return m_fThrowGrenade;
 	}
@@ -486,12 +487,12 @@ BOOL CHGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 			// throw a hand grenade
 			m_fThrowGrenade = TRUE;
 			// don't check again for a while.
-			m_flNextGrenadeCheck = gpGlobals->time; // 1/3 second.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase(); // 1/3 second.
 		} else {
 			// don't throw
 			m_fThrowGrenade = FALSE;
 			// don't check again for a while.
-			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		}
 	} else {
 		Vector vecToss = VecCheckThrow( pev, GetGunPosition(), vecTarget, gSkillData.hgruntGrenadeSpeed, 0.5 );
@@ -501,12 +502,12 @@ BOOL CHGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 			// throw a hand grenade
 			m_fThrowGrenade = TRUE;
 			// don't check again for a while.
-			m_flNextGrenadeCheck = gpGlobals->time + 0.3; // 1/3 second.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 0.3; // 1/3 second.
 		} else {
 			// don't throw
 			m_fThrowGrenade = FALSE;
 			// don't check again for a while.
-			m_flNextGrenadeCheck = gpGlobals->time + 1; // one full second.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		}
 	}
 
@@ -796,7 +797,6 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		case HGRUNT_AE_GREN_TOSS:
 		{
 			UTIL_MakeVectors( pev->angles );
-			// CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 34 + Vector (0, 0, 32), m_vecTossVelocity, 3.5 );
 			//LRC - a bit of a hack. Ideally the grunts would work out in advance whether it's ok to throw.
 			if (m_pCine)
 			{
@@ -809,13 +809,13 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				{
 					vecToss = (gpGlobals->v_forward*0.5+gpGlobals->v_up*0.5).Normalize()*gSkillData.hgruntGrenadeSpeed;
 				}
-				CGrenade::ShootTimed( pev, GetGunPosition(), vecToss, 3.5 );
+				CGrenade::ShootTimed( pev, GetGunPosition(), vecToss, RANDOM_FLOAT(1.5, 3));
 			}
 			else
-				CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, 3.5 );
+				CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, RANDOM_FLOAT(1.5, 3));
 
 			m_fThrowGrenade = FALSE;
-			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 			// !!!LATER - when in a group, only try to throw grenade if ordered.
 		}
 		break;
@@ -841,16 +841,16 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			CGrenade::ShootContact( pev, GetGunPosition(), m_vecTossVelocity );
 			m_fThrowGrenade = FALSE;
 			if (g_iSkillLevel == SKILL_HARD)
-				m_flNextGrenadeCheck = gpGlobals->time + RANDOM_FLOAT( 2, 5 );// wait a random amount of time before shooting again
+				m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 2, 5 );// wait a random amount of time before shooting again
 			else
-				m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
+				m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 		}
 		break;
 
 		case HGRUNT_AE_GREN_DROP:
 		{
 			UTIL_MakeVectors( pev->angles );
-			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, 3 );
+			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, RANDOM_FLOAT(1.5, 2));
 		}
 		break;
 
@@ -946,8 +946,8 @@ void CHGrunt :: Spawn()
 		pev->health			= gSkillData.hgruntHealth;
 	m_flFieldOfView		= 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState		= MONSTERSTATE_NONE;
-	m_flNextGrenadeCheck = gpGlobals->time + 1;
-	m_flNextPainTime	= gpGlobals->time;
+	m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1;
+	m_flNextPainTime	= UTIL_GlobalTimeBase();
 	m_iSentence			= HGRUNT_SENT_NONE;
 
 	m_afCapability		= bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
@@ -1122,7 +1122,7 @@ void CHGrunt :: RunTask ( Task_t *pTask )
 //=========================================================
 void CHGrunt :: PainSound ( void )
 {
-	if ( gpGlobals->time > m_flNextPainTime )
+	if ( UTIL_GlobalTimeBase() > m_flNextPainTime )
 	{
 		switch ( RANDOM_LONG(0,6) )
 		{
@@ -1143,7 +1143,7 @@ void CHGrunt :: PainSound ( void )
 			break;
 		}
 
-		m_flNextPainTime = gpGlobals->time + 1;
+		m_flNextPainTime = UTIL_GlobalTimeBase() + 1;
 	}
 }
 

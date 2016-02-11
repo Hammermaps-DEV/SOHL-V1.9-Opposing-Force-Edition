@@ -1850,12 +1850,16 @@ int CStudioModelRenderer::StudioDrawPlayer( int flags, entity_state_t *pplayer )
 			{
 				cl_entity_t saveent = *m_pCurrentEntity;
 
-				model_t *pweaponmodel = IEngineStudio.GetModelByIndex( pplayer->weaponmodel );
-
-				m_pStudioHeader = (studiohdr_t *)IEngineStudio.Mod_Extradata (pweaponmodel);
-				IEngineStudio.StudioSetHeader( m_pStudioHeader );
-
-				StudioMergeBones( pweaponmodel);
+				if ( gEngfuncs.GetMaxClients() > 1 )
+				{
+					model_t *pweaponmodel = IEngineStudio.GetModelByIndex( pplayer->weaponmodel );
+	
+					m_pStudioHeader = (studiohdr_t *)IEngineStudio.Mod_Extradata (pweaponmodel);
+	
+					IEngineStudio.StudioSetHeader( m_pStudioHeader );
+	
+					StudioMergeBones( pweaponmodel);
+				}
 
 				IEngineStudio.StudioSetupLighting (&lighting);
 
@@ -1884,7 +1888,8 @@ void CStudioModelRenderer::StudioCalcAttachments( void )
 
 	if ( m_pStudioHeader->numattachments > 4 )
 	{
-		CONPRINT( "Too many attachments on %s\n", m_pCurrentEntity->model->name );
+		gEngfuncs.Con_DPrintf( "Too many attachments on %s\n", m_pCurrentEntity->model->name );
+		exit( -1 );
 	}
 
 	// calculate attachment points

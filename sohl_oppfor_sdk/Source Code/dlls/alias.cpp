@@ -369,7 +369,7 @@ CBaseEntity *CMultiAlias::FollowAlias( CBaseEntity *pStartEntity )
 		// During any given 'game moment', this code may be called more than once. It must use the
 		// same random values each time (because otherwise it gets really messy). I'm using srand
 		// to arrange this.
-		srand( (int)(gpGlobals->time * 100) );
+		srand( (int)(UTIL_GlobalTimeBase() * 100) );
 		rand(); // throw away the first result - it's just the seed value
 		if (m_iMode == 1) // 'choose one' mode
 		{

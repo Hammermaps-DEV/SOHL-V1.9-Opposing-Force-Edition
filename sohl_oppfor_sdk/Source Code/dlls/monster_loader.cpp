@@ -26,13 +26,7 @@
 #include    "customentity.h"
 #include	"monster_loader.h"
 
-//TODO: 
-/*
-spawnflags(Flags) =
-[
-4 : "Not solid" : 0
-]
-*/
+#define	SF_LOADER_NOTSOLID	4 
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -59,6 +53,12 @@ void CLoader::Spawn()
 	pev->health = 100;
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
+
+	if (pev->spawnflags & SF_LOADER_NOTSOLID)
+	{
+		pev->solid = SOLID_NOT;
+		pev->takedamage = DAMAGE_NO;
+	}
 
 	MonsterInit();
 }

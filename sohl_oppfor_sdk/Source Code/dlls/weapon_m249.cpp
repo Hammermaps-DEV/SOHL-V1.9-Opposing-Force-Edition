@@ -112,7 +112,7 @@ BOOL CM249::Deploy()
 void CM249::Holster()
 {
 	m_fInReload = FALSE;// cancel any reload in progress.
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.8;
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.8;
 	SendWeaponAnim(SAW_HOLSTER);
 }
 
@@ -144,10 +144,10 @@ void CM249::PrimaryAttack()
 
 		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usM249, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0);
 
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.0675;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.0675;
 
-		if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase())
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.0675;
+		if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase())
+			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.0675;
 
 		if (!FBitSet(m_pPlayer->pev->flags, FL_DUCKING))
 		{
@@ -156,12 +156,12 @@ void CM249::PrimaryAttack()
 			m_pPlayer->pev->velocity.z = flOldPlayerVel;
 		}
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 7.0 / 30.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 7.0 / 30.0;
 	}
 	else
 	{
 		PlayEmptySound();
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.5;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
 
@@ -175,22 +175,22 @@ void CM249::Reload(void)
 		UpdateClip();
 		m_iReloadStep = 1;
 		DefaultReload(M249_MAX_CLIP, SAW_RELOAD_START, 1.5);
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + (61 / 40) + (111 / 45);
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 61 / 40;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + (61 / 40) + (111 / 45);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 61 / 40;
 	}
 }
 
 void CM249::WeaponIdle(void)
 {
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase()) return;
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) return;
 
 	if (m_iReloadStep)
 	{
 		UpdateClip();
 		m_iReloadStep = 0;
 		SendWeaponAnim(SAW_RELOAD_END);
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 111.0 / 45.0;
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 111.0 / 45.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 111.0 / 45.0;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 111.0 / 45.0;
 	}
 	else
 	{
@@ -200,12 +200,12 @@ void CM249::WeaponIdle(void)
 		if (flRand <= 0.8)
 		{
 			iAnim = SAW_SLOWIDLE;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + (45.0 / 9.0);
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + (45.0 / 9.0);
 		}
 		else
 		{
 			iAnim = SAW_IDLE;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + (74.0 / 12.0);// * RANDOM_LONG(2, 5);
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + (74.0 / 12.0);// * RANDOM_LONG(2, 5);
 		}
 
 		SendWeaponAnim(iAnim);

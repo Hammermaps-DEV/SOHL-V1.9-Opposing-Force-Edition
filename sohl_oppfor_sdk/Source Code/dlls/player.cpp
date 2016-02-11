@@ -197,6 +197,7 @@ int gmsgSetSkin = 0;//change skin for view weapon model
 int gmsgSetMirror = 0;//set mirror
 int gmsgResetMirror = 0;
 int gmsgParticles = 0; // particle system
+int gmsgConcuss = 0;
 
 void LinkUserMessages( void )
 {
@@ -259,6 +260,7 @@ void LinkUserMessages( void )
 	gmsgSetMirror = REG_USER_MSG("SetMirror", 10);
 	gmsgResetMirror = REG_USER_MSG("ResetMirror", 0);
 	gmsgParticles = REG_USER_MSG("Particles", -1);
+	gmsgConcuss = REG_USER_MSG("Concuss", 1);
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
@@ -365,7 +367,7 @@ int CBasePlayer :: TakeArmor( float flArmor )
 	if(CBaseMonster::TakeArmor(flArmor ))
 	{
 		//force flashlight to charge
-		m_flFlashLightTime = FLASH_CHARGE_TIME + gpGlobals->time;
+		m_flFlashLightTime = FLASH_CHARGE_TIME + UTIL_GlobalTimeBase();
 		return 1;
 	}
 	return 0;
@@ -616,9 +618,26 @@ int CBasePlayer :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		}
 		if (bitsDamage & DMG_SHOCK)
 		{
+			SetSuitUpdate("!HEV_SHOCK", FALSE, SUIT_NEXT_IN_1MIN);//new
 			bitsDamage &= ~DMG_SHOCK;
 			ffound = TRUE;
 		}
+
+		//new
+		if (bitsDamage & DMG_BURN)
+		{
+			SetSuitUpdate("!HEV_FIRE", FALSE, SUIT_NEXT_IN_1MIN);//new
+			bitsDamage &= ~DMG_BURN;
+			ffound = TRUE;
+		}
+
+		if (bitsDamage & DMG_SLOWBURN)
+		{
+			SetSuitUpdate("!HEV_FIRE", FALSE, SUIT_NEXT_IN_1MIN);//new
+			bitsDamage &= ~DMG_SLOWBURN;
+			ffound = TRUE;
+		}
+
 	}
 
 	pev->punchangle.x = -2;
@@ -871,7 +890,7 @@ void CBasePlayer::RemoveAmmo( const char* szName, int iAmount )
 }
 
 //LRC
-void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren, int iHornet, int iCycler )
+void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren, int iHornet, int iCycler, int iShock, int iSpore)
 {
 	int i;
 	CBasePlayerItem *pCurrentItem;
@@ -879,6 +898,7 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 	// hornetgun is outside the spawnflags Worldcraft can set - handle it seperately.
 	if (iHornet) iWeaponMask |= 1<<WEAPON_HORNETGUN;
 	if (iCycler) iWeaponMask |= 1<<WEAPON_CYCLER;
+	if (iShock)  iWeaponMask |= 1<<WEAPON_SHOCKRIFLE;
 
 	RemoveAmmo("9mm", i9mm);
 	RemoveAmmo("357", i357);
@@ -892,6 +912,8 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 	RemoveAmmo("Trip Mine", iTrip);
 	RemoveAmmo("Hand Grenade", iGren);
 	RemoveAmmo("Hornets", iHornet);
+	RemoveAmmo("spore", iSpore);
+	RemoveAmmo("shocks", iShock);
 
 	for (i = 0; i < MAX_ITEM_TYPES; i++)
 	{
@@ -902,7 +924,7 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 		{
 			if (!(1<<pCurrentItem->m_pNext->m_iId & iWeaponMask))
 			{
-				((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, FALSE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren);
+				((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, FALSE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren, iShock, iSpore);
 				//remove pCurrentItem->m_pNext from the list
 //				ALERT(at_console, "Removing %s. (id = %d)\n", pCurrentItem->m_pNext->pszName(), pCurrentItem->m_pNext->m_iId);
 				pCurrentItem->m_pNext->Drop( );
@@ -913,7 +935,7 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 			else
 			{
 				//we're keeping this, so we need to empty the clip
-				((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, TRUE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren);
+				((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, TRUE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren, iShock, iSpore);
 				//now, leave pCurrentItem->m_pNext in the list and go on to the next
 //				ALERT(at_console, "Keeping %s. (id = %d)\n", pCurrentItem->m_pNext->pszName(), pCurrentItem->m_pNext->m_iId);
 				pCurrentItem = pCurrentItem->m_pNext;
@@ -922,7 +944,7 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 		// we've gone through items 2+, now we finish off by checking item 1.
 		if (!(1<<m_rgpPlayerItems[i]->m_iId & iWeaponMask))
 		{
-			((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, FALSE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren);
+			((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, FALSE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren, iShock, iSpore);
 //			ALERT(at_console, "Removing %s. (id = %d)\n", m_rgpPlayerItems[i]->pszName(), m_rgpPlayerItems[i]->m_iId);
 			m_rgpPlayerItems[i]->Drop( );
 			if (m_pLastItem == m_rgpPlayerItems[i])
@@ -931,7 +953,7 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 		}
 		else
 		{
-			((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, TRUE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren);
+			((CBasePlayerWeapon*)pCurrentItem)->DrainClip(this, TRUE, i9mm, i357, iBuck, iBolt, iARGren, iRock, iUranium, iSatchel, iSnark, iTrip, iGren, iShock, iSpore);
 //			ALERT(at_console, "Keeping %s. (id = %d)\n", m_rgpPlayerItems[i]->pszName(), m_rgpPlayerItems[i]->m_iId);
 		}
 	}
@@ -965,7 +987,7 @@ void CBasePlayer::RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, i
 		if (m_pActiveItem && !((CBasePlayerWeapon*)m_pActiveItem)->IsUseable())
 		{
 			//lower the gun if it's out of ammo
-			((CBasePlayerWeapon*)m_pActiveItem)->m_flTimeWeaponIdle = UTIL_WeaponTimeBase();
+			((CBasePlayerWeapon*)m_pActiveItem)->m_flTimeWeaponIdle = UTIL_GlobalTimeBase();
 		}
 		UpdateClientData();
 	}
@@ -1254,6 +1276,8 @@ void CBasePlayer::TabulateAmmo()
 	ammo_uranium = AmmoInventory( GetAmmoIndex( "uranium" ) );
 	ammo_hornets = AmmoInventory( GetAmmoIndex( "Hornets" ) );
 	ammo_556 = AmmoInventory(GetAmmoIndex("556"));
+	ammo_shock = AmmoInventory(GetAmmoIndex("shocks"));
+	ammo_spore = AmmoInventory(GetAmmoIndex("spore"));
 }
 
 /*
@@ -1283,12 +1307,12 @@ void CBasePlayer::WaterMove()
 		// not underwater
 
 		// play 'up for air' sound
-		if (pev->air_finished < gpGlobals->time)
+		if (pev->air_finished < UTIL_GlobalTimeBase())
 			EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_wade1.wav", 1, ATTN_NORM);
-		else if (pev->air_finished < gpGlobals->time + 9)
+		else if (pev->air_finished < UTIL_GlobalTimeBase() + 9)
 			EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pl_wade2.wav", 1, ATTN_NORM);
 
-		pev->air_finished = gpGlobals->time + AIRTIME;
+		pev->air_finished = UTIL_GlobalTimeBase() + AIRTIME;
 		pev->dmg = 2;
 
 		// if we took drowning damage, give it back slowly
@@ -1313,16 +1337,16 @@ void CBasePlayer::WaterMove()
 		m_bitsDamageType &= ~DMG_DROWNRECOVER;
 		m_rgbTimeBasedDamage[itbd_DrownRecover] = 0;
 
-		if (pev->air_finished < gpGlobals->time)		// drown!
+		if (pev->air_finished < UTIL_GlobalTimeBase())		// drown!
 		{
-			if (pev->pain_finished < gpGlobals->time)
+			if (pev->pain_finished < UTIL_GlobalTimeBase())
 			{
 				// take drowning damage
 				pev->dmg += 1;
 				if (pev->dmg > 5)
 					pev->dmg = 5;
 				TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), pev->dmg, DMG_DROWN);
-				pev->pain_finished = gpGlobals->time + 1;
+				pev->pain_finished = UTIL_GlobalTimeBase() + 1;
 
 				// track drowning damage, give it back when
 				// player finally takes a breath
@@ -1346,7 +1370,7 @@ void CBasePlayer::WaterMove()
 	}
 
 	// make bubbles
-	air = (int)(pev->air_finished - gpGlobals->time);
+	air = (int)(pev->air_finished - UTIL_GlobalTimeBase());
 	if (!RANDOM_LONG(0,0x1f) && RANDOM_LONG(0,AIRTIME-1) >= air)
 	{
 		switch (RANDOM_LONG(0,3))
@@ -1360,12 +1384,12 @@ void CBasePlayer::WaterMove()
 
 	if (pev->watertype == CONTENT_LAVA)		// do damage
 	{
-		if (pev->dmgtime < gpGlobals->time)
+		if (pev->dmgtime < UTIL_GlobalTimeBase())
 			TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 10 * pev->waterlevel, DMG_BURN);
 	}
 	else if (pev->watertype == CONTENT_SLIME)		// do damage
 	{
-		pev->dmgtime = gpGlobals->time + 1;
+		pev->dmgtime = UTIL_GlobalTimeBase() + 1;
 		TakeDamage(VARS(eoNullEntity), VARS(eoNullEntity), 4 * pev->waterlevel, DMG_ACID);
 	}
 
@@ -1438,7 +1462,7 @@ void CBasePlayer::PlayerDeathThink(void)
 
 		if ( g_pGameRules->FPlayerCanRespawn( this ) )
 		{
-			m_fDeadTime = gpGlobals->time;
+			m_fDeadTime = UTIL_GlobalTimeBase();
 			pev->deadflag = DEAD_RESPAWNABLE;
 		}
 
@@ -1448,7 +1472,7 @@ void CBasePlayer::PlayerDeathThink(void)
 // if the player has been dead for one second longer than allowed by forcerespawn,
 // forcerespawn isn't on. Send the player off to an intermission camera until they
 // choose to respawn.
-	if ( g_pGameRules->IsMultiplayer() && ( gpGlobals->time > (m_fDeadTime + 6) ) && !(m_afPhysicsFlags & PFLAG_OBSERVER) )
+	if ( g_pGameRules->IsMultiplayer() && ( UTIL_GlobalTimeBase() > (m_fDeadTime + 6) ) && !(m_afPhysicsFlags & PFLAG_OBSERVER) )
 	{
 		// go to dead camera.
 		StartDeathCam();
@@ -1456,14 +1480,29 @@ void CBasePlayer::PlayerDeathThink(void)
 
 // wait for any button down,  or mp_forcerespawn is set and the respawn time is up
 	if (!fAnyButtonDown
-		&& !( g_pGameRules->IsMultiplayer() && forcerespawn.value > 0 && (gpGlobals->time > (m_fDeadTime + 5))) )
+		&& !( g_pGameRules->IsMultiplayer() && forcerespawn.value > 0 && (UTIL_GlobalTimeBase() > (m_fDeadTime + 5))) )
 		return;
 
 	pev->button = 0;
 	m_iRespawnFrames = 0;
 
-	//ALERT(at_console, "Respawn\n");
+	// clear all particlesystems with this hijacked message
+	extern int gmsgParticles;
+	MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(9999);
+		WRITE_STRING("");
+	MESSAGE_END();
 
+	ALERT(at_console, "Resetting Particle Engine\n");
+	
 	respawn(pev, !(m_afPhysicsFlags & PFLAG_OBSERVER) );// don't copy a corpse if we're in deathcam.
 	DontThink();
 }
@@ -1840,10 +1879,10 @@ void CBasePlayer::UpdateStatusBar()
 					newSBarState[ SBAR_ID_TARGETARMOR ] = pEntity->pev->armorvalue; //No need to get it % based since 100 it's the max.
 				}
 
-				m_flStatusBarDisappearDelay = gpGlobals->time + 1.0;
+				m_flStatusBarDisappearDelay = UTIL_GlobalTimeBase() + 1.0;
 			}
 		}
-		else if ( m_flStatusBarDisappearDelay > gpGlobals->time )
+		else if ( m_flStatusBarDisappearDelay > UTIL_GlobalTimeBase() )
 		{
 			// hold the values for a short amount of time after viewing the object
 			newSBarState[ SBAR_ID_TARGETNAME ] = m_izSBarState[ SBAR_ID_TARGETNAME ];
@@ -2036,6 +2075,24 @@ void CBasePlayer::PreThink(void)
 	{
 		pev->velocity = g_vecZero;
 	}
+
+	/////////////////////
+	//Idle Swaying Test//
+	/////////////////////
+	if (CVAR_GET_FLOAT("cl_idleswaying") != 0) {
+		int idleswaying = 1;
+			if (pev->flags & FL_ONGROUND) {
+				if (pev->flags & FL_DUCKING) {
+					idleswaying = 0;
+				}
+			} else {
+				idleswaying = 0;
+			}
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgConcuss, NULL, pev);
+		WRITE_BYTE(idleswaying);
+		MESSAGE_END();
+	}
 }
 /* Time based Damage works as follows:
 	1) There are several types of timebased damage:
@@ -2114,7 +2171,6 @@ void CBasePlayer::PreThink(void)
 
 /* */
 
-
 void CBasePlayer::CheckTimeBasedDamage()
 {
 	int i;
@@ -2126,10 +2182,10 @@ void CBasePlayer::CheckTimeBasedDamage()
 		return;
 
 	// only check for time based damage approx. every 2 seconds
-	if (V_fabs(gpGlobals->time - m_tbdPrev) < 2.0f)
+	if (V_fabs(UTIL_GlobalTimeBase() - m_tbdPrev) < 2.0f)
 		return;
 
-	m_tbdPrev = gpGlobals->time;
+	m_tbdPrev = UTIL_GlobalTimeBase();
 
 	for (i = 0; i < CDMG_TIMEBASED; i++)
 	{
@@ -2288,10 +2344,10 @@ void CBasePlayer :: UpdateGeigerCounter( void )
 	BYTE range;
 
 	// delay per update ie: don't flood net with these msgs
-	if (gpGlobals->time < m_flgeigerDelay)
+	if (UTIL_GlobalTimeBase() < m_flgeigerDelay)
 		return;
 
-	m_flgeigerDelay = gpGlobals->time + GEIGERDELAY;
+	m_flgeigerDelay = UTIL_GlobalTimeBase() + GEIGERDELAY;
 
 	// send range to radition source to client
 
@@ -2341,7 +2397,7 @@ void CBasePlayer::CheckSuitUpdate()
 		return;
 	}
 
-	if ( gpGlobals->time >= m_flSuitUpdate && m_flSuitUpdate > 0)
+	if ( UTIL_GlobalTimeBase() >= m_flSuitUpdate && m_flSuitUpdate > 0)
 	{
 		// play a sentence off of the end of the queue
 		for (i = 0; i < CSUITPLAYLIST; i++)
@@ -2370,7 +2426,7 @@ void CBasePlayer::CheckSuitUpdate()
 				// play sentence group
 				EMIT_GROUPID_SUIT(ENT(pev), -isentence);
 			}
-		m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME;
+		m_flSuitUpdate = UTIL_GlobalTimeBase() + SUITUPDATETIME;
 		}
 		else
 			// queue is empty, don't check
@@ -2434,7 +2490,7 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 			// this sentence or group is already in
 			// the norepeat list
 
-			if (m_rgflSuitNoRepeatTime[i] < gpGlobals->time)
+			if (m_rgflSuitNoRepeatTime[i] < UTIL_GlobalTimeBase())
 				{
 				// norepeat time has expired, clear it out
 				m_rgiSuitNoRepeat[i] = 0;
@@ -2460,7 +2516,7 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 		if (iempty < 0)
 			iempty = RANDOM_LONG(0, CSUITNOREPEAT-1); // pick random slot to take over
 		m_rgiSuitNoRepeat[iempty] = isentence;
-		m_rgflSuitNoRepeatTime[iempty] = iNoRepeatTime + gpGlobals->time;
+		m_rgflSuitNoRepeatTime[iempty] = iNoRepeatTime + UTIL_GlobalTimeBase();
 	}
 
 	// find empty spot in queue, or overwrite last spot
@@ -2469,13 +2525,13 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 	if (m_iSuitPlayNext == CSUITPLAYLIST)
 		m_iSuitPlayNext = 0;
 
-	if (m_flSuitUpdate <= gpGlobals->time)
+	if (m_flSuitUpdate <= UTIL_GlobalTimeBase())
 	{
 		if (m_flSuitUpdate == 0)
 			// play queue is empty, don't delay too long before playback
-			m_flSuitUpdate = gpGlobals->time + SUITFIRSTUPDATETIME;
+			m_flSuitUpdate = UTIL_GlobalTimeBase() + SUITFIRSTUPDATETIME;
 		else
-			m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME;
+			m_flSuitUpdate = UTIL_GlobalTimeBase() + SUITUPDATETIME;
 	}
 
 }
@@ -2590,7 +2646,7 @@ void CBasePlayer :: UpdatePlayerSound ( void )
 		iVolume = 0;
 	}
 
-	if ( gpGlobals->time > m_flStopExtraSoundTime )
+	if ( UTIL_GlobalTimeBase() > m_flStopExtraSoundTime )
 	{
 		// since the extra sound that a weapon emits only lasts for one client frame, we keep that sound around for a server frame or two
 		// after actual emission to make sure it gets heard.
@@ -2844,7 +2900,7 @@ ReturnSpot:
 
 void CBasePlayer::Spawn( void )
 {
-//	ALERT(at_console, "PLAYER spawns at time %f\n", gpGlobals->time);
+//	ALERT(at_console, "PLAYER spawns at time %f\n", UTIL_GlobalTimeBase());
 
 	pev->classname		= MAKE_STRING("player");
 	pev->health			= 100;
@@ -2855,7 +2911,7 @@ void CBasePlayer::Spawn( void )
 	pev->max_health		= pev->health;
 	pev->flags		   &= FL_PROXY;	// keep proxy flag sey by engine
 	pev->flags		   |= FL_CLIENT;
-	pev->air_finished	= gpGlobals->time + 12;
+	pev->air_finished	= UTIL_GlobalTimeBase() + 12;
 	pev->dmg			= 2;				// initial water damage
 	pev->effects		= 0;
 	pev->deadflag		= DEAD_NO;
@@ -2883,6 +2939,22 @@ void CBasePlayer::Spawn( void )
 	Rain_ideal_randY = 0;
 	Rain_endFade = 0;
 	Rain_nextFadeUpdate = 0;
+	// clear all particlesystems with this hijacked message
+	extern int gmsgParticles;
+	MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(9999);
+		WRITE_STRING("");
+	MESSAGE_END();
+
+	ALERT(at_console, "Resetting Particle Engine\n");
 
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "slj", "0" );
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "hl", "1" );
@@ -2892,7 +2964,7 @@ void CBasePlayer::Spawn( void )
 
 	m_flNextDecalTime	= 0;// let this player decal as soon as he spawns.
 
-	m_flgeigerDelay = gpGlobals->time + 2.0;	// wait a few seconds until user-defined message registrations
+	m_flgeigerDelay = UTIL_GlobalTimeBase() + 2.0;	// wait a few seconds until user-defined message registrations
 												// are recieved by all clients
 
 	m_flTimeStepSound	= 0;
@@ -2900,7 +2972,7 @@ void CBasePlayer::Spawn( void )
 	m_flFieldOfView		= 0.5;// some monsters use this to determine whether or not the player is looking at them.
 
 	m_bloodColor	= BLOOD_COLOR_RED;
-	m_flNextAttack	= UTIL_WeaponTimeBase();
+	m_flNextAttack	= UTIL_GlobalTimeBase();
 	StartSneaking();
 
 	m_iFlashBattery = 99;
@@ -2952,7 +3024,7 @@ void CBasePlayer::Spawn( void )
 
 	m_lastx = m_lasty = 0;
 
-	m_flNextChatTime = gpGlobals->time;
+	m_flNextChatTime = UTIL_GlobalTimeBase();
 
 	g_pGameRules->PlayerSpawn( this );
 }
@@ -3556,7 +3628,7 @@ void CBasePlayer::ImpulseCommands( )
 
 	case	201:// paint decal
 
-		if ( gpGlobals->time < m_flNextDecalTime )
+		if ( UTIL_GlobalTimeBase() < m_flNextDecalTime )
 		{
 			// too early!
 			break;
@@ -3567,7 +3639,7 @@ void CBasePlayer::ImpulseCommands( )
 
 		if ( tr.flFraction != 1.0 )
 		{// line hit something, so paint a decal
-			m_flNextDecalTime = gpGlobals->time + decalfrequency.value;
+			m_flNextDecalTime = UTIL_GlobalTimeBase() + decalfrequency.value;
 			CSprayCan *pCan = GetClassPtr((CSprayCan *)NULL);
 			pCan->Spawn( pev );
 		}
@@ -3645,7 +3717,9 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "weapon_knife" );
 		GiveNamedItem( "weapon_grapple" ); 
 		GiveNamedItem( "weapon_shockrifle" );
+		GiveNamedItem( "weapon_sporelauncher" );
 		GiveNamedItem( "weapon_9mmhandgun" );
+		GiveNamedItem( "ammo_spore" );
 		GiveNamedItem( "ammo_9mmclip" );
 		GiveNamedItem( "weapon_shotgun" );
 		GiveNamedItem( "ammo_buckshot" );
@@ -3947,7 +4021,7 @@ Called every frame by the player PreThink
 */
 void CBasePlayer::ItemPreFrame()
 {
-	if ( gpGlobals->time < m_flNextAttack )
+	if ( UTIL_GlobalTimeBase() < m_flNextAttack )
 		return;
 
 	if (!m_pActiveItem)// XWider
@@ -3982,7 +4056,7 @@ void CBasePlayer::ItemPostFrame()
 	// check if the player is using a tank
 	if ( m_pTank != NULL ) return;
 
-	if ( gpGlobals->time < m_flNextAttack ) return;
+	if ( UTIL_GlobalTimeBase() < m_flNextAttack ) return;
 
 	ImpulseCommands();
 
@@ -4255,11 +4329,11 @@ void CBasePlayer :: UpdateClientData( void )
 	// calculate and update rain fading
 	if (Rain_endFade > 0)
 	{
-		if (gpGlobals->time < Rain_endFade)
+		if (UTIL_GlobalTimeBase() < Rain_endFade)
 		{ // we're in fading process
-			if (Rain_nextFadeUpdate <= gpGlobals->time)
+			if (Rain_nextFadeUpdate <= UTIL_GlobalTimeBase())
 			{
-				int secondsLeft = Rain_endFade - gpGlobals->time + 1;
+				int secondsLeft = Rain_endFade - UTIL_GlobalTimeBase() + 1;
 
 				Rain_dripsPerSecond += (Rain_ideal_dripsPerSecond - Rain_dripsPerSecond) / secondsLeft;
 				Rain_windX += (Rain_ideal_windX - Rain_windX) / (float)secondsLeft;
@@ -4267,7 +4341,7 @@ void CBasePlayer :: UpdateClientData( void )
 				Rain_randX += (Rain_ideal_randX - Rain_randX) / (float)secondsLeft;
 				Rain_randY += (Rain_ideal_randY - Rain_randY) / (float)secondsLeft;
 
-				Rain_nextFadeUpdate = gpGlobals->time + 1; // update once per second
+				Rain_nextFadeUpdate = UTIL_GlobalTimeBase() + 1; // update once per second
 				Rain_needsUpdate = 1;
 
 				ALERT(at_aiconsole, "Rain fading: curdrips: %i, idealdrips %i\n", Rain_dripsPerSecond, Rain_ideal_dripsPerSecond);
@@ -4372,11 +4446,11 @@ void CBasePlayer :: UpdateClientData( void )
 		MESSAGE_END();
           	
           	m_iClientFlashState = FlashlightIsOn();
-          	m_flFlashLightTime = FLASH_DRAIN_TIME + gpGlobals->time;
+          	m_flFlashLightTime = FLASH_DRAIN_TIME + UTIL_GlobalTimeBase();
           }
                                      
 	// Update Flashlight
-	if(m_flFlashLightTime && m_flFlashLightTime <= gpGlobals->time)
+	if(m_flFlashLightTime && m_flFlashLightTime <= UTIL_GlobalTimeBase())
 	{
 		if (FlashlightIsOn())
 		{
@@ -4384,7 +4458,7 @@ void CBasePlayer :: UpdateClientData( void )
 			{
 				m_iFlashBattery--;
 				if (!m_iFlashBattery) FlashlightTurnOff();
-				m_flFlashLightTime = FLASH_DRAIN_TIME + gpGlobals->time;
+				m_flFlashLightTime = FLASH_DRAIN_TIME + UTIL_GlobalTimeBase();
 			}
 		}
 		else if(pev->armorvalue > 1) 
@@ -4394,7 +4468,7 @@ void CBasePlayer :: UpdateClientData( void )
 				
 				m_iFlashBattery++;
 				pev->armorvalue -= (0.05 * gSkillData.flashlightCharge);//g-cont. scale factor
-				m_flFlashLightTime = FLASH_CHARGE_TIME + gpGlobals->time;
+				m_flFlashLightTime = FLASH_CHARGE_TIME + UTIL_GlobalTimeBase();
 			}
 			
 		}
@@ -4486,10 +4560,10 @@ void CBasePlayer :: UpdateClientData( void )
 	m_iClientFOV = m_iFOV;
 
 	// Update Status Bar
-	if ( m_flNextSBarUpdateTime < gpGlobals->time )
+	if ( m_flNextSBarUpdateTime < UTIL_GlobalTimeBase() )
 	{
 		UpdateStatusBar();
-		m_flNextSBarUpdateTime = gpGlobals->time + 0.2;
+		m_flNextSBarUpdateTime = UTIL_GlobalTimeBase() + 0.2;
 	}
 }
 
@@ -4996,7 +5070,6 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 private:
-//	int m_iAmmo[MAX_WEAPONS];
 	int m_i9mm;
 	int m_i357;
 	int m_iBuck;
@@ -5010,12 +5083,13 @@ private:
 	int m_iGren;
 	int m_iHornet;
 	int m_iCycler;
+	int m_iSpore;
+	int m_iShock;
 };
 
 LINK_ENTITY_TO_CLASS( player_weaponstrip, CStripWeapons );
 
-TYPEDESCRIPTION	CStripWeapons::m_SaveData[] =
-{
+TYPEDESCRIPTION	CStripWeapons::m_SaveData[] = {
 	DEFINE_FIELD( CStripWeapons, m_i9mm, FIELD_INTEGER ),
 	DEFINE_FIELD( CStripWeapons, m_i357, FIELD_INTEGER ),
 	DEFINE_FIELD( CStripWeapons, m_iBuck, FIELD_INTEGER ),
@@ -5029,6 +5103,8 @@ TYPEDESCRIPTION	CStripWeapons::m_SaveData[] =
 	DEFINE_FIELD( CStripWeapons, m_iGren, FIELD_INTEGER ),
 	DEFINE_FIELD( CStripWeapons, m_iHornet, FIELD_INTEGER ),
 	DEFINE_FIELD( CStripWeapons, m_iCycler, FIELD_INTEGER ),
+	DEFINE_FIELD( CStripWeapons, m_iShock, FIELD_INTEGER ),
+	DEFINE_FIELD( CStripWeapons, m_iSpore, FIELD_INTEGER ),
 };
 
 IMPLEMENT_SAVERESTORE( CStripWeapons, CPointEntity );
@@ -5095,6 +5171,16 @@ void CStripWeapons :: KeyValue( KeyValueData *pkvd )
 		m_iHornet = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
+	else if (FStrEq(pkvd->szKeyName, "shockroach"))
+	{
+		m_iShock = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "spores"))
+	{
+		m_iSpore = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
 	else if (FStrEq(pkvd->szKeyName, "generic"))
 	{
 		m_iCycler = atoi(pkvd->szValue);
@@ -5120,8 +5206,7 @@ void CStripWeapons :: Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 	if ( pPlayer )
 	{
 		pPlayer->RemoveItems( pev->spawnflags, m_i9mm, m_i357, m_iBuck, m_iBolt,
-				m_iARGren, m_iRock, m_iUranium, m_iSatchel, m_iSnark, m_iTrip, m_iGren, m_iHornet, m_iCycler );
-//		pPlayer->RemoveAllItems( FALSE );
+				m_iARGren, m_iRock, m_iUranium, m_iSatchel, m_iSnark, m_iTrip, m_iGren, m_iHornet, m_iCycler, m_iShock, m_iSpore);
 	}
 }
 

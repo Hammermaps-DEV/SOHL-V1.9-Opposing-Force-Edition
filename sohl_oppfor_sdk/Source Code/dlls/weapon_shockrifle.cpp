@@ -48,7 +48,6 @@ const char *CShockrifle::pIdleSounds[] = {
 //=========================================================
 void CShockrifle::Spawn() {
 	Precache();
-	m_iId = WEAPON_SHOCKRIFLE;
 
 	SET_MODEL(ENT(pev), "models/w_shock.mdl");
 	m_iDefaultAmmo = SHOCKRIFLE_DEFAULT_GIVE;
@@ -105,7 +104,7 @@ int CShockrifle::AddToPlayer(CBasePlayer *pPlayer) {
 //=========================================================
 int CShockrifle::GetItemInfo(ItemInfo *p) {
 	p->pszName = STRING(pev->classname);
-	p->pszAmmo1 = "Shocks";
+	p->pszAmmo1 = "shocks";
 	p->iMaxAmmo1 = SHOCK_MAX_CARRY;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
@@ -139,7 +138,7 @@ void CShockrifle::PrimaryAttack() {
 		CBaseEntity *pShock = CBaseEntity::Create("shock", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 		pShock->pev->velocity = gpGlobals->v_forward * 1500;
 
-		m_flRechargeTime = UTIL_WeaponTimeBase() + 0.45;
+		m_flRechargeTime = UTIL_GlobalTimeBase() + 0.45;
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 
 		m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
@@ -147,24 +146,24 @@ void CShockrifle::PrimaryAttack() {
 
 		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usShockFire, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, FALSE, 0, 0, 0);
 
-		if (!m_fShouldUpdateEffects || UTIL_WeaponTimeBase() >= m_flBeamLifeTime) {
+		if (!m_fShouldUpdateEffects || UTIL_GlobalTimeBase() >= m_flBeamLifeTime) {
 			m_fShouldUpdateEffects = TRUE;
-			m_flBeamLifeTime = UTIL_WeaponTimeBase() + CalculateWeaponTime((int)SHOCKRIFLE_SHOOT::frames, (int)SHOCKRIFLE_SHOOT::fps);
+			m_flBeamLifeTime = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)SHOCKRIFLE_SHOOT::frames, (int)SHOCKRIFLE_SHOOT::fps);
 			UpdateEffects();
 		}
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.30;
-		if (m_flNextPrimaryAttack < UTIL_WeaponTimeBase()) {
-			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.30;
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.30;
+		if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase()) {
+			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.30;
 		}
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
 	} else {
 		PlayEmptySound(5);
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.30;
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.30;
 	}
 }
 
@@ -181,7 +180,7 @@ BOOL CShockrifle::Deploy() {
 //=========================================================
 void CShockrifle::Holster() {
 	SendWeaponAnim((int)SHOCKRIFLE_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)SHOCKRIFLE_HOLSTER::frames, (int)SHOCKRIFLE_HOLSTER::fps);
 
 	if (!m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()]) {
@@ -196,7 +195,7 @@ void CShockrifle::Reload(void) {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= SHOCK_MAX_CARRY)
 		return;
 
-	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < SHOCK_MAX_CARRY && m_flRechargeTime < UTIL_WeaponTimeBase()) {
+	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < SHOCK_MAX_CARRY && m_flRechargeTime < UTIL_GlobalTimeBase()) {
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shock_recharge.wav", 1, ATTN_NORM);
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
 		m_flRechargeTime += 0.45;
@@ -208,8 +207,8 @@ void CShockrifle::Reload(void) {
 //=========================================================
 void CShockrifle::WeaponIdle(void) {
 	Reload(); //Auto recharge
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-			m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+			m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -219,7 +218,7 @@ void CShockrifle::WeaponIdle(void) {
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
 			iAnim = (int)SHOCKRIFLE_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOCKRIFLE_IDLE1::frames, (int)SHOCKRIFLE_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 
@@ -227,15 +226,15 @@ void CShockrifle::WeaponIdle(void) {
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 0.8, ATTN_IDLE, 0, 90 + (RANDOM_LONG(-5, 5)));
 		} else if (flRand >= 0.7) {
 			iAnim = (int)SHOCKRIFLE_IDLE2::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOCKRIFLE_IDLE2::frames, (int)SHOCKRIFLE_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 
 			if(RANDOM_FLOAT(0, 10) >= 5)
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 0.8, ATTN_IDLE, 0, 90+(RANDOM_LONG(-5, 5)));
 		} else {
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-			m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
 
 		SendWeaponAnim(iAnim);
@@ -256,7 +255,7 @@ void CShockrifle::ItemPostFrame(void) {
 	CBasePlayerWeapon::ItemPostFrame();
 	if (!m_pPlayer->pev->button & IN_ATTACK) {
 		if (m_fShouldUpdateEffects) {
-			if (UTIL_WeaponTimeBase() <= m_flBeamLifeTime) {
+			if (UTIL_GlobalTimeBase() <= m_flBeamLifeTime) {
 				UpdateEffects();
 			} else {
 				m_fShouldUpdateEffects = FALSE;

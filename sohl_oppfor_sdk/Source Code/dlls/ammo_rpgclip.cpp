@@ -12,43 +12,53 @@
 *   without written permission from Valve LLC.
 *
 ****/
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
 #include "weapons.h"
 
-class CRpgAmmo : public CBasePlayerAmmo
-{
-	void Spawn(void)
-	{
+class CRpgAmmo : public CBasePlayerAmmo {
+	//=========================================================
+	// Spawn
+	//=========================================================
+	void Spawn(void) {
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_rpgammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
-	void Precache(void)
-	{
+
+	//=========================================================
+	// Precache
+	//=========================================================
+	void Precache(void) {
 		PRECACHE_MODEL("models/w_rpgammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity *pOther)
-	{
+
+	//=========================================================
+	// AddAmmo
+	//=========================================================
+	BOOL AddAmmo(CBaseEntity *pOther) {
 		int iGive;
 
-		if (IsMultiplayer())
-		{
+		if (IsMultiplayer()) {
 			// hand out more ammo per rocket in multiplayer.
 			iGive = AMMO_RPGCLIP_GIVE * 2;
-		}
-		else
-		{
+		} else {
 			iGive = AMMO_RPGCLIP_GIVE;
 		}
-		if (pOther->GiveAmmo(iGive, "rockets", ROCKET_MAX_CARRY) != -1)
-		{
+
+		if (pOther->GiveAmmo(iGive, "rockets", ROCKET_MAX_CARRY) != -1) {
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 			return TRUE;
 		}
+
 		return FALSE;
 	}
 };
+
+//=========================================================
+// Link entity to Class
+//=========================================================
 LINK_ENTITY_TO_CLASS(ammo_rpgclip, CRpgAmmo);

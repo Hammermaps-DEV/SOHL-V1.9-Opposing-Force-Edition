@@ -102,7 +102,7 @@ void CSoundEnt :: Think ( void )
 
 	while ( iSound != SOUNDLIST_EMPTY )
 	{
-		if ( m_SoundPool[ iSound ].m_flExpireTime <= gpGlobals->time && m_SoundPool[ iSound ].m_flExpireTime != SOUND_NEVER_EXPIRE )
+		if ( m_SoundPool[ iSound ].m_flExpireTime <= UTIL_GlobalTimeBase() && m_SoundPool[ iSound ].m_flExpireTime != SOUND_NEVER_EXPIRE )
 		{
 			int iNext = m_SoundPool[ iSound ].m_iNext;
 
@@ -218,7 +218,7 @@ void CSoundEnt :: InsertSound ( int iType, const Vector &vecOrigin, int iVolume,
 	pSoundEnt->m_SoundPool[ iThisSound ].m_vecOrigin = vecOrigin;
 	pSoundEnt->m_SoundPool[ iThisSound ].m_iType = iType;
 	pSoundEnt->m_SoundPool[ iThisSound ].m_iVolume = iVolume;
-	pSoundEnt->m_SoundPool[ iThisSound ].m_flExpireTime = gpGlobals->time + flDuration;
+	pSoundEnt->m_SoundPool[ iThisSound ].m_flExpireTime = UTIL_GlobalTimeBase() + flDuration;
 }
 
 //=========================================================

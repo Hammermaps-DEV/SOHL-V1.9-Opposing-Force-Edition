@@ -163,7 +163,7 @@ void CVoltigore::Spawn() {
 	pev->health = gSkillData.voltigoreHealth;
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
-	m_flNextSpitTime = gpGlobals->time;
+	m_flNextSpitTime = UTIL_GlobalTimeBase();
 	m_flDebug = false; //Debug Massages
 
 	pev->view_ofs = Vector(0, 0, 90);
@@ -290,7 +290,7 @@ void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 //=========================================================
 int CVoltigore::IgnoreConditions(void) {
 	int iIgnore = CBaseMonster::IgnoreConditions();
-	if (gpGlobals->time - m_flLastHurtTime <= 20) {
+	if (UTIL_GlobalTimeBase() - m_flLastHurtTime <= 20) {
 		// haven't been hurt in 20 seconds, so let the voltigore care about stink. 
 		iIgnore = bits_COND_SMELL | bits_COND_SMELL_FOOD;
 	}
@@ -308,7 +308,7 @@ int CVoltigore::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 
 	// if the voltigore is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
-	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && gpGlobals->time - m_flLastHurtTime > 3) {
+	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3) {
 		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
 
 		if (flDist > VOLTIGORE_SPRINT_DIST) {
@@ -336,7 +336,7 @@ BOOL CVoltigore::CheckRangeAttack1(float flDot, float flDist) {
 		return FALSE;
 	}
 
-	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpitTime) {
+	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime) {
 		if (m_hEnemy != NULL) {
 			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256) {
 				// don't try to spit at someone up really high or down really low.
@@ -346,10 +346,10 @@ BOOL CVoltigore::CheckRangeAttack1(float flDot, float flDist) {
 
 		if (IsMoving()) {
 			// don't spit again for a long time, resume chasing enemy.
-			m_flNextSpitTime = gpGlobals->time + 5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 5;
 		} else {
 			// not moving, so spit again pretty soon.
-			m_flNextSpitTime = gpGlobals->time + 0.5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 0.5;
 		}
 
 		return TRUE;

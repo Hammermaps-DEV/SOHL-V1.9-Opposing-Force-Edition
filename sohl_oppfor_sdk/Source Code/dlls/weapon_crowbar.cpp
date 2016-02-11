@@ -88,7 +88,7 @@ void CCrowbar::PrimaryAttack(void) {
 		CCrowbar::Swing(FALSE);
 	}
 
-	m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.2;
+	m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.2;
 }
 
 //=========================================================
@@ -106,7 +106,7 @@ int CCrowbar::Swing( int fFirst ) {
 	bHit = FALSE;
 	TraceResult tr;
 
-	if (m_flTimeUpdate > UTIL_WeaponTimeBase()) {
+	if (m_flTimeUpdate > UTIL_GlobalTimeBase()) {
 		return fDidHit;
 	}
           
@@ -153,7 +153,7 @@ int CCrowbar::Swing( int fFirst ) {
 				bHit = TRUE;//play hitbody sound on client
 				m_pPlayer->m_iWeaponVolume = CROWBAR_BODYHIT_VOLUME;
 				if (!pEntity->IsAlive()) {
-					m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+					m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
 				} else
 					flVol = 0.1;
 
@@ -162,23 +162,23 @@ int CCrowbar::Swing( int fFirst ) {
 		}
 
 		m_pPlayer->m_iWeaponVolume = flVol * CROWBAR_WALLHIT_VOLUME;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		switch (AttackAnimation) {
 			case 0:
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 
 					(CalculateWeaponTime((int)CROWBAR_ATTACK1::frames, (int)CROWBAR_ATTACK1::fps) / 100 * CROWBAR_ATTACK_BOOST);
 				break;
 			case 1:
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 					(CalculateWeaponTime((int)CROWBAR_ATTACK2::frames, (int)CROWBAR_ATTACK2::fps) / 100 * CROWBAR_ATTACK_BOOST);
 				break;
 			case 2:
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 					(CalculateWeaponTime((int)CROWBAR_ATTACK3::frames, (int)CROWBAR_ATTACK3::fps) / 100 * CROWBAR_ATTACK_BOOST);
 				break;
 		}
 
-		m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.2;	
+		m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.2;	
 	}
 
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usCrowbar, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0, 0, pev->body, fFirst, bHit, AttackAnimation);
@@ -198,7 +198,7 @@ BOOL CCrowbar::Deploy(void) {
 //=========================================================
 void CCrowbar::Holster(void) {
 	SendWeaponAnim((int)CROWBAR_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 
 		CalculateWeaponTime((int)CROWBAR_HOLSTER::frames, (int)CROWBAR_HOLSTER::fps);
 }
 
@@ -206,8 +206,8 @@ void CCrowbar::Holster(void) {
 // WeaponIdle Animation
 //=========================================================
 void CCrowbar:: WeaponIdle(void) {
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -215,22 +215,22 @@ void CCrowbar:: WeaponIdle(void) {
 	float flRand = RANDOM_FLOAT(0, 1);
 	if (flRand <= 0.5) {
 		iAnim = (int)CROWBAR_IDLE1::sequence;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)CROWBAR_IDLE1::frames, (int)CROWBAR_IDLE1::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 	} else if (flRand <= 0.7) {
 		iAnim = (int)CROWBAR_IDLE2::sequence;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)CROWBAR_IDLE2::frames, (int)CROWBAR_IDLE2::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 	} else if (flRand <= 0.9) {
 		iAnim = (int)CROWBAR_IDLE3::sequence;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)CROWBAR_IDLE3::frames, (int)CROWBAR_IDLE3::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 	} else {
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-		m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}
 
 	SendWeaponAnim(iAnim);

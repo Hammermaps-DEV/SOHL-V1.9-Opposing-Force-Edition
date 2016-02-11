@@ -15,7 +15,7 @@
 //=========================================================
 // Weapon: Shotgun * http://half-life.wikia.com/wiki/HECU_SPAS-12
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 24.01.2016
+// Version: 1.0 / Build: 00002 / Date: 07.02.2016
 //=========================================================
 
 #include "extdll.h"
@@ -36,9 +36,8 @@ LINK_ENTITY_TO_CLASS( weapon_shotgun, CShotgun );
 //=========================================================
 // Spawn Shotgun
 //=========================================================
-void CShotgun::Spawn( ) {
+void CShotgun::Spawn(void) {
 	Precache( );
-	m_iId = WEAPON_SHOTGUN;
 
 	SET_MODEL(ENT(pev), "models/w_shotgun.mdl");
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
@@ -49,7 +48,7 @@ void CShotgun::Spawn( ) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CShotgun::Precache( void ) {
+void CShotgun::Precache(void) {
 	PRECACHE_MODEL("models/v_shotgun.mdl");
 	PRECACHE_MODEL("models/w_shotgun.mdl");
 	PRECACHE_MODEL("models/p_shotgun.mdl");
@@ -86,11 +85,11 @@ int CShotgun::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CShotgun::PrimaryAttack() {
+void CShotgun::PrimaryAttack(void) {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(4);
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.15;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.15;
 		return;
 	}
 
@@ -127,10 +126,10 @@ void CShotgun::PrimaryAttack() {
 			// HEV suit - indicate out of ammo condition
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)SHOTGUN_SHOOT::frames, (int)SHOTGUN_SHOOT::fps);
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		m_iChargeLevel = 0;
 	}
 }
@@ -142,7 +141,7 @@ void CShotgun::SecondaryAttack(void) {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(4);
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.15;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.15;
 		return;
 	}
 
@@ -186,10 +185,10 @@ void CShotgun::SecondaryAttack(void) {
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
 
-		m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 
+		m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)SHOTGUN_SHOOT_BIG::frames, (int)SHOTGUN_SHOOT_BIG::fps);
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 
 		m_iChargeLevel = 0;
 		m_pPlayer->pev->punchangle.x -= 5;
@@ -199,7 +198,7 @@ void CShotgun::SecondaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CShotgun::Deploy( ) {
+BOOL CShotgun::Deploy(void) {
 	return DefaultDeploy("models/v_shotgun.mdl", "models/p_shotgun.mdl", (int)SHOTGUN_DRAW::sequence,
 		"shotgun", CalculateWeaponTime((int)SHOTGUN_DRAW::frames, (int)SHOTGUN_DRAW::fps));
 }
@@ -207,19 +206,19 @@ BOOL CShotgun::Deploy( ) {
 //=========================================================
 // Holster
 //=========================================================
-void CShotgun::Holster( ) {
+void CShotgun::Holster(void) {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)SHOTGUN_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)SHOTGUN_HOLSTER::frames, (int)SHOTGUN_HOLSTER::fps);
 }
 
 //=========================================================
 // Reload
 //=========================================================
-void CShotgun::Reload( void ) {
+void CShotgun::Reload(void) {
 	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SHOTGUN_MAX_CLIP) || 
-			m_flNextPrimaryAttack > UTIL_WeaponTimeBase()) {
+			m_flNextPrimaryAttack > UTIL_GlobalTimeBase() || m_flNextSecondaryAttack > UTIL_GlobalTimeBase()) {
 		return;
 	} else { Charge(false); }
 }
@@ -231,14 +230,14 @@ void CShotgun::Charge(bool m_BeginAttack) {
 	if((m_iClip != SHOTGUN_MAX_CLIP && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]) && !m_BeginAttack) {
 		if(m_iChargeLevel == 0) {
 			SendWeaponAnim((int)SHOTGUN_START_RELOAD::sequence);
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOTGUN_START_RELOAD::frames, (int)SHOTGUN_START_RELOAD::fps);
 			m_pPlayer->m_flNextAttack = m_flTimeWeaponIdle;
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + m_flTimeWeaponIdle;
-			m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + m_flTimeWeaponIdle;
+			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + m_flTimeWeaponIdle;
+			m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + m_flTimeWeaponIdle;
 			m_iChargeLevel = 1;
 		} else if (m_iChargeLevel == 1) {
-			if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase()) {
+			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iChargeLevel = 2;
 
 				if (RANDOM_LONG(0, 1)) {
@@ -248,18 +247,18 @@ void CShotgun::Charge(bool m_BeginAttack) {
 				}
 
 				SendWeaponAnim((int)SHOTGUN_RELOAD::sequence);
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
 					CalculateWeaponTime((int)SHOTGUN_RELOAD::frames, (int)SHOTGUN_RELOAD::fps);
 				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle;
 				m_pPlayer->m_flNextAttack = m_flTimeWeaponIdle;
 			}
 		} else {
-			if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase()) {
+			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iClip += 1;
 				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 1;
 				m_iChargeLevel = 1;
 				if (m_iClip == SHOTGUN_MAX_CLIP) {
-					m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.1;
+					m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.1;
 				}
 			}
 		}
@@ -267,7 +266,7 @@ void CShotgun::Charge(bool m_BeginAttack) {
 		// reload debounce has timed out
 		SendWeaponAnim((int)SHOTGUN_PUMP::sequence);
 		m_iChargeLevel = 0;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)SHOTGUN_PUMP::frames, (int)SHOTGUN_PUMP::fps);
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle;
 		m_pPlayer->m_flNextAttack = m_flNextSecondaryAttack;
@@ -277,9 +276,9 @@ void CShotgun::Charge(bool m_BeginAttack) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CShotgun::WeaponIdle( void ) {
-	if ((m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) && !m_iChargeLevel) {
+void CShotgun::WeaponIdle(void) {
+	if ((m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) && !m_iChargeLevel) {
 		return;
 	}
 
@@ -290,25 +289,25 @@ void CShotgun::WeaponIdle( void ) {
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
 			iAnim = (int)SHOTGUN_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOTGUN_IDLE1::frames, (int)SHOTGUN_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		}
 		else if (flRand <= 0.7) {
 			iAnim = (int)SHOTGUN_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOTGUN_IDLE1::frames, (int)SHOTGUN_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		}
 		else if (flRand <= 0.9) {
 			iAnim = (int)SHOTGUN_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOTGUN_IDLE1::frames, (int)SHOTGUN_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		}
 		else {
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-			m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
 
 		SendWeaponAnim(iAnim);

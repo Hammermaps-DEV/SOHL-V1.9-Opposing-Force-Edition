@@ -95,7 +95,7 @@ void CPipeWrench::PrimaryAttack() {
 		CPipeWrench::Swing(FALSE);
 	}
 
-	m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.2;
+	m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.2;
 }
 
 //=========================================================
@@ -106,11 +106,11 @@ void CPipeWrench::SecondaryAttack() {
 		m_fPrimaryFire = FALSE;
 		SendWeaponAnim((int)PIPE_WRENCH_ATTACKBIGWIND::sequence);
 		m_fInAttack = 1;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 0.75;
-		m_flChargeTime = UTIL_WeaponTimeBase();
-		m_flAmmoStartCharge = UTIL_WeaponTimeBase() + m_fullcharge;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.75;
+		m_flChargeTime = UTIL_GlobalTimeBase();
+		m_flAmmoStartCharge = UTIL_GlobalTimeBase() + m_fullcharge;
 	} else if (m_fInAttack == 1) {
-		if (m_flTimeWeaponIdle < UTIL_WeaponTimeBase()) {
+		if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 			SendWeaponAnim((int)PIPE_WRENCH_ATTACKBIGLOOP::sequence);
 			m_fInAttack = 2;
 		}
@@ -125,14 +125,14 @@ void CPipeWrench::SecondaryAttack() {
 //=========================================================
 void CPipeWrench::StartLargeSwing(void) {
 	float flDamage;
-	if ((UTIL_WeaponTimeBase()-m_flChargeTime) >= m_fullcharge) {
+	if ((UTIL_GlobalTimeBase()-m_flChargeTime) >= m_fullcharge) {
 		flDamage = 200;
 	} else {
-		flDamage = 200 * ((UTIL_WeaponTimeBase() - m_flChargeTime) / m_fullcharge);
+		flDamage = 200 * ((UTIL_GlobalTimeBase() - m_flChargeTime) / m_fullcharge);
 	}
 
-	m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.75;
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 2.0;
+	m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.75;
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 2.0;
 	LargeSwing(flDamage);
 }
 
@@ -144,7 +144,7 @@ int CPipeWrench::LargeSwing(float flDamage) {
 	bHit = FALSE;
 	TraceResult tr;
 
-	if (m_flTimeUpdate > UTIL_WeaponTimeBase()) {
+	if (m_flTimeUpdate > UTIL_GlobalTimeBase()) {
 		return fDidHit;
 	}
 
@@ -189,21 +189,21 @@ int CPipeWrench::LargeSwing(float flDamage) {
 				m_pPlayer->m_iWeaponVolume = PIPE_WRENCH_WALLHIT_VOLUME;
 				bHit = TRUE;//play hitbody sound on client
 				if (!pEntity->IsAlive()) {
-					m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+					m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
 				} else
 					flVol = 0.1;
 			}
 
-			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 				(CalculateWeaponTime((int)PIPE_WRENCH_ATTACKBIGMISS::frames, (int)PIPE_WRENCH_ATTACKBIGMISS::fps));
 		} else {
-			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+			m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 				(CalculateWeaponTime((int)PIPE_WRENCH_ATTACKBIGHIT::frames, (int)PIPE_WRENCH_ATTACKBIGHIT::fps));
 		}
 
 		m_pPlayer->m_iWeaponVolume = flVol * PIPE_WRENCH_BODYHIT_VOLUME;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-		m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.2;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.2;
 	}
 
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usWrenchLarge, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0, 0, pev->body, 0, bHit, 0);
@@ -218,7 +218,7 @@ int CPipeWrench::Swing(int fFirst) {
 	bHit = FALSE;
 	TraceResult tr;
 
-	if (m_flTimeUpdate > UTIL_WeaponTimeBase()) {
+	if (m_flTimeUpdate > UTIL_GlobalTimeBase()) {
 		return fDidHit;
 	}
 
@@ -253,7 +253,7 @@ int CPipeWrench::Swing(int fFirst) {
 		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
 
 		ClearMultiDamage();
-		if ((m_flNextPrimaryAttack + 2 < UTIL_WeaponTimeBase()) || g_pGameRules->IsMultiplayer()) {
+		if ((m_flNextPrimaryAttack + 2 < UTIL_GlobalTimeBase()) || g_pGameRules->IsMultiplayer()) {
 			// first swing does full damage
 			pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgWrench, gpGlobals->v_forward, &tr, DMG_CLUB);
 		} else {
@@ -271,7 +271,7 @@ int CPipeWrench::Swing(int fFirst) {
 				bHit = TRUE;//play hitbody sound on client
 				m_pPlayer->m_iWeaponVolume = PIPE_WRENCH_BODYHIT_VOLUME;
 				if (!pEntity->IsAlive()) {
-					m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 0.5;
+					m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
 				}
 				else
 					flVol = 0.1;
@@ -281,23 +281,23 @@ int CPipeWrench::Swing(int fFirst) {
 		}
 
 		m_pPlayer->m_iWeaponVolume = flVol * PIPE_WRENCH_WALLHIT_VOLUME;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		switch (AttackAnimation) {
 			case 0:
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 					(CalculateWeaponTime((int)PIPE_WRENCH_ATTACK1::frames, (int)PIPE_WRENCH_ATTACK1::fps) / 100 * PIPE_WRENCH_ATTACK_BOOST);
 			break;
 			case 1:
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 					(CalculateWeaponTime((int)PIPE_WRENCH_ATTACK2::frames, (int)PIPE_WRENCH_ATTACK2::fps) / 100 * PIPE_WRENCH_ATTACK_BOOST);
 			break;
 			case 2:
-				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_WeaponTimeBase() +
+				m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 					(CalculateWeaponTime((int)PIPE_WRENCH_ATTACK3::frames, (int)PIPE_WRENCH_ATTACK3::fps) / 100 * PIPE_WRENCH_ATTACK_BOOST);
 			break;
 		}
 
-		m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.2;
+		m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.2;
 	}
 
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usWrenchSmall, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0, 0, pev->body, fFirst, bHit, AttackAnimation);
@@ -317,7 +317,7 @@ BOOL CPipeWrench::Deploy(void) {
 //=========================================================
 void CPipeWrench::Holster(void) {
 	SendWeaponAnim((int)PIPE_WRENCH_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)PIPE_WRENCH_HOLSTER::frames, (int)PIPE_WRENCH_HOLSTER::fps);
 }
 
@@ -325,7 +325,7 @@ void CPipeWrench::Holster(void) {
 // WeaponIdle Animation
 //=========================================================
 void CPipeWrench::WeaponIdle(void) {
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -333,7 +333,7 @@ void CPipeWrench::WeaponIdle(void) {
 		CPipeWrench::StartLargeSwing();
 		m_fInAttack = 0;
 	} else {
-		if (m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+		if (m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 			return;
 		}
 
@@ -341,25 +341,25 @@ void CPipeWrench::WeaponIdle(void) {
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
 			iAnim = (int)PIPE_WRENCH_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PIPE_WRENCH_IDLE1::frames, (int)PIPE_WRENCH_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		}
 		else if (flRand <= 0.7) {
 			iAnim = (int)PIPE_WRENCH_IDLE2::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PIPE_WRENCH_IDLE2::frames, (int)PIPE_WRENCH_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		}
 		else if (flRand <= 0.9) {
 			iAnim = (int)PIPE_WRENCH_IDLE3::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PIPE_WRENCH_IDLE3::frames, (int)PIPE_WRENCH_IDLE3::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		}
 		else {
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-			m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
 
 		SendWeaponAnim(iAnim);

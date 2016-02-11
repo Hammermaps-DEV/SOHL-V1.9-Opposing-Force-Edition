@@ -45,6 +45,10 @@ float AmmoDamage( const char *pName )
 		return gSkillData.plrDmgSatchel;
 	if ( !strcmp( pName, "Trip Mine") )
 		return gSkillData.plrDmgTripmine;
+	if (!strcmp(pName, "shocks"))
+		return gSkillData.plrDmgShock;
+	if (!strcmp(pName, "spore"))
+		return gSkillData.plrDmgSpore;
 
 	return 0;
 }
@@ -88,14 +92,14 @@ void UpdateStats( CBasePlayer *pPlayer )
 
 	// Keep a running time, so the graph doesn't overlap
 	
-	if ( gpGlobals->time < gStats.lastGameTime )	// Changed level or died, don't b0rk
+	if ( UTIL_GlobalTimeBase() < gStats.lastGameTime )	// Changed level or died, don't b0rk
 	{
-		gStats.lastGameTime = gpGlobals->time;
+		gStats.lastGameTime = UTIL_GlobalTimeBase();
 		gStats.dataTime = gStats.gameTime;
 	}
 
-	gStats.gameTime += gpGlobals->time - gStats.lastGameTime;
-	gStats.lastGameTime = gpGlobals->time;
+	gStats.gameTime += UTIL_GlobalTimeBase() - gStats.lastGameTime;
+	gStats.lastGameTime = UTIL_GlobalTimeBase();
 
 	for (i = 0; i < MAX_ITEM_TYPES; i++)
 	{
@@ -151,6 +155,6 @@ void UpdateStats( CBasePlayer *pPlayer )
 
 void InitStats( CBasePlayer *pPlayer )
 {
-	gStats.lastGameTime = gpGlobals->time;	// Fixup stats time
+	gStats.lastGameTime = UTIL_GlobalTimeBase();	// Fixup stats time
 }
 

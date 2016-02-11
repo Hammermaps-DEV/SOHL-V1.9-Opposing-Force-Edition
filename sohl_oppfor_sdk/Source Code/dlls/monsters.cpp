@@ -170,7 +170,7 @@ int CBaseMonster::Restore( CRestore &restore )
 //=========================================================
 void CBaseMonster :: Eat ( float flFullDuration )
 {
-	m_flHungryTime = gpGlobals->time + flFullDuration;
+	m_flHungryTime = UTIL_GlobalTimeBase() + flFullDuration;
 }
 
 //=========================================================
@@ -178,7 +178,7 @@ void CBaseMonster :: Eat ( float flFullDuration )
 //=========================================================
 BOOL CBaseMonster :: FShouldEat ( void )
 {
-	if ( m_flHungryTime > gpGlobals->time )
+	if ( m_flHungryTime > UTIL_GlobalTimeBase() )
 	{
 		return FALSE;
 	}
@@ -1441,7 +1441,7 @@ float CBaseMonster :: OpenDoorAndWait( entvars_t *pevDoor )
 		}
 	}
 
-	return gpGlobals->time + flTravelTime;
+	return UTIL_GlobalTimeBase() + flTravelTime;
 }
 
 //=========================================================
@@ -1491,7 +1491,7 @@ void CBaseMonster :: AdvanceRoute ( float distance )
 						if (pevDoor)
 						{
 							m_flMoveWaitFinished = OpenDoorAndWait( pevDoor );
-//							ALERT( at_aiconsole, "Wating for door %.2f\n", m_flMoveWaitFinished-gpGlobals->time );
+//							ALERT( at_aiconsole, "Wating for door %.2f\n", m_flMoveWaitFinished-UTIL_GlobalTimeBase() );
 						}
 					}
 				}
@@ -1769,7 +1769,7 @@ void CBaseMonster :: Move ( float flInterval )
 		}
 	}
 	
-	if ( m_flMoveWaitFinished > gpGlobals->time )
+	if ( m_flMoveWaitFinished > UTIL_GlobalTimeBase() )
 		return;
 
 	// if the monster is moving directly towards an entity (enemy for instance), we'll set this pointer
@@ -1820,13 +1820,13 @@ void CBaseMonster :: Move ( float flInterval )
 			DispatchBlocked( edict(), pBlocker->edict() );
 		}
 
-		if ( pBlocker && m_moveWaitTime > 0 && pBlocker->IsMoving() && !pBlocker->IsPlayer() && (gpGlobals->time-m_flMoveWaitFinished) > 3.0 )
+		if ( pBlocker && m_moveWaitTime > 0 && pBlocker->IsMoving() && !pBlocker->IsPlayer() && (UTIL_GlobalTimeBase()-m_flMoveWaitFinished) > 3.0 )
 		{
 			// Can we still move toward our target?
 			if ( flDist < m_flGroundSpeed )
 			{
 				// No, Wait for a second
-				m_flMoveWaitFinished = gpGlobals->time + m_moveWaitTime;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + m_moveWaitTime;
 				return;
 			}
 			// Ok, still enough room to take a step
@@ -1854,10 +1854,10 @@ void CBaseMonster :: Move ( float flInterval )
 					else
 					{
 						// Don't get stuck
-						if ( (gpGlobals->time - m_flMoveWaitFinished) < 0.2 )
+						if ( (UTIL_GlobalTimeBase() - m_flMoveWaitFinished) < 0.2 )
 							Remember( bits_MEMORY_MOVE_FAILED );
 
-						m_flMoveWaitFinished = gpGlobals->time + 0.1;
+						m_flMoveWaitFinished = UTIL_GlobalTimeBase() + 0.1;
 					}
 				}
 				else
@@ -1879,7 +1879,7 @@ void CBaseMonster :: Move ( float flInterval )
 	}
 
 	// Might be waiting for a door
-	if ( m_flMoveWaitFinished > gpGlobals->time )
+	if ( m_flMoveWaitFinished > UTIL_GlobalTimeBase() )
 	{
 		Stop();
 		return;
@@ -2982,8 +2982,8 @@ void CBaseMonster::ReportAIState( void )
 	if ( IsMoving() )
 	{
 		ALERT( level, " Moving " );
-		if ( m_flMoveWaitFinished > gpGlobals->time )
-			ALERT( level, ": Stopped for %.2f. ", m_flMoveWaitFinished - gpGlobals->time );
+		if ( m_flMoveWaitFinished > UTIL_GlobalTimeBase() )
+			ALERT( level, ": Stopped for %.2f. ", m_flMoveWaitFinished - UTIL_GlobalTimeBase() );
 		else if ( m_IdealActivity == GetStoppedActivity() )
 			ALERT( level, ": In stopped anim. " );
 	}
@@ -3558,7 +3558,7 @@ void CBaseMonster::GlowShellOn(Vector color, float flDuration)
 	m_glowShellColor = color;
 
 	m_glowShellDuration = flDuration;
-	m_glowShellStartTime = gpGlobals->time;
+	m_glowShellStartTime = UTIL_GlobalTimeBase();
 
 	m_glowShellUpdate = TRUE;
 }
@@ -3580,7 +3580,7 @@ void CBaseMonster::GlowShellUpdate(void)
 {
 	if (m_glowShellUpdate)
 	{
-		if ((gpGlobals->time - m_glowShellStartTime) > m_glowShellDuration)
+		if ((UTIL_GlobalTimeBase() - m_glowShellStartTime) > m_glowShellDuration)
 			GlowShellOff();
 	}
 }

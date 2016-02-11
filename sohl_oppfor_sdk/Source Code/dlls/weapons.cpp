@@ -58,6 +58,12 @@ DLL_GLOBAL	short		g_sModelIndexFireballFlash;
 
 DLL_GLOBAL	short		g_sGrenadeGib;
 
+DLL_GLOBAL	short		g_sModelIndexSpore1; // holds the index for the spore explosion 1
+DLL_GLOBAL	short		g_sModelIndexSpore2; // holds the index for the spore explosion 2
+DLL_GLOBAL	short		g_sModelIndexSpore3; // holds the index for the spore explosion 3
+DLL_GLOBAL  short		g_sModelIndexBigSpit; // holds the index for the bullsquid big spit.
+DLL_GLOBAL  short		g_sModelIndexTinySpit; // holds the index for the bullsquid tiny spit.
+
 DLL_GLOBAL	unsigned short	g_usEventIndexNullEvent;//null event index
 DLL_GLOBAL 	unsigned short 	m_usDecals;	//Decal event
 DLL_GLOBAL 	unsigned short 	m_usEfx;		//special effects event (rocket trail, explosion e.t.c.)	
@@ -407,8 +413,6 @@ void W_Precache(void)
 	g_sModelIndexNullSprite =	PRECACHE_MODEL("sprites/null.spr");
 	g_sModelIndexErrorSprite =	PRECACHE_MODEL("sprites/error.spr");
 
-	// custom items...
-
 	// common world objects
 	UTIL_PrecacheOther("item_suit");
 	UTIL_PrecacheOther("item_battery");
@@ -490,8 +494,11 @@ void W_Precache(void)
 	UTIL_PrecacheOtherWeapon("weapon_m249");
 	UTIL_PrecacheOther("ammo_556");
 
-	if ( g_pGameRules->IsDeathmatch() )
-	{
+	// sporelauncher
+	UTIL_PrecacheOtherWeapon("weapon_sporelauncher");
+	UTIL_PrecacheOther("ammo_spore");
+
+	if ( g_pGameRules->IsDeathmatch() ) {
 		UTIL_PrecacheOther( "weaponbox" );// container for dropped deathmatch weapons
 	}
 	
@@ -513,6 +520,12 @@ void W_Precache(void)
 	g_sModelIndexFireballFlash = PRECACHE_MODEL("sprites/explosion_flash.spr");
 	g_sGrenadeGib = PRECACHE_MODEL("models/grenade_gibs.mdl");
 
+	g_sModelIndexSpore1 = PRECACHE_MODEL("sprites/spore_exp_01.spr");
+	g_sModelIndexSpore2 = PRECACHE_MODEL("sprites/spore_exp_b_01.spr");
+	g_sModelIndexSpore3 = PRECACHE_MODEL("sprites/spore_exp_c_01.spr");
+	g_sModelIndexBigSpit = PRECACHE_MODEL("sprites/bigspit.spr");
+	g_sModelIndexTinySpit = PRECACHE_MODEL("sprites/tinyspit.spr");
+
 	g_sModelIndexLaser = PRECACHE_MODEL( (char *)g_pModelNameLaser );
 	g_sModelIndexLaserDot = PRECACHE_MODEL("sprites/laserdot.spr");
 	m_usPlayEmptySound = PRECACHE_EVENT( 1, "events/tripfire.sc" );
@@ -520,24 +533,30 @@ void W_Precache(void)
 	m_usEfx = PRECACHE_EVENT(1, "events/explode.sc");
 	
 	// used by explosions
-	PRECACHE_MODEL ("models/grenade.mdl");
-	PRECACHE_MODEL ("sprites/explode1.spr");
+	PRECACHE_MODEL("models/grenade.mdl");
+	PRECACHE_MODEL("models/spore.mdl");
+	PRECACHE_MODEL("sprites/explode1.spr");
 
-	PRECACHE_SOUND ("weapons/debris1.wav");// explosion aftermaths
-	PRECACHE_SOUND ("weapons/debris2.wav");// explosion aftermaths
-	PRECACHE_SOUND ("weapons/debris3.wav");// explosion aftermaths
+	PRECACHE_SOUND("weapons/debris1.wav");// explosion aftermaths
+	PRECACHE_SOUND("weapons/debris2.wav");// explosion aftermaths
+	PRECACHE_SOUND("weapons/debris3.wav");// explosion aftermaths
 
-	PRECACHE_SOUND ("weapons/grenade_hit1.wav");//grenade
-	PRECACHE_SOUND ("weapons/grenade_hit2.wav");//grenade
-	PRECACHE_SOUND ("weapons/grenade_hit3.wav");//grenade
+	PRECACHE_SOUND("weapons/grenade_hit1.wav");//grenade
+	PRECACHE_SOUND("weapons/grenade_hit2.wav");//grenade
+	PRECACHE_SOUND("weapons/grenade_hit3.wav");//grenade
 
-	PRECACHE_SOUND ("weapons/bullet_hit1.wav");	// hit by bullet
-	PRECACHE_SOUND ("weapons/bullet_hit2.wav");	// hit by bullet
+	PRECACHE_SOUND("weapons/bullet_hit1.wav");	// hit by bullet
+	PRECACHE_SOUND("weapons/bullet_hit2.wav");	// hit by bullet
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 	PRECACHE_SOUND("items/9mmclip2.wav");
 	
-	PRECACHE_SOUND ("items/weapondrop1.wav");// weapon falls to the ground
+	PRECACHE_SOUND("items/weapondrop1.wav");// weapon falls to the ground
+
+	PRECACHE_SOUND("weapons/splauncher_impact.wav");//explosion aftermaths
+	PRECACHE_SOUND("weapons/spore_hit1.wav");//sporegrenade
+	PRECACHE_SOUND("weapons/spore_hit2.wav");//sporegrenade
+	PRECACHE_SOUND("weapons/spore_hit3.wav");//sporegrenade
 
 }
 
@@ -764,7 +783,7 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 
 void CBasePlayerItem::Spawn(void)
 {
-	pev->animtime = gpGlobals->time + 0.1;
+	pev->animtime = UTIL_GlobalTimeBase() + 0.1;
 	CBaseAnimating::Spawn();
 }
 
@@ -790,7 +809,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		WeaponIdle();
 	}
 
-	if ((m_fInReload) && ( m_pPlayer->m_flNextAttack <= UTIL_WeaponTimeBase() ) )
+	if ((m_fInReload) && ( m_pPlayer->m_flNextAttack <= UTIL_GlobalTimeBase() ) )
 	{
 		// complete the reload. 
 		int j = V_min( iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
@@ -804,7 +823,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		m_fInReload = FALSE;
 	}
 
-	if ((m_pPlayer->pev->button & IN_ATTACK2) && CanAttack( m_flNextSecondaryAttack, gpGlobals->time, 0 ) )
+	if ((m_pPlayer->pev->button & IN_ATTACK2) && CanAttack( m_flNextSecondaryAttack, UTIL_GlobalTimeBase(), 0 ) )
 	{
 		if ( pszAmmo2() && !m_pPlayer->m_rgAmmo[SecondaryAmmoIndex()] )
 		{
@@ -815,7 +834,7 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		SecondaryAttack();
 		m_pPlayer->pev->button &= ~IN_ATTACK2;
 	}
-	else if ((m_pPlayer->pev->button & IN_ATTACK) && CanAttack( m_flNextPrimaryAttack, gpGlobals->time, 0 ) )
+	else if ((m_pPlayer->pev->button & IN_ATTACK) && CanAttack( m_flNextPrimaryAttack, UTIL_GlobalTimeBase(), 0 ) )
 	{
 		if ( (m_iClip == 0 && pszAmmo1()) || (iMaxClip() == -1 && !m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] ) )
 		{
@@ -835,19 +854,19 @@ void CBasePlayerWeapon::ItemPostFrame( void )
 		// no fire buttons down
 		m_fFireOnEmpty = FALSE;
 
-		if ( !IsUseable() && m_flNextPrimaryAttack < gpGlobals->time ) 
+		if ( !IsUseable() && m_flNextPrimaryAttack < UTIL_GlobalTimeBase() ) 
 		{
 			// weapon isn't useable, switch.
 			if ( !(iFlags() & ITEM_FLAG_NOAUTOSWITCHEMPTY) && g_pGameRules->GetNextBestWeapon( m_pPlayer, this ) )
 			{
-				m_flNextPrimaryAttack = gpGlobals->time + 0.3;
+				m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3;
 				return;
 			}
 		}
 		else
 		{
 			// weapon is useable. Reload if empty and weapon has waited as long as it has to after firing
-			if ( m_iClip == 0 && !(iFlags() & ITEM_FLAG_NOAUTORELOAD) && m_flNextPrimaryAttack < gpGlobals->time )
+			if ( m_iClip == 0 && !(iFlags() & ITEM_FLAG_NOAUTORELOAD) && m_flNextPrimaryAttack < UTIL_GlobalTimeBase() )
 			{
 				Reload();
 				return;
@@ -915,7 +934,7 @@ void CBasePlayerItem::AttachToPlayer ( CBasePlayer *pPlayer )
 //LRC
 void CBasePlayerWeapon :: SetNextThink( float delay )
 {
-	m_fNextThink = UTIL_WeaponTimeBase() + delay;
+	m_fNextThink = UTIL_GlobalTimeBase() + delay;
 	pev->nextthink = m_fNextThink;
 }
 
@@ -1131,8 +1150,8 @@ BOOL CBasePlayerWeapon::DefaultDeploy(char *szViewModel, char *szWeaponModel, in
 	strcpy( m_pPlayer->m_szAnimExtention, szAnimExt );
 	SendWeaponAnim(iAnim);
 
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDrawTime;//Custom time for deploy
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + fDrawTime + 0.5; //Make half-second delay beetwen draw and idle animation
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + fDrawTime;//Custom time for deploy
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + fDrawTime + 0.5; //Make half-second delay beetwen draw and idle animation
 
 	return TRUE;
 }
@@ -1149,8 +1168,8 @@ BOOL CBasePlayerWeapon::DefaultDeploy(string_t iViewModel, string_t iWeaponModel
 	strcpy( m_pPlayer->m_szAnimExtention, szAnimExt );
 	SendWeaponAnim(iAnim);
 
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDrawTime;//Custom time for deploy
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + fDrawTime + 0.5; //Make half-second delay beetwen draw and idle animation
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + fDrawTime;//Custom time for deploy
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + fDrawTime + 0.5; //Make half-second delay beetwen draw and idle animation
 
 	return TRUE;
 }
@@ -1164,13 +1183,13 @@ BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay)
 
 	if (j == 0) return FALSE;
 
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + fDelay;
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + fDelay;
 
 	SendWeaponAnim(iAnim);
 
 	m_fInReload = TRUE;
 
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + fDelay + 0.5;
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + fDelay + 0.5;
 	return TRUE;
 }
 
@@ -1206,7 +1225,7 @@ void CBasePlayerWeapon :: RestoreBody ( void )
 		MESSAGE_END();
 
 		//restore idle animation and hands position
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase();
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase();
 
 		//saved in CBasePlayer
 		//strcpy( m_pPlayer->m_szAnimExtention, szAnimExt );
@@ -1383,7 +1402,7 @@ void CBasePlayerWeapon::RetireWeapon( void )
 //=========================================================
 // LRC - remove the specified ammo from this gun
 //=========================================================
-void CBasePlayerWeapon::DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren )
+void CBasePlayerWeapon::DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren, int iShock, int iSpore)
 {
 	int iPAI = PrimaryAmmoIndex();
 	int iAmt;
@@ -1399,6 +1418,8 @@ void CBasePlayerWeapon::DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int
 	else if (iPAI == pPlayer->GetAmmoIndex("Snarks"))		iAmt = iSnark;
 	else if (iPAI == pPlayer->GetAmmoIndex("Trip Mine"))	iAmt = iTrip;
 	else if (iPAI == pPlayer->GetAmmoIndex("Hand Grenade")) iAmt = iGren;
+	else if (iPAI == pPlayer->GetAmmoIndex("shocks"))		iAmt = iShock;
+	else if (iPAI == pPlayer->GetAmmoIndex("spore"))		iAmt = iSpore;
 	else return;
 
 	if (iAmt > 0)

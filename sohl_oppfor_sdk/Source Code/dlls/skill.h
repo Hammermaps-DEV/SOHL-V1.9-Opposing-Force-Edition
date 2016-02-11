@@ -27,6 +27,14 @@ struct skilldata_t
 
 	float apacheHealth;
 	
+	//Otis
+	float otisHealth;
+	float otisHead;
+	float otisChest;
+	float otisStomach;
+	float otisLeg;
+	float otisArm;
+
 	//Barney
 	float barneyHealth;
 	float barneyHead;
@@ -212,6 +220,12 @@ struct skilldata_t
 	float gonomeDmgGuts;
 	float gonomeDmgOneBite;
 
+	float strooperHealth;
+	float strooperDmgKick;
+	float strooperGrenadeSpeed;
+	float strooperMaxCharge;
+	float strooperRchgSpeed;
+
 	float turretHealth;
 	float miniturretHealth;
 	float sentryHealth;
@@ -238,6 +252,7 @@ struct skilldata_t
 	float plrDmgTripmine;
 	float plrDmgM249;
 	float plrDmgShock;
+	float plrDmgSpore;
 	
 // weapons shared by monsters
 	float monDmg9MM;

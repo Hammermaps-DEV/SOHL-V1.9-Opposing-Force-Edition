@@ -19,6 +19,7 @@
 #include "weapons.h"
 #include "nodes.h"
 #include "effects.h"
+#include "proj_grenade.h"
 #include "monster_apache.h"
 
 extern DLL_GLOBAL int		g_iSkillLevel;
@@ -149,11 +150,11 @@ void CApache :: Killed( entvars_t *pevAttacker, int iGib )
 
 	if (pev->spawnflags & SF_NOWRECKAGE)
 	{
-		m_flNextRocket = gpGlobals->time + 4.0;
+		m_flNextRocket = UTIL_GlobalTimeBase() + 4.0;
 	}
 	else
 	{
-		m_flNextRocket = gpGlobals->time + 15.0;
+		m_flNextRocket = UTIL_GlobalTimeBase() + 15.0;
 	}
 }
 
@@ -165,7 +166,7 @@ void CApache :: DyingThink( void )
 	pev->avelocity = pev->avelocity * 1.02;
 
 	// still falling?
-	if (m_flNextRocket > gpGlobals->time )
+	if (m_flNextRocket > UTIL_GlobalTimeBase() )
 	{
 		// random explosions
 		MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, pev->origin );
@@ -291,7 +292,7 @@ void CApache :: DyingThink( void )
 			pWreckage->pev->frame = pev->frame;
 			pWreckage->pev->sequence = pev->sequence;
 			pWreckage->pev->framerate = 0;
-			pWreckage->pev->dmgtime = gpGlobals->time + 5;
+			pWreckage->pev->dmgtime = UTIL_GlobalTimeBase() + 5;
 		}
 
 		// gibs
@@ -356,7 +357,7 @@ void CApache::CrashTouch( CBaseEntity *pOther )
 	if ( pOther->pev->solid == SOLID_BSP) 
 	{
 		SetTouch( NULL );
-		m_flNextRocket = gpGlobals->time;
+		m_flNextRocket = UTIL_GlobalTimeBase();
 		SetNextThink( 0 );
 	}
 }
@@ -402,9 +403,9 @@ void CApache :: HuntThink( void )
 		// ALERT( at_console, "%s\n", STRING( m_hEnemy->pev->classname ) );
 		if (FVisible( m_hEnemy ))
 		{
-			if (m_flLastSeen < gpGlobals->time - 5)
-				m_flPrevSeen = gpGlobals->time;
-			m_flLastSeen = gpGlobals->time;
+			if (m_flLastSeen < UTIL_GlobalTimeBase() - 5)
+				m_flPrevSeen = UTIL_GlobalTimeBase();
+			m_flLastSeen = UTIL_GlobalTimeBase();
 			m_posTarget = m_hEnemy->Center( );
 		}
 		else
@@ -442,7 +443,7 @@ void CApache :: HuntThink( void )
 	{
 		// float flLength2 = (m_posTarget - pev->origin).Length() * (1.5 - DotProduct((m_posTarget - pev->origin).Normalize(), pev->velocity.Normalize() ));
 		// if (flLength2 < flLength)
-		if (m_flLastSeen + 90 > gpGlobals->time && DotProduct( (m_posTarget - pev->origin).Normalize(), (m_posDesired - pev->origin).Normalize( )) > 0.25)
+		if (m_flLastSeen + 90 > UTIL_GlobalTimeBase() && DotProduct( (m_posTarget - pev->origin).Normalize(), (m_posDesired - pev->origin).Normalize( )) > 0.25)
 		{
 			m_vecDesired = (m_posTarget - pev->origin).Normalize( );
 		}
@@ -458,8 +459,8 @@ void CApache :: HuntThink( void )
 
 	Flight( );
 
-	// ALERT( at_console, "%.0f %.0f %.0f\n", gpGlobals->time, m_flLastSeen, m_flPrevSeen );
-	if ((m_flLastSeen + 1 > gpGlobals->time) && (m_flPrevSeen + 2 < gpGlobals->time))
+	// ALERT( at_console, "%.0f %.0f %.0f\n", UTIL_GlobalTimeBase(), m_flLastSeen, m_flPrevSeen );
+	if ((m_flLastSeen + 1 > UTIL_GlobalTimeBase()) && (m_flPrevSeen + 2 < UTIL_GlobalTimeBase()))
 	{
 		if (FireGun( ))
 		{
@@ -470,26 +471,26 @@ void CApache :: HuntThink( void )
 
 		// don't fire rockets and gun on easy mode
 		if (g_iSkillLevel == SKILL_EASY)
-			m_flNextRocket = gpGlobals->time + 10.0;
+			m_flNextRocket = UTIL_GlobalTimeBase() + 10.0;
 	}
 
 	UTIL_MakeAimVectors( pev->angles );
 	Vector vecEst = (gpGlobals->v_forward * 800 + pev->velocity).Normalize( );
-	// ALERT( at_console, "%d %d %d %4.2f\n", pev->angles.x < 0, DotProduct( pev->velocity, gpGlobals->v_forward ) > -100, m_flNextRocket < gpGlobals->time, DotProduct( m_vecTarget, vecEst ) );
+	// ALERT( at_console, "%d %d %d %4.2f\n", pev->angles.x < 0, DotProduct( pev->velocity, gpGlobals->v_forward ) > -100, m_flNextRocket < UTIL_GlobalTimeBase(), DotProduct( m_vecTarget, vecEst ) );
 
 	if ((m_iRockets % 2) == 1)
 	{
 		FireRocket( );
-		m_flNextRocket = gpGlobals->time + 0.5;
+		m_flNextRocket = UTIL_GlobalTimeBase() + 0.5;
 		if (m_iRockets <= 0)
 		{
-			m_flNextRocket = gpGlobals->time + 10;
+			m_flNextRocket = UTIL_GlobalTimeBase() + 10;
 			m_iRockets = 10;
 		}
 	}
-	else if (pev->angles.x < 0 && DotProduct( pev->velocity, gpGlobals->v_forward ) > -100 && m_flNextRocket < gpGlobals->time)
+	else if (pev->angles.x < 0 && DotProduct( pev->velocity, gpGlobals->v_forward ) > -100 && m_flNextRocket < UTIL_GlobalTimeBase())
 	{
-		if (m_flLastSeen + 60 > gpGlobals->time)
+		if (m_flLastSeen + 60 > UTIL_GlobalTimeBase())
 		{
 			if (m_hEnemy != NULL)
 			{

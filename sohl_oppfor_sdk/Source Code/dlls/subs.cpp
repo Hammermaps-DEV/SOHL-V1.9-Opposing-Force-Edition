@@ -137,7 +137,7 @@ void CBaseEntity :: SUB_DoNothing( void )
 //	if (pev->ltime)
 //		ALERT(at_console, "Doing Nothing %f\n", pev->ltime);
 //	else
-//		ALERT(at_console, "Doing Nothing %f\n", gpGlobals->time);
+//		ALERT(at_console, "Doing Nothing %f\n", UTIL_GlobalTimeBase());
 }
 
 
@@ -502,7 +502,7 @@ void CBaseToggle :: LinearMoveNow( void )
 
 	Vector vecDest;
 //	if (m_pMoveWith || m_pChildMoveWith )
-//		ALERT(at_console,"THINK: LinearMoveNow happens at %f, speed %f\n",gpGlobals->time, m_flLinearMoveSpeed);
+//		ALERT(at_console,"THINK: LinearMoveNow happens at %f, speed %f\n",UTIL_GlobalTimeBase(), m_flLinearMoveSpeed);
 
 	if (m_pMoveWith)
 	{
@@ -558,7 +558,7 @@ After moving, set origin to exact final destination, call "move done" function
 		// HACK: not there yet, try waiting one more frame.
 		ALERT(at_console,"Rejecting difference %f\n",vecDiff.Length());
 		SetThink(&CBaseToggle ::LinearMoveFinalDone);
-		pev->nextthink = gpGlobals->time + 0.01;
+		pev->nextthink = UTIL_GlobalTimeBase() + 0.01;
 	}
 	else
 	{
@@ -638,7 +638,7 @@ void CBaseToggle :: AngularMove( Vector vecDestAngle, float flSpeed )
 
 //	if ((m_pMoveWith || m_pChildMoveWith))// && !bNow)
 //	{
-//		ALERT(at_console,"Setting AngularMoveNow to happen after %f\n",gpGlobals->time);
+//		ALERT(at_console,"Setting AngularMoveNow to happen after %f\n",UTIL_GlobalTimeBase());
 	SetThink(&CBaseToggle :: AngularMoveNow );
 	UTIL_DesiredThink( this );
 //	ExternalThink( 0.01 );

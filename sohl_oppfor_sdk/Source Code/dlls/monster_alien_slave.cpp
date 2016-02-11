@@ -348,7 +348,7 @@ void CISlave :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			// STOP_SOUND( ENT(pev), CHAN_WEAPON, "debris/zap4.wav" );
 			ApplyMultiDamage(pev, pev);
 
-			m_flNextAttack = gpGlobals->time + RANDOM_FLOAT( 0.5, 4.0 );
+			m_flNextAttack = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.5, 4.0 );
 		}
 		break;
 
@@ -369,7 +369,7 @@ void CISlave :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 BOOL CISlave :: CheckRangeAttack1 ( float flDot, float flDist )
 {
-	if (m_flNextAttack > gpGlobals->time)
+	if (m_flNextAttack > UTIL_GlobalTimeBase())
 	{
 		return FALSE;
 	}
@@ -384,7 +384,7 @@ BOOL CISlave :: CheckRangeAttack2 ( float flDot, float flDist )
 {
 	return FALSE;
 
-	if (m_flNextAttack > gpGlobals->time)
+	if (m_flNextAttack > UTIL_GlobalTimeBase())
 	{
 		return FALSE;
 	}

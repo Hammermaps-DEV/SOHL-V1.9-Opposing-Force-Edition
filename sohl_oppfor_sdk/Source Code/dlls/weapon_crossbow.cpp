@@ -100,7 +100,7 @@ void CCrossbow::PrimaryAttack(void) {
 // FireSniperBolt * only in Multiplayer
 //=========================================================
 void CCrossbow::FireSniperBolt() {
-	m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.75;
+	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.75;
 
 	if (m_iClip == 0) {
 		PlayEmptySound();
@@ -161,9 +161,9 @@ void CCrossbow::FireSniperBolt() {
 
 		if (FClassnameIs(tr.pHit, "worldspawn")) {
 			// let the bolt sit around for a while if it hit static architecture
-			pBolt->pev->nextthink = UTIL_WeaponTimeBase() + 5.0;
+			pBolt->pev->nextthink = UTIL_GlobalTimeBase() + 5.0;
 		} else {
-			pBolt->pev->nextthink = UTIL_WeaponTimeBase();
+			pBolt->pev->nextthink = UTIL_GlobalTimeBase();
 		}
 	}
 }
@@ -220,10 +220,10 @@ void CCrossbow::FireBolt() {
 	}
 
 	if (m_iClip >= 2) {
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)CROSSBOW_FIRE::frames, (int)CROSSBOW_FIRE::fps);
 	} else {
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
 			CalculateWeaponTime((int)CROSSBOW_FIRE_LAST::frames, (int)CROSSBOW_FIRE_LAST::fps);
 	}
 
@@ -253,11 +253,11 @@ void CCrossbow::Holster( ) {
 
 	if (m_iClip) {
 		SendWeaponAnim((int)CROSSBOW_HOLSTER::sequence);
-		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+		m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_HOLSTER::frames, (int)CROSSBOW_HOLSTER::fps);
 	} else {
 		SendWeaponAnim((int)CROSSBOW_HOLSTER_EMPTY::sequence);
-		m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+		m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_HOLSTER_EMPTY::frames, (int)CROSSBOW_HOLSTER_EMPTY::fps);
 	}
 }
@@ -281,9 +281,9 @@ void CCrossbow::Reload( void ) {
 void CCrossbow :: ZoomUpdate( void ) {
 	if (m_pPlayer->pev->button & IN_ATTACK2) {
 		if(m_iChargeLevel == 0) {
-			if (m_flShockTime > UTIL_WeaponTimeBase()) return;
+			if (m_flShockTime > UTIL_GlobalTimeBase()) return;
 			m_iChargeLevel = 1;
-			m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.5;
+			m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.5;
 		}
 
 		if(m_iChargeLevel == 1) {
@@ -291,13 +291,13 @@ void CCrossbow :: ZoomUpdate( void ) {
 			m_iChargeLevel = 2;//ready to zooming, wait for 0.5 secs
 		}
 
-		if (m_flTimeUpdate > UTIL_WeaponTimeBase()) {
+		if (m_flTimeUpdate > UTIL_GlobalTimeBase()) {
 			return;
 		}
 
 		if (m_iChargeLevel == 2 && m_pPlayer->m_iFOV > 20) {
 			m_pPlayer->m_iFOV--;
-			m_flTimeUpdate = UTIL_WeaponTimeBase() + 0.02;
+			m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.02;
 		}
 
 		if (m_iChargeLevel == 3) {
@@ -312,7 +312,7 @@ void CCrossbow :: ZoomUpdate( void ) {
 // ZoomReset
 //=========================================================
 void CCrossbow::ZoomReset( void ) {
-	m_flShockTime = UTIL_WeaponTimeBase() + 0.5;
+	m_flShockTime = UTIL_GlobalTimeBase() + 0.5;
 	m_pPlayer->m_iFOV = 90;
 	m_iChargeLevel = 0;//clear zoom
 }
@@ -333,8 +333,8 @@ void CCrossbow::WeaponIdle( void ) {
 		case 5: pev->body = 0; break;
 	}
 
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -343,22 +343,22 @@ void CCrossbow::WeaponIdle( void ) {
 	if (flRand <= 0.5) {
 		if (m_iClip) {
 			iAnim = (int)CROSSBOW_IDLE::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)CROSSBOW_IDLE::frames, (int)CROSSBOW_IDLE::fps);
 		} else {
 			iAnim = (int)CROSSBOW_IDLE_EMPTY::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)CROSSBOW_IDLE_EMPTY::frames, (int)CROSSBOW_IDLE_EMPTY::fps);
 		}
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 	} else if (flRand <= 0.7 && m_iClip) {
 		iAnim = (int)CROSSBOW_FIDGET::sequence;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_FIDGET::frames, (int)CROSSBOW_FIDGET::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 	} else {
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-		m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}
 
 	SendWeaponAnim(iAnim);

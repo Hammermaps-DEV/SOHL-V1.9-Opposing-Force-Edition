@@ -259,10 +259,10 @@ void CBarniel::AlertSound(void) {
 // PainSound
 //=========================================================
 void CBarniel::PainSound(void) {
-	if (gpGlobals->time < m_painTime)
+	if (UTIL_GlobalTimeBase() < m_painTime)
 		return;
 
-	m_painTime = gpGlobals->time + RANDOM_FLOAT(0.5, 0.75);
+	m_painTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5, 0.75);
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 

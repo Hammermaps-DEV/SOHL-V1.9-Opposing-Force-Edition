@@ -192,10 +192,10 @@ void CNihilanth::Precache( void )
 
 void CNihilanth :: PainSound( void )
 {
-	if (m_flNextPainSound > gpGlobals->time)
+	if (m_flNextPainSound > UTIL_GlobalTimeBase())
 		return;
 	
-	m_flNextPainSound = gpGlobals->time + RANDOM_FLOAT( 2, 5 );
+	m_flNextPainSound = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 2, 5 );
 
 	if (pev->health > gSkillData.nihilanthHealth / 2)
 	{
@@ -433,11 +433,11 @@ void CNihilanth :: FloatSequence( void )
 
 void CNihilanth :: ShootBalls( void )
 {
-	if (m_flShootEnd > gpGlobals->time)
+	if (m_flShootEnd > UTIL_GlobalTimeBase())
 	{
 		Vector vecHand, vecAngle;
 		
-		while (m_flShootTime < m_flShootEnd && m_flShootTime < gpGlobals->time)
+		while (m_flShootTime < m_flShootEnd && m_flShootTime < UTIL_GlobalTimeBase())
 		{
 			if (m_hEnemy != NULL)
 			{
@@ -445,19 +445,19 @@ void CNihilanth :: ShootBalls( void )
 				CNihilanthHVR *pEntity;
 
 				GetAttachment( 2, vecHand, vecAngle );
-				vecSrc = vecHand + pev->velocity * (m_flShootTime - gpGlobals->time);
+				vecSrc = vecHand + pev->velocity * (m_flShootTime - UTIL_GlobalTimeBase());
 				// vecDir = (m_posTarget - vecSrc).Normalize( );
 				vecDir = (m_posTarget - pev->origin).Normalize( );
-				vecSrc = vecSrc + vecDir * (gpGlobals->time - m_flShootTime);
+				vecSrc = vecSrc + vecDir * (UTIL_GlobalTimeBase() - m_flShootTime);
 				pEntity = (CNihilanthHVR *)Create( "nihilanth_energy_ball", vecSrc, pev->angles, edict() );
 				pEntity->pev->velocity = vecDir * 200.0; 
 				pEntity->ZapInit( m_hEnemy );
 
 				GetAttachment( 3, vecHand, vecAngle );
-				vecSrc = vecHand + pev->velocity * (m_flShootTime - gpGlobals->time);
+				vecSrc = vecHand + pev->velocity * (m_flShootTime - UTIL_GlobalTimeBase());
 				// vecDir = (m_posTarget - vecSrc).Normalize( );
 				vecDir = (m_posTarget - pev->origin).Normalize( );
-				vecSrc = vecSrc + vecDir * (gpGlobals->time - m_flShootTime);
+				vecSrc = vecSrc + vecDir * (UTIL_GlobalTimeBase() - m_flShootTime);
 				pEntity = (CNihilanthHVR *)Create( "nihilanth_energy_ball", vecSrc, pev->angles, edict() );
 				pEntity->pev->velocity = vecDir * 200.0; 
 				pEntity->ZapInit( m_hEnemy );
@@ -626,7 +626,7 @@ void CNihilanth :: NextActivity( )
 		m_hEnemy = NULL;
 	}
 
-	if (m_flLastSeen + 15 < gpGlobals->time)
+	if (m_flLastSeen + 15 < UTIL_GlobalTimeBase())
 	{
 		m_hEnemy = NULL;
 	}
@@ -639,7 +639,7 @@ void CNihilanth :: NextActivity( )
 
 	if (m_hEnemy != NULL && m_irritation != 0)
 	{
-		if (m_flLastSeen + 5 > gpGlobals->time && flDist < 256 && flDot > 0)
+		if (m_flLastSeen + 5 > UTIL_GlobalTimeBase() && flDist < 256 && flDot > 0)
 		{
 			if (m_irritation >= 2 && pev->health < gSkillData.nihilanthHealth / 2.0)
 			{
@@ -718,9 +718,9 @@ void CNihilanth :: HuntThink( void )
 	{
 		if (FVisible( m_hEnemy ))
 		{
-			if (m_flLastSeen < gpGlobals->time - 5)
-				m_flPrevSeen = gpGlobals->time;
-			m_flLastSeen = gpGlobals->time;
+			if (m_flLastSeen < UTIL_GlobalTimeBase() - 5)
+				m_flPrevSeen = UTIL_GlobalTimeBase();
+			m_flLastSeen = UTIL_GlobalTimeBase();
 			m_posTarget = m_hEnemy->pev->origin;
 			m_vecTarget = (m_posTarget - pev->origin).Normalize();
 			m_vecDesired = m_vecTarget;
@@ -930,8 +930,8 @@ void CNihilanth :: HandleAnimEvent( MonsterEvent_t *pEvent )
 				WRITE_COORD( 128 ); // decay
 			MESSAGE_END();
 			
-			m_flShootTime = gpGlobals->time;
-			m_flShootEnd = gpGlobals->time + 1.0;
+			m_flShootTime = UTIL_GlobalTimeBase();
+			m_flShootEnd = UTIL_GlobalTimeBase() + 1.0;
 		}
 		break;
 	case 3:	// prayer
@@ -991,8 +991,8 @@ void CNihilanth :: HandleAnimEvent( MonsterEvent_t *pEvent )
 					WRITE_COORD( 128 ); // decay
 				MESSAGE_END();
 
-				m_flShootTime = gpGlobals->time;
-				m_flShootEnd = gpGlobals->time + 1.0;
+				m_flShootTime = UTIL_GlobalTimeBase();
+				m_flShootEnd = UTIL_GlobalTimeBase() + 1.0;
 			}
 		}
 		break;

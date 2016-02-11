@@ -37,40 +37,6 @@ public:
 	static CLaserSpot *CreateSpot( const char* spritename );
 };
 
-// Contact Grenade / Timed grenade / Satchel Charge
-class CGrenade : public CBaseMonster
-{
-public:
-	void Spawn( void );
-
-	typedef enum { SATCHEL_DETONATE = 0, SATCHEL_RELEASE } SATCHELCODE;
-
-	static CGrenade *ShootTimed( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time );
-	static CGrenade *ShootContact( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity );
-	static CGrenade *ShootSatchelCharge( entvars_t *pevOwner, Vector vecStart, Vector vecVelocity );
-	static void UseSatchelCharges( entvars_t *pevOwner, SATCHELCODE code );
-
-	void Explode( Vector vecSrc, Vector vecAim );
-	void Explode( TraceResult *pTrace, int bitsDamageType );
-	void EXPORT Smoke( void );
-
-	void EXPORT BounceTouch( CBaseEntity *pOther );
-	void EXPORT SlideTouch( CBaseEntity *pOther );
-	void EXPORT ExplodeTouch( CBaseEntity *pOther );
-	void EXPORT DangerSoundThink( void );
-	void EXPORT PreDetonate( void );
-	void EXPORT Detonate( void );
-	void EXPORT DetonateUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void EXPORT TumbleThink( void );
-
-	virtual void BounceSound( void );
-	virtual int	BloodColor( void ) { return DONT_BLEED; }
-	virtual void Killed( entvars_t *pevAttacker, int iGib );
-
-	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.
-};
-
-
 // constant items
 #define ITEM_HEALTHKIT		1
 #define ITEM_ANTIDOTE		2
@@ -100,7 +66,7 @@ public:
 #define WEAPON_SNARK			20
 #define WEAPON_M249				21
 #define WEAPON_SHOCKRIFLE		22
-
+#define WEAPON_SPORELAUNCHER	23
 
 #define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
 
@@ -132,6 +98,7 @@ public:
 #define M249_WEIGHT			25
 #define SHOCKRIFLE_WEIGHT	10
 #define EAGLE_WEIGHT		15
+#define SPORELAUNCHER_WEIGHT	10
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -148,6 +115,7 @@ public:
 #define M203_GRENADE_MAX_CARRY	10
 #define SHOCK_MAX_CARRY		10
 #define _556_MAX_CARRY			200
+#define SPORE_MAX_CARRY			20
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP		-1
@@ -169,6 +137,7 @@ public:
 #define SNARK_MAX_CLIP		WEAPON_NOCLIP
 #define M249_MAX_CLIP		50
 #define EAGLE_MAX_CLIP		7
+#define SPORELAUNCHER_MAX_CLIP			5
 
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE			17
@@ -189,6 +158,7 @@ public:
 #define M249_DEFAULT_GIVE			50
 #define SHOCKRIFLE_DEFAULT_GIVE		10
 #define EAGLE_DEFAULT_GIVE			7
+#define SPORELAUNCHER_DEFAULT_GIVE	5
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -202,6 +172,7 @@ public:
 #define AMMO_RPGCLIP_GIVE		RPG_MAX_CLIP
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
+#define AMMO_SPORE_GIVE			1
 
 //SOHL - Opposing-Force
 #define AMMO_556_GIVE			50
@@ -387,7 +358,7 @@ public:
 	virtual void RestoreBody ( void );
 	
 	//LRC - used by weaponstrip
-	void DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren );
+	void DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren, int iShock, int iSpore);
 	
 	int	PrimaryAmmoIndex(); 
 	int	SecondaryAmmoIndex(); 
@@ -456,6 +427,11 @@ extern DLL_GLOBAL	short		g_sModelIndexFireball_0;
 extern DLL_GLOBAL	short		g_sModelIndexFireball_1;
 extern DLL_GLOBAL	short		g_sModelIndexFireballFlash;
 extern DLL_GLOBAL	short		g_sGrenadeGib;
+extern DLL_GLOBAL	short		g_sModelIndexSpore1;
+extern DLL_GLOBAL	short		g_sModelIndexSpore2;
+extern DLL_GLOBAL	short		g_sModelIndexSpore3;
+extern DLL_GLOBAL   short		g_sModelIndexBigSpit;
+extern DLL_GLOBAL   short		g_sModelIndexTinySpit;
 
 extern DLL_GLOBAL	unsigned short	g_usEventIndexNullEvent;//null event index
 extern DLL_GLOBAL 	unsigned short 	m_usDecals;	    //Decal event

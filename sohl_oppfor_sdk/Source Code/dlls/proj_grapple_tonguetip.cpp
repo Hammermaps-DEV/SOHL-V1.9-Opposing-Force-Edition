@@ -22,7 +22,7 @@
 #include "player.h"
 #include "gamerules.h"
 #include "weapon_grapple.h"
-#include "grapple_tonguetip.h"
+#include "proj_grapple_tonguetip.h"
 
 LINK_ENTITY_TO_CLASS(proj_hook, CGrappleHook);
 
@@ -63,7 +63,7 @@ void CGrappleHook::Spawn(void)
 	UTIL_MakeVectors(pev->angles);
 	pev->velocity = gpGlobals->v_forward * 500;
 	pev->gravity = 0;
-	pev->nextthink = gpGlobals->time + 0.01;	// Fograin92: Changed this to 0.01 it will be much smoother
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.01;	// Fograin92: Changed this to 0.01 it will be much smoother
 	pev->dmg = 0;
 }
 
@@ -182,7 +182,7 @@ void CGrappleHook::Killed(entvars_t *pev, int gib)
 	myowner->pev->movetype = MOVETYPE_WALK; //Re-apply gravity
 	myowner->m_afPhysicsFlags &= ~PFLAG_ON_GRAPPLE; //Remove "on grapple" flag
 	myowner->m_pGrappleExists = false;
-	myowner->m_flNextAttack = UTIL_WeaponTimeBase() + 1.0;
+	myowner->m_flNextAttack = UTIL_GlobalTimeBase() + 1.0;
 
 	// Fograin92: Clear monster
 	if ((m_iHitMonster == 2) && (myHitMonster->IsAlive()))
@@ -289,5 +289,5 @@ void CGrappleHook::Move(void)
 		m_pTongue->SetScrollRate(20);
 	}
 
-	pev->nextthink = gpGlobals->time + 0.01;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.01;
 }

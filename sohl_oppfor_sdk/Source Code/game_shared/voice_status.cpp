@@ -13,7 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "../cl_dll/parsemsg.h"
+#include "parsemsg.h"
 #include "../cl_dll/hud_servers.h"
 #include "../cl_dll/demo.h"
 

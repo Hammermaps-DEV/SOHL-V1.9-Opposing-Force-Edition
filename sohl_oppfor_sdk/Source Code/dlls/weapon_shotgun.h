@@ -50,8 +50,8 @@ class CShotgun : public CBasePlayerWeapon {
 		void SecondaryAttack(void);
 
 		//Animations
-		BOOL Deploy();
-		void Holster();
+		BOOL Deploy(void);
+		void Holster(void);
 		void Reload(void);
 		void Charge(bool m_BeginAttack);
 		void WeaponIdle(void);

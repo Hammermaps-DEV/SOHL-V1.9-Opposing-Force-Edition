@@ -315,7 +315,7 @@ void CGeneWorm::Spawn()
 	InitBoneControllers();
 
 	SetThink(&CGeneWorm::StartupThink);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 
 	m_vecDesired = Vector(1, 0, 0);
 	m_posDesired = Vector(pev->origin.x, pev->origin.y, 512);
@@ -342,7 +342,7 @@ void CGeneWorm::Precache()
 void CGeneWorm::NullThink(void)
 {
 	StudioFrameAdvance();
-	pev->nextthink = gpGlobals->time + 0.5;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
 }
 
 //=========================================================
@@ -351,7 +351,7 @@ void CGeneWorm::NullThink(void)
 void CGeneWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetThink(&CGeneWorm::HuntThink);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 	SetUse(&CGeneWorm::CommandUse);
 }
 
@@ -372,7 +372,7 @@ void CGeneWorm::StartupThink(void)
 
 	SetThink(&CGeneWorm::HuntThink);
 	SetUse(&CGeneWorm::CommandUse);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 }
 
 
@@ -383,7 +383,7 @@ void CGeneWorm::Killed(entvars_t *pevAttacker, int iGib)
 
 void CGeneWorm::DyingThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -442,7 +442,7 @@ void CGeneWorm::NextActivity(void)
 		m_hEnemy = NULL;
 	}
 
-	if (m_flLastSeen + 15 < gpGlobals->time)
+	if (m_flLastSeen + 15 < UTIL_GlobalTimeBase())
 	{
 		m_hEnemy = NULL;
 	}
@@ -461,7 +461,7 @@ void CGeneWorm::NextActivity(void)
 
 	if (m_hEnemy != NULL)
 	{
-		if (m_flLastSeen + 5 > gpGlobals->time)
+		if (m_flLastSeen + 5 > UTIL_GlobalTimeBase())
 		{
 			return;
 		}
@@ -478,7 +478,7 @@ void CGeneWorm::NextActivity(void)
 
 void CGeneWorm::HuntThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -506,9 +506,9 @@ void CGeneWorm::HuntThink(void)
 
 		if (FVisible(m_hEnemy))
 		{
-			if (m_flLastSeen < gpGlobals->time - 5)
-				m_flPrevSeen = gpGlobals->time;
-			m_flLastSeen = gpGlobals->time;
+			if (m_flLastSeen < UTIL_GlobalTimeBase() - 5)
+				m_flPrevSeen = UTIL_GlobalTimeBase();
+			m_flLastSeen = UTIL_GlobalTimeBase();
 			m_posTarget = m_hEnemy->pev->origin;
 			m_vecTarget = (m_posTarget - pev->origin).Normalize();
 			m_vecDesired = m_vecTarget;

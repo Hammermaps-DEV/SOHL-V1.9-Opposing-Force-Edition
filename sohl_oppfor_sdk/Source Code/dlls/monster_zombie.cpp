@@ -367,13 +367,13 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 int CZombie::IgnoreConditions(void) {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 	if ((m_Activity == ACT_MELEE_ATTACK1)) {	
-		if (m_flNextFlinch >= gpGlobals->time)
+		if (m_flNextFlinch >= UTIL_GlobalTimeBase())
 			iIgnore |= (bits_COND_LIGHT_DAMAGE|bits_COND_HEAVY_DAMAGE);
 	}
 
 	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH)) {
-		if (m_flNextFlinch < gpGlobals->time)
-			m_flNextFlinch = gpGlobals->time + ZOMBIE_FLINCH_DELAY;
+		if (m_flNextFlinch < UTIL_GlobalTimeBase())
+			m_flNextFlinch = UTIL_GlobalTimeBase() + ZOMBIE_FLINCH_DELAY;
 	}
 
 	return iIgnore;

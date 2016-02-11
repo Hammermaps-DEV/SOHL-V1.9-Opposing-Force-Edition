@@ -885,10 +885,10 @@ void CFuncTrain :: Blocked( CBaseEntity *pOther )
 	// Keep "movewith" entities in line
 	UTIL_AssignOrigin(this, pev->origin);
 
-	if ( gpGlobals->time < m_flActivateFinished)
+	if ( UTIL_GlobalTimeBase() < m_flActivateFinished)
 		return;
 
-	m_flActivateFinished = gpGlobals->time + 0.5;
+	m_flActivateFinished = UTIL_GlobalTimeBase() + 0.5;
 
 	if (pev->dmg)
 		if (m_hActivator)
@@ -1760,8 +1760,8 @@ void CFuncTrackTrain :: DesiredAction( void ) // Next( void )
 //	UTIL_DesiredInfo(this);
 
 //	static float stime;
-//	ALERT(at_console, "TRAIN: think delay = %f\n", gpGlobals->time - stime);
-//	stime = gpGlobals->time;
+//	ALERT(at_console, "TRAIN: think delay = %f\n", UTIL_GlobalTimeBase() - stime);
+//	stime = UTIL_GlobalTimeBase();
 
 	if ( !pev->speed )
 	{
@@ -2369,7 +2369,7 @@ void CFuncVehicle::CalcHeight( void )
 	// Ok we know where ware the average floor should be
 	// Lets get moving.
 
-	m_nextcalc[0] = gpGlobals->time + 0.5;
+	m_nextcalc[0] = UTIL_GlobalTimeBase() + 0.5;
 	// Dont worry about this, in fact remove it!
 	// You dont have this variable, this is just there
 	// so it only checks the height every 0.5 seconds

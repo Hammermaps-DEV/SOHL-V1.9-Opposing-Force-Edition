@@ -47,6 +47,7 @@
 #include "weapon_pipewrench.h"
 #include "weapon_shockrifle.h"
 #include "weapon_eagle.h"
+#include "weapon_sporelauncher.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -83,6 +84,7 @@ extern "C" {
 	void EV_FireM249(struct event_args_s *args);
 	void EV_ShockFire(struct event_args_s *args);
 	void EV_FireEagle(struct event_args_s *args);
+	void EV_FireSpore(struct event_args_s *args);
 }
 
 #define VECTOR_CONE_1DEGREES Vector( 0.00873, 0.00873, 0.00873 )
@@ -1320,6 +1322,7 @@ void EV_FireKnife(event_args_t *args) {
 //======================
 //	   KNIFE END 
 //======================
+
 //======================
 //	    GLOCK START
 //======================
@@ -1592,6 +1595,53 @@ void EV_FireShotGun( event_args_t *args ) {
 }
 //======================
 //	   SHOTGUN END
+//======================
+
+//======================
+// SPORELAUNCHER START
+//======================
+void EV_FireSpore(event_args_t *args) {
+	int idx;
+	vec3_t origin;
+	vec3_t angles;
+	vec3_t velocity;
+	vec3_t up, right, forward;
+
+	idx = args->entindex;
+	VectorCopy(args->origin, origin);
+	VectorCopy(args->angles, angles);
+	VectorCopy(args->velocity, velocity);
+
+	AngleVectors(angles, forward, right, up);
+
+	if (EV_IsLocal(idx)) {
+		gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SPLAUNCHER_SHOOT::sequence, 0);
+		V_PunchAxis(0, -5.0);
+	}
+
+	if (args->bparam2)
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/splauncher_fire.wav", 1, ATTN_NORM, 0, 100);
+	else
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/splauncher_altfire.wav", 1, ATTN_NORM, 0, 100);
+
+	Vector	vecSpitOffset;
+	Vector	vecSpitDir;
+
+	vecSpitDir.x = forward.x;
+	vecSpitDir.y = forward.y;
+	vecSpitDir.z = forward.z;
+
+	vecSpitOffset = origin;
+
+	vecSpitOffset = vecSpitOffset + forward * 16;
+	vecSpitOffset = vecSpitOffset + right * 8;
+	vecSpitOffset = vecSpitOffset + up * 4;
+
+	int iSpitModelIndex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/tinyspit.spr");
+	gEngfuncs.pEfxAPI->R_Sprite_Spray((float*)&vecSpitOffset,(float*)&vecSpitDir,iSpitModelIndex,8,210,25);
+}
+//======================
+//  SPORELAUNCHER END
 //======================
 
 //======================
@@ -1998,8 +2048,8 @@ enum EGON_FIREMODE { FIRE_NARROW = 0, FIRE_WIDE };
 #define EGON_PRIMARY_VOLUME		450
 #define EGON_BEAM_SPRITE		"sprites/xbeam1.spr"
 #define EGON_FLARE_SPRITE		"sprites/XSpark1.spr"
-#define EGON_SOUND_OFF		"weapons/egon_off1.wav"
-#define EGON_SOUND_RUN		"weapons/egon_run3.wav"
+#define EGON_SOUND_OFF			"weapons/egon_off1.wav"
+#define EGON_SOUND_RUN			"weapons/egon_run3.wav"
 #define EGON_SOUND_STARTUP		"weapons/egon_windup2.wav"
 
 BEAM *pBeam;

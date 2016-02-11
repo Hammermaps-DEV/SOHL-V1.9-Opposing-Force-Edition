@@ -65,7 +65,7 @@ void CShock::Spawn(void) {
 	ComputeBeamPositions(vDir, &m_vecBeamStart, &m_vecBeamEnd);
 
 	SetThink(&CShock::ShockThink);
-	pev->nextthink = gpGlobals->time + 0.1f;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1f;
 }
 
 void CShock::Precache() {
@@ -78,7 +78,7 @@ void CShock::Precache() {
 }
 
 void CShock::ShockThink(void) {
-	pev->nextthink = gpGlobals->time + 0.01f;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.01f;
 
 	Vector vDir = pev->velocity.Normalize();
 	ComputeBeamPositions(vDir, &m_vecBeamStart, &m_vecBeamEnd);
@@ -96,7 +96,7 @@ void CShock::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) {
 	pShock->pev->owner = ENT(pevOwner);
 
 	pShock->SetThink(&CShock::ShockThink);
-	pShock->pev->nextthink = gpGlobals->time;
+	pShock->pev->nextthink = UTIL_GlobalTimeBase();
 }
 
 void CShock::Touch(CBaseEntity *pOther) {
@@ -162,7 +162,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 		}
 
 		SetThink(&CShock::FadeShock);
-		pev->nextthink = gpGlobals->time + 1.0;
+		pev->nextthink = UTIL_GlobalTimeBase() + 1.0;
 	} else {
 		pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_ALWAYSGIB);
 	}
@@ -175,7 +175,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 	m_pSprite = NULL;
 
 	SetThink(&CShock::SUB_Remove);
-	pev->nextthink = gpGlobals->time;
+	pev->nextthink = UTIL_GlobalTimeBase();
 	UTIL_Sparks(tr.vecEndPos);
 }
 

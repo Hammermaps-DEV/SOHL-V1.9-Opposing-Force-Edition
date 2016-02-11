@@ -377,17 +377,17 @@ void CBigMomma :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector ve
 	{
 		// didn't hit the sack?
 		
-		if ( pev->dmgtime != gpGlobals->time || (RANDOM_LONG(0,10) < 1) )
+		if ( pev->dmgtime != UTIL_GlobalTimeBase() || (RANDOM_LONG(0,10) < 1) )
 		{
 			UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT( 1, 2) );
-			pev->dmgtime = gpGlobals->time;
+			pev->dmgtime = UTIL_GlobalTimeBase();
 		}
 
 		flDamage = 0.1;// don't hurt the monster much, but allow bits_COND_LIGHT_DAMAGE to be generated
 	}
-	else if ( gpGlobals->time > m_painSoundTime )
+	else if ( UTIL_GlobalTimeBase() > m_painSoundTime )
 	{
-		m_painSoundTime = gpGlobals->time + RANDOM_LONG(1, 3);
+		m_painSoundTime = UTIL_GlobalTimeBase() + RANDOM_LONG(1, 3);
 		EMIT_SOUND_ARRAY_DYN( CHAN_VOICE, pPainSounds );
 	}
 
@@ -424,12 +424,12 @@ void CBigMomma :: LayHeadcrab( void )
 	// Is this the second crab in a pair?
 	if ( HasMemory( bits_MEMORY_CHILDPAIR ) )
 	{
-		m_crabTime = gpGlobals->time + RANDOM_FLOAT( 5, 10 );
+		m_crabTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 5, 10 );
 		Forget( bits_MEMORY_CHILDPAIR );
 	}
 	else
 	{
-		m_crabTime = gpGlobals->time + RANDOM_FLOAT( 0.5, 2.5 );
+		m_crabTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.5, 2.5 );
 		Remember( bits_MEMORY_CHILDPAIR );
 	}
 
@@ -457,7 +457,7 @@ void CBigMomma::DeathNotice( entvars_t *pevChild )
 
 void CBigMomma::LaunchMortar( void )
 {
-	m_mortarTime = gpGlobals->time + RANDOM_FLOAT( 2, 15 );
+	m_mortarTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 2, 15 );
 	
 	Vector startPos = pev->origin;
 	startPos.z += 180;
@@ -625,7 +625,7 @@ BOOL CBigMomma::CheckMeleeAttack2( float flDot, float flDist )
 // Mortar launch
 BOOL CBigMomma::CheckRangeAttack1( float flDot, float flDist )
 {
-	if ( flDist <= BIG_MORTARDIST && m_mortarTime < gpGlobals->time )
+	if ( flDist <= BIG_MORTARDIST && m_mortarTime < UTIL_GlobalTimeBase() )
 	{
 		CBaseEntity *pEnemy = m_hEnemy;
 
@@ -741,7 +741,7 @@ BOOL CBigMomma::ShouldGoToNode( void )
 {
 	if ( HasMemory( bits_MEMORY_ADVANCE_NODE ) )
 	{
-		if ( m_nodeTime < gpGlobals->time )
+		if ( m_nodeTime < UTIL_GlobalTimeBase() )
 			return TRUE;
 	}
 	return FALSE;
@@ -818,7 +818,7 @@ void CBigMomma::StartTask( Task_t *pTask )
 		break;
 
 	case TASK_NODE_DELAY:
-		m_nodeTime = gpGlobals->time + pTask->flData;
+		m_nodeTime = UTIL_GlobalTimeBase() + pTask->flData;
 		TaskComplete();
 		ALERT( at_aiconsole, "BM: FAIL! Delay %.2f\n", pTask->flData );
 		break;
@@ -861,7 +861,7 @@ void CBigMomma::StartTask( Task_t *pTask )
 		break;
 
 	case TASK_WAIT_NODE:
-		m_flWait = gpGlobals->time + GetNodeDelay();
+		m_flWait = UTIL_GlobalTimeBase() + GetNodeDelay();
 		if ( m_hTargetEnt->pev->spawnflags & SF_INFOBM_WAIT )
 			ALERT( at_aiconsole, "BM: Wait at node %s forever\n", STRING(pev->netname) );
 		else
@@ -941,7 +941,7 @@ void CBigMomma::RunTask( Task_t *pTask )
 		if ( m_hTargetEnt != NULL && (m_hTargetEnt->pev->spawnflags & SF_INFOBM_WAIT) )
 			return;
 
-		if ( gpGlobals->time > m_flWaitFinished )
+		if ( UTIL_GlobalTimeBase() > m_flWaitFinished )
 			TaskComplete();
 		ALERT( at_aiconsole, "BM: The WAIT is over!\n" );
 		break;
@@ -1049,16 +1049,16 @@ void CBMortar:: Spawn( void )
 	UTIL_SetSize( pev, Vector( 0, 0, 0), Vector(0, 0, 0) );
 
 	m_maxFrame = (float) MODEL_FRAMES( pev->modelindex ) - 1;
-	pev->dmgtime = gpGlobals->time + 0.4;
+	pev->dmgtime = UTIL_GlobalTimeBase() + 0.4;
 }
 
 void CBMortar::Animate( void )
 {
 	SetNextThink( 0.1 );
 
-	if ( gpGlobals->time > pev->dmgtime )
+	if ( UTIL_GlobalTimeBase() > pev->dmgtime )
 	{
-		pev->dmgtime = gpGlobals->time + 0.2;
+		pev->dmgtime = UTIL_GlobalTimeBase() + 0.2;
 		MortarSpray( pev->origin, -pev->velocity.Normalize(), gSpitSprite, 3 );
 	}
 	if ( pev->frame++ )

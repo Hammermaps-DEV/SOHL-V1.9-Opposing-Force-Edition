@@ -188,9 +188,9 @@ int TryAssistEntity( CBaseEntity *pEnt )
 		if (pEnt->m_fNextThink <= pEnt->pev->ltime + gpGlobals->frametime)
 			fFraction = (pEnt->m_fNextThink - pEnt->pev->ltime)/gpGlobals->frametime;
 	}
-	else if (pEnt->m_fNextThink <= gpGlobals->time + gpGlobals->frametime)
+	else if (pEnt->m_fNextThink <= UTIL_GlobalTimeBase() + gpGlobals->frametime)
 	{
-		fFraction = (pEnt->m_fNextThink - gpGlobals->time)/gpGlobals->frametime;
+		fFraction = (pEnt->m_fNextThink - UTIL_GlobalTimeBase())/gpGlobals->frametime;
 //		ALERT(at_console, "Setting fFraction\n");
 	}
 
@@ -492,7 +492,7 @@ void UTIL_SetMoveWithVelocity ( CBaseEntity *pEnt, const Vector vecSet, int loop
 //	else if (pEnt->pev->nextthink < 1)
 //	{
 //		UTIL_DesiredNextThink( pEnt, 1E6 );
-//		//pEnt->pev->nextthink = gpGlobals->time + 1E6;
+//		//pEnt->pev->nextthink = UTIL_GlobalTimeBase() + 1E6;
 //	}
 
 	if ( pEnt->m_pChildMoveWith )

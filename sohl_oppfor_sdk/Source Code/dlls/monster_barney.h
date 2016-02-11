@@ -29,7 +29,7 @@ class CBarney : public CTalkMonster {
 		virtual void Precache(void);
 		virtual void SetYawSpeed(void);
 		virtual int  ISoundMask(void);
-		virtual void Fire9mmPistol(void);
+		virtual void FirePistol(void);
 		virtual void AlertSound(void);
 		virtual int  Classify(void);
 		virtual void HandleAnimEvent(MonsterEvent_t *pEvent);

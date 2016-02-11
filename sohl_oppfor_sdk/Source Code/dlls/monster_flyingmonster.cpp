@@ -162,7 +162,7 @@ void CFlyingMonster::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir,
 {
 	if ( pev->movetype == MOVETYPE_FLY )
 	{
-		if ( gpGlobals->time - m_stopTime > 1.0 )
+		if ( UTIL_GlobalTimeBase() - m_stopTime > 1.0 )
 		{
 			if ( m_IdealActivity != m_movementActivity )
 			{
@@ -176,7 +176,7 @@ void CFlyingMonster::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir,
 		{
 			m_flightSpeed = UTIL_Approach( 100, m_flightSpeed, 75 * gpGlobals->frametime );
 			if ( m_flightSpeed < 100 )
-				m_stopTime = gpGlobals->time;
+				m_stopTime = UTIL_GlobalTimeBase();
 		}
 		else
 			m_flightSpeed = UTIL_Approach( 20, m_flightSpeed, 300 * gpGlobals->frametime );
@@ -190,7 +190,7 @@ void CFlyingMonster::MoveExecute( CBaseEntity *pTargetEnt, const Vector &vecDir,
 		else
 		{
 			m_IdealActivity = GetStoppedActivity();
-			m_stopTime = gpGlobals->time;
+			m_stopTime = UTIL_GlobalTimeBase();
 			m_vecTravel = g_vecZero;
 		}
 	}

@@ -2665,11 +2665,7 @@ void PM_Jump (void)
 	// In the air now.
     pmove->onground = -1;
 
-
-
 	int p_punchangle = 1;
-
-
 	switch (pmove->RandomLong(0, 3)) {
 		case 0:
 			if (p_punchangle) {

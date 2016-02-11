@@ -216,6 +216,22 @@ void CParticleSystemManager::CreatePresetPS(unsigned int iPreset, particle_syste
 			dl->die = (gEngfuncs.GetClientTime() + 0.1);
 		}
 		break;
+		case iDefaultSporeExplosion: {
+			// explositions are made up of 5 ps
+			//CreateMappedPS("particles/explosions/spore_clouds.txt", pSystem);
+			//CreateMappedPS("particles/explosions/spore_groundparticles.txt", pSystem);
+
+			// create dynamic light
+			dlight_t *dl = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
+			VectorCopy(pSystem->vPosition, dl->origin);
+			dl->radius = 200;
+			dl->color.r = 119;
+			dl->color.g = 179;
+			dl->color.b = 0;
+			dl->decay = 0.2;
+			dl->die = (gEngfuncs.GetClientTime() + 0.1);
+		}
+		break;
 
 		case iImpactBSPconcrete:
 		//	CreateMappedPS("particles/impact/e_impacts_chunks.txt", pSystem);

@@ -280,7 +280,7 @@ void DispatchSave( edict_t *pent, SAVERESTOREDATA *pSaveData )
 		if ( pEntity->pev->movetype == MOVETYPE_PUSH )
 		{
 			//LRC - rearranged so that we can correct m_fNextThink too.
-			float delta = gpGlobals->time - pEntity->pev->ltime;
+			float delta = UTIL_GlobalTimeBase() - pEntity->pev->ltime;
 			pEntity->pev->ltime += delta;
 			pEntity->pev->nextthink += delta;
 			pEntity->m_fPevNextThink = pEntity->pev->nextthink;
@@ -782,7 +782,7 @@ void CBaseEntity :: SetNextThink( float delay, BOOL correctSpeed )
 		if (pev->movetype == MOVETYPE_PUSH)
 			m_fNextThink = pev->ltime + delay;
 		else
-			m_fNextThink = gpGlobals->time + delay;
+			m_fNextThink = UTIL_GlobalTimeBase() + delay;
 		SetEternalThink( );
 		UTIL_MarkForAssist( this, correctSpeed );
 
@@ -797,7 +797,7 @@ void CBaseEntity :: SetNextThink( float delay, BOOL correctSpeed )
 		}
 		else
 		{
-			pev->nextthink = gpGlobals->time + delay;
+			pev->nextthink = UTIL_GlobalTimeBase() + delay;
 		}
 
 		m_fPevNextThink = m_fNextThink = pev->nextthink;

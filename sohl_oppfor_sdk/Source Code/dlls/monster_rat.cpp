@@ -73,7 +73,7 @@ void CRat::Spawn() {
 	m_fLightHacked = FALSE;
 	m_flLastLightLevel = -1;
 	m_iMode = RAT_IDLE;
-	m_flNextSmellTime = gpGlobals->time;
+	m_flNextSmellTime = UTIL_GlobalTimeBase();
 }
 
 void CRat::Precache() {

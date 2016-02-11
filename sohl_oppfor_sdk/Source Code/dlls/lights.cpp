@@ -510,9 +510,9 @@ IMPLEMENT_SAVERESTORE(CLightFader,CPointEntity);
 
 void CLightFader::FadeThink( void )
 {
-	if (m_fEndTime > gpGlobals->time)
+	if (m_fEndTime > UTIL_GlobalTimeBase())
 	{
-		m_szCurStyle[0] = m_cTo + (char)((m_cFrom - m_cTo) * (m_fEndTime - gpGlobals->time) * m_fStep);
+		m_szCurStyle[0] = m_cTo + (char)((m_cFrom - m_cTo) * (m_fEndTime - UTIL_GlobalTimeBase()) * m_fStep);
 		m_szCurStyle[1] = 0; // null terminator
 //		ALERT(at_console, "FadeThink: %s %s\n", STRING(m_pLight->pev->classname), m_szCurStyle);
 		m_pLight->SetStyle(MAKE_STRING(m_szCurStyle));
@@ -633,7 +633,7 @@ void CTriggerLightstyle::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 				pFader->m_cFrom = ((char*)STRING(pLight->GetStyle()))[0];
 				pFader->m_cTo = ((char*)STRING(iszPattern))[0];
 				pFader->m_iszPattern = iszPattern;
-				pFader->m_fEndTime = gpGlobals->time + m_iFade;
+				pFader->m_fEndTime = UTIL_GlobalTimeBase() + m_iFade;
 				pFader->m_fStep = ((float)1)/m_iFade;
 				pFader->m_iWait = m_iWait;
 				pFader->SetThink(&CLightFader::FadeThink );

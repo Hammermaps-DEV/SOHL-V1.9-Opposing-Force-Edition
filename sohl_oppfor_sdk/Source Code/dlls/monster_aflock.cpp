@@ -181,7 +181,7 @@ void CFlockingFlyer :: Precache( )
 //=========================================================
 void CFlockingFlyer :: MakeSound( void )
 {
-	if ( m_flAlertTime > gpGlobals->time )
+	if ( m_flAlertTime > UTIL_GlobalTimeBase() )
 	{
 		// make agitated sounds
 		switch ( RANDOM_LONG( 0, 1 ) )
@@ -211,7 +211,7 @@ void CFlockingFlyer :: Killed( entvars_t *pevAttacker, int iGib )
 
 	while ( pSquad )
 	{
-		pSquad->m_flAlertTime = gpGlobals->time + 15;
+		pSquad->m_flAlertTime = UTIL_GlobalTimeBase() + 15;
 		pSquad = (CFlockingFlyer *)pSquad->m_pSquadNext;
 	}
 
@@ -442,9 +442,9 @@ BOOL CFlockingFlyer :: FPathBlocked( )
 	Vector			vecDir;// used for general measurements
 	BOOL			fBlocked;
 
-	if ( m_flFakeBlockedTime > gpGlobals->time )
+	if ( m_flFakeBlockedTime > UTIL_GlobalTimeBase() )
 	{
-		m_flLastBlockedTime = gpGlobals->time;
+		m_flLastBlockedTime = UTIL_GlobalTimeBase();
 		return TRUE;
 	}
 
@@ -458,7 +458,7 @@ BOOL CFlockingFlyer :: FPathBlocked( )
 	UTIL_TraceLine(pev->origin, pev->origin + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
 	if (tr.flFraction != 1.0)
 	{
-		m_flLastBlockedTime = gpGlobals->time;
+		m_flLastBlockedTime = UTIL_GlobalTimeBase();
 		fBlocked = TRUE;
 	}
 
@@ -466,21 +466,21 @@ BOOL CFlockingFlyer :: FPathBlocked( )
 	UTIL_TraceLine(pev->origin + gpGlobals->v_right * 12, pev->origin + gpGlobals->v_right * 12 + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
 	if (tr.flFraction != 1.0)
 	{
-		m_flLastBlockedTime = gpGlobals->time;
+		m_flLastBlockedTime = UTIL_GlobalTimeBase();
 		fBlocked = TRUE;
 	}
 
 	UTIL_TraceLine(pev->origin - gpGlobals->v_right * 12, pev->origin - gpGlobals->v_right * 12 + gpGlobals->v_forward * AFLOCK_CHECK_DIST, ignore_monsters, ENT(pev), &tr);
 	if (tr.flFraction != 1.0)
 	{
-		m_flLastBlockedTime = gpGlobals->time;
+		m_flLastBlockedTime = UTIL_GlobalTimeBase();
 		fBlocked = TRUE;
 	}
 
-	if ( !fBlocked && gpGlobals->time - m_flLastBlockedTime > 6 )
+	if ( !fBlocked && UTIL_GlobalTimeBase() - m_flLastBlockedTime > 6 )
 	{
 		// not blocked, and it's been a few seconds since we've actually been blocked.
-		m_flFakeBlockedTime = gpGlobals->time + RANDOM_LONG(1, 3); 
+		m_flFakeBlockedTime = UTIL_GlobalTimeBase() + RANDOM_LONG(1, 3); 
 	}
 
 	return	fBlocked;
@@ -583,10 +583,10 @@ void CFlockingFlyer :: FlockLeaderThink( void )
 		pev->velocity.z = 0;
 	}
 
-	if ( m_flFlockNextSoundTime < gpGlobals->time )
+	if ( m_flFlockNextSoundTime < UTIL_GlobalTimeBase() )
 	{
 		MakeSound();
-		m_flFlockNextSoundTime = gpGlobals->time + RANDOM_FLOAT( 1, 3 );
+		m_flFlockNextSoundTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 1, 3 );
 	}
 
 	BoidAdvanceFrame( );

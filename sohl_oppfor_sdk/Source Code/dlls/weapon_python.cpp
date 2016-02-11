@@ -108,19 +108,19 @@ void CPython::PrimaryAttack() {
 
 		PLAYBACK_EVENT_FULL( 0, m_pPlayer->edict(), m_usFirePython, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0 );
 
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + CalculateWeaponTime((int)PYTHON_SHOOT::frames, (int)PYTHON_SHOOT::fps);
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)PYTHON_SHOOT::frames, (int)PYTHON_SHOOT::fps);
 		if (!IsMultiplayer()) {
 			m_flNextSecondaryAttack = m_flNextPrimaryAttack;
 		}
 
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
 			// HEV suit - indicate out of ammo condition
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
 	} else {
 		PlayEmptySound(); Reload();
-		m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.7;
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.7;
 	}
 }
 
@@ -136,7 +136,7 @@ void CPython::SecondaryAttack(void) {
 			m_pSpot = NULL;
 		}
 
-		m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 0.3;
+		m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.3;
 	} else {
 		PrimaryAttack();
 	}
@@ -157,7 +157,7 @@ BOOL CPython::Deploy() {
 void CPython::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)PYTHON_HOLSTER::sequence);
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() +
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)PYTHON_HOLSTER::frames, (int)PYTHON_HOLSTER::fps);
 
 	if (m_pSpot) {
@@ -180,10 +180,10 @@ void CPython::Reload( void ) {
 
 	if (DefaultReload(PYTHON_MAX_CLIP, (int)PYTHON_RELOAD::sequence,
 		CalculateWeaponTime((int)PYTHON_RELOAD::frames, (int)PYTHON_RELOAD::fps))) {
-		m_flSoundDelay = UTIL_WeaponTimeBase();
+		m_flSoundDelay = UTIL_GlobalTimeBase();
 	}
 
-	m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 }
 
 //=========================================================
@@ -194,15 +194,15 @@ void CPython::WeaponIdle( void ) {
 		UpdateSpot(); //Spot Update
 	}
 
-	if (m_flSoundDelay != 0 && m_flSoundDelay <= UTIL_WeaponTimeBase()) { //Finsh Reload
+	if (m_flSoundDelay != 0 && m_flSoundDelay <= UTIL_GlobalTimeBase()) { //Finsh Reload
 		m_flSoundDelay = 0;      
 		for (int i = 0; i < 6; i++) {
 			EjectBrass(m_pPlayer->pev->origin, Vector( RANDOM_FLOAT( -10.0, 10.0 ), RANDOM_FLOAT( -10.0, 10.0 ), (float)0.0 ), m_pPlayer->pev->angles.y, m_iShell, TE_BOUNCE_SHELL); 
 		}
 	}
 
-	if (m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ||
-		m_flTimeWeaponIdleLock > UTIL_WeaponTimeBase()) {
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -212,28 +212,28 @@ void CPython::WeaponIdle( void ) {
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
 			iAnim = (int)PYTHON_IDLE1::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PYTHON_IDLE1::frames, (int)PYTHON_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.7) {
 			iAnim = (int)PYTHON_IDLE2::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PYTHON_IDLE2::frames, (int)PYTHON_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else if (flRand <= 0.9) {
 			iAnim = (int)PYTHON_IDLE3::sequence;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PYTHON_IDLE3::frames, (int)PYTHON_IDLE3::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 		} else {
 			if (RANDOM_FLOAT(0, 1) && !m_fSpotActive && IsMultiplayer()) {
 				iAnim = (int)PYTHON_FIDGET::sequence;
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() +
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)PYTHON_FIDGET::frames, (int)PYTHON_FIDGET::fps);
 				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 			} else {
-				m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_FLOAT(10, 15);
-				m_flTimeWeaponIdleLock = UTIL_WeaponTimeBase();
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+				m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 			}
 		}
 

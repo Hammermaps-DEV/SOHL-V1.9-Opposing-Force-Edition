@@ -402,7 +402,7 @@ void CBaseTurret::Initialize(void)
 
 	if (m_iAutoStart)
 	{
-		m_flLastSight = gpGlobals->time + m_flMaxWait;
+		m_flLastSight = UTIL_GlobalTimeBase() + m_flMaxWait;
 		SetThink(&CBaseTurret::AutoSearchThink);		
 		SetNextThink( 0.1 );
 	}
@@ -442,10 +442,10 @@ void CBaseTurret::Ping( void )
 {
 	// make the pinging noise every second while searching
 	if (m_flPingTime == 0)
-		m_flPingTime = gpGlobals->time + 1;
-	else if (m_flPingTime <= gpGlobals->time)
+		m_flPingTime = UTIL_GlobalTimeBase() + 1;
+	else if (m_flPingTime <= UTIL_GlobalTimeBase())
 	{
-		m_flPingTime = gpGlobals->time + 1;
+		m_flPingTime = UTIL_GlobalTimeBase() + 1;
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "turret/tu_ping.wav", 1, ATTN_NORM);
 		EyeOn( );
 	}
@@ -493,7 +493,7 @@ void CBaseTurret::ActiveThink(void)
 	if ((!m_iOn) || (m_hEnemy == NULL))
 	{
 		m_hEnemy = NULL;
-		m_flLastSight = gpGlobals->time + m_flMaxWait;
+		m_flLastSight = UTIL_GlobalTimeBase() + m_flMaxWait;
 		SetThink(&CBaseTurret::SearchThink);
 		return;
 	}
@@ -503,14 +503,14 @@ void CBaseTurret::ActiveThink(void)
 	{
 		if (!m_flLastSight)
 		{
-			m_flLastSight = gpGlobals->time + 0.5; // continue-shooting timeout
+			m_flLastSight = UTIL_GlobalTimeBase() + 0.5; // continue-shooting timeout
 		}
 		else
 		{
-			if (gpGlobals->time > m_flLastSight)
+			if (UTIL_GlobalTimeBase() > m_flLastSight)
 			{	
 				m_hEnemy = NULL;
-				m_flLastSight = gpGlobals->time + m_flMaxWait;
+				m_flLastSight = UTIL_GlobalTimeBase() + m_flMaxWait;
 				SetThink(&CBaseTurret::SearchThink);
 				return;
 			}
@@ -532,14 +532,14 @@ void CBaseTurret::ActiveThink(void)
 	if (!fEnemyVisible || (flDistToEnemy > TURRET_RANGE))
 	{
 		if (!m_flLastSight)
-			m_flLastSight = gpGlobals->time + 0.5;
+			m_flLastSight = UTIL_GlobalTimeBase() + 0.5;
 		else
 		{
 			// Should we look for a new target?
-			if (gpGlobals->time > m_flLastSight)
+			if (UTIL_GlobalTimeBase() > m_flLastSight)
 			{
 				m_hEnemy = NULL;
-				m_flLastSight = gpGlobals->time + m_flMaxWait;
+				m_flLastSight = UTIL_GlobalTimeBase() + m_flMaxWait;
 				SetThink(&CBaseTurret::SearchThink);
 				return;
 			}
@@ -695,7 +695,7 @@ void CBaseTurret::Deploy(void)
 		SetThink(&CBaseTurret::SearchThink);
 	}
 
-	m_flLastSight = gpGlobals->time + m_flMaxWait;
+	m_flLastSight = UTIL_GlobalTimeBase() + m_flMaxWait;
 }
 
 void CBaseTurret::Retire(void)
@@ -854,7 +854,7 @@ void CBaseTurret::SearchThink(void)
 	SetNextThink( 0.1 );
 
 	if (m_flSpinUpTime == 0 && m_flMaxSpin)
-		m_flSpinUpTime = gpGlobals->time + m_flMaxSpin;
+		m_flSpinUpTime = UTIL_GlobalTimeBase() + m_flMaxSpin;
 
 	Ping( );
 
@@ -883,7 +883,7 @@ void CBaseTurret::SearchThink(void)
 	else
 	{
 		// Are we out of time, do we need to retract?
- 		if (gpGlobals->time > m_flLastSight)
+ 		if (UTIL_GlobalTimeBase() > m_flLastSight)
 		{
 			//Before we retrace, make sure that we are spun down.
 			m_flLastSight = 0;
@@ -891,7 +891,7 @@ void CBaseTurret::SearchThink(void)
 			SetThink(&CBaseTurret::Retire);
 		}
 		// should we stop the spin?
-		else if ((m_flSpinUpTime) && (gpGlobals->time > m_flSpinUpTime))
+		else if ((m_flSpinUpTime) && (UTIL_GlobalTimeBase() > m_flSpinUpTime))
 		{
 			SpinDownCall();
 		}
@@ -973,7 +973,7 @@ void CBaseTurret ::	TurretDeath( void )
 
 	EyeOff( );
 
-	if (pev->dmgtime + RANDOM_FLOAT( 0, 2 ) > gpGlobals->time)
+	if (pev->dmgtime + RANDOM_FLOAT( 0, 2 ) > UTIL_GlobalTimeBase())
 	{
 		// lots of smoke
 		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
@@ -987,7 +987,7 @@ void CBaseTurret ::	TurretDeath( void )
 		MESSAGE_END();
 	}
 	
-	if (pev->dmgtime + RANDOM_FLOAT( 0, 5 ) > gpGlobals->time)
+	if (pev->dmgtime + RANDOM_FLOAT( 0, 5 ) > UTIL_GlobalTimeBase())
 	{
 		Vector vecSrc = Vector( RANDOM_FLOAT( pev->absmin.x, pev->absmax.x ), RANDOM_FLOAT( pev->absmin.y, pev->absmax.y ), 0 );
 		if (m_iOrientation == 0)
@@ -998,7 +998,7 @@ void CBaseTurret ::	TurretDeath( void )
 		UTIL_Sparks( vecSrc );
 	}
 
-	if (m_fSequenceFinished && !MoveTurret( ) && pev->dmgtime + 5 < gpGlobals->time)
+	if (m_fSequenceFinished && !MoveTurret( ) && pev->dmgtime + 5 < UTIL_GlobalTimeBase())
 	{
 		pev->framerate = 0;
 		SetThink( NULL );
@@ -1012,10 +1012,10 @@ void CBaseTurret :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector 
 	if ( ptr->iHitgroup == 10 )
 	{
 		// hit armor
-		if ( pev->dmgtime != gpGlobals->time || (RANDOM_LONG(0,10) < 1) )
+		if ( pev->dmgtime != UTIL_GlobalTimeBase() || (RANDOM_LONG(0,10) < 1) )
 		{
 			UTIL_Ricochet( ptr->vecEndPos, RANDOM_FLOAT( 1, 2) );
-			pev->dmgtime = gpGlobals->time;
+			pev->dmgtime = UTIL_GlobalTimeBase();
 		}
 
 		flDamage = 0.1;// don't hurt the monster much, but allow bits_COND_LIGHT_DAMAGE to be generated
@@ -1042,7 +1042,7 @@ int CBaseTurret::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 	{
 		pev->health = 0;
 		pev->takedamage = DAMAGE_NO;
-		pev->dmgtime = gpGlobals->time;
+		pev->dmgtime = UTIL_GlobalTimeBase();
 
 		ClearBits (pev->flags, FL_MONSTER); // why are they set in the first place???
 
@@ -1245,7 +1245,7 @@ int CSentry::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 	{
 		pev->health = 0;
 		pev->takedamage = DAMAGE_NO;
-		pev->dmgtime = gpGlobals->time;
+		pev->dmgtime = UTIL_GlobalTimeBase();
 
 		ClearBits (pev->flags, FL_MONSTER); // why are they set in the first place???
 
@@ -1308,7 +1308,7 @@ void CSentry ::	SentryDeath( void )
 	Vector vecSrc, vecAng;
 	GetAttachment( 1, vecSrc, vecAng );
 
-	if (pev->dmgtime + RANDOM_FLOAT( 0, 2 ) > gpGlobals->time)
+	if (pev->dmgtime + RANDOM_FLOAT( 0, 2 ) > UTIL_GlobalTimeBase())
 	{
 		// lots of smoke
 		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
@@ -1322,12 +1322,12 @@ void CSentry ::	SentryDeath( void )
 		MESSAGE_END();
 	}
 	
-	if (pev->dmgtime + RANDOM_FLOAT( 0, 8 ) > gpGlobals->time)
+	if (pev->dmgtime + RANDOM_FLOAT( 0, 8 ) > UTIL_GlobalTimeBase())
 	{
 		UTIL_Sparks( vecSrc );
 	}
 
-	if (m_fSequenceFinished && pev->dmgtime + 5 < gpGlobals->time)
+	if (m_fSequenceFinished && pev->dmgtime + 5 < UTIL_GlobalTimeBase())
 	{
 		pev->framerate = 0;
 		SetThink( NULL );

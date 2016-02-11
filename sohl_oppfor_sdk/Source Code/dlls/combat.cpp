@@ -333,7 +333,7 @@ void CBaseMonster::FadeMonster( void )
 	pev->velocity = g_vecZero;
 	pev->movetype = MOVETYPE_NONE;
 	pev->avelocity = g_vecZero;
-	pev->animtime = gpGlobals->time;
+	pev->animtime = UTIL_GlobalTimeBase();
 	pev->effects |= EF_NOINTERP;
 	SUB_StartFadeOut();
 }

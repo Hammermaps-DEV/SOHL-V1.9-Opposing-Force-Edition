@@ -46,10 +46,10 @@ float CBaseAnimating :: StudioFrameAdvance ( float flInterval )
 {
 	if (flInterval == 0.0)
 	{
-		flInterval = (gpGlobals->time - pev->animtime);
+		flInterval = (UTIL_GlobalTimeBase() - pev->animtime);
 		if (flInterval <= 0.001)
 		{
-			pev->animtime = gpGlobals->time;
+			pev->animtime = UTIL_GlobalTimeBase();
 			return 0.0;
 		}
 	}
@@ -57,7 +57,7 @@ float CBaseAnimating :: StudioFrameAdvance ( float flInterval )
 		flInterval = 0.0;
 	
 	pev->frame += flInterval * m_flFrameRate * pev->framerate;
-	pev->animtime = gpGlobals->time;
+	pev->animtime = UTIL_GlobalTimeBase();
 
 	if (pev->frame < 0.0 || pev->frame >= 256.0) 
 	{
@@ -113,10 +113,10 @@ void CBaseAnimating :: ResetSequenceInfo ( )
 
 	GetSequenceInfo( pmodel, pev, &m_flFrameRate, &m_flGroundSpeed );
 	m_fSequenceLoops = ((GetSequenceFlags() & STUDIO_LOOPING) != 0);
-	pev->animtime = gpGlobals->time;
+	pev->animtime = UTIL_GlobalTimeBase();
 	pev->framerate = 1.0;
 	m_fSequenceFinished = FALSE;
-	m_flLastEventCheck = gpGlobals->time;
+	m_flLastEventCheck = UTIL_GlobalTimeBase();
 }
 
 

@@ -9,934 +9,1098 @@
       <UniqueIdentifier>{4470395e-a79c-4596-b18a-c287ba43f5a1}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;fi;fd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{4e7211c7-dc1b-409e-ac41-fef4c0918c7c}</UniqueIdentifier>
-      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
+    <Filter Include="Header Files\dlls">
+      <UniqueIdentifier>{8284a0d6-689a-47e9-8cee-bbd6a9382277}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\engine">
+      <UniqueIdentifier>{8e367ecc-9b6a-42ae-9df0-79244549afce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\pm_shared">
+      <UniqueIdentifier>{2bfc0740-06fa-4c35-9d48-1ff05826aa1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\monsters">
+      <UniqueIdentifier>{0a01b0b4-7214-42e5-802c-b41416a58ee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\weapons">
+      <UniqueIdentifier>{045eb1a8-419c-4da2-a714-73ea559fe7e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\projectile">
+      <UniqueIdentifier>{ebc9371c-3e0e-419c-864c-6d9249f0c0d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls">
+      <UniqueIdentifier>{be357d42-5fd5-4fc1-bd61-a2d113c79004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\pm_shared">
+      <UniqueIdentifier>{f6083a6d-e686-475e-99f2-5323c89671d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\game_shared">
+      <UniqueIdentifier>{60410722-90a0-4112-947a-255d1115b429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\game_shared">
+      <UniqueIdentifier>{346461e8-5122-4e5b-acdb-da399ec2de89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\ammo">
+      <UniqueIdentifier>{73b6742b-dd20-4746-84cf-237b28086874}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\weapons">
+      <UniqueIdentifier>{46bd0c9f-0ef8-4dfb-aeb0-a604dc398f64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\monsters">
+      <UniqueIdentifier>{658327dd-c868-468c-ae23-e198e258bccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\projectile">
+      <UniqueIdentifier>{f9f707ef-848f-460e-a35e-0404f15f25ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\item">
+      <UniqueIdentifier>{c781743f-f7bf-442d-8dde-4415e7af9517}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\func">
+      <UniqueIdentifier>{d3d55db0-3af6-4a4d-b356-71c464667ce8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\item">
+      <UniqueIdentifier>{1b94fb91-fded-46c8-b628-a86798017491}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\func">
+      <UniqueIdentifier>{44ad6ad5-e5e6-42de-8a66-f4708140173b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\xen">
+      <UniqueIdentifier>{2734103d-52bf-4da5-9da8-f698cbd5d1e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\xen">
+      <UniqueIdentifier>{d11248b8-0e3e-41e6-a79b-f845346f3dd7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="airtank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="alias.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="animating.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="animation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bmodels.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="buttons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cbase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="client.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="combat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="defaultai.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="effects.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="explode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="func_break.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="func_tank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ggrenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="globals.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="h_ai.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="h_battery.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="h_cine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="h_cycler.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="h_export.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hornet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="items.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lights.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="locus.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="maprules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monstermaker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monsters.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monsterstate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mortar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="movewith.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="multiplay_gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="nodes.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pathcorner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="plane.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="plats.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="playermonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="schedule.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scripted.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="singleplay_gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="skill.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="soundent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="spectator.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="squadmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="stats.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="subs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="talkmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="teamplay_gamerules.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="triggers.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="turret.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="world.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="xen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_shared.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_debug.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_math.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\game_shared\voice_gamemgr.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_aflock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_agrunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_apache.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_barnacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_barney.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_bigmomma.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_bloater.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_bullsquid.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_controller.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_flyingmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_gargantua.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_genericmonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_gman.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_hassassin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_headcrab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_hgrunt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_houndeye.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_ichthyosaur.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_leech.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_nihilanth.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_osprey.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_rat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_roach.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_scientist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_tentacle.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_crowbar.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_crossbow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_egon.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_gauss.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_glock.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_handgrenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_hornetgun.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_tripmine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_squeakgrenade.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_shotgun.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_satchel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_rpg.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_mp5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="func_doors.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_python.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="item_healthkit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_soldier.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_drillsergeant.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_recruit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_m249.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="rcallymonster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_hgrunt_opfor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_hgrunt_medic.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_hgrunt_torch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_babycrab.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_pitworm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_barney_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_otis_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_otis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_cleansuit_scientist.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_soldier_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_skeleton_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_alien_slave_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_alien_slave.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_houndeye_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_gonome_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_hevsuit_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_gonome.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_loader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_pitdrone.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_alien_voltigore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_alien_babyvoltigore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_shockroach.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_barney.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="proj_bolt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="proj_pitdronespit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="proj_gonomespit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="proj_voltigore_energy_ball.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="env_electrified_wire.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="env_rope_segment.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_barniel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_construction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_construction_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_barney_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="particle_emitter.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_soldier_helmet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_soldier_helmet_dead.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_blackop.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="monster_zombie_blackop_dead.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ammo_9mmbox.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
     <ClCompile Include="ammo_9mmclip.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
     <ClCompile Include="ammo_357.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ammo_mp5grenades.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ammo_9mmbox.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ammo_mp5clip.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
     <ClCompile Include="ammo_buckshot.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
     <ClCompile Include="ammo_crossbow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ammo_rpgclip.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="weapon_knife.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="proj_plrocket.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
     <ClCompile Include="ammo_gaussclip.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
-    <ClCompile Include="monster_geneworm.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ammo_mp5clip.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
-    <ClCompile Include="item_generic.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ammo_mp5grenades.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
-    <ClCompile Include="item_longjump.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="item_security.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ammo_rpgclip.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
     <ClCompile Include="item_antidote.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\item</Filter>
     </ClCompile>
     <ClCompile Include="item_battery.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_generic.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_healthkit.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_longjump.cpp">
+      <Filter>Source Files\dlls\item</Filter>
     </ClCompile>
     <ClCompile Include="item_suit.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\item</Filter>
     </ClCompile>
-    <ClCompile Include="weapon_pipewrench.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="item_security.cpp">
+      <Filter>Source Files\dlls\item</Filter>
     </ClCompile>
-    <ClCompile Include="grapple_tonguetip.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="monster_aflock.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
     </ClCompile>
-    <ClCompile Include="weapon_grapple.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="monster_agrunt.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_alien_babyvoltigore.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_alien_slave_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_geneworm.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_genericmonster.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_gargantua.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_flyingmonster.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_drillsergeant.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_controller.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
     </ClCompile>
     <ClCompile Include="monster_construction.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_cleansuit_scientist.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_bullsquid.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_bloater.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_bigmomma.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barniel.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barney_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barney.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_barnacle.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_babycrab.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_apache.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_alien_voltigore.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_alien_slave.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_soldier_helmet_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_soldier_helmet.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_soldier_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_soldier.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_construction_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_blackop_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_construction.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_blackop.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_barney_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie_barney.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_zombie.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_tentacle.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_skeleton_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_shocktrooper.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_scientist.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_shockroach.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_recruit.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_roach.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_rat.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_pitworm.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_pitdrone.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_otis.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_otis_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hgrunt_torch.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_houndeye.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_houndeye_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_ichthyosaur.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_leech.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_loader.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_nihilanth.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_osprey.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_gman.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_gonome.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hassassin.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_gonome_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_headcrab.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hevsuit_dead.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hgrunt.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hgrunt_medic.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_hgrunt_opfor.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_bolt.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_gonomespit.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_pitdronespit.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_plrocket.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
     </ClCompile>
     <ClCompile Include="proj_shock.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_voltigore_energy_ball.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_tripmine.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_squeakgrenade.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_sporelauncher.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_shotgun.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
     </ClCompile>
     <ClCompile Include="weapon_shockrifle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_satchel.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_rpg.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_pipewrench.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_python.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_mp5.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_m249.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_knife.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_hornetgun.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_handgrenade.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_grapple.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_gauss.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_glock.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_egon.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
     </ClCompile>
     <ClCompile Include="weapon_eagle.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_crowbar.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_crossbow.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="func_doors.cpp">
+      <Filter>Source Files\dlls\func</Filter>
+    </ClCompile>
+    <ClCompile Include="func_tank.cpp">
+      <Filter>Source Files\dlls\func</Filter>
+    </ClCompile>
+    <ClCompile Include="func_break.cpp">
+      <Filter>Source Files\dlls\func</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_debug.c">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_math.c">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_shared.c">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\game_shared\voice_gamemgr.cpp">
+      <Filter>Source Files\game_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="airtank.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="alias.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="animation.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="explode.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="env_electrified_wire.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="effects.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="defaultai.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="client.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="cbase.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="buttons.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="bmodels.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="animating.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="combat.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="env_rope_segment.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="game.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="globals.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="h_ai.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="h_battery.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="h_cine.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="h_export.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="lights.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="locus.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="items.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="h_cycler.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="maprules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="monstermaker.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="pathcorner.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="nodes.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="particle_emitter.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="multiplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="movewith.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="mortar.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="monsterstate.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="monsters.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="world.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="weapons.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="turret.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="triggers.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="teamplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="talkmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="subs.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="stats.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="soundent.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="spectator.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="squadmonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="skill.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="singleplay_gamerules.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="schedule.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="scripted.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="plats.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="plane.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="playermonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="rcallymonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_sporegrenade.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_hornet.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_grapple_tonguetip.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_grenade.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="ammo_spore.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="ammo_spore_plant.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="baseactanimating.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="xen_plantlight.cpp">
+      <Filter>Source Files\dlls\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="xen_hair.cpp">
+      <Filter>Source Files\dlls\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="xen_ttrigger.cpp">
+      <Filter>Source Files\dlls\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="xen_tree.cpp">
+      <Filter>Source Files\dlls\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="xen_hull.cpp">
+      <Filter>Source Files\dlls\xen</Filter>
+    </ClCompile>
+    <ClCompile Include="xen_spore.cpp">
+      <Filter>Source Files\dlls\xen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="animation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="basemonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cbase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cdll_dll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="client.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="decals.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="defaultai.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="doors.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="effects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="enginecallback.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="explode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="extdll.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="func_break.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="gamerules.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hornet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="items.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="locus.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="maprules.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monsterevent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monsters.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="movewith.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nodes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="saverestore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="schedule.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scripted.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scriptevent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="skill.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="soundent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="spectator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="squad.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="squadmonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="talkmonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="teamplay_gamerules.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="trains.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="vector.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="activity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="activitymap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pm_shared\pm_materials.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pm_shared\pm_shared.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pm_shared\pm_debug.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pm_shared\pm_defs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pm_shared\pm_info.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\pm_shared\pm_movevars.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="rcallymonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_apache.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="monster_aflock.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
     <ClInclude Include="monster_agrunt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_barnacle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_barney.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_bigmomma.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_bloater.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_bullsquid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_osprey.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_rat.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_recruit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_roach.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_scientist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_tentacle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_controller.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_drillsergeant.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_flyingmonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_gargantua.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_genericmonster.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_gman.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_hassassin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_headcrab.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_hgrunt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_hgrunt_medic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_hgrunt_opfor.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_hgrunt_torch.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_houndeye.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_ichthyosaur.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_leech.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_nihilanth.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie_soldier.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_babycrab.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_pitworm.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_barney_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_otis_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_otis.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_cleansuit_scientist.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie_soldier_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_skeleton_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_alien_slave_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_alien_slave.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_houndeye_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_gonome_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_hevsuit_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_gonome.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_pitdrone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_alien_voltigore.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
     <ClInclude Include="monster_alien_babyvoltigore.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="monster_shockroach.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_alien_slave.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="monster_zombie_barney.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_alien_slave_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="proj_bolt.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_apache.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="proj_pitdronespit.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_alien_voltigore.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="proj_gonomespit.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_hgrunt_medic.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="proj_voltigore_energy_ball.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_hevsuit_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="monster_zombie_construction.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_gonome_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="monster_zombie_construction_dead.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_gargantua.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="monster_zombie_barney_dead.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_drillsergeant.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_bullsquid.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_barney.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_babycrab.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_barnacle.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_barney_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
     <ClInclude Include="monster_barniel.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="particle_emitter.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_bigmomma.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="monster_zombie_soldier_helmet.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie_soldier_helmet_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie_blackop.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="monster_zombie_blackop_dead.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_crowbar.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_glock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_python.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_mp5.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_shotgun.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_crossbow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_rpg.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_knife.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="proj_plrocket.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_gauss.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="item_generic.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_pipewrench.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="grapple_tonguetip.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="weapon_grapple.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_bloater.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
     <ClInclude Include="monster_construction.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="proj_shock.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="monster_controller.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_cleansuit_scientist.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_flyingmonster.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_genericmonster.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_gman.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_gonome.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_hassassin.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_headcrab.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_hgrunt.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_hgrunt_opfor.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_hgrunt_torch.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_houndeye.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_houndeye_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_ichthyosaur.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_leech.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_nihilanth.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_loader.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_pitdrone.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_rat.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_roach.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_shocktrooper.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_tentacle.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_skeleton_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_shockroach.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_scientist.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_recruit.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_pitworm.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_otis_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_osprey.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_otis.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_soldier_helmet_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_soldier_helmet.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_soldier_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_soldier.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_construction_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_construction.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_blackop_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_blackop.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_barney_dead.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_zombie_barney.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_sporelauncher.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_shotgun.h">
+      <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="weapon_shockrifle.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_rpg.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_python.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_pipewrench.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_mp5.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_knife.h">
+      <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="weapon_hornetgun.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_grapple.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_glock.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_gauss.h">
+      <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
     <ClInclude Include="weapon_eagle.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_crowbar.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_crossbow.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_voltigore_energy_ball.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_shock.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_plrocket.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_pitdronespit.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_bolt.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_gonomespit.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pm_shared\pm_shared.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pm_shared\pm_movevars.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pm_shared\pm_materials.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pm_shared\pm_info.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pm_shared\pm_defs.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pm_shared\pm_debug.h">
+      <Filter>Header Files\pm_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\anorms.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\apiproxy.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\cdll_int.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\custom.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\customentity.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\edict.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\eiface.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\keydefs.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\particle_emitter.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\progdefs.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\progs.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\shake.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\engine\studio.h">
+      <Filter>Header Files\engine</Filter>
+    </ClInclude>
+    <ClInclude Include="activity.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="activitymap.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="basemonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="cbase.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="cdll_dll.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="client.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="decals.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="defaultai.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="doors.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="effects.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="enginecallback.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="explode.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="extdll.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="game.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="gamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="items.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="locus.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="maprules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="monsterevent.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="monsters.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="movewith.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="nodes.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_emitter.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="plane.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="player.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="rcallymonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="saverestore.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="schedule.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="weapons.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="util.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="teamplay_gamerules.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="trains.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="talkmonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="squad.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="spectator.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="soundent.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="skill.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="scriptevent.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="scripted.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="squadmonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game_shared\voice_gamemgr.h">
+      <Filter>Header Files\game_shared</Filter>
+    </ClInclude>
+    <ClInclude Include="item_generic.h">
+      <Filter>Header Files\dlls\item</Filter>
+    </ClInclude>
+    <ClInclude Include="func_break.h">
+      <Filter>Header Files\dlls\func</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_hornet.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_grapple_tonguetip.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_sporegrenade.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_grenade.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_handgrenade.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="baseactanimating.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="xen_ttrigger.h">
+      <Filter>Header Files\dlls\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="xen_hull.h">
+      <Filter>Header Files\dlls\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="xen_hair.h">
+      <Filter>Header Files\dlls\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="xen_plantlight.h">
+      <Filter>Header Files\dlls\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="xen_spore.h">
+      <Filter>Header Files\dlls\xen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

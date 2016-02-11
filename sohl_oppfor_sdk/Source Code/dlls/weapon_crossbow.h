@@ -46,7 +46,7 @@ class CCrossbow : public CBasePlayerWeapon {
 
 		//Attack
 		void PrimaryAttack(void);
-		void SecondaryAttack(void) { m_flNextSecondaryAttack = UTIL_WeaponTimeBase() + 1E6; };
+		void SecondaryAttack(void) { m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 1E6; };
 		void FireBolt(void);
 		void FireSniperBolt(void);
 

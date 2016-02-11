@@ -354,7 +354,7 @@ void CBaseMonster :: RunTask ( Task_t *pTask )
 	case TASK_WAIT:
 	case TASK_WAIT_RANDOM:
 		{
-			if ( gpGlobals->time >= m_flWaitFinished )
+			if ( UTIL_GlobalTimeBase() >= m_flWaitFinished )
 			{
 				TaskComplete();
 			}
@@ -365,7 +365,7 @@ void CBaseMonster :: RunTask ( Task_t *pTask )
 			MakeIdealYaw ( m_vecEnemyLKP );
 			ChangeYaw( pev->yaw_speed ); 
 
-			if ( gpGlobals->time >= m_flWaitFinished )
+			if ( UTIL_GlobalTimeBase() >= m_flWaitFinished )
 			{
 				TaskComplete();
 			}
@@ -485,7 +485,7 @@ void CBaseMonster :: RunTask ( Task_t *pTask )
 		break;
 	case TASK_WAIT_FOR_SCRIPT:
 		{
-			if ( m_pCine->m_iDelay <= 0 && gpGlobals->time >= m_pCine->m_startTime )
+			if ( m_pCine->m_iDelay <= 0 && UTIL_GlobalTimeBase() >= m_pCine->m_startTime )
 			{
 				TaskComplete();
 			}
@@ -721,13 +721,13 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 			if ( FindLateralCover( pevCover->origin, pevCover->view_ofs ) )
 			{
 				// try lateral first
-				m_flMoveWaitFinished = gpGlobals->time + pTask->flData;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
 				TaskComplete();
 			}
 			else if ( FindCover( pevCover->origin, pevCover->view_ofs, 0, CoverRadius() ) )
 			{
 				// then try for plain ole cover
-				m_flMoveWaitFinished = gpGlobals->time + pTask->flData;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
 				TaskComplete();
 			}
 			else
@@ -742,7 +742,7 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 			if ( FindCover( pev->origin, pev->view_ofs, 0, CoverRadius() ) )
 			{
 				// then try for plain ole cover
-				m_flMoveWaitFinished = gpGlobals->time + pTask->flData;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
 				TaskComplete();
 			}
 			else
@@ -763,7 +763,7 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 			if ( pBestSound && FindLateralCover( pBestSound->m_vecOrigin, g_vecZero ) )
 			{
 				// try lateral first
-				m_flMoveWaitFinished = gpGlobals->time + pTask->flData;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
 				TaskComplete();
 			}
 			*/
@@ -771,7 +771,7 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 			if ( pBestSound && FindCover( pBestSound->m_vecOrigin, g_vecZero, pBestSound->m_iVolume, CoverRadius() ) )
 			{
 				// then try for plain ole cover
-				m_flMoveWaitFinished = gpGlobals->time + pTask->flData;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
 				TaskComplete();
 			}
 			else
@@ -836,12 +836,12 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 	case TASK_WAIT:
 	case TASK_WAIT_FACE_ENEMY:
 		{// set a future time that tells us when the wait is over.
-			m_flWaitFinished = gpGlobals->time + pTask->flData;	
+			m_flWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;	
 			break;
 		}
 	case TASK_WAIT_RANDOM:
 		{// set a future time that tells us when the wait is over.
-			m_flWaitFinished = gpGlobals->time + RANDOM_FLOAT( 0.1, pTask->flData );
+			m_flWaitFinished = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.1, pTask->flData );
 			break;
 		}
 	case TASK_MOVE_TO_TARGET_RANGE:
@@ -899,7 +899,7 @@ void CBaseMonster :: StartTask ( Task_t *pTask )
 		}
 	case TASK_CLEAR_MOVE_WAIT:
 		{
-			m_flMoveWaitFinished = gpGlobals->time;
+			m_flMoveWaitFinished = UTIL_GlobalTimeBase();
 			TaskComplete();
 			break;
 		}
@@ -1245,7 +1245,7 @@ case TASK_GET_PATH_TO_BESTSCENT:
 		}
 	case TASK_WAIT_FOR_SCRIPT:
 		{
-			if ( m_pCine->m_iDelay <= 0 && gpGlobals->time >= m_pCine->m_startTime )
+			if ( m_pCine->m_iDelay <= 0 && UTIL_GlobalTimeBase() >= m_pCine->m_startTime )
 			{
 				TaskComplete(); //LRC - start playing immediately
 			}

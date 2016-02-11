@@ -238,7 +238,7 @@ void CPitWorm::Spawn()
 	InitBoneControllers();
 
 	SetThink(&CPitWorm::StartupThink);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 
 	m_spawnAngles = pev->angles;
 	m_flInitialYaw = m_spawnAngles.y;
@@ -265,8 +265,8 @@ void CPitWorm::Spawn()
 
 	m_vecCurAngles = Vector(0, pev->angles.y, 0);
 	m_vecGoalAngles = Vector(0, pev->angles.y, 0);
-	m_flNextAttackTime = gpGlobals->time;
-	m_flNextIdleSoundTime = gpGlobals->time;
+	m_flNextAttackTime = UTIL_GlobalTimeBase();
+	m_flNextIdleSoundTime = UTIL_GlobalTimeBase();
 
 	// Create the eye glow.
 	CreateGlow();
@@ -421,7 +421,7 @@ void CPitWorm::HandleAnimEvent(MonsterEvent_t *pEvent)
 
 			// Reset beam yaw.
 			m_flBeamYaw = 0.0f;
-			m_flBeamTime = gpGlobals->time + PITWORM_EYEBLAST_DURATION;
+			m_flBeamTime = UTIL_GlobalTimeBase() + PITWORM_EYEBLAST_DURATION;
 		}
 		break;
 		case PITWORM_AE_EYEBLAST_END: // end killing swing
@@ -451,7 +451,7 @@ void CPitWorm::CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 		pev->health = 0;
 
 		SetThink(&CPitWorm::DyingThink);
-		pev->nextthink = gpGlobals->time;
+		pev->nextthink = UTIL_GlobalTimeBase();
 	}
 	// ALERT(at_console, "USE_TOGGLE\n");
 	break;
@@ -519,7 +519,7 @@ void CPitWorm::StartupThink(void)
 	SetThink(&CPitWorm::HuntThink);
 	SetTouch(&CPitWorm::WormTouch);
 	SetUse(&CPitWorm::CommandUse);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 }
 
 //=========================================================
@@ -528,7 +528,7 @@ void CPitWorm::StartupThink(void)
 void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetThink(&CPitWorm::HuntThink);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 	SetUse(&CPitWorm::CommandUse);
 }
 
@@ -538,7 +538,7 @@ void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 void CPitWorm::NullThink(void)
 {
 	StudioFrameAdvance();
-	pev->nextthink = gpGlobals->time + 0.5;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
 }
 
 //=========================================================
@@ -546,7 +546,7 @@ void CPitWorm::NullThink(void)
 //=========================================================
 void CPitWorm::DyingThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -586,7 +586,7 @@ void CPitWorm::DyingThink(void)
 //=========================================================
 void CPitWorm::HuntThink(void)
 {
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -604,7 +604,7 @@ void CPitWorm::HuntThink(void)
 		// Update beam if we need to.
 		if (m_fBeamOn)
 		{
-			if (m_flBeamTime > gpGlobals->time && !m_fSequenceFinished)
+			if (m_flBeamTime > UTIL_GlobalTimeBase() && !m_fSequenceFinished)
 			{
 				Vector src, target, angles;
 				GetAttachment(0, src, angles);
@@ -635,7 +635,7 @@ void CPitWorm::HuntThink(void)
 				m_flBeamTime = 0.0f;
 			}
 
-			pev->nextthink = gpGlobals->time + 0.01f;
+			pev->nextthink = UTIL_GlobalTimeBase() + 0.01f;
 			return;
 		}
 	}
@@ -691,10 +691,10 @@ void CPitWorm::HuntThink(void)
 
 		if (FVisible(m_hEnemy))
 		{
-			if (m_flLastSeen < gpGlobals->time - 5)
-				m_flPrevSeen = gpGlobals->time;
+			if (m_flLastSeen < UTIL_GlobalTimeBase() - 5)
+				m_flPrevSeen = UTIL_GlobalTimeBase();
 
-			m_flLastSeen = gpGlobals->time;
+			m_flLastSeen = UTIL_GlobalTimeBase();
 			m_posTarget = m_hEnemy->pev->origin;
 			m_vecTarget = (m_posTarget - pev->origin).Normalize();
 			m_vecDesired = m_vecTarget;
@@ -706,12 +706,12 @@ void CPitWorm::HuntThink(void)
 		}
 	}
 
-	if (m_flNextIdleSoundTime < gpGlobals->time)
+	if (m_flNextIdleSoundTime < UTIL_GlobalTimeBase())
 	{
 		//IdleSound();
 		// Use flinch sounds.
 		FlinchSound();
-		m_flNextIdleSoundTime = gpGlobals->time + RANDOM_LONG(4.0f, 4.1f);
+		m_flNextIdleSoundTime = UTIL_GlobalTimeBase() + RANDOM_LONG(4.0f, 4.1f);
 	}
 
 	// don't go too high
@@ -773,7 +773,7 @@ void CPitWorm::NextActivity()
 
 	if (m_hEnemy == NULL)
 	{
-		m_flLastSeen = gpGlobals->time;
+		m_flLastSeen = UTIL_GlobalTimeBase();
 		m_hEnemy = UTIL_PlayerByIndex(1);
 	}
 
@@ -793,7 +793,7 @@ void CPitWorm::NextActivity()
 		flDot = DotProduct(m_vecDesired, forward);
 		flDotSpawnAngles = DotProduct(m_vecDesired, Vector(0, -1, 0));
 
-		if (m_flLastSeen + 5 > gpGlobals->time && (m_flNextAttackTime < gpGlobals->time))
+		if (m_flLastSeen + 5 > UTIL_GlobalTimeBase() && (m_flNextAttackTime < UTIL_GlobalTimeBase()))
 		{
 			float flEnemyZ = m_hEnemy->pev->origin.z;
 
@@ -858,7 +858,7 @@ void CPitWorm::NextActivity()
 				}
 			}
 
-			m_flNextAttackTime = gpGlobals->time + RANDOM_FLOAT(3, 3.1f);
+			m_flNextAttackTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(3, 3.1f);
 			return;
 		}
 	}

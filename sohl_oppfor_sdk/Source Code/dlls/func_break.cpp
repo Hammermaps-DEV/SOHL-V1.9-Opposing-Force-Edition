@@ -1164,9 +1164,9 @@ void CPushable :: Move( CBaseEntity *pOther, int push )
 	{
 		pevToucher->velocity.x = pev->velocity.x;
 		pevToucher->velocity.y = pev->velocity.y;
-		if ( (gpGlobals->time - m_soundTime) > 0.7 )
+		if ( (UTIL_GlobalTimeBase() - m_soundTime) > 0.7 )
 		{
-			m_soundTime = gpGlobals->time;
+			m_soundTime = UTIL_GlobalTimeBase();
 			if ( length > 0 && FBitSet(pev->flags,FL_ONGROUND) )
 			{
 				m_lastSound = RANDOM_LONG(0,2);

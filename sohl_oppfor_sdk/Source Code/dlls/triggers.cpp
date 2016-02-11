@@ -329,7 +329,7 @@ void CAutoTrigger::Activate( void )
 
 void CAutoTrigger::DesiredAction( void )
 {
-//	ALERT(at_console, "trigger_auto targetting \"%s\": Fire at time %f\n", STRING(pev->target), gpGlobals->time);
+//	ALERT(at_console, "trigger_auto targetting \"%s\": Fire at time %f\n", STRING(pev->target), UTIL_GlobalTimeBase());
 	if ( !m_globalstate || gGlobalState.EntityGetState( m_globalstate ) == GLOBAL_ON )
 	{
 		if (pev->spawnflags & SF_AUTO_FROMPLAYER)
@@ -912,7 +912,7 @@ void CMultiManager :: ManagerThink ( void )
 	int		finalidx;
 	int		index = m_index; // store the current index
 
-	time = gpGlobals->time - m_startTime;
+	time = UTIL_GlobalTimeBase() - m_startTime;
 
 //	ALERT(at_console,"Manager think for time %f\n",time);
 
@@ -946,7 +946,7 @@ void CMultiManager :: ManagerThink ( void )
 			if (pev->spawnflags & SF_MULTIMAN_DEBUG)
 				ALERT(at_debug, "DEBUG: multi_manager \"%s\": restarting loop.\n", STRING(pev->targetname));
 			SetNextThink( m_startTime );
-			m_startTime += gpGlobals->time;
+			m_startTime += UTIL_GlobalTimeBase();
 		}
 		else
 		{
@@ -1095,7 +1095,7 @@ void CMultiManager :: ManagerUse ( CBaseEntity *pActivator, CBaseEntity *pCaller
 		m_iState = STATE_ON;
 	}
 
-	m_startTime = timeOffset + gpGlobals->time;
+	m_startTime = timeOffset + UTIL_GlobalTimeBase();
 
 	// startTime should not be affected by this next bit
 	if (m_cTargets > 0 && !m_iMode && m_flTargetDelay[0] < 0)
@@ -1536,7 +1536,7 @@ void CRenderFxFader :: FadeThink( void )
 		return;
 	}
 
-	float flDegree = (gpGlobals->time - m_flStartTime)/m_flDuration;
+	float flDegree = (UTIL_GlobalTimeBase() - m_flStartTime)/m_flDuration;
 
 	if (flDegree >= 1)
 	{
@@ -1685,7 +1685,7 @@ void CRenderFxManager::Affect( CBaseEntity *pTarget, BOOL bIsFirst, CBaseEntity 
 		else
 			pFader->m_fOffsetScale = 0;
 
-		pFader->m_flStartTime = gpGlobals->time;
+		pFader->m_flStartTime = UTIL_GlobalTimeBase();
 		pFader->m_flDuration = pev->frags;
 		pFader->m_flCoarseness = pev->armorvalue;
 		pFader->SetNextThink( 0 );
@@ -2375,9 +2375,9 @@ void CTriggerHurt :: HurtTouch ( CBaseEntity *pOther )
 	// how much time has passed and whether or not you've touched that player
 	if ( g_pGameRules->IsMultiplayer() )
 	{
-		if ( pev->dmgtime > gpGlobals->time )
+		if ( pev->dmgtime > UTIL_GlobalTimeBase() )
 		{
-			if ( gpGlobals->time != pev->pain_finished )
+			if ( UTIL_GlobalTimeBase() != pev->pain_finished )
 			{// too early to hurt again, and not same frame with a different entity
 				if ( pOther->IsPlayer() )
 				{
@@ -2413,7 +2413,7 @@ void CTriggerHurt :: HurtTouch ( CBaseEntity *pOther )
 	}
 	else	// Original code -- single player
 	{
-		if ( pev->dmgtime > gpGlobals->time && gpGlobals->time != pev->pain_finished )
+		if ( pev->dmgtime > UTIL_GlobalTimeBase() && UTIL_GlobalTimeBase() != pev->pain_finished )
 		{// too early to hurt again, and not same frame with a different entity
 			return;
 		}
@@ -2436,10 +2436,10 @@ void CTriggerHurt :: HurtTouch ( CBaseEntity *pOther )
 		pOther->TakeDamage( pev, pev, fldmg, m_bitsDamageInflict );
 
 	// Store pain time so we can get all of the other entities on this frame
-	pev->pain_finished = gpGlobals->time;
+	pev->pain_finished = UTIL_GlobalTimeBase();
 
 	// Apply damage every half second
-	pev->dmgtime = gpGlobals->time + 0.5;// half second delay until this trigger can hurt toucher again
+	pev->dmgtime = UTIL_GlobalTimeBase() + 0.5;// half second delay until this trigger can hurt toucher again
 
   
 	
@@ -2569,9 +2569,9 @@ void CTriggerHevCharge :: ChargeTouch ( CBaseEntity *pOther )
 		return;
 
 	//FIXME: add in the multiplayer fix, from trigger_hurt?
-	if ( pev->dmgtime > gpGlobals->time )
+	if ( pev->dmgtime > UTIL_GlobalTimeBase() )
 		return;
-	pev->dmgtime = gpGlobals->time + 0.5;// half second delay until this trigger can hurt toucher again
+	pev->dmgtime = UTIL_GlobalTimeBase() + 0.5;// half second delay until this trigger can hurt toucher again
 
 	int iNewArmor = pOther->pev->armorvalue + pev->frags;
 	if (iNewArmor > MAX_NORMAL_BATTERY) iNewArmor = MAX_NORMAL_BATTERY;
@@ -2735,7 +2735,7 @@ void CTargetFMODAudio::Activate( void )
 void CTargetFMODAudio::DesiredAction( void )
 {
 	if( m_bPlaying ) // run music on restore level 
-		pev->nextthink = gpGlobals->time + 1;
+		pev->nextthink = UTIL_GlobalTimeBase() + 1;
 }
 
 void CTargetFMODAudio::Think( void )
@@ -2994,7 +2994,7 @@ void CTriggerMultiple :: MultiTouch( CBaseEntity *pOther )
 //
 void CTriggerMultiple :: ActivateMultiTrigger( CBaseEntity *pActivator )
 {
-	if (m_fNextThink > gpGlobals->time)
+	if (m_fNextThink > UTIL_GlobalTimeBase())
 		return;         // still waiting for reset time
 
 	if (!UTIL_IsMasterTriggered(m_sMaster,pActivator))
@@ -3568,10 +3568,10 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 		return;
 
 	// Some people are firing these multiple times in a frame, disable
-	if ( gpGlobals->time == pev->dmgtime )
+	if ( UTIL_GlobalTimeBase() == pev->dmgtime )
 		return;
 
-	pev->dmgtime = gpGlobals->time;
+	pev->dmgtime = UTIL_GlobalTimeBase();
 
 
 	CBaseEntity *pPlayer = CBaseEntity::Instance( g_engfuncs.pfnPEntityOfEntIndex( 1 ) );
@@ -5313,7 +5313,7 @@ void CTriggerCamera::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	m_state = !m_state;
 	if (m_state == 0)
 	{
-		m_flReturnTime = gpGlobals->time;
+		m_flReturnTime = UTIL_GlobalTimeBase();
 		return;
 	}
 	if ( !pActivator || !pActivator->IsPlayer() )
@@ -5324,9 +5324,9 @@ void CTriggerCamera::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	m_hPlayer = pActivator;
 
 	if (m_flWait == -1)//G-Cont. if wait time = -1, set is 1E6 for retriggered only
-		m_flReturnTime = gpGlobals->time + 1E6;
+		m_flReturnTime = UTIL_GlobalTimeBase() + 1E6;
 	else
-		m_flReturnTime = gpGlobals->time + m_flWait;
+		m_flReturnTime = UTIL_GlobalTimeBase() + m_flWait;
 
 	pev->speed = m_initialSpeed;
 	m_targetSpeed = m_initialSpeed;
@@ -5363,7 +5363,7 @@ void CTriggerCamera::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 		m_pentPath = NULL;
 	}
 
-	m_flStopTime = gpGlobals->time;
+	m_flStopTime = UTIL_GlobalTimeBase();
 	if ( m_pentPath )
 	{
 		if ( m_pentPath->pev->speed != 0 )
@@ -5430,7 +5430,7 @@ void CTriggerCamera::FollowTarget( )
 	if (m_hPlayer == NULL)
 		return;
 
-	if (m_hTarget == NULL || m_flReturnTime < gpGlobals->time)
+	if (m_hTarget == NULL || m_flReturnTime < UTIL_GlobalTimeBase())
 	{
 		if (m_hPlayer->IsAlive( ))
 		{
@@ -5518,11 +5518,11 @@ void CTriggerCamera::Move()
 			Vector delta = m_pentPath->pev->origin - pev->origin;
 			m_moveDistance = delta.Length();
 			pev->movedir = delta.Normalize();
-			m_flStopTime = gpGlobals->time + m_pentPath->GetDelay();
+			m_flStopTime = UTIL_GlobalTimeBase() + m_pentPath->GetDelay();
 		}
 	}
 
-	if ( m_flStopTime > gpGlobals->time )
+	if ( m_flStopTime > UTIL_GlobalTimeBase() )
 		pev->speed = UTIL_Approach( 0, pev->speed, m_deceleration * gpGlobals->frametime );
 	else
 		pev->speed = UTIL_Approach( m_targetSpeed, pev->speed, m_acceleration * gpGlobals->frametime );

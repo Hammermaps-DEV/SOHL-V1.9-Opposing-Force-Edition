@@ -399,16 +399,16 @@ void CTentacle :: Cycle( void )
 	if ( pSound )
 	{
 		Vector vecDir;
-		if (gpGlobals->time - m_flPrevSoundTime < 0.5)
+		if (UTIL_GlobalTimeBase() - m_flPrevSoundTime < 0.5)
 		{
-			float dt = gpGlobals->time - m_flPrevSoundTime;
+			float dt = UTIL_GlobalTimeBase() - m_flPrevSoundTime;
 			vecDir = pSound->m_vecOrigin + (pSound->m_vecOrigin - m_vecPrevSound) / dt - pev->origin;
 		}
 		else
 		{
 			vecDir = pSound->m_vecOrigin - pev->origin;
 		}
-		m_flPrevSoundTime = gpGlobals->time;
+		m_flPrevSoundTime = UTIL_GlobalTimeBase();
 		m_vecPrevSound = pSound->m_vecOrigin;
 
 		m_flSoundYaw = UTIL_VecToYaw ( vecDir ) - m_flInitialYaw;
@@ -420,7 +420,7 @@ void CTentacle :: Cycle( void )
 			m_flSoundYaw -= 360;
 
 		// ALERT( at_console, "sound %d %.0f\n", m_iSoundLevel, m_flSoundYaw );
-		if (m_flSoundTime < gpGlobals->time)
+		if (m_flSoundTime < UTIL_GlobalTimeBase())
 		{
 			// play "I hear new something" sound
 			char *sound;	
@@ -433,7 +433,7 @@ void CTentacle :: Cycle( void )
 
 			// UTIL_EmitAmbientSound(ENT(pev), pev->origin + Vector( 0, 0, MyHeight()), sound, 1.0, ATTN_NORM, 0, 100);
 		}
-		m_flSoundTime = gpGlobals->time + RANDOM_FLOAT( 5.0, 10.0 );
+		m_flSoundTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 5.0, 10.0 );
 	}
 
 	// clip ideal_yaw
@@ -472,7 +472,7 @@ void CTentacle :: Cycle( void )
 				pev->health = 75;
 			}
 		}
-		else if ( m_flSoundTime > gpGlobals->time )
+		else if ( m_flSoundTime > UTIL_GlobalTimeBase() )
 		{
 			if (m_flSoundYaw >= -(m_flMaxYaw + 30) && m_flSoundYaw <= (m_flMaxYaw + 30))
 			{
@@ -497,9 +497,9 @@ void CTentacle :: Cycle( void )
 		}
 		else if (pev->sequence == m_iGoalAnim)
 		{
-			if (MyLevel() >= 0 && gpGlobals->time < m_flSoundTime)
+			if (MyLevel() >= 0 && UTIL_GlobalTimeBase() < m_flSoundTime)
 			{
-				if (RANDOM_LONG(0,9) < m_flSoundTime - gpGlobals->time)
+				if (RANDOM_LONG(0,9) < m_flSoundTime - UTIL_GlobalTimeBase())
 				{
 					// continue stike
 					m_iGoalAnim = LookupActivity( ACT_T_STRIKE + m_iSoundLevel );
@@ -516,7 +516,7 @@ void CTentacle :: Cycle( void )
 			}
 			else
 			{
-				if (m_flNextSong < gpGlobals->time)
+				if (m_flNextSong < UTIL_GlobalTimeBase())
 				{
 					// play "I hear new something" sound
 					char *sound;	
@@ -529,7 +529,7 @@ void CTentacle :: Cycle( void )
 
 					EMIT_SOUND(ENT(pev), CHAN_VOICE, sound, 1.0, ATTN_NORM);
 
-					m_flNextSong = gpGlobals->time + RANDOM_FLOAT( 10, 20 );
+					m_flNextSong = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 10, 20 );
 				}
 
 				if (RANDOM_LONG(0,15) == 0)
@@ -601,15 +601,15 @@ void CTentacle :: Cycle( void )
 		// ALERT( at_console, "seq %d\n", pev->sequence );
 	}
 
-	if (m_flPrevSoundTime + 2.0 > gpGlobals->time)
+	if (m_flPrevSoundTime + 2.0 > UTIL_GlobalTimeBase())
 	{
 		// 1.5 normal speed if hears sounds
 		pev->framerate = m_iDir * 1.5 + m_flFramerateAdj;
 	}
-	else if (m_flPrevSoundTime + 5.0 > gpGlobals->time)
+	else if (m_flPrevSoundTime + 5.0 > UTIL_GlobalTimeBase())
 	{
 		// slowdown to normal
-		pev->framerate = m_iDir + m_iDir * (5 - (gpGlobals->time - m_flPrevSoundTime)) / 2 + m_flFramerateAdj;
+		pev->framerate = m_iDir + m_iDir * (5 - (UTIL_GlobalTimeBase() - m_flPrevSoundTime)) / 2 + m_flFramerateAdj;
 	}
 }
 
@@ -856,7 +856,7 @@ void CTentacle :: HitTouch( CBaseEntity *pOther )
 	if (pOther->pev->modelindex == pev->modelindex)
 		return;
 
-	if (m_flHitTime > gpGlobals->time)
+	if (m_flHitTime > UTIL_GlobalTimeBase())
 		return;
 
 	// only look at the ones where the player hit me
@@ -878,7 +878,7 @@ void CTentacle :: HitTouch( CBaseEntity *pOther )
 		return; // Huh?
 	}
 
-	m_flHitTime = gpGlobals->time + 0.5;
+	m_flHitTime = UTIL_GlobalTimeBase() + 0.5;
 
 	//ALERT( at_console, "%s : ", STRING( tr.pHit->v.classname ) );
 

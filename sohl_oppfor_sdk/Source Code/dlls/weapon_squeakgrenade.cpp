@@ -22,6 +22,7 @@
 #include "player.h"
 #include "soundent.h"
 #include "gamerules.h"
+#include "proj_grenade.h"
 
 enum w_squeak_e {
 	WSQUEAK_IDLE1 = 0,
@@ -131,7 +132,7 @@ void CSqueakGrenade :: Spawn( void )
 	SetTouch(&CSqueakGrenade :: SuperBounceTouch );
 	SetThink(&CSqueakGrenade :: HuntThink );
 	SetNextThink( 0.1 );
-	m_flNextHunt = gpGlobals->time + 1E6;
+	m_flNextHunt = UTIL_GlobalTimeBase() + 1E6;
 
 	pev->flags |= FL_MONSTER;
 	pev->takedamage		= DAMAGE_AIM;
@@ -142,10 +143,10 @@ void CSqueakGrenade :: Spawn( void )
 
 	pev->dmg = gSkillData.snarkDmgPop;
 
-	m_flDie = gpGlobals->time + SQUEEK_DETONATE_DELAY;
+	m_flDie = UTIL_GlobalTimeBase() + SQUEEK_DETONATE_DELAY;
 	m_flFieldOfView = 0; // 180 degrees
 	if ( pev->owner ) m_hOwner = Instance( pev->owner );
-	m_flNextBounceSoundTime = UTIL_WeaponTimeBase();// reset each time a snark is spawned.
+	m_flNextBounceSoundTime = UTIL_GlobalTimeBase();// reset each time a snark is spawned.
 
 	pev->sequence = WSQUEAK_RUN;
 	ResetSequenceInfo( );
@@ -210,7 +211,7 @@ void CSqueakGrenade::HuntThink( void )
 	SetNextThink( 0.1 );
 
 	// explode when ready
-	if (gpGlobals->time >= m_flDie)
+	if (UTIL_GlobalTimeBase() >= m_flDie)
 	{
 		g_vecAttackDir = pev->velocity.Normalize( );
 		pev->health = -1;
@@ -232,10 +233,10 @@ void CSqueakGrenade::HuntThink( void )
 		pev->movetype = MOVETYPE_BOUNCE;
 
 	// return if not time to hunt
-	if (m_flNextHunt > gpGlobals->time)
+	if (m_flNextHunt > UTIL_GlobalTimeBase())
 		return;
 
-	m_flNextHunt = gpGlobals->time + 2.0;
+	m_flNextHunt = UTIL_GlobalTimeBase() + 2.0;
 	
 	CBaseEntity *pOther = NULL;
 	Vector vecDir;
@@ -255,14 +256,14 @@ void CSqueakGrenade::HuntThink( void )
 	}
 
 	// squeek if it's about time blow up
-	if ((m_flDie - gpGlobals->time <= 0.5) && (m_flDie - gpGlobals->time >= 0.3))
+	if ((m_flDie - UTIL_GlobalTimeBase() <= 0.5) && (m_flDie - UTIL_GlobalTimeBase() >= 0.3))
 	{
 		EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_die1.wav", 1, ATTN_NORM, 0, 100 + RANDOM_LONG(0,0x3F));
 		CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, 256, 0.25 );
 	}
 
 	// higher pitch as squeeker gets closer to detonation time
-	float flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / SQUEEK_DETONATE_DELAY);
+	float flpitch = 155.0 - 60.0 * ((m_flDie - UTIL_GlobalTimeBase()) / SQUEEK_DETONATE_DELAY);
 	if (flpitch < 80) flpitch = 80;
 
 	if (m_hEnemy != NULL)
@@ -318,12 +319,12 @@ void CSqueakGrenade::SuperBounceTouch( CBaseEntity *pOther )
 	pev->angles.z = 0;
 
 	// avoid bouncing too much
-	if (m_flNextHit > gpGlobals->time) return;
+	if (m_flNextHit > UTIL_GlobalTimeBase()) return;
 
 	// higher pitch as squeeker gets closer to detonation time
-	flpitch = 155.0 - 60.0 * ((m_flDie - gpGlobals->time) / SQUEEK_DETONATE_DELAY);
+	flpitch = 155.0 - 60.0 * ((m_flDie - UTIL_GlobalTimeBase()) / SQUEEK_DETONATE_DELAY);
 
-	if ( pOther->pev->takedamage && m_flNextAttack < gpGlobals->time )
+	if ( pOther->pev->takedamage && m_flNextAttack < UTIL_GlobalTimeBase() )
 	{
 		// make sure it's me who has touched them
 		if (tr.pHit == pOther->edict())
@@ -341,18 +342,18 @@ void CSqueakGrenade::SuperBounceTouch( CBaseEntity *pOther )
 
 				// make bite sound
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "squeek/sqk_deploy1.wav", 1.0, ATTN_NORM, 0, (int)flpitch);
-				m_flNextAttack = gpGlobals->time + 0.5;
+				m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
 			}
 		}
 	}
 
-	m_flNextHit = gpGlobals->time + 0.1;
-	m_flNextHunt = gpGlobals->time;
+	m_flNextHit = UTIL_GlobalTimeBase() + 0.1;
+	m_flNextHunt = UTIL_GlobalTimeBase();
 
 	if ( IsMultiplayer() )
 	{
 		// in multiplayer, we limit how often snarks can make their bounce sounds to prevent overflows.
-		if ( gpGlobals->time < m_flNextBounceSoundTime ) return;
+		if ( UTIL_GlobalTimeBase() < m_flNextBounceSoundTime ) return;
 	}
 
 	if (!(pev->flags & FL_ONGROUND))
@@ -374,7 +375,7 @@ void CSqueakGrenade::SuperBounceTouch( CBaseEntity *pOther )
 		CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, 100, 0.1 );
 	}
 
-	m_flNextBounceSoundTime = gpGlobals->time + 0.5;// half second.
+	m_flNextBounceSoundTime = UTIL_GlobalTimeBase() + 0.5;// half second.
 }
 LINK_ENTITY_TO_CLASS( weapon_snark, CSqueak );
 
@@ -388,7 +389,7 @@ void CSqueak::Spawn( )
 	m_iDefaultAmmo = SNARK_DEFAULT_GIVE;
 		
 	pev->sequence = 1;
-	pev->animtime = gpGlobals->time;
+	pev->animtime = UTIL_GlobalTimeBase();
 	pev->framerate = 1.0;
 }
 
@@ -436,7 +437,7 @@ BOOL CSqueak::Deploy( )
 
 void CSqueak::Holster( )
 {
-	m_pPlayer->m_flNextAttack = UTIL_WeaponTimeBase() + 1.4;
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 1.4;
 	SendWeaponAnim( SQUEAK_DOWN );
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);	
 
@@ -487,8 +488,8 @@ void CSqueak::PrimaryAttack()
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 			m_fJustThrown = 1;
 
-			m_flNextPrimaryAttack = UTIL_WeaponTimeBase() + 0.3;
-			m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 1.0;
+			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3;
+			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 1.0;
 		}
 	}
 }
@@ -496,7 +497,7 @@ void CSqueak::PrimaryAttack()
 
 void CSqueak::WeaponIdle( void )
 {
-	if ( m_flTimeWeaponIdle > UTIL_WeaponTimeBase() ) return;
+	if ( m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ) return;
 
 	if (m_fJustThrown)
 	{
@@ -509,7 +510,7 @@ void CSqueak::WeaponIdle( void )
 		}
 
 		SendWeaponAnim( SQUEAK_UP );
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + RANDOM_LONG( 10, 15 );
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_LONG( 10, 15 );
 		return;
 	}
 
@@ -518,17 +519,17 @@ void CSqueak::WeaponIdle( void )
 	if (flRand <= 0.75)
 	{
 		iAnim = SQUEAK_IDLE1;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 30.0 / 16 * (2);
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 30.0 / 16 * (2);
 	}
 	else if (flRand <= 0.875)
 	{
 		iAnim = SQUEAK_FIDGETFIT;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 70.0 / 16.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 70.0 / 16.0;
 	}
 	else
 	{
 		iAnim = SQUEAK_FIDGETNIP;
-		m_flTimeWeaponIdle = UTIL_WeaponTimeBase() + 80.0 / 16.0;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 80.0 / 16.0;
 	}
 	SendWeaponAnim( iAnim );
 }

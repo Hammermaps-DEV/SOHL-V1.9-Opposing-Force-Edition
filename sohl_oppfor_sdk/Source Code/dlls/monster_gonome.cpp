@@ -155,14 +155,14 @@ int CGonome::IgnoreConditions(void)
 
 	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1))
 	{
-		if (m_flNextFlinch >= gpGlobals->time)
+		if (m_flNextFlinch >= UTIL_GlobalTimeBase())
 			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 	}
 
 	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH))
 	{
-		if (m_flNextFlinch < gpGlobals->time)
-			m_flNextFlinch = gpGlobals->time + GONOME_FLINCH_DELAY;
+		if (m_flNextFlinch < UTIL_GlobalTimeBase())
+			m_flNextFlinch = UTIL_GlobalTimeBase() + GONOME_FLINCH_DELAY;
 	}
 
 	return iIgnore;
@@ -187,7 +187,7 @@ int CGonome::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 
 	// if the squid is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
-	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && gpGlobals->time - m_flLastHurtTime > 3)
+	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3)
 	{
 		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
 
@@ -217,7 +217,7 @@ BOOL CGonome::CheckRangeAttack1(float flDot, float flDist)
 		return FALSE;
 	}
 
-	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpitTime)
+	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime)
 	{
 		if (m_hEnemy != NULL)
 		{
@@ -231,12 +231,12 @@ BOOL CGonome::CheckRangeAttack1(float flDot, float flDist)
 		if (IsMoving())
 		{
 			// don't spit again for a long time, resume chasing enemy.
-			m_flNextSpitTime = gpGlobals->time + 5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 5;
 		}
 		else
 		{
 			// not moving, so spit again pretty soon.
-			m_flNextSpitTime = gpGlobals->time + 0.5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 0.5;
 		}
 
 		return TRUE;
@@ -492,7 +492,7 @@ void CGonome::Spawn()
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_fCanThreatDisplay = TRUE;
-	m_flNextSpitTime = gpGlobals->time;
+	m_flNextSpitTime = UTIL_GlobalTimeBase();
 
 	MonsterInit();
 }

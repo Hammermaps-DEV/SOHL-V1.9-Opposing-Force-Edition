@@ -140,7 +140,6 @@ void CParticle::Draw( void )
 	vNormal.z += sParticle.flCurrentRotation;
 	AngleVectors(vNormal, vForward, vRight, vUp);
 
-	//RenderFog();	// Fograin92: Disabled
 	glColor4ub(sParticle.iRed, sParticle.iGreen, sParticle.iBlue, iHealth); 
 
 	glBindTexture(GL_TEXTURE_2D, sParticle.pTexture->iID);

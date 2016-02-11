@@ -22,7 +22,7 @@
 #include	"monsters.h"
 #include	"weapons.h"
 #include	"soundent.h"
-#include	"hornet.h"
+#include	"proj_hornet.h"
 #include	"gamerules.h"
 
 
@@ -70,11 +70,11 @@ void CHornet :: Spawn( void )
 	if ( g_pGameRules->IsMultiplayer() )
 	{
 		// hornets don't live as long in multiplayer
-		m_flStopAttack = gpGlobals->time + 3.5;
+		m_flStopAttack = UTIL_GlobalTimeBase() + 3.5;
 	}
 	else
 	{
-		m_flStopAttack	= gpGlobals->time + 5.0;
+		m_flStopAttack	= UTIL_GlobalTimeBase() + 5.0;
 	}
 
 	m_flFieldOfView = 0.9; // +- 25 degrees
@@ -261,7 +261,7 @@ void CHornet :: TrackTarget ( void )
 
 	StudioFrameAdvance( );
 
-	if (gpGlobals->time > m_flStopAttack)
+	if (UTIL_GlobalTimeBase() > m_flStopAttack)
 	{
 		SetTouch( NULL );
 		SetThink(&CHornet :: SUB_Remove );
@@ -363,7 +363,7 @@ void CHornet :: TrackTarget ( void )
 			pev->velocity = pev->velocity * 2;
 			SetNextThink( 1.0 );
 			// don't attack again
-			m_flStopAttack = gpGlobals->time;
+			m_flStopAttack = UTIL_GlobalTimeBase();
 		}
 	}
 }

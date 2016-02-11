@@ -26,6 +26,7 @@
 #include	"soundent.h"
 #include	"scripted.h"
 #include	"game.h"
+#include	"proj_grenade.h"
 #include	"monster_hassassin.h"
 
 extern DLL_GLOBAL int  g_iSkillLevel;
@@ -154,7 +155,7 @@ void CHAssassin :: Shoot ( void )
 	Vector vecShootOrigin = GetGunPosition();
 	Vector vecShootDir = ShootAtEnemy( vecShootOrigin );
 
-	if (m_flLastShot + 2 < gpGlobals->time)
+	if (m_flLastShot + 2 < UTIL_GlobalTimeBase())
 	{
 		m_flDiviation = 0.10;
 	}
@@ -164,7 +165,7 @@ void CHAssassin :: Shoot ( void )
 		if (m_flDiviation < 0.02)
 			m_flDiviation = 0.02;
 	}
-	m_flLastShot = gpGlobals->time;
+	m_flLastShot = UTIL_GlobalTimeBase();
 
 	UTIL_MakeVectors ( pev->angles );
 
@@ -224,12 +225,12 @@ void CHAssassin :: HandleAnimEvent( MonsterEvent_t *pEvent )
 					// what speed would be best to use, here? Borrowing the hgrunt grenade speed seems silly...
 					vecToss = ((gpGlobals->v_forward*0.5)+(gpGlobals->v_up*0.5)).Normalize()*gSkillData.hgruntGrenadeSpeed;
 				}
-				CGrenade::ShootTimed( pev, vecGunPosition, vecToss, 2.0 );
+				CGrenade::ShootTimed( pev, vecGunPosition, vecToss, RANDOM_FLOAT(1.5,2.5));
 			}
 			else
-				CGrenade::ShootTimed( pev, vecGunPosition, m_vecTossVelocity, 2.0 );
+				CGrenade::ShootTimed( pev, vecGunPosition, m_vecTossVelocity, RANDOM_FLOAT(1.5, 2.5));
 
-			m_flNextGrenadeCheck = gpGlobals->time + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
 			m_fThrowGrenade = FALSE;
 			// !!!LATER - when in a group, only try to throw grenade if ordered.
 		}
@@ -267,7 +268,7 @@ void CHAssassin :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			}
 			else
 			pev->velocity = m_vecJumpVelocity;
-			m_flNextJump = gpGlobals->time + 3.0;
+			m_flNextJump = UTIL_GlobalTimeBase() + 3.0;
 		}
 		return;
 	default:
@@ -634,7 +635,7 @@ IMPLEMENT_CUSTOM_SCHEDULES( CHAssassin, CBaseMonster );
 //=========================================================
 BOOL CHAssassin :: CheckMeleeAttack1 ( float flDot, float flDist )
 {
-	if ( m_flNextJump < gpGlobals->time && (flDist <= 128 || HasMemory( bits_MEMORY_BADJUMP )) && m_hEnemy != NULL )
+	if ( m_flNextJump < UTIL_GlobalTimeBase() && (flDist <= 128 || HasMemory( bits_MEMORY_BADJUMP )) && m_hEnemy != NULL )
 	{
 		TraceResult	tr;
 
@@ -697,7 +698,7 @@ BOOL CHAssassin :: CheckRangeAttack2 ( float flDot, float flDist )
 	if ( m_iFrustration <= 2)
 		return FALSE;
 
-	if ( m_flNextGrenadeCheck < gpGlobals->time && !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= 512 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */ )
+	if ( m_flNextGrenadeCheck < UTIL_GlobalTimeBase() && !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= 512 /* && flDot >= 0.5 */ /* && NoFriendlyFire() */ )
 	{
 		Vector vecToss = VecCheckThrow( pev, GetGunPosition( ), m_hEnemy->Center(), flDist, 0.5 ); // use dist as speed to get there in 1 second
 
@@ -997,7 +998,7 @@ Schedule_t* CHAssassin :: GetScheduleOfType ( int Type )
 	case SCHED_MELEE_ATTACK1:
 		if (pev->flags & FL_ONGROUND)
 		{
-			if (m_flNextJump > gpGlobals->time)
+			if (m_flNextJump > UTIL_GlobalTimeBase())
 			{
 				// can't jump yet, go ahead and fail
 				return slAssassinFail;

@@ -300,7 +300,7 @@ void CSittingCleansuitScientist::Spawn(void)
 	ResetSequenceInfo();
 
 	SetThink(&CSittingScientist::SittingThink);
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 
 	DROP_TO_FLOOR(ENT(pev));
 }

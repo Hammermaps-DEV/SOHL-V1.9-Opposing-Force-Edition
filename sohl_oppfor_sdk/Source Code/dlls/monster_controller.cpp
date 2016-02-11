@@ -209,9 +209,9 @@ void CController :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			MESSAGE_END();
 
 			m_iBall[0] = 192;
-			m_iBallTime[0] = gpGlobals->time + atoi( pEvent->options ) / 15.0;
+			m_iBallTime[0] = UTIL_GlobalTimeBase() + atoi( pEvent->options ) / 15.0;
 			m_iBall[1] = 255;
-			m_iBallTime[1] = gpGlobals->time + atoi( pEvent->options ) / 15.0;
+			m_iBallTime[1] = UTIL_GlobalTimeBase() + atoi( pEvent->options ) / 15.0;
 
 		}
 		break;
@@ -258,7 +258,7 @@ void CController :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		{
 			//ALERT(at_console,"Controller Small Shoot\n");
 			AttackSound( );
-			m_flShootTime = gpGlobals->time;
+			m_flShootTime = UTIL_GlobalTimeBase();
 			m_flShootEnd = m_flShootTime + atoi( pEvent->options ) / 15.0;
 		}
 		break;
@@ -266,18 +266,18 @@ void CController :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		{
 			//ALERT(at_console,"Controller Powerup Full\n");
 			m_iBall[0] = 255;
-			m_iBallTime[0] = gpGlobals->time + atoi( pEvent->options ) / 15.0;
+			m_iBallTime[0] = UTIL_GlobalTimeBase() + atoi( pEvent->options ) / 15.0;
 			m_iBall[1] = 255;
-			m_iBallTime[1] = gpGlobals->time + atoi( pEvent->options ) / 15.0;
+			m_iBallTime[1] = UTIL_GlobalTimeBase() + atoi( pEvent->options ) / 15.0;
 		}
 		break;
 		case CONTROLLER_AE_POWERUP_HALF:
 		{
 			//ALERT(at_console,"Controller Powerup Half\n");
 			m_iBall[0] = 192;
-			m_iBallTime[0] = gpGlobals->time + atoi( pEvent->options ) / 15.0;
+			m_iBallTime[0] = UTIL_GlobalTimeBase() + atoi( pEvent->options ) / 15.0;
 			m_iBall[1] = 192;
-			m_iBallTime[1] = gpGlobals->time + atoi( pEvent->options ) / 15.0;
+			m_iBallTime[1] = UTIL_GlobalTimeBase() + atoi( pEvent->options ) / 15.0;
 		}
 		break;
 		default:
@@ -567,15 +567,15 @@ int CController::LookupFloat( )
 void CController :: RunTask ( Task_t *pTask )
 {
 
-	if (m_flShootEnd > gpGlobals->time)
+	if (m_flShootEnd > UTIL_GlobalTimeBase())
 	{
 		Vector vecHand, vecAngle;
 		
 		GetAttachment( 2, vecHand, vecAngle );
 	
-		while (m_flShootTime < m_flShootEnd && m_flShootTime < gpGlobals->time)
+		while (m_flShootTime < m_flShootEnd && m_flShootTime < UTIL_GlobalTimeBase())
 		{
-			Vector vecSrc = vecHand + pev->velocity * (m_flShootTime - gpGlobals->time);
+			Vector vecSrc = vecHand + pev->velocity * (m_flShootTime - UTIL_GlobalTimeBase());
 			Vector vecDir;
 			
 			if (m_pCine != NULL || m_hEnemy != NULL)
@@ -608,7 +608,7 @@ void CController :: RunTask ( Task_t *pTask )
 				float delta = 0.03490; // +-2 degree
 				vecDir = vecDir + Vector( RANDOM_FLOAT( -delta, delta ), RANDOM_FLOAT( -delta, delta ), RANDOM_FLOAT( -delta, delta ) ) * gSkillData.controllerSpeedBall;
 
-				vecSrc = vecSrc + vecDir * (gpGlobals->time - m_flShootTime);
+				vecSrc = vecSrc + vecDir * (UTIL_GlobalTimeBase() - m_flShootTime);
 				CBaseMonster *pBall = (CBaseMonster*)Create( "controller_energy_ball", vecSrc, pev->angles, edict() );
 				pBall->pev->velocity = vecDir;
 			}
@@ -809,7 +809,7 @@ void CController :: RunAI( void )
 			m_pBall[i]->SetScale( 1.0 );
 		}
 
-		float t = m_iBallTime[i] - gpGlobals->time;
+		float t = m_iBallTime[i] - UTIL_GlobalTimeBase();
 		if (t > 0.1)
 			t = 0.1 / t;
 		else
@@ -866,7 +866,7 @@ void CController :: Move ( float flInterval )
 		return;
 	}
 	
-	if ( m_flMoveWaitFinished > gpGlobals->time )
+	if ( m_flMoveWaitFinished > UTIL_GlobalTimeBase() )
 		return;
 
 	// if the monster is moving directly towards an entity (enemy for instance), we'll set this pointer
@@ -927,13 +927,13 @@ void CController :: Move ( float flInterval )
 			{
 				DispatchBlocked( edict(), pBlocker->edict() );
 			}
-			if ( pBlocker && m_moveWaitTime > 0 && pBlocker->IsMoving() && !pBlocker->IsPlayer() && (gpGlobals->time-m_flMoveWaitFinished) > 3.0 )
+			if ( pBlocker && m_moveWaitTime > 0 && pBlocker->IsMoving() && !pBlocker->IsPlayer() && (UTIL_GlobalTimeBase()-m_flMoveWaitFinished) > 3.0 )
 			{
 				// Can we still move toward our target?
 				if ( flDist < m_flGroundSpeed )
 				{
 					// Wait for a second
-					m_flMoveWaitFinished = gpGlobals->time + m_moveWaitTime;
+					m_flMoveWaitFinished = UTIL_GlobalTimeBase() + m_moveWaitTime;
 	//				ALERT( at_aiconsole, "Move %s!!!\n", STRING( pBlocker->pev->classname ) );
 					return;
 				}
@@ -953,7 +953,7 @@ void CController :: Move ( float flInterval )
 					if ( m_moveWaitTime > 0 )
 					{
 						FRefreshRoute();
-						m_flMoveWaitFinished = gpGlobals->time + m_moveWaitTime * 0.5;
+						m_flMoveWaitFinished = UTIL_GlobalTimeBase() + m_moveWaitTime * 0.5;
 					}
 					else
 					{
@@ -1097,7 +1097,7 @@ void CControllerHeadBall :: Spawn( void )
 	SetNextThink( 0.1 );
 
 	m_hOwner = Instance( pev->owner );
-	pev->dmgtime = gpGlobals->time;
+	pev->dmgtime = UTIL_GlobalTimeBase();
 }
 
 
@@ -1130,7 +1130,7 @@ void CControllerHeadBall :: HuntThink( void  )
 	MESSAGE_END();
 
 	// check world boundaries
-	if (gpGlobals->time - pev->dmgtime > 5 || pev->renderamt < 64 || m_hEnemy == NULL || m_hOwner == NULL || pev->origin.x < -4096 || pev->origin.x > 4096 || pev->origin.y < -4096 || pev->origin.y > 4096 || pev->origin.z < -4096 || pev->origin.z > 4096)
+	if (UTIL_GlobalTimeBase() - pev->dmgtime > 5 || pev->renderamt < 64 || m_hEnemy == NULL || m_hOwner == NULL || pev->origin.x < -4096 || pev->origin.x > 4096 || pev->origin.y < -4096 || pev->origin.y > 4096 || pev->origin.z < -4096 || pev->origin.z > 4096)
 	{
 		SetTouch( NULL );
 		UTIL_Remove( this );
@@ -1174,7 +1174,7 @@ void CControllerHeadBall :: HuntThink( void  )
 
 		UTIL_EmitAmbientSound( ENT(pev), tr.vecEndPos, "weapons/electro4.wav", 0.5, ATTN_NORM, 0, RANDOM_LONG( 140, 160 ) );
 
-		m_flNextAttack = gpGlobals->time + 3.0;
+		m_flNextAttack = UTIL_GlobalTimeBase() + 3.0;
 
 		SetThink(&CControllerHeadBall :: DieThink );
 		SetNextThink( 0.3 );
@@ -1273,7 +1273,7 @@ void CControllerZapBall :: Spawn( void )
 	SetTouch(&CControllerZapBall :: ExplodeTouch );
 
 	m_hOwner = Instance( pev->owner );
-	pev->dmgtime = gpGlobals->time; // keep track of when ball spawned
+	pev->dmgtime = UTIL_GlobalTimeBase(); // keep track of when ball spawned
 	SetNextThink( 0.1 );
 }
 
@@ -1288,7 +1288,7 @@ void CControllerZapBall :: AnimateThink( void  )
 	
 	pev->frame = ((int)pev->frame + 1) % 11;
 
-	if (gpGlobals->time - pev->dmgtime > 5 || pev->velocity.Length() < 10)
+	if (UTIL_GlobalTimeBase() - pev->dmgtime > 5 || pev->velocity.Length() < 10)
 	{
 		SetTouch( NULL );
 		UTIL_Remove( this );

@@ -136,8 +136,8 @@ void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton)
 
 	if (flocked)
 	{
-		int fplaysound = (pls->sLockedSound && gpGlobals->time > pls->flwaitSound);
-		int fplaysentence = (pls->sLockedSentence && !pls->bEOFLocked && gpGlobals->time > pls->flwaitSentence);
+		int fplaysound = (pls->sLockedSound && UTIL_GlobalTimeBase() > pls->flwaitSound);
+		int fplaysentence = (pls->sLockedSentence && !pls->bEOFLocked && UTIL_GlobalTimeBase() > pls->flwaitSentence);
 		float fvol;
 
 		if (fplaysound && fplaysentence)
@@ -150,7 +150,7 @@ void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton)
 		{
 			// play 'door locked' sound
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, (char*)STRING(pls->sLockedSound), fvol, ATTN_NORM);
-			pls->flwaitSound = gpGlobals->time + flsoundwait;
+			pls->flwaitSound = UTIL_GlobalTimeBase() + flsoundwait;
 		}
 
 		// if there is a sentence, we've not played all in list, and we've debounced, play sound
@@ -166,15 +166,15 @@ void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton)
 			// make sure we don't keep calling last sentence in list
 			pls->bEOFLocked = (iprev == pls->iLockedSentence);
 		
-			pls->flwaitSentence = gpGlobals->time + DOOR_SENTENCEWAIT;
+			pls->flwaitSentence = UTIL_GlobalTimeBase() + DOOR_SENTENCEWAIT;
 		}
 	}
 	else
 	{
 		// UNLOCKED SOUND
 
-		int fplaysound = (pls->sUnlockedSound && gpGlobals->time > pls->flwaitSound);
-		int fplaysentence = (pls->sUnlockedSentence && !pls->bEOFUnlocked && gpGlobals->time > pls->flwaitSentence);
+		int fplaysound = (pls->sUnlockedSound && UTIL_GlobalTimeBase() > pls->flwaitSound);
+		int fplaysentence = (pls->sUnlockedSentence && !pls->bEOFUnlocked && UTIL_GlobalTimeBase() > pls->flwaitSentence);
 		float fvol;
 
 		// if playing both sentence and sound, lower sound volume so we hear sentence
@@ -187,7 +187,7 @@ void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton)
 		if (fplaysound)
 		{
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, (char*)STRING(pls->sUnlockedSound), fvol, ATTN_NORM);
-			pls->flwaitSound = gpGlobals->time + flsoundwait;
+			pls->flwaitSound = UTIL_GlobalTimeBase() + flsoundwait;
 		}
 
 		// play next 'door unlocked' sentence in group
@@ -201,7 +201,7 @@ void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton)
 
 			// make sure we don't keep calling last sentence in list
 			pls->bEOFUnlocked = (iprev == pls->iUnlockedSentence);
-			pls->flwaitSentence = gpGlobals->time + DOOR_SENTENCEWAIT;
+			pls->flwaitSentence = UTIL_GlobalTimeBase() + DOOR_SENTENCEWAIT;
 		}
 	}
 }
@@ -894,8 +894,8 @@ void CBaseDoor::Blocked( CBaseEntity *pOther )
 	
 	UTIL_AssignOrigin(this, pev->origin);
 	//make delay before retouching
-	if ( gpGlobals->time < m_flBlockedTime) return;
-	m_flBlockedTime = gpGlobals->time + 0.5;
+	if ( UTIL_GlobalTimeBase() < m_flBlockedTime) return;
+	m_flBlockedTime = UTIL_GlobalTimeBase() + 0.5;
 
 	if ( pev->dmg ) pOther->TakeDamage( pev, pev, pev->dmg, DMG_CRUSH );
 

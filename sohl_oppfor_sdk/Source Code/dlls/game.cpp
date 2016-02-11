@@ -114,6 +114,31 @@ cvar_t	sk_barniel_arm1 = { "sk_barniel_arm1","0" };
 cvar_t	sk_barniel_arm2 = { "sk_barniel_arm2","0" };
 cvar_t	sk_barniel_arm3 = { "sk_barniel_arm3","0" };
 
+// Otis Laurey
+cvar_t	sk_otis_health1 = { "sk_otis_health1","0" };
+cvar_t	sk_otis_health2 = { "sk_otis_health2","0" };
+cvar_t	sk_otis_health3 = { "sk_otis_health3","0" };
+
+cvar_t	sk_otis_head1 = { "sk_otis_head1","0" };
+cvar_t	sk_otis_head2 = { "sk_otis_head2","0" };
+cvar_t	sk_otis_head3 = { "sk_otis_head3","0" };
+
+cvar_t	sk_otis_chest1 = { "sk_otis_chest1","0" };
+cvar_t	sk_otis_chest2 = { "sk_otis_chest2","0" };
+cvar_t	sk_otis_chest3 = { "sk_otis_chest3","0" };
+
+cvar_t	sk_otis_stomach1 = { "sk_otis_stomach1","0" };
+cvar_t	sk_otis_stomach2 = { "sk_otis_stomach2","0" };
+cvar_t	sk_otis_stomach3 = { "sk_otis_stomach3","0" };
+
+cvar_t	sk_otis_leg1 = { "sk_otis_leg1","0" };
+cvar_t	sk_otis_leg2 = { "sk_otis_leg2","0" };
+cvar_t	sk_otis_leg3 = { "sk_otis_leg3","0" };
+
+cvar_t	sk_otis_arm1 = { "sk_otis_arm1","0" };
+cvar_t	sk_otis_arm2 = { "sk_otis_arm2","0" };
+cvar_t	sk_otis_arm3 = { "sk_otis_arm3","0" };
+
 // Bullsquid
 cvar_t	sk_bullsquid_health1 = {"sk_bullsquid_health1","0"};
 cvar_t	sk_bullsquid_health2 = {"sk_bullsquid_health2","0"};
@@ -630,6 +655,27 @@ cvar_t	sk_gonome_dmg_one_bite1 = { "sk_gonome_dmg_one_bite1", "0" };
 cvar_t	sk_gonome_dmg_one_bite2 = { "sk_gonome_dmg_one_bite2", "0" };
 cvar_t	sk_gonome_dmg_one_bite3 = { "sk_gonome_dmg_one_bite3", "0" };
 
+// ShockTrooper 
+cvar_t	sk_shocktrooper_health1 = { "sk_shocktrooper_health1", "0" };
+cvar_t	sk_shocktrooper_health2 = { "sk_shocktrooper_health2", "0" };
+cvar_t	sk_shocktrooper_health3 = { "sk_shocktrooper_health3", "0" };
+
+cvar_t	sk_shocktrooper_kick1 = { "sk_shocktrooper_kick1", "0" };
+cvar_t	sk_shocktrooper_kick2 = { "sk_shocktrooper_kick2", "0" };
+cvar_t	sk_shocktrooper_kick3 = { "sk_shocktrooper_kick3", "0" };
+
+cvar_t	sk_shocktrooper_gspeed1 = { "sk_shocktrooper_gspeed1", "0" };
+cvar_t	sk_shocktrooper_gspeed2 = { "sk_shocktrooper_gspeed2", "0" };
+cvar_t	sk_shocktrooper_gspeed3 = { "sk_shocktrooper_gspeed3", "0" };
+
+cvar_t	sk_shocktrooper_maxcharge1 = { "sk_shocktrooper_maxcharge1", "0" };
+cvar_t	sk_shocktrooper_maxcharge2 = { "sk_shocktrooper_maxcharge2", "0" };
+cvar_t	sk_shocktrooper_maxcharge3 = { "sk_shocktrooper_maxcharge3", "0" };
+
+cvar_t	sk_shocktrooper_rchgspeed1 = { "sk_shocktrooper_rchgspeed1", "0" };
+cvar_t	sk_shocktrooper_rchgspeed2 = { "sk_shocktrooper_rchgspeed2", "0" };
+cvar_t	sk_shocktrooper_rchgspeed3 = { "sk_shocktrooper_rchgspeed3", "0" };
+
 //Turret
 cvar_t	sk_turret_health1 = {"sk_turret_health1","0"};
 cvar_t	sk_turret_health2 = {"sk_turret_health2","0"};
@@ -770,6 +816,11 @@ cvar_t	sk_plr_shockroachs3 = { "sk_plr_shockroachs3", "0" };
 cvar_t	sk_plr_shockroachm1 = { "sk_plr_shockroachm1", "0" };
 cvar_t	sk_plr_shockroachm2 = { "sk_plr_shockroachm2", "0" };
 cvar_t	sk_plr_shockroachm3 = { "sk_plr_shockroachm3", "0" };
+
+// SPOREGRENADE
+cvar_t	sk_plr_spore1 = { "sk_plr_spore1", "0" };
+cvar_t	sk_plr_spore2 = { "sk_plr_spore2", "0" };
+cvar_t	sk_plr_spore3 = { "sk_plr_spore3", "0" };
 
 // HEALTH/CHARGE
 cvar_t	sk_suitcharger1	= { "sk_suitcharger1","0" };
@@ -938,6 +989,31 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_barniel_arm1);
 	CVAR_REGISTER(&sk_barniel_arm2);
 	CVAR_REGISTER(&sk_barniel_arm3);
+
+	// Otis Laurey
+	CVAR_REGISTER(&sk_otis_health1);
+	CVAR_REGISTER(&sk_otis_health2);
+	CVAR_REGISTER(&sk_otis_health3);
+
+	CVAR_REGISTER(&sk_otis_head1);
+	CVAR_REGISTER(&sk_otis_head2);
+	CVAR_REGISTER(&sk_otis_head3);
+
+	CVAR_REGISTER(&sk_otis_chest1);
+	CVAR_REGISTER(&sk_otis_chest2);
+	CVAR_REGISTER(&sk_otis_chest3);
+
+	CVAR_REGISTER(&sk_otis_stomach1);
+	CVAR_REGISTER(&sk_otis_stomach2);
+	CVAR_REGISTER(&sk_otis_stomach3);
+
+	CVAR_REGISTER(&sk_otis_leg1);
+	CVAR_REGISTER(&sk_otis_leg2);
+	CVAR_REGISTER(&sk_otis_leg3);
+
+	CVAR_REGISTER(&sk_otis_arm1);
+	CVAR_REGISTER(&sk_otis_arm2);
+	CVAR_REGISTER(&sk_otis_arm3);
 
 	// Bullsquid
 	CVAR_REGISTER ( &sk_bullsquid_health1 );
@@ -1456,6 +1532,27 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_gonome_dmg_one_bite2);
 	CVAR_REGISTER(&sk_gonome_dmg_one_bite3);
 
+	// ShockTrooper 
+	CVAR_REGISTER(&sk_shocktrooper_health1);
+	CVAR_REGISTER(&sk_shocktrooper_health2);
+	CVAR_REGISTER(&sk_shocktrooper_health3);
+
+	CVAR_REGISTER(&sk_shocktrooper_kick1);
+	CVAR_REGISTER(&sk_shocktrooper_kick2);
+	CVAR_REGISTER(&sk_shocktrooper_kick3);
+
+	CVAR_REGISTER(&sk_shocktrooper_gspeed1);
+	CVAR_REGISTER(&sk_shocktrooper_gspeed2);
+	CVAR_REGISTER(&sk_shocktrooper_gspeed3);
+
+	CVAR_REGISTER(&sk_shocktrooper_maxcharge1);
+	CVAR_REGISTER(&sk_shocktrooper_maxcharge2);
+	CVAR_REGISTER(&sk_shocktrooper_maxcharge3);
+
+	CVAR_REGISTER(&sk_shocktrooper_rchgspeed1);
+	CVAR_REGISTER(&sk_shocktrooper_rchgspeed2);
+	CVAR_REGISTER(&sk_shocktrooper_rchgspeed3);
+
 	//Turret
 	CVAR_REGISTER ( &sk_turret_health1 );
 	CVAR_REGISTER ( &sk_turret_health2 );
@@ -1596,6 +1693,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER(&sk_plr_shockroachm1);
 	CVAR_REGISTER(&sk_plr_shockroachm2);
 	CVAR_REGISTER(&sk_plr_shockroachm3);
+
+	// SPOREGRENADE
+	CVAR_REGISTER(&sk_plr_spore1);
+	CVAR_REGISTER(&sk_plr_spore2);
+	CVAR_REGISTER(&sk_plr_spore3);
 
 	// HEALTH/SUIT CHARGE DISTRIBUTION
 	CVAR_REGISTER ( &sk_suitcharger1 );

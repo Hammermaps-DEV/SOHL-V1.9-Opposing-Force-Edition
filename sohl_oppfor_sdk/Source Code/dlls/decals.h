@@ -62,6 +62,9 @@ enum decal_e
 	DECAL_BIGSHOT5,
 	DECAL_SPIT1,
 	DECAL_SPIT2,
+	DECAL_SPORESPLAT1,
+	DECAL_SPORESPLAT2,
+	DECAL_SPORESPLAT3,
 	DECAL_BPROOF1,		// Bulletproof glass decal
 	DECAL_GARGSTOMP1,	// Gargantua stomp crack
 	DECAL_SMALLSCORCH1,	// Small scorch mark

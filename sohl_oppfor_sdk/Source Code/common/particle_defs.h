@@ -299,6 +299,7 @@ enum ParticleIDs
 
 	// Explosions FX
 	iExplosionDefault,		// Fograin92: Default explosion (FULL FX)
+	iDefaultSporeExplosion,  // Spore Explosion
 
 	// BSP Impact
 	iImpactBSPconcrete,

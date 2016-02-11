@@ -128,7 +128,7 @@ void CLeech::Spawn( void )
 	m_fPathBlocked = FALSE;
 	SetActivity( ACT_SWIM );
 	SetState( MONSTERSTATE_IDLE );
-	m_stateTime = gpGlobals->time + RANDOM_FLOAT( 1, 5 );
+	m_stateTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 1, 5 );
 }
 
 
@@ -160,13 +160,13 @@ void CLeech::RecalculateWaterlevel( void )
 	m_top = m_bottom * 0.2 + m_top * 0.8;
 	m_bottom = newBottom;
 	m_height = RANDOM_FLOAT( m_bottom, m_top );
-	m_waterTime = gpGlobals->time + RANDOM_FLOAT( 5, 7 );
+	m_waterTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 5, 7 );
 }
 
 
 void CLeech::SwitchLeechState( void )
 {
-	m_stateTime = gpGlobals->time + RANDOM_FLOAT( 3, 6 );
+	m_stateTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 3, 6 );
 	if ( m_MonsterState == MONSTERSTATE_COMBAT )
 	{
 		m_hEnemy = NULL;
@@ -182,7 +182,7 @@ void CLeech::SwitchLeechState( void )
 		{
 			m_hEnemy = pEnemy;
 			SetState( MONSTERSTATE_COMBAT );
-			m_stateTime = gpGlobals->time + RANDOM_FLOAT( 18, 25 );
+			m_stateTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 18, 25 );
 			AlertSound();
 		}
 	}
@@ -200,10 +200,10 @@ int CLeech::IRelationship( CBaseEntity *pTarget )
 
 void CLeech::AttackSound( void )
 {
-	if ( gpGlobals->time > m_attackSoundTime )
+	if ( UTIL_GlobalTimeBase() > m_attackSoundTime )
 	{
 		EMIT_SOUND_DYN ( ENT(pev), CHAN_VOICE, pAttackSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackSounds)-1) ], 1.0, ATTN_NORM, 0, PITCH_NORM );
-		m_attackSoundTime = gpGlobals->time + 0.5;
+		m_attackSoundTime = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
 
@@ -334,7 +334,7 @@ float CLeech::ObstacleDistance( CBaseEntity *pTarget )
 		}
 	}
 
-	if ( m_sideTime < gpGlobals->time )
+	if ( m_sideTime < UTIL_GlobalTimeBase() )
 	{
 		// extra wide checks
 		vecTest = pev->origin + gpGlobals->v_right * LEECH_SIZEX * 2 + gpGlobals->v_forward * LEECH_CHECK_DIST;
@@ -348,7 +348,7 @@ float CLeech::ObstacleDistance( CBaseEntity *pTarget )
 			return tr.flFraction;
 
 		// Didn't hit either side, so stop testing for another 0.5 - 1 seconds
-		m_sideTime = gpGlobals->time + RANDOM_FLOAT(0.5,1);
+		m_sideTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5,1);
 	}
 	return 1.0;
 }
@@ -461,7 +461,7 @@ void CLeech::UpdateMotion( void )
                     	pev->gravity = 0.02;
 			pev->takedamage    += 2;
                     }
-		m_waterTime = gpGlobals->time + 2;	// Recalc again soon, water may be rising
+		m_waterTime = UTIL_GlobalTimeBase() + 2;	// Recalc again soon, water may be rising
 	}
 
 	if ( m_Activity != m_IdealActivity )
@@ -514,10 +514,10 @@ void CLeech::SwimThink( void )
 
 	targetSpeed = LEECH_SWIM_SPEED;
 
-	if ( m_waterTime < gpGlobals->time )
+	if ( m_waterTime < UTIL_GlobalTimeBase() )
 		RecalculateWaterlevel();
 
-	if ( m_stateTime < gpGlobals->time )
+	if ( m_stateTime < UTIL_GlobalTimeBase() )
 		SwitchLeechState();
 
 	ClearConditions( bits_COND_CAN_MELEE_ATTACK1 );
@@ -556,11 +556,11 @@ void CLeech::SwimThink( void )
 		break;
 
 	default:
-		if ( m_zTime < gpGlobals->time )
+		if ( m_zTime < UTIL_GlobalTimeBase() )
 		{
 			float newHeight = RANDOM_FLOAT( m_bottom, m_top );
 			m_height = 0.5 * m_height + 0.5 * newHeight;
-			m_zTime = gpGlobals->time + RANDOM_FLOAT( 1, 4 );
+			m_zTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 1, 4 );
 		}
 		if ( RANDOM_LONG( 0, 100 ) < 10 )
 			targetYaw = RANDOM_LONG( -30, 30 );

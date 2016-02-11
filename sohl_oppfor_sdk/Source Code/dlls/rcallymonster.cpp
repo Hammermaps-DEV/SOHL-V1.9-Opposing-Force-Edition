@@ -422,7 +422,7 @@ void CRCAllyMonster :: StartTask( Task_t *pTask )
 	case TASK_TLK_LOOK_AT_CLIENT:
 	case TASK_TLK_CLIENT_STARE:
 		// track head to the client for a while.
-		m_flWaitFinished = gpGlobals->time + pTask->flData;
+		m_flWaitFinished = UTIL_GlobalTimeBase() + pTask->flData;
 		break;
 
 	case TASK_TLK_EYECONTACT:
@@ -486,7 +486,7 @@ void CRCAllyMonster :: StartTask( Task_t *pTask )
 			else if ( FindCover( pev->origin, pev->view_ofs, 0, CoverRadius() ) )
 			{
 				// then try for plain ole cover
-				m_flMoveWaitFinished = gpGlobals->time + 2;
+				m_flMoveWaitFinished = UTIL_GlobalTimeBase() + 2;
 				TaskComplete();
 			}
 			else
@@ -553,7 +553,7 @@ void CRCAllyMonster :: RunTask( Task_t *pTask )
 			}
 		}
 
-		if ( gpGlobals->time > m_flWaitFinished )
+		if ( UTIL_GlobalTimeBase() > m_flWaitFinished )
 		{
 			TaskComplete();
 		}
@@ -569,7 +569,7 @@ void CRCAllyMonster :: RunTask( Task_t *pTask )
 				MakeIdealYaw ( pPlayer->v.origin );
 				ChangeYaw ( pev->yaw_speed );
 				IdleHeadTurn( pPlayer->v.origin );
-				if ( gpGlobals->time > m_flWaitFinished && FlYawDiff() < 10 )
+				if ( UTIL_GlobalTimeBase() > m_flWaitFinished && FlYawDiff() < 10 )
 				{
 					TaskComplete();
 				}
@@ -584,7 +584,7 @@ void CRCAllyMonster :: RunTask( Task_t *pTask )
 	case TASK_TLK_EYECONTACT:
 		if (!IsMoving() && IsTalking() && m_hTalkTarget != NULL)
 		{
-			// ALERT( at_console, "waiting %f\n", m_flStopTalkTime - gpGlobals->time );
+			// ALERT( at_console, "waiting %f\n", m_flStopTalkTime - UTIL_GlobalTimeBase() );
 			IdleHeadTurn( m_hTalkTarget->pev->origin );
 		}
 		else
@@ -964,7 +964,7 @@ int CRCAllyMonster :: FOkToSpeak( void )
 	}
 
 	// if someone else is talking, don't speak
-	if (gpGlobals->time <= CRCAllyMonster::g_talkWaitTime)
+	if (UTIL_GlobalTimeBase() <= CRCAllyMonster::g_talkWaitTime)
 		return FALSE;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
@@ -1180,7 +1180,7 @@ void CRCAllyMonster::PlayScriptedSentence( const char *pszSentence, float durati
 		ShutUpFriends();
 
 	ClearConditions( bits_COND_CLIENT_PUSH );	// Forget about moving!  I've got something to say!
-	m_useTime = gpGlobals->time + duration;
+	m_useTime = UTIL_GlobalTimeBase() + duration;
 	PlaySentence( pszSentence, duration, volume, attenuation );
 
 	m_hTalkTarget = pListener;
@@ -1193,7 +1193,7 @@ void CRCAllyMonster::PlaySentence( const char *pszSentence, float duration, floa
 
 	Talk ( duration );
 
-	CRCAllyMonster::g_talkWaitTime = gpGlobals->time + duration + 2.0;
+	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + duration + 2.0;
 	if ( pszSentence[0] == '!' )
 		EMIT_SOUND_DYN( edict(), CHAN_VOICE, pszSentence, volume, attenuation, 0, GetVoicePitch());
 	else
@@ -1212,11 +1212,11 @@ void CRCAllyMonster :: Talk( float flDuration )
 	if ( flDuration <= 0 )
 	{
 		// no duration :( 
-		m_flStopTalkTime = gpGlobals->time + 3;
+		m_flStopTalkTime = UTIL_GlobalTimeBase() + 3;
 	}
 	else
 	{
-		m_flStopTalkTime = gpGlobals->time + flDuration;
+		m_flStopTalkTime = UTIL_GlobalTimeBase() + flDuration;
 	}
 }
 
@@ -1301,7 +1301,7 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 			if (!FBitSet(m_bitsSaid, bit_saidWoundLight) && (pev->health <= (pev->max_health * 0.75)))
 			{
 				//SENTENCEG_PlayRndSz( ENT(pev), m_szGrp[TLK_WOUND], 1.0, ATTN_IDLE, 0, GetVoicePitch() );
-				//CRCAllyMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(2.8, 3.2);
+				//CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(2.8, 3.2);
 				PlaySentence( m_szGrp[TLK_WOUND], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE );
 				SetBits(m_bitsSaid, bit_saidWoundLight);
 				return slIdleStand;
@@ -1310,7 +1310,7 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 			else if (!FBitSet(m_bitsSaid, bit_saidWoundHeavy) && (pev->health <= (pev->max_health * 0.5)))
 			{
 				//SENTENCEG_PlayRndSz( ENT(pev), m_szGrp[TLK_MORTAL], 1.0, ATTN_IDLE, 0, GetVoicePitch() );
-				//CRCAllyMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(2.8, 3.2);
+				//CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(2.8, 3.2);
 				PlaySentence( m_szGrp[TLK_MORTAL], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE );
 				SetBits(m_bitsSaid, bit_saidWoundHeavy);
 				return slIdleStand;
@@ -1367,7 +1367,7 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 //=========================================================
 BOOL CRCAllyMonster :: IsTalking( void )
 {
-	if ( m_flStopTalkTime > gpGlobals->time )
+	if ( m_flStopTalkTime > UTIL_GlobalTimeBase() )
 	{
 		return TRUE;
 	}
@@ -1393,7 +1393,7 @@ void CRCAllyMonster :: TrySmellTalk( void )
 		return;
 
 	// clear smell bits periodically
-	if ( gpGlobals->time > m_flLastSaidSmelled  )
+	if ( UTIL_GlobalTimeBase() > m_flLastSaidSmelled  )
 	{
 //		ALERT ( at_aiconsole, "Clear smell bits\n" );
 		ClearBits(m_bitsSaid, bit_saidSmelled);
@@ -1402,7 +1402,7 @@ void CRCAllyMonster :: TrySmellTalk( void )
 	if (!FBitSet(m_bitsSaid, bit_saidSmelled) && HasConditions ( bits_COND_SMELL ))
 	{
 		PlaySentence( m_szGrp[TLK_SMELL], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE );
-		m_flLastSaidSmelled = gpGlobals->time + 60;// don't talk about the stinky for a while.
+		m_flLastSaidSmelled = UTIL_GlobalTimeBase() + 60;// don't talk about the stinky for a while.
 		SetBits(m_bitsSaid, bit_saidSmelled);
 	}
 }
@@ -1473,7 +1473,7 @@ BOOL CRCAllyMonster::CanFollow( void )
 void CRCAllyMonster :: FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
 	// Don't allow use during a scripted_sentence
-	if (m_useTime > gpGlobals->time)
+	if (m_useTime > UTIL_GlobalTimeBase())
 		return;
 
 	//ALERT(at_console,"Talkmonster was Used: ");
@@ -1515,7 +1515,7 @@ void CRCAllyMonster :: FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCalle
 void CRCAllyMonster :: GruntHealerCall( CBaseEntity *pGrunt )
 {
 	// Don't allow use during a scripted_sentence
-	if ( m_useTime > gpGlobals->time )
+	if ( m_useTime > UTIL_GlobalTimeBase() )
 		return;
 
 	ALERT ( at_console, "This is the medic!\n" );

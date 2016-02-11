@@ -147,7 +147,7 @@ void CRecruit :: RunTask( Task_t *pTask )
 	{
 	case TASK_WAIT:
 		// look at who I'm talking to
-		if (m_flTalkTime > gpGlobals->time && m_hTalkTarget != NULL)
+		if (m_flTalkTime > UTIL_GlobalTimeBase() && m_hTalkTarget != NULL)
 		{
 			float yaw = VecToYaw(m_hTalkTarget->pev->origin - pev->origin) - pev->angles.y;
 
@@ -213,6 +213,6 @@ void CRecruit::PlayScriptedSentence( const char *pszSentence, float duration, fl
 {
 	CBaseMonster::PlayScriptedSentence( pszSentence, duration, volume, attenuation, bConcurrent, pListener );
 
-	m_flTalkTime = gpGlobals->time + duration;
+	m_flTalkTime = UTIL_GlobalTimeBase() + duration;
 	m_hTalkTarget = pListener;
 }

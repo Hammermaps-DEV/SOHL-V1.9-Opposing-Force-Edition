@@ -178,6 +178,9 @@ void CHalfLifeMultiplay::RefreshSkillData( void )
 
 	// Shockroach
 	gSkillData.plrDmgShock = 10;
+
+	// Spore
+	gSkillData.plrDmgSpore = 50;
 }
 
 // longest the intermission can last, in seconds
@@ -212,10 +215,10 @@ void CHalfLifeMultiplay :: Think ( void )
 		m_flIntermissionEndTime = g_flIntermissionStartTime + mp_chattime.value;
 
 		// check to see if we should change levels now
-		if ( m_flIntermissionEndTime < gpGlobals->time )
+		if ( m_flIntermissionEndTime < UTIL_GlobalTimeBase() )
 		{
 			if ( m_iEndIntermissionButtonHit  // check that someone has pressed a key, or the max intermission time is over
-				|| ( ( g_flIntermissionStartTime + MAX_INTERMISSION_TIME ) < gpGlobals->time) ) 
+				|| ( ( g_flIntermissionStartTime + MAX_INTERMISSION_TIME ) < UTIL_GlobalTimeBase()) ) 
 				ChangeLevel(); // intermission is over
 		}
 
@@ -225,9 +228,9 @@ void CHalfLifeMultiplay :: Think ( void )
 	float flTimeLimit = timelimit.value * 60;
 	float flFragLimit = fraglimit.value;
 
-	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - gpGlobals->time ) : 0);
+	time_remaining = (int)(flTimeLimit ? ( flTimeLimit - UTIL_GlobalTimeBase() ) : 0);
 	
-	if ( flTimeLimit != 0 && gpGlobals->time >= flTimeLimit )
+	if ( flTimeLimit != 0 && UTIL_GlobalTimeBase() >= flTimeLimit )
 	{
 		GoToIntermission();
 		return;
@@ -595,7 +598,7 @@ BOOL CHalfLifeMultiplay :: FPlayerCanRespawn( CBasePlayer *pPlayer )
 //=========================================================
 float CHalfLifeMultiplay :: FlPlayerSpawnTime( CBasePlayer *pPlayer )
 {
-	return gpGlobals->time;//now!
+	return UTIL_GlobalTimeBase();//now!
 }
 
 BOOL CHalfLifeMultiplay :: AllowAutoTargetCrosshair( void )
@@ -672,7 +675,7 @@ void CHalfLifeMultiplay :: PlayerKilled( CBasePlayer *pVictim, entvars_t *pKille
 		MESSAGE_END();
 
 		// let the killer paint another decal as soon as he'd like.
-		PK->m_flNextDecalTime = gpGlobals->time;
+		PK->m_flNextDecalTime = UTIL_GlobalTimeBase();
 	}
 }
 
@@ -897,11 +900,11 @@ float CHalfLifeMultiplay :: FlWeaponRespawnTime( CBasePlayerItem *pWeapon )
 		// make sure it's only certain weapons
 		if ( !(pWeapon->iFlags() & ITEM_FLAG_LIMITINWORLD) )
 		{
-			return gpGlobals->time + 0;		// weapon respawns almost instantly
+			return UTIL_GlobalTimeBase() + 0;		// weapon respawns almost instantly
 		}
 	}
 
-	return gpGlobals->time + WEAPON_RESPAWN_TIME;
+	return UTIL_GlobalTimeBase() + WEAPON_RESPAWN_TIME;
 }
 
 // when we are within this close to running out of entities,  items 
@@ -1012,7 +1015,7 @@ int CHalfLifeMultiplay::ItemShouldRespawn( CItem *pItem )
 //=========================================================
 float CHalfLifeMultiplay::FlItemRespawnTime( CItem *pItem )
 {
-	return gpGlobals->time + ITEM_RESPAWN_TIME;
+	return UTIL_GlobalTimeBase() + ITEM_RESPAWN_TIME;
 }
 
 //=========================================================
@@ -1056,7 +1059,7 @@ int CHalfLifeMultiplay::AmmoShouldRespawn( CBasePlayerAmmo *pAmmo )
 //=========================================================
 float CHalfLifeMultiplay::FlAmmoRespawnTime( CBasePlayerAmmo *pAmmo )
 {
-	return gpGlobals->time + AMMO_RESPAWN_TIME;
+	return UTIL_GlobalTimeBase() + AMMO_RESPAWN_TIME;
 }
 
 //=========================================================
@@ -1155,8 +1158,8 @@ void CHalfLifeMultiplay :: GoToIntermission( void )
 	else if ( time > MAX_INTERMISSION_TIME )
 		CVAR_SET_STRING( "mp_chattime", UTIL_dtos1( MAX_INTERMISSION_TIME ) );
 
-	m_flIntermissionEndTime = gpGlobals->time + ( (int)mp_chattime.value );
-	g_flIntermissionStartTime = gpGlobals->time;
+	m_flIntermissionEndTime = UTIL_GlobalTimeBase() + ( (int)mp_chattime.value );
+	g_flIntermissionStartTime = UTIL_GlobalTimeBase();
 
 	g_fGameOver = TRUE;
 	m_iEndIntermissionButtonHit = FALSE;

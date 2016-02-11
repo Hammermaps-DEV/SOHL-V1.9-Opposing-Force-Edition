@@ -741,10 +741,10 @@ int CScientist :: ISoundMask ( void )
 //=========================================================
 void CScientist :: PainSound ( void )
 {
-	if (gpGlobals->time < m_painTime )
+	if (UTIL_GlobalTimeBase() < m_painTime )
 		return;
 	
-	m_painTime = gpGlobals->time + RANDOM_FLOAT(0.5, 0.75);
+	m_painTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5, 0.75);
 
 	switch (RANDOM_LONG(0,4))
 	{
@@ -862,7 +862,7 @@ Schedule_t *CScientist :: GetSchedule ( void )
 		if ( pEnemy )
 		{
 			if ( HasConditions( bits_COND_SEE_ENEMY ) )
-				m_fearTime = gpGlobals->time;
+				m_fearTime = UTIL_GlobalTimeBase();
 			else if ( DisregardEnemy( pEnemy ) )		// After 15 seconds of being hidden, return to alert
 			{
 				m_hEnemy = NULL;
@@ -887,9 +887,9 @@ Schedule_t *CScientist :: GetSchedule ( void )
 			{
 				if ( pSound->m_iType & (bits_SOUND_DANGER | bits_SOUND_COMBAT) )
 				{
-					if ( gpGlobals->time - m_fearTime > 3 )	// Only cower every 3 seconds or so
+					if ( UTIL_GlobalTimeBase() - m_fearTime > 3 )	// Only cower every 3 seconds or so
 					{
-						m_fearTime = gpGlobals->time;		// Update last fear
+						m_fearTime = UTIL_GlobalTimeBase();		// Update last fear
 						return GetScheduleOfType( SCHED_STARTLE );	// This will just duck for a second
 					}
 				}
@@ -1004,7 +1004,7 @@ MONSTERSTATE CScientist :: GetIdealState ( void )
 
 				if ( HasConditions ( bits_COND_SEE_ENEMY ) )
 				{
-					m_fearTime = gpGlobals->time;
+					m_fearTime = UTIL_GlobalTimeBase();
 					m_IdealMonsterState = MONSTERSTATE_COMBAT;
 					return m_IdealMonsterState;
 				}
@@ -1020,7 +1020,7 @@ MONSTERSTATE CScientist :: GetIdealState ( void )
 
 BOOL CScientist::CanHeal( void )
 { 
-	if ( (m_healTime > gpGlobals->time) || (m_hTargetEnt == NULL) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.5)) )
+	if ( (m_healTime > UTIL_GlobalTimeBase()) || (m_hTargetEnt == NULL) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.5)) )
 		return FALSE;
 
 	return TRUE;
@@ -1037,7 +1037,7 @@ void CScientist::Heal( void )
 
 	m_hTargetEnt->TakeHealth( gSkillData.scientistHeal, DMG_GENERIC );
 	// Don't heal again for 1 minute
-	m_healTime = gpGlobals->time + 60;
+	m_healTime = UTIL_GlobalTimeBase() + 60;
 }
 
 int CScientist::FriendNumber( int arrayNumber )
@@ -1236,7 +1236,7 @@ void CSittingScientist :: SittingThink( void )
 		int i = RANDOM_LONG(0,99);
 		m_headTurn = 0;
 		
-		if (m_flResponseDelay && gpGlobals->time > m_flResponseDelay)
+		if (m_flResponseDelay && UTIL_GlobalTimeBase() > m_flResponseDelay)
 		{
 			// respond to question
 			IdleRespond();
@@ -1304,7 +1304,7 @@ void CSittingScientist :: SittingThink( void )
 // prepare sitting scientist to answer a question
 void CSittingScientist :: SetAnswerQuestion( CTalkMonster *pSpeaker )
 {
-	m_flResponseDelay = gpGlobals->time + RANDOM_FLOAT(3, 4);
+	m_flResponseDelay = UTIL_GlobalTimeBase() + RANDOM_FLOAT(3, 4);
 	m_hTalkTarget = (CBaseMonster *)pSpeaker;
 }
 
@@ -1322,7 +1322,7 @@ int CSittingScientist :: FIdleSpeak ( void )
 		return FALSE;
 
 	// set global min delay for next conversation
-	CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(4.8, 5.2);
+	CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(4.8, 5.2);
 
 	pitch = GetVoicePitch();
 		
@@ -1339,7 +1339,7 @@ int CSittingScientist :: FIdleSpeak ( void )
 		IdleHeadTurn(pentFriend->pev->origin);
 		SENTENCEG_PlayRndSz( ENT(pev), m_szGrp[TLK_PQUESTION], 1.0, ATTN_IDLE, 0, pitch );
 		// set global min delay for next conversation
-		CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(4.8, 5.2);
+		CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(4.8, 5.2);
 		return TRUE;
 	}
 
@@ -1348,7 +1348,7 @@ int CSittingScientist :: FIdleSpeak ( void )
 	{
 		SENTENCEG_PlayRndSz( ENT(pev), m_szGrp[TLK_PIDLE], 1.0, ATTN_IDLE, 0, pitch );
 		// set global min delay for next conversation
-		CTalkMonster::g_talkWaitTime = gpGlobals->time + RANDOM_FLOAT(4.8, 5.2);
+		CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(4.8, 5.2);
 		return TRUE;
 	}
 

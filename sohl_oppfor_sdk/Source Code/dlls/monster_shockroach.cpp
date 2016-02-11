@@ -82,7 +82,7 @@ void CShockRoach::Spawn() {
 	pev->yaw_speed = 5;// should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
 	m_MonsterState = MONSTERSTATE_NONE;
-	m_flDie = gpGlobals->time + gSkillData.sroachLifespan;
+	m_flDie = UTIL_GlobalTimeBase() + gSkillData.sroachLifespan;
 	m_flPitch = 100; //basic voice pitch for this monster
 
 	MonsterInit();
@@ -170,7 +170,7 @@ void CShockRoach::LeapTouch(CBaseEntity *pOther) {
 //=========================================================
 void CShockRoach::PrescheduleThink(void) {
 	// Kill Shock-Roach when in out a specific period
-	if (m_iDies && gpGlobals->time >= m_flDie) {
+	if (m_iDies && UTIL_GlobalTimeBase() >= m_flDie) {
 		pev->health = -1;
 		Killed(pev, 0);
 		return;
@@ -224,7 +224,7 @@ void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			}
 
 			pev->velocity = vecJumpDir;
-			m_flNextAttack = gpGlobals->time + 2;
+			m_flNextAttack = UTIL_GlobalTimeBase() + 2;
 		}
 		break;
 		default: {

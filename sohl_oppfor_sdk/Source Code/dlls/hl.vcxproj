@@ -24,9 +24,12 @@
     <ClCompile Include="ammo_mp5clip.cpp" />
     <ClCompile Include="ammo_mp5grenades.cpp" />
     <ClCompile Include="ammo_rpgclip.cpp" />
+    <ClCompile Include="ammo_spore.cpp" />
+    <ClCompile Include="ammo_spore_plant.cpp" />
+    <ClCompile Include="baseactanimating.cpp" />
     <ClCompile Include="env_electrified_wire.cpp" />
     <ClCompile Include="env_rope_segment.cpp" />
-    <ClCompile Include="grapple_tonguetip.cpp" />
+    <ClCompile Include="proj_grapple_tonguetip.cpp" />
     <ClCompile Include="item_antidote.cpp" />
     <ClCompile Include="item_battery.cpp" />
     <ClCompile Include="item_generic.cpp" />
@@ -74,6 +77,7 @@
     <ClCompile Include="monster_pitworm.cpp" />
     <ClCompile Include="monster_recruit.cpp" />
     <ClCompile Include="monster_shockroach.cpp" />
+    <ClCompile Include="monster_shocktrooper.cpp" />
     <ClCompile Include="monster_skeleton_dead.cpp" />
     <ClCompile Include="monster_zombie_barney.cpp" />
     <ClCompile Include="monster_zombie_barney_dead.cpp" />
@@ -89,10 +93,12 @@
     <ClCompile Include="monster_zombie_soldier_helmet_dead.cpp" />
     <ClCompile Include="particle_emitter.cpp" />
     <ClCompile Include="proj_gonomespit.cpp" />
+    <ClCompile Include="proj_grenade.cpp" />
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
     <ClCompile Include="proj_plrocket.cpp" />
     <ClCompile Include="proj_shock.cpp" />
+    <ClCompile Include="proj_sporegrenade.cpp" />
     <ClCompile Include="proj_voltigore_energy_ball.cpp" />
     <ClCompile Include="rcallymonster.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
@@ -111,7 +117,6 @@
     <ClCompile Include="monster_gargantua.cpp" />
     <ClCompile Include="weapon_gauss.cpp" />
     <ClCompile Include="monster_genericmonster.cpp" />
-    <ClCompile Include="ggrenade.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="weapon_glock.cpp" />
     <ClCompile Include="monster_gman.cpp" />
@@ -121,7 +126,7 @@
     <ClCompile Include="monster_headcrab.cpp" />
     <ClCompile Include="item_healthkit.cpp" />
     <ClCompile Include="monster_hgrunt.cpp" />
-    <ClCompile Include="hornet.cpp" />
+    <ClCompile Include="proj_hornet.cpp" />
     <ClCompile Include="weapon_hornetgun.cpp" />
     <ClCompile Include="monster_houndeye.cpp" />
     <ClCompile Include="h_ai.cpp" />
@@ -170,6 +175,7 @@
     <ClCompile Include="soundent.cpp" />
     <ClCompile Include="spectator.cpp" />
     <ClCompile Include="squadmonster.cpp" />
+    <ClCompile Include="weapon_sporelauncher.cpp" />
     <ClCompile Include="weapon_squeakgrenade.cpp" />
     <ClCompile Include="stats.cpp" />
     <ClCompile Include="subs.cpp" />
@@ -182,10 +188,29 @@
     <ClCompile Include="util.cpp" />
     <ClCompile Include="weapons.cpp" />
     <ClCompile Include="world.cpp" />
-    <ClCompile Include="xen.cpp" />
     <ClCompile Include="monster_zombie.cpp" />
+    <ClCompile Include="xen_hair.cpp" />
+    <ClCompile Include="xen_hull.cpp" />
+    <ClCompile Include="xen_plantlight.cpp" />
+    <ClCompile Include="xen_spore.cpp" />
+    <ClCompile Include="xen_tree.cpp" />
+    <ClCompile Include="xen_ttrigger.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\engine\anorms.h" />
+    <ClInclude Include="..\engine\apiproxy.h" />
+    <ClInclude Include="..\engine\cdll_int.h" />
+    <ClInclude Include="..\engine\custom.h" />
+    <ClInclude Include="..\engine\customentity.h" />
+    <ClInclude Include="..\engine\edict.h" />
+    <ClInclude Include="..\engine\eiface.h" />
+    <ClInclude Include="..\engine\keydefs.h" />
+    <ClInclude Include="..\engine\particle_emitter.h" />
+    <ClInclude Include="..\engine\progdefs.h" />
+    <ClInclude Include="..\engine\progs.h" />
+    <ClInclude Include="..\engine\shake.h" />
+    <ClInclude Include="..\engine\studio.h" />
+    <ClInclude Include="..\game_shared\voice_gamemgr.h" />
     <ClInclude Include="..\pm_shared\pm_debug.h" />
     <ClInclude Include="..\pm_shared\pm_defs.h" />
     <ClInclude Include="..\pm_shared\pm_info.h" />
@@ -195,6 +220,7 @@
     <ClInclude Include="activity.h" />
     <ClInclude Include="activitymap.h" />
     <ClInclude Include="animation.h" />
+    <ClInclude Include="baseactanimating.h" />
     <ClInclude Include="basemonster.h" />
     <ClInclude Include="cbase.h" />
     <ClInclude Include="cdll_dll.h" />
@@ -209,8 +235,9 @@
     <ClInclude Include="func_break.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
-    <ClInclude Include="grapple_tonguetip.h" />
-    <ClInclude Include="hornet.h" />
+    <ClInclude Include="proj_grapple_tonguetip.h" />
+    <ClInclude Include="proj_grenade.h" />
+    <ClInclude Include="proj_hornet.h" />
     <ClInclude Include="items.h" />
     <ClInclude Include="item_generic.h" />
     <ClInclude Include="locus.h" />
@@ -265,6 +292,7 @@
     <ClInclude Include="monster_roach.h" />
     <ClInclude Include="monster_scientist.h" />
     <ClInclude Include="monster_shockroach.h" />
+    <ClInclude Include="monster_shocktrooper.h" />
     <ClInclude Include="monster_skeleton_dead.h" />
     <ClInclude Include="monster_tentacle.h" />
     <ClInclude Include="monster_zombie.h" />
@@ -289,6 +317,7 @@
     <ClInclude Include="proj_bolt.h" />
     <ClInclude Include="proj_plrocket.h" />
     <ClInclude Include="proj_shock.h" />
+    <ClInclude Include="proj_sporegrenade.h" />
     <ClInclude Include="proj_voltigore_energy_ball.h" />
     <ClInclude Include="rcallymonster.h" />
     <ClInclude Include="saverestore.h" />
@@ -312,6 +341,7 @@
     <ClInclude Include="weapon_gauss.h" />
     <ClInclude Include="weapon_glock.h" />
     <ClInclude Include="weapon_grapple.h" />
+    <ClInclude Include="weapon_handgrenade.h" />
     <ClInclude Include="weapon_hornetgun.h" />
     <ClInclude Include="weapon_knife.h" />
     <ClInclude Include="weapon_mp5.h" />
@@ -320,6 +350,12 @@
     <ClInclude Include="weapon_rpg.h" />
     <ClInclude Include="weapon_shockrifle.h" />
     <ClInclude Include="weapon_shotgun.h" />
+    <ClInclude Include="weapon_sporelauncher.h" />
+    <ClInclude Include="xen_hair.h" />
+    <ClInclude Include="xen_hull.h" />
+    <ClInclude Include="xen_plantlight.h" />
+    <ClInclude Include="xen_spore.h" />
+    <ClInclude Include="xen_ttrigger.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1C9F46EB-3FE6-41D1-9108-B30FCA334712}</ProjectGuid>

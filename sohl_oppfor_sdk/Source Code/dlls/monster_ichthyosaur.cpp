@@ -257,7 +257,7 @@ int	CIchthyosaur :: Classify ( void )
 //=========================================================
 BOOL CIchthyosaur :: CheckMeleeAttack1 ( float flDot, float flDist )
 {
-	if ( flDot >= 0.7 && m_flEnemyTouched > gpGlobals->time - 0.2 )
+	if ( flDot >= 0.7 && m_flEnemyTouched > UTIL_GlobalTimeBase() - 0.2 )
 	{
 		return TRUE;
 	}
@@ -269,7 +269,7 @@ void CIchthyosaur::BiteTouch( CBaseEntity *pOther )
 	// bite if we hit who we want to eat
 	if ( pOther == m_hEnemy ) 
 	{
-		m_flEnemyTouched = gpGlobals->time;
+		m_flEnemyTouched = UTIL_GlobalTimeBase();
 		m_bOnAttack = TRUE;
 	}
 }
@@ -352,7 +352,7 @@ void CIchthyosaur :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			{
 				CBaseEntity *pHurt = m_hEnemy;
 
-				if (m_flEnemyTouched < gpGlobals->time - 0.2 && (m_hEnemy->BodyTarget( pev->origin ) - pev->origin).Length() > (32+16+32))
+				if (m_flEnemyTouched < UTIL_GlobalTimeBase() - 0.2 && (m_hEnemy->BodyTarget( pev->origin ) - pev->origin).Length() > (32+16+32))
 					break;
 
 				Vector vecShootDir = ShootAtEnemy( pev->origin );
@@ -629,14 +629,14 @@ void CIchthyosaur :: RunTask ( Task_t *pTask )
 		}
 		else
 		{
-			m_flNextAlert = gpGlobals->time + 0.2;
+			m_flNextAlert = UTIL_GlobalTimeBase() + 0.2;
 		}
 
-		if (m_flNextAlert < gpGlobals->time)
+		if (m_flNextAlert < UTIL_GlobalTimeBase())
 		{
 			// ALERT( at_console, "AlertSound()\n");
 			AlertSound( );
-			m_flNextAlert = gpGlobals->time + RANDOM_FLOAT( 3, 5 );
+			m_flNextAlert = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 3, 5 );
 		}
 
 		break;
@@ -786,12 +786,12 @@ void CIchthyosaur::MonsterThink ( void )
 			Swim( );
 
 			// blink the eye
-			if (m_flBlink < gpGlobals->time)
+			if (m_flBlink < UTIL_GlobalTimeBase())
 			{
 				pev->skin = EYE_CLOSED;
-				if (m_flBlink + 0.2 < gpGlobals->time)
+				if (m_flBlink + 0.2 < UTIL_GlobalTimeBase())
 				{
-					m_flBlink = gpGlobals->time + RANDOM_FLOAT( 3, 4 );
+					m_flBlink = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 3, 4 );
 					if (m_bOnAttack)
 						pev->skin = EYE_MAD;
 					else

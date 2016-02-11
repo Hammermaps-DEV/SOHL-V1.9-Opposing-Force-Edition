@@ -17,6 +17,7 @@
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
 // Version: 1.0 / Build: 00002 / Date: 01.02.2016
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -72,7 +73,9 @@ const char *CBarney::pDeathSounds[] = {
 
 const char *CBarney::pAttackSounds[] = {
 	"barney/ba_attack1.wav",
-	"barney/ba_attack2.wav"
+	"barney/ba_attack2.wav",
+	"weapons/357_shot1.wav",
+	"weapons/357_shot2.wav"
 };
 
 //=========================================================
@@ -299,10 +302,10 @@ void CBarney::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 // PainSound
 //=========================================================
 void CBarney::PainSound(void) {
-	if (gpGlobals->time < m_painTime)
+	if (UTIL_GlobalTimeBase() < m_painTime)
 		return;
 
-	m_painTime = gpGlobals->time + RANDOM_FLOAT(0.5, 0.75);
+	m_painTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5, 0.75);
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
@@ -338,7 +341,7 @@ void CBarney::AlertSound(void) {
 void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
 		case BARNEY_AE_SHOOT:
-			Fire9mmPistol();
+			FirePistol();
 		break;
 		case BARNEY_AE_DRAW:
 			pev->body = m_iBaseBody + BARNEY_BODY_GUNDRAWN;
@@ -359,20 +362,20 @@ void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 BOOL CBarney::CheckRangeAttack1(float flDot, float flDist) {
 	if (flDist <= 1024 && flDot >= 0.5)	{
-		if (gpGlobals->time > m_checkAttackTime) {
+		if (UTIL_GlobalTimeBase() > m_checkAttackTime) {
 			TraceResult tr;
 			Vector shootOrigin = pev->origin + Vector(0, 0, 55);
 			CBaseEntity *pEnemy = m_hEnemy;
 			Vector shootTarget = ((pEnemy->BodyTarget(shootOrigin) - pEnemy->pev->origin) + m_vecEnemyLKP);
 			UTIL_TraceLine(shootOrigin, shootTarget, dont_ignore_monsters, ENT(pev), &tr);
-			m_checkAttackTime = gpGlobals->time + 1;
+			m_checkAttackTime = UTIL_GlobalTimeBase() + 1;
 
 			if (tr.flFraction == 1.0 || (tr.pHit != NULL && CBaseEntity::Instance(tr.pHit) == pEnemy))
 				m_lastAttackCheck = TRUE;
 			else
 				m_lastAttackCheck = FALSE;
 
-			m_checkAttackTime = gpGlobals->time + 1.5;
+			m_checkAttackTime = UTIL_GlobalTimeBase() + 1.5;
 		}
 
 		return m_lastAttackCheck;
@@ -384,11 +387,9 @@ BOOL CBarney::CheckRangeAttack1(float flDot, float flDist) {
 //=========================================================
 // Barney shoots one round from the pistol at 9mm
 //=========================================================
-void CBarney::Fire9mmPistol(void) {
-	Vector vecShootOrigin;
-
+void CBarney::FirePistol(void) {
 	UTIL_MakeVectors(pev->angles);
-	vecShootOrigin = pev->origin + Vector(0, 0, 55);
+	Vector vecShootOrigin = pev->origin + Vector(0, 0, 55);
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
@@ -401,10 +402,19 @@ void CBarney::Fire9mmPistol(void) {
 	else
 		pitchShift -= 5;
 
+	if (pev->frags) {
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_357);
+		switch (RANDOM_LONG(0, 1)) {
+			case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot1.wav", 1, ATTN_NORM, 0, 100 + pitchShift); break;
+			case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot2.wav", 1, ATTN_NORM, 0, 100 + pitchShift); break;
+		}
+	} else {
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
+	}
+
 	Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 100) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
 	WeaponFlash(vecShootOrigin);
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
@@ -619,7 +629,7 @@ void CBarney::Killed( entvars_t *pevAttacker, int iGib ) {
 		Vector vecGunPos, vecGunAngles;
 		pev->body = m_iBaseBody + BARNEY_BODY_GUNGONE;
 		GetAttachment( 0, vecGunPos, vecGunAngles );
-		CBaseEntity *pGun = DropItem( "weapon_9mmhandgun", vecGunPos, vecGunAngles );
+		CBaseEntity *pGun = DropItem((pev->frags ? "weapon_357" : "weapon_9mmhandgun"), vecGunPos, vecGunAngles);
 	}
 
 	SetUse( NULL );	

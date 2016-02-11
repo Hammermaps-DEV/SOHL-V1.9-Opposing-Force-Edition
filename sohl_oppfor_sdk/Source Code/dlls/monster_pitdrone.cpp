@@ -178,7 +178,7 @@ void CPitDrone::Spawn() {
 	m_flDebug = false; //Debug Massages
 
 	m_fCanThreatDisplay = TRUE;
-	m_flNextSpitTime = gpGlobals->time;
+	m_flNextSpitTime = UTIL_GlobalTimeBase();
 
 	m_flhorns = m_flammo;
 	MonsterInit();
@@ -233,7 +233,7 @@ void CPitDrone::Precache() {
 int CPitDrone::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
 	// if the gonome is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
-	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && gpGlobals->time - m_flLastHurtTime > 3) {
+	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3) {
 		float flDist;
 		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
 		if (flDist > PITDRONE_SPRINT_DIST) {
@@ -248,7 +248,7 @@ int CPitDrone::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float
 
 	if (!FClassnameIs(pevAttacker, "monster_babycrab")) {
 		// don't forget about headcrabs if it was a headcrab that hurt the squid.
-		m_flLastHurtTime = gpGlobals->time;
+		m_flLastHurtTime = UTIL_GlobalTimeBase();
 	}
 
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
@@ -493,7 +493,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 int CPitDrone::IgnoreConditions(void) {
 	int iIgnore = CBaseMonster::IgnoreConditions();
-	if (gpGlobals->time - m_flLastHurtTime <= 20) {
+	if (UTIL_GlobalTimeBase() - m_flLastHurtTime <= 20) {
 		// haven't been hurt in 20 seconds, so let the squid care about stink. 
 		// Er, more like, we HAVE been hurt in the last 20 seconds, so DON'T let it care about food. --LRC
 		iIgnore = bits_COND_SMELL | bits_COND_SMELL_FOOD;
@@ -508,13 +508,13 @@ int CPitDrone::IgnoreConditions(void) {
 	}
 
 	if ((m_Activity == ACT_MELEE_ATTACK1)) {
-		if (m_flNextFlinch >= gpGlobals->time)
+		if (m_flNextFlinch >= UTIL_GlobalTimeBase())
 			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 	}
 
 	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH)) {
-		if (m_flNextFlinch < gpGlobals->time)
-			m_flNextFlinch = gpGlobals->time + PITDRONE_FLINCH_DELAY;
+		if (m_flNextFlinch < UTIL_GlobalTimeBase())
+			m_flNextFlinch = UTIL_GlobalTimeBase() + PITDRONE_FLINCH_DELAY;
 	}
 
 	return iIgnore;
@@ -524,7 +524,7 @@ int CPitDrone::IgnoreConditions(void) {
 // StopTalking - won't speak again for 10-20 seconds.
 //=========================================================
 void CPitDrone::StopTalking(void) {
-	m_flNextWordTime = m_flNextSpeakTime = gpGlobals->time + 10 + RANDOM_LONG(0, 10);
+	m_flNextWordTime = m_flNextSpeakTime = UTIL_GlobalTimeBase() + 10 + RANDOM_LONG(0, 10);
 }
 
 //=========================================================
@@ -532,13 +532,13 @@ void CPitDrone::StopTalking(void) {
 // be made to ignore its love of headcrabs for a while.
 //=========================================================
 int CPitDrone::IRelationship(CBaseEntity *pTarget) {
-	if (gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs(pTarget->pev, "monster_babycrab")) {
+	if (UTIL_GlobalTimeBase() - m_flLastHurtTime < 5 && FClassnameIs(pTarget->pev, "monster_babycrab")) {
 		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab, 
 		// tell squid to disregard crab. 
 		return R_NO;
 	}
 
-	if (gpGlobals->time - m_flLastHurtTime < 5 && FClassnameIs(pTarget->pev, "monster_rat")) {
+	if (UTIL_GlobalTimeBase() - m_flLastHurtTime < 5 && FClassnameIs(pTarget->pev, "monster_rat")) {
 		// if squid has been hurt in the last 5 seconds, and is getting relationship for a headcrab, 
 		// tell squid to disregard crab. 
 		return R_NO;
@@ -555,13 +555,13 @@ BOOL CPitDrone::CheckRangeAttack1(float flDot, float flDist) {
 		return false;
 	}
 
-	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && gpGlobals->time >= m_flNextSpitTime) {
+	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime) {
 		if (IsMoving()) {
 			// don't spit again for a long time, resume chasing enemy.
-			m_flNextSpitTime = gpGlobals->time + 5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 5;
 		} else {
 			// not moving, so spit again pretty soon.
-			m_flNextSpitTime = gpGlobals->time + 0.5;
+			m_flNextSpitTime = UTIL_GlobalTimeBase() + 0.5;
 		}
 
 		return true;
@@ -605,7 +605,7 @@ void CPitDrone::UpdateHorns(void) {
 // ShouldSpeak - Should this PDrone be talking?
 //=========================================================
 BOOL CPitDrone::ShouldSpeak(void) {
-	if (m_flNextSpeakTime > gpGlobals->time) {
+	if (m_flNextSpeakTime > UTIL_GlobalTimeBase()) {
 		// my time to talk is still in the future.
 		return false;
 	}
@@ -616,7 +616,7 @@ BOOL CPitDrone::ShouldSpeak(void) {
 			// if not going to talk because of this, put the talk time 
 			// into the future a bit, so we don't talk immediately after 
 			// going into combat
-			m_flNextSpeakTime = gpGlobals->time + 3;
+			m_flNextSpeakTime = UTIL_GlobalTimeBase() + 3;
 			return false;
 		}
 	}

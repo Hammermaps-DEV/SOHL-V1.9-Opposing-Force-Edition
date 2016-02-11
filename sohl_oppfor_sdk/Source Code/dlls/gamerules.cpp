@@ -165,6 +165,17 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.barnielLeg     = GetSkillCvar("sk_barniel_leg"); //Hitgroup
 	gSkillData.barnielArm     = GetSkillCvar("sk_barniel_arm"); //Hitgroup
 
+	//=========================================================
+	// NPCs: Otis Laurey
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.otisHealth  = GetSkillCvar("sk_otis_health");
+	gSkillData.otisHead    = GetSkillCvar("sk_otis_head"); //Hitgroup
+	gSkillData.otisChest   = GetSkillCvar("sk_otis_chest"); //Hitgroup
+	gSkillData.otisStomach = GetSkillCvar("sk_otis_stomach"); //Hitgroup
+	gSkillData.otisLeg     = GetSkillCvar("sk_otis_leg"); //Hitgroup
+	gSkillData.otisArm     = GetSkillCvar("sk_otis_arm"); //Hitgroup
+
 	// Big Momma
 	gSkillData.bigmommaHealthFactor = GetSkillCvar( "sk_bigmomma_health_factor" );
 	gSkillData.bigmommaDmgSlash = GetSkillCvar( "sk_bigmomma_dmg_slash" );
@@ -377,6 +388,16 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.gonomeDmgGuts = GetSkillCvar("sk_gonome_dmg_guts");
 	gSkillData.gonomeDmgOneBite = GetSkillCvar("sk_gonome_dmg_one_bite");
 
+	//=========================================================
+	// NPCs: ShockTrooper
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.strooperHealth = GetSkillCvar("sk_shocktrooper_health");
+	gSkillData.strooperDmgKick = GetSkillCvar("sk_shocktrooper_kick");
+	gSkillData.strooperGrenadeSpeed = GetSkillCvar("sk_shocktrooper_gspeed");
+	gSkillData.strooperMaxCharge = GetSkillCvar("sk_shocktrooper_maxcharge");
+	gSkillData.strooperRchgSpeed = GetSkillCvar("sk_shocktrooper_rchgspeed");
+
 	//Turret
 	gSkillData.turretHealth = GetSkillCvar( "sk_turret_health");
 
@@ -454,6 +475,8 @@ void CGameRules::RefreshSkillData ( void )
 	// Shockroach
 	gSkillData.plrDmgShock = GetSkillCvar("sk_plr_shockroachs");
 
+	// Sporegrenade
+	gSkillData.plrDmgSpore = GetSkillCvar("sk_plr_spore");
 
 	// PLAYER HORNET
 // Up to this point, player hornet damage and monster hornet damage were both using

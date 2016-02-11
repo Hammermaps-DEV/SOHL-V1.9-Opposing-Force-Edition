@@ -163,7 +163,7 @@ public:
 	inline BOOL IsActive( void ) { return (pev->spawnflags & SF_TANK_ACTIVE)?TRUE:FALSE; }
 	inline void TankActivate( void ) { pev->spawnflags |= SF_TANK_ACTIVE; SetNextThink(0.1); m_fireLast = 0; }
 	inline void TankDeactivate( void ) { pev->spawnflags &= ~SF_TANK_ACTIVE; m_fireLast = 0; StopRotSound(); }
-	inline BOOL CanFire( void ) { return (gpGlobals->time - m_lastSightTime) < m_persist; }
+	inline BOOL CanFire( void ) { return (UTIL_GlobalTimeBase() - m_lastSightTime) < m_persist; }
 	BOOL		InRange( float range );
 
 	// Acquire a target.  pPlayer is a player in the PVS
@@ -601,7 +601,7 @@ void CFuncTank::UpdateSpot( void )
 {
 	ASSERT(m_pController != NULL);
 
-	if ( gpGlobals->time < m_flNextAttack )
+	if ( UTIL_GlobalTimeBase() < m_flNextAttack )
 		return;
 
 	if ( m_pController->pev->button & IN_ATTACK )
@@ -609,7 +609,7 @@ void CFuncTank::UpdateSpot( void )
 		Vector vecForward;
 		UTIL_MakeVectorsPrivate( pev->angles, vecForward, NULL, NULL );
 
-		m_fireLast = gpGlobals->time - (1/m_fireRate) - 0.01;  // to make sure the gun doesn't fire too many bullets
+		m_fireLast = UTIL_GlobalTimeBase() - (1/m_fireRate) - 0.01;  // to make sure the gun doesn't fire too many bullets
 
 		Fire( BarrelPosition(), vecForward, m_pController->pev );
 		
@@ -617,7 +617,7 @@ void CFuncTank::UpdateSpot( void )
 		if ( m_pController && m_pController->IsPlayer() )
 			((CBasePlayer *)m_pController)->m_iWeaponVolume = LOUD_GUN_VOLUME;
 
-		m_flNextAttack = gpGlobals->time + (1/m_fireRate);
+		m_flNextAttack = UTIL_GlobalTimeBase() + (1/m_fireRate);
 	}
 }*/
 ////////////// END NEW STUFF //////////////
@@ -1047,7 +1047,7 @@ void CFuncTank::TrackTarget( void )
 	// we can always 'see' the whole vertical arc, so it's just the yaw we needed to check.
 
 	if ( updateTime )
-		m_lastSightTime = gpGlobals->time;
+		m_lastSightTime = UTIL_GlobalTimeBase();
 
 	// Move toward target at rate or less
 	float distY = UTIL_AngleDistance( angles.y, pev->angles.y );
@@ -1084,7 +1084,7 @@ void CFuncTank::TrackTarget( void )
 	// firing in tanksequences:
 	if ( m_pSequence )
 	{
-		if ( gpGlobals->time < m_flNextAttack )	return;
+		if ( UTIL_GlobalTimeBase() < m_flNextAttack )	return;
 
 		if ( pev->spawnflags & SF_TANK_SEQFIRE ) // does the sequence want me to fire?
 		{
@@ -1092,18 +1092,18 @@ void CFuncTank::TrackTarget( void )
 			UTIL_MakeVectorsPrivate( pev->angles, forward, NULL, NULL );
 
 			// to make sure the gun doesn't fire too many bullets
-			m_fireLast = gpGlobals->time - (1/m_fireRate) - 0.01;
+			m_fireLast = UTIL_GlobalTimeBase() - (1/m_fireRate) - 0.01;
 
 			TryFire( BarrelPosition(), forward, pev );
 		
-			m_flNextAttack = gpGlobals->time + (1/m_fireRate);
+			m_flNextAttack = UTIL_GlobalTimeBase() + (1/m_fireRate);
 		}
 		return;
 	}
 	// firing with player-controlled tanks:
 	else if ( pController )
 	{
-		if ( gpGlobals->time < m_flNextAttack )
+		if ( UTIL_GlobalTimeBase() < m_flNextAttack )
 		return;
 
 		// FIXME- use m_???Tolerance to fire in the desired direction,
@@ -1115,7 +1115,7 @@ void CFuncTank::TrackTarget( void )
 			UTIL_MakeVectorsPrivate( pev->angles, forward, NULL, NULL );
 
 			// to make sure the gun doesn't fire too many bullets
-			m_fireLast = gpGlobals->time - (1/m_fireRate) - 0.01;
+			m_fireLast = UTIL_GlobalTimeBase() - (1/m_fireRate) - 0.01;
 
 			TryFire( BarrelPosition(), forward, pController->pev );
 		
@@ -1123,7 +1123,7 @@ void CFuncTank::TrackTarget( void )
 			if ( pController && pController->IsPlayer() )
 				((CBasePlayer *)pController)->m_iWeaponVolume = LOUD_GUN_VOLUME;
 
-			m_flNextAttack = gpGlobals->time + (1/m_fireRate);
+			m_flNextAttack = UTIL_GlobalTimeBase() + (1/m_fireRate);
 		}
 	}
 	// firing with automatic guns:
@@ -1225,7 +1225,7 @@ void CFuncTank::Fire( const Vector &barrelEnd, const Vector &forward, entvars_t 
 
 		SUB_UseTargets( this, USE_TOGGLE, 0 );
 	}
-	m_fireLast = gpGlobals->time;
+	m_fireLast = UTIL_GlobalTimeBase();
 }
 
 
@@ -1281,7 +1281,7 @@ void CFuncTankGun::Fire( const Vector &barrelEnd, const Vector &forward, entvars
 		// FireBullets needs gpGlobals->v_up, etc.
 		UTIL_MakeAimVectors(pev->angles);
 
-		int bulletCount = (gpGlobals->time - m_fireLast) * m_fireRate;
+		int bulletCount = (UTIL_GlobalTimeBase() - m_fireLast) * m_fireRate;
 		if ( bulletCount > 0 )
 		{
 			for ( i = 0; i < bulletCount; i++ )
@@ -1402,7 +1402,7 @@ CLaser *CFuncTankLaser::GetLaser( void )
 
 void CFuncTankLaser::Think( void )
 {
-	if ( m_pLaser && (gpGlobals->time > m_laserTime) )
+	if ( m_pLaser && (UTIL_GlobalTimeBase() > m_laserTime) )
 		m_pLaser->TurnOff();
 
 	CFuncTank::Think();
@@ -1420,7 +1420,7 @@ void CFuncTankLaser::Fire( const Vector &barrelEnd, const Vector &forward, entva
 		// TankTrace needs gpGlobals->v_up, etc.
 		UTIL_MakeAimVectors(pev->angles);
 
-		int bulletCount = (gpGlobals->time - m_fireLast) * m_fireRate;
+		int bulletCount = (UTIL_GlobalTimeBase() - m_fireLast) * m_fireRate;
 		if ( bulletCount )
 		{
 			for ( i = 0; i < bulletCount; i++ )
@@ -1428,9 +1428,9 @@ void CFuncTankLaser::Fire( const Vector &barrelEnd, const Vector &forward, entva
 				m_pLaser->pev->origin = barrelEnd;
 				TankTrace( barrelEnd, forward, gTankSpread[m_spread], tr );
 				
-				m_laserTime = gpGlobals->time;
+				m_laserTime = UTIL_GlobalTimeBase();
 				m_pLaser->TurnOn();
-				m_pLaser->pev->dmgtime = gpGlobals->time - 1.0;
+				m_pLaser->pev->dmgtime = UTIL_GlobalTimeBase() - 1.0;
 				m_pLaser->FireAtPoint( barrelEnd, tr );
 
 				//LRC - tripbeams
@@ -1473,7 +1473,7 @@ void CFuncTankRocket::Fire( const Vector &barrelEnd, const Vector &forward, entv
 
 	if ( m_fireLast != 0 )
 	{
-		int bulletCount = (gpGlobals->time - m_fireLast) * m_fireRate;
+		int bulletCount = (UTIL_GlobalTimeBase() - m_fireLast) * m_fireRate;
 		if ( bulletCount > 0 )
 		{
 			for ( i = 0; i < bulletCount; i++ )
@@ -1514,7 +1514,7 @@ void CFuncTankMortar::Fire( const Vector &barrelEnd, const Vector &forward, entv
 //	ALERT(at_console, "FuncTankMortar::Fire\n");
 	if ( m_fireLast != 0 )
 	{
-		int bulletCount = (gpGlobals->time - m_fireLast) * m_fireRate;
+		int bulletCount = (UTIL_GlobalTimeBase() - m_fireLast) * m_fireRate;
 		// Only create 1 explosion
 		if ( bulletCount > 0 )
 		{
@@ -1953,7 +1953,7 @@ void CTankSequence :: StopSequence()
 	// if we're doing "shoot at end", fire that shot now.
 	if (m_iShoot == TSEQ_SHOOT_ONCE)
 	{
-		m_pTank->m_fireLast = gpGlobals->time - 1/m_pTank->m_fireRate; // exactly one shot.
+		m_pTank->m_fireLast = UTIL_GlobalTimeBase() - 1/m_pTank->m_fireRate; // exactly one shot.
 		Vector forward;
 		UTIL_MakeVectorsPrivate( m_pTank->pev->angles, forward, NULL, NULL );	
 		m_pTank->TryFire( m_pTank->BarrelPosition(), forward, m_pTank->pev );
