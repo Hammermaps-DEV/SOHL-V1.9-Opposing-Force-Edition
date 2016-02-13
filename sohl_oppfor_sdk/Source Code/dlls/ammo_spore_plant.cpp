@@ -79,7 +79,6 @@ void CSporeAmmoPlant::Precache(void)
 // Spawn
 //=========================================================
 void CSporeAmmoPlant::Spawn(void) {
-	TraceResult tr;
 	Precache();
 	SET_MODEL(ENT(pev), "models/spore_ammo.mdl");
 	UTIL_SetSize(pev, Vector(-20, -20, -8), Vector(20, 20, 16));
@@ -144,6 +143,7 @@ void CSporeAmmoPlant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector
 		m_flTimeSporeIdle = UTIL_GlobalTimeBase() + 1;
 		SetThink(&CSporeAmmoPlant::IdleThink);
 	}
+
 	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 }
 

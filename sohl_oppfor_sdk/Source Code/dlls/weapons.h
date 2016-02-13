@@ -381,18 +381,18 @@ public:
 	int		m_iClientWeaponState;								// the last version of the weapon state sent to hud dll (is current weapon, is on target)
 	int		m_fInReload;										// Are we in the middle of a reload;
 	int		m_iClipSize;//This required weapon_generic, defintion in same class will crash'es compile
-	int 		m_iChargeLevel;//level of energy charge
-	int 		m_iOverloadLevel;//level of overload weapon
-	int 		m_fInAttack;//attack type
+	int 	m_iChargeLevel;//level of energy charge
+	int 	m_iOverloadLevel;//level of overload weapon
+	int 	m_fInAttack;//attack type
 
 	int		m_iDefaultAmmo;// how much ammo you get when you pick up this weapon as placed by a level designer.
 	int		m_iLastSkin;
 	int		m_iBody;
 	int		m_iSkin;
 	int		m_iLastBody;
-	BOOL		b_Restored;//restore body and skin after save/load
-	BOOL		AnimRestore;//restore sound and animation after save/load
-	BOOL		m_iPlayEmptySound;
+	BOOL	b_Restored;//restore body and skin after save/load
+	BOOL	AnimRestore;//restore sound and animation after save/load
+	BOOL	m_iPlayEmptySound;
 };
 
 

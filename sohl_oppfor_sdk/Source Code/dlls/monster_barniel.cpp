@@ -27,6 +27,13 @@
 #include	"monster_barniel.h"
 
 //=========================================================
+// Monster's Anim Events Go Here
+//=========================================================
+#define	BARNIEL_BODY_GUNHOLSTERED	0
+#define	BARNIEL_BODY_GUNDRAWN		1
+#define BARNIEL_BODY_GUNGONE		2
+
+//=========================================================
 // Monster's link to Class
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_barniel, CBarniel);
@@ -247,8 +254,7 @@ void CBarniel::AlertSound(void) {
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_ATTACK");
 				PlaySentence(szBuf, RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
-			}
-			else {
+			} else {
 				PlaySentence("BN_ATTACK", RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			}
 		}
@@ -277,10 +283,8 @@ void CBarniel::DeathSound(void) {
 // Barney shoots one round from the pistol at 9mm
 //=========================================================
 void CBarniel::Fire9mmPistol(void) {
-	Vector vecShootOrigin;
-
 	UTIL_MakeVectors(pev->angles);
-	vecShootOrigin = pev->origin + Vector(0, 0, 55);
+	Vector vecShootOrigin = pev->origin + Vector(0, 0, 55);
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
@@ -293,10 +297,19 @@ void CBarniel::Fire9mmPistol(void) {
 	else
 		pitchShift -= 5;
 
+	if (pev->frags) {
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_357);
+		switch (RANDOM_LONG(0, 1)) {
+		case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot1.wav", 1, ATTN_NORM, 0, 100 + pitchShift); break;
+		case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot2.wav", 1, ATTN_NORM, 0, 100 + pitchShift); break;
+		}
+	} else {
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/bn_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
+	}
+
 	Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 100) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barniel/bn_attack2.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
 	WeaponFlash(vecShootOrigin);
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
@@ -345,6 +358,21 @@ void CBarniel::TalkInit() {
 	}
 
 	m_voicePitch = (95 + RANDOM_LONG(0, 10));
+}
+
+//=========================================================
+// Monster is Killed, change body and drop weapon
+//=========================================================
+void CBarniel::Killed(entvars_t *pevAttacker, int iGib) {
+	if (pev->body < m_iBaseBody + BARNIEL_BODY_GUNGONE && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
+		Vector vecGunPos, vecGunAngles;
+		pev->body = m_iBaseBody + BARNIEL_BODY_GUNGONE;
+		GetAttachment(0, vecGunPos, vecGunAngles);
+		CBaseEntity *pGun = DropItem((pev->frags ? "weapon_357" : "weapon_9mmhandgun"), vecGunPos, vecGunAngles);
+	}
+
+	SetUse(NULL);
+	CTalkMonster::Killed(pevAttacker, iGib);
 }
 
 //=========================================================

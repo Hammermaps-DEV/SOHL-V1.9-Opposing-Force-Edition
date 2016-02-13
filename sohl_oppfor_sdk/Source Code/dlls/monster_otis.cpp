@@ -37,18 +37,20 @@
 #define	OTIS_AE_SHOOT		( 3 )
 #define	OTIS_AE_HOLSTER		( 4 )
 
-#define	NUM_OTIS_HEADS		2
+#define	NUM_OTIS_HEADS		4
 
 #define	GUN_GROUP			1
 #define	HEAD_GROUP			2
 
 #define	HEAD_HAIR			0
 #define	HEAD_BALD			1
+#define	HEAD_HELMET			2
+#define	HEAD_JOE			3
 
 #define	GUN_NONE			0
 #define	GUN_EAGLE			1
-#define	GUN_DONUT			2
-#define	GUN_NO_GUN			3
+#define	GUN_NO_GUN			2
+#define	GUN_DONUT			3
 
 //=========================================================
 // Monster's link to Class & Saverestore Begins
@@ -106,15 +108,20 @@ void COtis::Spawn() {
 	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_iBaseBody = pev->body; //LRC
-	pev->body = m_iBaseBody + GUN_NONE; // gun in holster
+	SetBodygroup(GUN_GROUP, GUN_NONE);
+
 	m_fGunDrawn = FALSE;
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
 	// Make sure hands are white.
-	SetBodygroup(HEAD_GROUP, RANDOM_LONG(0, NUM_OTIS_HEADS - 1));
+	if (m_iBaseBody) {
+		SetBodygroup(HEAD_GROUP, m_iBaseBody);
+	} else {
+		SetBodygroup(HEAD_GROUP, RANDOM_LONG(0, NUM_OTIS_HEADS - 1));
+	}
 
-	if (head != -1) {
+	if (head != -1 && !m_iBaseBody) {
 		SetBodygroup(HEAD_GROUP, head);
 	}
 
@@ -195,22 +202,19 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat(szBuf, "_MAD");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				}
-				else {
+				} else {
 					PlaySentence("OT_MAD", 4, VOL_NORM, ATTN_NORM);
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
 				StopFollowing(TRUE);
-			}
-			else {
+			} else {
 				if (m_iszSpeakAs) {
 					char szBuf[32];
 					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat(szBuf, "_SHOT");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				}
-				else {
+				} else {
 					PlaySentence("OT_SHOT", 4, VOL_NORM, ATTN_NORM);
 				}
 				Remember(bits_MEMORY_SUSPICIOUS);
@@ -222,8 +226,7 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_SHOT");
 				PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-			}
-			else {
+			} else {
 				PlaySentence("OT_SHOT", 4, VOL_NORM, ATTN_NORM);
 			}
 		}
@@ -253,12 +256,22 @@ void COtis::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, T
 		}
 
 		switch (ptr->iHitgroup) {
+			case 10: //Otis Hack
 			case HITGROUP_HEAD:
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+
+				if (GetBodygroup(HEAD_GROUP) == HEAD_HELMET & 
+					bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+					flDamage -= 20;
+					if (flDamage <= 0) {
+						UTIL_Ricochet(ptr->vecEndPos, 1.0);
+						flDamage = 0.01;
+					}
+				} else {
 					flDamage = m_flHitgroupHead*flDamage;
 				}
+				ptr->iHitgroup = HITGROUP_HEAD;
 			break;
 			case HITGROUP_CHEST:
 				if (m_flDebug)
@@ -422,7 +435,7 @@ void COtis::TalkInit() {
 // Monster is Killed, change body and drop weapon
 //=========================================================
 void COtis::Killed(entvars_t *pevAttacker, int iGib) {
-	if (pev->body < GUN_DONUT) {
+	if (GetBodygroup(GUN_GROUP) == GUN_EAGLE && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
 		Vector vecGunPos, vecGunAngles;
 		SetBodygroup(GUN_GROUP, GUN_NO_GUN);
 		GetAttachment(0, vecGunPos, vecGunAngles);

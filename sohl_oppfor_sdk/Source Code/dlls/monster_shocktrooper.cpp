@@ -210,135 +210,109 @@ void CStrooper::IdleSound(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CStrooper::Classify(void)
-{
-	return CLASS_ALIEN_MILITARY;
+int	CStrooper::Classify(void) {
+	return m_iClass ? m_iClass : CLASS_ALIEN_MILITARY;
 }
-
 
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CStrooper::HandleAnimEvent(MonsterEvent_t *pEvent)
-{
-	Vector	vecShootDir;
-	Vector	vecShootOrigin;
+void CStrooper::HandleAnimEvent(MonsterEvent_t *pEvent) {
+	Vector	vecShootDir, vecShootOrigin;
+	switch (pEvent->event) {
+		case STROOPER_AE_DROP_GUN: {
+			Vector	vecGunPos,vecGunAngles;
+			GetAttachment(0, vecGunPos, vecGunAngles);
 
-	switch (pEvent->event)
-	{
-	case STROOPER_AE_DROP_GUN:
-	{
-		Vector	vecGunPos;
-		Vector	vecGunAngles;
+			// switch to body group with no gun.
+			SetBodygroup(GUN_GROUP, GUN_NONE);
 
-		GetAttachment(0, vecGunPos, vecGunAngles);
+			Vector vecDropAngles = vecGunAngles;
 
-		// switch to body group with no gun.
-		SetBodygroup(GUN_GROUP, GUN_NONE);
-
-		Vector vecDropAngles = vecGunAngles;
-
-
-		if (m_hEnemy)
-			vecDropAngles = (m_hEnemy->pev->origin - pev->origin).Normalize();
-
-		// Remove any pitch.
-		vecDropAngles.x = 0;
-
-		// now spawn a shockroach.
-		CBaseEntity* pRoach = DropItem("monster_shockroach", vecGunPos, vecDropAngles);
-		if (pRoach)
-		{
-			pRoach->pev->owner = edict();
 
 			if (m_hEnemy)
-				pRoach->pev->angles = (pev->origin - m_hEnemy->pev->origin).Normalize();
+				vecDropAngles = (m_hEnemy->pev->origin - pev->origin).Normalize();
 
 			// Remove any pitch.
-			pRoach->pev->angles.x = 0;
-		}
-	}
-	break;
+			vecDropAngles.x = 0;
 
-	case STROOPER_AE_RELOAD:
-		m_cAmmoLoaded = m_cClipSize;
-		ClearConditions(bits_COND_NO_AMMO_LOADED);
+			// now spawn a shockroach.
+			CBaseEntity* pRoach = DropItem("monster_shockroach", vecGunPos, vecDropAngles);
+			if (pRoach)
+			{
+				pRoach->pev->owner = edict();
+
+				if (m_hEnemy)
+					pRoach->pev->angles = (pev->origin - m_hEnemy->pev->origin).Normalize();
+
+				// Remove any pitch.
+				pRoach->pev->angles.x = 0;
+			}
+		}
 		break;
-
-	case STROOPER_AE_GREN_TOSS: 
-	{
-		UTIL_MakeVectors(pev->angles);
-		CSporeGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, RANDOM_FLOAT(1.5, 3));
-
-		m_fThrowGrenade = FALSE;
-		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;
-	}
-	break;
-
-	case STROOPER_AE_GREN_LAUNCH:
-	case STROOPER_AE_GREN_DROP:
-		UTIL_MakeVectors(pev->angles);
-		CSporeGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, RANDOM_FLOAT(1, 2));
-	break;
-
-	case STROOPER_AE_BURST1:
-	{
-		//Shoot();
-
-		Vector	vecGunPos;
-		Vector	vecGunAngles;
-
-		GetAttachment(0, vecGunPos, vecGunAngles);
-		if (m_hEnemy) {
-			vecGunAngles = (m_hEnemy->EyePosition() - pev->origin - gpGlobals->v_right * 30 + gpGlobals->v_up * -6).Normalize();
+		case STROOPER_AE_RELOAD: {
+			m_cAmmoLoaded = m_cClipSize;
+			ClearConditions(bits_COND_NO_AMMO_LOADED);
 		}
-
-		CBaseEntity *pShock = CBaseEntity::Create("shock", vecGunPos, vecGunAngles, edict());
-		pShock->pev->velocity = vecGunAngles * 1200;
-
-		// Play fire sound.
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM);
-
-		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
-	}
-	break;
-
-	case STROOPER_AE_KICK:
-	{
-		CBaseEntity *pHurt = Kick();
-
-		if (pHurt)
-		{
-			// SOUND HERE!
+		break;
+		case STROOPER_AE_GREN_TOSS: {
 			UTIL_MakeVectors(pev->angles);
-			pHurt->pev->punchangle.x = 15;
-			pHurt->pev->punchangle.z = (m_fRightClaw) ? -10 : 10;
+			CSporeGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, RANDOM_FLOAT(1.5, 3));
 
-			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
-			pHurt->TakeDamage(pev, pev, gSkillData.strooperDmgKick, DMG_CLUB);
+			m_fThrowGrenade = FALSE;
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;
 		}
-
-		m_fRightClaw = !m_fRightClaw;
-	}
-	break;
-
-	case STROOPER_AE_CAUGHT_ENEMY:
-	{
-		if (FOkToSpeak())
-		{
-			SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", STROOPER_SENTENCE_VOLUME, STROOPER_ATTN, 0, m_voicePitch);
-			JustSpoke();
+		break;
+		case STROOPER_AE_GREN_LAUNCH:
+		case STROOPER_AE_GREN_DROP: {
+			UTIL_MakeVectors(pev->angles);
+			CSporeGrenade::ShootTimed(pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, RANDOM_FLOAT(1, 2));
 		}
+		break;
+		case STROOPER_AE_BURST1: {
+			Vector	vecGunPos, vecGunAngles;
+			GetAttachment(0, vecGunPos, vecGunAngles);
+			if (m_hEnemy) {
+				vecGunAngles = (m_hEnemy->EyePosition() - pev->origin - gpGlobals->v_right * 30 + gpGlobals->v_up * -6).Normalize();
+			}
 
-	}
+			CBaseEntity *pShock = CBaseEntity::Create("shock", vecGunPos, vecGunAngles, edict());
+			pShock->pev->velocity = vecGunAngles * 1200;
 
-	default:
-		CHGrunt::HandleAnimEvent(pEvent);
+			// Play fire sound.
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM);
+
+			CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+		}
+		break;
+		case STROOPER_AE_KICK: {
+			CBaseEntity *pHurt = Kick();
+			if (pHurt)
+			{
+				// SOUND HERE!
+				UTIL_MakeVectors(pev->angles);
+				pHurt->pev->punchangle.x = 15;
+				pHurt->pev->punchangle.z = (m_fRightClaw) ? -10 : 10;
+
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
+				pHurt->TakeDamage(pev, pev, gSkillData.strooperDmgKick, DMG_CLUB);
+			}
+
+			m_fRightClaw = !m_fRightClaw;
+		}
+		break;
+		case STROOPER_AE_CAUGHT_ENEMY: {
+			if (FOkToSpeak()) {
+				SENTENCEG_PlayRndSz(ENT(pev), "ST_ALERT", STROOPER_SENTENCE_VOLUME, STROOPER_ATTN, 0, m_voicePitch);
+				JustSpoke();
+			}
+		}
+		default:
+			CHGrunt::HandleAnimEvent(pEvent);
 		break;
 	}
 }
-
 
 //=========================================================
 // Spawn
@@ -368,8 +342,7 @@ void CStrooper::Spawn()
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
-	if (pev->weapons == 0)
-	{
+	if (pev->weapons == 0) {
 		// initialize to original values
 		pev->weapons = STROOPER_SHOCKRIFLE | STROOPER_HANDGRENADE;
 	}
@@ -425,10 +398,8 @@ void CStrooper::Precache()
 //=========================================================
 void CStrooper::PainSound(void)
 {
-	if (UTIL_GlobalTimeBase() > m_flNextPainTime)
-	{
-		switch (RANDOM_LONG(0, 4))
-		{
+	if (UTIL_GlobalTimeBase() > m_flNextPainTime) {
+		switch (RANDOM_LONG(0, 4)) {
 		case 0:
 			EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_pain1.wav", 1, ATTN_NORM);
 			break;
@@ -453,10 +424,8 @@ void CStrooper::PainSound(void)
 //=========================================================
 // DeathSound 
 //=========================================================
-void CStrooper::DeathSound(void)
-{
-	switch (RANDOM_LONG(0, 3))
-	{
+void CStrooper::DeathSound(void) {
+	switch (RANDOM_LONG(0, 3)) {
 	case 0:
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die1.wav", 1, ATTN_IDLE);
 		break;

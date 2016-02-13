@@ -13,7 +13,9 @@
 *
 ****/
 //=========================================================
-// DEAD BARNEY PROP
+// DEAD OTIS PROP
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+// Version: 1.0 / Build: 00001 / Date: 13.02.2016
 //=========================================================
 
 #include	"extdll.h"
@@ -21,26 +23,49 @@
 #include	"cbase.h"
 #include    "monster_otis_dead.h"
 
+//=========================================================
+// Monster's Anim Events Go Here
+//=========================================================
 char *CDeadOtis::m_szPoses[] = { "lying_on_back", "lying_on_side", "lying_on_stomach" };
 
-void CDeadOtis::KeyValue(KeyValueData *pkvd)
-{
-	if (FStrEq(pkvd->szKeyName, "pose"))
-	{
+#define	NUM_OTIS_HEADS		4
+
+#define	GUN_GROUP			1
+#define	HEAD_GROUP			2
+
+#define	HEAD_HAIR			0
+#define	HEAD_BALD			1
+#define	HEAD_HELMET			2
+#define	HEAD_JOE			3
+
+#define	GUN_NONE			0
+#define	GUN_EAGLE			1
+#define	GUN_NO_GUN			2
+#define	GUN_DONUT			3
+
+//=========================================================
+// Monster's link to Class
+//=========================================================
+LINK_ENTITY_TO_CLASS(monster_otis_dead, CDeadOtis);
+
+//=========================================================
+// KeyValue
+//=========================================================
+void CDeadOtis::KeyValue(KeyValueData *pkvd) {
+	if (FStrEq(pkvd->szKeyName, "pose")) {
 		m_iPose = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	}
-	else
+	} else if (FStrEq(pkvd->szKeyName, "head")) {
+		head = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	} else
 		CBaseMonster::KeyValue(pkvd);
 }
-
-LINK_ENTITY_TO_CLASS(monster_otis_dead, CDeadOtis);
 
 //=========================================================
 // ********** DeadBarney SPAWN **********
 //=========================================================
-void CDeadOtis::Spawn()
-{
+void CDeadOtis::Spawn() {
 	PRECACHE_MODEL("models/otis.mdl");
 	SET_MODEL(ENT(pev), "models/otis.mdl");
 
@@ -49,12 +74,27 @@ void CDeadOtis::Spawn()
 	pev->sequence = 0;
 	m_bloodColor = BLOOD_COLOR_RED;
 
+	m_iBaseBody = pev->body; //LRC
+	SetBodygroup(GUN_GROUP, GUN_NONE);
+
+	// Make sure hands are white.
+	if (m_iBaseBody) {
+		SetBodygroup(HEAD_GROUP, m_iBaseBody);
+	}
+	else {
+		SetBodygroup(HEAD_GROUP, RANDOM_LONG(0, NUM_OTIS_HEADS - 1));
+	}
+
+	if (head != -1 && !m_iBaseBody) {
+		SetBodygroup(HEAD_GROUP, head);
+	}
+
 	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
-	if (pev->sequence == -1)
-	{
+	if (pev->sequence == -1) {
 		ALERT(at_console, "Dead otis with bad pose\n");
 	}
+
 	// Corpses have less health
-	pev->health = 8;//gSkillData.otisHealth;
+	pev->health = 8;
 	MonsterInitDead();
 }

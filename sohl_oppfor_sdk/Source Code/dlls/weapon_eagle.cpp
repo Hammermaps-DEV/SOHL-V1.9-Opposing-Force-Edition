@@ -245,6 +245,7 @@ void CEagle::ShutdownSpot(void) {
 		m_pSpot->Killed(NULL, GIB_NEVER);
 		m_pSpot = NULL;
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/desert_eagle_sight2.wav", 1, ATTN_NORM);
+		m_pPlayer->m_fSpotActive = false;
 	}
 
 	if (m_pMirSpot) {
@@ -266,6 +267,7 @@ void CEagle::UpdateSpot(void) {
 		if (!m_pSpot) {
 			m_pSpot = CLaserSpot::CreateSpot();
 			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/desert_eagle_sight.wav", 1, ATTN_NORM);
+			m_pPlayer->m_fSpotActive = true;
 		}
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);

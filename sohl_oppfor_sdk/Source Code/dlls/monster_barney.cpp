@@ -132,7 +132,7 @@ int	CBarney::Classify(void) {
 // Precache - precaches all resources this monster needs
 //=========================================================
 void CBarney::Precache() {
-	if (pev->model)
+	if(pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/barney.mdl");

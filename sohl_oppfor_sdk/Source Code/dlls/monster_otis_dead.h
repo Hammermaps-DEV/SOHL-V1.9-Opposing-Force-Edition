@@ -25,6 +25,9 @@ class CDeadOtis : public CDeadBarney
 		int	Classify(void) { return	CLASS_PLAYER_ALLY; }
 		void KeyValue(KeyValueData *pkvd);
 		static char *m_szPoses[3];
+
+		int	head;
+		int	m_iBaseBody;
 };
 
 #endif // MONSTER_OTIS_H

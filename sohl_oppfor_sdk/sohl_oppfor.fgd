@@ -470,6 +470,10 @@
 	//* this are BA (speak as a Barney) and SC (speak as a Scientist). To define a
 	//* speech group "XX", you need to define sentences XX_ANSWER, XX_QUESTION, XX_IDLE,
 	//* XX_STARE, XX_OK, XX_WAIT, XX_STOP, XX_NOSHOOT, XX_HELLO, XX_SMELL, XX_WOUND and
+	//* XX_MORTAL. (as well as some others, if the monsters are going to be Pre-Disaster.)	//* Mostly provided for mod-makers. In the standard sentences.txt, valid settings for
+	//* this are BA (speak as a Barney) and SC (speak as a Scientist). To define a
+	//* speech group "XX", you need to define sentences XX_ANSWER, XX_QUESTION, XX_IDLE,
+	//* XX_STARE, XX_OK, XX_WAIT, XX_STOP, XX_NOSHOOT, XX_HELLO, XX_SMELL, XX_WOUND and
 	//* XX_MORTAL. (as well as some others, if the monsters are going to be Pre-Disaster.)
 	SpeakAs(string) : "Speech Group"
 	spawnflags(Flags) =
@@ -3411,6 +3415,7 @@
 	frags(choices) : "Weapon" : 0 =
 	[
 		0 : "Glock (normal)"
+		1 : "Python"
 	]
 	spawnflags(Flags) = 
 	[
@@ -3495,11 +3500,12 @@
 	]
 ]
 // NEW 1.9
-@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/barniel.mdl") = monster_barniel : "Female Barney"
+@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/barniel.mdl") = monster_barniel : "Female Barney (Barniel)"
 [
 	frags(choices) : "Weapon" : 0 =
 	[
 		0 : "Glock (normal)"
+		1 : "Python"
 	]
 	spawnflags(Flags) = 
 	[
@@ -3699,9 +3705,9 @@
 @PointClass base(Monster) size(-16 -16 0, 16 16 72) studio("models/hgrunt.mdl") = monster_grunt_repel : "Human Grunt (Repel)" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_grenade.mdl") = monster_handgrenade : "Live Handgrenade" []
 @PointClass base(Monster) size(-16 -16 0, 16 16 36) studio("models/headcrab.mdl") = monster_headcrab : "Head Crab" []
-@PointClass base(Targetname, Angles, Appearflags,RenderFields) size(-16 -16 0, 16 16 72) = monster_hevsuit_dead : "Dead HEV Suit" 
+@PointClass base(Targetname, Angles, Appearflags, RenderFields) size(-16 -16 0, 16 16 72) studio("models/hev.mdl") = monster_hevsuit_dead : "Dead HEV Suit" 
 [
-      pose(choices) : "Pose" : 0 =
+    pose(choices) : "Pose" : 0 =
 	[
 		0 : "On back"
 		1 : "Seated"
@@ -3897,7 +3903,7 @@
 ]
 //* Like @monster_bloater: no AI, no death animation.
 @PointClass base(Monster) size(-6 -6 0, 6 6 6) studio("models/bigrat.mdl") = monster_rat : "Rat" []
-@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/scientist.mdl") = monster_scientist : "Scared Scientist" 
+@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/scientist.mdl") = monster_scientist : "Scientist" 
 [
       body(Choices) : "Body" : -1 =
 	[
@@ -4069,6 +4075,140 @@
 		42 : "dead_table3"
 	]
 
+]
+@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/construction.mdl") = monster_construction : "Construction (Gus)" 
+[
+	sequence(Choices) : "Animation Sequence (editor)" : 13 =
+	[
+		0 : "walk"
+		1 : "walk_scared"
+		2 : "run"
+		3 : "run1"
+		4 : "run2"
+		5 : "180_Left"
+		6 : "180_Right"
+		7 : "flinch"
+		8 : "flinch1"
+		9 : "laflinch"
+		10 : "raflinch"
+		11 : "llflinch"
+		12 : "rlflinch"
+		13 : "idle1"
+		14 : "idle3"
+		15 : "idle4"
+		16 : "idle5"
+		17 : "idle6"
+		18 : "idle7"
+		19 : "crouchstand"
+		20 : "crouch_idle"
+		21 : "crouch_idle2"
+		22 : "crouch_idle3"
+		23 : "crouch_idle3"
+		24 : "panic"
+		25 : "fear1"
+		26 : "fear2"
+		27 : "eye_wipe"
+		28 : "pull_needle"
+		29 : "return_needle"
+		30 : "give_shot"
+		31 : "diesimple"
+		32 : "dieforward"
+		33 : "dieforward1"
+		34 : "diebackward"
+		35 : "headshot"
+		36 : "gutshot"
+		37 : "lying_on_back"
+		38 : "lying_on_stomach"
+		39 : "dead_sitting"
+		40 : "dead_table1"
+		41 : "dead_table2"
+		42 : "dead_table3"
+		43 : "barnacled1"
+		44 : "barnacled2"
+		45 : "barnacled3"
+		46 : "barnacled4"
+		47 : "console"
+		48 : "checktie"
+		49 : "dryhands"
+		50 : "tieshoe"
+		51 : "whiteboard"
+		52 : "studycart"
+		53 : "lean"
+		54 : "pondering"
+		55 : "pondering2"
+		56 : "pondering3"
+		57 : "buysoda"
+		58 : "pause"
+		59 : "yes"
+		60 : "no"
+		61 : "push_button"
+		62 : "converse1"
+		63 : "converse2"
+		64 : "retina"
+		65 : "talkleft"
+		66 : "talkright"
+		67 : "deskidle"
+		68 : "coffee"
+		69 : "franticbutton"
+		70 : "startle"
+		71 : "sitlookleft"
+		72 : "sitlookright"
+		73 : "sitscared"
+		74 : "sitting2"
+		75 : "sitting3"
+		76 : "cprscientist"
+		77 : "cprscientistrevive"
+		78 : "cowering_in_corner"
+		79 : "sstruggleidle"
+		80 : "sstruggle"
+		81 : "headcrabbed"
+		82 : "c1a0_catwalkidle"
+		83 : "c1a0_catwalk"
+		84 : "ceiling_dangle"
+		85 : "ventpull1"
+		86 : "ventpull2"
+		87 : "ventpullidle1"
+		88 : "ventpullidle2"
+		89 : "sitidle"
+		90 : "sitstand"
+		91 : "keypad"
+		92 : "panic1"
+		93 : "lookwindow"
+		94 : "wave"
+		95 : "pulldoor"
+		96 : "beatdoor"
+		97 : "fallingloop"
+		98 : "crawlwindow"
+		99 : "divewindow"
+		100 : "locked_door"
+		101 : "push_button2"
+		102 : "unlock_door"
+		103 : "quicklook"
+		104 : "handrailidle"
+		105 : "handrail"
+		106 : "hanging_idle"
+		107 : "fall"
+		108 : "scientist_get_pulled"
+		109 : "hanging_idle2"
+		110 : "fall_elevator"
+		111 : "scientist_idlewall"
+		112 : "ickyjump_sci"
+		113 : "haulscientist"
+		114 : "c1a4_wounded_idle"
+		115 : "c1a4_dying_speech"
+		116 : "tentacle_grab"
+		117 : "helicack"
+		118 : "windive"
+		119 : "scicrashidle"
+		120 : "scicrash"
+		121 : "onguard"
+		122 : "seeya"
+		123 : "rocketcrawl"
+		124 : "portal"
+		125 : "gluonshow"
+		126 : "crouch"
+		127 : "kneel"
+	]
 ]
 @PointClass base(Monster) size(-16 -16 0, 16 16 72) studio("models/sentry.mdl") = monster_sentry : "Sentry Turret Gun"
 [
@@ -4551,6 +4691,14 @@
 //NEW 1.9
 @PointClass base(Targetname, Angles, RenderFields, Appearflags) size(-16 -16 0, 16 16 72) studio("models/otis.mdl") = monster_otis_dead : "Dead Otis"
 [
+	head(Choices) : "Head" : -1 =
+	[
+		-1 : "Random"
+		0 : "Bald Head"
+		1 : "Head with hair"
+		2 : "Head with Helmet"
+		3 : "Head Joe"
+	]
 	pose(choices) : "Pose" : 0 =
 	[
         0 : "On back"
@@ -4563,18 +4711,32 @@
 //NEW 1.9
 @PointClass base(Monster,TalkMonster) studio("models/otis.mdl") = monster_otis : "Otis"
 [
-	bodystate(Choices) : "bodystate" : -1 =
+	frags(choices) : "Weapon" : 0 =
+	[
+		0 : "Python (normal)"
+		1 : "Glock"
+	]
+	spawnflags(Flags) = 
+	[
+		//NEW 0.3
+		//* Ensure the player can't take this monster's ammo or weapons.
+		1024: "Don't Drop Gun" : 0
+	]
+	bodystate(Choices) : "Bodystate" : -1 =
 	[
 		-1 : "Random"
 		0 : "Gun Holstered"
 		1 : "Gun Drawn"
+		2 : "No Gun"
 		3 : "Donut"
 	]
-	head(Choices) : "head" : -1 =
+	head(Choices) : "Head" : -1 =
 	[
 		-1 : "Random"
 		0 : "Bald Head"
 		1 : "Head with hair"
+		2 : "Head with Helmet"
+		3 : "Head Joe"
 	]
 	suspicious(choices) : "Suspicious" : 0 =
 	[

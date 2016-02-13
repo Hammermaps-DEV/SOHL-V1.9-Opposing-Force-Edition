@@ -33,6 +33,7 @@ class CBarniel : public CBarney {
 		void Fire9mmPistol(void);
 		void TalkInit(void);
 
+		void Killed(entvars_t *pevAttacker, int iGib);
 		Schedule_t *GetSchedule(void);
 
 		static const char *pPainSounds[];

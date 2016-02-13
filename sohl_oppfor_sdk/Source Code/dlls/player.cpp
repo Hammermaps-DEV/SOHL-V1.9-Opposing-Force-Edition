@@ -2081,7 +2081,9 @@ void CBasePlayer::PreThink(void)
 	/////////////////////
 	if (CVAR_GET_FLOAT("cl_idleswaying") != 0) {
 		int idleswaying = 1;
-			if (pev->flags & FL_ONGROUND) {
+			if (pev->flags & FL_ONGROUND && 
+				(m_iFOV >= 90 || !m_iFOV) && 
+					!m_fInAttack && !m_fSpotActive) {
 				if (pev->flags & FL_DUCKING) {
 					idleswaying = 0;
 				}
@@ -2090,7 +2092,7 @@ void CBasePlayer::PreThink(void)
 			}
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgConcuss, NULL, pev);
-		WRITE_BYTE(idleswaying);
+			WRITE_BYTE(idleswaying);
 		MESSAGE_END();
 	}
 }
@@ -3719,6 +3721,8 @@ void CBasePlayer::CheatImpulseCommands( int iImpulse )
 		GiveNamedItem( "weapon_shockrifle" );
 		GiveNamedItem( "weapon_sporelauncher" );
 		GiveNamedItem( "weapon_9mmhandgun" );
+		GiveNamedItem( "ammo_spore" );
+		GiveNamedItem( "ammo_spore" );
 		GiveNamedItem( "ammo_spore" );
 		GiveNamedItem( "ammo_9mmclip" );
 		GiveNamedItem( "weapon_shotgun" );
