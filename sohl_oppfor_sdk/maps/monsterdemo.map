@@ -2423,12 +2423,12 @@
 {
 "classname" "monster_hevsuit_dead"
 "pose" "0"
-"angles" "-0 90 -0"
+"angles" "0 90 0"
 "rendercolor" "0 0 0"
 "rendermode" "0"
 "renderfx" "0"
 "skill" "0"
-"origin" "-160 96 5"
+"origin" "-159 96 36"
 }
 {
 "classname" "monster_hgrunt_dead"
@@ -2546,7 +2546,8 @@
 "pose" "0"
 "skill" "0"
 "angles" "-0 90 -0"
-"head" "5"
+"head" "2"
+"bodystate" "3"
 "origin" "-160 448 5"
 }
 {
@@ -2596,7 +2597,7 @@
 {
 "classname" "monster_otis"
 "suspicious" "0"
-"head" "5"
+"head" "-1"
 "bodystate" "-1"
 "TriggerCondition" "0"
 "m_iPlayerReact" "0"
@@ -2883,7 +2884,7 @@
 }
 {
 "classname" "monster_construction"
-"sequence" "0"
+"sequence" "13"
 "frags" "0"
 "m_iPlayerReact" "0"
 "m_iClass" "0"
@@ -2897,7 +2898,7 @@
 "suspicious" "0"
 "TriggerCondition" "0"
 "head" "5"
-"origin" "-160 1472 32"
+"origin" "-160 1472 0"
 }
 {
 "classname" "light"
@@ -3048,4 +3049,62 @@
 "spawnflags" "0"
 "TriggerCondition" "0"
 "origin" "-832 192 0"
+}
+{
+"classname" "monster_otis"
+"suspicious" "0"
+"head" "0"
+"bodystate" "-1"
+"TriggerCondition" "0"
+"m_iPlayerReact" "0"
+"m_iClass" "0"
+"angles" "0 271 0"
+"rendercolor" "0 0 0"
+"rendermode" "0"
+"renderfx" "0"
+"origin" "0 1568 5"
+}
+{
+"classname" "monster_otis"
+"suspicious" "0"
+"head" "2"
+"bodystate" "-1"
+"TriggerCondition" "0"
+"m_iPlayerReact" "0"
+"m_iClass" "0"
+"angles" "0 271 0"
+"rendercolor" "0 0 0"
+"rendermode" "0"
+"renderfx" "0"
+"origin" "160 1568 0.0698051"
+}
+{
+"classname" "monster_otis"
+"spawnflags" "0"
+"suspicious" "0"
+"head" "3"
+"bodystate" "-1"
+"TriggerCondition" "0"
+"m_iPlayerReact" "0"
+"m_iClass" "0"
+"angles" "0 271 0"
+"rendercolor" "0 0 0"
+"rendermode" "0"
+"renderfx" "0"
+"origin" "0 1472 0.0698051"
+}
+{
+"classname" "monster_otis"
+"spawnflags" "1024"
+"suspicious" "0"
+"head" "-1"
+"bodystate" "-1"
+"TriggerCondition" "0"
+"m_iPlayerReact" "0"
+"m_iClass" "0"
+"angles" "0 271 0"
+"rendercolor" "0 0 0"
+"rendermode" "0"
+"renderfx" "0"
+"origin" "160 1472 0.0698051"
 }
