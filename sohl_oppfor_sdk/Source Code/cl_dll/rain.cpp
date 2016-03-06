@@ -1,15 +1,8 @@
 /***
 *
-*	Copyright (c) 1996-2004, Shambler Team. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*	Copyright (c) 2005, BUzer.
 *
-*   Use, distribution, and modification of this source code and/or resulting
-*   object code is restricted to non-commercial enhancements to products from
-*   Shambler Team.  All other use, distribution, or modification is prohibited
-*   without written permission from Shambler Team.
+*	Used with permission for Spirit of Half-Life 1.5
 *
 ****/
 /*
@@ -100,9 +93,9 @@ void ProcessRain( void )
 
 		curDrip->origin.x += rain_timedelta * curDrip->xDelta;
 		curDrip->origin.y += rain_timedelta * curDrip->yDelta;
-		
+
 		// remove drip if its origin lower than minHeight
-		if (curDrip->origin.z < curDrip->minHeight) 
+		if (curDrip->origin.z < curDrip->minHeight)
 		{
 			if (curDrip->landInWater/* && Rain.weatherMode == 0*/)
 				WaterLandingEffect(curDrip); // create water rings
@@ -112,12 +105,12 @@ void ProcessRain( void )
 				debug_lifetime += (rain_curtime - curDrip->birthTime);
 				debug_howmany++;
 			}
-			
+
 			curDrip->p_Prev->p_Next = curDrip->p_Next; // link chain
 			if (nextDrip != NULL)
-				nextDrip->p_Prev = curDrip->p_Prev; 
+				nextDrip->p_Prev = curDrip->p_Prev;
 			delete curDrip;
-					
+
 			dripcounter--;
 		}
 
@@ -139,10 +132,10 @@ void ProcessRain( void )
 
 	while (rain_nextspawntime < rain_curtime)
 	{
-		rain_nextspawntime += timeBetweenDrips;		
+		rain_nextspawntime += timeBetweenDrips;
 		if (gHUD.RainInfo->value)
 			debug_attempted++;
-				
+
 		if (dripcounter < MAXDRIPS) // check for overflow
 		{
 			float deathHeight;
@@ -162,15 +155,16 @@ void ProcessRain( void )
 
 			pmtrace_t pmtrace;
 			gEngfuncs.pEventAPI->EV_SetTraceHull( 2 );
-                              gEngfuncs.pEventAPI->EV_PlayerTrace( vecStart, vecStart + vecEnd, PM_STUDIO_IGNORE, -1, &pmtrace );
-			if (pmtrace.startsolid)
+			gEngfuncs.pEventAPI->EV_PlayerTrace( vecStart, vecEnd, PM_STUDIO_IGNORE, -1, &pmtrace );
+
+			if (pmtrace.startsolid || pmtrace.allsolid)
 			{
 				if (gHUD.RainInfo->value)
 					debug_dropped++;
 
 				continue; // drip cannot be placed
 			}
-			
+
 			// falling to water?
 			int contents = gEngfuncs.PM_PointContents( pmtrace.endpos, NULL );
 			if (contents == CONTENTS_WATER)
@@ -215,15 +209,15 @@ void ProcessRain( void )
 				gEngfuncs.Con_Printf( "Rain error: failed to allocate object!\n");
 				return;
 			}
-			
+
 			vecStart[2] -= gEngfuncs.pfnRandomFloat(0, maxDelta); // randomize a bit
-			
+
 			newClDrip->alpha = gEngfuncs.pfnRandomFloat(0.12, 0.2);
 			VectorCopy(vecStart, newClDrip->origin);
-			
+
 			newClDrip->xDelta = xDelta;
 			newClDrip->yDelta = yDelta;
-	
+
 			newClDrip->birthTime = rain_curtime; // store time when it was spawned
 			newClDrip->minHeight = deathHeight;
 
@@ -243,7 +237,7 @@ void ProcessRain( void )
 		}
 		else
 		{
-			//gEngfuncs.Con_Printf( "Rain error: Drip limit overflow!\n" );
+			gEngfuncs.Con_Printf( "Rain error: Drip limit overflow!\n" );
 			return;
 		}
 	}
@@ -275,19 +269,19 @@ void WaterLandingEffect(cl_drip *drip)
 	{
 		gEngfuncs.Con_Printf( "Rain error: FX limit overflow!\n" );
 		return;
-	}	
-	
+	}
+
 	cl_rainfx *newFX = new cl_rainfx;
 	if (!newFX)
 	{
 		gEngfuncs.Con_Printf( "Rain error: failed to allocate FX object!\n");
 		return;
 	}
-			
+
 	newFX->alpha = gEngfuncs.pfnRandomFloat(0.6, 0.9);
 	VectorCopy(drip->origin, newFX->origin);
 	newFX->origin[2] = drip->minHeight; // correct position
-			
+
 	newFX->birthTime = gEngfuncs.GetClientTime();
 	newFX->life = gEngfuncs.pfnRandomFloat(0.7, 1);
 
@@ -297,7 +291,7 @@ void WaterLandingEffect(cl_drip *drip)
 	if (newFX->p_Next != NULL)
 		newFX->p_Next->p_Prev = newFX;
 	FirstChainFX.p_Next = newFX;
-			
+
 	fxcounter++;
 }
 
@@ -312,21 +306,21 @@ Call every frame before ProcessRain
 void ProcessFXObjects( void )
 {
 	float curtime = gEngfuncs.GetClientTime();
-	
+
 	cl_rainfx* curFX = FirstChainFX.p_Next;
-	cl_rainfx* nextFX = NULL;	
+	cl_rainfx* nextFX = NULL;
 
 	while (curFX != NULL) // go through FX objects list
 	{
 		nextFX = curFX->p_Next; // save pointer to next
-		
-		// delete current?
+
+								// delete current?
 		if ((curFX->birthTime + curFX->life) < curtime)
 		{
 			curFX->p_Prev->p_Next = curFX->p_Next; // link chain
 			if (nextFX != NULL)
-				nextFX->p_Prev = curFX->p_Prev; 
-			delete curFX;					
+				nextFX->p_Prev = curFX->p_Prev;
+			delete curFX;
 			fxcounter--;
 		}
 		curFX = nextFX; // restore pointer
@@ -344,7 +338,7 @@ void ResetRain( void )
 // delete all drips
 	cl_drip* delDrip = FirstChainDrip.p_Next;
 	FirstChainDrip.p_Next = NULL;
-	
+
 	while (delDrip != NULL)
 	{
 		cl_drip* nextDrip = delDrip->p_Next; // save pointer to next drip in chain
@@ -356,7 +350,7 @@ void ResetRain( void )
 // delete all FX objects
 	cl_rainfx* delFX = FirstChainFX.p_Next;
 	FirstChainFX.p_Next = NULL;
-	
+
 	while (delFX != NULL)
 	{
 		cl_rainfx* nextFX = delFX->p_Next;
@@ -406,7 +400,7 @@ void InitRain( void )
 	FirstChainFX.origin[2] = 0;
 	FirstChainFX.p_Next = NULL;
 	FirstChainFX.p_Prev = NULL;
-	
+
 	rain_oldtime = 0;
 	rain_curtime = 0;
 	rain_nextspawntime = 0;
@@ -446,7 +440,7 @@ void ParseRainFile( void )
 	}
 
 	mapname[strlen(mapname)-4] = 0;
-	sprintf(mapname, "%s.pcs", mapname); 
+	sprintf(mapname, "%s.pcs", mapname);
 
 	pfile = (char *)gEngfuncs.COM_LoadFile( mapname, 5, NULL);
 	if (!pfile)
@@ -480,7 +474,7 @@ void ParseRainFile( void )
 		else if (!stricmp(token, "windy")) // windY
 		{
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
-			Rain.windY = atof(token);		
+			Rain.windY = atof(token);
 		}
 		else if (!stricmp(token, "randx")) // randX
 		{
@@ -505,7 +499,7 @@ void ParseRainFile( void )
 		else
 			gEngfuncs.Con_Printf("Rain error: unknown token %s in file %s\n", token, mapname);
 	}
-	
+
 	gEngfuncs.COM_FreeFile( pfile );
 }
 

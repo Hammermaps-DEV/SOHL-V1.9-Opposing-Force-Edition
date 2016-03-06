@@ -32,6 +32,8 @@ extern "C" {
 	void EV_ShockFire(struct event_args_s *args);
 	void EV_FireEagle(struct event_args_s *args);
 	void EV_FireSpore(struct event_args_s *args);
+	void EV_FireSniper(struct event_args_s *args);
+	void EV_Displacer(struct event_args_s *args);
 }
 
 /*
@@ -71,4 +73,6 @@ void EV_HookEvents( void ) {
 	gEngfuncs.pfnHookEvent( "events/shock.sc",				EV_ShockFire );
 	gEngfuncs.pfnHookEvent( "events/eagle.sc",				EV_FireEagle);
 	gEngfuncs.pfnHookEvent( "events/spore.sc",				EV_FireSpore);
+	gEngfuncs.pfnHookEvent( "events/sniper.sc",				EV_FireSniper);
+	gEngfuncs.pfnHookEvent( "events/displacer.sc",			EV_Displacer);
 }

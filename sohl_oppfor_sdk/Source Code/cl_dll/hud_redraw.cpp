@@ -85,7 +85,6 @@ void CHud::Think(void)
 extern float g_fFadeDuration;
 extern float g_fStartDist;
 extern float g_fEndDist;
-//extern int g_iFinalStartDist;
 extern int g_iFinalEndDist;
 
 // Redraw
@@ -96,19 +95,23 @@ int CHud :: Redraw( float flTime, int intermission )
 	m_fOldTime = m_flTime;	// save time of previous redraw
 	m_flTime = flTime;
 	m_flTimeDelta = (double)m_flTime - m_fOldTime;
-	static int m_flShotTime = 0;
+	static float m_flShotTime = 0;
 
 	//LRC - handle fog fading effects. (is this the right place for it?)
 	if (g_fFadeDuration)
 	{
 		// Nicer might be to use some kind of logarithmic fade-in?
-		double fFraction = m_flTimeDelta/g_fFadeDuration;
+		double fFraction = m_flTimeDelta / g_fFadeDuration;
+		//		g_fStartDist -= (FOG_LIMIT - g_iFinalStartDist)*fFraction;
 		g_fEndDist -= (FOG_LIMIT - g_iFinalEndDist)*fFraction;
 
-//		CONPRINT("FogFading: %f, frac %f, time %f, final %d\n", g_fEndDist, fFraction, flTime, g_iFinalEndDist);
+		//		CONPRINT("FogFading: %f - %f, frac %f, time %f, final %d\n", g_fStartDist, g_fEndDist, fFraction, flTime, g_iFinalEndDist);
 
+		// cap it
+		//		if (g_fStartDist > FOG_LIMIT)				g_fStartDist = FOG_LIMIT;
 		if (g_fEndDist   > FOG_LIMIT)				g_fEndDist = FOG_LIMIT;
-		if (g_fEndDist   < g_iFinalEndDist)		g_fEndDist   = g_iFinalEndDist;
+		//		if (g_fStartDist < g_iFinalStartDist)	g_fStartDist = g_iFinalStartDist;
+		if (g_fEndDist   < g_iFinalEndDist)		g_fEndDist = g_iFinalEndDist;
 	}
 	
 	// Clock was reset, reset delta

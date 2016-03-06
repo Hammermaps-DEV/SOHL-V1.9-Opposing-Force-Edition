@@ -1989,15 +1989,14 @@ StudioRenderFinal_Hardware
 
 ====================
 */
-void CStudioModelRenderer::StudioRenderFinal_Hardware( void )
+void CStudioModelRenderer::StudioRenderFinal_Hardware(void)
 {
 	int i;
 	int rendermode;
-	int iShadows = CVAR_GET_FLOAT("r_shadows");
 
 	rendermode = IEngineStudio.GetForceFaceFlags() ? kRenderTransAdd : m_pCurrentEntity->curstate.rendermode;
-	IEngineStudio.SetupRenderer( rendermode );
-	
+	IEngineStudio.SetupRenderer(rendermode);
+
 	if (m_pCvarDrawEntities->value == 2)
 	{
 		IEngineStudio.StudioDrawBones();
@@ -2020,27 +2019,21 @@ void CStudioModelRenderer::StudioRenderFinal_Hardware( void )
 
 			IEngineStudio.GL_SetRenderMode(rendermode);
 			IEngineStudio.StudioDrawPoints();
-
-			if (iShadows == 1)
-			{
-				GL_StudioDrawShadow = (void(*)(void))(((unsigned int)IEngineStudio.GL_StudioDrawShadow) + 32);
-				HackShadows();
-			}
-
-			IEngineStudio.GL_StudioDrawShadow();
+			// Set the pointer to skip the code that checks the locked r_shadows cvar
+			GL_StudioDrawShadow = (void(*)(void))(((unsigned int)IEngineStudio.GL_StudioDrawShadow) + 32);
 		}
 	}
 
-	if ( m_pCvarDrawEntities->value == 4 )
+	if (m_pCvarDrawEntities->value == 4)
 	{
-		gEngfuncs.pTriAPI->RenderMode( kRenderTransAdd );
-		IEngineStudio.StudioDrawHulls( );
-		gEngfuncs.pTriAPI->RenderMode( kRenderNormal );
+		gEngfuncs.pTriAPI->RenderMode(kRenderTransAdd);
+		IEngineStudio.StudioDrawHulls();
+		gEngfuncs.pTriAPI->RenderMode(kRenderNormal);
 	}
 
 	if (m_pCvarDrawEntities->value == 5)
 	{
-		IEngineStudio.StudioDrawAbsBBox( );
+		IEngineStudio.StudioDrawAbsBBox();
 	}
 	IEngineStudio.RestoreRenderer();
 }

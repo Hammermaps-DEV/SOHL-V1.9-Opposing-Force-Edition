@@ -28,7 +28,6 @@
 #define DRIP_SPRITE_HALFHEIGHT	46
 #define DRIP_SPRITE_HALFWIDTH	8
 #define SNOW_SPRITE_HALFSIZE	3
-#define DUST_SPRITE_HALFSIZE	256
 
 // radius water rings
 #define MAXRINGHALFSIZE		25	
@@ -39,7 +38,7 @@ typedef struct
 	float		distFromPlayer;
 	float		windX, windY;
 	float		randX, randY;
-	int			weatherMode;	// 0 - snow, 1 - rain, 2 - dust
+	int			weatherMode;	// 0 - snow, 1 - rain
 	float		globalHeight;
 } rain_properties;
 

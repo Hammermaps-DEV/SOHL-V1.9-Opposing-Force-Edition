@@ -27,16 +27,6 @@
 #include "hltv.h"
 #include "studio.h"
 
-// Spectator Mode
-extern "C" 
-{
-	float	vecNewViewAngles[3];
-	int		iHasNewViewAngles;
-	float	vecNewViewOrigin[3];
-	int		iHasNewViewOrigin;
-	int		iIsSpectator;
-}
-
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
 #endif
@@ -600,8 +590,11 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 
 		AngleVectors(angles, pparams->forward, pparams->right, pparams->up);
 
-		for (i = 0; i < 3; i++) {
-			pparams->vieworg[i] += scr_ofsx->value*pparams->forward[i] + scr_ofsy->value*pparams->right[i] + scr_ofsz->value*pparams->up[i];
+		// don't allow cheats in multiplayer
+		if (pparams->maxclients <= 1) {
+			for (i = 0; i<3; i++) {
+				pparams->vieworg[i] += scr_ofsx->value*pparams->forward[i] + scr_ofsy->value*pparams->right[i] + scr_ofsz->value*pparams->up[i];
+			}
 		}
 
 		// Give gun our viewangles
@@ -618,17 +611,13 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 		// Let the viewmodel shake at about 10% of the amplitude
 		gEngfuncs.V_ApplyShake(view->origin, view->angles, 0.9);
 
-		for (i = 0; i < 3; i++) {
-			view->origin[i] += bob * 0.5 * pparams->forward[i];
-			view->origin[i] += bob * -0.25 * pparams->right[i];
-			view->origin[i] += bob * -0.25 * pparams->up[i];
+		for (i = 0; i < 3; i++)
+		{
+			view->origin[i] += bob * 0.4 * pparams->forward[i];
 		}
-
 		view->origin[2] += bob;
 
-		//RM999 - After testing this a bit, I found out that this does NOTHING at all...
 		// throw in a little tilt.
-
 		view->angles[YAW] -= bob * 0.5;
 		view->angles[ROLL] -= bob * 1;
 		view->angles[PITCH] -= bob * 0.3;
@@ -741,7 +730,6 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 		// Store off v_angles before munging for third person
 		v_angles = pparams->viewangles;
 		v_lastAngles = pparams->viewangles;
-		v_cl_angles = pparams->cl_viewangles;
 
 		// override all previous settings if the viewent isn't the client
 		if (pparams->viewentity > pparams->maxclients) {
@@ -757,11 +745,13 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 		}
 
 		lasttime = pparams->time;
-
 		v_origin = pparams->vieworg;
 
-		//LRC
-		RenderFog();
+		//LRC 1.8 - no fog in the env_sky
+		if (gHUD.m_iSkyMode != SKY_ON_DRAWING) {
+			RenderFog();
+		}
+
 		if (gHUD.viewFlags & 1 && gHUD.m_iSkyMode == SKY_OFF) {
 			cl_entity_t *viewentity;
 			viewentity = gEngfuncs.GetEntityByIndex(gHUD.viewEntityIndex);
@@ -776,8 +766,7 @@ void V_CalcNormalRefdef ( struct ref_params_s *pparams )
 						pparams->vieworg[1] = viewmonster->eyeposition[1] + viewentity->origin[1];
 						pparams->vieworg[2] = viewmonster->eyeposition[2] + viewentity->origin[2];
 					}
-				}
-				else {
+				}else {
 					CONPRINT("origin eyes\n");
 					pparams->vieworg[0] = viewentity->origin[0];
 					pparams->vieworg[1] = viewentity->origin[1];
@@ -1218,7 +1207,6 @@ void V_ResetChaseCam()
 	v_resetCamera = true;
 }
 
-
 void V_GetInEyePos(int target, float * origin, float * angles )
 {
 	if ( !target)
@@ -1319,7 +1307,6 @@ void V_GetMapChasePosition(int target, float * cl_angles, float * origin, float 
 }
 
 int V_FindViewModelByWeaponModel(int weaponindex) {
-
 	static char * modelmap[][2] = {
 		{ "models/p_crossbow.mdl",		"models/v_crossbow.mdl"			},
 		{ "models/p_crowbar.mdl",		"models/v_crowbar.mdl"			},
@@ -1343,30 +1330,23 @@ int V_FindViewModelByWeaponModel(int weaponindex) {
 		{ "models/p_saw.mdl",			"models/v_saw.mdl"				},
 		{ "models/p_desert_eagle.mdl",	"models/v_desert_eagle.mdl"     },
 		{ "models/p_spore_launcher.mdl","models/v_spore_launcher.mdl"	},
+		{ "models/p_m40a1.mdl"		   ,"models/v_m40a1.mdl"			},
+		{ "models/p_displacer.mdl"	   ,"models/v_displacer.mdl"		},
 		{ NULL, 				NULL 				} 
 	};
 
 	struct model_s * weaponModel = IEngineStudio.GetModelByIndex( weaponindex );
-
-	if ( weaponModel )
-	{
-		int len = strlen( weaponModel->name );
+	if ( weaponModel ) {
 		int i = 0;
-
-		while ( modelmap[i] != NULL )
-		{
-			if ( !strnicmp( weaponModel->name, modelmap[i][0], len ) )
-			{
+		while ( modelmap[i] != NULL ) {
+			if ( !strnicmp( weaponModel->name, modelmap[i][0], strlen(weaponModel->name)) ) {
 				return gEngfuncs.pEventAPI->EV_FindModelIndex( modelmap[i][1] );
-			}
-			i++;
+			} i++;
 		}
 
 		return 0;
-	}
-	else
+	} else
 		return 0;
-
 }
 
 
@@ -1758,86 +1738,3 @@ void V_Init (void)
 	gEngfuncs.pfnAddCommand		( "thirdperson", CMD_ThirdPerson );
 	gEngfuncs.pfnAddCommand		( "firstperson", CMD_FirstPerson );
 }
-
-
-//#define TRACE_TEST
-#if defined( TRACE_TEST )
-
-extern float in_fov;
-/*
-====================
-CalcFov
-====================
-*/
-float CalcFov (float fov_x, float width, float height)
-{
-	float	a;
-	float	x;
-
-	if (fov_x < 1 || fov_x > 179)
-		fov_x = 90;	// error, set to 90
-
-	x = width/tan(fov_x/360*M_PI);
-
-	a = atan (height/x);
-
-	a = a*360/M_PI;
-
-	return a;
-}
-
-int hitent = -1;
-
-void V_Move( int mx, int my )
-{
-	float fov;
-	float fx, fy;
-	float dx, dy;
-	float c_x, c_y;
-	float dX, dY;
-	vec3_t forward, up, right;
-	vec3_t newangles;
-
-	vec3_t farpoint;
-	pmtrace_t tr;
-
-	fov = CalcFov( in_fov, (float)ScreenWidth, (float)ScreenHeight );
-
-	c_x = (float)ScreenWidth / 2.0;
-	c_y = (float)ScreenHeight / 2.0;
-
-	dx = (float)mx - c_x;
-	dy = (float)my - c_y;
-
-	// Proportion we moved in each direction
-	fx = dx / c_x;
-	fy = dy / c_y;
-
-	dX = fx * in_fov / 2.0 ;
-	dY = fy * fov / 2.0;
-
-	newangles = v_angles;
-
-	newangles[ YAW ] -= dX;
-	newangles[ PITCH ] += dY;
-
-	// Now rotate v_forward around that point
-	AngleVectors ( newangles, forward, right, up );
-
-	farpoint = v_origin + 8192 * forward;
-
-	// Trace
-	tr = *(gEngfuncs.PM_TraceLine( (float *)&v_origin, (float *)&farpoint, PM_TRACELINE_PHYSENTSONLY, 2 /*point sized hull*/, -1 ));
-
-	if ( tr.fraction != 1.0 && tr.ent != 0 )
-	{
-		hitent = PM_GetPhysEntInfo( tr.ent );
-		PM_ParticleLine( (float *)&v_origin, (float *)&tr.endpos, 5, 1.0, 0.0 );
-	}
-	else
-	{
-		hitent = -1;
-	}
-}
-
-#endif

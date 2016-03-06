@@ -21,6 +21,7 @@
 //
 
 #define FOG_LIMIT 30000
+#define RGB_YELLOWISH 0x00FFA000 //255,160,0
 #define RGB_REDISH 0x00FF1010 //255,160,0
 #define RGB_GREENISH 0x0000A000 //0,160,0
 
@@ -202,30 +203,6 @@ private:
 	int m_iPos;
 
 };
-
-//
-//-----------------------------------------------------
-//
-// REMOVED: Vgui has replaced this.
-//
-/*
-class CHudMOTD : public CHudBase
-{
-public:
-	int Init( void );
-	int VidInit( void );
-	int Draw( float flTime );
-	void Reset( void );
-
-	int MsgFunc_MOTD( const char *pszName, int iSize, void *pbuf );
-
-protected:
-	static int MOTD_DISPLAY_TIME;
-	char m_szMOTD[ MAX_MOTD_LENGTH ];
-	float m_flActiveRemaining;
-	int m_iLines;
-};
-*/
 
 //
 //-----------------------------------------------------
@@ -566,6 +543,7 @@ public:
 
 //LRC - for the moment, skymode has only two settings
 #define SKY_OFF 0
+#define SKY_ON_DRAWING  2
 #define SKY_ON  1
 
 typedef struct cl_mirror_s
@@ -727,3 +705,14 @@ extern int g_iUser1;
 extern int g_iUser2;
 extern int g_iUser3;
 
+struct FogSettings
+{
+	float fogColor[3];
+	float startDist;
+	float endDist;
+};
+extern FogSettings g_fog;
+extern FogSettings g_fogPreFade;
+extern FogSettings g_fogPostFade;
+extern float g_fFogFadeDuration;
+extern float g_fFogFadeFraction;

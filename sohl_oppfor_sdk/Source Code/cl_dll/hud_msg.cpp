@@ -26,7 +26,6 @@
 vec3_t FogColor;
 float g_fStartDist;
 float g_fEndDist;
-//int g_iFinalStartDist; //for fading
 int g_iFinalEndDist;   //for fading
 float g_fFadeDuration; //negative = fading out
 
@@ -72,7 +71,7 @@ void CHud :: MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf )
 
 void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 {
-//	CONPRINT("MSG:InitHUD");
+	//	CONPRINT("MSG:InitHUD");
 	//LRC - clear the fog
 	g_fStartDist = 0;
 	g_fEndDist = 0;
@@ -82,9 +81,8 @@ void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 	// prepare all hud data
 	HUDLIST *pList = m_pHudList;
 
-	while (pList)
-	{
-		if ( pList->p )
+	while (pList) {
+		if (pList->p)
 			pList->p->InitHUDData();
 		pList = pList->pNext;
 	}
@@ -94,12 +92,12 @@ void CHud :: MsgFunc_InitHUD( const char *pszName, int iSize, void *pbuf )
 }
 
 //LRC
-void CHud :: MsgFunc_SetFog( const char *pszName, int iSize, void *pbuf )
+void CHud::MsgFunc_SetFog(const char *pszName, int iSize, void *pbuf)
 {
-	BEGIN_READ( pbuf, iSize );
-	FogColor.x = TransformColor ( READ_BYTE() );
-	FogColor.y = TransformColor ( READ_BYTE() );
-	FogColor.z = TransformColor ( READ_BYTE() );
+	BEGIN_READ(pbuf, iSize);
+	FogColor.x = TransformColor(READ_BYTE());
+	FogColor.y = TransformColor(READ_BYTE());
+	FogColor.z = TransformColor(READ_BYTE());
 	//CONPRINT("fog color %f, %f, %f\n", FogColor.x, FogColor.y, FogColor.z );
 	g_fFadeDuration = READ_SHORT();
 	g_fStartDist = READ_SHORT();
