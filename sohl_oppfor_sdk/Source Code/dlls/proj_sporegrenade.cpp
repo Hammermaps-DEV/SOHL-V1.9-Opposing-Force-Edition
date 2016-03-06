@@ -1,17 +1,23 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 //=========================================================
 // Projectile: Spore Grenade for Shocktrooper & Spore Launcher
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
@@ -153,6 +159,19 @@ void CSporeGrenade::FlyThink(void) {
 		WRITE_BYTE(RANDOM_FLOAT(4, 9) * 100);
 	MESSAGE_END();
 
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(pev->origin.x);	// X
+		WRITE_COORD(pev->origin.y);	// Y
+		WRITE_COORD(pev->origin.z);	// Z
+		WRITE_BYTE(15);     // radius
+		WRITE_BYTE(0);		// r
+		WRITE_BYTE(180);	// g
+		WRITE_BYTE(0);	// b
+		WRITE_BYTE(1);     // life * 10
+		WRITE_BYTE(0); // decay
+	MESSAGE_END();
+
 	if (pev->movetype == MOVETYPE_BOUNCE) {
 		if (pev->dmgtime <= UTIL_GlobalTimeBase())
 			Explode();
@@ -256,6 +275,17 @@ void CSporeGrenade::Explode(void) {
 		WRITE_BYTE(155); // framerate
 	MESSAGE_END();
 
+	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+		WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+		WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_SHORT(g_sModelIndexSpore1);
+		WRITE_BYTE((pev->dmg - 50) * .60); // scale * 10
+		WRITE_BYTE(15); // framerate
+		WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
+	MESSAGE_END();
+
 	TraceResult tr;
 	UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 15, dont_ignore_monsters, ENT(pev), &tr);
 
@@ -292,7 +322,7 @@ void CSporeGrenade::Explode(void) {
 		WRITE_COORD(pev->origin.x);	// X
 		WRITE_COORD(pev->origin.y);	// Y
 		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(12);		// radius * 0.1
+		WRITE_BYTE(20);		// radius * 0.1
 		WRITE_BYTE(0);		// r
 		WRITE_BYTE(180);		// g
 		WRITE_BYTE(0);		// b

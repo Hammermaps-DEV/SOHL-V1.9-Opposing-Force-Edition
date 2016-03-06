@@ -1,17 +1,25 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
-****/
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*   All Rights Reserved.
+*
+*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
+
 //=========================================================
 // shocktrooper
 //=========================================================
@@ -79,8 +87,7 @@ extern Schedule_t	slGruntTossGrenadeCover[];
 //=========================================================
 // monster-specific schedule types
 //=========================================================
-enum
-{
+enum {
 	SCHED_STROOPER_SUPPRESS = LAST_COMMON_SCHEDULE + 1,
 	SCHED_STROOPER_ESTABLISH_LINE_OF_FIRE,// move to a location to set up an attack against the enemy. (usually when a friendly is in the way).
 	SCHED_STROOPER_COVER_AND_RELOAD,
@@ -104,18 +111,15 @@ enum
 	TASK_STROOPER_CHECK_FIRE,
 };
 
-
 LINK_ENTITY_TO_CLASS(monster_shocktrooper, CStrooper);
 
-TYPEDESCRIPTION	CStrooper::m_SaveData[] =
-{
+TYPEDESCRIPTION	CStrooper::m_SaveData[] = {
 	DEFINE_FIELD(CStrooper, m_fRightClaw, FIELD_BOOLEAN),
 };
 
 IMPLEMENT_SAVERESTORE(CStrooper, CHGrunt);
 
-const char *CStrooper::pGruntSentences[] =
-{
+const char *CStrooper::pGruntSentences[] = {
 	"ST_GREN",		// grenade scared grunt
 	"ST_ALERT",		// sees player
 	"ST_MONST",		// sees monster
@@ -136,7 +140,6 @@ enum
 	STROOPER_SENT_CHARGE,
 	STROOPER_SENT_TAUNT,
 } STROOPER_SENTENCE_TYPES;
-
 
 //=========================================================
 // GibMonster - make gun fly through the air.

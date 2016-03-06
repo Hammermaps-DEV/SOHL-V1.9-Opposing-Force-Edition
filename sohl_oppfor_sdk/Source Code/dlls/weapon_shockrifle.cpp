@@ -1,21 +1,28 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
+
 //=========================================================
 // Weapon: Shockrifle * http://half-life.wikia.com/wiki/Shock_Roach
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 03.02.2016
 //=========================================================
 
 #include "extdll.h"
@@ -84,18 +91,13 @@ void CShockrifle::Precache(void) {
 // AddToPlayer
 //=========================================================
 int CShockrifle::AddToPlayer(CBasePlayer *pPlayer) {
-	if (CBasePlayerWeapon::AddToPlayer(pPlayer)) {
-		if (g_pGameRules->IsMultiplayer()) {
-			// in multiplayer, all hivehands come full. 
-			pPlayer->m_rgAmmo[PrimaryAmmoIndex()] = SHOCK_MAX_CARRY;
-		}
-
-		MESSAGE_BEGIN(MSG_ONE, gmsgWeapPickup, NULL, pPlayer->pev);
-			WRITE_BYTE(m_iId);
-		MESSAGE_END();
-		return TRUE;
+	int bResult = CBasePlayerWeapon::AddToPlayer(pPlayer);
+	if (g_pGameRules->IsMultiplayer()) {
+		// in multiplayer, all hivehands come full. 
+		pPlayer->m_rgAmmo[PrimaryAmmoIndex()] = SHOCK_MAX_CARRY;
 	}
 
+	if (bResult) return AddWeapon();
 	return FALSE;
 }
 
@@ -224,6 +226,8 @@ void CShockrifle::WeaponIdle(void) {
 
 			if (RANDOM_FLOAT(0, 10) >= 5)
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 0.8, ATTN_IDLE, 0, 90 + (RANDOM_LONG(-5, 5)));
+
+			SendWeaponAnim(iAnim);
 		} else if (flRand >= 0.7) {
 			iAnim = (int)SHOCKRIFLE_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
@@ -232,12 +236,12 @@ void CShockrifle::WeaponIdle(void) {
 
 			if(RANDOM_FLOAT(0, 10) >= 5)
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 0.8, ATTN_IDLE, 0, 90+(RANDOM_LONG(-5, 5)));
+
+			SendWeaponAnim(iAnim);
 		} else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
-
-		SendWeaponAnim(iAnim);
 	}
 }
 

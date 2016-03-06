@@ -1,17 +1,23 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 
 #include "extdll.h"
 #include "util.h"
@@ -231,6 +237,19 @@ void CShock::UpdateBeam(const Vector& start, const Vector& end) {
 		m_pBeam->SetEndPos(end);
 		m_pBeam->RelinkBeam();
 	}
+
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(pev->origin.x);	// X
+		WRITE_COORD(pev->origin.y);	// Y
+		WRITE_COORD(pev->origin.z);	// Z
+		WRITE_BYTE(10);     // radius
+		WRITE_BYTE(0);		// r
+		WRITE_BYTE(255);	// g
+		WRITE_BYTE(255);	// b
+		WRITE_BYTE(1);     // life * 10
+		WRITE_BYTE(0); // decay
+	MESSAGE_END();
 }
 
 void CShock::ComputeBeamPositions(const Vector& vel, Vector* pos1, Vector* pos2) {

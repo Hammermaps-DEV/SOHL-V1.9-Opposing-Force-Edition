@@ -1,9 +1,23 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
-//
-// Purpose: New version of the slider bar
-//
-// $NoKeywords: $
-//=============================================================================
+/***
+*
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 
 #include "extdll.h"
 #include "util.h"
@@ -29,6 +43,8 @@ float AmmoDamage( const char *pName )
 		return gSkillData.plrDmg9MM;
 	if ( !strcmp( pName, "357" ) )
 		return gSkillData.plrDmg357;
+	if (!strcmp(pName, "762"))
+		return gSkillData.plrDmg762;
 	if ( !strcmp( pName, "ARgrenades" ) )
 		return gSkillData.plrDmgM203Grenade;
 	if ( !strcmp( pName, "buckshot" ) )

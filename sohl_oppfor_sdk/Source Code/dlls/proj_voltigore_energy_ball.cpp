@@ -1,17 +1,25 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
-****/
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*   All Rights Reserved.
+*
+*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
+
 //=========================================================
 // Projectile: Energy Ball for Voltigore
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
@@ -169,16 +177,16 @@ void CVoltigoreEnergyBall::Think(void) {
 	pBeam->LiveForTime(0.3);
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(TE_DLIGHT);
-	WRITE_COORD(pev->origin.x);	// X
-	WRITE_COORD(pev->origin.y);	// Y
-	WRITE_COORD(pev->origin.z);	// Z
-	WRITE_BYTE(25);     // radius
-	WRITE_BYTE(125);     // R
-	WRITE_BYTE(61);     // G
-	WRITE_BYTE(177);     // B
-	WRITE_BYTE(1);     // life * 10
-	WRITE_BYTE(0); // decay
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(pev->origin.x);	// X
+		WRITE_COORD(pev->origin.y);	// Y
+		WRITE_COORD(pev->origin.z);	// Z
+		WRITE_BYTE(25);     // radius
+		WRITE_BYTE(125);     // R
+		WRITE_BYTE(61);     // G
+		WRITE_BYTE(177);     // B
+		WRITE_BYTE(1);     // life * 10
+		WRITE_BYTE(0); // decay
 	MESSAGE_END();
 
 	if (UTIL_PointContents(pev->origin) == CONTENT_WATER) { //Impact on Water

@@ -16,6 +16,7 @@
     <ClCompile Include="..\pm_shared\pm_math.c" />
     <ClCompile Include="..\pm_shared\pm_shared.c" />
     <ClCompile Include="ammo_357.cpp" />
+    <ClCompile Include="ammo_762.cpp" />
     <ClCompile Include="ammo_9mmbox.cpp" />
     <ClCompile Include="ammo_9mmclip.cpp" />
     <ClCompile Include="ammo_buckshot.cpp" />
@@ -28,7 +29,9 @@
     <ClCompile Include="ammo_spore_plant.cpp" />
     <ClCompile Include="baseactanimating.cpp" />
     <ClCompile Include="env_electrified_wire.cpp" />
+    <ClCompile Include="env_rope.cpp" />
     <ClCompile Include="env_rope_segment.cpp" />
+    <ClCompile Include="monster_massn.cpp" />
     <ClCompile Include="proj_grapple_tonguetip.cpp" />
     <ClCompile Include="item_antidote.cpp" />
     <ClCompile Include="item_battery.cpp" />
@@ -97,6 +100,7 @@
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
     <ClCompile Include="proj_plrocket.cpp" />
+    <ClCompile Include="proj_portal.cpp" />
     <ClCompile Include="proj_shock.cpp" />
     <ClCompile Include="proj_sporegrenade.cpp" />
     <ClCompile Include="proj_voltigore_energy_ball.cpp" />
@@ -106,6 +110,7 @@
     <ClCompile Include="defaultai.cpp" />
     <ClCompile Include="func_doors.cpp" />
     <ClCompile Include="effects.cpp" />
+    <ClCompile Include="weapon_displacer.cpp" />
     <ClCompile Include="weapon_eagle.cpp" />
     <ClCompile Include="weapon_egon.cpp" />
     <ClCompile Include="explode.cpp" />
@@ -175,6 +180,7 @@
     <ClCompile Include="soundent.cpp" />
     <ClCompile Include="spectator.cpp" />
     <ClCompile Include="squadmonster.cpp" />
+    <ClCompile Include="weapon_sniperrifle.cpp" />
     <ClCompile Include="weapon_sporelauncher.cpp" />
     <ClCompile Include="weapon_squeakgrenade.cpp" />
     <ClCompile Include="stats.cpp" />
@@ -230,11 +236,14 @@
     <ClInclude Include="doors.h" />
     <ClInclude Include="effects.h" />
     <ClInclude Include="enginecallback.h" />
+    <ClInclude Include="env_rope.h" />
+    <ClInclude Include="env_rope_segment.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
     <ClInclude Include="func_break.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
+    <ClInclude Include="monster_massn.h" />
     <ClInclude Include="proj_grapple_tonguetip.h" />
     <ClInclude Include="proj_grenade.h" />
     <ClInclude Include="proj_hornet.h" />
@@ -316,6 +325,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="proj_bolt.h" />
     <ClInclude Include="proj_plrocket.h" />
+    <ClInclude Include="proj_portal.h" />
     <ClInclude Include="proj_shock.h" />
     <ClInclude Include="proj_sporegrenade.h" />
     <ClInclude Include="proj_voltigore_energy_ball.h" />
@@ -337,6 +347,7 @@
     <ClInclude Include="weapons.h" />
     <ClInclude Include="weapon_crossbow.h" />
     <ClInclude Include="weapon_crowbar.h" />
+    <ClInclude Include="weapon_displacer.h" />
     <ClInclude Include="weapon_eagle.h" />
     <ClInclude Include="weapon_gauss.h" />
     <ClInclude Include="weapon_glock.h" />
@@ -350,6 +361,7 @@
     <ClInclude Include="weapon_rpg.h" />
     <ClInclude Include="weapon_shockrifle.h" />
     <ClInclude Include="weapon_shotgun.h" />
+    <ClInclude Include="weapon_sniperrifle.h" />
     <ClInclude Include="weapon_sporelauncher.h" />
     <ClInclude Include="xen_hair.h" />
     <ClInclude Include="xen_hull.h" />

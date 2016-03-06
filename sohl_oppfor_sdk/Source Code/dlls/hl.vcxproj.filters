@@ -623,6 +623,24 @@
     <ClCompile Include="xen_spore.cpp">
       <Filter>Source Files\dlls\xen</Filter>
     </ClCompile>
+    <ClCompile Include="monster_massn.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="env_rope.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_sniperrifle.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="ammo_762.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="weapon_displacer.cpp">
+      <Filter>Source Files\dlls\weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_portal.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1101,6 +1119,24 @@
     </ClInclude>
     <ClInclude Include="xen_spore.h">
       <Filter>Header Files\dlls\xen</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_massn.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="env_rope_segment.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="env_rope.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_sniperrifle.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_displacer.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_portal.h">
+      <Filter>Header Files\dlls\projectile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

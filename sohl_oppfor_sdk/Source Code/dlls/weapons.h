@@ -38,72 +38,75 @@ public:
 };
 
 // constant items
-#define ITEM_HEALTHKIT		1
-#define ITEM_ANTIDOTE		2
-#define ITEM_SECURITY		3
-#define ITEM_BATTERY		4
+#define ITEM_HEALTHKIT			 1
+#define ITEM_ANTIDOTE			 2
+#define ITEM_SECURITY			 3
+#define ITEM_BATTERY			 4
 
-#define WEAPON_NONE				0
-#define WEAPON_CROWBAR			1
-#define WEAPON_PIPEWRENCH		2
-#define WEAPON_KNIFE			3
-#define WEAPON_GRAPPLE			4
-#define WEAPON_GLOCK			5
-#define WEAPON_PYTHON			6
-#define WEAPON_EAGLE			7
-#define WEAPON_GENERIC			8
-#define WEAPON_MP5				9
-#define WEAPON_DEBUG            10
-#define WEAPON_CROSSBOW			11
-#define WEAPON_SHOTGUN			12
-#define WEAPON_RPG				13
-#define WEAPON_GAUSS			14
-#define WEAPON_EGON				15
-#define WEAPON_HORNETGUN		16
-#define WEAPON_HANDGRENADE		17
-#define WEAPON_TRIPMINE			18
-#define WEAPON_SATCHEL			19
-#define WEAPON_SNARK			20
-#define WEAPON_M249				21
-#define WEAPON_SHOCKRIFLE		22
-#define WEAPON_SPORELAUNCHER	23
+#define WEAPON_NONE				 0
+#define WEAPON_CROWBAR			 1
+#define WEAPON_PIPEWRENCH		 2
+#define WEAPON_KNIFE			 3
+#define WEAPON_GRAPPLE			 4
+#define WEAPON_GLOCK			 5
+#define WEAPON_PYTHON			 6
+#define WEAPON_EAGLE			 7
+#define WEAPON_MP5				 8
+#define WEAPON_SHOTGUN			 9
+#define WEAPON_CROSSBOW			10
+#define WEAPON_RPG				11
+#define WEAPON_GAUSS			12
+#define WEAPON_EGON				13
+#define WEAPON_HORNETGUN		14
+#define WEAPON_HANDGRENADE		15
+#define WEAPON_SATCHEL			16
+#define WEAPON_TRIPMINE			17
+#define WEAPON_SNARK			18
+#define WEAPON_M249				19
+#define WEAPON_SPORELAUNCHER	20
+#define WEAPON_SHOCKRIFLE		21
+#define WEAPON_SNIPERRIFLE		22
+#define WEAPON_DISPLACER		23
 
-#define WEAPON_ALLWEAPONS			(~(1<<WEAPON_CYCLER))
+#define WEAPON_ALLWEAPONS		(~(1<<WEAPON_CYCLER))
 
-#define WEAPON_CYCLER			31	// ?????
+#define WEAPON_CYCLER			31
 
 #define MAX_WEAPONS				45
 
-#define MAX_NORMAL_BATTERY			100
+#define MAX_NORMAL_BATTERY		100
 
 
 // weapon weight factors (for auto-switching)   (-1 = noswitch)
-#define CROWBAR_WEIGHT		0
-#define PIPEWRENCH_WEIGHT	0
-#define KNIFE_WEIGHT		5
-#define GRAPPLE_WEIGHT		0
-#define GLOCK_WEIGHT		10
-#define PYTHON_WEIGHT		15
-#define MP5_WEIGHT			15
-#define SHOTGUN_WEIGHT		15
-#define CROSSBOW_WEIGHT		10
-#define RPG_WEIGHT			20
-#define GAUSS_WEIGHT		20
-#define EGON_WEIGHT			20
-#define HORNETGUN_WEIGHT	10
-#define HANDGRENADE_WEIGHT	5
-#define SNARK_WEIGHT		5
-#define SATCHEL_WEIGHT		-10
-#define TRIPMINE_WEIGHT		-10
-#define M249_WEIGHT			25
-#define SHOCKRIFLE_WEIGHT	10
-#define EAGLE_WEIGHT		15
-#define SPORELAUNCHER_WEIGHT	10
+#define CROWBAR_WEIGHT			  0
+#define PIPEWRENCH_WEIGHT		  0
+#define KNIFE_WEIGHT			  5
+#define GRAPPLE_WEIGHT			  0
+#define GLOCK_WEIGHT			 10
+#define PYTHON_WEIGHT			 15
+#define MP5_WEIGHT				 15
+#define SHOTGUN_WEIGHT			 15
+#define CROSSBOW_WEIGHT			 10
+#define RPG_WEIGHT				 20
+#define GAUSS_WEIGHT			 20
+#define EGON_WEIGHT				 20
+#define HORNETGUN_WEIGHT		 10
+#define HANDGRENADE_WEIGHT		  5
+#define SNARK_WEIGHT			  5
+#define SATCHEL_WEIGHT			-10
+#define TRIPMINE_WEIGHT			-10
+#define M249_WEIGHT				 25
+#define SHOCKRIFLE_WEIGHT		 10
+#define EAGLE_WEIGHT			 15
+#define SPORELAUNCHER_WEIGHT	 10
+#define SNIPERRIFLE_WEIGHT		 15
+#define DISPLACER_WEIGHT		 0
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
 #define	_9MM_MAX_CARRY		250
 #define _357_MAX_CARRY		36
+#define _762_MAX_CARRY		15
 #define BUCKSHOT_MAX_CARRY		125
 #define BOLT_MAX_CARRY		50
 #define ROCKET_MAX_CARRY		5
@@ -137,7 +140,8 @@ public:
 #define SNARK_MAX_CLIP		WEAPON_NOCLIP
 #define M249_MAX_CLIP		50
 #define EAGLE_MAX_CLIP		7
-#define SPORELAUNCHER_MAX_CLIP			5
+#define SPORELAUNCHER_MAX_CLIP	5
+#define SNIPERRIFLE_MAX_CLIP	5
 
 // the default amount of ammo that comes with each gun when it spawns
 #define GLOCK_DEFAULT_GIVE			17
@@ -159,6 +163,7 @@ public:
 #define SHOCKRIFLE_DEFAULT_GIVE		10
 #define EAGLE_DEFAULT_GIVE			7
 #define SPORELAUNCHER_DEFAULT_GIVE	5
+#define SNIPERRIFLE_DEFAULT_GIVE	5
 
 // The amount of ammo given to a player by an ammo item.
 #define AMMO_URANIUMBOX_GIVE	20
@@ -173,8 +178,7 @@ public:
 #define AMMO_URANIUMBOX_GIVE	20
 #define AMMO_SNARKBOX_GIVE		5
 #define AMMO_SPORE_GIVE			1
-
-//SOHL - Opposing-Force
+#define AMMO_762BOX_GIVE		5
 #define AMMO_556_GIVE			50
 
 // bullet types
@@ -184,6 +188,7 @@ typedef	enum
 	BULLET_PLAYER_9MM, // glock
 	BULLET_PLAYER_MP5, // mp5
 	BULLET_PLAYER_357, // python
+	BULLET_PLAYER_762, // m40a1
 	BULLET_PLAYER_BUCKSHOT, // shotgun
 	BULLET_PLAYER_CROWBAR, // crowbar swipe
 
@@ -380,7 +385,7 @@ public:
 	int		m_iClientClip;										// the last version of m_iClip sent to hud dll
 	int		m_iClientWeaponState;								// the last version of the weapon state sent to hud dll (is current weapon, is on target)
 	int		m_fInReload;										// Are we in the middle of a reload;
-	int		m_iClipSize;//This required weapon_generic, defintion in same class will crash'es compile
+	int		m_iClipSize;
 	int 	m_iChargeLevel;//level of energy charge
 	int 	m_iOverloadLevel;//level of overload weapon
 	int 	m_fInAttack;//attack type

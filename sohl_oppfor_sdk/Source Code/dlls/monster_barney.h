@@ -33,6 +33,7 @@ class CBarney : public CTalkMonster {
 		virtual void AlertSound(void);
 		virtual int  Classify(void);
 		virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
+		virtual void KeyValue(KeyValueData *pkvd);
 
 		virtual void RunTask(Task_t *pTask);
 		virtual void StartTask(Task_t *pTask);
@@ -79,6 +80,7 @@ class CBarney : public CTalkMonster {
 		float m_flHitgroupArm;
 		float m_flHitgroupLeg;
 		int	  m_iBrassShell;
+		int	  head;
 };
 
 #endif // MONSTER_BARNEY_H

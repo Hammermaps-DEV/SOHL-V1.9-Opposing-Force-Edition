@@ -1,17 +1,23 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 /*
 
 ===== util.cpp ========================================================
@@ -2845,13 +2851,13 @@ int CRestore::ReadField( void *pBaseData, TYPEDESCRIPTION *pFields, int fieldCou
 					switch( pTest->fieldType )
 					{
 					case FIELD_TIME:
-						timeData = *(float *)pInputData;
-						// Re-base time variables
-						timeData += time;
-						*((float *)pOutputData) = timeData;
+						memcpy(&timeData, pInputData, 4);
+												// Re-base time variables
+							timeData += time;
+						memcpy(pOutputData, &timeData, 4);
 					break;
 					case FIELD_FLOAT:
-						*((float *)pOutputData) = *(float *)pInputData;
+						memcpy(pOutputData, pInputData, 4);
 					break;
 					case FIELD_MODELNAME:
 					case FIELD_SOUNDNAME:
@@ -2932,9 +2938,16 @@ int CRestore::ReadField( void *pBaseData, TYPEDESCRIPTION *pFields, int fieldCou
 						((float *)pOutputData)[2] = ((float *)pInputData)[2];
 					break;
 					case FIELD_POSITION_VECTOR:
-						((float *)pOutputData)[0] = ((float *)pInputData)[0] + position.x;
-						((float *)pOutputData)[1] = ((float *)pInputData)[1] + position.y;
-						((float *)pOutputData)[2] = ((float *)pInputData)[2] + position.z;
+						float tmp;
+						memcpy(&tmp, (char *)pInputData + 0, 4);
+						tmp += position.x;
+						memcpy((char *)pOutputData + 0, &tmp, 4);
+						memcpy(&tmp, (char *)pInputData + 4, 4);
+						tmp += position.y;
+						memcpy((char *)pOutputData + 4, &tmp, 4);
+						memcpy(&tmp, (char *)pInputData + 8, 4);
+						tmp += position.z;
+						memcpy((char *)pOutputData + 8, &tmp, 4);
 					break;
 
 					case FIELD_BOOLEAN:

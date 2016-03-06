@@ -1,17 +1,23 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-****/
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 //=========================================================
 // NPC: Barney * http://half-life.wikia.com/wiki/Barney_Calhoun
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
@@ -36,14 +42,23 @@
 #define	BARNEY_AE_SHOOT		( 3 )
 #define	BARNEY_AE_DISARM	( 4 )
 
-#define	BARNEY_BODY_GUNHOLSTERED	0
-#define	BARNEY_BODY_GUNDRAWN		1
-#define BARNEY_BODY_GUNGONE			2
+#define	NUM_BARNEY_HEADS	3
+
+#define	GUN_GROUP			1
+#define	HEAD_GROUP			2
+
+#define	HEAD_NORMAL			0
+#define	HEAD_BLACK			1
+#define	HEAD_JOE			2
+
+#define	GUN_NONE			0
+#define	GUN_DRAWN			1
+#define	GUN_NO_GUN			2
 
 //=========================================================
 // Monster's link to Class & Saverestore Begins
 //=========================================================
-LINK_ENTITY_TO_CLASS(monster_barney, CBarney );
+LINK_ENTITY_TO_CLASS(monster_barney, CBarney);
 
 TYPEDESCRIPTION	CBarney::m_SaveData[] = {
 	DEFINE_FIELD( CBarney, m_iBaseBody, FIELD_INTEGER ), //LRC
@@ -52,9 +67,21 @@ TYPEDESCRIPTION	CBarney::m_SaveData[] = {
 	DEFINE_FIELD( CBarney, m_checkAttackTime, FIELD_TIME ),
 	DEFINE_FIELD( CBarney, m_lastAttackCheck, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CBarney, m_flPlayerDamage, FIELD_FLOAT ),
+	DEFINE_FIELD( CBarney, head, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE( CBarney, CTalkMonster );
+
+//=========================================================
+// KeyValue
+//=========================================================
+void CBarney::KeyValue(KeyValueData *pkvd) {
+	if (FStrEq(pkvd->szKeyName, "head")) {
+		head = atoi(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	} else
+		CTalkMonster::KeyValue(pkvd);
+}
 
 //=========================================================
 // Monster Sounds
@@ -102,11 +129,20 @@ void CBarney::Spawn() {
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
-	m_iBaseBody = pev->body; //LRC
-	pev->body = m_iBaseBody + BARNEY_BODY_GUNHOLSTERED; // gun in holster
 	m_fGunDrawn = FALSE;
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
+
+	// Make sure hands are white.
+	if (m_iBaseBody) {
+		SetBodygroup(HEAD_GROUP, m_iBaseBody);
+	} else {
+		SetBodygroup(HEAD_GROUP, RANDOM_LONG(0, NUM_BARNEY_HEADS - 1));
+	}
+
+	if (head != -1 && !m_iBaseBody) {
+		SetBodygroup(HEAD_GROUP, head);
+	}
 
 	m_flDebug = false; //Debug Massages
 
@@ -344,11 +380,11 @@ void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			FirePistol();
 		break;
 		case BARNEY_AE_DRAW:
-			pev->body = m_iBaseBody + BARNEY_BODY_GUNDRAWN;
+			SetBodygroup(GUN_GROUP, GUN_DRAWN);
 			m_fGunDrawn = TRUE;
 		break;
 		case BARNEY_AE_DISARM:
-			pev->body = m_iBaseBody + BARNEY_BODY_GUNHOLSTERED;
+			SetBodygroup(GUN_GROUP, GUN_NONE);
 			m_fGunDrawn = FALSE;
 		break;
 		default:
@@ -625,9 +661,9 @@ void CBarney :: TalkInit() {
 // Monster is Killed, change body and drop weapon
 //=========================================================
 void CBarney::Killed( entvars_t *pevAttacker, int iGib ) {
-	if ( pev->body < m_iBaseBody + BARNEY_BODY_GUNGONE && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
+	if ( pev->body < m_iBaseBody + GUN_DRAWN && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
 		Vector vecGunPos, vecGunAngles;
-		pev->body = m_iBaseBody + BARNEY_BODY_GUNGONE;
+		SetBodygroup(GUN_GROUP, GUN_NO_GUN);
 		GetAttachment( 0, vecGunPos, vecGunAngles );
 		CBaseEntity *pGun = DropItem((pev->frags ? "weapon_357" : "weapon_9mmhandgun"), vecGunPos, vecGunAngles);
 	}

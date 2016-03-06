@@ -1,17 +1,23 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 /*
 
 ===== triggers.cpp ========================================================
@@ -5531,21 +5537,73 @@ void CTriggerCamera::Move()
 	pev->velocity = ((pev->movedir * pev->speed) * fraction) + (pev->velocity * (1-fraction));
 }
 
-// Opposing-Force
-class CTriggerPlayerFreeze : public CBaseDelay
-{
-   public:
-   void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-   int ObjectCaps( void ) { return CBaseDelay::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+//=========================================================
+// CPlayerFreeze
+//=========================================================
+class CPlayerFreeze : public CBaseDelay {
+public:
+	void	Spawn(void);
+	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
+	static	TYPEDESCRIPTION m_SaveData[];
+
+	EHANDLE m_hPlayer;
 };
-LINK_ENTITY_TO_CLASS( trigger_playerfreeze, CTriggerPlayerFreeze );
 
-void CTriggerPlayerFreeze::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+LINK_ENTITY_TO_CLASS(trigger_playerfreeze, CPlayerFreeze);
+
+
+TYPEDESCRIPTION CPlayerFreeze::m_SaveData[] =
 {
-   if ( !pActivator || !pActivator->IsPlayer() )
-     pActivator = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex( 1 ));
+	DEFINE_FIELD(CPlayerFreeze, m_hPlayer, FIELD_EHANDLE),
+};
 
-   if (pActivator->pev->flags & FL_FROZEN)
-     ((CBasePlayer *)((CBaseEntity *)pActivator))->EnableControl(TRUE);
-   else ((CBasePlayer *)((CBaseEntity *)pActivator))->EnableControl(FALSE);
+IMPLEMENT_SAVERESTORE(CPlayerFreeze, CBaseDelay);
+
+void CPlayerFreeze::Spawn(void)
+{
+	CBaseDelay::Spawn();
+
+	m_hPlayer.Set(NULL);
+
+	CBaseEntity* pPlayer = UTIL_PlayerByIndex(1);
+
+	if (pPlayer)
+	{
+		m_hPlayer = pPlayer;
+	}
+}
+
+void CPlayerFreeze::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+{
+	CBaseEntity* pPlayer = NULL;
+
+	if (!m_hPlayer.Get())
+	{
+		CBaseEntity* pPlayer = UTIL_PlayerByIndex(1);
+
+		if (pPlayer)
+		{
+			m_hPlayer = pPlayer;
+		}
+	}
+
+	if (m_hPlayer.Get())
+	{
+#ifdef DEBUG
+		ASSERT(m_hPlayer != NULL);
+#endif
+		m_hPlayer->pev->movetype = (m_hPlayer->pev->movetype == MOVETYPE_NONE)
+			? MOVETYPE_WALK
+			: MOVETYPE_NONE;
+	}
+	else
+	{
+		ALERT(at_console, "ERROR: Couldn't find player entity.\n");
+	}
+
+	SetThink(&CPlayerFreeze::SUB_Remove);
+	pev->nextthink = gpGlobals->time;
 }

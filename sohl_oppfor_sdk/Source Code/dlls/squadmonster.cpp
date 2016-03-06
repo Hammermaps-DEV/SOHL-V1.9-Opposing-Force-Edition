@@ -1,17 +1,24 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-****/
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
+
 //=========================================================
 // Squadmonster  functions
 //=========================================================
@@ -28,22 +35,15 @@
 //=========================================================
 // Save/Restore
 //=========================================================
-TYPEDESCRIPTION	CSquadMonster::m_SaveData[] = 
-{
+TYPEDESCRIPTION	CSquadMonster::m_SaveData[] = {
 	DEFINE_FIELD( CSquadMonster, m_hSquadLeader, FIELD_EHANDLE ),
 	DEFINE_ARRAY( CSquadMonster, m_hSquadMember, FIELD_EHANDLE, MAX_SQUAD_MEMBERS - 1 ),
-
-	// DEFINE_FIELD( CSquadMonster, m_afSquadSlots, FIELD_INTEGER ), // these need to be reset after transitions!
 	DEFINE_FIELD( CSquadMonster, m_fEnemyEluded, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CSquadMonster, m_flLastEnemySightTime, FIELD_TIME ),
-
 	DEFINE_FIELD( CSquadMonster, m_iMySlot, FIELD_INTEGER ),
-
-
 };
 
 IMPLEMENT_SAVERESTORE( CSquadMonster, CBaseMonster );
-
 
 //=========================================================
 // OccupySlot - if any slots of the passed slots are 

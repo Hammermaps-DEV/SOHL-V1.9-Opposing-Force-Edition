@@ -346,6 +346,11 @@ public:
 	float	Rain_endFade; // 0 means off
 	float	Rain_nextFadeUpdate;
 
+	BOOL	m_fInXen;
+	BOOL	m_fIsFrozen;
+
+	friend class CDisplacer;
+
 	int	Rain_needsUpdate;
 };
 

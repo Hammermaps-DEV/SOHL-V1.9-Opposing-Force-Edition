@@ -1,21 +1,25 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 //=========================================================
 // Weapon: Crossbow * http://half-life.wikia.com/wiki/Black_Mesa_Crossbow
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 24.01.2016
 //=========================================================
 
 #include "extdll.h"
@@ -266,10 +270,11 @@ void CCrossbow::Holster( ) {
 // Reload
 //=========================================================
 void CCrossbow::Reload( void ) {
-	if (m_iClip) { return; }
 	if (m_iChargeLevel) {
 		ZoomReset();
 	}
+
+	if (m_iClip) { return; }
 
 	DefaultReload(CROSSBOW_MAX_CLIP, (int)CROSSBOW_RELOAD::sequence,
 		CalculateWeaponTime((int)CROSSBOW_RELOAD::frames, (int)CROSSBOW_RELOAD::fps));
@@ -331,6 +336,10 @@ void CCrossbow::WeaponIdle( void ) {
 		case 3: pev->body = 2; break;
 		case 4: pev->body = 1; break;
 		case 5: pev->body = 0; break;
+	}
+
+	if (m_iChargeLevel != 0) {
+		return;
 	}
 
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||

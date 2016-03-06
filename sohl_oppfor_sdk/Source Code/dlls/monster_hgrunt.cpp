@@ -1,17 +1,23 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-****/
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 //=========================================================
 // hgrunt
 //=========================================================
@@ -71,6 +77,10 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 #define HEAD_COMMANDER				1
 #define HEAD_SHOTGUN				2
 #define HEAD_M203					3
+#define HEAD_M203_BLACK				4
+#define HEAD_MP						5
+#define HEAD_MP5					6
+#define HEAD_MP5_BLACK				7
 
 #define GUN_GROUP					2
 #define GUN_MP5						0
@@ -976,11 +986,6 @@ void CHGrunt :: Spawn()
 	}
 	m_cAmmoLoaded		= m_cClipSize;
 
-	if (RANDOM_LONG( 0, 99 ) < 80)
-		pev->skin = 0;	// light skin
-	else
-		pev->skin = 1;	// dark skin
-
 	if (FBitSet( pev->weapons, HGRUNT_SHOTGUN ))
 	{
 		SetBodygroup( HEAD_GROUP, HEAD_SHOTGUN);
@@ -988,7 +993,6 @@ void CHGrunt :: Spawn()
 	else if (FBitSet( pev->weapons, HGRUNT_GRENADELAUNCHER ))
 	{
 		SetBodygroup( HEAD_GROUP, HEAD_M203 );
-		pev->skin = 1; // alway dark skin
 	}
 
 	CTalkMonster::g_talkWaitTime = 0;

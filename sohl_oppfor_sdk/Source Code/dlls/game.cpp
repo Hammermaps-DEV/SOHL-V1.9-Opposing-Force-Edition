@@ -1,17 +1,24 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
+
 #include "extdll.h"
 #include "eiface.h"
 #include "util.h"
@@ -721,6 +728,11 @@ cvar_t	sk_plr_9mm_bullet3 = {"sk_plr_9mm_bullet3","0"};
 cvar_t	sk_plr_357_bullet1 = {"sk_plr_357_bullet1","0"};
 cvar_t	sk_plr_357_bullet2 = {"sk_plr_357_bullet2","0"};
 cvar_t	sk_plr_357_bullet3 = {"sk_plr_357_bullet3","0"};
+
+// 762 Round
+cvar_t	sk_plr_762_bullet1 = { "sk_plr_762_bullet1","0" };
+cvar_t	sk_plr_762_bullet2 = { "sk_plr_762_bullet2","0" };
+cvar_t	sk_plr_762_bullet3 = { "sk_plr_762_bullet3","0" };
 
 // MP5 Round
 cvar_t	sk_plr_9mmAR_bullet1 = {"sk_plr_9mmAR_bullet1","0"};
@@ -1598,6 +1610,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_plr_357_bullet1 );
 	CVAR_REGISTER ( &sk_plr_357_bullet2 );
 	CVAR_REGISTER ( &sk_plr_357_bullet3 );
+
+	// 762 Round
+	CVAR_REGISTER(&sk_plr_762_bullet1);
+	CVAR_REGISTER(&sk_plr_762_bullet2);
+	CVAR_REGISTER(&sk_plr_762_bullet3);
 
 	// MP5 Round
 	CVAR_REGISTER ( &sk_plr_9mmAR_bullet1 );
