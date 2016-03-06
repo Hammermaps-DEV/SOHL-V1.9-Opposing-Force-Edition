@@ -49,13 +49,13 @@ $hbox 0 "Bip01 R Finger31" 0.000000 -0.800000 -0.560000 1.136842 0.360000 0.4600
 
 // 9 animation sequence(s)
 $sequence "draw" "draw" fps 30 
-$sequence "slowidle" "slowidle" fps 23 loop 
+$sequence "slowidle" "slowidle" fps 23 
 $sequence "fire" "fire" fps 38 { event 5004 32 "weapons/sniper_bolt1.wav" } 
 $sequence "firelastround" "firelastround" fps 38 { event 5004 32 "weapons/sniper_bolt2.wav" } 
 $sequence "reload1" "reload1" fps 34 { event 5004 1 "weapons/sniper_reload_first_seq.wav" } 
 $sequence "reload2" "reload2" fps 27 { event 5004 1 "weapons/sniper_reload_second_seq.wav" } 
 $sequence "reload3" "reload3" fps 34 { event 5004 1 "weapons/sniper_reload_first_seq.wav" } 
-$sequence "slowidle2" "slowidle2" fps 23 loop 
+$sequence "slowidle2" "slowidle2" fps 23 
 $sequence "holster" "holster" fps 20 
 
 // End of QC script.

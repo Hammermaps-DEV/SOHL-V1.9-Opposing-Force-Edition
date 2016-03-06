@@ -51,8 +51,8 @@ $hbox 0 "Bone08" 0.000000 -1.410000 -0.010000 1.370000 0.000000 1.150000
 $hbox 0 "Bone09" 0.000000 -1.090000 -0.170000 1.550000 0.000000 1.040000
 
 // 7 animation sequence(s)
-$sequence "idle1" "idle1" fps 30 loop 
-$sequence "idle2" "idle2" fps 30 loop 
+$sequence "idle1" "idle1" fps 30
+$sequence "idle2" "idle2" fps 30 
 $sequence "spinup" "spinup" fps 30 loop 
 $sequence "spin" "spin" fps 30 loop 
 $sequence "fire" "fire" fps 30 
