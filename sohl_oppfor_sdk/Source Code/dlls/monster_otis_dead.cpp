@@ -32,7 +32,7 @@
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-char *CDeadOtis::m_szPoses[] = { "lying_on_back", "lying_on_side", "lying_on_stomach" };
+char *CDeadOtis::m_szPoses[] = { "lying_on_back", "lying_on_side", "lying_on_stomach", "stuffed_in_vent" ,"dead_sitting" };
 
 #define	NUM_OTIS_HEADS		4
 
@@ -65,7 +65,7 @@ void CDeadOtis::KeyValue(KeyValueData *pkvd) {
 		head = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	} else
-		CBaseMonster::KeyValue(pkvd);
+		CDeadBarney::KeyValue(pkvd);
 }
 
 //=========================================================

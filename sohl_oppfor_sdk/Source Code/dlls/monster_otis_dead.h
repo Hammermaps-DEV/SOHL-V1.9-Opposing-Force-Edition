@@ -24,7 +24,7 @@ class CDeadOtis : public CDeadBarney
 		void Spawn(void);
 		int	Classify(void) { return	CLASS_PLAYER_ALLY; }
 		void KeyValue(KeyValueData *pkvd);
-		static char *m_szPoses[3];
+		static char *m_szPoses[5];
 
 		int	head;
 		int	m_iBaseBody;
