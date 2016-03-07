@@ -31,6 +31,8 @@
     <ClCompile Include="env_electrified_wire.cpp" />
     <ClCompile Include="env_rope.cpp" />
     <ClCompile Include="env_rope_segment.cpp" />
+    <ClCompile Include="func_grass.cpp" />
+    <ClCompile Include="genericmodel.cpp" />
     <ClCompile Include="monster_massn.cpp" />
     <ClCompile Include="proj_grapple_tonguetip.cpp" />
     <ClCompile Include="item_antidote.cpp" />
@@ -104,6 +106,8 @@
     <ClCompile Include="proj_shock.cpp" />
     <ClCompile Include="proj_sporegrenade.cpp" />
     <ClCompile Include="proj_voltigore_energy_ball.cpp" />
+    <ClCompile Include="prop_bushs.cpp" />
+    <ClCompile Include="prop_generic.cpp" />
     <ClCompile Include="rcallymonster.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
     <ClCompile Include="weapon_crowbar.cpp" />
@@ -236,13 +240,16 @@
     <ClInclude Include="doors.h" />
     <ClInclude Include="effects.h" />
     <ClInclude Include="enginecallback.h" />
+    <ClInclude Include="env_lensflare.h" />
     <ClInclude Include="env_rope.h" />
     <ClInclude Include="env_rope_segment.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
     <ClInclude Include="func_break.h" />
+    <ClInclude Include="func_grass.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
+    <ClInclude Include="genericmodel.h" />
     <ClInclude Include="monster_massn.h" />
     <ClInclude Include="proj_grapple_tonguetip.h" />
     <ClInclude Include="proj_grenade.h" />
@@ -329,6 +336,8 @@
     <ClInclude Include="proj_shock.h" />
     <ClInclude Include="proj_sporegrenade.h" />
     <ClInclude Include="proj_voltigore_energy_ball.h" />
+    <ClInclude Include="prop_bushs.h" />
+    <ClInclude Include="prop_generic.h" />
     <ClInclude Include="rcallymonster.h" />
     <ClInclude Include="saverestore.h" />
     <ClInclude Include="schedule.h" />

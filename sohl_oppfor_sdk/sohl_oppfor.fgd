@@ -364,6 +364,12 @@
 
 @BaseClass base(Appearflags, Angles) size(-16 -16 -36, 16 16 36) color(0 255 0) = PlayerClass []
 
+@BaseClass base(Targetname, Angles, RenderFields, Appearflags) color(0 200 200) = Prop 
+[
+	model(studio) : "Model (e.g. models/can.mdl)"
+	scale(string) : "Scale (1.0 = normal size)"
+]
+
 @BaseClass base(Targetname, Angles, RenderFields, Appearflags) color(0 200 200) = Monster 
 [
 	//NEW 0.7.1
@@ -6468,13 +6474,6 @@
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_9mmar.mdl")= weapon_9mmAR : "9mm Assault Rifle" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_9mmhandgun.mdl")= weapon_9mmhandgun : "9mm Handgun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_crossbow.mdl")= weapon_crossbow : "Crossbow" 
-[
-	sequence(choices) : "Placement" : 0 =
-	[
-		0 : "Normal (flat)"
-		1 : "Realistic (tilted)"
-	]
-]
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_crowbar.mdl") = weapon_crowbar : "Crowbar" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_egon.mdl") = weapon_egon : "Egon Gun" []
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_gauss.mdl") = weapon_gauss : "Gauss Gun" []
@@ -6500,6 +6499,10 @@
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_shock.mdl") = weapon_shockrifle : "Shock Roach" []
 //NEW 1.9
 @PointClass base(Weapon, Targetx, RenderFields) studio("models/w_spore_launcher.mdl") = weapon_sporelauncher : "Spore Launcher" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_displacer.mdl") = weapon_displacer : "Displacer" []
+//NEW 1.9
+@PointClass base(Weapon, Targetx, RenderFields) studio("models/w_m40a1.mdl") = weapon_sniperrifle : "Sniper Rifle" []
 
 @PointClass base(Weapon, Targetx, RenderFields) = world_items : "World Items" 
 [
@@ -6554,3 +6557,46 @@
 	m_flRandX(integer) : "Rand X" : 0 
 	m_flRandY(integer) : "Rand Y" : 0 
 ]
+
+//NEW 1.9 
+@PointClass base(Angles, RenderFields) size(-8 -8 0, 8 8 32 ) = prop_bush : "Prop-Bush" 
+[
+	bush(choices) : "Bush Model" : "0" =
+	[
+		"0" : "Random Bush"
+		"models/bush/bush_01.mdl" : "Bush-01"
+		"models/bush/bush_02.mdl" : "Bush-02"
+		"models/bush/bush_03.mdl" : "Bush-03"
+		"models/bush/bush_04.mdl" : "Bush-04"
+		"models/bush/bush_05.mdl" : "Bush-05"
+		"models/bush/bush_06.mdl" : "Bush-06"
+	]
+	model(studio) : "Model"
+]
+//NEW 1.9 
+@PointClass base(Targetname, Angles, RenderFields) size(-8 -8 0, 8 8 32 ) = prop_generic : "Prop-Generic" 
+[
+	model(studio) : "Model name"
+	skin(integer) : "Skin" : 0
+	body(integer) : "Body" : 0
+	size(string) : "Size (X Y Z)"
+]
+//NEW 1.9 
+@PointClass base(Targetname, Angles) size(-8 -8 0, 8 8 32 ) studio("models/particle_emitter.mdl") = env_particleemitter: "Particle System Emitter"
+[
+	definition_file(string) : "Definition File" : "particles/generic_particle_example.txt"
+	spawnflags(flags) =
+	[
+		1: "Start On" : 1
+		2: "Triggerable" : 0
+	]
+]
+//NEW 1.9 
+@SolidClass base(Targetname, Angles) size(-8 -8 0, 8 8 32 ) = func_grass: "Area Grass"
+[
+	definition_file(string) : "Definition File" : "particles/generic_grass_example.txt"
+]
+//NEW 1.9 
+@PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(200 100 50) = info_displacer_xen_target : "Displacer XEN Target" []
+//NEW 1.9 
+@PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(200 100 50) = info_displacer_earth_target : "Displacer EARTH Target" []

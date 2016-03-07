@@ -69,6 +69,18 @@
     <Filter Include="Header Files\dlls\xen">
       <UniqueIdentifier>{d11248b8-0e3e-41e6-a79b-f845346f3dd7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\env">
+      <UniqueIdentifier>{22e2c07d-ce17-46ee-a0a6-b9c5e039883b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\env">
+      <UniqueIdentifier>{03742a49-eb6f-405d-b32e-a12933c5e0c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\props">
+      <UniqueIdentifier>{3dfd048f-50ce-4995-80f0-277de07be2f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\props">
+      <UniqueIdentifier>{40df2770-e295-42dd-906d-39f0dcb3a415}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ammo_9mmbox.cpp">
@@ -500,9 +512,6 @@
     <ClCompile Include="nodes.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="particle_emitter.cpp">
-      <Filter>Source Files\dlls</Filter>
-    </ClCompile>
     <ClCompile Include="multiplay_gamerules.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
@@ -640,6 +649,21 @@
     </ClCompile>
     <ClCompile Include="proj_portal.cpp">
       <Filter>Source Files\dlls\projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="genericmodel.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="prop_bushs.cpp">
+      <Filter>Source Files\dlls\props</Filter>
+    </ClCompile>
+    <ClCompile Include="prop_generic.cpp">
+      <Filter>Source Files\dlls\props</Filter>
+    </ClCompile>
+    <ClCompile Include="func_grass.cpp">
+      <Filter>Source Files\dlls\func</Filter>
+    </ClCompile>
+    <ClCompile Include="particle_emitter.cpp">
+      <Filter>Source Files\dlls\env</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1021,9 +1045,6 @@
     <ClInclude Include="nodes.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
-    <ClInclude Include="particle_emitter.h">
-      <Filter>Header Files\dlls</Filter>
-    </ClInclude>
     <ClInclude Include="plane.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
@@ -1137,6 +1158,24 @@
     </ClInclude>
     <ClInclude Include="proj_portal.h">
       <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="env_lensflare.h">
+      <Filter>Header Files\dlls\env</Filter>
+    </ClInclude>
+    <ClInclude Include="genericmodel.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="prop_bushs.h">
+      <Filter>Header Files\dlls\props</Filter>
+    </ClInclude>
+    <ClInclude Include="prop_generic.h">
+      <Filter>Header Files\dlls\props</Filter>
+    </ClInclude>
+    <ClInclude Include="func_grass.h">
+      <Filter>Header Files\dlls\func</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_emitter.h">
+      <Filter>Header Files\dlls\env</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

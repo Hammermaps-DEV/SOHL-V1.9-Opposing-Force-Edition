@@ -2654,7 +2654,8 @@ void EV_Displacer(event_args_t *args)
 			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_fire.wav", 1, ATTN_NORM, 0, PITCH_NORM);
 			break;
 		case 2: // FIRESTATE_BACKWARD (secondary attack)
-			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_self.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+			if(!args->bparam1)
+				gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_self.wav", 1, ATTN_NORM, 0, PITCH_NORM);
 			break;
 		default:
 			break;

@@ -321,6 +321,15 @@ void CDisplacer::Displace(void) {
 //=========================================================
 void CDisplacer::Teleport(void)
 {
+	edict_t* pEnt_earth = FIND_ENTITY_BY_CLASSNAME(NULL, "info_displacer_earth_target");
+	edict_t* pEnt_xen = FIND_ENTITY_BY_CLASSNAME(NULL, "info_displacer_xen_target");
+	if (FNullEnt(pEnt_earth) || FNullEnt(pEnt_xen)) {
+		PlayEmptySound(2);
+		m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.3f;
+		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_FIRE::sequence, FIREMODE_BACKWARD, 1, 0);
+		return;
+	}
+
 	Vector vecSrc = m_pPlayer->pev->origin;
 	ASSERT(m_hTargetEarth != NULL && m_hTargetXen);
 

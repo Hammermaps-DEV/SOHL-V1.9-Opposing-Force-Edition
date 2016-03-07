@@ -90,13 +90,11 @@ cvar_t *cl_rollspeed;
 
 void ShutdownInput (void);
 
-//DECLARE_MESSAGE(m_Logo, Logo)
 int __MsgFunc_Logo(const char *pszName, int iSize, void *pbuf)
 {
 	return gHUD.MsgFunc_Logo(pszName, iSize, pbuf );
 }
 
-//DECLARE_MESSAGE(m_Logo, Logo)
 //LRC
 int __MsgFunc_HUDColor(const char *pszName, int iSize, void *pbuf)
 {
@@ -415,7 +413,6 @@ void CHud :: Init( void )
 	m_iHUDColor = RGB_GREENISH;
 	
 	CVAR_CREATE( "zoom_sensitivity_ratio", "1.2", 0 );
-	CVAR_CREATE("r_shadows", "0", FCVAR_ARCHIVE );
 	default_fov = CVAR_CREATE( "default_fov", "90", 0 );
 	m_pCvarStealMouse = CVAR_CREATE( "hud_capturemouse", "1", FCVAR_ARCHIVE );
 	m_pCvarDraw = CVAR_CREATE( "hud_draw", "1", FCVAR_ARCHIVE );
@@ -432,6 +429,7 @@ void CHud :: Init( void )
 	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "300", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 
 	//Particles System
+	CVAR_CREATE("cl_grassamount", "100", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	CVAR_CREATE("r_particles", "1", FCVAR_ARCHIVE);
 	g_ParticleCount = gEngfuncs.pfnRegisterVariable("cl_particlecount", "100", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	g_ParticleDebug = gEngfuncs.pfnRegisterVariable("cl_particledebug", "0", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);

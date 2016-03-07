@@ -205,6 +205,7 @@ int gmsgSetMirror = 0;//set mirror
 int gmsgResetMirror = 0;
 int gmsgParticles = 0; // particle system
 int gmsgConcuss = 0;
+int gmsgGrassParticles = 0;
 
 void LinkUserMessages( void )
 {
@@ -268,11 +269,10 @@ void LinkUserMessages( void )
 	gmsgResetMirror = REG_USER_MSG("ResetMirror", 0);
 	gmsgParticles = REG_USER_MSG("Particles", -1);
 	gmsgConcuss = REG_USER_MSG("Concuss", 1);
+	gmsgGrassParticles = REG_USER_MSG("Grass", -1);
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
-
-
 
 void CBasePlayer :: Pain( void )
 {
@@ -333,7 +333,7 @@ void CBasePlayer :: DeathSound( void )
 {
 	// water death sounds
 	if (pev->waterlevel == 3) {
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
+	//	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
 

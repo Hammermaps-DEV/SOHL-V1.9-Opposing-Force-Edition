@@ -277,7 +277,7 @@ void CStrooper::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			Vector	vecGunPos, vecGunAngles;
 			GetAttachment(0, vecGunPos, vecGunAngles);
 			if (m_hEnemy) {
-				vecGunAngles = (m_hEnemy->EyePosition() - pev->origin - gpGlobals->v_right * 30 + gpGlobals->v_up * -6).Normalize();
+				vecGunAngles = (m_hEnemy->EyePosition() - pev->origin - gpGlobals->v_right * 30 + gpGlobals->v_up * -50).Normalize();
 			}
 
 			CBaseEntity *pShock = CBaseEntity::Create("shock", vecGunPos, vecGunAngles, edict());

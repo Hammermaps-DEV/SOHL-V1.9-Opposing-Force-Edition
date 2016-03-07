@@ -1,8 +1,15 @@
 /***
 *
-*	Copyright (c) 2005, BUzer.
+*	Copyright (c) 1996-2004, Shambler Team. All rights reserved.
 *
-*	Used with permission for Spirit of Half-Life 1.5
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Shambler Team.  All other use, distribution, or modification is prohibited
+*   without written permission from Shambler Team.
 *
 ****/
 /*
@@ -21,7 +28,7 @@
 #include "rain.h"
 
 void WaterLandingEffect(cl_drip *drip);
-void ParseRainFile( void );
+void ParseRainFile(void);
 
 rain_properties     Rain;
 
@@ -44,7 +51,7 @@ ProcessRain
 Must think every frame.
 =================================
 */
-void ProcessRain( void )
+void ProcessRain(void)
 {
 	rain_oldtime = rain_curtime; // save old time
 	rain_curtime = gEngfuncs.GetClientTime();
@@ -154,10 +161,9 @@ void ProcessRain( void )
 			vecEnd[2] = -4096;
 
 			pmtrace_t pmtrace;
-			gEngfuncs.pEventAPI->EV_SetTraceHull( 2 );
-			gEngfuncs.pEventAPI->EV_PlayerTrace( vecStart, vecEnd, PM_STUDIO_IGNORE, -1, &pmtrace );
-
-			if (pmtrace.startsolid || pmtrace.allsolid)
+			gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+			gEngfuncs.pEventAPI->EV_PlayerTrace(vecStart, vecStart + vecEnd, PM_STUDIO_IGNORE, -1, &pmtrace);
+			if (pmtrace.startsolid)
 			{
 				if (gHUD.RainInfo->value)
 					debug_dropped++;
@@ -166,14 +172,14 @@ void ProcessRain( void )
 			}
 
 			// falling to water?
-			int contents = gEngfuncs.PM_PointContents( pmtrace.endpos, NULL );
+			int contents = gEngfuncs.PM_PointContents(pmtrace.endpos, NULL);
 			if (contents == CONTENTS_WATER)
 			{
-				int waterEntity = gEngfuncs.PM_WaterEntity( pmtrace.endpos );
-				if ( waterEntity > 0 )
+				int waterEntity = gEngfuncs.PM_WaterEntity(pmtrace.endpos);
+				if (waterEntity > 0)
 				{
-					cl_entity_t *pwater = gEngfuncs.GetEntityByIndex( waterEntity );
-					if ( pwater && ( pwater->model != NULL ) )
+					cl_entity_t *pwater = gEngfuncs.GetEntityByIndex(waterEntity);
+					if (pwater && (pwater->model != NULL))
 					{
 						deathHeight = pwater->curstate.maxs[2];
 					}
@@ -206,7 +212,7 @@ void ProcessRain( void )
 			if (!newClDrip)
 			{
 				Rain.dripsPerSecond = 0; // disable rain
-				gEngfuncs.Con_Printf( "Rain error: failed to allocate object!\n");
+				gEngfuncs.Con_Printf("Rain error: failed to allocate object!\n");
 				return;
 			}
 
@@ -237,23 +243,23 @@ void ProcessRain( void )
 		}
 		else
 		{
-			gEngfuncs.Con_Printf( "Rain error: Drip limit overflow!\n" );
+			//gEngfuncs.Con_Printf( "Rain error: Drip limit overflow!\n" );
 			return;
 		}
 	}
 
 	if (gHUD.RainInfo->value) // print debug info
 	{
-		gEngfuncs.Con_Printf( "Rain info: Drips exist: %i\n", dripcounter );
-		gEngfuncs.Con_Printf( "Rain info: FX's exist: %i\n", fxcounter );
-		gEngfuncs.Con_Printf( "Rain info: Attempted/Dropped: %i, %i\n", debug_attempted, debug_dropped);
+		gEngfuncs.Con_Printf("Rain info: Drips exist: %i\n", dripcounter);
+		gEngfuncs.Con_Printf("Rain info: FX's exist: %i\n", fxcounter);
+		gEngfuncs.Con_Printf("Rain info: Attempted/Dropped: %i, %i\n", debug_attempted, debug_dropped);
 		if (debug_howmany)
 		{
 			float ave = debug_lifetime / (float)debug_howmany;
-			gEngfuncs.Con_Printf( "Rain info: Average drip life time: %f\n", ave);
+			gEngfuncs.Con_Printf("Rain info: Average drip life time: %f\n", ave);
 		}
 		else
-			gEngfuncs.Con_Printf( "Rain info: Average drip life time: --\n");
+			gEngfuncs.Con_Printf("Rain info: Average drip life time: --\n");
 	}
 	return;
 }
@@ -267,14 +273,14 @@ void WaterLandingEffect(cl_drip *drip)
 {
 	if (fxcounter >= MAXFX)
 	{
-		gEngfuncs.Con_Printf( "Rain error: FX limit overflow!\n" );
+		gEngfuncs.Con_Printf("Rain error: FX limit overflow!\n");
 		return;
 	}
 
 	cl_rainfx *newFX = new cl_rainfx;
 	if (!newFX)
 	{
-		gEngfuncs.Con_Printf( "Rain error: failed to allocate FX object!\n");
+		gEngfuncs.Con_Printf("Rain error: failed to allocate FX object!\n");
 		return;
 	}
 
@@ -303,7 +309,7 @@ Remove all fx objects with out time to live
 Call every frame before ProcessRain
 =================================
 */
-void ProcessFXObjects( void )
+void ProcessFXObjects(void)
 {
 	float curtime = gEngfuncs.GetClientTime();
 
@@ -333,9 +339,9 @@ ResetRain
 clear memory, delete all objects
 =================================
 */
-void ResetRain( void )
+void ResetRain(void)
 {
-// delete all drips
+	// delete all drips
 	cl_drip* delDrip = FirstChainDrip.p_Next;
 	FirstChainDrip.p_Next = NULL;
 
@@ -347,7 +353,7 @@ void ResetRain( void )
 		dripcounter--;
 	}
 
-// delete all FX objects
+	// delete all FX objects
 	cl_rainfx* delFX = FirstChainFX.p_Next;
 	FirstChainFX.p_Next = NULL;
 
@@ -369,7 +375,7 @@ InitRain
 initialze system
 =================================
 */
-void InitRain( void )
+void InitRain(void)
 {
 	Rain.dripsPerSecond = 0;
 	Rain.distFromPlayer = 0;
@@ -382,9 +388,9 @@ void InitRain( void )
 
 	FirstChainDrip.birthTime = 0;
 	FirstChainDrip.minHeight = 0;
-	FirstChainDrip.origin[0]=0;
-	FirstChainDrip.origin[1]=0;
-	FirstChainDrip.origin[2]=0;
+	FirstChainDrip.origin[0] = 0;
+	FirstChainDrip.origin[1] = 0;
+	FirstChainDrip.origin[2] = 0;
 	FirstChainDrip.alpha = 0;
 	FirstChainDrip.xDelta = 0;
 	FirstChainDrip.yDelta = 0;
@@ -413,17 +419,17 @@ void InitRain( void )
 ParseRainFile
 
 List of settings:
-	drips 		- max raindrips\snowflakes
-	distance 	- radius of rain\snow
-	windx 		- wind shift X
-	windy 		- wind shift Y
-	randx 		- random shift X
-	randy 		- random shift Y
-	mode 		- rain = 0\snow =1
-	height		- max height to create raindrips\snowflakes
+drips 		- max raindrips\snowflakes
+distance 	- radius of rain\snow
+windx 		- wind shift X
+windy 		- wind shift Y
+randx 		- random shift X
+randy 		- random shift Y
+mode 		- rain = 0\snow =1
+height		- max height to create raindrips\snowflakes
 ===========================
 */
-void ParseRainFile( void )
+void ParseRainFile(void)
 {
 	if (Rain.distFromPlayer != 0 || Rain.dripsPerSecond != 0 || Rain.globalHeight != 0)
 		return;
@@ -432,17 +438,17 @@ void ParseRainFile( void )
 	char token[64];
 	char *pfile;
 
-	strcpy( mapname, gEngfuncs.pfnGetLevelName() );
+	strcpy(mapname, gEngfuncs.pfnGetLevelName());
 	if (strlen(mapname) == 0)
 	{
-		gEngfuncs.Con_Printf( "Rain error: unable to read map name\n");
+		gEngfuncs.Con_Printf("Rain error: unable to read map name\n");
 		return;
 	}
 
-	mapname[strlen(mapname)-4] = 0;
+	mapname[strlen(mapname) - 4] = 0;
 	sprintf(mapname, "%s.pcs", mapname);
 
-	pfile = (char *)gEngfuncs.COM_LoadFile( mapname, 5, NULL);
+	pfile = (char *)gEngfuncs.COM_LoadFile(mapname, 5, NULL);
 	if (!pfile)
 	{
 		if (gHUD.RainInfo->value)
@@ -500,6 +506,6 @@ void ParseRainFile( void )
 			gEngfuncs.Con_Printf("Rain error: unknown token %s in file %s\n", token, mapname);
 	}
 
-	gEngfuncs.COM_FreeFile( pfile );
+	gEngfuncs.COM_FreeFile(pfile);
 }
 

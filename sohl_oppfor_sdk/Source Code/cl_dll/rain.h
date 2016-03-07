@@ -22,7 +22,7 @@
 #define SNOWSPEED	200		// speed of snowflakes
 #define SNOWFADEDIST	80
 
-#define MAXDRIPS	2000	// max raindrops
+#define MAXDRIPS	3000	// max raindrops
 #define MAXFX		3000	// max effects
 
 #define DRIP_SPRITE_HALFHEIGHT	46
