@@ -414,5 +414,5 @@ void CDisplacer::UseAmmo(int count) {
 // CanFireDisplacer
 //=========================================================
 BOOL CDisplacer::CanFireDisplacer() const {
-	return m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > EGON_DEFAULT_GIVE;
+	return m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= EGON_DEFAULT_GIVE;
 }
