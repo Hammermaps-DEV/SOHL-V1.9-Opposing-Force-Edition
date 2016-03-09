@@ -47,6 +47,7 @@ class CDisplacer : public CBasePlayerWeapon {
 		BOOL Deploy(void);
 		void Holster(void);
 		void WeaponIdle(void);
+		void AttachBeamCreate(const Vector &vecEndPos);
 
 		int		m_iFireState;
 		int		m_iFireMode;
@@ -68,6 +69,9 @@ class CDisplacer : public CBasePlayerWeapon {
 		void Fire(BOOL fIsPrimary);
 		void Teleport(void);
 		void Displace(void);
+
+		CBeam *m_pBeam;
+
 		BOOL ShouldUpdateEffects(void) const;
 		unsigned short m_usDisplacer;
 };

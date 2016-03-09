@@ -194,8 +194,8 @@ void CDisplacer::WeaponIdle(void) {
 	if (m_iFireState != FIRESTATE_NONE) {
 		switch (m_iFireState) {
 			case FIRESTATE_SPINUP: {
-			// Launch spinup sequence.
-			SpinUp(m_iFireMode);
+				// Launch spinup sequence.
+				SpinUp(m_iFireMode);
 			}
 			break;
 			case FIRESTATE_SPIN: {
@@ -259,6 +259,18 @@ void CDisplacer::ClearSpin(void) {
 void CDisplacer::SpinUp(int iFireMode) {
 	PLAYBACK_EVENT_FULL(0,m_pPlayer->edict(),m_usDisplacer,0.0,(float *)&g_vecZero,(float *)&g_vecZero,0.0,0.0,(int)DISPLACER_SPINUP::sequence,iFireMode,0,0);
 
+	/*
+	//Not FINAL Buggy
+	Vector vecGunPos, vecGunDir;
+	m_pPlayer->GetAttachment(0, vecGunPos, vecGunDir);
+	Vector vecEndPos = vecGunPos;
+	if (!m_pBeam) {
+		AttachBeamCreate(vecEndPos);
+	}
+
+	m_pBeam->SetStartPos(vecEndPos);
+	*/
+
 	m_iFireState = FIRESTATE_FIRE;
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.7f;
 	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.7f;
@@ -291,6 +303,10 @@ void CDisplacer::Fire(BOOL fIsPrimary)
 	}
 
 	ClearSpin();
+	if(m_pBeam != NULL) {
+		UTIL_Remove(m_pBeam);
+		m_pBeam = NULL;
+	}
 
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.7f;
 	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.7f;
@@ -415,4 +431,16 @@ void CDisplacer::UseAmmo(int count) {
 //=========================================================
 BOOL CDisplacer::CanFireDisplacer() const {
 	return m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= EGON_DEFAULT_GIVE;
+}
+
+//=========================================================
+// AttachBeamCreate
+//=========================================================
+void CDisplacer::AttachBeamCreate(const Vector &vecEndPos) {
+	m_pBeam = CBeam::BeamCreate("sprites/plasma.spr", 60);
+	m_pBeam->PointEntInit(vecEndPos, m_pPlayer->entindex());
+	m_pBeam->SetStartAttachment(2);
+	m_pBeam->SetEndAttachment(3);
+	m_pBeam->SetColor(96, 128, 16);
+	m_pBeam->SetBrightness(64);
 }

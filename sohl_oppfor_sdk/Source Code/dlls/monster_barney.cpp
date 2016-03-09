@@ -285,7 +285,7 @@ void CBarney::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 		}
 
 		switch (ptr->iHitgroup) {
-			case 10: //Barney Hack
+			case HITGROUP_HEAD_HELMET_BN:
 			case HITGROUP_HEAD:
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));

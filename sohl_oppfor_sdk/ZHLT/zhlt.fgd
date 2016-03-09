@@ -101,6 +101,7 @@
 // It is not a real entity. Brushes in this entity are still world brushes.
 @SolidClass = func_group : "Solid brushes"
 [
+	zhlt_coplanarpriority(integer) : "Priority when faces overlap" : 0
 	zhlt_noclip(choices) : "Passable" : "" =
 	[
 		"": "No"
@@ -149,7 +150,7 @@
 	_fdist(string) : " Filter max dist to plane" : "" // max distance from face plane to this entity
 	_fclass(string) : " Filter entity classname" : ""
 	_fname(string) : " Filter entity name" : ""
-	_light(string) : "Texture brightness" : "80" // value >= 80 will ensure full brightness. Colored brightness is not recommended.
+	_light(color255) : "Texture brightness" : "255 255 255 80" // value >= 80 will ensure full brightness. Colored brightness is not recommended.
 	_texcolor(color255) : " Color(replace texture color)" : "" // emit light as if the texture is in this color
 	//  Note:
 	//    If you want to set cone angle or any other value to 0,
@@ -159,6 +160,13 @@
 	_cone2(string) : " Outer(fading) angle(90default)" : "" // should be 90 for conventional texlights
 	_scale(string) : " Adjust emit scale(1.0default)" : "" // 0.0 = no emitting
 	_chop(string) : " Grid size of sampling" : "" // in inch; not affected by texture scale
+	_texlightgap(choices) : " Dark gap in front of texlight" : "" = // in texture pixels; size of dark area near the light source
+	[
+		"": "Default (no gap)"
+		"0.0": "0.0 - no gap"
+		"3.0": "3.0 - small gap"
+		"12.0": "12.0 - large gap"
+	]
 	_fast(choices) : " Fast" : "" =
 	[
 		"": "Auto"
@@ -207,6 +215,8 @@
 	zhlt_chopdown(integer) : "Lower its level to chop others" : 0
 	// Usually you don't have to use this.
 	zhlt_chopup(integer) : "Raise its level to get chopped" : 0
+	// For brushes in the same detail level and have overlapping faces (which are on the same plane), this priority determines which one will appear.
+	zhlt_coplanarpriority(integer) : "Priority when faces overlap" : 0
 	// Setting this to 0 will reduce clipnode count, but will lose the benefit of func_detail's better content deciding method which is designed to prevent "Ambiguous leafnode contents" problem.
 	zhlt_clipnodedetaillevel(integer) : "Detail level of cliphulls" : 1
 	// Very useful option which can reduce clipnode count.

@@ -38,6 +38,10 @@
 #define HITGROUP_RIGHTARM	5
 #define HITGROUP_LEFTLEG	6
 #define HITGROUP_RIGHTLEG	7
+#define HITGROUP_TANK		8 //Added for Torch
+
+#define HITGROUP_HEAD_HELMET_BN		10 //Added for Otis & Barney
+#define HITGROUP_HEAD_HELMET_GT		11 //Added for Torch
 
 
 // Monster Spawnflags

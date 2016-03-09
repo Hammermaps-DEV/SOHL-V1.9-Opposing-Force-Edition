@@ -297,8 +297,7 @@ void CStrooper::HandleAnimEvent(MonsterEvent_t *pEvent) {
 				UTIL_MakeVectors(pev->angles);
 				pHurt->pev->punchangle.x = 15;
 				pHurt->pev->punchangle.z = (m_fRightClaw) ? -10 : 10;
-
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 150 + gpGlobals->v_up * 80;
 				pHurt->TakeDamage(pev, pev, gSkillData.strooperDmgKick, DMG_CLUB);
 			}
 

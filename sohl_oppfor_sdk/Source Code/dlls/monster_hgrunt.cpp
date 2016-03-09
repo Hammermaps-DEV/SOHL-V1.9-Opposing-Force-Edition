@@ -52,8 +52,6 @@
 
 int g_fGruntQuestion;				// true if an idle grunt asked a question. Cleared when someone answers.
 
-extern DLL_GLOBAL int		g_iSkillLevel;
-
 //=========================================================
 // monster-specific DEFINE's
 //=========================================================
@@ -911,8 +909,8 @@ void CHGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			{
 				// SOUND HERE!
 				UTIL_MakeVectors( pev->angles );
-				pHurt->pev->punchangle.x = 15;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
+				pHurt->pev->punchangle.x = 20;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 150 + gpGlobals->v_up * 80;
 				pHurt->TakeDamage( pev, pev, gSkillData.hgruntDmgKick, DMG_CLUB );
 			}
 		}

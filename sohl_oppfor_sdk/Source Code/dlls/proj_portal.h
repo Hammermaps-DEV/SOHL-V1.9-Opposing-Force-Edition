@@ -39,6 +39,7 @@ public:
 	void EXPORT FadeShock(void);
 	void Glow(void);
 
+	int  m_iBeams;
 	int  m_maxFrame;
 	CBeam* m_pBeam[MAX_PORTAL_BEAMS];
 	CSprite *m_pSprite;

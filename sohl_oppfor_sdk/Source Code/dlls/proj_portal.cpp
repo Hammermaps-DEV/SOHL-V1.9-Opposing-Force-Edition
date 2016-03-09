@@ -195,7 +195,7 @@ void CPortal::Touch(CBaseEntity *pOther)
 			    && !FClassnameIs(pOther->pev, "monster_gargantua") && !FClassnameIs(pOther->pev, "monster_bigmomma")) {
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport_player.wav", 1, ATTN_NORM, 0, 100);
 				pOther->Killed(pev, GIB_NEVER);
-				UTIL_Remove(pOther);
+				pOther->SUB_Remove();
 			} else {
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport.wav", 1, ATTN_NORM, 0, 100);
 				pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_SHOCK);
@@ -204,7 +204,7 @@ void CPortal::Touch(CBaseEntity *pOther)
 			pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_ALWAYSGIB);
 		}
 
-		::RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 200, CLASS_NONE, DMG_ENERGYBEAM);
+		RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 256, CLASS_NONE, DMG_ENERGYBEAM);
 	}
 
 	// portal circle
@@ -274,7 +274,7 @@ void CPortal::UpdateBeams() {
 	int i, j;
 	float flDist = 1.0;
 
-	Vector vecSrc, vecTarget;
+	Vector vecSrc , vecAim;
 	vecSrc = pev->origin;
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
@@ -292,18 +292,15 @@ void CPortal::UpdateBeams() {
 
 	for (i = 0; i < MAX_PORTAL_BEAMS; i++) {
 		for (j = 0; j < 10; ++j) {
-			vecTarget = gpGlobals->v_forward * RANDOM_FLOAT(-1, 1) + gpGlobals->v_right * RANDOM_FLOAT(-1, 1) + gpGlobals->v_up * RANDOM_FLOAT(-1, 1);
-
-			UTIL_TraceLine(vecSrc, vecSrc + (vecTarget * 512), dont_ignore_monsters, ENT(pev), &tr1);
+			vecAim = gpGlobals->v_right * RANDOM_FLOAT(0, 2) + gpGlobals->v_up * RANDOM_FLOAT(-1, 2);
+			UTIL_TraceLine(vecSrc, vecSrc + vecAim * 512, dont_ignore_monsters, ENT(pev), &tr1);
 			if (flDist > tr1.flFraction) {
 				tr = tr1;
 				flDist = tr.flFraction;
 			}
 		}
 
-		// Couldn't find anything close enough
-		if (flDist == 1.0)
-			continue;
+		DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
 
 		// Update the beams.
 		m_pBeam[i]->SetStartPos(tr.vecEndPos);

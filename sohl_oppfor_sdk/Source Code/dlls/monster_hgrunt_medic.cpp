@@ -1118,14 +1118,7 @@ void CMedic :: CheckAmmo ( void )
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
 }
-//=========================================================
-// Classify - indicates this monster's place in the 
-// relationship table.
-//=========================================================
-int	CMedic :: Classify ( void )
-{
-	return	CLASS_PLAYER_ALLY;
-}
+
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
@@ -1369,27 +1362,6 @@ BOOL CMedic :: CheckRangeAttack2 ( float flDot, float flDist )
 	}
 	return m_fThrowGrenade;
 }
-//=========================================================
-//=========================================================
-CBaseEntity *CMedic :: Kick( void )
-{
-	TraceResult tr;
-
-	UTIL_MakeVectors( pev->angles );
-	Vector vecStart = pev->origin;
-	vecStart.z += pev->size.z * 0.5;
-	Vector vecEnd = vecStart + (gpGlobals->v_forward * 70);
-
-	UTIL_TraceHull( vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr );
-	
-	if ( tr.pHit )
-	{
-		CBaseEntity *pEntity = CBaseEntity::Instance( tr.pHit );
-		return pEntity;
-	}
-
-	return NULL;
-}
 
 //=========================================================
 // GetGunPosition	return the end of the barrel
@@ -1578,8 +1550,8 @@ void CMedic :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			{
 				// SOUND HERE!
 				UTIL_MakeVectors( pev->angles );
-				pHurt->pev->punchangle.x = 15;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
+				pHurt->pev->punchangle.x = 20;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 150 + gpGlobals->v_up * 80;
 				pHurt->TakeDamage( pev, pev, gSkillData.medicDmgKick, DMG_CLUB );
 			}
 		}

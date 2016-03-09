@@ -25,7 +25,6 @@ public:
 	void Precache(void);
 	void SetYawSpeed(void);
 	int  ISoundMask(void);
-	int  Classify(void);
 	void CheckAmmo(void);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	void SetActivity(Activity NewActivity);
@@ -36,15 +35,19 @@ public:
 	BOOL CheckRangeAttack1(float flDot, float flDist);
 	BOOL CheckRangeAttack2(float flDot, float flDist);
 	BOOL CheckMeleeAttack1(float flDot, float flDist);
+
 	void DeclineFollowing(void);
 	void PrescheduleThink(void);
 	Vector GetGunPosition(void);
+
 	void Shoot(void);
 	void MakeGas(void);
 	void UpdateGas(void);
 	void KillGas(void);
+
+	void SpawnExplosion(Vector center, float randomRange, float time, int magnitude);
+
 	// Override these to set behavior
-	CBaseEntity	*Kick(void);
 	Schedule_t *GetScheduleOfType(int Type);
 	Schedule_t *GetSchedule(void);
 	MONSTERSTATE GetIdealState(void);
@@ -62,8 +65,8 @@ public:
 	void Killed(entvars_t *pevAttacker, int iGib);
 	int IRelationship(CBaseEntity *pTarget);
 
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// UNDONE: What is this for?  It isn't used?
@@ -90,6 +93,8 @@ public:
 	int		m_iSentence;
 
 	static const char *pGruntSentences[];
+	static const char *pPainSounds[];
+	static const char *pDeathSounds[];
 
 	CUSTOM_SCHEDULES;
 };

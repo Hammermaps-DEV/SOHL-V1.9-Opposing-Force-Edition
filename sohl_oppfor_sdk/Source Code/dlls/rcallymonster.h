@@ -142,6 +142,8 @@ public:
 	virtual void	PlaySentence( const char *pszSentence, float duration, float volume, float attenuation );
 	void			PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener );
 	void			KeyValue( KeyValueData *pkvd );
+	int				Classify(void);
+	CBaseEntity		*Kick(void);
 
 	// AI functions
 	void			SetActivity ( Activity newActivity );
@@ -218,7 +220,8 @@ public:
 	void VacateSlot( void );
 	void ScheduleChange( void );
 	BOOL OccupySlot( int iDesiredSlot );
-	BOOL NoFriendlyFire( void );
+	BOOL NoFriendlyFire(void);
+	BOOL NoFriendlyFire(BOOL playerAlly);
 
 	// squad functions still left in base class
 	CRCAllyMonster *MySquadLeader( ) 

@@ -40,25 +40,23 @@
 //=========================================================
 float	CRCAllyMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 
-TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] = 
-{
-	DEFINE_FIELD( CRCAllyMonster, m_bitsSaid, FIELD_INTEGER ),
-	DEFINE_FIELD( CRCAllyMonster, m_nSpeak, FIELD_INTEGER ),
-	DEFINE_FIELD( CRCAllyMonster, m_useTime, FIELD_TIME ),
-	DEFINE_FIELD( CRCAllyMonster, m_iszUse, FIELD_STRING ),
-	DEFINE_FIELD( CRCAllyMonster, m_iszUnUse, FIELD_STRING ),
-	DEFINE_FIELD( CRCAllyMonster, m_iszDecline, FIELD_STRING ), //LRC
-	DEFINE_FIELD( CRCAllyMonster, m_iszSpeakAs, FIELD_STRING ), //LRC
-	DEFINE_FIELD( CRCAllyMonster, m_flLastSaidSmelled, FIELD_TIME ),
-	DEFINE_FIELD( CRCAllyMonster, m_flStopTalkTime, FIELD_TIME ),
-	DEFINE_FIELD( CRCAllyMonster, m_hTalkTarget, FIELD_EHANDLE ),
-	DEFINE_FIELD( CRCAllyMonster, m_hSquadLeader, FIELD_EHANDLE ),
-	DEFINE_ARRAY( CRCAllyMonster, m_hSquadMember, FIELD_EHANDLE, MAXRC_SQUAD_MEMBERS - 1 ),
-	DEFINE_FIELD( CRCAllyMonster, m_fEnemyEluded, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CRCAllyMonster, m_flLastEnemySightTime, FIELD_TIME ),
-	DEFINE_FIELD( CRCAllyMonster, m_hHealTarget, FIELD_EHANDLE ),
-
-	DEFINE_FIELD( CRCAllyMonster, m_iMySlot, FIELD_INTEGER ),
+TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] = {
+	DEFINE_FIELD(CRCAllyMonster, m_bitsSaid, FIELD_INTEGER),
+	DEFINE_FIELD(CRCAllyMonster, m_nSpeak, FIELD_INTEGER),
+	DEFINE_FIELD(CRCAllyMonster, m_useTime, FIELD_TIME),
+	DEFINE_FIELD(CRCAllyMonster, m_iszUse, FIELD_STRING),
+	DEFINE_FIELD(CRCAllyMonster, m_iszUnUse, FIELD_STRING),
+	DEFINE_FIELD(CRCAllyMonster, m_iszDecline, FIELD_STRING), //LRC
+	DEFINE_FIELD(CRCAllyMonster, m_iszSpeakAs, FIELD_STRING), //LRC
+	DEFINE_FIELD(CRCAllyMonster, m_flLastSaidSmelled, FIELD_TIME),
+	DEFINE_FIELD(CRCAllyMonster, m_flStopTalkTime, FIELD_TIME),
+	DEFINE_FIELD(CRCAllyMonster, m_hTalkTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(CRCAllyMonster, m_hHealTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(CRCAllyMonster, m_hSquadLeader, FIELD_EHANDLE),
+	DEFINE_ARRAY(CRCAllyMonster, m_hSquadMember, FIELD_EHANDLE, MAXRC_SQUAD_MEMBERS - 1),
+	DEFINE_FIELD(CRCAllyMonster, m_fEnemyEluded, FIELD_BOOLEAN),
+	DEFINE_FIELD(CRCAllyMonster, m_flLastEnemySightTime, FIELD_TIME),
+	DEFINE_FIELD(CRCAllyMonster, m_iMySlot, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE( CRCAllyMonster, CBaseMonster );
@@ -75,13 +73,12 @@ char *CRCAllyMonster::m_szFriends[TLK_CFRIENDS] =
 	"monster_sitting_cleansuit_scientist",
 	"monster_human_grunt_ally",
 	"monster_human_torch_ally",
-	"monster_human_medic_ally",
+	"monster_human_medic_ally"
 };
 
 //=========================================================
 // AI Schedules Specific to talking monsters
 //=========================================================
-
 Task_t	tlIdleResponseTS[] =
 {
 	{ TASK_SET_ACTIVITY,	(float)ACT_IDLE	},// Stop and listen
@@ -395,6 +392,13 @@ void CRCAllyMonster :: SetActivity ( Activity newActivity )
 	CBaseMonster::SetActivity( newActivity );
 }
 
+//=========================================================
+// Classify - indicates this monster's place in the 
+// relationship table.
+//=========================================================
+int	CRCAllyMonster::Classify(void) {
+	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
+}
 
 void CRCAllyMonster :: StartTask( Task_t *pTask )
 {
@@ -651,24 +655,20 @@ void CRCAllyMonster :: RunTask( Task_t *pTask )
 
 void CRCAllyMonster :: Killed( entvars_t *pevAttacker, int iGib )
 {
-	// If a client killed me (unless I was already Barnacle'd), make everyone else mad/afraid of him
-	if ( (pevAttacker->flags & FL_CLIENT) && m_MonsterState != MONSTERSTATE_PRONE )
-	{
+	VacateSlot();
+
+	if (InSquad()) {
+		MySquadLeader()->SquadRemove(this);
+	}
+
+	if ( (pevAttacker->flags & FL_CLIENT) && m_MonsterState != MONSTERSTATE_PRONE ) {
 		AlertFriends();
 	}
 
 	m_hTargetEnt = NULL;
-	// Don't finish that sentence
 	StopTalking();
 	SetUse( NULL );
 	CBaseMonster::Killed( pevAttacker, iGib );
-
-	VacateSlot();
-
-	if ( InSquad() )
-	{
-		MySquadLeader()->SquadRemove( this );
-	}
 }
 
 CBaseEntity	*CRCAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber, BOOL bTrace )
@@ -709,13 +709,10 @@ void CRCAllyMonster::AlertFriends( void )
 	int i;
 
 	// for each friend in this bsp...
-	for ( i = 0; i < TLK_CFRIENDS; i++ )
-	{
-		while (pFriend = EnumFriends( pFriend, i, TRUE ))
-		{
+	for ( i = 0; i < TLK_CFRIENDS; i++ ) {
+		while (pFriend = EnumFriends( pFriend, i, TRUE )) {
 			CBaseMonster *pMonster = pFriend->MyMonsterPointer();
-			if ( pMonster->IsAlive() )
-			{
+			if ( pMonster->IsAlive() ) {
 				// don't provoke a friend that's playing a death animation. They're a goner
 				pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
 			}
@@ -1270,9 +1267,9 @@ void CRCAllyMonster :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vect
 
 extern Schedule_t	slChaseEnemyFailed[];
 
-Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
+Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int iType)
 {
-	switch( Type )
+	switch(iType)
 	{
 	case SCHED_MOVE_AWAY:
 		return slMoveAwayTS;
@@ -1333,7 +1330,6 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 			if ( !IsTalking() && HasConditions ( bits_COND_SEE_CLIENT ) && RANDOM_LONG( 0, 6 ) == 0 )
 			{
 				edict_t *pPlayer = g_engfuncs.pfnPEntityOfEntIndex( 1 );
-
 				if ( pPlayer )
 				{
 					// watch the client.
@@ -1346,6 +1342,8 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 					}
 
 					return slTlkIdleWatchClientTS;
+				} else {
+					return CBaseMonster::GetScheduleOfType(iType);
 				}
 			}
 			else
@@ -1357,16 +1355,11 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 					// regular standing idle
 					return slIdleStand;
 			}
-
-
-			// NOTE - caller must first CRCAllyMonster::GetScheduleOfType, 
-			// then check result and decide what to return ie: if sci gets back
-			// slIdleStand, return slIdleSciStand
 		}
 		break;
+		default:
+			return CBaseMonster::GetScheduleOfType(iType);
 	}
-
-	return CBaseMonster::GetScheduleOfType( Type );
 }
 
 //=========================================================
@@ -1374,8 +1367,7 @@ Schedule_t* CRCAllyMonster :: GetScheduleOfType ( int Type )
 //=========================================================
 BOOL CRCAllyMonster :: IsTalking( void )
 {
-	if ( m_flStopTalkTime > UTIL_GlobalTimeBase() )
-	{
+	if ( m_flStopTalkTime > UTIL_GlobalTimeBase() ) {
 		return TRUE;
 	}
 
@@ -1947,15 +1939,20 @@ void CRCAllyMonster :: StartMonster( void )
 	}
 }
 
+BOOL CRCAllyMonster::NoFriendlyFire(void)
+{
+	return NoFriendlyFire(FALSE); //default: don't like the player
+}
+
 //=========================================================
 // NoFriendlyFire - checks for possibility of friendly fire
 //
 // Builds a large box in front of the grunt and checks to see 
 // if any squad members are in that box. 
 //=========================================================
-BOOL CRCAllyMonster :: NoFriendlyFire( void )
+BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly)
 {
-	if ( !InSquad() )
+	if (!playerAlly && !InSquad())
 	{
 		return TRUE;
 	}
@@ -2023,6 +2020,19 @@ BOOL CRCAllyMonster :: NoFriendlyFire( void )
 				// this guy is in the check volume! Don't shoot!
 				return FALSE;
 			}
+		}
+	}
+
+	if (playerAlly)
+	{
+		edict_t	*pentPlayer = FIND_CLIENT_IN_PVS(edict());
+		if (!FNullEnt(pentPlayer) &&
+			backPlane.PointInFront(pentPlayer->v.origin) &&
+			leftPlane.PointInFront(pentPlayer->v.origin) &&
+			rightPlane.PointInFront(pentPlayer->v.origin))
+		{
+			// the player is in the check volume! Don't shoot!
+			return FALSE;
 		}
 	}
 
@@ -2117,4 +2127,26 @@ BOOL CRCAllyMonster :: SquadMemberInRange ( const Vector &vecLocation, float flD
 			return TRUE;
 	}
 	return FALSE;
+}
+
+//=========================================================
+//=========================================================
+CBaseEntity *CRCAllyMonster::Kick(void)
+{
+	TraceResult tr;
+
+	UTIL_MakeVectors(pev->angles);
+	Vector vecStart = pev->origin;
+	vecStart.z += pev->size.z * 0.5;
+	Vector vecEnd = vecStart + (gpGlobals->v_forward * 70);
+
+	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
+
+	if (tr.pHit)
+	{
+		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
+		return pEntity;
+	}
+
+	return NULL;
 }

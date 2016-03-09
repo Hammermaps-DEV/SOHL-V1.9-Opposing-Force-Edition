@@ -25,7 +25,6 @@ public:
 	void Precache(void);
 	void SetYawSpeed(void);
 	int  ISoundMask(void);
-	int  Classify(void);
 	void CheckAmmo(void);
 	void KeyValue(KeyValueData *pkvd);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
@@ -48,8 +47,7 @@ public:
 	BOOL CanHeal(void); // Can we heal the player, or the injured grunt?
 	void Heal(void);// Lets apply the healing.
 
-					// Override these to set behavior
-	CBaseEntity	*Kick(void);
+	// Override these to set behavior
 	Schedule_t *GetScheduleOfType(int Type);
 	Schedule_t *GetSchedule(void);
 	MONSTERSTATE GetIdealState(void);
@@ -68,8 +66,8 @@ public:
 	int IRelationship(CBaseEntity *pTarget);
 	void Killed(entvars_t *pevAttacker, int iGib);
 
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// UNDONE: What is this for?  It isn't used?

@@ -51,19 +51,18 @@
 //   -full
 // 
 // HLRAD:
-//   -waddir #
 //   -limiter #
 //   -fast
 //   -extra
-//   -blur
-//   -chop #
-//   -texchop #
+//   -blur #
 //   -smooth #
 //   -smooth2 #
 //   -texreflectscale #
+//   -chop #
+//   -texchop #
 //   -drawoverload
+//   -gamma #
 //   -minlight #
-//   -softsky #
 // 
 // RIPENT:
 //   -export

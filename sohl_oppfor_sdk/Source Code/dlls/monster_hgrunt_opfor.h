@@ -29,7 +29,6 @@ class CHFGrunt : public CRCAllyMonster {
 		void Precache(void);
 		void SetYawSpeed(void);
 		int  ISoundMask(void);
-		int  Classify(void);
 		void HandleAnimEvent(MonsterEvent_t *pEvent);
 		void CheckAmmo(void);
 		void SetActivity(Activity NewActivity);
@@ -51,7 +50,6 @@ class CHFGrunt : public CRCAllyMonster {
 		void M249(void);
 
 		// Override these to set behavior
-		CBaseEntity	*Kick(void);
 		Schedule_t *GetScheduleOfType(int Type);
 		Schedule_t *GetSchedule(void);
 		MONSTERSTATE GetIdealState(void);

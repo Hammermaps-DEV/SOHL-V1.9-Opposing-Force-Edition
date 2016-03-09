@@ -20,8 +20,6 @@
 ***/
 //=========================================================
 // NPC: Human Grunt Ally
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 01.02.2016
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -51,11 +49,11 @@
 #define	HGRUNT_ALLY_AE_CAUGHT_ENEMY	( 10 ) // grunt established sight with an enemy (player only) that had previously eluded the squad.
 #define	HGRUNT_ALLY_AE_DROP_GUN		( 11 ) // grunt (probably dead) is dropping his mp5
 
-#define	FGRUNT_CLIP_SIZE_9MM			32
-#define	FGRUNT_CLIP_SIZE_M249			50
-#define FGRUNT_LIMP_HEALTH				20
+#define	FGRUNT_CLIP_SIZE_9MM		40
+#define	FGRUNT_CLIP_SIZE_M249		70
+#define FGRUNT_LIMP_HEALTH			20
 
-#define FGRUNT_MEDIC_WAIT				5
+#define FGRUNT_MEDIC_WAIT			5
 
 #define FGRUNT_9MMAR				(1 << 0)
 #define FGRUNT_HANDGRENADE			(1 << 1)
@@ -80,7 +78,7 @@
 //=========================================================
 // Monster's specific conditions
 //=========================================================
-#define bits_COND_FGRUNT_NOFIRE	( bits_COND_SPECIAL4 )
+#define bits_COND_FGRUNT_NOFIRE	( bits_COND_SPECIAL1 )
 
 //=========================================================
 // Monster's specific tasks
@@ -238,7 +236,7 @@ void CHFGrunt::Spawn() {
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
-	m_flDebug = true; //Debug Massages
+	m_flDebug = false; //Debug Massages
 
 	m_flHitgroupHead = gSkillData.fgruntHead;
 	m_flHitgroupChest = gSkillData.fgruntChest;
@@ -256,6 +254,7 @@ void CHFGrunt::Spawn() {
 
 	m_HackedGunPos = Vector(0, 0, 55);
 
+	m_cClipSize = FGRUNT_CLIP_SIZE_9MM;
 	if(FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
 		if (!IsLeader() && m_iHead == -1) {
 			SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SHOTGUN);
@@ -285,9 +284,8 @@ void CHFGrunt::Spawn() {
 				case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
 			}
 		}
-
-		m_cClipSize = FGRUNT_CLIP_SIZE_9MM;
 	}
+	m_cAmmoLoaded = m_cClipSize;
 
 	//When is leader, set Beret or Major skin
 	if ((pev->spawnflags & SF_ALLYMONSTER_LEADER) && m_iHead == -1) {
@@ -313,7 +311,6 @@ void CHFGrunt::Spawn() {
 		}
 	}
 
-	m_cAmmoLoaded = m_cClipSize;
 	CRCAllyMonster::g_talkWaitTime = 0;
 
 	MonsterInit();
@@ -322,17 +319,10 @@ void CHFGrunt::Spawn() {
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
-// relationship table.
-//=========================================================
-int	CHFGrunt::Classify(void) {
-	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
-}
-
-//=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
 void CHFGrunt::Precache() {
+	CRCAllyMonster::Precache();
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
@@ -357,7 +347,6 @@ void CHFGrunt::Precache() {
 	m_iM249Link = PRECACHE_MODEL("models/saw_link.mdl");// saw link
 
 	TalkInit();
-	CRCAllyMonster::Precache();
 }
 
 //=========================================================
@@ -396,6 +385,7 @@ BOOL CHFGrunt :: FOkToSpeak( void ) {
 	return TRUE;
 }
 //=========================================================
+// JustSpoke
 //=========================================================
 void CHFGrunt :: JustSpoke( void ) {
 	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
@@ -407,7 +397,9 @@ void CHFGrunt :: JustSpoke( void ) {
 // Human Grunt's nemesis.
 //=========================================================
 int CHFGrunt::IRelationship ( CBaseEntity *pTarget ) {
-	if ( FClassnameIs( pTarget->pev, "monster_male_assassin" ) ) {
+	//LRC- only hate alien grunts if my behaviour hasn't been overridden
+	if (!m_iClass && FClassnameIs(pTarget->pev, "monster_alien_grunt") || 
+		(FClassnameIs(pTarget->pev, "monster_gargantua")) || FClassnameIs(pTarget->pev, "monster_male_assassin")) {
 		return R_NM;
 	}
 
@@ -1224,7 +1216,6 @@ void CHFGrunt :: StartTask( Task_t *pTask ) {
 			Forget( bits_MEMORY_INCOVER );
 			CRCAllyMonster ::StartTask( pTask );
 		break;
-
 		case TASK_RELOAD:
 			m_IdealActivity = ACT_RELOAD;
 		break;
@@ -1248,28 +1239,23 @@ void CHFGrunt :: StartTask( Task_t *pTask ) {
 //=========================================================
 void CHFGrunt :: RunTask( Task_t *pTask )
 {
-	switch ( pTask->iTask )
-	{
-
-	case TASK_HGRUNT_ALLY_FACE_TOSS_DIR:
-		{
+	switch (pTask->iTask) {
+		case TASK_HGRUNT_ALLY_FACE_TOSS_DIR: {
 			// project a point along the toss vector and turn to face that point.
-			MakeIdealYaw( pev->origin + m_vecTossVelocity * 64 );
-			ChangeYaw( pev->yaw_speed );
-
-			if ( FacingIdeal() )
-			{
+			MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
+			ChangeYaw(pev->yaw_speed);
+			if (FacingIdeal()) {
 				m_iTaskStatus = TASKSTATUS_COMPLETE;
 			}
 			break;
 		}
-	default:
-		{
-			CRCAllyMonster :: RunTask( pTask );
+		default: {
+			CRCAllyMonster::RunTask(pTask);
 			break;
 		}
 	}
 }
+
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
@@ -1443,20 +1429,20 @@ BOOL CHFGrunt :: CheckMeleeAttack1 ( float flDot, float flDist ) {
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
 BOOL CHFGrunt :: CheckRangeAttack1 ( float flDot, float flDist ) {
-	if ( !HasConditions( bits_COND_ENEMY_OCCLUDED ) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire() && ( GetBodygroup( 3 ) != 3 ) ) {
+	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire()) {
 		TraceResult	tr;
 
-		if ( !m_hEnemy->IsPlayer() && flDist <= 64 ) {
-			// kick nonclients, but don't shoot at them.
+		if (!m_hEnemy->IsPlayer() && flDist <= 64) {
+			// kick nonclients who are close enough, but don't shoot at them.
 			return FALSE;
 		}
 
 		Vector vecSrc = GetGunPosition();
 
 		// verify that a bullet fired from the gun will hit the enemy before the world.
-		UTIL_TraceLine( vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
+		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
 
-		if ( tr.flFraction == 1.0 ) {
+		if (tr.flFraction == 1.0) {
 			return TRUE;
 		}
 	}
@@ -1564,25 +1550,6 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 
 	return m_fThrowGrenade;
-}
-//=========================================================
-//=========================================================
-CBaseEntity *CHFGrunt :: Kick( void ) {
-	TraceResult tr;
-
-	UTIL_MakeVectors( pev->angles );
-	Vector vecStart = pev->origin;
-	vecStart.z += pev->size.z * 0.5;
-	Vector vecEnd = vecStart + (gpGlobals->v_forward * 70);
-
-	UTIL_TraceHull( vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr );
-	
-	if ( tr.pHit ) {
-		CBaseEntity *pEntity = CBaseEntity::Instance( tr.pHit );
-		return pEntity;
-	}
-
-	return NULL;
 }
 
 //=========================================================
@@ -1823,15 +1790,14 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			if ( pHurt ) {
 				// SOUND HERE!
 				UTIL_MakeVectors( pev->angles );
-				pHurt->pev->punchangle.x = 15;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 100 + gpGlobals->v_up * 50;
+				pHurt->pev->punchangle.x = 20;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 150 + gpGlobals->v_up * 80;
 				pHurt->TakeDamage( pev, pev, gSkillData.fgruntDmgKick, DMG_CLUB );
 			}
 		}
 		break;
 		case HGRUNT_ALLY_AE_CAUGHT_ENEMY: {
-			if ( FOkToSpeak() )
-			{
+			if ( FOkToSpeak() ) {
 				SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
 				JustSpoke();
 			}
@@ -1891,6 +1857,7 @@ void CHFGrunt :: PainSound ( void ) {
 void CHFGrunt :: DeathSound ( void ) {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
+
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
@@ -2514,8 +2481,7 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 //=========================================================
 // GetIdealState 
 //=========================================================
-MONSTERSTATE CHFGrunt :: GetIdealState ( void )
-{
+MONSTERSTATE CHFGrunt :: GetIdealState ( void ) {
 	return CRCAllyMonster::GetIdealState();
 }
 
@@ -2526,52 +2492,25 @@ void CHFGrunt::DeclineFollowing( void ) {
 	PlaySentence( "FG_STOP", 2, VOL_NORM, ATTN_NORM );
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //=========================================================
 // CHFGruntRepel - when triggered, spawns a
 // repelling down a line.
 //=========================================================
 LINK_ENTITY_TO_CLASS( monster_hgrunt_ally_repel, CHFGruntRepel );
 
-void CHFGruntRepel::Spawn( void )
-{
+void CHFGruntRepel::Spawn( void ) {
 	Precache( );
 	pev->solid = SOLID_NOT;
 
 	SetUse(&CHFGruntRepel :: RepelUse );
 }
 
-void CHFGruntRepel::Precache( void )
-{
+void CHFGruntRepel::Precache( void ) {
 	UTIL_PrecacheOther( "monster_human_grunt_ally" );
 	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
 }
 
-void CHFGruntRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-{
+void CHFGruntRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) {
 	TraceResult tr;
 	UTIL_TraceLine( pev->origin, pev->origin + Vector( 0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
 
@@ -2604,19 +2543,14 @@ void CHFGruntRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, US
 //=========================================================
 char *CDeadFGrunt::m_szPoses[] = { "deadstomach", "deadside", "deadsitting", "dead_on_back", "dead_headcrabbed", "hgrunt_dead_stomach", "dead_canyon" };
 
-void CDeadFGrunt::KeyValue( KeyValueData *pkvd )
-{
-	if (FStrEq(pkvd->szKeyName, "pose"))
-	{
+void CDeadFGrunt::KeyValue( KeyValueData *pkvd ) {
+	if (FStrEq(pkvd->szKeyName, "pose")) {
 		m_iPose = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	}
-	else if (FStrEq(pkvd->szKeyName, "head"))
-	{
+	} else if (FStrEq(pkvd->szKeyName, "head")) {
 		m_iHead = atoi( pkvd->szValue );
 		pkvd->fHandled = TRUE;
-	}
-	else 
+	} else 
 		CBaseMonster::KeyValue( pkvd );
 }
 
@@ -2625,8 +2559,7 @@ LINK_ENTITY_TO_CLASS( monster_human_grunt_ally_dead, CDeadFGrunt );
 //=========================================================
 // ********** DeadBGrunt SPAWN **********
 //=========================================================
-void CDeadFGrunt :: Spawn( )
-{
+void CDeadFGrunt :: Spawn( ) {
 	PRECACHE_MODEL("models/hgrunt_opfor.mdl");
 	SET_MODEL(ENT(pev), "models/hgrunt_opfor.mdl");
 

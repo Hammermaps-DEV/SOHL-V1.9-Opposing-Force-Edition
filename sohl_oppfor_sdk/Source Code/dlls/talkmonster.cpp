@@ -42,10 +42,6 @@ TYPEDESCRIPTION	CTalkMonster::m_SaveData[] =
 {
 	DEFINE_FIELD( CTalkMonster, m_bitsSaid, FIELD_INTEGER ),
 	DEFINE_FIELD( CTalkMonster, m_nSpeak, FIELD_INTEGER ),
-
-	// Recalc'ed in Precache()
-	//	DEFINE_FIELD( CTalkMonster, m_voicePitch, FIELD_INTEGER ),
-	//	DEFINE_FIELD( CTalkMonster, m_szGrp, FIELD_??? ),
 	DEFINE_FIELD( CTalkMonster, m_useTime, FIELD_TIME ),
 	DEFINE_FIELD( CTalkMonster, m_iszUse, FIELD_STRING ),
 	DEFINE_FIELD( CTalkMonster, m_iszUnUse, FIELD_STRING ),
@@ -70,7 +66,7 @@ char *CTalkMonster::m_szFriends[TLK_CFRIENDS] =
 	"monster_sitting_cleansuit_scientist",
 	"monster_human_grunt_ally",
 	"monster_human_torch_ally",
-	"monster_human_medic_ally",
+	"monster_human_medic_ally"
 };
 
 
