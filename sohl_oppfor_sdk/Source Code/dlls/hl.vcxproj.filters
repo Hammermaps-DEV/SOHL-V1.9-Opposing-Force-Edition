@@ -665,6 +665,12 @@
     <ClCompile Include="particle_emitter.cpp">
       <Filter>Source Files\dlls\env</Filter>
     </ClCompile>
+    <ClCompile Include="ammo_egonclip.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="ammo_556.cpp">
+      <Filter>Source Files\dlls\ammo</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1176,6 +1182,12 @@
     </ClInclude>
     <ClInclude Include="particle_emitter.h">
       <Filter>Header Files\dlls\env</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_egon.h">
+      <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="weapon_m249.h">
+      <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

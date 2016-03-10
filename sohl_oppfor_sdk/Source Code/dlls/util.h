@@ -426,13 +426,6 @@ extern DLL_GLOBAL ULONG g_ulFrameCount;
 //
 // Un-comment only as needed
 //
-#define LANGUAGE_ENGLISH				0
-#define LANGUAGE_GERMAN					1
-#define LANGUAGE_FRENCH					2
-#define LANGUAGE_BRITISH				3
-
-extern DLL_GLOBAL int			g_Language;
-
 #define AMBIENT_SOUND_STATIC			0	// medium radius attenuation
 #define AMBIENT_SOUND_EVERYWHERE		1
 #define AMBIENT_SOUND_SMALLRADIUS		2
@@ -530,7 +523,6 @@ extern DLL_GLOBAL int			g_Language;
 // sentence groups
 #define CBSENTENCENAME_MAX 16
 #define CVOXFILESENTENCEMAX		1536		// max number of sentences in game. NOTE: this must match
-											// CVOXFILESENTENCEMAX in engine\sound.h!!!
 
 extern char gszallsentencenames[CVOXFILESENTENCEMAX][CBSENTENCENAME_MAX];
 extern int gcallsentences;
@@ -539,7 +531,7 @@ int USENTENCEG_Pick(int isentenceg, char *szfound);
 int USENTENCEG_PickSequential(int isentenceg, char *szfound, int ipick, int freset);
 void USENTENCEG_InitLRU(unsigned char *plru, int count);
 
-void SENTENCEG_Init();
+void SENTENCEG_Init(char *filename);
 void SENTENCEG_Stop(edict_t *entity, int isentenceg, int ipick);
 int SENTENCEG_PlayRndI(edict_t *entity, int isentenceg, float volume, float attenuation, int flags, int pitch);
 int SENTENCEG_PlayRndSz(edict_t *entity, const char *szrootname, float volume, float attenuation, int flags, int pitch);
@@ -547,7 +539,7 @@ int SENTENCEG_PlaySequentialSz(edict_t *entity, const char *szrootname, float vo
 int SENTENCEG_GetIndex(const char *szrootname);
 int SENTENCEG_Lookup(const char *sample, char *sentencenum);
 
-void TEXTURETYPE_Init();
+void TEXTURETYPE_Init(char *filename);
 char TEXTURETYPE_Find(char *name);
 float TEXTURETYPE_PlaySound(TraceResult *ptr,  Vector vecSrc, Vector vecEnd, int iBulletType);
 

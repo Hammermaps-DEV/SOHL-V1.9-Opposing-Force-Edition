@@ -50,6 +50,8 @@
 #include "weapon_sporelauncher.h"
 #include "weapon_sniperrifle.h"
 #include "weapon_displacer.h"
+#include "weapon_m249.h"
+#include "weapon_egon.h"
 
 extern engine_studio_api_t IEngineStudio;
 
@@ -331,10 +333,10 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 				//int iDebrisTile = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_tile.spr");
 				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisTile, 8, 0.1, 0.1, 255, 150, 150);
 				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet1.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet2.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet3.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet4.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 				fDoPuffs = true;
 			break;
@@ -342,10 +344,10 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 				//int iDebrisConcrete = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_concrete.spr");
 				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisConcrete, 8, 0.1, 0.1, 255, 150, 150);
 				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet1.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet2.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet3.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet4.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 				fDoPuffs = true;
 			break;
@@ -357,10 +359,10 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 				//int m_iMetalGlow = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/metal_puff.spr");
 				//gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRITETRAIL, pTrace->endpos, fwd, m_iMetalGlow, 8, 0.6, gEngfuncs.pfnRandomFloat( 10, 20 ) / 100.0, 100, 100, 50 );
 				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet1.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet2.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet3.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet4.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 
 				// spawn light
@@ -386,10 +388,10 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 				//gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRAY, pTrace->endpos, fwd, iDebrisGrass, 8, 0.1, 0.1, 255, 150, 150 );
 				/*
 				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet1.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet2.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet3.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet4.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
 				} */
 				fDoPuffs = true;
 			break;
@@ -397,10 +399,10 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 				//int iDebrisWood = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_wood.spr");
 				//gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRAY, pTrace->endpos, fwd, iDebrisWood, 8, 0.1, 0.1, 255, 150, 150 );
 				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet1.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet2.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet3.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet4.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 				fDoPuffs = false;
 			break;
@@ -414,10 +416,10 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 				//int iDebrisGlass = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_glass.spr");
 				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisGlass, 8, 0.1, 0.1, 255, 150, 150);
 				switch( gEngfuncs.pfnRandomLong( 0, 3 ) ) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet1.wav", 1.5, ATTN_NORM, 0, PITCH_NORM );break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet2.wav", 1.5, ATTN_NORM, 0, PITCH_NORM );break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet3.wav", 1.5, ATTN_NORM, 0, PITCH_NORM );break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet4.wav", 1.5, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );break;
+					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );break;
+					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );break;
+					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 				fDoPuffs = false;
 			break;
@@ -1231,25 +1233,25 @@ void EV_FireKnife(event_args_t *args) {
 				if (EV_IsLocal(idx)) {
 					// miss
 					switch (args->bparam2) {
-					case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK1MISS::sequence, args->iparam1); break;
-					case 1: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK2MISS::sequence, args->iparam1); break;
-					case 2: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK3MISS::sequence, args->iparam1); break;
+						case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK1MISS::sequence, args->iparam1); break;
+						case 1: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK2MISS::sequence, args->iparam1); break;
+						case 2: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK3MISS::sequence, args->iparam1); break;
 					}
 				}
 
 				// play wiff or swish sound
 				switch (gEngfuncs.pfnRandomLong(0, 2)) {
-				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-				case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife3.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife3.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 			}
 		} else {
 			if (EV_IsLocal(idx)) {
 				switch (args->bparam2) {
-				case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK1::sequence, args->iparam1); break;
-				case 1: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK2::sequence, args->iparam1); break;
-				case 2: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK3::sequence, args->iparam1); break;
+					case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK1::sequence, args->iparam1); break;
+					case 1: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK2::sequence, args->iparam1); break;
+					case 2: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)KNIFE_ATTACK3::sequence, args->iparam1); break;
 				}
 			}
 
@@ -1446,12 +1448,10 @@ void EV_FireMP5( event_args_t *args ) {
 //======================
 
 //======================
-//SOHL - Opposing-Force
 //	    SAW START
 //======================
 int shell_link_count = 0;
-void EV_FireM249(event_args_t *args)
-{
+void EV_FireM249(event_args_t *args) {
 	int idx;
 	vec3_t origin;
 	vec3_t angles;
@@ -1477,21 +1477,13 @@ void EV_FireM249(event_args_t *args)
 	shell = gEngfuncs.pEventAPI->EV_FindModelIndex("models/saw_shell.mdl");// brass shell
 	shell_link = gEngfuncs.pEventAPI->EV_FindModelIndex("models/saw_link.mdl");// brass shell link
 
-	if (EV_IsLocal(idx))
-	{
+	if (EV_IsLocal(idx)) {
 		// Add muzzle flash to current weapon model
 		EV_MuzzleFlash();
-		switch (gEngfuncs.pfnRandomLong(0, 2))
-		{
-		case 0:
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(SAW_SHOOT1 + gEngfuncs.pfnRandomLong(0, 2), body);
-			break;
-		case 1:
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(SAW_SHOOT2 + gEngfuncs.pfnRandomLong(0, 2), body);
-			break;
-		case 2:
-			gEngfuncs.pEventAPI->EV_WeaponAnimation(SAW_SHOOT3 + gEngfuncs.pfnRandomLong(0, 2), body);
-			break;
+		switch (gEngfuncs.pfnRandomLong(0, 2)) {
+			case 0: gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SAW_SHOOT1::sequence, body); break;
+			case 1:	gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SAW_SHOOT2::sequence, body); break;
+			case 2:	gEngfuncs.pEventAPI->EV_WeaponAnimation((int)SAW_SHOOT3::sequence, body); break;
 		}
 
 		V_PunchAxis(0, gEngfuncs.pfnRandomFloat(-2, 2 + gEngfuncs.pfnRandomLong(0, 0.3)));
@@ -1501,25 +1493,17 @@ void EV_FireM249(event_args_t *args)
 	EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 12, -14, 5);
 	EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell, TE_BOUNCE_SHELL);
 
-	if (shell_link_count >= 2)
-	{
+	if (shell_link_count >= 2) {
 		EV_GetDefaultShellInfo(args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 12, -14, 5);
 		EV_EjectBrass(ShellOrigin, ShellVelocity, angles[YAW], shell_link, TE_BOUNCE_SHELL);
 		shell_link_count = 0;
 	}
 	shell_link_count++;
 
-	switch (gEngfuncs.pfnRandomLong(0, 2))
-	{
-	case 0:
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
-		break;
-	case 1:
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
-		break;
-	case 2:
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire3.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf));
-		break;
+	switch (gEngfuncs.pfnRandomLong(0, 2)) {
+		case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
+		case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
+		case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire3.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
 	}
 
 	EV_GetGunPosition(args, vecSrc, origin);
@@ -1527,9 +1511,9 @@ void EV_FireM249(event_args_t *args)
 	EV_Dynamic_MuzzleFlash(vecSrc, 1.5 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.01);
 
 	if (gEngfuncs.GetMaxClients() > 1)
-		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_556, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
 	else 	
-		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_MP5, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_556, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
 }
 //======================
 //		 SAW END
@@ -2042,16 +2026,6 @@ void EV_FireGauss( event_args_t *args )
 //======================
 //	    EGON START 
 //======================
-enum egon_e {
-	EGON_IDLE1 = 0,
-	EGON_FIDGET1,
-	EGON_ALTFIREON,
-	EGON_ALTFIREOFF,
-	EGON_FIRESTOP,
-	EGON_FIRECYCLE,
-	EGON_DRAW,
-	EGON_HOLSTER
-};
 
 enum EGON_FIRESTATE { FIRE_OFF = 0, FIRE_CHARGE };
 enum EGON_FIREMODE { FIRE_NARROW = 0, FIRE_WIDE };
@@ -2074,8 +2048,7 @@ TEMPENTITY *EndMirFlare;
 //UNDONE : mirror beams don't update, end sprite don't drawing
 bool b_mir = 0;
 
-void EV_EgonFire( event_args_t *args )
-{
+void EV_EgonFire( event_args_t *args ) {
 	int idx, iFireState, iFireMode;
 	vec3_t origin;
 
@@ -2086,21 +2059,15 @@ void EV_EgonFire( event_args_t *args )
 	iFireState = args->bparam2;
 	int m_iFlare = gEngfuncs.pEventAPI->EV_FindModelIndex( EGON_FLARE_SPRITE );
 
-	if ( iStartup )
-	{
+	if ( iStartup ) {
 		if ( iFireMode == FIRE_WIDE )
 			gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, EGON_SOUND_STARTUP, 0.98, ATTN_NORM, 0, 125 );
 		else	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, EGON_SOUND_STARTUP, 0.9, ATTN_NORM, 0, 100 );
-	}
-	else
-	{
+	}  else {
 		if ( iFireMode == FIRE_WIDE )
 			gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_STATIC, EGON_SOUND_RUN, 0.98, ATTN_NORM, 0, 125 );
 		else	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_STATIC, EGON_SOUND_RUN, 0.9, ATTN_NORM, 0, 100 );
 	}
-
-	//Only play the weapon anims if I shot it.
-	//if ( EV_IsLocal( idx ) ) gEngfuncs.pEventAPI->EV_WeaponAnimation ( EGON_FIRECYCLE, args->iparam1 );
 
 	if ( iStartup == 1 && EV_IsLocal( idx ) && !pBeam && !pBeam2 && cl_lw->value )
 	{
@@ -2227,7 +2194,7 @@ void EV_EgonStop( event_args_t *args )
 			EndMirFlare->die = 0.0;
 			EndMirFlare = NULL;
 		}
-		gEngfuncs.pEventAPI->EV_WeaponAnimation( EGON_FIRESTOP, args->iparam2 );
+		gEngfuncs.pEventAPI->EV_WeaponAnimation((int)EGON_FIRESTOP::sequence, args->iparam2 );
 	}
 }
 
@@ -2305,110 +2272,6 @@ void EV_UpdateBeams ( void )
 //======================
 
 //======================
-//	   DECALS START
-//======================
-void EV_Decals( struct event_args_s *args )
-{
-	int idx;
-	pmtrace_t tr;
-	pmtrace_t *pTrace = &tr;
-          physent_t *pe;
-          
-	idx = args->entindex;
-	VectorCopy( args->origin, pTrace->endpos );
-	pTrace->ent = args->iparam1; 
-	pe = gEngfuncs.pEventAPI->EV_GetPhysent( pTrace->ent );
-	
-	if(args->iparam2 == 0)//explode decals
-	{
-		switch( gEngfuncs.pfnRandomLong( 0, 2 ) )
-		{
-		case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{scorch1" ); break;
-		case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{scorch2" ); break;
-		case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{scorch3" ); break;
-		}
-	}
-	if(args->iparam2 == 1)//red blood decals
-	{
-		switch( gEngfuncs.pfnRandomLong( 0, 7 ) )
-		{
-		case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood1" ); break;
-		case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood2" ); break;
-		case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood3" ); break;
-		case 3: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood4" ); break;
-		case 4: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood5" ); break;
-		case 5: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood6" ); break;
-		case 6: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood7" ); break;
-		case 7: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood8" ); break;
-		}
-	}
-	if(args->iparam2 == 2)//yellow blood decals
-	{
-		switch( gEngfuncs.pfnRandomLong( 0, 5 ) )
-		{
-		case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood1" ); break;
-		case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood2" ); break;
-		case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood3" ); break;
-		case 3: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood4" ); break;
-		case 4: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood5" ); break;
-		case 5: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood6" ); break;
-		}
-	}
-	if(args->iparam2 == 4)//bulsquid decals
-	{
-		switch( gEngfuncs.pfnRandomLong( 0, 1 ) )
-		{
-		case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{spit1" ); break;
-		case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{spit2" ); break;
-		}
-	}
-	if(args->iparam2 == 5)//garg flames
-	{
-		switch( gEngfuncs.pfnRandomLong( 0, 2 ) )
-		{
-		case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{smscorch1" ); break;
-		case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{smscorch2" ); break;
-		case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{smscorch3" ); break;
-		}
-	}
-	if(args->iparam2 == 6)//monsters shoot
-	{
-           	if ( pe && pe->solid == SOLID_BSP )
-			EV_HLDM_GunshotDecalTrace( pTrace, EV_HLDM_DamageDecal( pe ) );
-	}
-}
-//======================
-//	   DECALS END
-//======================
-
-//======================
-//           EFX START
-//======================
-void EV_Explode( struct event_args_s *args )
-{
-	int m_iExplodeSprite;
-	vec3_t mirpos = EV_MirrorPos(args->origin); 	
-
-	if(args->bparam1)
-		m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/WXplo1.spr" );
-	else {
-		switch (gEngfuncs.pfnRandomLong(0, 3)) {
-			case 0: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_0.spr"); break;
-			case 1: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_1.spr"); break;
-			case 2: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_2.spr"); break;
-			case 3: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_3.spr"); break;
-		}
-	}
-
-	EV_Dynamic_MuzzleFlash(args->origin, (args->fparam1 - 50) * 0.06 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.3);
-	gEngfuncs.pEfxAPI->R_Explosion( args->origin, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES );
-	if(mirpos != vec3_t(0,0,0))
-		gEngfuncs.pEfxAPI->R_Explosion( mirpos, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND | TE_EXPLFLAG_NOPARTICLES );
-}
-//======================
-//           EFX END
-//======================
-//======================
 //	   SQUEAK START
 //======================
 enum squeak_e {
@@ -2420,36 +2283,35 @@ enum squeak_e {
 	SQUEAK_THROW
 };
 
-void EV_SnarkFire( event_args_t *args )
-{
+void EV_SnarkFire(event_args_t *args) {
 	int idx;
 	vec3_t vecSrc, angles, view_ofs, forward;
 	pmtrace_t tr;
 
 	idx = args->entindex;
-	VectorCopy( args->origin, vecSrc );
-	VectorCopy( args->angles, angles );
+	VectorCopy(args->origin, vecSrc);
+	VectorCopy(args->angles, angles);
 
-	AngleVectors ( angles, forward, NULL, NULL );
-		
-	if ( !EV_IsLocal ( idx ) )
+	AngleVectors(angles, forward, NULL, NULL);
+
+	if (!EV_IsLocal(idx))
 		return;
-	
-	if ( args->ducking )
-		vecSrc = vecSrc - ( VEC_HULL_MIN - VEC_DUCK_HULL_MIN );
-	
+
+	if (args->ducking)
+		vecSrc = vecSrc - (VEC_HULL_MIN - VEC_DUCK_HULL_MIN);
+
 	// Store off the old count
 	gEngfuncs.pEventAPI->EV_PushPMStates();
 
 	// Now add in all of the players.
-	gEngfuncs.pEventAPI->EV_SetSolidPlayers ( idx - 1 );	
-	gEngfuncs.pEventAPI->EV_SetTraceHull( 2 );
-	gEngfuncs.pEventAPI->EV_PlayerTrace( vecSrc + forward * 20, vecSrc + forward * 64, PM_NORMAL, -1, &tr );
+	gEngfuncs.pEventAPI->EV_SetSolidPlayers(idx - 1);
+	gEngfuncs.pEventAPI->EV_SetTraceHull(2);
+	gEngfuncs.pEventAPI->EV_PlayerTrace(vecSrc + forward * 20, vecSrc + forward * 64, PM_NORMAL, -1, &tr);
 
 	//Find space to drop the thing.
-	if ( tr.allsolid == 0 && tr.startsolid == 0 && tr.fraction > 0.25 )
-		 gEngfuncs.pEventAPI->EV_WeaponAnimation ( SQUEAK_THROW, args->iparam1 );
-	
+	if (tr.allsolid == 0 && tr.startsolid == 0 && tr.fraction > 0.25)
+		gEngfuncs.pEventAPI->EV_WeaponAnimation(SQUEAK_THROW, args->iparam1);
+
 	gEngfuncs.pEventAPI->EV_PopPMStates();
 }
 //======================
@@ -2457,7 +2319,7 @@ void EV_SnarkFire( event_args_t *args )
 //======================
 
 //======================
-//	   SHOCKRIFLE START
+//	 SHOCKRIFLE START
 //======================
 void EV_ShockFire(event_args_t *args) {
 	int idx;
@@ -2489,8 +2351,7 @@ void EV_ShockFire(event_args_t *args) {
 			// Store off the old count
 			gEngfuncs.pEventAPI->EV_PushPMStates();
 
-			for (int i = 1; i < 4; i++)
-			{
+			for (int i = 1; i < 4; i++) {
 				BEAM* pBeam = gEngfuncs.pEfxAPI->R_BeamPoints(
 					(float*)&vm->attachment[0],
 					(float*)&vm->attachment[i],
@@ -2506,8 +2367,7 @@ void EV_ShockFire(event_args_t *args) {
 					1.0f,
 					1.0f);
 
-				if (pBeam)
-				{
+				if (pBeam) {
 					pBeam->flags |= (FBEAM_SHADEIN | FBEAM_SHADEOUT);
 					pBeam->startEntity = vm->index;
 					pBeam->endEntity = vm->index;
@@ -2520,11 +2380,11 @@ void EV_ShockFire(event_args_t *args) {
 	}
 }
 //======================
-//	   SHOCKRIFLE END
+//   SHOCKRIFLE END
 //======================
 
 //======================
-//	   SNIPERRIFLE START 
+//  SNIPERRIFLE START 
 //======================
 void EV_FireSniper(event_args_t *args) {
 	int idx;
@@ -2567,113 +2427,70 @@ void EV_FireSniper(event_args_t *args) {
 	EV_Dynamic_MuzzleFlash(vecSrc, 1.5 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.02);
 	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_762, 0, 0, args->fparam1, args->fparam2);
 }
+//======================
+//	 SNIPERRIFLE END 
+//======================
 
 //======================
-//	   SNIPERRIFLE END 
+//	 DISPLACER START 
 //======================
-
-//======================
-//	   DISPLACER START 
-//======================
-void EV_Displacer(event_args_t *args)
-{
+void EV_Displacer(event_args_t *args) {
 	int idx;
 	vec3_t origin;
-
 	idx = args->entindex;
 	VectorCopy(args->origin, origin);
 
-	if (EV_IsLocal(idx))
-	{
-		//
+	if (EV_IsLocal(idx)) {
 		// Used to play weapon animations.
-		//
 		// Fire state
-		switch (args->iparam1)
-		{
-		case (int)DISPLACER_SPINUP::sequence:
-		{
-			if (EV_IsLocal(args->entindex))
-			{
-				gEngfuncs.pEventAPI->EV_WeaponAnimation((int)DISPLACER_SPINUP::sequence, 2);
-				cl_entity_t *view = gEngfuncs.GetViewModel();
-				if (view != NULL)
-				{
-					float life = 1.14;
-				//	int iBeamModelIndex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/plasma.spr");
-				//	gEngfuncs.pEfxAPI->R_BeamEnts(view->index | 0x2000, view->index | 0x1000, iBeamModelIndex, life, 0.5, 0.5, 0.5, 0.6, 0, 10, 2, 10, 0);
-				//	gEngfuncs.pEfxAPI->R_BeamEnts(view->index | 0x3000, view->index | 0x1000, iBeamModelIndex, life, 0.5, 0.5, 0.5, 0.6, 0, 10, 2, 10, 0);
-				//	gEngfuncs.pEfxAPI->R_BeamEnts(view->index | 0x4000, view->index | 0x1000, iBeamModelIndex, life, 0.5, 0.5, 0.5, 0.6, 0, 10, 2, 10, 0);
+		switch (args->iparam1) {
+			case (int)DISPLACER_SPINUP::sequence:
+				if (EV_IsLocal(args->entindex)) {
+					gEngfuncs.pEventAPI->EV_WeaponAnimation((int)DISPLACER_SPINUP::sequence, 2);
+					cl_entity_t *view = gEngfuncs.GetViewModel();
+					if (view != NULL) {
+						float life = 1.14;
+						//	int iBeamModelIndex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/plasma.spr");
+						//	gEngfuncs.pEfxAPI->R_BeamEnts(view->index | 0x2000, view->index | 0x1000, iBeamModelIndex, life, 0.5, 0.5, 0.5, 0.6, 0, 10, 2, 10, 0);
+						//	gEngfuncs.pEfxAPI->R_BeamEnts(view->index | 0x3000, view->index | 0x1000, iBeamModelIndex, life, 0.5, 0.5, 0.5, 0.6, 0, 10, 2, 10, 0);
+						//	gEngfuncs.pEfxAPI->R_BeamEnts(view->index | 0x4000, view->index | 0x1000, iBeamModelIndex, life, 0.5, 0.5, 0.5, 0.6, 0, 10, 2, 10, 0);
+					}
 				}
-			}
-		}
-		break;
-		case (int)DISPLACER_SPIN::sequence:
-		{
-			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)DISPLACER_SPIN::sequence, 0);
-		}
-		break;
-		case (int)DISPLACER_FIRE::sequence:
-		{
-			gEngfuncs.pEventAPI->EV_WeaponAnimation((int)DISPLACER_FIRE::sequence, 0);
-		}
-		break;
-		default:
+			break;
+			case (int)DISPLACER_SPIN::sequence:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation((int)DISPLACER_SPIN::sequence, 0);
+			break;
+			case (int)DISPLACER_FIRE::sequence:
+				gEngfuncs.pEventAPI->EV_WeaponAnimation((int)DISPLACER_FIRE::sequence, 0);
 			break;
 		}
 	}
 
 	// Used to play weapon sounds.
-	//
 	// Fire state.
-	switch (args->iparam1)
-	{
-	case (int)DISPLACER_SPINUP::sequence:
-	{
-		// Fire mode
-		switch (args->iparam2)
-		{
-		case 1: // FIRESTATE_FORWARD (primary attack)
-			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin.wav", 1, ATTN_NORM, 0, PITCH_NORM);
-			break;
-		case 2: // FIRESTATE_BACKWARD (secondary attack)
-			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin2.wav", 1, ATTN_NORM, 0, PITCH_NORM);
-			break;
-		default:
-			break;
-		}
-	}
-	break;
-
-	case (int)DISPLACER_FIRE::sequence:
-	{
-		// Fire mode
-		switch (args->iparam2)
-		{
-		case 1: // FIRESTATE_FORWARD (primary attack)
-			gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_fire.wav", 1, ATTN_NORM, 0, PITCH_NORM);
-			break;
-		case 2: // FIRESTATE_BACKWARD (secondary attack)
-			if(!args->bparam1)
-				gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_self.wav", 1, ATTN_NORM, 0, PITCH_NORM);
-			break;
-		default:
-			break;
-		}
-	}
-	break;
-	default:
+	switch (args->iparam1) {
+		case (int)DISPLACER_SPINUP::sequence:
+			// Fire mode
+			switch (args->iparam2) {
+				case 1: // FIRESTATE_FORWARD (primary attack)
+					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+				break;
+				case 2: // FIRESTATE_BACKWARD (secondary attack)
+					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin2.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+				break;
+			}
 		break;
-	}
-
-	switch (args->bparam1)
-	{
-	case 1: // EFFECT_CORE
-	{
-		
-	}
-	break;
-	default:
+		case (int)DISPLACER_FIRE::sequence:
+			// Fire mode
+			switch (args->iparam2) {
+				case 1: // FIRESTATE_FORWARD (primary attack)
+					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_fire.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+				break;
+				case 2: // FIRESTATE_BACKWARD (secondary attack)
+					if (!args->bparam1)
+						gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_self.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+				break;
+			}
 		break;
 	}
 }
@@ -2682,17 +2499,115 @@ void EV_Displacer(event_args_t *args)
 //======================
 
 //======================
+//	   DECALS START
+//======================
+void EV_Decals( struct event_args_s *args )
+{
+	int idx;
+	pmtrace_t tr;
+	pmtrace_t *pTrace = &tr;
+          physent_t *pe;
+          
+	idx = args->entindex;
+	VectorCopy( args->origin, pTrace->endpos );
+	pTrace->ent = args->iparam1; 
+	pe = gEngfuncs.pEventAPI->EV_GetPhysent( pTrace->ent );
+	
+	if(args->iparam2 == 0)//explode decals
+	{
+		switch( gEngfuncs.pfnRandomLong( 0, 2 ) ) {
+			case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{scorch1" ); break;
+			case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{scorch2" ); break;
+			case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{scorch3" ); break;
+		}
+	}
+	else if(args->iparam2 == 1)//red blood decals
+	{
+		switch( gEngfuncs.pfnRandomLong( 0, 7 ) ) {
+			case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood1" ); break;
+			case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood2" ); break;
+			case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood3" ); break;
+			case 3: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood4" ); break;
+			case 4: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood5" ); break;
+			case 5: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood6" ); break;
+			case 6: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood7" ); break;
+			case 7: EV_HLDM_CrowbarDecalTrace( pTrace, "{blood8" ); break;
+		}
+	}
+	else if(args->iparam2 == 2)//yellow blood decals
+	{
+		switch( gEngfuncs.pfnRandomLong( 0, 5 ) ) {
+			case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood1" ); break;
+			case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood2" ); break;
+			case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood3" ); break;
+			case 3: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood4" ); break;
+			case 4: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood5" ); break;
+			case 5: EV_HLDM_CrowbarDecalTrace( pTrace, "{yblood6" ); break;
+		}
+	}
+	else if(args->iparam2 == 4)//bulsquid decals
+	{
+		switch( gEngfuncs.pfnRandomLong( 0, 1 ) ) {
+			case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{spit1" ); break;
+			case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{spit2" ); break;
+		}
+	}
+	else if(args->iparam2 == 5)//garg flames
+	{
+		switch( gEngfuncs.pfnRandomLong( 0, 2 ) ) {
+			case 0: EV_HLDM_CrowbarDecalTrace( pTrace, "{smscorch1" ); break;
+			case 1: EV_HLDM_CrowbarDecalTrace( pTrace, "{smscorch2" ); break;
+			case 2: EV_HLDM_CrowbarDecalTrace( pTrace, "{smscorch3" ); break;
+		}
+	}
+	else if(args->iparam2 == 6)//monsters shoot
+	{
+        if ( pe && pe->solid == SOLID_BSP )
+			EV_HLDM_GunshotDecalTrace( pTrace, EV_HLDM_DamageDecal( pe ) );
+	}
+}
+//======================
+//	   DECALS END
+//======================
+
+//======================
+//           EFX START
+//======================
+void EV_Explode( struct event_args_s *args ) {
+	int m_iExplodeSprite;
+	vec3_t mirpos = EV_MirrorPos(args->origin); 	
+
+	if(args->bparam1)
+		m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex( "sprites/WXplo1.spr" );
+	else {
+		switch (gEngfuncs.pfnRandomLong(0, 3)) {
+			case 0: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_0.spr"); break;
+			case 1: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_1.spr"); break;
+			case 2: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_2.spr"); break;
+			case 3: m_iExplodeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/explosion_3.spr"); break;
+		}
+	}
+
+	EV_Dynamic_MuzzleFlash(args->origin, (args->fparam1 - 50) * 0.06 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.3);
+	gEngfuncs.pEfxAPI->R_Explosion( args->origin, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES );
+	if(mirpos != vec3_t(0,0,0))
+		gEngfuncs.pEfxAPI->R_Explosion( mirpos, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND | TE_EXPLFLAG_NOPARTICLES );
+}
+//======================
+//           EFX END
+//======================
+
+//======================
 //	   NULL START
 //======================
-void EV_FireNull(event_args_t *args)
-{
+void EV_FireNull(event_args_t *args) {
 	CONPRINT("Fire Null!\n");
 }
+
 //======================
 //	   NULL END
 //======================
-void EV_TrainPitchAdjust( event_args_t *args )
-{
+void EV_TrainPitchAdjust( event_args_t *args ) {
 	int idx;
 	vec3_t origin;
 
@@ -2715,33 +2630,24 @@ void EV_TrainPitchAdjust( event_args_t *args )
 	noise		= (int)(((us_params) >> 12 ) & 0x0007);
 	pitch		= (int)( 10.0 * (float)( ( us_params >> 6 ) & 0x003f ) );
 
-	switch ( noise )
-	{
-	case 1: strcpy( sz, "plats/ttrain1.wav"); break;
-	case 2: strcpy( sz, "plats/ttrain2.wav"); break;
-	case 3: strcpy( sz, "plats/ttrain3.wav"); break; 
-	case 4: strcpy( sz, "plats/ttrain4.wav"); break;
-	case 5: strcpy( sz, "plats/ttrain6.wav"); break;
-	case 6: strcpy( sz, "plats/ttrain7.wav"); break;
-	default:
-		// no sound
-		strcpy( sz, "" );
+	switch ( noise ) {
+		case 1: strcpy( sz, "plats/ttrain1.wav"); break;
+		case 2: strcpy( sz, "plats/ttrain2.wav"); break;
+		case 3: strcpy( sz, "plats/ttrain3.wav"); break; 
+		case 4: strcpy( sz, "plats/ttrain4.wav"); break;
+		case 5: strcpy( sz, "plats/ttrain6.wav"); break;
+		case 6: strcpy( sz, "plats/ttrain7.wav"); break;
+		default:
+			// no sound
+			strcpy( sz, "" );
 		return;
 	}
 
-	if ( stop )
-	{
+	if ( stop ) {
 		gEngfuncs.pEventAPI->EV_StopSound( idx, CHAN_STATIC, sz );
-	}
-	else
-	{
+	} else {
 		gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_STATIC, sz, m_flVolume, ATTN_NORM, SND_CHANGE_PITCH, pitch );
 	}
-}
-
-int EV_TFC_IsAllyTeam( int iTeam1, int iTeam2 )
-{
-	return 0;
 }
 
 /*

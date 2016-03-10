@@ -421,7 +421,7 @@ void CSquadMonster :: StartMonster( void )
 		if ( !FStringNull( pev->netname ) )
 		{
 			// if I have a groupname, I can only recruit if I'm flagged as leader
-			if ( !( pev->spawnflags & SF_SQUADMONSTER_LEADER ) )
+			if ( !( pev->spawnflags & SF_MONSTER_SQUADLEADER) )
 			{
 				return;
 			}
@@ -450,10 +450,8 @@ BOOL CSquadMonster :: NoFriendlyFire( void )
 //
 // Can now, also, check whether the player is in the box. LRC
 //=========================================================
-BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly )
-{
-	if ( !playerAlly && !InSquad() )
-	{
+BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly ) {
+	if ( !playerAlly && !InSquad() ) {
 		return TRUE;
 	}
 

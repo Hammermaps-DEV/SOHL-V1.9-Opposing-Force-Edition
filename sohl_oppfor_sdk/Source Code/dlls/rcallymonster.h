@@ -25,9 +25,6 @@
 // form squads and are player allies
 //=========================================================
 
-#define	SF_ALLYMONSTER_LEADER	32
-
-
 #define bits_NO_SLOT		0
 
 // HUMAN GRUNT SLOTS
@@ -144,6 +141,24 @@ public:
 	void			KeyValue( KeyValueData *pkvd );
 	int				Classify(void);
 	CBaseEntity		*Kick(void);
+	void			CheckAmmo(void);
+	BOOL			FCanCheckAttacks(void);
+
+	// Attack
+	BOOL			CheckRangeAttack2(float flDot, float flDist);
+	void			ShootMP5(void);
+	void			ShootShotgun(void);
+	void			ShootDesertEagle(void);
+	void			ShootM249(void);
+	void			ShootGlock(void);
+	BOOL			CheckMeleeAttack1(float flDot, float flDist);
+	BOOL			CheckRangeAttack1(float flDot, float flDist);
+	Vector			GetGunPosition();
+
+	// Base Monster Sounds
+	int				ISoundMask(void);
+	void			DeathSound(void);
+	void			PainSound(void);
 
 	// AI functions
 	void			SetActivity ( Activity newActivity );
@@ -167,12 +182,13 @@ public:
 	void			ShutUpFriends( void );
 	BOOL			IsTalking( void );
 	void			Talk( float flDuration );	
+
 	// For following
 	BOOL			CanFollow( void );
 	BOOL			IsFollowing( void ) { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
 	void			StopFollowing( BOOL clearSchedule );
 	void			StartFollowing( CBaseEntity *pLeader );
-	virtual void	DeclineFollowing( void ) {}
+	void			DeclineFollowing(void);
 
 	void			GruntHealerCall( CBaseEntity *pGrunt );
 
@@ -181,8 +197,8 @@ public:
 	virtual void	SetAnswerQuestion( CRCAllyMonster *pSpeaker );
 	virtual int		FriendNumber( int arrayNumber )	{ return arrayNumber; }
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	virtual int	Save( CSave &save );
+	virtual int	Restore( CRestore &restore );
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	
@@ -198,7 +214,16 @@ public:
 	int			m_iszUnUse;						// Custom +USE sentence group (stop following)
 	int			m_iszDecline;					// Custom +USE sentence group (refuse to follow) LRC
 	int			m_iszSpeakAs;					// Change the prefix for all this monster's speeches LRC
+	float		m_flNextPainTime;
+	BOOL		m_fStanding;
+	float		m_flLinkToggle;
+	float		m_flPlayerDamage;
 
+	BOOL		m_fThrowGrenade;
+	Vector		m_vecTossVelocity;
+
+	float		m_flMedicWaitTime;
+	float		m_flNextGrenadeCheck;
 	float		m_flLastSaidSmelled;// last time we talked about something that stinks
 	float		m_flStopTalkTime;// when in the future that I'll be done saying this sentence.
 
@@ -211,9 +236,10 @@ public:
 	int		m_afSquadSlots;
 	float	m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
 	BOOL	m_fEnemyEluded;
+	BOOL	m_fImmortal;
 
 	// squad member info
-	int		m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
+	int	m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
 
 	int  CheckEnemy ( CBaseEntity *pEnemy );
 	void StartMonster ( void );
@@ -259,6 +285,18 @@ public:
 	BOOL FValidateCover ( const Vector &vecCoverLocation );
 
 	MONSTERSTATE GetIdealState ( void );
+
+	//BrassShell
+	int	m_iBrassShell;
+	int	m_iShotgunShell;
+	int	m_iM249Shell;
+	int	m_iM249Link;
+
+	//Sounds
+	static const char *pAttackSoundsSAW[];
+	static const char *pAttackSounds9MM[];
+	static const char *pPainSounds[];
+	static const char *pDeathSounds[];
 
 	CUSTOM_SCHEDULES;
 

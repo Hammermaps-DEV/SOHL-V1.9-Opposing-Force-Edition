@@ -36,7 +36,7 @@
 #include	"monster_hgrunt_opfor.h"
 
 //=========================================================
-// Monster's Anim Events Go Here
+// Monster's define
 //=========================================================
 #define	HGRUNT_ALLY_AE_RELOAD		( 2 )
 #define	HGRUNT_ALLY_AE_KICK			( 3 )
@@ -165,38 +165,6 @@ enum {
 } FGRUNT_SENTENCE_TYPES;
 
 //=========================================================
-// Monster Sounds
-//=========================================================
-const char *CHFGrunt::pPainSounds[] = {
-	"fgrunt/gr_pain1.wav",
-	"fgrunt/gr_pain2.wav",
-	"fgrunt/gr_pain3.wav",
-	"fgrunt/gr_pain4.wav",
-	"fgrunt/gr_pain5.wav",
-	"fgrunt/gr_pain6.wav"
-};
-
-const char *CHFGrunt::pDeathSounds[] = {
-	"fgrunt/death1.wav",
-	"fgrunt/death2.wav",
-	"fgrunt/death3.wav",
-	"fgrunt/death4.wav",
-	"fgrunt/death5.wav",
-	"fgrunt/death6.wav"
-};
-
-const char *CHFGrunt::pAttackSoundsSAW[] = {
-	"weapons/saw_fire1.wav",
-	"weapons/saw_fire2.wav",
-	"weapons/saw_fire3.wav"
-};
-
-const char *CHFGrunt::pAttackSounds9MM[] = {
-	"hgrunt/gr_mgun1.wav",
-	"hgrunt/gr_mgun2.wav"
-};
-
-//=========================================================
 // KeyValue
 // !!! netname entvar field is used in squadmonster for groupname!!!
 //=========================================================
@@ -215,7 +183,7 @@ void CHFGrunt :: KeyValue( KeyValueData *pkvd ) {
 //=========================================================
 // Spawn Human Grunt Ally
 //=========================================================
-void CHFGrunt::Spawn() {
+void CHFGrunt::Spawn(void) {
 	Precache();
 
 	if (pev->model)
@@ -288,7 +256,7 @@ void CHFGrunt::Spawn() {
 	m_cAmmoLoaded = m_cClipSize;
 
 	//When is leader, set Beret or Major skin
-	if ((pev->spawnflags & SF_ALLYMONSTER_LEADER) && m_iHead == -1) {
+	if ((pev->spawnflags & SF_MONSTER_SQUADLEADER) && m_iHead == -1) {
 		switch ((int)RANDOM_FLOAT(0, 3)) {
 			//Random Skins
 			case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET); break;
@@ -321,89 +289,24 @@ void CHFGrunt::Spawn() {
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CHFGrunt::Precache() {
+void CHFGrunt::Precache(void) {
 	CRCAllyMonster::Precache();
+
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/hgrunt_opfor.mdl");
 
-	PRECACHE_SOUND_ARRAY(pAttackSounds9MM);
-	PRECACHE_SOUND_ARRAY(pAttackSoundsSAW);
-	PRECACHE_SOUND_ARRAY(pPainSounds);
-	PRECACHE_SOUND_ARRAY(pDeathSounds);
-
-	PRECACHE_SOUND("fgrunt/medic.wav");
-	PRECACHE_SOUND("hgrunt/gr_reload1.wav");
 	PRECACHE_SOUND("weapons/saw_reload2.wav");
 	PRECACHE_SOUND("weapons/glauncher.wav");
-	PRECACHE_SOUND("weapons/sbarrel1.wav");
-	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
-	PRECACHE_SOUND("weapons/dryfire1.wav"); //LRC
-
-	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
-	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");// shotgun shell
-	m_iM249Shell = PRECACHE_MODEL("models/saw_shell.mdl");// saw shell
-	m_iM249Link = PRECACHE_MODEL("models/saw_link.mdl");// saw link
-
-	TalkInit();
 }
 
-//=========================================================
-// Killed
-//=========================================================
-void CHFGrunt::Killed( entvars_t *pevAttacker, int iGib ) {
-	SetUse( NULL );
-	CRCAllyMonster::Killed( pevAttacker, iGib );
-}
-
-//=========================================================
-// someone else is talking - don't speak
-//=========================================================
-BOOL CHFGrunt :: FOkToSpeak( void ) {
-	// if someone else is talking, don't speak
-	if (UTIL_GlobalTimeBase() <= CRCAllyMonster::g_talkWaitTime)
-		return FALSE;
-
-	// if in the grip of a barnacle, don't speak
-	if ( m_MonsterState == MONSTERSTATE_PRONE || m_IdealMonsterState == MONSTERSTATE_PRONE ) {
-		return FALSE;
-	}
-
-	// if not alive, certainly don't speak
-	if ( pev->deadflag != DEAD_NO ) {
-		return FALSE;
-	}
-
-	if ( pev->spawnflags & SF_MONSTER_GAG ) {
-		if ( m_MonsterState != MONSTERSTATE_COMBAT ) {
-			// no talking outside of combat if gagged.
-			return FALSE;
-		}
-	}
-	
-	return TRUE;
-}
 //=========================================================
 // JustSpoke
 //=========================================================
 void CHFGrunt :: JustSpoke( void ) {
 	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = FGRUNT_SENT_NONE;
-}
-
-//=========================================================
-// IRelationship - overridden because Male Assassins are 
-// Human Grunt's nemesis.
-//=========================================================
-int CHFGrunt::IRelationship ( CBaseEntity *pTarget ) {
-	//LRC- only hate alien grunts if my behaviour hasn't been overridden
-	if (!m_iClass && FClassnameIs(pTarget->pev, "monster_alien_grunt") || 
-		(FClassnameIs(pTarget->pev, "monster_gargantua")) || FClassnameIs(pTarget->pev, "monster_male_assassin")) {
-		return R_NM;
-	}
-
-	return CRCAllyMonster::IRelationship( pTarget );
 }
 
 //=========================================================
@@ -473,11 +376,7 @@ Schedule_t	slFGruntIdleStand[] =
 		bits_COND_HEAR_SOUND	|
 		bits_COND_SMELL			|
 		bits_COND_PROVOKED,
-
 		bits_SOUND_COMBAT		|// sound flags - change these, and you'll break the talking code.
-		//bits_SOUND_PLAYER		|
-		//bits_SOUND_WORLD		|
-		
 		bits_SOUND_DANGER		|
 		bits_SOUND_MEAT			|// scents
 		bits_SOUND_CARCASS		|
@@ -586,7 +485,6 @@ Schedule_t slFGruntEstablishLineOfFire[] =
 		bits_COND_CAN_RANGE_ATTACK2	|
 		bits_COND_CAN_MELEE_ATTACK2	|
 		bits_COND_HEAR_SOUND,
-		
 		bits_SOUND_DANGER,
 		"FGruntEstablishLineOfFire"
 	},
@@ -609,7 +507,6 @@ Schedule_t	slFGruntFoundEnemy[] =
 		tlFGruntFoundEnemy,
 		HL_ARRAYSIZE ( tlFGruntFoundEnemy ), 
 		bits_COND_HEAR_SOUND,
-		
 		bits_SOUND_DANGER,
 		"FGruntFoundEnemy"
 	},
@@ -1237,8 +1134,7 @@ void CHFGrunt :: StartTask( Task_t *pTask ) {
 //=========================================================
 // RunTask
 //=========================================================
-void CHFGrunt :: RunTask( Task_t *pTask )
-{
+void CHFGrunt :: RunTask( Task_t *pTask ) {
 	switch (pTask->iTask) {
 		case TASK_HGRUNT_ALLY_FACE_TOSS_DIR: {
 			// project a point along the toss vector and turn to face that point.
@@ -1247,12 +1143,12 @@ void CHFGrunt :: RunTask( Task_t *pTask )
 			if (FacingIdeal()) {
 				m_iTaskStatus = TASKSTATUS_COMPLETE;
 			}
-			break;
 		}
+		break;
 		default: {
 			CRCAllyMonster::RunTask(pTask);
-			break;
 		}
+		break;
 	}
 }
 
@@ -1261,10 +1157,8 @@ void CHFGrunt :: RunTask( Task_t *pTask )
 //=========================================================
 void CHFGrunt :: GibMonster ( void ) {
 	if ( GetBodygroup( 3 ) != 3 && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
-
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
-
 		GetAttachment( 0, vecGunPos, vecGunAngles );
 		
 		CBaseEntity *pGun;
@@ -1302,29 +1196,7 @@ void CHFGrunt :: GibMonster ( void ) {
 		}
 	}
 
-	CBaseMonster :: GibMonster();
-}
-//=========================================================
-// ISoundMask - returns a bit mask indicating which types
-// of sounds this monster regards. 
-//=========================================================
-int CHFGrunt :: ISoundMask ( void) {
-	return	bits_SOUND_WORLD	|
-			bits_SOUND_COMBAT	|
-			bits_SOUND_CARCASS	|
-			bits_SOUND_MEAT		|
-			bits_SOUND_GARBAGE	|
-			bits_SOUND_DANGER	|
-			bits_SOUND_PLAYER;
-}
-//=========================================================
-// CheckAmmo - overridden for the grunt because he actually
-// uses ammo! (base class doesn't)
-//=========================================================
-void CHFGrunt :: CheckAmmo ( void ) {
-	if ( m_cAmmoLoaded <= 0 ) {
-		SetConditions(bits_COND_NO_AMMO_LOADED);
-	}
+	CRCAllyMonster::GibMonster();
 }
 
 //=========================================================
@@ -1359,98 +1231,6 @@ void CHFGrunt :: SetYawSpeed ( void ) {
 }
 
 //=========================================================
-// PrescheduleThink - this function runs after conditions
-// are collected and before scheduling code is run.
-//=========================================================
-void CHFGrunt :: PrescheduleThink ( void ) {
-	if ( InSquad() && m_hEnemy != NULL ) {
-		if ( HasConditions ( bits_COND_SEE_ENEMY ) ) {
-			// update the squad's last enemy sighting time.
-			MySquadLeader()->m_flLastEnemySightTime = UTIL_GlobalTimeBase();
-		} else {
-			if ( UTIL_GlobalTimeBase() - MySquadLeader()->m_flLastEnemySightTime > 5 ) {
-				// been a while since we've seen the enemy
-				MySquadLeader()->m_fEnemyEluded = TRUE;
-			}
-		}
-	}
-
-	CBaseMonster :: PrescheduleThink();
-}
-
-//=========================================================
-// FCanCheckAttacks - this is overridden for human grunts
-// because they can throw/shoot grenades when they can't see their
-// target and the base class doesn't check attacks if the monster
-// cannot see its enemy.
-//
-// !!!BUGBUG - this gets called before a 3-round burst is fired
-// which means that a friendly can still be hit with up to 2 rounds. 
-// ALSO, grenades will not be tossed if there is a friendly in front,
-// this is a bad bug. Friendly machine gun fire avoidance
-// will unecessarily prevent the throwing of a grenade as well.
-//=========================================================
-BOOL CHFGrunt :: FCanCheckAttacks ( void ) {
-	if( !HasConditions( bits_COND_ENEMY_TOOFAR ) ) {
-		return TRUE;
-	} else {
-		return FALSE;
-	}
-}
-
-//=========================================================
-// CheckMeleeAttack1
-//=========================================================
-BOOL CHFGrunt :: CheckMeleeAttack1 ( float flDot, float flDist ) {
-	CBaseMonster *pEnemy;
-	if ( m_hEnemy != NULL ) {
-		pEnemy = m_hEnemy->MyMonsterPointer();
-
-		if ( !pEnemy ) {
-			return FALSE;
-		}
-	}
-
-	if ( flDist <= 64 && flDot >= 0.7	&& 
-		 pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
-		 pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON ) {
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-//=========================================================
-// CheckRangeAttack1 - overridden for HGrunt, cause 
-// FCanCheckAttacks() doesn't disqualify all attacks based
-// on whether or not the enemy is occluded because unlike
-// the base class, the HGrunt can attack when the enemy is
-// occluded (throw grenade over wall, etc). We must 
-// disqualify the machine gun attack if the enemy is occluded.
-//=========================================================
-BOOL CHFGrunt :: CheckRangeAttack1 ( float flDot, float flDist ) {
-	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire()) {
-		TraceResult	tr;
-
-		if (!m_hEnemy->IsPlayer() && flDist <= 64) {
-			// kick nonclients who are close enough, but don't shoot at them.
-			return FALSE;
-		}
-
-		Vector vecSrc = GetGunPosition();
-
-		// verify that a bullet fired from the gun will hit the enemy before the world.
-		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
-
-		if (tr.flFraction == 1.0) {
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
-
-//=========================================================
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
@@ -1479,7 +1259,6 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 	
 	Vector vecTarget;
-
 	if (FBitSet( pev->weapons, FGRUNT_HANDGRENADE)) {
 		// find feet
 		if (RANDOM_LONG(0,1)) {
@@ -1553,123 +1332,16 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 }
 
 //=========================================================
-// GetGunPosition	return the end of the barrel
-//=========================================================
-Vector CHFGrunt :: GetGunPosition( ) {
-	if (m_fStanding ) {
-		return pev->origin + Vector( 0, 0, 60 );
-	} else {
-		return pev->origin + Vector( 0, 0, 48 );
-	}
-}
-
-//=========================================================
-// Shoot 9mm
-//=========================================================
-void CHFGrunt :: Shoot ( void ) {
-	if (m_hEnemy == NULL && m_pCine == NULL) {
-		return;
-	}
-
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy( vecShootOrigin );
-
-	if (m_cAmmoLoaded > 0) {
-		UTIL_MakeVectors ( pev->angles );
-
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40,90) + gpGlobals->v_up * RANDOM_FLOAT(75,200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-		EjectBrass ( vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL); 
-		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_4DEGREES, 2048, BULLET_MONSTER_9MM ); // shoot +-5 degrees
-		EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSounds9MM);
-		WeaponFlash(vecShootOrigin);
-
-		pev->effects |= EF_MUZZLEFLASH;
-
-		m_cAmmoLoaded--;// take away a bullet!
-	} else {
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
-	}
-
-	Vector angDir = UTIL_VecToAngles( vecShootDir );
-	SetBlending( 0, angDir.x );
-}
-
-//=========================================================
-// Shoot Shotgun
-//=========================================================
-void CHFGrunt :: Shotgun ( void ) {
-	if (m_hEnemy == NULL && m_pCine == NULL) {
-		return;
-	}
-
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy( vecShootOrigin );
-
-	UTIL_MakeVectors ( pev->angles );
-
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-	FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
-	WeaponFlash(vecShootOrigin);
-
-	pev->effects |= EF_MUZZLEFLASH;
-	m_cAmmoLoaded--;
-	
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
-	SetBlending(0, angDir.x);
-}
-
-//=========================================================
-// Shoot M249
-//=========================================================
-void CHFGrunt :: M249 ( void ) {
-	if (m_hEnemy == NULL && m_pCine == NULL) {
-		return;
-	}
-
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy( vecShootOrigin );
-
-	UTIL_MakeVectors ( pev->angles );
-
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40,90) + gpGlobals->v_up * RANDOM_FLOAT(75,200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	
-	if (m_flLinkToggle >= 2) {
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Link, TE_BOUNCE_SHELL);
-		m_flLinkToggle = 0;
-	} else {
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Shell, TE_BOUNCE_SHELL);
-		m_flLinkToggle++;
-	}
-	
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_3DEGREES, 2048, BULLET_MONSTER_556 ); // shoot +-5 degrees
-	WeaponFlash(vecShootOrigin);
-	EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSoundsSAW);
-
-	pev->effects |= EF_MUZZLEFLASH;
-
-	m_cAmmoLoaded--;
-
-	Vector angDir = UTIL_VecToAngles( vecShootDir );
-	SetBlending( 0, angDir.x );
-}
-
-//=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
 void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
-	Vector	vecShootDir;
-	Vector	vecShootOrigin;
-
+	Vector	vecShootDir, vecShootOrigin;
 	switch( pEvent->event ) {
 		case HGRUNT_ALLY_AE_DROP_GUN: {
 			if (pev->spawnflags & SF_MONSTER_NO_WPN_DROP) break; //LRC
 
-			Vector	vecGunPos;
-			Vector	vecGunAngles;
-
+			Vector	vecGunPos, vecGunAngles;
 			GetAttachment(0, vecGunPos, vecGunAngles);
 
 			// switch to body group with no gun.
@@ -1684,7 +1356,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			}
 
 			CBaseEntity *pGun;
-			if (!(pev->spawnflags & SF_MONSTER_FADECORPSE)) { //Hack for "Don't Drop Explosives"
+			if (!(pev->spawnflags & SF_MONSTER_CUSTOM_FLAG_1)) {
 				if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
 					pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 					if (pGun) {
@@ -1694,7 +1366,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 				}
 			}
 
-			if (!(pev->spawnflags & SF_MONSTER_FADECORPSE)) { //Hack for "Don't Drop Explosives"
+			if (!(pev->spawnflags & SF_MONSTER_CUSTOM_FLAG_1)) {
 				if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
 					pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 					if (pGun) {
@@ -1709,7 +1381,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			if (FBitSet( pev->weapons, FGRUNT_M249)) {
 				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_reload2.wav", 1, ATTN_NORM);
 			} else {
-				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "weapons/gr_reload1.wav", 1, ATTN_NORM );
+				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM );
 			}
 
 			m_cAmmoLoaded = m_cClipSize;
@@ -1765,25 +1437,17 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			CGrenade::ShootTimed( pev, pev->origin + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6, g_vecZero, RANDOM_FLOAT(1.5, 2));
 		}
 		break;
-		case HGRUNT_ALLY_AE_BURST1: {
-			if (FBitSet( pev->weapons, FGRUNT_M249)) {
-				M249();
-			} else if (FBitSet( pev->weapons, FGRUNT_SHOTGUN )) {
-				Shotgun( );
-			} else {
-				Shoot();
-			}
-		
-			CSoundEnt::InsertSound ( bits_SOUND_COMBAT, pev->origin, 384, 0.3 );
-		}
-		break;
+		case HGRUNT_ALLY_AE_BURST1:
 		case HGRUNT_ALLY_AE_BURST2:
-		case HGRUNT_ALLY_AE_BURST3:
+		case HGRUNT_ALLY_AE_BURST3: {
 			if (FBitSet(pev->weapons, FGRUNT_M249)) {
-				M249();
+				ShootM249();
+			} else if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
+				ShootShotgun();
 			} else {
-				Shoot();
+				ShootMP5();
 			}
+		}
 		break;
 		case HGRUNT_ALLY_AE_KICK: {
 			CBaseEntity *pHurt = Kick();
@@ -1801,61 +1465,11 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 				SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
 				JustSpoke();
 			}
-
 		}
 		default:
 			CRCAllyMonster::HandleAnimEvent( pEvent );
 		break;
 	}
-}
-
-//=========================================================
-// Init talk data
-//=========================================================
-void CHFGrunt :: TalkInit() {
-	CRCAllyMonster::TalkInit();
-
-	if (!m_iszSpeakAs) {
-		m_szGrp[TLK_ANSWER]  =	"FG_ANSWER";
-		m_szGrp[TLK_QUESTION] =	"FG_QUESTION";
-		m_szGrp[TLK_IDLE] =		"FG_IDLE";
-		m_szGrp[TLK_STARE] =	"FG_STARE";
-		m_szGrp[TLK_USE] =		"FG_OK";
-		m_szGrp[TLK_UNUSE] =	"FG_WAIT";
-		m_szGrp[TLK_STOP] =		"FG_STOP";
-
-		m_szGrp[TLK_NOSHOOT] =	"FG_SCARED";
-		m_szGrp[TLK_HELLO] =	"FG_HELLO";
-
-		m_szGrp[TLK_PLHURT1] =	"FG_CURE";
-		m_szGrp[TLK_PLHURT2] =	"FG_CURE"; 
-		m_szGrp[TLK_PLHURT3] =	"FG_CURE";
-
-		m_szGrp[TLK_SMELL] =	"FG_SMELL";
-	
-		m_szGrp[TLK_WOUND] =	"FG_WOUND";
-		m_szGrp[TLK_MORTAL] =	"FG_MORTAL";
-	}
-
-	m_voicePitch = (90 + RANDOM_LONG(0, 10));
-}
-	
-//=========================================================
-// PainSound
-//=========================================================
-void CHFGrunt :: PainSound ( void ) {
-	if (UTIL_GlobalTimeBase() < m_flNextPainTime)
-		return;
-
-	m_flNextPainTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5, 0.75);
-	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
-}
-
-//=========================================================
-// DeathSound 
-//=========================================================
-void CHFGrunt :: DeathSound ( void ) {
-	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
 //=========================================================
@@ -1927,98 +1541,6 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 	}
 
 	CRCAllyMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType );
-}
-
-//=========================================================
-// TakeDamage - overridden for the grunt because the grunt
-// needs to forget that he is in cover if he's hurt. (Obviously
-// not in a safe place anymore).
-//=========================================================
-int CHFGrunt :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) {
-	if ( m_fImmortal )
-		flDamage = 0;
-
-	int takedamage = CRCAllyMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
-	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
-		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
-
-		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
-		if (pEnt->IsPlayer()) {
-			pev->health = pev->max_health / 2;
-			if (flDamage > 0) //Override all damage
-				SetConditions(bits_COND_LIGHT_DAMAGE);
-
-			if (flDamage >= 20) //Override all damage
-				SetConditions(bits_COND_HEAVY_DAMAGE);
-
-			return takedamage;
-		}
-
-		if (pevAttacker->owner) {
-			pEnt = CBaseEntity::Instance(pevAttacker->owner);
-			if (pEnt->IsPlayer()) {
-				pev->health = pev->max_health / 2;
-				if (flDamage > 0) //Override all damage
-					SetConditions(bits_COND_LIGHT_DAMAGE);
-
-				if (flDamage >= 20) //Override all damage
-					SetConditions(bits_COND_HEAVY_DAMAGE);
-
-				return takedamage;
-			}
-		}
-	}
-
-	Forget( bits_MEMORY_INCOVER );
-	if (!IsAlive() || pev->deadflag == DEAD_DYING || m_iPlayerReact) {
-		return takedamage;
-	}
-
-	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT)) {
-		m_flPlayerDamage += flDamage;
-		if (m_hEnemy == NULL) {
-			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) || UTIL_IsFacing(pevAttacker, pev->origin)) {
-				if (m_iszSpeakAs) {
-					char szBuf[32];
-					strcpy(szBuf, STRING(m_iszSpeakAs));
-					strcat(szBuf, "_MAD");
-					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				}
-				else {
-					PlaySentence("FG_MAD", 4, VOL_NORM, ATTN_NORM);
-				}
-
-				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
-			}
-			else {
-				if (m_iszSpeakAs) {
-					char szBuf[32];
-					strcpy(szBuf, STRING(m_iszSpeakAs));
-					strcat(szBuf, "_SHOT");
-					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				}
-				else {
-					PlaySentence("FG_SHOT", 4, VOL_NORM, ATTN_NORM);
-				}
-				Remember(bits_MEMORY_SUSPICIOUS);
-			}
-		}
-		else if (!(m_hEnemy->IsPlayer()) && pev->deadflag == DEAD_NO) {
-			if (m_iszSpeakAs) {
-				char szBuf[32];
-				strcpy(szBuf, STRING(m_iszSpeakAs));
-				strcat(szBuf, "_SHOT");
-				PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-			}
-			else {
-				PlaySentence("FG_SHOT", 4, VOL_NORM, ATTN_NORM);
-			}
-		}
-	}
-
-	return takedamage;
 }
 
 //=========================================================
@@ -2170,6 +1692,7 @@ Schedule_t* CHFGrunt :: GetScheduleOfType ( int Type ) {
 		}
 	}
 }
+
 //=========================================================
 // SetActivity 
 //=========================================================
@@ -2254,13 +1777,13 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 			pev->frame = 0;
 		}
 
-		pev->sequence		= iSequence;	// Set to the reset anim (if it's there)
+		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
 		ResetSequenceInfo( );
 		SetYawSpeed();
 	} else {
 		// Not available try to get default anim
 		ALERT ( at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity );
-		pev->sequence		= 0;	// Set to the reset anim (if it's there)
+		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
 
@@ -2447,9 +1970,9 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 			return GetScheduleOfType ( SCHED_RELOAD );
 		}
 
-		if ( pev->health < pev->max_health && ( m_flMedicWaitTime < UTIL_GlobalTimeBase() )) {
+		if ( pev->health < pev->max_health && pev->health <= 20 && ( m_flMedicWaitTime < UTIL_GlobalTimeBase() )) {
 			// Find a medic 
-			//return GetScheduleOfType( SCHED_HGRUNT_ALLY_FIND_MEDIC ); // Unresolved
+			return GetScheduleOfType( SCHED_HGRUNT_ALLY_FIND_MEDIC ); // Unresolved
 		}
 
 		if ( m_hEnemy == NULL && IsFollowing() ) {
@@ -2476,20 +1999,6 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 	}
 	
 	return CRCAllyMonster :: GetSchedule();
-}
-
-//=========================================================
-// GetIdealState 
-//=========================================================
-MONSTERSTATE CHFGrunt :: GetIdealState ( void ) {
-	return CRCAllyMonster::GetIdealState();
-}
-
-//=========================================================
-// DeclineFollowing 
-//=========================================================
-void CHFGrunt::DeclineFollowing( void ) {
-	PlaySentence( "FG_STOP", 2, VOL_NORM, ATTN_NORM );
 }
 
 //=========================================================

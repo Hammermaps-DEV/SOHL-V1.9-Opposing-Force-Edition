@@ -53,8 +53,7 @@ void CHandGrenade::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CHandGrenade::Precache(void)
-{
+void CHandGrenade::Precache(void) {
 	PRECACHE_MODEL("models/w_grenade.mdl");
 	PRECACHE_MODEL("models/v_grenade.mdl");
 	PRECACHE_MODEL("models/p_grenade.mdl");
@@ -192,7 +191,8 @@ void CHandGrenade::WeaponIdle(void) {
 	}
 
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]) {
-		if (m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
+		if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+			m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 			return;
 		}
 
@@ -204,14 +204,12 @@ void CHandGrenade::WeaponIdle(void) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)HANDGRENADE_IDLE::frames, (int)HANDGRENADE_IDLE::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		}
-		else if (flRand <= 0.7) {
+		} else if (flRand <= 0.7) {
 			iAnim = (int)HANDGRENADE_FIDGET::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)HANDGRENADE_FIDGET::frames, (int)HANDGRENADE_FIDGET::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		}
-		else {
+		} else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

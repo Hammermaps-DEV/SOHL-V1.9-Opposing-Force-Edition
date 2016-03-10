@@ -426,7 +426,7 @@
 		//5 : "Follower"
 	]
 	TriggerTarget(String) : "TriggerTarget"
-      TriggerCondition(Choices) : "Trigger Condition" =
+    TriggerCondition(Choices) : "Trigger Condition" =
 	[
 		0 : "No Trigger"
 		1 : "See Player, Mad at Player"
@@ -459,7 +459,7 @@
 	]
 ]
 
-@BaseClass = TalkMonster
+@BaseClass base(Monster) color(0 200 200) = TalkMonster 
 [
 	//* The sentence (see sound/sentences.txt) to speak when the player tells us to follow.
 	UseSentence(String) : "Use Sentence"
@@ -482,10 +482,10 @@
 	//* XX_STARE, XX_OK, XX_WAIT, XX_STOP, XX_NOSHOOT, XX_HELLO, XX_SMELL, XX_WOUND and
 	//* XX_MORTAL. (as well as some others, if the monsters are going to be Pre-Disaster.)
 	SpeakAs(string) : "Speech Group"
-	spawnflags(Flags) =
+	spawnflags(Flags) = 
 	[
 		//* Unless given a Master, a pre-disaster monster will refuse to follow the player.
-		256: "Pre-Disaster" 	: 0
+		256: "Pre-Disaster" : 0
 	]
 ]
 
@@ -3416,7 +3416,7 @@
 ]
 @PointClass base(Monster) size(-16 -16 0, 16 16 36) studio("models/baby_headcrab.mdl") = monster_babycrab : "Baby Headcrab" []
 @PointClass base(Targetname, RenderFields) size(-16 -16 -36, 16 16 0) studio("models/barnacle.mdl") = monster_barnacle : "Barnacle Monster" []
-@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/barney.mdl") = monster_barney : "Barney"
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/barney.mdl") = monster_barney : "Barney"
 [
 	frags(choices) : "Weapon" : 0 =
 	[
@@ -3506,7 +3506,7 @@
 	]
 ]
 // NEW 1.9
-@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/barniel.mdl") = monster_barniel : "Female Barney (Barniel)"
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/barniel.mdl") = monster_barniel : "Female Barney (Barniel)"
 [
 	frags(choices) : "Weapon" : 0 =
 	[
@@ -3909,7 +3909,7 @@
 ]
 //* Like @monster_bloater: no AI, no death animation.
 @PointClass base(Monster) size(-6 -6 0, 6 6 6) studio("models/bigrat.mdl") = monster_rat : "Rat" []
-@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/scientist.mdl") = monster_scientist : "Scientist" 
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/scientist.mdl") = monster_scientist : "Scientist" 
 [
       body(Choices) : "Body" : -1 =
 	[
@@ -4082,7 +4082,7 @@
 	]
 
 ]
-@PointClass base(Monster, TalkMonster) size(-16 -16 0, 16 16 72) studio("models/construction.mdl") = monster_construction : "Construction (Gus)" 
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/construction.mdl") = monster_construction : "Construction (Gus)" 
 [
 	sequence(Choices) : "Animation Sequence (editor)" : 13 =
 	[
@@ -4671,7 +4671,7 @@
 	]
 ]
 //NEW 1.9
-@PointClass base(Monster,TalkMonster) studio("models/recruit.mdl") = monster_recruit : "Recruit" []
+@PointClass base(TalkMonster) studio("models/recruit.mdl") = monster_recruit : "Recruit" []
 //NEW 1.9
 @PointClass base(Targetname,Appearflags,RenderFields, Sequence) size(-16 -16 0, 16 16 72) studio("models/skeleton.mdl") = monster_skeleton_dead : "Dead Skeleton" 
 [
@@ -4715,7 +4715,7 @@
 	]
 ]
 //NEW 1.9
-@PointClass base(Monster,TalkMonster) studio("models/otis.mdl") = monster_otis : "Otis"
+@PointClass base(TalkMonster) studio("models/otis.mdl") = monster_otis : "Otis"
 [
 	frags(choices) : "Weapon" : 0 =
 	[
@@ -4795,16 +4795,15 @@
 	]
 ]
 //NEW 1.9
-@PointClass base(Monster) studio("models/hgrunt_opfor.mdl") = monster_human_grunt_ally : "Human Grunt Ally (camo)" 
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/hgrunt_opfor.mdl") = monster_human_grunt_ally : "Human Grunt Ally (camo)" 
 [
     netname(string) : "Squad Name"
     spawnflags(Flags) =
     [
         32 : "SquadLeader" : 0
-		512: "Don't Drop Explosives" : 0
 		1024: "Don't Drop Gun" : 0
+		2048: "Don't Drop Explosives" : 0
     ]
-
     weapons(Choices) : "Weapons" : 3 =
     [
         0 : "None"
@@ -4815,7 +4814,6 @@
         10 : "Shotgun + HG"
         16 : "Saw"
     ]
-
     head(Choices) : "Heads" : -1 =
     [
         -1 : "Default"
@@ -4841,7 +4839,6 @@
 		4 : "Dead On Stomach"
 		5 : "Head Crabbed"
 	]
-
 	weapons(Choices) : "Weapons" : 1 =
 	[
 		0 : "None"
@@ -4849,7 +4846,6 @@
 		8 : "Shotgun"
 		16 : "Saw"
 	]
-
 	head(Choices) : "Heads" : 0 =
 	[
 		0 : "Gas Mask"
@@ -4861,44 +4857,46 @@
 	]
 ]
 //NEW 1.9
-@PointClass base(Monster) studio("models/hgrunt_medic.mdl") = monster_human_medic_ally : "Medic" 
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/hgrunt_medic.mdl") = monster_human_medic_ally : "Medic" 
 [
     netname(string) : "Squad Name"
     spawnflags(Flags) =
     [
         32 : "SquadLeader" : 0
 		1024: "Don't Drop Gun" : 0
+		2048: "Don't Drop Explosives" : 0
     ]
-
     head(Choices) : "Heads" : -1 =
     [
        -1 : "Random"
         0 : "White"
         1 : "Black"
     ]
-
-    weapons(Choices) : "Weapons" : 2 =
+    weapons(Choices) : "Weapons" : 1 =
     [
 		0 : "None"
         1 : "Desert Eagle"
         2 : "9mm Handgun"
-        4 : "Hypodermic Needle"
+        3 : "Hypodermic Needle"
     ]
 ]
 //NEW 1.9
-@PointClass base(Monster) studio("models/hgrunt_torch.mdl") = monster_human_torch_ally : "Torch" 
+@PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/hgrunt_torch.mdl") = monster_human_torch_ally : "Torch" 
 [
 	netname(string) : "Squad Name"
-	spawnflags(Flags) =
-	[
-		32 : "SquadLeader" : 0
+    spawnflags(Flags) =
+    [
+        32 : "SquadLeader" : 0
 		1024: "Don't Drop Gun" : 0
-	]
-	weapons(Choices) : "Weapons" : 1 =
-		[
-		1 : "Desert Eagle"
-		2 : "Blow Torch"
-	]
+		2048: "Don't Drop Explosives" : 0
+    ]
+    weapons(Choices) : "Weapons" : 1 =
+    [
+		0 : "None"
+        1 : "Desert Eagle"
+        2 : "9mm Handgun"
+        3 : "Blow Torch"
+    ]
 ]
 //NEW 1.9
 @PointClass base(Monster) studio("models/gonome.mdl") = monster_gonome : "Gonome" []
@@ -4927,7 +4925,7 @@
     ]
 ]
 //NEW 1.9
-@PointClass base(Monster,TalkMonster) studio("models/drill.mdl") = monster_drillsergeant : "Drill Sergeant" []
+@PointClass base(TalkMonster) studio("models/drill.mdl") = monster_drillsergeant : "Drill Sergeant" []
 //NEW 1.9
 @PointClass base(Monster) studio("models/cleansuit_scientist.mdl") = monster_sitting_cleansuit_scientist : "Sitting Cleansuit Scientist" 
 [
@@ -4965,7 +4963,7 @@
 	]
 ]
 //NEW 1.9
-@PointClass base(Monster, TalkMonster) studio("models/cleansuit_scientist.mdl") = monster_cleansuit_scientist : "Cleansuit Scientist" 
+@PointClass base(TalkMonster) studio("models/cleansuit_scientist.mdl") = monster_cleansuit_scientist : "Cleansuit Scientist" 
 [
     body(Choices) : "Body" : -1 =
     [

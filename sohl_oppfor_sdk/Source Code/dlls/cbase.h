@@ -992,6 +992,7 @@ public:
 	void Spawn( void );
 	void Precache( void );
 	void KeyValue( KeyValueData *pkvd );
+	BOOL LoadMAPSentences(void);
 
 	CBaseAlias *m_pFirstAlias;
 };

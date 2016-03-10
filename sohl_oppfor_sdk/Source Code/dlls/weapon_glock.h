@@ -20,7 +20,6 @@
 ***/
 //=========================================================
 // Weapon: Glock 17 * http://half-life.wikia.com/wiki/Glock_17
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
 
 #ifndef WEAPON_GLOCK_H

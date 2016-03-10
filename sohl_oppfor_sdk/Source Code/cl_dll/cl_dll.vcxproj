@@ -222,7 +222,7 @@
     <ClCompile Include="death.cpp" />
     <ClCompile Include="demo.cpp" />
     <ClCompile Include="entity.cpp" />
-    <ClCompile Include="events.cpp" />
+    <ClCompile Include="ev_events.cpp" />
     <ClCompile Include="ev_common.cpp" />
     <ClCompile Include="ev_hldm.cpp" />
     <ClCompile Include="flashlight.cpp" />

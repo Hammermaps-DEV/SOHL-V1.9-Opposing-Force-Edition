@@ -1,23 +1,21 @@
 /***
 *
-*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
-*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*
-*   This product contains software technology licensed from Id
-*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*	All Rights Reserved.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
-*
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
-*
-***/
+****/
+//=========================================================
+// Weapon: M249 Squad Automatic Weapon
+// http://half-life.wikia.com/wiki/M249_Squad_Automatic_Weapon
+//=========================================================
 
 #include "extdll.h"
 #include "util.h"
@@ -28,53 +26,30 @@
 #include "player.h"
 #include "soundent.h"
 #include "gamerules.h"
+#include "weapon_m249.h"
 
-enum m249_e
-{
-	SAW_SLOWIDLE = 0,
-	SAW_IDLE,
-	SAW_RELOAD_START,
-	SAW_RELOAD_END,
-	SAW_HOLSTER,
-	SAW_DRAW,
-	SAW_SHOOT1,
-	SAW_SHOOT2,
-	SAW_SHOOT3
-};
-
-class CM249 : public CBasePlayerWeapon
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	int GetItemInfo(ItemInfo *p);
-
-	void PrimaryAttack(void);
-	BOOL Deploy(void);
-	void Holster();
-	void Reload(void);
-	void WeaponIdle(void);
-	void UpdateClip(void);
-
-	int m_iReloadStep = 0;
-private:
-	unsigned short m_usM249;
-};
-
+//=========================================================
+// Link ENTITY
+//=========================================================
 LINK_ENTITY_TO_CLASS(weapon_m249, CM249);
+LINK_ENTITY_TO_CLASS(weapon_saw, CM249);
 
-void CM249::Spawn()
-{
-	pev->classname = MAKE_STRING("weapon_m249");
+//=========================================================
+// Spawn M249 Squad Automatic Weapon
+//=========================================================
+void CM249::Spawn(void) {
 	Precache();
+
 	SET_MODEL(ENT(pev), "models/w_saw.mdl");
 	m_iDefaultAmmo = M249_DEFAULT_GIVE;
 
 	FallInit();// get ready to fall down.
 }
 
-void CM249::Precache(void)
-{
+//=========================================================
+// Precache - precaches all resources this weapon needs
+//=========================================================
+void CM249::Precache(void) {
 	PRECACHE_MODEL("models/v_saw.mdl");
 	PRECACHE_MODEL("models/w_saw.mdl");
 	PRECACHE_MODEL("models/p_saw.mdl");
@@ -83,17 +58,19 @@ void CM249::Precache(void)
 	PRECACHE_SOUND("weapons/saw_fire2.wav");
 	PRECACHE_SOUND("weapons/saw_fire3.wav");
 
-	PRECACHE_SOUND("weapons/saw_reload.wav");
-	PRECACHE_SOUND("weapons/saw_reload2.wav");
+	PRECACHE_SOUND("weapons/saw_reload.wav"); //by model
+	PRECACHE_SOUND("weapons/saw_reload2.wav"); //by model
 
-	int m_iShell = PRECACHE_MODEL("models/saw_shell.mdl");// brass shell
-	int m_iShell_link = PRECACHE_MODEL("models/saw_link.mdl");// brass shell link
+	PRECACHE_MODEL("models/saw_shell.mdl");// brass shell
+	PRECACHE_MODEL("models/saw_link.mdl");// brass shell link
 
 	m_usM249 = PRECACHE_EVENT(1, "events/m249.sc");
 }
 
-int CM249::GetItemInfo(ItemInfo *p)
-{
+//=========================================================
+// GetItemInfo - give all Infos for this weapon
+//=========================================================
+int CM249::GetItemInfo(ItemInfo *p) {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "556";
 	p->iMaxAmmo1 = _556_MAX_CARRY;
@@ -105,30 +82,18 @@ int CM249::GetItemInfo(ItemInfo *p)
 	p->iFlags = 0;
 	p->iId = m_iId = WEAPON_M249;
 	p->iWeight = M249_WEIGHT;
-
 	return 1;
 }
 
-BOOL CM249::Deploy()
-{
-	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", SAW_DRAW, "saw", 0.3);
-}
-
-void CM249::Holster()
-{
-	m_fInReload = FALSE;// cancel any reload in progress.
-	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.8;
-	SendWeaponAnim(SAW_HOLSTER);
-}
-
-void CM249::PrimaryAttack()
-{
+//=========================================================
+// PrimaryAttack
+//=========================================================
+void CM249::PrimaryAttack(void) {
 	if (m_iReloadStep)
 		return;
 
 	// don't fire underwater
-	if (m_iClip && m_pPlayer->pev->waterlevel != 3)
-	{
+	if (m_iClip && m_pPlayer->pev->waterlevel != 3) {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
@@ -144,7 +109,7 @@ void CM249::PrimaryAttack()
 
 		if (!IsMultiplayer())
 			vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_5DEGREES, 8192, BULLET_PLAYER_556, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
-		else	
+		else
 			vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_4DEGREES, 8192, BULLET_PLAYER_556, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 
 		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usM249, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0);
@@ -154,71 +119,103 @@ void CM249::PrimaryAttack()
 		if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase())
 			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.0675;
 
-		if (!FBitSet(m_pPlayer->pev->flags, FL_DUCKING))
-		{
+		if (!FBitSet(m_pPlayer->pev->flags, FL_DUCKING)) {
 			float flOldPlayerVel = m_pPlayer->pev->velocity.z;
 			m_pPlayer->pev->velocity = m_pPlayer->pev->velocity + (50 * -gpGlobals->v_forward);
 			m_pPlayer->pev->velocity.z = flOldPlayerVel;
 		}
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 7.0 / 30.0;
-	}
-	else
-	{
+	} else {
 		PlayEmptySound();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
 
-void CM249::Reload(void)
-{
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == M249_MAX_CLIP)
+//=========================================================
+// Deploy
+//=========================================================
+BOOL CM249::Deploy(void) {
+	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", (int)SAW_DRAW::sequence,
+		"mp5", CalculateWeaponTime((int)SAW_DRAW::frames, (int)SAW_DRAW::fps));
+}
+
+//=========================================================
+// Holster
+//=========================================================
+void CM249::Holster(void) {
+	m_fInReload = FALSE;// cancel any reload in progress.
+	SendWeaponAnim((int)SAW_HOLSTER::sequence);
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
+		CalculateWeaponTime((int)SAW_HOLSTER::frames, (int)SAW_HOLSTER::fps);
+}
+
+//=========================================================
+// Reload
+//=========================================================
+void CM249::Reload(void) {
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0 || m_iClip == M249_MAX_CLIP) {
 		return;
+	}
 
-	if (m_iClip != 50 && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] != 0)
-	{
+	UpdateClip();
+	m_iReloadStep = true;
+
+	DefaultReload(GLOCK_MAX_CLIP, (int)SAW_RELOAD_START::sequence,
+		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps));
+
+	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
+		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps) + 
+		CalculateWeaponTime((int)SAW_RELOAD_END::frames, (int)SAW_RELOAD_END::fps);
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps);
+}
+
+//=========================================================
+// WeaponIdle Animation
+//=========================================================
+void CM249::WeaponIdle(void) {
+	if (m_iReloadStep) {
+		m_iReloadStep = false;
+		SendWeaponAnim((int)SAW_RELOAD_END::sequence);
+		m_flTimeWeaponIdle = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
+			CalculateWeaponTime((int)SAW_RELOAD_END::frames, (int)SAW_RELOAD_END::fps);
 		UpdateClip();
-		m_iReloadStep = 1;
-		DefaultReload(M249_MAX_CLIP, SAW_RELOAD_START, 1.5);
-		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + (61 / 40) + (111 / 45);
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 61 / 40;
+	} else {
+		UpdateClip();
+
+		if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+			m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
+			return;
+		}
+
+		// only idle if the slid isn't back
+		if (m_iClip) {
+			int iAnim;
+			float flRand = RANDOM_FLOAT(0, 1);
+			if (flRand <= 0.5) {
+				iAnim = (int)SAW_SLOWIDLE::sequence;
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
+					CalculateWeaponTime((int)SAW_SLOWIDLE::frames, (int)SAW_SLOWIDLE::fps);
+				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
+			} else if (flRand <= 0.7) {
+				iAnim = (int)SAW_IDLE::sequence;
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
+					CalculateWeaponTime((int)SAW_IDLE::frames, (int)SAW_IDLE::fps);
+				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
+			} else {
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+				m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
+			}
+
+			SendWeaponAnim(iAnim);
+		}
 	}
 }
 
-void CM249::WeaponIdle(void)
-{
-	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) return;
-
-	if (m_iReloadStep)
-	{
-		UpdateClip();
-		m_iReloadStep = 0;
-		SendWeaponAnim(SAW_RELOAD_END);
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 111.0 / 45.0;
-		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 111.0 / 45.0;
-	}
-	else
-	{
-		UpdateClip();
-		int iAnim;
-		float flRand = UTIL_SharedRandomFloat(m_pPlayer->random_seed, 0, 1);
-		if (flRand <= 0.8)
-		{
-			iAnim = SAW_SLOWIDLE;
-			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + (45.0 / 9.0);
-		}
-		else
-		{
-			iAnim = SAW_IDLE;
-			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + (74.0 / 12.0);// * RANDOM_LONG(2, 5);
-		}
-
-		SendWeaponAnim(iAnim);
-	}
-}
-
-void CM249::UpdateClip(void)
-{
+//=========================================================
+// UpdateClip
+//=========================================================
+void CM249::UpdateClip(void) {
 	if (m_iClip <= 8)
 		pev->body = 1;
 	if (m_iClip <= 7)
@@ -250,28 +247,3 @@ void CM249::UpdateClip(void)
 		&& m_iClip != 9)
 		pev->body = 0;
 }
-
-class CM249AmmoClip : public CBasePlayerAmmo
-{
-	void Spawn(void)
-	{
-		Precache();
-		SET_MODEL(ENT(pev), "models/w_saw_clip.mdl");
-		CBasePlayerAmmo::Spawn();
-	}
-	void Precache(void)
-	{
-		PRECACHE_MODEL("models/w_saw_clip.mdl");
-		PRECACHE_SOUND("items/9mmclip1.wav");
-	}
-	BOOL AddAmmo(CBaseEntity *pOther)
-	{
-		int bResult = (pOther->GiveAmmo(AMMO_556_GIVE, "556", _556_MAX_CARRY) != -1);
-		if (bResult)
-		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-		}
-		return bResult;
-	}
-};
-LINK_ENTITY_TO_CLASS(ammo_556, CM249AmmoClip)

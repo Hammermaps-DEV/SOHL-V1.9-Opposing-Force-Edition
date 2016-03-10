@@ -34,6 +34,7 @@
 #include <ctype.h>  // isspace
 
 vec3_t flPlayerOrigin;
+
 #ifdef CLIENT_DLL
 	// Spectator Mode
 	int		iJumpSpectator;
@@ -88,7 +89,7 @@ typedef struct hull_s
 #define VEC_VIEW			28
 #define	STOP_EPSILON	0.1
 
-#define CTEXTURESMAX		1024		// max number of textures loaded
+#define CTEXTURESMAX		2048		// max number of textures loaded
 #define CBTEXTURENAMEMAX	32			// only load first n chars of name
 
 #define CHAR_TEX_CONCRETE	'C'			// texture types
@@ -102,8 +103,6 @@ typedef struct hull_s
 #define CHAR_TEX_COMPUTER	'P'
 #define CHAR_TEX_GLASS		'Y'
 #define CHAR_TEX_FLESH		'F'
-
-// Opposing-Force
 #define CHAR_TEX_DEEP_SNOW	'U'
 #define CHAR_TEX_SNOW		'O'
 #define CHAR_TEX_GRASS		'Z'
@@ -117,8 +116,6 @@ typedef struct hull_s
 #define STEP_SLOSH		6		// shallow liquid puddle
 #define STEP_WADE		7		// wading in liquid
 #define STEP_LADDER		8		// climbing ladder
-
-// Opposing-Force
 #define STEP_SNOW		9		// snow
 #define STEP_GRASS		10		// grass
 
@@ -200,7 +197,7 @@ void PM_SortTextures( void )
 	}
 }
 
-void PM_InitTextureTypes()
+void PM_InitTextureTypes(char *filename)
 {
 	char buffer[512];
 	int i, j;
@@ -217,8 +214,8 @@ void PM_InitTextureTypes()
 	gcTextures = 0;
 	memset(buffer, 0, 512);
 
-	fileSize = pmove->COM_FileSize( "sound/materials.txt" );
-	pMemFile = pmove->COM_LoadFile( "sound/materials.txt", 5, NULL );
+	fileSize = pmove->COM_FileSize(filename);
+	pMemFile = pmove->COM_LoadFile(filename, 5, NULL );
 	if ( !pMemFile )
 		return;
 
@@ -3519,7 +3516,7 @@ void PM_Init( struct playermove_s *ppmove )
 	pmove = ppmove;
 
 	PM_CreateStuckTable();
-	PM_InitTextureTypes();
+	PM_InitTextureTypes("sound/materials.txt");
 
 	pm_shared_initialized = 1;
 }

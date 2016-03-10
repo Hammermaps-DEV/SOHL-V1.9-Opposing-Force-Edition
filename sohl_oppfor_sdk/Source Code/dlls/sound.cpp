@@ -1183,7 +1183,7 @@ typedef struct sentenceg
 
 } SENTENCEG;
 
-#define CSENTENCEG_MAX 200					// max number of sentence groups
+#define CSENTENCEG_MAX 800					// max number of sentence groups
 // globals
 
 SENTENCEG rgsentenceg[CSENTENCEG_MAX];
@@ -1444,7 +1444,7 @@ void SENTENCEG_Stop(edict_t *entity, int isentenceg, int ipick)
 // Should be called from world spawn, only works on the
 // first call and is ignored subsequently.
 
-void SENTENCEG_Init()
+void SENTENCEG_Init(char *filename)
 {
 	char buffer[512];
 	char szgroup[64];
@@ -1464,7 +1464,7 @@ void SENTENCEG_Init()
 
 	
 	int filePos = 0, fileSize;
-	byte *pMemFile = g_engfuncs.pfnLoadFileForMe( "sound/sentences.txt", &fileSize );
+	byte *pMemFile = g_engfuncs.pfnLoadFileForMe(filename, &fileSize );
 	if ( !pMemFile )
 		return;
 
@@ -1657,14 +1657,14 @@ void EMIT_GROUPNAME_SUIT(edict_t *entity, const char *groupname)
 
 int fTextureTypeInit = FALSE;
 
-#define CTEXTURESMAX		512			// max number of textures loaded
+#define CTEXTURESMAX	2048			// max number of textures loaded
 
 int gcTextures = 0;
 char grgszTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];	// texture names
 char grgchTextureType[CTEXTURESMAX];						// parallel array of texture types
 
 
-void TEXTURETYPE_Init()
+void TEXTURETYPE_Init(char *filename)
 {
 	char buffer[512];
 	int i, j;
@@ -1680,7 +1680,7 @@ void TEXTURETYPE_Init()
 	gcTextures = 0;
 	memset(buffer, 0, 512);
 
-	pMemFile = g_engfuncs.pfnLoadFileForMe( "sound/materials.txt", &fileSize );
+	pMemFile = g_engfuncs.pfnLoadFileForMe(filename, &fileSize );
 	if ( !pMemFile )
 		return;
 

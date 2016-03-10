@@ -18,27 +18,33 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-/*
-
-===== globals.cpp ========================================================
-
-  DLL-wide global variable definitions.
-  They're all defined here, for convenient centralization.
-  Source files that need them should "extern ..." declare each
-  variable, to better document what globals they care about.
-
-*/
 
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "soundent.h"
+#include "weapons.h"
 
-DLL_GLOBAL ULONG		g_ulFrameCount;
-DLL_GLOBAL ULONG		g_ulModelIndexEyes;
-DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
-DLL_GLOBAL Vector		g_vecAttackDir;
-DLL_GLOBAL int			g_iSkillLevel;
-DLL_GLOBAL int			gDisplayTitle;
-DLL_GLOBAL BOOL			g_fGameOver;
-DLL_GLOBAL const Vector	g_vecZero = Vector(0,0,0);
+class CM249AmmoClip : public CBasePlayerAmmo
+{
+	void Spawn(void)
+	{
+		Precache();
+		SET_MODEL(ENT(pev), "models/w_saw_clip.mdl");
+		CBasePlayerAmmo::Spawn();
+	}
+	void Precache(void)
+	{
+		PRECACHE_MODEL("models/w_saw_clip.mdl");
+		PRECACHE_SOUND("items/9mmclip1.wav");
+	}
+	BOOL AddAmmo(CBaseEntity *pOther)
+	{
+		int bResult = (pOther->GiveAmmo(AMMO_556_GIVE, "556", _556_MAX_CARRY) != -1);
+		if (bResult)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+		}
+		return bResult;
+	}
+};
+LINK_ENTITY_TO_CLASS(ammo_556, CM249AmmoClip)

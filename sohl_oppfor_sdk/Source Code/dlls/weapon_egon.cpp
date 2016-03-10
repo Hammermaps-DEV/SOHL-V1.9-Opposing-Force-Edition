@@ -29,6 +29,7 @@
 #include "effects.h"
 #include "customentity.h"
 #include "gamerules.h"
+#include "weapon_egon.h"
 
 #define EGON_PRIMARY_VOLUME		450
 #define EGON_BEAM_SPRITE		"sprites/xbeam1.spr"
@@ -41,66 +42,6 @@
 #define EGON_SWITCH_WIDE_TIME			1.5
 #define PRIMARY_CHARGE_VOLUME			256
 #define PRIMARY_FIRE_VOLUME			450
-
-enum egon_e {
-	EGON_IDLE1 = 0,
-	EGON_FIDGET1,
-	EGON_ALTFIREON,
-	EGON_ALTFIREOFF,
-	EGON_FIRESTOP,
-	EGON_FIRECYCLE,
-	EGON_DRAW,
-	EGON_HOLSTER
-};
-
-class CEgon : public CBasePlayerWeapon
-{
-public:
-	int	Save( CSave &save );
-	int	Restore( CRestore &restore );
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	void Spawn( void );
-	void Precache( void );
-	int GetItemInfo(ItemInfo *p);
-
-	BOOL Deploy( void );
-	void Holster( );
-
-	void CreateEffect ( void );
-	void UpdateEffect( const Vector &startPoint, const Vector &endPoint, float timeBlend );
-	void DestroyEffect ( void );
-
-	void EndAttack( void );
-	void UpdateScreen( void );
-	void ShutdownScreen( void );
-	void PrimaryAttack( void );
-	void SecondaryAttack( void );
-	void WeaponIdle( void );
-
-	float m_flAmmoUseTime;// since we use < 1 point of ammo per update, we subtract ammo on a timer.
-
-	void Fire( const Vector &vecOrigSrc, const Vector &vecDir );
-
-	BOOL HasAmmo( void );
-	void UseAmmo( int count );
-	
-	int flags (void) { return ENGINE_CANSKIP( m_pPlayer->edict()) ? NULL : FEV_NOTHOST; }; 
-	
-	enum EGON_FIRESTATE { FIRE_OFF = 0, FIRE_CHARGE };
-	enum EGON_FIREMODE { FIRE_NARROW = 0, FIRE_WIDE};
-
-private:
-	float				m_shootTime;
-	CBeam				*m_pBeam;
-	CBeam				*m_pNoise;
-	CSprite				*m_pSprite;
-	EGON_FIRESTATE			m_fireState;
-	EGON_FIREMODE			m_fireMode;
-	float				m_shakeTime;
-	unsigned int 			m_usEgonFire;
-	unsigned int			m_usEgonStop;
-};
 
 LINK_ENTITY_TO_CLASS( weapon_egon, CEgon );
 
@@ -146,7 +87,7 @@ BOOL CEgon::Deploy( void )
 	m_fireState = FIRE_OFF;
 
 	AnimRestore = TRUE;
-	return DefaultDeploy( "models/v_egon.mdl", "models/p_egon.mdl", EGON_DRAW, "egon", 0.7 );
+	return DefaultDeploy( "models/v_egon.mdl", "models/p_egon.mdl", (int)EGON_DRAW::sequence, "egon", 0.7 );
 }
 
 void CEgon::Holster()
@@ -155,7 +96,7 @@ void CEgon::Holster()
 
 	ShutdownScreen();
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
-	SendWeaponAnim( EGON_HOLSTER );
+	SendWeaponAnim((int)EGON_HOLSTER::sequence );
 }
 
 int CEgon::GetItemInfo(ItemInfo *p)
@@ -222,7 +163,7 @@ void CEgon::PrimaryAttack( void )
 			m_flAmmoUseTime = UTIL_GlobalTimeBase();// start using ammo ASAP.
 
 			PLAYBACK_EVENT_FULL( flags(), m_pPlayer->edict(), m_usEgonFire, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, pev->body, m_fireMode, 1, m_fireState );
-                              SendWeaponAnim( EGON_FIRECYCLE );
+                              SendWeaponAnim((int)EGON_FIRECYCLE::sequence);
 			m_shakeTime = 0;
 
 			m_pPlayer->m_iWeaponVolume = PRIMARY_FIRE_VOLUME;
@@ -242,13 +183,13 @@ void CEgon::PrimaryAttack( void )
 			if ( m_shootTime != 0 && UTIL_GlobalTimeBase() > m_shootTime )
 			{
 				PLAYBACK_EVENT_FULL( flags(), m_pPlayer->edict(), m_usEgonFire, 0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, pev->body, m_fireMode, 0, m_fireState );
-				SendWeaponAnim( EGON_FIRECYCLE );
+				SendWeaponAnim((int)EGON_FIRECYCLE::sequence);
 				m_shootTime = 0;
 			}
 			if(!AnimRestore)
 			{
 				PLAYBACK_EVENT_FULL( flags(), m_pPlayer->edict(), m_usEgonFire, 0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, pev->body, m_fireMode, 0, m_fireState );
-                                        SendWeaponAnim( EGON_FIRECYCLE );
+                                        SendWeaponAnim((int)EGON_FIRECYCLE::sequence);
 				m_shootTime = 0;
 				m_fireMode = (EGON_FIREMODE)m_iBody;
 				AnimRestore = TRUE;
@@ -271,7 +212,7 @@ void CEgon::SecondaryAttack( void )
 	if ( m_fireState != FIRE_OFF ) EndAttack();
 	if(m_iBody == 0)
 	{
-		SendWeaponAnim( EGON_ALTFIREON );
+		SendWeaponAnim((int)EGON_ALTFIREON::sequence );
 		m_fireMode = FIRE_NARROW;
 		m_iBody = 1;
 		m_flTimeUpdate = UTIL_GlobalTimeBase() + 1.1;
@@ -279,7 +220,7 @@ void CEgon::SecondaryAttack( void )
 	else 
 	{
 		m_iBody = 0;
-		SendWeaponAnim( EGON_ALTFIREOFF );
+		SendWeaponAnim((int)EGON_ALTFIREOFF::sequence );
 		m_fireMode = FIRE_WIDE;
 		m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.7;//off animation is faster than on
 	}
@@ -571,41 +512,14 @@ void CEgon::WeaponIdle( void )
 
 		if ( flRand > 0.8 )
 		{
-			iAnim = EGON_IDLE1;
+			iAnim = (int)EGON_IDLE1::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10,15);
 		}
 		else if ((m_iBody == 0)&&(flRand < 0.2))
 		{
-			iAnim = EGON_FIDGET1;
+			iAnim = (int)EGON_FIDGET1::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 3;
 		}
 		SendWeaponAnim( iAnim );
 	}
 }
-
-
-
-class CEgonAmmo : public CBasePlayerAmmo
-{
-	void Spawn( void )
-	{ 
-		Precache( );
-		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
-		CBasePlayerAmmo::Spawn( );
-	}
-	void Precache( void )
-	{
-		PRECACHE_MODEL ("models/w_chainammo.mdl");
-		PRECACHE_SOUND("items/9mmclip1.wav");
-	}
-	BOOL AddAmmo( CBaseEntity *pOther ) 
-	{ 
-		if (pOther->GiveAmmo( AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY ) != -1)
-		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
-		}
-		return FALSE;
-	}
-};
-LINK_ENTITY_TO_CLASS( ammo_egonclip, CEgonAmmo );

@@ -470,8 +470,6 @@ void ResetGlobalState( void )
 	gInitHUD = TRUE;	// Init the HUD on a new game / load game
 }
 
-
-
 // moved CWorld class definition to cbase.h
 //=======================
 // CWorld
@@ -508,15 +506,12 @@ void CWorld :: Precache( void )
 	g_pLastSpawn = NULL;
 
 	//Game Options Register
-	CVAR_SET_FLOAT("player_jump_punchangle", 1);
-
 	CVAR_SET_STRING("sv_gravity", "800"); // 67ft/sec
 	CVAR_SET_STRING("sv_stepsize", "18");
 	CVAR_SET_STRING("room_type", "0");// clear DSP
 
 	// Set up game rules
-	if (g_pGameRules)
-	{
+	if (g_pGameRules) {
 		delete g_pGameRules;
 	}
 
@@ -527,22 +522,20 @@ void CWorld :: Precache( void )
 	pSoundEnt = GetClassPtr( ( CSoundEnt *)NULL );
 	pSoundEnt->Spawn();
 
-	if ( !pSoundEnt )
-	{
+	if ( !pSoundEnt ) {
 		ALERT ( at_debug, "**COULD NOT CREATE SOUNDENT**\n" );
 	}
 
 	InitBodyQue();
-	
+
 // init sentence group playback stuff from sentences.txt.
 // ok to call this multiple times, calls after first are ignored.
 
-	SENTENCEG_Init();
+	SENTENCEG_Init("sound/sentences.txt");
 
 // init texture type array from materials.txt
 
-	TEXTURETYPE_Init();
-
+	TEXTURETYPE_Init("sound/materials.txt");
 
 // the area based ambient sounds MUST be the first precache_sounds
 
@@ -559,16 +552,8 @@ void CWorld :: Precache( void )
 	PRECACHE_SOUND( "common/bodydrop3.wav" );// dead bodies hitting the ground (animation events)
 	PRECACHE_SOUND( "common/bodydrop4.wav" );
 	
-	g_Language = (int)CVAR_GET_FLOAT( "sv_language" );
-	if ( g_Language == LANGUAGE_GERMAN )
-	{
-		PRECACHE_MODEL( "models/germangibs.mdl" );
-	}
-	else
-	{
-		PRECACHE_MODEL( "models/hgibs.mdl" );
-		PRECACHE_MODEL( "models/agibs.mdl" );
-	}
+	PRECACHE_MODEL( "models/hgibs.mdl" );
+	PRECACHE_MODEL( "models/agibs.mdl" );
 
 	PRECACHE_SOUND ("weapons/ric1.wav");
 	PRECACHE_SOUND ("weapons/ric2.wav");

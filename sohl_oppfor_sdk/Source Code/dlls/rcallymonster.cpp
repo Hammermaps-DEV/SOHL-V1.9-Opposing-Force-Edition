@@ -33,12 +33,13 @@
 #include	"soundent.h"
 #include	"animation.h"
 #include	"plane.h"
+#include	"weapons.h"
 
 //=========================================================
 // Talking monster base class
 // Used for scientists and barneys
 //=========================================================
-float	CRCAllyMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
+float CRCAllyMonster::g_talkWaitTime = 0;		// time delay until it's ok to speak: used so that two NPCs don't talk at once
 
 TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] = {
 	DEFINE_FIELD(CRCAllyMonster, m_bitsSaid, FIELD_INTEGER),
@@ -74,6 +75,38 @@ char *CRCAllyMonster::m_szFriends[TLK_CFRIENDS] =
 	"monster_human_grunt_ally",
 	"monster_human_torch_ally",
 	"monster_human_medic_ally"
+};
+
+//=========================================================
+// Monster Sounds
+//=========================================================
+const char *CRCAllyMonster::pPainSounds[] = {
+	"fgrunt/gr_pain1.wav",
+	"fgrunt/gr_pain2.wav",
+	"fgrunt/gr_pain3.wav",
+	"fgrunt/gr_pain4.wav",
+	"fgrunt/gr_pain5.wav",
+	"fgrunt/gr_pain6.wav"
+};
+
+const char *CRCAllyMonster::pDeathSounds[] = {
+	"fgrunt/death1.wav",
+	"fgrunt/death2.wav",
+	"fgrunt/death3.wav",
+	"fgrunt/death4.wav",
+	"fgrunt/death5.wav",
+	"fgrunt/death6.wav"
+};
+
+const char *CRCAllyMonster::pAttackSoundsSAW[] = {
+	"weapons/saw_fire1.wav",
+	"weapons/saw_fire2.wav",
+	"weapons/saw_fire3.wav"
+};
+
+const char *CRCAllyMonster::pAttackSounds9MM[] = {
+	"hgrunt/gr_mgun1.wav",
+	"hgrunt/gr_mgun2.wav"
 };
 
 //=========================================================
@@ -653,8 +686,10 @@ void CRCAllyMonster :: RunTask( Task_t *pTask )
 	}
 }
 
-void CRCAllyMonster :: Killed( entvars_t *pevAttacker, int iGib )
-{
+//=========================================================
+// Killed
+//=========================================================
+void CRCAllyMonster :: Killed( entvars_t *pevAttacker, int iGib ) {
 	VacateSlot();
 
 	if (InSquad()) {
@@ -671,8 +706,10 @@ void CRCAllyMonster :: Killed( entvars_t *pevAttacker, int iGib )
 	CBaseMonster::Killed( pevAttacker, iGib );
 }
 
-CBaseEntity	*CRCAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber, BOOL bTrace )
-{
+//=========================================================
+// EnumFriends
+//=========================================================
+CBaseEntity	*CRCAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber, BOOL bTrace ) {
 	CBaseEntity *pFriend = pPrevious;
 	char *pszFriend;
 	TraceResult tr;
@@ -703,8 +740,10 @@ CBaseEntity	*CRCAllyMonster::EnumFriends( CBaseEntity *pPrevious, int listNumber
 	return NULL;
 }
 
-void CRCAllyMonster::AlertFriends( void )
-{
+//=========================================================
+// AlertFriends
+//=========================================================
+void CRCAllyMonster::AlertFriends( void ) {
 	CBaseEntity *pFriend = NULL;
 	int i;
 
@@ -772,17 +811,13 @@ void CRCAllyMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 	}
 }
 
-// monsters derived from CRCAllyMonster should call this in precache()
-
-void CRCAllyMonster :: TalkInit( void )
-{
-	// every new talking monster must reset this global, otherwise
-	// when a level is loaded, nobody will talk (time is reset to 0)
-
+//=========================================================
+// Init talk data
+//=========================================================
+void CRCAllyMonster :: TalkInit( void ) {
 	CRCAllyMonster::g_talkWaitTime = 0;
 
-	if (m_iszSpeakAs) //LRC: changing voice groups for monsters
-	{
+	if (m_iszSpeakAs)  {
 		char szBuf[64];
 		strcpy(szBuf,STRING(m_iszSpeakAs));
 		strcat(szBuf,"_");
@@ -836,9 +871,29 @@ void CRCAllyMonster :: TalkInit( void )
 		m_szGrp[TLK_WOUND]  = STRING(ALLOC_STRING(szBuf));
 		strcpy(szAssign,"MORTAL");
 		m_szGrp[TLK_MORTAL]  = STRING(ALLOC_STRING(szBuf));
+	} else {
+		m_szGrp[TLK_ANSWER] = "FG_ANSWER";
+		m_szGrp[TLK_QUESTION] = "FG_QUESTION";
+		m_szGrp[TLK_IDLE] = "FG_IDLE";
+		m_szGrp[TLK_STARE] = "FG_STARE";
+		m_szGrp[TLK_USE] = "FG_OK";
+		m_szGrp[TLK_UNUSE] = "FG_WAIT";
+		m_szGrp[TLK_STOP] = "FG_STOP";
+
+		m_szGrp[TLK_NOSHOOT] = "FG_SCARED";
+		m_szGrp[TLK_HELLO] = "FG_HELLO";
+
+		m_szGrp[TLK_PLHURT1] = "FG_CURE";
+		m_szGrp[TLK_PLHURT2] = "FG_CURE";
+		m_szGrp[TLK_PLHURT3] = "FG_CURE";
+
+		m_szGrp[TLK_SMELL] = "FG_SMELL";
+
+		m_szGrp[TLK_WOUND] = "FG_WOUND";
+		m_szGrp[TLK_MORTAL] = "FG_MORTAL";
 	}
 
-	m_voicePitch = 100;
+	m_voicePitch = (90 + RANDOM_LONG(0, 10));
 }	
 //=========================================================
 // FindNearestFriend
@@ -953,17 +1008,17 @@ void CRCAllyMonster :: IdleRespond( void )
 	PlaySentence( m_szGrp[TLK_ANSWER], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE );
 }
 
-int CRCAllyMonster :: FOkToSpeak( void )
-{
+//=========================================================
+// someone else is talking - don't speak
+//=========================================================
+int CRCAllyMonster :: FOkToSpeak( void ) {
 	// if in the grip of a barnacle, don't speak
-	if ( m_MonsterState == MONSTERSTATE_PRONE || m_IdealMonsterState == MONSTERSTATE_PRONE )
-	{
+	if ( m_MonsterState == MONSTERSTATE_PRONE || m_IdealMonsterState == MONSTERSTATE_PRONE ) {
 		return FALSE;
 	}
 
 	// if not alive, certainly don't speak
-	if ( pev->deadflag != DEAD_NO )
-	{
+	if ( pev->deadflag != DEAD_NO ) {
 		return FALSE;
 	}
 
@@ -972,9 +1027,6 @@ int CRCAllyMonster :: FOkToSpeak( void )
 		return FALSE;
 
 	if ( pev->spawnflags & SF_MONSTER_GAG )
-		return FALSE;
-
-	if ( m_MonsterState == MONSTERSTATE_PRONE )
 		return FALSE;
 
 	// if player is not in pvs, don't speak
@@ -987,7 +1039,6 @@ int CRCAllyMonster :: FOkToSpeak( void )
 
 	return TRUE;
 }
-
 
 int CRCAllyMonster::CanPlaySentence( BOOL fDisregardState ) 
 { 
@@ -1232,27 +1283,6 @@ void CRCAllyMonster :: SetAnswerQuestion( CRCAllyMonster *pSpeaker )
 	m_hTalkTarget = (CBaseMonster *)pSpeaker;
 }
 
-int CRCAllyMonster :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
-{
-	if ( IsAlive() )
-	{
-		// if player damaged this entity, have other friends talk about it
-		if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && FBitSet(pevAttacker->flags, FL_CLIENT))
-		{
-			CBaseEntity *pFriend = FindNearestFriend(FALSE);
-
-			if (pFriend && pFriend->IsAlive())
-			{
-				// only if not dead or dying!
-				CRCAllyMonster *pTalkMonster = (CRCAllyMonster *)pFriend;
-				pTalkMonster->ChangeSchedule( slIdleStopShootingTS );
-			}
-		}
-	}
-
-	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
-}
-
 //=========================================================
 // TraceAttack - Double damage fix
 //=========================================================
@@ -1375,12 +1405,23 @@ BOOL CRCAllyMonster :: IsTalking( void )
 }
 
 //=========================================================
-// If there's a player around, watch him.
+// PrescheduleThink - this function runs after conditions
+// are collected and before scheduling code is run.
 //=========================================================
-void CRCAllyMonster :: PrescheduleThink ( void )
-{
-	if ( !HasConditions ( bits_COND_SEE_CLIENT ) )
-	{
+void CRCAllyMonster :: PrescheduleThink ( void ) {
+	if (InSquad() && m_hEnemy != NULL) {
+		if (HasConditions(bits_COND_SEE_ENEMY)) {
+			// update the squad's last enemy sighting time.
+			MySquadLeader()->m_flLastEnemySightTime = UTIL_GlobalTimeBase();
+		} else {
+			if (UTIL_GlobalTimeBase() - MySquadLeader()->m_flLastEnemySightTime > 5) {
+				// been a while since we've seen the enemy
+				MySquadLeader()->m_fEnemyEluded = TRUE;
+			}
+		}
+	}
+
+	if ( !HasConditions ( bits_COND_SEE_CLIENT ) ) {
 		SetConditions ( bits_COND_CLIENT_UNSEEN );
 	}
 }
@@ -1406,13 +1447,36 @@ void CRCAllyMonster :: TrySmellTalk( void )
 	}
 }
 
+//=========================================================
+// ISoundMask - returns a bit mask indicating which types
+// of sounds this monster regards. 
+//=========================================================
+int CRCAllyMonster::ISoundMask(void) {
+	return	bits_SOUND_WORLD |
+		bits_SOUND_COMBAT |
+		bits_SOUND_CARCASS |
+		bits_SOUND_MEAT |
+		bits_SOUND_GARBAGE |
+		bits_SOUND_DANGER |
+		bits_SOUND_PLAYER;
+}
 
+//=========================================================
+// IRelationship - overridden because Male Assassins are 
+// Human Grunt's nemesis.
+//=========================================================
+int CRCAllyMonster::IRelationship( CBaseEntity *pTarget ) {
+	//LRC- only hate alien grunts if my behaviour hasn't been overridden
+	if (!m_iClass && FClassnameIs(pTarget->pev, "monster_alien_grunt") ||
+		(FClassnameIs(pTarget->pev, "monster_gargantua")) ||
+		FClassnameIs(pTarget->pev, "monster_male_assassin")) {
+		return R_NM;
+	}
 
-int CRCAllyMonster::IRelationship( CBaseEntity *pTarget )
-{
 	if ( pTarget->IsPlayer() )
 		if ( m_afMemory & bits_MEMORY_PROVOKED )
 			return R_HT;
+
 	return CBaseMonster::IRelationship( pTarget );
 }
 
@@ -1517,7 +1581,7 @@ void CRCAllyMonster :: GruntHealerCall( CBaseEntity *pGrunt )
 	if ( m_useTime > UTIL_GlobalTimeBase() )
 		return;
 
-	ALERT ( at_console, "This is the medic!\n" );
+	ALERT ( at_console, "Call for the medic!\n" );
 
 	SetConditions( bits_COND_MEDIC_HEAL );// Set this condition for the medic to recognise.
 	m_hHealTarget = pGrunt;// The grunt we need to heal.
@@ -1551,15 +1615,38 @@ void CRCAllyMonster::KeyValue( KeyValueData *pkvd )
 		CBaseMonster::KeyValue(pkvd);
 }
 
-
-void CRCAllyMonster::Precache( void )
-{
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CRCAllyMonster::Precache( void ) {
 	if (m_iszUse)
 		m_szGrp[TLK_USE] = STRING(m_iszUse);
+
 	if (m_iszUnUse)
 		m_szGrp[TLK_UNUSE] = STRING(m_iszUnUse);
+
 	if (m_iszDecline) //LRC
 		m_szGrp[TLK_DECLINE] = STRING(m_iszDecline);
+
+	PRECACHE_SOUND_ARRAY(pAttackSounds9MM);
+	PRECACHE_SOUND_ARRAY(pAttackSoundsSAW);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pDeathSounds);
+
+	PRECACHE_SOUND("fgrunt/medic.wav");
+	PRECACHE_SOUND("hgrunt/gr_reload1.wav");
+	PRECACHE_SOUND("weapons/sbarrel1.wav");
+	PRECACHE_SOUND("zombie/claw_miss2.wav");
+	PRECACHE_SOUND("weapons/dryfire1.wav"); //LRC
+	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
+	PRECACHE_SOUND("weapons/pl_gun3.wav");
+
+	m_iBrassShell   = PRECACHE_MODEL("models/shell.mdl");// brass shell
+	m_iShotgunShell = PRECACHE_MODEL("models/shotgunshell.mdl");// shotgun shell
+	m_iM249Shell    = PRECACHE_MODEL("models/saw_shell.mdl");// saw shell
+	m_iM249Link     = PRECACHE_MODEL("models/saw_link.mdl");// saw link
+
+	TalkInit();
 }
 
 //=========================================================
@@ -1572,8 +1659,7 @@ BOOL CRCAllyMonster :: OccupySlot( int iDesiredSlots )
 	int iMask;
 	int iSquadSlots;
 
-	if ( !InSquad() )
-	{
+	if ( !InSquad() ) {
 		return TRUE;
 	}
 
@@ -1923,7 +2009,7 @@ void CRCAllyMonster :: StartMonster( void )
 		if ( !FStringNull( pev->netname ) )
 		{
 			// if I have a groupname, I can only recruit if I'm flagged as leader
-			if ( !( pev->spawnflags & SF_ALLYMONSTER_LEADER ) )
+			if ( !( pev->spawnflags & SF_MONSTER_SQUADLEADER) )
 			{
 				return;
 			}
@@ -1939,21 +2025,18 @@ void CRCAllyMonster :: StartMonster( void )
 	}
 }
 
-BOOL CRCAllyMonster::NoFriendlyFire(void)
-{
-	return NoFriendlyFire(FALSE); //default: don't like the player
-}
-
 //=========================================================
 // NoFriendlyFire - checks for possibility of friendly fire
 //
 // Builds a large box in front of the grunt and checks to see 
 // if any squad members are in that box. 
 //=========================================================
-BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly)
-{
-	if (!playerAlly && !InSquad())
-	{
+BOOL CRCAllyMonster::NoFriendlyFire(void) {
+	return NoFriendlyFire(FALSE); //default: don't like the player
+}
+
+BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly) {
+	if (!playerAlly && !InSquad()) {
 		return TRUE;
 	}
 
@@ -1965,19 +2048,12 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly)
 	Vector	vecRightSide;
 	Vector	v_left;
 
-	//!!!BUGBUG - to fix this, the planes must be aligned to where the monster will be firing its gun, not the direction it is facing!!!
-
-	if ( m_hEnemy != NULL )
-	{
+	if ( m_hEnemy != NULL ) {
 		UTIL_MakeVectors ( UTIL_VecToAngles( m_hEnemy->Center() - pev->origin ) );
-	}
-	else
-	{
+	} else {
 		// if there's no enemy, pretend there's a friendly in the way, so the grunt won't shoot.
 		return FALSE;
 	}
-
-	//UTIL_MakeVectors ( pev->angles );
 	
 	vecLeftSide = pev->origin - ( gpGlobals->v_right * ( pev->size.x * 1.5 ) );
 	vecRightSide = pev->origin + ( gpGlobals->v_right * ( pev->size.x * 1.5 ) );
@@ -1993,44 +2069,36 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly)
 	ALERT ( at_console, "BackPlane: %f %f %f : %f\n", backPlane.m_vecNormal.x, backPlane.m_vecNormal.y, backPlane.m_vecNormal.z, backPlane.m_flDist );
 */
 
-	if ( !m_afMemory & bits_MEMORY_PROVOKED )
-	{
+	if ( !m_afMemory & bits_MEMORY_PROVOKED ) {
 		edict_t		*pentPlayer = FIND_CLIENT_IN_PVS( edict() );
 		if (!FNullEnt(pentPlayer) &&
 			backPlane.PointInFront  ( pentPlayer->v.origin ) &&
 			leftPlane.PointInFront  ( pentPlayer->v.origin ) && 
-			rightPlane.PointInFront ( pentPlayer->v.origin ) )
-		{
+			rightPlane.PointInFront ( pentPlayer->v.origin ) ) {
 			// the player is in the check volume! Don't shoot!
 			return FALSE;
 		}
 	}
 
 	CRCAllyMonster *pSquadLeader = MySquadLeader();
-	for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++)
-	{
+	for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++) {
 		CRCAllyMonster *pMember = pSquadLeader->MySquadMember(i);
-		if (pMember && pMember != this)
-		{
-
+		if (pMember && pMember != this) {
 			if ( backPlane.PointInFront  ( pMember->pev->origin ) &&
 				 leftPlane.PointInFront  ( pMember->pev->origin ) && 
-				 rightPlane.PointInFront ( pMember->pev->origin) )
-			{
+				 rightPlane.PointInFront ( pMember->pev->origin) ) {
 				// this guy is in the check volume! Don't shoot!
 				return FALSE;
 			}
 		}
 	}
 
-	if (playerAlly)
-	{
+	if (playerAlly) {
 		edict_t	*pentPlayer = FIND_CLIENT_IN_PVS(edict());
 		if (!FNullEnt(pentPlayer) &&
 			backPlane.PointInFront(pentPlayer->v.origin) &&
 			leftPlane.PointInFront(pentPlayer->v.origin) &&
-			rightPlane.PointInFront(pentPlayer->v.origin))
-		{
+			rightPlane.PointInFront(pentPlayer->v.origin)) {
 			// the player is in the check volume! Don't shoot!
 			return FALSE;
 		}
@@ -2043,25 +2111,20 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly)
 // GetIdealState - surveys the Conditions information available
 // and finds the best new state for a monster.
 //=========================================================
-MONSTERSTATE CRCAllyMonster :: GetIdealState ( void )
-{
-	int	iConditions;
+MONSTERSTATE CRCAllyMonster::GetIdealState(void) {
+	int iConditions = IScheduleFlags();
 
-	iConditions = IScheduleFlags();
-	
 	// If no schedule conditions, the new ideal state is probably the reason we're in here.
-	switch ( m_MonsterState )
-	{
+	switch (m_MonsterState) {
 	case MONSTERSTATE_IDLE:
 	case MONSTERSTATE_ALERT:
-		if ( HasConditions ( bits_COND_NEW_ENEMY ) && InSquad() )
-		{
-			SquadMakeEnemy ( m_hEnemy );
+		if (HasConditions(bits_COND_NEW_ENEMY) && InSquad()) {
+			SquadMakeEnemy(m_hEnemy);
 		}
 		break;
 	}
 
-	return CBaseMonster :: GetIdealState();
+	return CBaseMonster::GetIdealState();
 }
 
 //=========================================================
@@ -2113,26 +2176,25 @@ BOOL CRCAllyMonster :: SquadEnemySplit ( void )
 // cover location is a good one to move to. (currently based
 // on proximity to others in the squad)
 //=========================================================
-BOOL CRCAllyMonster :: SquadMemberInRange ( const Vector &vecLocation, float flDist )
-{
+BOOL CRCAllyMonster :: SquadMemberInRange ( const Vector &vecLocation, float flDist ) {
 	if (!InSquad())
 		return FALSE;
 
 	CRCAllyMonster *pSquadLeader = MySquadLeader();
 
-	for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++)
-	{
+	for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++) {
 		CRCAllyMonster *pSquadMember = pSquadLeader->MySquadMember(i);
 		if (pSquadMember && (vecLocation - pSquadMember->pev->origin ).Length2D() <= flDist)
 			return TRUE;
 	}
+
 	return FALSE;
 }
 
 //=========================================================
+// Kick
 //=========================================================
-CBaseEntity *CRCAllyMonster::Kick(void)
-{
+CBaseEntity *CRCAllyMonster::Kick(void) {
 	TraceResult tr;
 
 	UTIL_MakeVectors(pev->angles);
@@ -2142,11 +2204,452 @@ CBaseEntity *CRCAllyMonster::Kick(void)
 
 	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
 
-	if (tr.pHit)
-	{
+	if (tr.pHit) {
 		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
 		return pEntity;
 	}
 
 	return NULL;
+}
+
+//=========================================================
+// PainSound
+//=========================================================
+void CRCAllyMonster::PainSound(void) {
+	if (UTIL_GlobalTimeBase() < m_flNextPainTime)
+		return;
+
+	m_flNextPainTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5, 0.75);
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
+}
+
+//=========================================================
+// DeathSound 
+//=========================================================
+void CRCAllyMonster::DeathSound(void) {
+	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
+}
+
+//=========================================================
+// CheckAmmo - overridden for the grunt because he actually
+// uses ammo! (base class doesn't)
+//=========================================================
+void CRCAllyMonster::CheckAmmo(void) {
+	if (m_cAmmoLoaded <= 0) {
+		SetConditions(bits_COND_NO_AMMO_LOADED);
+	}
+}
+
+//=========================================================
+// FCanCheckAttacks - this is overridden for human grunts
+// because they can throw/shoot grenades when they can't see their
+// target and the base class doesn't check attacks if the monster
+// cannot see its enemy.
+//
+// !!!BUGBUG - this gets called before a 3-round burst is fired
+// which means that a friendly can still be hit with up to 2 rounds. 
+// ALSO, grenades will not be tossed if there is a friendly in front,
+// this is a bad bug. Friendly machine gun fire avoidance
+// will unecessarily prevent the throwing of a grenade as well.
+//=========================================================
+BOOL CRCAllyMonster::FCanCheckAttacks(void) {
+	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
+		return TRUE;
+	} else {
+		return FALSE;
+	}
+}
+
+//=========================================================
+// CheckMeleeAttack1
+//=========================================================
+BOOL CRCAllyMonster::CheckMeleeAttack1(float flDot, float flDist) {
+	CBaseMonster *pEnemy;
+	if (m_hEnemy != NULL) {
+		pEnemy = m_hEnemy->MyMonsterPointer();
+
+		if (!pEnemy) {
+			return FALSE;
+		}
+	}
+
+	if (flDist <= 64 && flDot >= 0.7	&&
+		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
+		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+//=========================================================
+// CheckRangeAttack1 - overridden for HGrunt, cause 
+// FCanCheckAttacks() doesn't disqualify all attacks based
+// on whether or not the enemy is occluded because unlike
+// the base class, the HGrunt can attack when the enemy is
+// occluded (throw grenade over wall, etc). We must 
+// disqualify the machine gun attack if the enemy is occluded.
+//=========================================================
+BOOL CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
+	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire()) {
+		if (!m_hEnemy->IsPlayer() && flDist <= 64) {
+			// kick nonclients who are close enough, but don't shoot at them.
+			return FALSE;
+		}
+
+		Vector vecSrc = GetGunPosition();
+		TraceResult	tr;
+		// verify that a bullet fired from the gun will hit the enemy before the world.
+		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
+
+		if (tr.flFraction == 1.0) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+//=========================================================
+// DeclineFollowing 
+//=========================================================
+void CRCAllyMonster::DeclineFollowing(void) {
+	PlaySentence("FG_STOP", 2, VOL_NORM, ATTN_NORM);
+}
+
+//=========================================================
+// GetGunPosition	return the end of the barrel
+//=========================================================
+Vector CRCAllyMonster::GetGunPosition() {
+	if (m_fStanding) {
+		return pev->origin + Vector(0, 0, 60);
+	} else {
+		return pev->origin + Vector(0, 0, 48);
+	}
+}
+
+//=========================================================
+// Shoot MP5
+//=========================================================
+void CRCAllyMonster::ShootMP5(void) {
+	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+		return;
+	}
+
+	Vector vecShootOrigin = GetGunPosition();
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+	if (m_cAmmoLoaded > 0) {
+		UTIL_MakeVectors(pev->angles);
+
+		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_4DEGREES, 2048, BULLET_MONSTER_9MM); // shoot +-5 degrees
+		EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSounds9MM);
+		WeaponFlash(vecShootOrigin);
+
+		pev->effects |= EF_MUZZLEFLASH;
+
+		m_cAmmoLoaded--;// take away a bullet!
+	} else {
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
+	}
+
+	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
+}
+
+//=========================================================
+// Shoot Shotgun
+//=========================================================
+void CRCAllyMonster::ShootShotgun(void) {
+	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+		return;
+	}
+
+	Vector vecShootOrigin = GetGunPosition();
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+	UTIL_MakeVectors(pev->angles);
+
+	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
+	FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
+	WeaponFlash(vecShootOrigin);
+
+	pev->effects |= EF_MUZZLEFLASH;
+	m_cAmmoLoaded--;
+
+	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
+}
+
+//=========================================================
+// Shoot M249
+//=========================================================
+void CRCAllyMonster::ShootM249(void) {
+	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+		return;
+	}
+
+	Vector vecShootOrigin = GetGunPosition();
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+	UTIL_MakeVectors(pev->angles);
+
+	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+
+	if (m_flLinkToggle >= 2) {
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Link, TE_BOUNCE_SHELL);
+		m_flLinkToggle = 0;
+	} else {
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Shell, TE_BOUNCE_SHELL);
+		m_flLinkToggle++;
+	}
+
+	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_3DEGREES, 2048, BULLET_MONSTER_556); // shoot +-5 degrees
+	WeaponFlash(vecShootOrigin);
+	EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSoundsSAW);
+
+	pev->effects |= EF_MUZZLEFLASH;
+
+	m_cAmmoLoaded--;
+
+	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
+}
+
+//=========================================================
+// Shoot Desert Eagle
+//=========================================================
+void CRCAllyMonster::ShootDesertEagle(void) {
+	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+		return;
+	}
+
+	Vector vecShootOrigin = GetGunPosition();
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+	UTIL_MakeVectors(pev->angles);
+
+	int pitchShift = RANDOM_LONG(0, 20);
+	if (pitchShift > 10)
+		pitchShift = 0;
+	else
+		pitchShift -= 5;
+
+	Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_357 ); // shoot +-5 degrees
+	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_fire.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
+
+	pev->effects |= EF_MUZZLEFLASH;
+
+	WeaponFlash(vecShootOrigin);
+
+	m_cAmmoLoaded--;// take away a bullet!
+
+	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
+}
+//=========================================================
+// Shoot 9mm Glock
+//=========================================================
+void CRCAllyMonster::ShootGlock(void) {
+	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+		return;
+	}
+
+	Vector vecShootOrigin = GetGunPosition();
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+	UTIL_MakeVectors(pev->angles);
+
+	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_9MM); // shoot +-5 degrees
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/pl_gun3.wav", 1, ATTN_NORM);
+
+	pev->effects |= EF_MUZZLEFLASH;
+
+	WeaponFlash(vecShootOrigin);
+
+	m_cAmmoLoaded--;// take away a bullet!
+
+	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
+}
+
+//=========================================================
+// CheckRangeAttack2 - this checks the Grunt's grenade
+// attack. 
+//=========================================================
+BOOL CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
+	// if the grunt isn't moving, it's ok to check.
+	if (m_flGroundSpeed != 0) {
+		m_fThrowGrenade = FALSE;
+		return m_fThrowGrenade;
+	}
+
+	// assume things haven't changed too much since last time
+	if (UTIL_GlobalTimeBase() < m_flNextGrenadeCheck) {
+		return m_fThrowGrenade;
+	}
+
+	if (!FBitSet(m_hEnemy->pev->flags, FL_ONGROUND) && m_hEnemy->pev->waterlevel == 0 && m_vecEnemyLKP.z > pev->absmax.z) {
+		//!!!BUGBUG - we should make this check movetype and make sure it isn't FLY? Players who jump a lot are unlikely to 
+		// be grenaded.
+		// don't throw grenades at anything that isn't on the ground!
+		m_fThrowGrenade = FALSE;
+		return m_fThrowGrenade;
+	}
+
+	Vector vecTarget;
+
+	// find feet
+	if (RANDOM_LONG(0, 1)) {
+		// magically know where they are
+		vecTarget = Vector(m_hEnemy->pev->origin.x, m_hEnemy->pev->origin.y, m_hEnemy->pev->absmin.z);
+	}
+	else {
+		// toss it to where you last saw them
+		vecTarget = m_vecEnemyLKP;
+	}
+
+	// are any of my squad members near the intended grenade impact area?
+	// are any of my squad members near the intended grenade impact area?
+	if (InSquad()) {
+		if (SquadMemberInRange(vecTarget, 256)) {
+			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
+			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
+			m_fThrowGrenade = FALSE;
+			return m_fThrowGrenade;	//AJH need this or it is overridden later.
+		}
+	}
+
+	if ((vecTarget - pev->origin).Length2D() <= 256) {
+		// crap, I don't want to blow myself up
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
+		m_fThrowGrenade = FALSE;
+		return m_fThrowGrenade;
+	}
+
+
+	Vector vecToss = VecCheckToss(pev, GetGunPosition(), vecTarget, 0.5);
+	if (vecToss != g_vecZero) {
+		m_vecTossVelocity = vecToss;
+
+		// throw a hand grenade
+		m_fThrowGrenade = TRUE;
+		// don't check again for a while.
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase(); // 1/3 second.
+	}
+	else {
+		// don't throw
+		m_fThrowGrenade = FALSE;
+		// don't check again for a while.
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
+	}
+
+	return m_fThrowGrenade;
+}
+
+//=========================================================
+// TakeDamage - overridden for the grunt because the grunt
+// needs to forget that he is in cover if he's hurt. (Obviously
+// not in a safe place anymore).
+//=========================================================
+int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
+	if (m_fImmortal)
+		flDamage = 0;
+
+	int takedamage = CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (m_flDebug)
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
+
+		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+		if (pEnt->IsPlayer()) {
+			pev->health = pev->max_health / 2;
+			if (flDamage > 0) //Override all damage
+				SetConditions(bits_COND_LIGHT_DAMAGE);
+
+			if (flDamage >= 20) //Override all damage
+				SetConditions(bits_COND_HEAVY_DAMAGE);
+
+			return takedamage;
+		}
+
+		if (pevAttacker->owner) {
+			pEnt = CBaseEntity::Instance(pevAttacker->owner);
+			if (pEnt->IsPlayer()) {
+				pev->health = pev->max_health / 2;
+				if (flDamage > 0) //Override all damage
+					SetConditions(bits_COND_LIGHT_DAMAGE);
+
+				if (flDamage >= 20) //Override all damage
+					SetConditions(bits_COND_HEAVY_DAMAGE);
+
+				return takedamage;
+			}
+		}
+	}
+
+	Forget(bits_MEMORY_INCOVER);
+	if (!IsAlive() || pev->deadflag == DEAD_DYING || m_iPlayerReact) {
+		return takedamage;
+	}
+
+	if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT)) {
+		CBaseEntity *pFriend = FindNearestFriend(FALSE);
+		if (pFriend && pFriend->IsAlive()) {
+			// only if not dead or dying!
+			CRCAllyMonster *pTalkMonster = (CRCAllyMonster *)pFriend;
+			pTalkMonster->ChangeSchedule(slIdleStopShootingTS);
+		}
+
+		m_flPlayerDamage += flDamage;
+		if (m_hEnemy == NULL) {
+			if ((m_afMemory & bits_MEMORY_SUSPICIOUS) || UTIL_IsFacing(pevAttacker, pev->origin)) {
+				if (m_iszSpeakAs) {
+					char szBuf[32];
+					strcpy(szBuf, STRING(m_iszSpeakAs));
+					strcat(szBuf, "_MAD");
+					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
+				} else {
+					PlaySentence("FG_MAD", 4, VOL_NORM, ATTN_NORM);
+				}
+
+				Remember(bits_MEMORY_PROVOKED);
+				StopFollowing(TRUE);
+			} else {
+				if (m_iszSpeakAs) {
+					char szBuf[32];
+					strcpy(szBuf, STRING(m_iszSpeakAs));
+					strcat(szBuf, "_SHOT");
+					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
+				} else {
+					PlaySentence("FG_SHOT", 4, VOL_NORM, ATTN_NORM);
+				}
+				Remember(bits_MEMORY_SUSPICIOUS);
+			}
+		} else if (!(m_hEnemy->IsPlayer()) && pev->deadflag == DEAD_NO) {
+			if (m_iszSpeakAs) {
+				char szBuf[32];
+				strcpy(szBuf, STRING(m_iszSpeakAs));
+				strcat(szBuf, "_SHOT");
+				PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
+			} else {
+				PlaySentence("FG_SHOT", 4, VOL_NORM, ATTN_NORM);
+			}
+		}
+	}
+
+	return takedamage;
 }

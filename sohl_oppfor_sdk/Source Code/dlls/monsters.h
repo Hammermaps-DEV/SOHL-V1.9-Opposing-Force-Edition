@@ -43,20 +43,21 @@
 #define HITGROUP_HEAD_HELMET_BN		10 //Added for Otis & Barney
 #define HITGROUP_HEAD_HELMET_GT		11 //Added for Torch
 
-
 // Monster Spawnflags
 #define	SF_MONSTER_WAIT_TILL_SEEN		1// spawnflag that makes monsters wait until player can see them before attacking.
 #define	SF_MONSTER_GAG					2 // no idle noises from this monster
 #define SF_MONSTER_HITMONSTERCLIP		4
 //										8
 #define SF_MONSTER_PRISONER				16 // monster won't attack anyone, no one will attacke him.
-//										32
+#define SF_MONSTER_SQUADLEADER			32 // monster is squad leader
 #define SF_MONSTER_INVINCIBLE			64 // dont take damage from player
 #define SF_MONSTER_NO_YELLOW_BLOBS		128 //LRC- if the monster is stuck, don't give errors or show yellow blobs.
-//LRC- wasn't implemented. #define	SF_MONSTER_WAIT_FOR_SCRIPT		128 //spawnflag that makes monsters wait to check for attacking until the script is done or they've been attacked
 #define SF_MONSTER_PREDISASTER			256	//this is a predisaster scientist or barney. Influences how they speak.
 #define SF_MONSTER_FADECORPSE			512 // Fade out corpse after death
 #define SF_MONSTER_NO_WPN_DROP			1024 //LRC- never drop your weapon (player can't pick it up.)
+#define SF_MONSTER_CUSTOM_FLAG_1		2048 // Don't Drop Explosives
+#define SF_MONSTER_CUSTOM_FLAG_2		4096
+
 //LRC - this clashes with 'not in deathmatch'. Replaced with m_iPlayerReact.
 //#define SF_MONSTER_INVERT_PLAYERREACT	2048 //LRC- if this monster would usually attack the player, don't attack unless provoked. If you would usually NOT attack the player, attack him.
 #define SF_MONSTER_FALL_TO_GROUND		0x80000000

@@ -3415,15 +3415,13 @@ void CBloodSplat::Spray ( void )
 {
 	TraceResult	tr;
 
-	if ( g_Language != LANGUAGE_GERMAN )
-	{
-		UTIL_MakeVectors(pev->angles);
-		UTIL_TraceLine ( pev->origin, pev->origin + gpGlobals->v_forward * 128, ignore_monsters, pev->owner, & tr);
+	UTIL_MakeVectors(pev->angles);
+	UTIL_TraceLine ( pev->origin, pev->origin + gpGlobals->v_forward * 128, ignore_monsters, pev->owner, & tr);
 
-         		CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
-		PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), 1, 0, 0 );
-		//UTIL_BloodDecalTrace( &tr, BLOOD_COLOR_RED );
-	}
+    CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
+	PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), 1, 0, 0 );
+	//UTIL_BloodDecalTrace( &tr, BLOOD_COLOR_RED );
+
 	SetThink(&CBloodSplat:: SUB_Remove );
 	SetNextThink( 0.1 );
 }

@@ -18,6 +18,9 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
+//=========================================================
+// Weapon: Hivehand * http://half-life.wikia.com/wiki/Hivehand
+//=========================================================
 
 #include "extdll.h"
 #include "util.h"
@@ -30,36 +33,28 @@
 #include "gamerules.h"
 #include "weapon_hornetgun.h"
 
-enum hgun_e {
-	HGUN_IDLE1 = 0,
-	HGUN_FIDGETSWAY,
-	HGUN_FIDGETSHAKE,
-	HGUN_DOWN,
-	HGUN_UP,
-	HGUN_SHOOT
-};
-
-enum firemode_e
-{
-	FIREMODE_TRACK = 0,
-	FIREMODE_FAST
-};
-
+//=========================================================
+// Link ENTITY
+//=========================================================
 LINK_ENTITY_TO_CLASS( weapon_hornetgun, CHgun );
 
-void CHgun::Spawn( )
-{
+//=========================================================
+// Spawn Glock 17
+//=========================================================
+void CHgun::Spawn(void) {
 	Precache( );
 	SET_MODEL(ENT(pev), "models/w_hgun.mdl");
 
 	m_iDefaultAmmo = HIVEHAND_DEFAULT_GIVE;
 	m_iFirePhase = 0;
+
 	FallInit();// get ready to fall down.
 }
 
-
-void CHgun::Precache( void )
-{
+//=========================================================
+// Precache - precaches all resources this weapon needs
+//=========================================================
+void CHgun::Precache(void) {
 	PRECACHE_MODEL("models/v_hgun.mdl");
 	PRECACHE_MODEL("models/w_hgun.mdl");
 	PRECACHE_MODEL("models/p_hgun.mdl");
@@ -67,8 +62,10 @@ void CHgun::Precache( void )
 	UTIL_PrecacheOther("hornet");
 }
 
-int CHgun::GetItemInfo(ItemInfo *p)
-{
+//=========================================================
+// GetItemInfo - give all Infos for this weapon
+//=========================================================
+int CHgun::GetItemInfo(ItemInfo *p) {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Hornets";
 	p->iMaxAmmo1 = HORNET_MAX_CARRY;
@@ -80,34 +77,20 @@ int CHgun::GetItemInfo(ItemInfo *p)
 	p->iId = m_iId = WEAPON_HORNETGUN;
 	p->iFlags = ITEM_FLAG_NOAUTOSWITCHEMPTY | ITEM_FLAG_NOAUTORELOAD;
 	p->iWeight = HORNETGUN_WEIGHT;
-
 	return 1;
 }
 
+//=========================================================
+// PrimaryAttack
+//=========================================================
+void CHgun::PrimaryAttack(void) {
+	Reload();
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
+		return;
+	}
 
-BOOL CHgun::Deploy( )
-{
-	return DefaultDeploy( "models/v_hgun.mdl", "models/p_hgun.mdl", HGUN_UP, "hive", 0.9 );
-}
-
-void CHgun::Holster( )
-{
-	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 1.4;
-	SendWeaponAnim( HGUN_DOWN );
-
-	if ( !m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] )
-		m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] = 1;
-}
-
-
-void CHgun::PrimaryAttack()
-{
-	Reload( );
-
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) return;
-	UTIL_MakeVectors( m_pPlayer->pev->v_angle );
-
-	CBaseEntity *pHornet = CBaseEntity::Create( "hornet", m_pPlayer->GetGunPosition( ) + gpGlobals->v_forward * 16 + gpGlobals->v_right * 8 + gpGlobals->v_up * -12, m_pPlayer->pev->v_angle, m_pPlayer->edict() );
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+	CBaseEntity *pHornet = CBaseEntity::Create("hornet", m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16 + gpGlobals->v_right * 8 + gpGlobals->v_up * -12, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 	pHornet->pev->velocity = gpGlobals->v_forward * 300;
 
 	m_flRechargeTime = UTIL_GlobalTimeBase() + 0.5;
@@ -115,122 +98,154 @@ void CHgun::PrimaryAttack()
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
 
-	SendWeaponAnim( HGUN_SHOOT );
+	SendWeaponAnim((int)HGUN_SHOOT::sequence);
 
 	// player "shoot" animation
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 	m_flNextPrimaryAttack = m_flNextPrimaryAttack + 0.25;
 
-	if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase() )
+	if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase()) {
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.25;
-	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_LONG( 10, 15 );
+	}
+
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_LONG(10, 15);
 }
 
-
-
-void CHgun::SecondaryAttack( void )
-{
+//=========================================================
+// SecondaryAttack
+//=========================================================
+void CHgun::SecondaryAttack(void) {
 	Reload();
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
+		return;
+	}
 
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) return;
-
-	CBaseEntity *pHornet;
-	Vector vecSrc;
-
-	UTIL_MakeVectors( m_pPlayer->pev->v_angle );
-	vecSrc = m_pPlayer->GetGunPosition( ) + gpGlobals->v_forward * 16 + gpGlobals->v_right * 8 + gpGlobals->v_up * -12;
+	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+	Vector vecSrc = m_pPlayer->GetGunPosition() + gpGlobals->v_forward * 16 + gpGlobals->v_right * 8 + gpGlobals->v_up * -12;
 
 	m_iFirePhase++;
-	switch ( m_iFirePhase )
-	{
-	case 1:
-		vecSrc = vecSrc + gpGlobals->v_up * 8;
+	switch (m_iFirePhase) {
+		case 1:
+			vecSrc = vecSrc + gpGlobals->v_up * 8;
 		break;
-	case 2:
-		vecSrc = vecSrc + gpGlobals->v_up * 8;
-		vecSrc = vecSrc + gpGlobals->v_right * 8;
+		case 2:
+			vecSrc = vecSrc + gpGlobals->v_up * 8;
+			vecSrc = vecSrc + gpGlobals->v_right * 8;
 		break;
-	case 3:
-		vecSrc = vecSrc + gpGlobals->v_right * 8;
+		case 3:
+			vecSrc = vecSrc + gpGlobals->v_right * 8;
 		break;
-	case 4:
-		vecSrc = vecSrc + gpGlobals->v_up * -8;
-		vecSrc = vecSrc + gpGlobals->v_right * 8;
+		case 4:
+			vecSrc = vecSrc + gpGlobals->v_up * -8;
+			vecSrc = vecSrc + gpGlobals->v_right * 8;
 		break;
-	case 5:
-		vecSrc = vecSrc + gpGlobals->v_up * -8;
+		case 5:
+			vecSrc = vecSrc + gpGlobals->v_up * -8;
 		break;
-	case 6:
-		vecSrc = vecSrc + gpGlobals->v_up * -8;
-		vecSrc = vecSrc + gpGlobals->v_right * -8;
+		case 6:
+			vecSrc = vecSrc + gpGlobals->v_up * -8;
+			vecSrc = vecSrc + gpGlobals->v_right * -8;
 		break;
-	case 7:
-		vecSrc = vecSrc + gpGlobals->v_right * -8;
+		case 7:
+			vecSrc = vecSrc + gpGlobals->v_right * -8;
 		break;
-	case 8:
-		vecSrc = vecSrc + gpGlobals->v_up * 8;
-		vecSrc = vecSrc + gpGlobals->v_right * -8;
-		m_iFirePhase = 0;
+		case 8:
+			vecSrc = vecSrc + gpGlobals->v_up * 8;
+			vecSrc = vecSrc + gpGlobals->v_right * -8;
+			m_iFirePhase = 0;
 		break;
 	}
 
-	pHornet = CBaseEntity::Create( "hornet", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict() );
+	CBaseEntity *pHornet;
+	pHornet = CBaseEntity::Create("hornet", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 	pHornet->pev->velocity = gpGlobals->v_forward * 1200;
-	pHornet->pev->angles = UTIL_VecToAngles( pHornet->pev->velocity );
+	pHornet->pev->angles = UTIL_VecToAngles(pHornet->pev->velocity);
 
-	pHornet->SetThink(& CHornet::StartDart );
+	pHornet->SetThink(&CHornet::StartDart);
 	m_flRechargeTime = UTIL_GlobalTimeBase() + 0.5;
 
 	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
 
-	SendWeaponAnim( HGUN_SHOOT );
-	
+	SendWeaponAnim((int)HGUN_SHOOT::sequence);
+
 	// player "shoot" animation
-	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.1;
-	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_LONG( 10, 15 );
-	m_pPlayer->pev->punchangle.x = RANDOM_FLOAT( 0, 2 );
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_LONG(10, 15);
+	m_pPlayer->pev->punchangle.x = RANDOM_FLOAT(0, 2);
 }
 
+//=========================================================
+// Deploy
+//=========================================================
+BOOL CHgun::Deploy(void) {
+	return DefaultDeploy("models/v_hgun.mdl", "models/p_hgun.mdl", (int)HGUN_UP::sequence,
+		"hive", CalculateWeaponTime((int)HGUN_UP::frames, (int)HGUN_UP::fps));
+}
 
-void CHgun::Reload( void )
-{
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= HORNET_MAX_CARRY) return;
-	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < HORNET_MAX_CARRY && m_flRechargeTime < UTIL_GlobalTimeBase())
-	{
+//=========================================================
+// Holster
+//=========================================================
+void CHgun::Holster(void) {
+	SendWeaponAnim((int)HGUN_DOWN::sequence);
+	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
+		CalculateWeaponTime((int)HGUN_DOWN::frames, (int)HGUN_DOWN::fps);
+
+	if ( !m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] )
+		m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] = 1;
+}
+
+//=========================================================
+// Reload
+//=========================================================
+void CHgun::Reload(void) {
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == HORNET_MAX_CARRY) {
+		return;
+	}
+
+	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < HORNET_MAX_CARRY && m_flRechargeTime < UTIL_GlobalTimeBase()) {
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
 		m_flRechargeTime += 0.5;
 	}
 }
 
-
-void CHgun::WeaponIdle( void )
-{
+//=========================================================
+// WeaponIdle Animation
+//=========================================================
+void CHgun::WeaponIdle(void) {
 	Reload( );
-
-	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase())
+	float flTime = 0.0;
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
+	}
 
+	// only idle if the slid isn't back
 	int iAnim;
-	float flRand = RANDOM_FLOAT( 0, 1 );
-	if (flRand <= 0.75)
-	{
-		iAnim = HGUN_IDLE1;
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 30.0 / 16 * (2);
+	float flRand = RANDOM_FLOAT(0, 1);
+	if (flRand <= 0.5) {
+		iAnim = (int)HGUN_IDLE1::sequence;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
+			CalculateWeaponTime((int)HGUN_IDLE1::frames, (int)HGUN_IDLE1::fps);
+		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
+	} else if (flRand <= 0.7) {
+		iAnim = (int)HGUN_FIDGETSWAY::sequence;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
+			CalculateWeaponTime((int)HGUN_FIDGETSWAY::frames, (int)HGUN_FIDGETSWAY::fps);
+		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
+	} else if (flRand <= 0.9) {
+		iAnim = (int)HGUN_FIDGETSHAKE::sequence;
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
+			CalculateWeaponTime((int)HGUN_FIDGETSHAKE::frames, (int)HGUN_FIDGETSHAKE::fps);
+		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
+	} else {
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
+		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}
-	else if (flRand <= 0.875)
-	{
-		iAnim = HGUN_FIDGETSWAY;
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 40.0 / 16.0;
-	}
-	else
-	{
-		iAnim = HGUN_FIDGETSHAKE;
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 35.0 / 16.0;
-	}
-	SendWeaponAnim( iAnim );
+
+	SendWeaponAnim(iAnim);
 }

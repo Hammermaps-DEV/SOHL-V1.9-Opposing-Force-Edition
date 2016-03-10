@@ -868,8 +868,8 @@
     <ClCompile Include="ev_common.cpp">
       <Filter>Source Files\cl_dll\ev</Filter>
     </ClCompile>
-    <ClCompile Include="events.cpp">
-      <Filter>Source Files\cl_dll</Filter>
+    <ClCompile Include="ev_events.cpp">
+      <Filter>Source Files\cl_dll\ev</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

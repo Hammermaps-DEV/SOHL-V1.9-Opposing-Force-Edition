@@ -27,20 +27,6 @@ typedef	enum
 	BULLET_MONSTER_556,
 } Bullet;
 
-//SOHL - Opposing-Force
-enum m249_e
-{
-	SAW_SLOWIDLE = 0,
-	SAW_IDLE,
-	SAW_RELOAD_START,
-	SAW_RELOAD_END,
-	SAW_HOLSTER,
-	SAW_DRAW,
-	SAW_SHOOT1,
-	SAW_SHOOT2,
-	SAW_SHOOT3
-};
-
 vec3_t EV_HLDM_GetMirroredPosition(int mirror_index, vec3_t pos);
 void EV_HLDM_GunshotDecalTrace( pmtrace_t *pTrace, char *decalName );
 void EV_HLDM_DecalGunshot( pmtrace_t *pTrace, int iBulletType );
