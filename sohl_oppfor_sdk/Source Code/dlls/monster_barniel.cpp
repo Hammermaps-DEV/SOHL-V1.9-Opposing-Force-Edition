@@ -107,7 +107,6 @@ void CBarniel::Precache() {
 // TakeDamage
 //=========================================================
 int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) {
-	int takedamage = CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
 		if (m_flDebug)
 			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
@@ -121,7 +120,7 @@ int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 			if (flDamage >= 20) //Override all damage
 				SetConditions(bits_COND_HEAVY_DAMAGE);
 
-			return takedamage;
+			return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 		}
 
 		if (pevAttacker->owner) {
@@ -134,13 +133,13 @@ int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 				if (flDamage >= 20) //Override all damage
 					SetConditions(bits_COND_HEAVY_DAMAGE);
 
-				return takedamage;
+				return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 			}
 		}
 	}
 
 	if (!IsAlive() || pev->deadflag == DEAD_DYING || m_iPlayerReact) {
-		return takedamage;
+		return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	}
 
 	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT)) {
@@ -186,7 +185,7 @@ int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 		}
 	}
 
-	return takedamage;
+	return CTalkMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
 //=========================================================

@@ -1369,7 +1369,7 @@ void CTorch::JustSpoke(void) {
 //=========================================================
 void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
 	if (!IsAlive()) {
-		CRCAllyMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+		CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 		return;
 	}
 
@@ -1380,10 +1380,10 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
 		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
-			if (pEnt->IsPlayer()) { return; }
+			if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); }
 			if (pevAttacker->owner) {
 				pEnt = CBaseEntity::Instance(pevAttacker->owner);
-				if (pEnt->IsPlayer()) { return; }
+				if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); }
 			}
 		}
 
@@ -1458,7 +1458,7 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 		}
 	}
 
-	CRCAllyMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 //=========================================================

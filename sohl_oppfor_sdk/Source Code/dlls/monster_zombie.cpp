@@ -162,7 +162,6 @@ void CZombie::Precache() {
 // TakeDamage - overridden for zombie, take XX% damage from bullets
 //=========================================================
 int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType ) {
-	int takedamage = CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
 		if(m_flDebug)
 			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
@@ -176,7 +175,7 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 			if (flDamage >= 20) //Override all damage
 				SetConditions(bits_COND_HEAVY_DAMAGE);
 
-			return takedamage;
+			return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 		}
 
 		if (pevAttacker->owner) {
@@ -189,7 +188,7 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 				if (flDamage >= 20) //Override all damage
 					SetConditions(bits_COND_HEAVY_DAMAGE);
 
-				return takedamage;
+				return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 			}
 		}
 	}
@@ -206,7 +205,7 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 		flDamage *= m_flBulletDR;
 	}
 	
-	return takedamage;
+	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
 //=========================================================

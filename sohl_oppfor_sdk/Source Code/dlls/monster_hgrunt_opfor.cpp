@@ -1540,7 +1540,7 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 		}
 	}
 
-	CRCAllyMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType );
+	CBaseMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType ); //To CBaseMonster
 }
 
 //=========================================================

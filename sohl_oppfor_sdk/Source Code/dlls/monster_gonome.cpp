@@ -21,7 +21,7 @@
 ***/
 
 //=========================================================
-// Gonome.cpp
+// NPC: Gonome
 //=========================================================
 
 #include	"extdll.h"
@@ -72,8 +72,7 @@ enum
 //=========================================================
 // monster-specific tasks
 //=========================================================
-enum
-{
+enum {
 	TASK_GONOME_SMELLFOOD = LAST_COMMON_SCHEDULE + 1,
 };
 
@@ -82,8 +81,7 @@ enum
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_gonome, CGonome);
 
-TYPEDESCRIPTION	CGonome::m_SaveData[] =
-{
+TYPEDESCRIPTION	CGonome::m_SaveData[] = {
 	DEFINE_FIELD(CGonome, m_fCanThreatDisplay, FIELD_BOOLEAN),
 	DEFINE_FIELD(CGonome, m_flLastHurtTime, FIELD_TIME),
 	DEFINE_FIELD(CGonome, m_flNextSpitTime, FIELD_TIME),
@@ -134,8 +132,7 @@ const char *CGonome::pDeathSounds[] = {
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CGonome::ISoundMask(void)
-{
+int CGonome::ISoundMask(void) {
 	return	bits_SOUND_WORLD |
 			bits_SOUND_COMBAT |
 			bits_SOUND_CARCASS |
@@ -148,26 +145,22 @@ int CGonome::ISoundMask(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CGonome::Classify(void)
-{
+int	CGonome::Classify(void) {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CGonome::IgnoreConditions(void)
-{
+int CGonome::IgnoreConditions(void) {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
-	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1))
-	{
+	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1)) {
 		if (m_flNextFlinch >= UTIL_GlobalTimeBase())
 			iIgnore |= (bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE);
 	}
 
-	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH))
-	{
+	if ((m_Activity == ACT_SMALL_FLINCH) || (m_Activity == ACT_BIG_FLINCH)) {
 		if (m_flNextFlinch < UTIL_GlobalTimeBase())
 			m_flNextFlinch = UTIL_GlobalTimeBase() + GONOME_FLINCH_DELAY;
 	}
@@ -176,34 +169,56 @@ int CGonome::IgnoreConditions(void)
 }
 
 //=========================================================
-// IRelationship - overridden for gonome
-//=========================================================
-int CGonome::IRelationship(CBaseEntity *pTarget)
-{
-	return CBaseMonster::IRelationship(pTarget);
-}
-
-//=========================================================
 // TakeDamage - overridden for gonome so we can keep track
 // of how much time has passed since it was last injured
 //=========================================================
-int CGonome::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
-{
+int CGonome::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
 	float flDist;
 	Vector vecApex;
+	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+		if (pEnt->IsPlayer()) {
+			pev->health = pev->max_health / 2;
+			if (flDamage > 0) //Override all damage
+				SetConditions(bits_COND_LIGHT_DAMAGE);
+
+			if (flDamage >= 20) //Override all damage
+				SetConditions(bits_COND_HEAVY_DAMAGE);
+
+			return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+		}
+
+		if (pevAttacker->owner) {
+			pEnt = CBaseEntity::Instance(pevAttacker->owner);
+			if (pEnt->IsPlayer()) {
+				pev->health = pev->max_health / 2;
+				if (flDamage > 0) //Override all damage
+					SetConditions(bits_COND_LIGHT_DAMAGE);
+
+				if (flDamage >= 20) //Override all damage
+					SetConditions(bits_COND_HEAVY_DAMAGE);
+
+				return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+			}
+		}
+	}
+
+	// Take 30% damage from bullets
+	if (bitsDamageType == DMG_BULLET) {
+		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
+		vecDir = vecDir.Normalize();
+		float flForce = DamageForce(flDamage);
+		pev->velocity = pev->velocity + vecDir * flForce;
+		flDamage *= 0.3;
+	}
 
 	// if the squid is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
-	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3)
-	{
+	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3) {
 		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
-
-		if (flDist > GONOME_SPRINT_DIST)
-		{
-			flDist = (pev->origin - m_Route[m_iRouteIndex].vecLocation).Length2D();// reusing flDist. 
-
-			if (FTriangulate(pev->origin, m_Route[m_iRouteIndex].vecLocation, flDist * 0.5, m_hEnemy, &vecApex))
-			{
+		if (flDist > GONOME_SPRINT_DIST) {
+			flDist = (pev->origin - m_Route[m_iRouteIndex].vecLocation).Length2D();
+			if (FTriangulate(pev->origin, m_Route[m_iRouteIndex].vecLocation, flDist * 0.5, m_hEnemy, &vecApex)) {
 				InsertWaypoint(vecApex, bits_MF_TO_DETOUR | bits_MF_DONT_SIMPLIFY);
 			}
 		}
@@ -211,7 +226,6 @@ int CGonome::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
-
 
 //=========================================================
 // CheckRangeAttack1
@@ -256,11 +270,9 @@ BOOL CGonome::CheckRangeAttack1(float flDot, float flDist)
 // CheckMeleeAttack1 - bullsquid is a big guy, so has a longer
 // melee range than most monsters. This is the tailwhip attack
 //=========================================================
-BOOL CGonome::CheckMeleeAttack1(float flDot, float flDist)
-{
+BOOL CGonome::CheckMeleeAttack1(float flDot, float flDist) {
 	if (flDist <= GONOME_TOLERANCE_MELEE1_RANGE &&
-		flDot >= GONOME_TOLERANCE_MELEE1_DOT)
-	{
+		flDot >= GONOME_TOLERANCE_MELEE1_DOT) {
 		return TRUE;
 	}
 
@@ -273,41 +285,34 @@ BOOL CGonome::CheckMeleeAttack1(float flDot, float flDist)
 // this attack will not be performed if the tailwhip attack
 // is valid.
 //=========================================================
-BOOL CGonome::CheckMeleeAttack2(float flDot, float flDist)
-{
+BOOL CGonome::CheckMeleeAttack2(float flDot, float flDist) {
 	if (flDist <= GONOME_TOLERANCE_MELEE2_RANGE &&
 		flDot >= GONOME_TOLERANCE_MELEE2_DOT &&
-		!HasConditions(bits_COND_CAN_MELEE_ATTACK1))
-	{
+		!HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
 		return TRUE;
 	}
 
 	return FALSE;
 }
 
-
 //=========================================================
 // IdleSound 
 //=========================================================
-#define GONOME_ATTN_IDLE	(float)1.5
-void CGonome::IdleSound(void)
-{
+void CGonome::IdleSound(void) {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CGonome::PainSound(void)
-{
+void CGonome::PainSound(void) {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CGonome::AlertSound(void)
-{
+void CGonome::AlertSound(void) {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
@@ -329,46 +334,27 @@ void CGonome::AttackSound(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CGonome::SetYawSpeed(void)
-{
-	int ys = 0;
-	switch (m_Activity)
-	{
-	case	ACT_WALK:			ys = 120;	break;
-	case	ACT_RUN:			ys = 120;	break;
-	case	ACT_IDLE:			ys = 120;	break;
-	case	ACT_RANGE_ATTACK1:	ys = 120;	break;
-	default:
-		ys = 120;
-		break;
+void CGonome::SetYawSpeed(void) {
+	switch (m_Activity) {
+		default: pev->yaw_speed = 120;   break;
 	}
-
-	pev->yaw_speed = ys;
 }
 
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
-{
-	switch (pEvent->event)
-	{
-		case GONOME_AE_THROW:
-		{
+void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent) {
+	switch (pEvent->event) {
+		case GONOME_AE_THROW: {
 			Vector	vecSpitOffset;
 			Vector	vecSpitDir;
 
 			UTIL_MakeVectors(pev->angles);
 
-			// !!!HACKHACK - the spot at which the spit originates (in front of the mouth) was measured in 3ds and hardcoded here.
-			// we should be able to read the position of bones at runtime for this info.
-
 			Vector vecArmPos, vecArmAng;
 			GetAttachment(0, vecArmPos, vecArmAng);
 
-			//vecSpitOffset = (gpGlobals->v_right * 8 + gpGlobals->v_forward * 37 + gpGlobals->v_up * 23);
-			//vecSpitOffset = (pev->origin + vecSpitOffset);
 			vecSpitOffset = vecArmPos;
 			vecSpitDir = ((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
 
@@ -378,17 +364,17 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 
 			// spew the spittle temporary ents.
 			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpitOffset);
-			WRITE_BYTE(TE_SPRITE_SPRAY);
-			WRITE_COORD(vecSpitOffset.x);	// pos
-			WRITE_COORD(vecSpitOffset.y);
-			WRITE_COORD(vecSpitOffset.z);
-			WRITE_COORD(vecSpitDir.x);	// dir
-			WRITE_COORD(vecSpitDir.y);
-			WRITE_COORD(vecSpitDir.z);
-			WRITE_SHORT(iGonomeSpitSprite);	// model
-			WRITE_BYTE(15);			// count
-			WRITE_BYTE(210);			// speed
-			WRITE_BYTE(25);			// noise ( client will divide by 100 )
+				WRITE_BYTE(TE_SPRITE_SPRAY);
+				WRITE_COORD(vecSpitOffset.x);	// pos
+				WRITE_COORD(vecSpitOffset.y);
+				WRITE_COORD(vecSpitOffset.z);
+				WRITE_COORD(vecSpitDir.x);	// dir
+				WRITE_COORD(vecSpitDir.y);
+				WRITE_COORD(vecSpitDir.z);
+				WRITE_SHORT(iGonomeSpitSprite);	// model
+				WRITE_BYTE(15);			// count
+				WRITE_BYTE(210);			// speed
+				WRITE_BYTE(25);			// noise ( client will divide by 100 )
 			MESSAGE_END();
 
 			switch (RANDOM_LONG(0, 1)) {
@@ -404,11 +390,11 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 		}
 		break;
 		case GONOME_AE_SLASH_LEFT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH);
+			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH | DMG_NEVERGIB);
 			if (pHurt) {
 				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-					pHurt->pev->punchangle.z = 20;
-					pHurt->pev->punchangle.x = 20;
+					pHurt->pev->punchangle.z = 22;
+					pHurt->pev->punchangle.x = 9;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 				}
@@ -419,11 +405,11 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 		}
 		break;
 		case GONOME_AE_SLASH_RIGHT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH);
+			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH | DMG_NEVERGIB);
 			if (pHurt) {
 				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-					pHurt->pev->punchangle.z = -20;
-					pHurt->pev->punchangle.x = 20;
+					pHurt->pev->punchangle.z = -22;
+					pHurt->pev->punchangle.x = 9;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 				}
@@ -437,30 +423,24 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 		case GONOME_AE_BITE1:
 		case GONOME_AE_BITE2:
 		case GONOME_AE_BITE3:
-		case GONOME_AE_BITE4:
-		{
-			int iPitch;
-
+		case GONOME_AE_BITE4: {
 			// SOUND HERE!
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_TOLERANCE_MELEE2_RANGE, gSkillData.gonomeDmgOneBite, DMG_SLASH);
-
-			if (pHurt)
-			{
+			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_TOLERANCE_MELEE2_RANGE, gSkillData.gonomeDmgOneBite, DMG_SLASH | DMG_NEVERGIB);
+			if (pHurt) {
 				// croonchy bite sound
-				iPitch = RANDOM_FLOAT(90, 110);
-				switch (RANDOM_LONG(0, 1))
-				{
-				case 0:
-					EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch);
+				int iPitch = RANDOM_FLOAT(90, 110);
+				switch (RANDOM_LONG(0, 1)) {
+					case 0:
+						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch);
 					break;
-				case 1:
-					EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch);
+					case 1:
+						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch);
 					break;
 				}
 
 				pHurt->pev->punchangle.z = RANDOM_LONG(-10, 10);
 				pHurt->pev->punchangle.x = RANDOM_LONG(-35, -45);
-				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * 50;
+				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * -100;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 50;
 				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 			} else {
@@ -476,8 +456,7 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CGonome::Spawn()
-{
+void CGonome::Spawn(void) {
 	Precache();
 
 	if (pev->model)
@@ -490,13 +469,15 @@ void CGonome::Spawn()
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
-	pev->effects = 0;
 
 	if (pev->health == 0)
 		pev->health = gSkillData.gonomeHealth;
 
+	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
 	m_flFieldOfView = 0.2;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+
 	m_MonsterState = MONSTERSTATE_NONE;
+	m_afCapability = bits_CAP_DOORS_GROUP;
 
 	m_fCanThreatDisplay = TRUE;
 	m_flNextSpitTime = UTIL_GlobalTimeBase();
@@ -507,7 +488,7 @@ void CGonome::Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CGonome::Precache()
+void CGonome::Precache(void)
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -546,16 +527,13 @@ void CGonome::Precache()
 // RunAI - overridden for gonome because there are things
 // that need to be checked every think.
 //========================================================
-void CGonome::RunAI(void)
-{
+void CGonome::RunAI(void) {
 	// first, do base class stuff
 	CBaseMonster::RunAI();
 
-	if (m_hEnemy != NULL && m_Activity == ACT_RUN)
-	{
+	if (m_hEnemy != NULL && m_Activity == ACT_RUN) {
 		// chasing enemy. Sprint for last bit
-		if ((pev->origin - m_hEnemy->pev->origin).Length2D() < GONOME_SPRINT_DIST)
-		{
+		if ((pev->origin - m_hEnemy->pev->origin).Length2D() < GONOME_SPRINT_DIST) {
 			pev->framerate = 1.25;
 		}
 	}
@@ -907,20 +885,11 @@ void CGonome::StartTask(Task_t *pTask)
 }
 
 //=========================================================
-// RunTask
-//=========================================================
-void CGonome::RunTask(Task_t *pTask)
-{
-	CBaseMonster::RunTask(pTask);
-}
-
-//=========================================================
 // GetIdealState - Overridden for Gonome to deal with
 // the feature that makes it lose interest in headcrabs for 
 // a while if something injures it. 
 //=========================================================
-MONSTERSTATE CGonome::GetIdealState(void)
-{
+MONSTERSTATE CGonome::GetIdealState(void) {
 	int	iConditions;
 	iConditions = IScheduleFlags();
 	m_IdealMonsterState = CBaseMonster::GetIdealState();

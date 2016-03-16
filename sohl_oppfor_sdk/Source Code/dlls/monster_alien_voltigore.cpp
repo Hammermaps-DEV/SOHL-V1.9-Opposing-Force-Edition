@@ -251,10 +251,10 @@ void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
 		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
-			if (pEnt->IsPlayer()) { return; }
+			if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); return; }
 			if (pevAttacker->owner) {
 				pEnt = CBaseEntity::Instance(pevAttacker->owner);
-				if (pEnt->IsPlayer()) { return; }
+				if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); return; }
 			}
 		}
 

@@ -1286,13 +1286,67 @@ void CRCAllyMonster :: SetAnswerQuestion( CRCAllyMonster *pSpeaker )
 //=========================================================
 // TraceAttack - Double damage fix
 //=========================================================
-void CRCAllyMonster :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
-{
-	// I cant understand this! The ally grunts get more damage than the male assassin and the others.
-	// This is just weird. I cant understand it, and thats why this hack is needed!
-	flDamage = flDamage / 2;
+void CRCAllyMonster::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
+	if (!IsAlive()) {
+		CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+		return;
+	}
 
-	CBaseMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType );
+	if (pev->takedamage) {
+		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
+		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+			if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); }
+			if (pevAttacker->owner) {
+				pEnt = CBaseEntity::Instance(pevAttacker->owner);
+				if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); }
+			}
+		}
+
+		switch (ptr->iHitgroup) {
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+				flDamage -= 20;
+				if (flDamage <= 0) {
+					UTIL_Ricochet(ptr->vecEndPos, 1.0);
+					flDamage = 0.01;
+				}
+			} else {
+				flDamage = m_flHitgroupHead*flDamage;
+			}
+			ptr->iHitgroup = HITGROUP_HEAD;
+			break;
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			flDamage = m_flHitgroupChest*flDamage;
+			break;
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			flDamage = m_flHitgroupStomach*flDamage;
+			break;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm*flDamage;
+			break;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg*flDamage;
+			break;
+		}
+	}
+
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }
 
 extern Schedule_t	slChaseEnemyFailed[];
@@ -2569,7 +2623,6 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	if (m_fImmortal)
 		flDamage = 0;
 
-	int takedamage = CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
 		if (m_flDebug)
 			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
@@ -2583,7 +2636,7 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 			if (flDamage >= 20) //Override all damage
 				SetConditions(bits_COND_HEAVY_DAMAGE);
 
-			return takedamage;
+			return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 		}
 
 		if (pevAttacker->owner) {
@@ -2596,14 +2649,14 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 				if (flDamage >= 20) //Override all damage
 					SetConditions(bits_COND_HEAVY_DAMAGE);
 
-				return takedamage;
+				return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 			}
 		}
 	}
 
 	Forget(bits_MEMORY_INCOVER);
 	if (!IsAlive() || pev->deadflag == DEAD_DYING || m_iPlayerReact) {
-		return takedamage;
+		return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 	}
 
 	if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT)) {
@@ -2651,5 +2704,5 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		}
 	}
 
-	return takedamage;
+	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }

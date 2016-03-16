@@ -44,8 +44,6 @@ public:
 	void GibMonster(void);
 	void JustSpoke(void);
 
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
