@@ -35,6 +35,7 @@
     <ClCompile Include="env_rope_segment.cpp" />
     <ClCompile Include="func_grass.cpp" />
     <ClCompile Include="genericmodel.cpp" />
+    <ClCompile Include="monster_diablo.cpp" />
     <ClCompile Include="monster_massn.cpp" />
     <ClCompile Include="proj_grapple_tonguetip.cpp" />
     <ClCompile Include="item_antidote.cpp" />
@@ -252,6 +253,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
     <ClInclude Include="genericmodel.h" />
+    <ClInclude Include="monster_diablo.h" />
     <ClInclude Include="monster_massn.h" />
     <ClInclude Include="proj_grapple_tonguetip.h" />
     <ClInclude Include="proj_grenade.h" />

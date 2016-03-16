@@ -671,6 +671,9 @@
     <ClCompile Include="ammo_556.cpp">
       <Filter>Source Files\dlls\ammo</Filter>
     </ClCompile>
+    <ClCompile Include="monster_diablo.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1188,6 +1191,9 @@
     </ClInclude>
     <ClInclude Include="weapon_m249.h">
       <Filter>Header Files\dlls\weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_diablo.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
