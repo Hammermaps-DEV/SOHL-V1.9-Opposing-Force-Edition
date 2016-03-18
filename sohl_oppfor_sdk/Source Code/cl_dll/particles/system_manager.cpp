@@ -141,7 +141,7 @@ void CParticleSystemManager::UpdateSystems( void )
 	// print out how fast we've been drawing the systems in debug mode
 	if (g_ParticleDebug->value != 0 && ((m_flLastDebug + 1) <= gEngfuncs.GetClientTime()))
 	{
-		gEngfuncs.Con_Printf("%i Particles Drawn this pass in %i systems %i Textures in Cache\n\0", iDrawn, m_pParticleSystems.size(), m_pTextures.size());
+		CONPRINT("%i Particles Drawn this pass in %i systems %i Textures in Cache\n\0", iDrawn, m_pParticleSystems.size(), m_pTextures.size());
 		m_flLastDebug = gEngfuncs.GetClientTime();
 	}
 
@@ -385,7 +385,8 @@ particle_texture_s* CParticleSystemManager::HasTexture(char* sName) {
 // cache the most used tgas, so we don't get lag on first firing the gun
 void CParticleSystemManager::PrecacheTextures( void ) 
 {
-	gEngfuncs.Con_Printf("Caching frequently used particles, this may take a few moments\n");
+
+	ENGINEPRINT("Caching frequently used particles, this may take a few moments\n");
 
 	// Default explosion
 	LoadTGA(NULL, const_cast<char*>(spark01));
@@ -400,7 +401,7 @@ void CParticleSystemManager::PrecacheTextures( void )
 	LoadTGA(NULL, const_cast<char*>(blood_red_drips));
 	LoadTGA(NULL, const_cast<char*>(blood_red_impact));
 
-	gEngfuncs.Con_Printf("Finished caching frequently used particles, game loading will now continue\n");
+	ENGINEPRINT("Finished caching frequently used particles, game loading will now continue\n");
 }
 // adds a particle into the global particle tracker
 void CParticleSystemManager::AddParticle(CParticle* pParticle)

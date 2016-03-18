@@ -143,7 +143,7 @@ void CHudServers::ListResponse( struct net_response_s *response )
 		}
 	}
 
-	gEngfuncs.Con_Printf( "got list\n" );
+	CONPRINT( "got list\n" );
 
 	m_nQuerying = 1;
 	m_nActiveQueries = 0;
@@ -218,7 +218,7 @@ void CHudServers::PingResponse( struct net_response_s *response )
 	case NETAPI_REQUEST_PING:
 		sprintf( sz, "%.2f", 1000.0 * response->ping );
 
-		gEngfuncs.Con_Printf( "ping == %s\n", sz );
+		CONPRINT( "ping == %s\n", sz );
 		break;
 	default:
 		break;
@@ -245,7 +245,7 @@ void CHudServers::RulesResponse( struct net_response_s *response )
 		{
 			szresponse = (char *)response->response;
 
-			gEngfuncs.Con_Printf( "rules %s\n", szresponse );
+			CONPRINT( "rules %s\n", szresponse );
 		}
 		break;
 	default:
@@ -273,7 +273,7 @@ void CHudServers::PlayersResponse( struct net_response_s *response )
 		{
 			szresponse = (char *)response->response;
 
-			gEngfuncs.Con_Printf( "players %s\n", szresponse );
+			CONPRINT( "players %s\n", szresponse );
 		}
 		break;
 	default:

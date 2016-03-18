@@ -644,8 +644,8 @@ public:
 	CHudAmmoSecondary	m_AmmoSecondary;
 	CHudTextMessage	m_TextMessage;
 	CHudStatusIcons	m_StatusIcons;
-	CHudParticle	m_Particle; // (LRC) -- 30/08/02 November235: Particles to Order
-    CHudSound		m_Sound;	// g-cont. mp3 player from xash 0.45
+	CHudParticle	m_Particle;
+    CHudSound		m_Sound;
  
 	void Init( void );
 	void VidInit( void );
@@ -666,7 +666,6 @@ public:
 	int _cdecl MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
 	int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
 	int  _cdecl MsgFunc_RainData( const char *pszName, int iSize, void *pbuf ); 		//G-Cont
-    int  _cdecl MsgFunc_PlayMP3( const char *pszName, int iSize, void *pbuf );		//KILLAR
 	int _cdecl MsgFunc_HUDColor(const char *pszName,  int iSize, void *pbuf);		//LRC
 	void _cdecl MsgFunc_SetFog( const char *pszName, int iSize, void *pbuf );		//LRC
 	void _cdecl MsgFunc_KeyedDLight( const char *pszName, int iSize, void *pbuf );		//LRC

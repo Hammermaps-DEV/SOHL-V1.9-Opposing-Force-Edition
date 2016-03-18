@@ -191,7 +191,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 	// check we've set a file
 	if(!m_sParticleFile) 
 	{
-		gEngfuncs.Con_Printf("No Mapped Particle definition file specified");
+		CONPRINT("No Mapped Particle definition file specified");
 		return false;
 	}
 
@@ -205,7 +205,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 	char *sFile = (char *)gEngfuncs.COM_LoadFile(m_sParticleFile, 5 , null);
 	if(!sFile) 
 	{
-//		gEngfuncs.Con_Printf("Bad Mapped Particle definition file specified %s\n", m_sParticleFile);
+//		CONPRINT("Bad Mapped Particle definition file specified %s\n", m_sParticleFile);
 		return false;
 	}
 
@@ -225,7 +225,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 
 		// not eof but no setting... !?
 		if(!sSetting) {
-			gEngfuncs.Con_Printf("Unexpected error in file after %sin %s", sValue, m_sParticleFile);
+			CONPRINT("Unexpected error in file after %sin %s", sValue, m_sParticleFile);
 			gEngfuncs.COM_FreeFile(sFile);
 			return false;
 		}
@@ -235,7 +235,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 
 		// hitting eof is unaccpetable so no need to check for it and return true;
 		if(!sValue) {
-			gEngfuncs.Con_Printf("Unexpected error in file after %s in %s", sSetting, m_sParticleFile);
+			CONPRINT("Unexpected error in file after %s in %s", sSetting, m_sParticleFile);
 			gEngfuncs.COM_FreeFile(sFile);
 			return false;
 		}
@@ -377,7 +377,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 				m_pSystem->iFramesPerTexture = (int)flTemp;
 			}
 			else {
-				gEngfuncs.Con_Printf("Frames in Image (%i), not square in %s", (int)flTemp, m_sParticleFile);
+				CONPRINT("Frames in Image (%i), not square in %s", (int)flTemp, m_sParticleFile);
 			}
 		}
 		// how looping of the animation is handled
@@ -494,7 +494,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 		}
 		// catch all to accomodate for my spelling at first and then mapper's spelling later on
 		else {
-			gEngfuncs.Con_Printf("Unknown setting - %s in %s\n\0", sSetting, m_sParticleFile);
+			CONPRINT("Unknown setting - %s in %s\n\0", sSetting, m_sParticleFile);
 		}
 	}
 

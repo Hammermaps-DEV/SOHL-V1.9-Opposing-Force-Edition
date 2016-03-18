@@ -49,6 +49,8 @@ class CDiablo : public CBaseMonster {
 		static const char *pPainSounds[];
 		static const char *pAttackHitSounds[];
 		static const char *pAttackMissSounds[];
+		static const char *pAttackHitSoundsEXT[];
+		static const char *pAttackMissSoundsEXT[];
 
 		// No range attacks
 		BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }

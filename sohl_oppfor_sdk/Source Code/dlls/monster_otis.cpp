@@ -152,7 +152,7 @@ void COtis::Precache() {
 	else
 		PRECACHE_MODEL("models/otis.mdl");
 
-	PRECACHE_SOUND("barney/desert_eagle_fire.wav");
+	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
 
 	TalkInit();
 	CBarney::Precache();

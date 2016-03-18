@@ -287,7 +287,7 @@ ParticleType *ParticleSystem::ParseType( char *&szFile )
 			{
 				// there's already a type with this name
 				if (pTemp->m_bIsDefined)
-					gEngfuncs.Con_Printf("Warning: Particle type %s is defined more than once!\n", szToken);
+					CONPRINT("Warning: Particle type %s is defined more than once!\n", szToken);
 
 				// copy all our data into the existing type, throw away the type we were making
 				*pTemp = *pType;

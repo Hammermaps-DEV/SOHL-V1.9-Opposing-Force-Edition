@@ -47,6 +47,17 @@ LINK_ENTITY_TO_CLASS(monster_diablo, CDiablo);
 //=========================================================
 // Monster Sounds
 //=========================================================
+const char *CDiablo::pAttackHitSoundsEXT[] = {
+	"zombie/claw_strike1.wav",
+	"zombie/claw_strike2.wav",
+	"zombie/claw_strike3.wav",
+};
+
+const char *CDiablo::pAttackMissSoundsEXT[] = {
+	"zombie/claw_miss1.wav",
+	"zombie/claw_miss2.wav",
+};
+
 const char *CDiablo::pAttackHitSounds[] = {
 	"diablo/diablo_claw1.wav",
 	"diablo/diablo_claw2.wav",
@@ -115,11 +126,9 @@ void CDiablo::SetYawSpeed(void) {
 //=========================================================
 // TakeDamage
 //=========================================================
-int CDiablo::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
-{
+int CDiablo::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
 	// Take 30% damage from bullets
-	if (bitsDamageType == DMG_BULLET)
-	{
+	if (bitsDamageType == DMG_BULLET) {
 		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
 		vecDir = vecDir.Normalize();
 		float flForce = DamageForce(flDamage);
@@ -173,10 +182,19 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 				}
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+
+				if (RANDOM_LONG(0, 1))
+					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
 			} else {
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+				if (RANDOM_LONG(0, 1))
+					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
 			}
+
+			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}
 		break;
 		case DIABLO_AE_ATTACK_LEFT: {
@@ -188,9 +206,15 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
 					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 				}
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+				if (RANDOM_LONG(0, 1))
+					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
 			} else {
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+				if (RANDOM_LONG(0, 1))
+					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
 			}
 		}
 		break;
@@ -201,10 +225,18 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 				pHurt->pev->punchangle.x = RANDOM_LONG(-20, -30);
 				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * -100;
 				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 70;
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+				if (RANDOM_LONG(0, 1))
+					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
 			} else {
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+				if (RANDOM_LONG(0, 1))
+					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
 			}
+
+			if (RANDOM_LONG(0, 1)) { AttackSound(); }
 		}
 		break;
 		default:
@@ -253,6 +285,8 @@ void CDiablo::Precache(void) {
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
+	PRECACHE_SOUND_ARRAY(pAttackHitSoundsEXT);
+	PRECACHE_SOUND_ARRAY(pAttackMissSoundsEXT);
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);

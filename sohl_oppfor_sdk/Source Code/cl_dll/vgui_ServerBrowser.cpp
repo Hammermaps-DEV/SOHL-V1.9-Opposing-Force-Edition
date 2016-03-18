@@ -129,7 +129,7 @@ public:
 			return;
 
 		address = gEngfuncs.pNetAPI->ValueForKey( info, "address" );
-		//gEngfuncs.Con_Printf( "Connecting to %s\n", address );
+		//CONPRINT( "Connecting to %s\n", address );
 
 		sprintf( sz, "connect %s\n", address );
 

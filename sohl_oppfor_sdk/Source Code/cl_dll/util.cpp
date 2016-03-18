@@ -168,13 +168,13 @@ bool Sys_LoadLibrary (const char* dllname, dllhandle_t* handle, const dllfunctio
 	{
 		if (!(*gamefunc->funcvariable = (void *) Sys_GetProcAddress (dllhandle, gamefunc->name)))
 		{
-			CONPRINT( "Error: failed to get proc address %s\n", gamefunc->name );
+			ENGINEPRINT( "Error: failed to get proc address %s\n", gamefunc->name );
 			Sys_UnloadLibrary (&dllhandle);
 			return false;
 		}
 	}
           
-	CONPRINT( "%s sucessfully loaded\n", dllname );
+	ENGINEPRINT( "%s sucessfully loaded\n", dllname );
 	*handle = dllhandle;
 	return true;
 }

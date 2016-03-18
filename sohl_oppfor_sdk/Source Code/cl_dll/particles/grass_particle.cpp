@@ -131,7 +131,7 @@ void CGrassParticle::Draw( void )
 		return;
 
 	if(sParticle.pTexture == NULL) {
-		gEngfuncs.Con_Printf("Null texture in particle\n");
+		CONPRINT("Null texture in particle\n");
 		return;
 	}
 

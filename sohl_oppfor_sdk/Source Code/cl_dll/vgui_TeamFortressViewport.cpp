@@ -710,7 +710,7 @@ try
 			// We should never be here without a Command Menu
 			if (!m_pCurrentCommandMenu)
 			{
-				gEngfuncs.Con_Printf("Error in %s file after '%s'.\n",menuFile, szLastButtonText );
+				CONPRINT("Error in %s file after '%s'.\n",menuFile, szLastButtonText );
 				m_iInitialized = false;
 				return newIndex;
 			}
@@ -848,7 +848,7 @@ try
 			{
 				if ( m_iNumMenus >= MAX_MENUS )
 				{
-					gEngfuncs.Con_Printf( "Too many menus in %s past '%s'\n",menuFile, szLastButtonText );
+					CONPRINT( "Too many menus in %s past '%s'\n",menuFile, szLastButtonText );
 				}
 				else
 				{

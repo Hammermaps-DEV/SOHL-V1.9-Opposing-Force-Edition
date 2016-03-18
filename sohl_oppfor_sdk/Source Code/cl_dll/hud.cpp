@@ -170,17 +170,11 @@ int __MsgFunc_ResetMirror(const char *pszName, int iSize, void *pbuf)
 
 int __MsgFunc_ResetHUD(const char *pszName, int iSize, void *pbuf)
 {
-#ifdef ENGINE_DEBUG
-	CONPRINT("## ResetHUD\n");
-#endif
 	return gHUD.MsgFunc_ResetHUD(pszName, iSize, pbuf );
 }
 
 int __MsgFunc_InitHUD(const char *pszName, int iSize, void *pbuf)
 {
-#ifdef ENGINE_DEBUG
-	CONPRINT("## InitHUD\n");
-#endif
 	gHUD.MsgFunc_InitHUD( pszName, iSize, pbuf );
 	return 1;
 }
@@ -439,11 +433,9 @@ void CHud :: Init( void )
 	m_pShinySurface = NULL; //LRC
 
 	// Clear any old HUD list
-	if ( m_pHudList )
-	{
+	if ( m_pHudList ) {
 		HUDLIST *pList;
-		while ( m_pHudList )
-		{
+		while ( m_pHudList ) {
 			pList = m_pHudList;
 			m_pHudList = m_pHudList->pNext;
 			free( pList );
@@ -469,8 +461,8 @@ void CHud :: Init( void )
 	m_TextMessage.Init();
 	m_StatusIcons.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
-	m_Particle.Init(); // (LRC) -- 30/08/02 November235: Particles to Order
-	m_Sound.Init();
+	m_Particle.Init();
+	//m_Sound.Init();
 
 	m_Menu.Init();
 	InitRain();	
@@ -644,6 +636,7 @@ void CHud :: VidInit( void )
 	m_StatusIcons.VidInit();
 	GetClientVoiceMgr()->VidInit();
 	m_Particle.VidInit(); // (LRC) -- 30/08/02 November235: Particles to Order
+	m_Sound.Init();
 
 	if(pParticleManager)
 		delete pParticleManager;
@@ -651,9 +644,10 @@ void CHud :: VidInit( void )
 	pParticleManager = new CParticleSystemManager;
 	pParticleManager->PrecacheTextures();
 
-	gEngfuncs.Con_Printf("Spirit of Half-Life: Revision Build 1.9\n");
-	gEngfuncs.Con_Printf("Opposing-Force Edition by Hammermaps.de\n");
-	gEngfuncs.Con_Printf("https://github.com/Hammermaps-DEV/SOHL-V1.9-Opposing-Force-Edition\n");
+	ENGINEPRINT("==========================================\n");
+	ENGINEPRINT("Client-DLL for Spirit of Half-Life: Revision Build 1.9\n");
+	ENGINEPRINT("https://github.com/Hammermaps-DEV/SOHL-V1.9-Opposing-Force-Edition\n");
+	ENGINEPRINT("==========================================\n");
 }
 
 int CHud::MsgFunc_Logo(const char *pszName,  int iSize, void *pbuf)

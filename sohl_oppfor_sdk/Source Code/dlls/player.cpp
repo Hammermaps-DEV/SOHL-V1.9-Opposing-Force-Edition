@@ -1509,8 +1509,6 @@ void CBasePlayer::PlayerDeathThink(void)
 		WRITE_STRING("");
 	MESSAGE_END();
 
-	ALERT(at_console, "Resetting Particle Engine\n");
-	
 	respawn(pev, !(m_afPhysicsFlags & PFLAG_OBSERVER) );// don't copy a corpse if we're in deathcam.
 	DontThink();
 }
@@ -2456,7 +2454,6 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 	int isentence;
 	int iempty = -1;
 
-
 	// Ignore suit updates if no suit
 	if ( !(m_iHideHUD & ITEM_SUIT) )
 		return;
@@ -2479,8 +2476,7 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 	if (!fgroup)
 	{
 		isentence = SENTENCEG_Lookup(name, NULL);
-		if (isentence < 0)
-		{
+		if (isentence < 0) {
 			ALERT(at_debug,"HEV couldn't find sentence %s\n",name);
 			return;
 		}
@@ -2555,8 +2551,7 @@ Check for turning off powerups
 GLOBALS ASSUMED SET:  g_ulModelIndexPlayer
 ================
 */
-	static void
-CheckPowerups(entvars_t *pev)
+static void CheckPowerups(entvars_t *pev)
 {
 	if (pev->health <= 0)
 		return;
@@ -2963,8 +2958,6 @@ void CBasePlayer::Spawn( void )
 		WRITE_SHORT(9999);
 		WRITE_STRING("");
 	MESSAGE_END();
-
-	ALERT(at_console, "Resetting Particle Engine\n");
 
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "slj", "0" );
 	g_engfuncs.pfnSetPhysicsKeyValue( edict(), "hl", "1" );

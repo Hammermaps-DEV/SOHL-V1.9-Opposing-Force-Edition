@@ -40,3 +40,4 @@ typedef int (*pfnUserMsgHook)(const char *pszName, int iSize, void *pbuf);
 extern cl_enginefunc_t gEngfuncs;
 
 #define CONPRINT (gEngfuncs.Con_Printf) //LRC - I can't live without printf!
+#define ENGINEPRINT (gEngfuncs.Con_DPrintf)

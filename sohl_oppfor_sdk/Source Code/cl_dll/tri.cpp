@@ -119,7 +119,7 @@ void CShinySurface::Draw(const vec3_t &org)
 	// check whether the texture is valid
 	if (!UseTexture(m_hsprSprite, m_szSprite)) return;
 
-//	gEngfuncs.Con_Printf("minx %f, maxx %f, miny %f, maxy %f\n", m_fMinX, m_fMaxX, m_fMinY, m_fMaxY);
+//	CONPRINT("minx %f, maxx %f, miny %f, maxy %f\n", m_fMinX, m_fMaxX, m_fMinY, m_fMaxY);
 
 	float fFactor = 1/(m_fScale*fHeight);
 	float fMinTX = (org.x - m_fMinX)*fFactor;
@@ -358,7 +358,7 @@ void CL_DLLEXPORT HUD_DrawTransparentTriangles( void )
 	try {
 		pParticleManager->UpdateSystems();
 	} catch (CException *e) {
-		gEngfuncs.Con_Printf("There was a serious error within the particle engine. Particles will return on map change\n");
+		CONPRINT("There was a serious error within the particle engine. Particles will return on map change\n");
 		delete pParticleManager;
 		pParticleManager = NULL;
 	}

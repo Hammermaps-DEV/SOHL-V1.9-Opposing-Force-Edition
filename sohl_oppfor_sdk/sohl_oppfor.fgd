@@ -706,6 +706,18 @@
 		19: "Satchel Charge"
 		20: "Snark"
 		21: "Hornet Gun"
+		22: "Pipe Wrench"
+		23: "Knife"
+		24: "Barnacle Grapple"
+		25: "Desert Eagle"
+		26: "M249"
+		27: "M249 Clip"
+		28: "Displacer"
+		29: "M40A1 Sniper Rifle"
+		30: "M40A1 Clip"
+		31: "Spore Launcher"
+		32: "Spore Clip"
+		33: "Shockrifle"
 	]
 	explodemagnitude(integer) : "Explode Magnitude (0=none)" : 0
 	//NEW 0.4

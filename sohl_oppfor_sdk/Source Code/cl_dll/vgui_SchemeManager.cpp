@@ -214,11 +214,11 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 		{
 			if ( currentScheme < 0 )
 			{
-				gEngfuncs.Con_Printf( "error parsing font scheme text file at file start - expected '=', found '%s''\n", token );
+				CONPRINT( "error parsing font scheme text file at file start - expected '=', found '%s''\n", token );
 			}
 			else
 			{
-				gEngfuncs.Con_Printf( "error parsing font scheme text file at scheme '%s' - expected '=', found '%s''\n", tmpSchemes[currentScheme].schemeName, token );
+				CONPRINT( "error parsing font scheme text file at scheme '%s' - expected '=', found '%s''\n", tmpSchemes[currentScheme].schemeName, token );
 			}
 			break;
 		}
@@ -284,7 +284,7 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 
 		if ( !pScheme )
 		{
-			gEngfuncs.Con_Printf( "font scheme text file MUST start with a 'SchemeName'\n");
+			CONPRINT( "font scheme text file MUST start with a 'SchemeName'\n");
 			break;
 		}
 
@@ -398,7 +398,7 @@ buildDefaultFont:
 				sprintf(fontFilename, "gfx\\vgui\\fonts\\%d_%s.tga", m_xRes, m_pSchemeList[i].schemeName);
 				pFontData = gEngfuncs.COM_LoadFile( fontFilename, 5, &fontFileLength );
 				if(!pFontData)
-					gEngfuncs.Con_Printf("Missing bitmap font: %s\n", fontFilename);
+					CONPRINT("Missing bitmap font: %s\n", fontFilename);
 			}
 
 			m_pSchemeList[i].font = new vgui::Font(

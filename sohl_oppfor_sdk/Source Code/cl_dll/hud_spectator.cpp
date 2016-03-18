@@ -52,7 +52,7 @@ void SpectatorMode(void)
 
 	if ( gEngfuncs.Cmd_Argc() <= 1 )
 	{
-		gEngfuncs.Con_Printf( "usage:  spec_mode <Main Mode> [<Inset Mode>]\n" );
+		CONPRINT( "usage:  spec_mode <Main Mode> [<Inset Mode>]\n" );
 		return;
 	}
 
@@ -98,7 +98,7 @@ void SpectatorHelp(void)
 			while ( *text )
 			{
 				if ( *text != 13 )
-					gEngfuncs.Con_Printf( "%c", *text );
+					CONPRINT( "%c", *text );
 				text++;
 			}
 		}
@@ -109,7 +109,7 @@ void SpectatorMenu( void )
 {
 	if ( gEngfuncs.Cmd_Argc() <= 1 )
 	{
-		gEngfuncs.Con_Printf( "usage:  spec_menu <0|1>\n" );
+		CONPRINT( "usage:  spec_menu <0|1>\n" );
 		return;
 	}
 	
@@ -163,7 +163,7 @@ int CHudSpectator::Init()
 	
 	if ( !m_drawnames || !m_drawcone || !m_drawstatus || !m_autoDirector || !m_pip)
 	{
-		gEngfuncs.Con_Printf("ERROR! Couldn't register all spectator variables.\n");
+		CONPRINT("ERROR! Couldn't register all spectator variables.\n");
 		return 0;
 	}
 
@@ -496,7 +496,7 @@ void CHudSpectator::DirectorMessage( int iSize, void *pbuf )
 								g_iUser3 = m_lastSecondaryObject;
 							}
 
-							// gEngfuncs.Con_Printf("Director Camera: %i %i\n", firstObject, secondObject);
+							// CONPRINT("Director Camera: %i %i\n", firstObject, secondObject);
 							break;
 
 		case DRC_CMD_MODE  :
@@ -562,7 +562,7 @@ void CHudSpectator::DirectorMessage( int iSize, void *pbuf )
 							string = READ_STRING();
 							value =  READ_FLOAT();
 							
-							// gEngfuncs.Con_Printf("DRC_CMD_FX_SOUND: %s %.2f\n", string, value );
+							// CONPRINT("DRC_CMD_FX_SOUND: %s %.2f\n", string, value );
 							gEngfuncs.pEventAPI->EV_PlaySound(0, v_origin, CHAN_BODY, string, value, ATTN_NORM, 0, PITCH_NORM );
 							
 							break;
@@ -674,7 +674,7 @@ void CHudSpectator::HandleButtonsDown( int ButtonPressed )
 	int newMainMode		= g_iUser1;
 	int newInsetMode	= m_pip->value;
 
-	// gEngfuncs.Con_Printf(" HandleButtons:%i\n", ButtonPressed );
+	// CONPRINT(" HandleButtons:%i\n", ButtonPressed );
 	if ( !gViewPort )
 		return;
 
@@ -794,7 +794,7 @@ void CHudSpectator::SetModes(int iNewMainMode, int iNewInsetMode)
 	
 	if ( iNewMainMode < OBS_CHASE_LOCKED || iNewMainMode > OBS_MAP_CHASE )
 	{
-		gEngfuncs.Con_Printf("Invalid spectator mode.\n");
+		CONPRINT("Invalid spectator mode.\n");
 		return;
 	}
 	
@@ -925,8 +925,7 @@ bool CHudSpectator::ParseOverviewFile( )
 
 	if (!pfile)
 	{
-		
-		gEngfuncs.Con_Printf("Couldn't open file %s. Using default values for overiew mode.\n", filename );
+		//CONPRINT("Couldn't open file %s. Using default values for overiew mode.\n", filename );
 		return false;
 	}
 	
@@ -944,7 +943,7 @@ bool CHudSpectator::ParseOverviewFile( )
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
 			if ( stricmp( token, "{" ) ) 
 			{
-				gEngfuncs.Con_Printf("Error parsing overview file %s. (expected { )\n", filename );
+				//CONPRINT("Error parsing overview file %s. (expected { )\n", filename );
 				return false;
 			}
 
@@ -985,7 +984,7 @@ bool CHudSpectator::ParseOverviewFile( )
 				}
 				else
 				{
-					gEngfuncs.Con_Printf("Error parsing overview file %s. (%s unkown)\n", filename, token );
+					CONPRINT("Error parsing overview file %s. (%s unkown)\n", filename, token );
 					return false;
 				}
 
@@ -999,7 +998,7 @@ bool CHudSpectator::ParseOverviewFile( )
 
 			if ( m_OverviewData.layers == OVERVIEW_MAX_LAYERS )
 			{
-				gEngfuncs.Con_Printf("Error parsing overview file %s. ( too many layers )\n", filename );
+				CONPRINT("Error parsing overview file %s. ( too many layers )\n", filename );
 				return false;
 			}
 
@@ -1008,7 +1007,7 @@ bool CHudSpectator::ParseOverviewFile( )
 				
 			if ( stricmp( token, "{" ) ) 
 			{
-				gEngfuncs.Con_Printf("Error parsing overview file %s. (expected { )\n", filename );
+				CONPRINT("Error parsing overview file %s. (expected { )\n", filename );
 				return false;
 			}
 
@@ -1031,7 +1030,7 @@ bool CHudSpectator::ParseOverviewFile( )
 				}
 				else
 				{
-					gEngfuncs.Con_Printf("Error parsing overview file %s. (%s unkown)\n", filename, token );
+					CONPRINT("Error parsing overview file %s. (%s unkown)\n", filename, token );
 					return false;
 				}
 

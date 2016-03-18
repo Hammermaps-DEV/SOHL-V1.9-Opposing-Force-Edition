@@ -166,7 +166,7 @@ void CHud :: MsgFunc_AddShine( const char *pszName, int iSize, void *pbuf )
 	float fZ = READ_COORD();
 	char *szSprite = READ_STRING();
 
-//	gEngfuncs.Con_Printf("minx %f, maxx %f, miny %f, maxy %f\n", fMinX, fMaxX, fMinY, fMaxY);
+//	CONPRINT("minx %f, maxx %f, miny %f, maxy %f\n", fMinX, fMaxX, fMinY, fMaxY);
 
 	CShinySurface *pSurface = new CShinySurface(fScale, fAlpha, fMinX, fMaxX, fMinY, fMaxY, fZ, szSprite);
 	pSurface->m_pNext = m_pShinySurface;
@@ -316,6 +316,6 @@ void CHud :: MsgFunc_SetMirror( const char *pszName, int iSize, void *pbuf )
 
 void CHud :: MsgFunc_ResetMirror( const char *pszName, int iSize, void *pbuf )
 {
-	CONPRINT("mirrors reset\n");
+	//CONPRINT("mirrors reset\n");
 	numMirrors = 0;
 }

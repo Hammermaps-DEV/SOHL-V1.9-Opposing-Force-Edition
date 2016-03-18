@@ -40,8 +40,7 @@ extern DLL_GLOBAL Vector		g_vecAttackDir;
 // Just add more items to the bottom of this array and they will automagically be supported
 // This is done instead of just a classname in the FGD so we can control which entities can
 // be spawned, and still remain fairly flexible
-const char *CBreakable::pSpawnObjects[] =
-{
+const char *CBreakable::pSpawnObjects[] = {
 	NULL,				// 0
 	"item_battery",		// 1
 	"item_healthkit",	// 2
@@ -64,7 +63,19 @@ const char *CBreakable::pSpawnObjects[] =
 	"weapon_satchel",	// 19
 	"weapon_snark",		// 20
 	"weapon_hornetgun",	// 21
-	"weapon_m249",		// 22
+
+	"weapon_pipewrench",// 22
+	"weapon_knife",		// 23
+	"weapon_grapple",	// 24
+	"weapon_eagle",		// 25
+	"weapon_m249",		// 26
+	"ammo_556",			// 27
+	"weapon_displacer",	// 28
+	"weapon_m40a1",		// 29
+	"ammo_762",			// 30
+	"weapon_sporelauncher",	// 31
+	"ammo_spore",		// 32
+	"weapon_shockrifle"	// 33
 };
 
 void CBreakable::KeyValue( KeyValueData* pkvd )
@@ -150,9 +161,6 @@ TYPEDESCRIPTION CBreakable::m_SaveData[] =
 {
 	DEFINE_FIELD( CBreakable, m_Material, FIELD_INTEGER ),
 	DEFINE_FIELD( CBreakable, m_Explosion, FIELD_INTEGER ),
-
-// Don't need to save/restore these because we precache after restore
-//	DEFINE_FIELD( CBreakable, m_idShard, FIELD_INTEGER ),
 
 	DEFINE_FIELD( CBreakable, m_angle, FIELD_FLOAT ),
 	DEFINE_FIELD( CBreakable, m_iszGibModel, FIELD_STRING ),
@@ -424,9 +432,6 @@ void CBreakable::DamageSound( void )
 	char *rgpsz[6];
 	int i;
 	int material = m_Material;
-
-//	if (RANDOM_LONG(0,1))
-//		return;
 
 	if (RANDOM_LONG(0,2))
 		pitch = PITCH_NORM;

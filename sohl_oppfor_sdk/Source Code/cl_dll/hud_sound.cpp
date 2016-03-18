@@ -218,10 +218,10 @@ int CHudSound::Init( void )
 	{
 		if( qfmod_getversion() < 3.3f || qfmod_getversion() > 3.4f )
 		{
-			CONPRINT( "Warning: Invalid fmod version: %g\n", qfmod_getversion( ));
+			ENGINEPRINT( "Warning: Invalid fmod version: %g\n", qfmod_getversion( ));
 			Sys_UnloadLibrary( &fmod_dll ); // free library
 			return 1;
-          	}
+        }
 
 		qfmod_setbuffersize( 100 );
           	qfmod_setoutput( FSOUND_OUTPUT_DSOUND );
@@ -230,13 +230,13 @@ int CHudSound::Init( void )
 		// NOTE: 32 channels needs for correctly playing tracker music
 		if( !qfmod_init( 44100, 32, 0 ))
 		{	
-			CONPRINT( "%s\n", FMOD_ErrorString( qfmod_geterror( )));
+			ENGINEPRINT( "%s\n", FMOD_ErrorString( qfmod_geterror( )));
 			return 1;
 		}
 
 		qfmod_setmixer( FSOUND_MIXER_AUTODETECT );
 	}
-	else CONPRINT( "fmod.dll not installed\n" );
+	else ENGINEPRINT( "fmod.dll not installed\n" );
           
 	return 1;
 }
@@ -310,7 +310,7 @@ int CHudSound::PlayStream( const char* name )
 	{
 		CONPRINT( "Couldn't load %s\n", name );
 		return false;
-          }
+    }
 
 	// try to open this file as stream default
 	int flags = FSOUND_LOADMEMORY | FSOUND_MPEGACCURATE;
