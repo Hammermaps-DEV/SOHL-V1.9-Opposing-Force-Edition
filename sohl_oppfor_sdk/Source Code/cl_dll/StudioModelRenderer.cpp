@@ -36,26 +36,22 @@
 // Global engine <-> studio model rendering code interface
 engine_studio_api_t IEngineStudio;
 
-// The adjusted pointer to the shadow function
-void(*GL_StudioDrawShadow)(void);
+/////////////////////
+// Implementation of CStudioModelRenderer.h
+#define LEGS_BONES_COUNT	8
 
-// This needs to be a function so that when GL_StudioDrawShadow() returns, the
-// stack isn't trashed.  It needs to be __declspec(naked) so the compiler doesn't
-// emit any prolog/epilog code (we do that ourselves in the asm block).
-__declspec(naked) void HackShadows(void)
+// enumerate all the bones that used for gait animation
+const char *legs_bones[] =
 {
-	// GL_StudioDrawShadows calls this, but the adjusted pointer skips it.
-	// We need to call it ourselves (although I can't see any difference if we don't...)
-	// We're only called from StudioRenderFinal_Hardware, so the gl call is Ok.
-	//	glDepthMask( 1 );
-	_asm {
-		// Must save ecx! GL_StudioDrawShadow will attempt to pop it when it returns
-		push ecx;
-		// Must jmp, not call so when GL_StudioDrawShadow returns it pulls the return
-		// address of this function (i.e. it will return to wherever we were called from)
-		jmp[GL_StudioDrawShadow];
-	}
-}
+{ "Bip01" },
+{ "Bip01 Pelvis" },
+{ "Bip01 L Leg" },
+{ "Bip01 L Leg1" },
+{ "Bip01 L Foot" },
+{ "Bip01 R Leg" },
+{ "Bip01 R Leg1" },
+{ "Bip01 R Foot" },
+};
 
 /*
 ====================
@@ -414,9 +410,7 @@ StudioPlayerBlend
 void CStudioModelRenderer::StudioPlayerBlend( mstudioseqdesc_t *pseqdesc, int *pBlend, float *pPitch )
 {
 	// calc up/down pointing
-
-	*pBlend = (*pPitch * -6);
-
+	*pBlend = (*pPitch * 3);
 	if (*pBlend < pseqdesc->blendstart[0])
 	{
 		*pPitch -= pseqdesc->blendstart[0] / 3.0;
@@ -934,10 +928,18 @@ void CStudioModelRenderer::StudioSetupBones ( void )
 		panim = StudioGetAnim( m_pRenderModel, pseqdesc );
 		StudioCalcRotations( pos2, q2, pseqdesc, panim, m_pPlayerInfo->gaitframe );
 
+		int j = 0;
 		for (i = 0; i < m_pStudioHeader->numbones; i++)
 		{
-			if (strcmp( pbones[i].name, "Bip01 Spine") == 0)
+			for( j = 0; j < LEGS_BONES_COUNT; j++ )
+			{
+				if( !strcmp( pbones[i].name, legs_bones[j] ))
 				break;
+			}
+
+			if( j == LEGS_BONES_COUNT )
+				continue;	// not used for legs
+
 			memcpy( pos[i], pos2[i], sizeof( pos[i] ));
 			memcpy( q[i], q2[i], sizeof( q[i] ));
 		}
@@ -2019,8 +2021,7 @@ void CStudioModelRenderer::StudioRenderFinal_Hardware(void)
 
 			IEngineStudio.GL_SetRenderMode(rendermode);
 			IEngineStudio.StudioDrawPoints();
-			// Set the pointer to skip the code that checks the locked r_shadows cvar
-			GL_StudioDrawShadow = (void(*)(void))(((unsigned int)IEngineStudio.GL_StudioDrawShadow) + 32);
+			IEngineStudio.GL_StudioDrawShadow();
 		}
 	}
 

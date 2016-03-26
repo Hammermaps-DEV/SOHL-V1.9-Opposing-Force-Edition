@@ -418,6 +418,7 @@ void CHud :: Init( void )
 	CVAR_CREATE("cl_expdetail", "1", FCVAR_ARCHIVE);
 
 	CVAR_CREATE("cl_idleswaying", "1", FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_gunsmoke", "1", FCVAR_ARCHIVE);
 
 	cl_rollangle = gEngfuncs.pfnRegisterVariable("cl_rollangle", "0.65", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "300", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
@@ -446,6 +447,7 @@ void CHud :: Init( void )
 	// In case we get messages before the first update -- time will be valid
 	m_flTime = 1.0;
 
+
 	m_Ammo.Init();
 	m_Health.Init();
 	m_SayText.Init();
@@ -462,7 +464,6 @@ void CHud :: Init( void )
 	m_StatusIcons.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 	m_Particle.Init();
-	//m_Sound.Init();
 
 	m_Menu.Init();
 	InitRain();	
@@ -489,8 +490,6 @@ CHud :: ~CHud()
 		delete m_pShinySurface;
 		m_pShinySurface = NULL;
 	}
-
-	m_Sound.Close();
 	
 	if ( m_pHudList )
 	{
@@ -618,7 +617,6 @@ void CHud :: VidInit( void )
 
 	m_iFontHeight = m_rgrcRects[m_HUD_number_0].bottom - m_rgrcRects[m_HUD_number_0].top;
 
-	m_Sound.VidInit();
 	m_Ammo.VidInit();
 	m_Health.VidInit();
 	m_Spectator.VidInit();
@@ -636,7 +634,6 @@ void CHud :: VidInit( void )
 	m_StatusIcons.VidInit();
 	GetClientVoiceMgr()->VidInit();
 	m_Particle.VidInit(); // (LRC) -- 30/08/02 November235: Particles to Order
-	m_Sound.Init();
 
 	if(pParticleManager)
 		delete pParticleManager;
@@ -770,6 +767,10 @@ int CHud::MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf)
 
 	int newfov = READ_BYTE();
 	int def_fov = CVAR_GET_FLOAT( "default_fov" );
+
+	//Weapon prediction already takes care of changing the fog. ( g_lastFOV ).
+	if ( cl_lw && cl_lw->value )
+		return 1;
 
 	g_lastFOV = newfov;
 

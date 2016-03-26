@@ -18,12 +18,10 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // NPC: Pit Drone * http://half-life.wikia.com/wiki/Pit_Drone
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00003 / Date: 17.01.2016
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -44,7 +42,7 @@
 #define PIT_DRONE_AE_SPIT_SOUND		( 1 ) //Shooting Sound
 #define PIT_DRONE_AE_SPIT			( 2 ) //Shooting
 #define PIT_DRONE_AE_RELOAD			( 3 ) //Reload
-#define PIT_DRONE_AE_BITE			( 4 ) //Dubble Slash
+#define PIT_DRONE_AE_BITE			( 4 ) //Double Slash
 #define PIT_DRONE_AE_SLASH_LEFT		( 5 ) //Slash Left
 #define PIT_DRONE_AE_SLASH_RIGHT	( 6 ) //Slash Right
 

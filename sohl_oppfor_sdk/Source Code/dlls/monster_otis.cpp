@@ -21,7 +21,6 @@
 //=========================================================
 // NPC: Otis * http://half-life.wikia.com/wiki/Otis_Laurey
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 09.02.2016
 //=========================================================
 
 #include "extdll.h"

@@ -21,8 +21,6 @@
 
 //=========================================================
 // Item: Generic
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 25.01.2016
 //=========================================================
 
 #include	"extdll.h"

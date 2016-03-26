@@ -19,12 +19,10 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // Projectile: Energy Ball for Voltigore
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 12.11.2015
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"

@@ -508,17 +508,23 @@ void PM_PlayStepSound( int step, float fvol )
 		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_ladder4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
 		}
 		break;
-
-	// Opposing-Force
 	case STEP_SNOW:
 		switch(irand)
 		{
-		// right foot
-		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		// left foot
-		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_snow4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			// right foot
+			case 0:	
+				pmove->PM_PlaySound( CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow1.wav" : "player/pl_snow5.wav"), fvol, ATTN_NORM, 0, PITCH_NORM );
+			break;
+			case 1:	
+				pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow3.wav" : "player/pl_snow7.wav"), fvol, ATTN_NORM, 0, PITCH_NORM);
+			break;
+			// left foot
+			case 2:	
+				pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow2.wav" : "player/pl_snow6.wav"), fvol, ATTN_NORM, 0, PITCH_NORM);
+			break;
+			case 3:	
+				pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow4.wav" : "player/pl_snow8.wav"), fvol, ATTN_NORM, 0, PITCH_NORM);
+			break;
 		}
 
 		break;
@@ -548,8 +554,6 @@ int PM_MapTextureTypeStepType(char chTextureType)
 		case CHAR_TEX_GRATE: return STEP_GRATE;	
 		case CHAR_TEX_TILE: return STEP_TILE;
 		case CHAR_TEX_SLOSH: return STEP_SLOSH;
-
-		// Opposing-Force
 		case CHAR_TEX_SNOW: return STEP_SNOW;
 		case CHAR_TEX_DEEP_SNOW: return STEP_SNOW;
 		case CHAR_TEX_GRASS: return STEP_GRASS;

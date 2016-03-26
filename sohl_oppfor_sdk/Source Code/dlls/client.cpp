@@ -924,6 +924,10 @@ void ClientPrecache( void )
 	PRECACHE_SOUND("player/pl_snow2.wav");
 	PRECACHE_SOUND("player/pl_snow3.wav");
 	PRECACHE_SOUND("player/pl_snow4.wav");
+	PRECACHE_SOUND("player/pl_snow5.wav");
+	PRECACHE_SOUND("player/pl_snow6.wav");
+	PRECACHE_SOUND("player/pl_snow7.wav");
+	PRECACHE_SOUND("player/pl_snow8.wav");
 
 	PRECACHE_SOUND("player/pl_grass1.wav");		// grass texture
 	PRECACHE_SOUND("player/pl_grass2.wav");
@@ -937,8 +941,10 @@ void ClientPrecache( void )
 
 	PRECACHE_SOUND("plats/train_use1.wav");		// use a train
 
-	PRECACHE_SOUND("buttons/spark5.wav");		// hit computer texture
-	PRECACHE_SOUND("buttons/spark6.wav");
+	PRECACHE_SOUND("buttons/spark1.wav");
+	PRECACHE_SOUND("buttons/spark2.wav");
+	PRECACHE_SOUND("buttons/spark3.wav");
+
 	PRECACHE_SOUND("debris/glass1.wav");
 	PRECACHE_SOUND("debris/glass2.wav");
 	PRECACHE_SOUND("debris/glass3.wav");

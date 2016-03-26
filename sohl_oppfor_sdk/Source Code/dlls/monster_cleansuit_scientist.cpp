@@ -22,9 +22,8 @@
 //=========================================================
 // NPC: Cleansuit - Scientist
 // http://half-life.wikia.com/wiki/Black_Mesa_Science_Team
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 31.01.2016
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"

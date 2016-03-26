@@ -3777,6 +3777,7 @@
 @PointClass base(Monster) size(-16 -16 0, 16 16 72) studio("models/hgrunt.mdl") = monster_human_grunt : "Human Grunt (camo)" 
 [
 	netname(string) : "Squad Name"
+	SpeakAs(string) : "Speech Group"
 	spawnflags(Flags) =
 	[
 		//* Only needed if you use the Squad Name value. If you define a Squad using the Squad Name
@@ -3880,7 +3881,6 @@
 		80 : "pipetoss"
 		81 : "plunger"
 	]
-
 ]
 @PointClass base(Monster) size(-32 -32 0, 32 32 64) studio("models/icky.mdl") = monster_ichthyosaur : "Ichthyosaur" []
 @PointClass base(Monster) size(-6 -6 0, 6 6 6) studio("models/leech.mdl") = monster_leech : "Leech" []

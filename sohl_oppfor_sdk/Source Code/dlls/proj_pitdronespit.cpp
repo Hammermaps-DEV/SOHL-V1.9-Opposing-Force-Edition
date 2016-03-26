@@ -18,12 +18,10 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // Projectile: Pit Drone Spit * http://half-life.wikia.com/wiki/Pit_Drone
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 11.11.2015
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"

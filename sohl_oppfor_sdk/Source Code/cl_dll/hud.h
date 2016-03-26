@@ -645,7 +645,6 @@ public:
 	CHudTextMessage	m_TextMessage;
 	CHudStatusIcons	m_StatusIcons;
 	CHudParticle	m_Particle;
-    CHudSound		m_Sound;
  
 	void Init( void );
 	void VidInit( void );

@@ -2674,7 +2674,11 @@ void CBaseMonster :: StepSound( void )
 		rgsz[1] = "player/pl_snow3.wav";
 		rgsz[2] = "player/pl_snow2.wav";
 		rgsz[3] = "player/pl_snow4.wav";
-		cnt = 4;
+		rgsz[4] = "player/pl_snow5.wav";
+		rgsz[5] = "player/pl_snow7.wav";
+		rgsz[6] = "player/pl_snow6.wav";
+		rgsz[7] = "player/pl_snow8.wav";
+		cnt = 8;
 		break;
 
 	case CHAR_TEX_GRASS:

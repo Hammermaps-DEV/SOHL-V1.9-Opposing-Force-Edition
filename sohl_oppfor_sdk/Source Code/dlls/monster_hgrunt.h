@@ -37,11 +37,13 @@ public:
 	void PainSound(void);
 	void IdleSound(void);
 	Vector GetGunPosition(void);
-	void Shoot(void);
-	void Shotgun(void);
+	void ShootMP5(void);
+	void ShootShotgun(void);
+	void ShootShotgunDouble(void);
 	void PrescheduleThink(void);
 	void GibMonster(void);
 	void SpeakSentence(void);
+	void KeyValue(KeyValueData *pkvd);
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);
@@ -73,12 +75,19 @@ public:
 	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
 	int		m_cClipSize;
 
+	static const char *pPainSounds[];
+	static const char *pDeathSounds[];
+	static const char *pAttackSoundsMP5[];
+
 	int m_voicePitch;
 
 	int		m_iBrassShell;
 	int		m_iShotgunShell;
-
+	float	m_fLockShootTime;
+	float	m_nShotgunDouble;
 	int		m_iSentence;
+	int		g_fGruntQuestion; // true if an idle grunt asked a question. Cleared when someone answers.
+	int		m_iszSpeakAs; // Change the prefix for all this monster's speeches LRC
 
 	static const char *pGruntSentences[];
 };

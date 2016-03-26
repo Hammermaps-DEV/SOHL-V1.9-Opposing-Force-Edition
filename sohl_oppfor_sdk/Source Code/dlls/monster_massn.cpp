@@ -23,7 +23,6 @@
 //=========================================================
 // NPC: Black Ops * http://half-life.wikia.com/wiki/Black_Ops
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 15.02.2016
 //=========================================================
 
 #include	"extdll.h"
@@ -173,7 +172,7 @@ void CMassn::HandleAnimEvent(MonsterEvent_t *pEvent)
 	{
 		if (FBitSet(pev->weapons, MASSN_9MMAR))
 		{
-			Shoot();
+			//Shoot();
 
 			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
 			if (RANDOM_LONG(0, 1))

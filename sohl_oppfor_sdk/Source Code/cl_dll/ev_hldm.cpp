@@ -1,17 +1,24 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
+
 #include "hud.h"
 #include "cl_util.h"
 #include "const.h"
@@ -66,7 +73,6 @@ vec3_t previousorigin;//egon use this
 extern cvar_t *cl_lw;
 
 extern "C" {
-	// HLDM
 	void EV_FireNull(event_args_t *args);
 	void EV_FireCrowbar(struct event_args_s *args);
 	void EV_FireWrenchSmall(struct event_args_s *args);
@@ -116,159 +122,9 @@ extern "C" {
 #define VEC_DUCK_HULL_MIN	Vector(-16, -16, -18 )
 #define VEC_DUCK_HULL_MAX	Vector( 16,  16,  18)
 
-// play a strike sound based on the texture that was hit by the attack traceline.  VecSrc/VecEnd are the
-// original traceline endpoints used by the attacker, iBulletType is the type of bullet that hit the texture.
-// returns volume of strike instrument (crowbar) to play
-float EV_HLDM_PlayTextureSound( int idx, pmtrace_t *ptr, float *vecSrc, float *vecEnd, int iBulletType )
-{
-	// hit the world, try to play sound based on texture material type
-	char chTextureType = CHAR_TEX_CONCRETE;
-	float fvol;
-	float fvolbar;
-	char *rgsz[4];
-	int cnt;
-	float fattn = ATTN_NORM;
-	int entity;
-	char *pTextureName;
-	char texname[ 64 ];
-	char szbuffer[ 64 ];
-
-	entity = gEngfuncs.pEventAPI->EV_IndexFromTrace( ptr );
-
-	// FIXME check if playtexture sounds movevar is set
-	//
-
-	chTextureType = 0;
-
-	// Player
-	if ( entity >= 1 && entity <= gEngfuncs.GetMaxClients() )
-	{
-		// hit body
-		chTextureType = CHAR_TEX_FLESH;
-	}
-	else if ( entity == 0 )
-	{
-		// get texture from entity or world (world is ent(0))
-		pTextureName = (char *)gEngfuncs.pEventAPI->EV_TraceTexture( ptr->ent, vecSrc, vecEnd );
-		
-		if ( pTextureName )
-		{
-			strcpy( texname, pTextureName );
-			pTextureName = texname;
-
-			// strip leading '-0' or '+0~' or '{' or '!'
-			if (*pTextureName == '-' || *pTextureName == '+')
-			{
-				pTextureName += 2;
-			}
-
-			if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ')
-			{
-				pTextureName++;
-			}
-			
-			// '}}'
-			strcpy( szbuffer, pTextureName );
-			szbuffer[ CBTEXTURENAMEMAX - 1 ] = 0;
-				
-			// get texture type
-			chTextureType = PM_FindTextureType( szbuffer );	
-		}
-	}
-	
-	switch (chTextureType)
-	{
-	default:
-	case CHAR_TEX_CONCRETE: fvol = 0.9;	fvolbar = 0.6;
-		rgsz[0] = "player/pl_step1.wav";
-		rgsz[1] = "player/pl_step2.wav";
-		cnt = 2;
-		break;
-	case CHAR_TEX_METAL: fvol = 0.9; fvolbar = 0.3;
-		rgsz[0] = "player/pl_metal1.wav";
-		rgsz[1] = "player/pl_metal2.wav";
-		cnt = 2;
-		break;
-	case CHAR_TEX_DIRT:	fvol = 0.9; fvolbar = 0.1;
-		rgsz[0] = "player/pl_dirt1.wav";
-		rgsz[1] = "player/pl_dirt2.wav";
-		rgsz[2] = "player/pl_dirt3.wav";
-		cnt = 3;
-		break;
-	case CHAR_TEX_VENT:	fvol = 0.5; fvolbar = 0.3;
-		rgsz[0] = "player/pl_duct1.wav";
-		rgsz[1] = "player/pl_duct1.wav";
-		cnt = 2;
-		break;
-	case CHAR_TEX_GRATE: fvol = 0.9; fvolbar = 0.5;
-		rgsz[0] = "player/pl_grate1.wav";
-		rgsz[1] = "player/pl_grate4.wav";
-		cnt = 2;
-		break;
-	case CHAR_TEX_TILE:	fvol = 0.8; fvolbar = 0.2;
-		rgsz[0] = "player/pl_tile1.wav";
-		rgsz[1] = "player/pl_tile3.wav";
-		rgsz[2] = "player/pl_tile2.wav";
-		rgsz[3] = "player/pl_tile4.wav";
-		cnt = 4;
-		break;
-	case CHAR_TEX_SLOSH: fvol = 0.9; fvolbar = 0.0;
-		rgsz[0] = "player/pl_slosh1.wav";
-		rgsz[1] = "player/pl_slosh3.wav";
-		rgsz[2] = "player/pl_slosh2.wav";
-		rgsz[3] = "player/pl_slosh4.wav";
-		cnt = 4;
-		break;
-	// Opposing-Force
-	case CHAR_TEX_DEEP_SNOW:
-	case CHAR_TEX_SNOW: fvol = 0.9; fvolbar = 0.2;
-		rgsz[0] = "player/pl_snow1.wav";
-		rgsz[1] = "player/pl_snow3.wav";
-		rgsz[2] = "player/pl_snow2.wav";
-		rgsz[3] = "player/pl_snow4.wav";
-		cnt = 4;
-		break;
-	case CHAR_TEX_GRASS: fvol = 0.9; fvolbar = 0.2;
-		rgsz[0] = "player/pl_grass1.wav";
-		rgsz[1] = "player/pl_grass3.wav";
-		rgsz[2] = "player/pl_grass2.wav";
-		rgsz[3] = "player/pl_grass4.wav";
-		cnt = 4;
-		break;
-	case CHAR_TEX_WOOD: fvol = 0.9; fvolbar = 0.2;
-		rgsz[0] = "debris/wood1.wav";
-		rgsz[1] = "debris/wood2.wav";
-		rgsz[2] = "debris/wood3.wav";
-		cnt = 3;
-		break;
-	case CHAR_TEX_GLASS:
-	case CHAR_TEX_COMPUTER:
-		fvol = 0.8; fvolbar = 0.2;
-		rgsz[0] = "debris/glass1.wav";
-		rgsz[1] = "debris/glass2.wav";
-		rgsz[2] = "debris/glass3.wav";
-		cnt = 3;
-		break;
-	case CHAR_TEX_FLESH:
-		if (iBulletType == BULLET_PLAYER_CROWBAR)
-			return 0.0; // crowbar already makes this sound
-		fvol = 1.0;	fvolbar = 0.2;
-		rgsz[0] = "weapons/bullet_hit1.wav";
-		rgsz[1] = "weapons/bullet_hit2.wav";
-		fattn = 1.0;
-		cnt = 2;
-		break;
-	}
-
-	// play material hit sound
-	gEngfuncs.pEventAPI->EV_PlaySound( 0, ptr->endpos, CHAN_STATIC, rgsz[gEngfuncs.pfnRandomLong(0,cnt-1)], fvol, fattn, 0, 96 + gEngfuncs.pfnRandomLong(0,0xf) );
-	return fvolbar;
-}
-
 /*
 =================
 EV_MuzzleFlash
-
 Flag weapon/view model for muzzle flash
 =================
 */
@@ -282,33 +138,57 @@ void EV_Dynamic_MuzzleFlash(vec3_t pos, float amount, int red, int green, int bl
 	dl->radius = amount * 100;
 }
 
-/*
-=================
-EV_HLDM_SmokePuff
+//=====================
+// EV_WallPuffCallback
+//=====================
+void EV_WallPuffCallback(struct tempent_s *ent, float frametime, float currenttime) {
+	ent->entity.angles = ent->entity.baseline.vuser1;
+}
 
-Event which spawns a smokepuff and/or sparks at a given origin
-=================
-*/
-void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
+// play a strike sound based on the texture that was hit by the attack traceline.  VecSrc/VecEnd are the
+// original traceline endpoints used by the attacker, iBulletType is the type of bullet that hit the texture.
+// returns volume of strike instrument (crowbar) to play
+float EV_HLDM_PlayTextureSound( int idx, pmtrace_t *ptr, float *vecSrc, float *vecEnd, int iBulletType ) {
+	//CONPRINT("There was a serious error within the particle engine. Particles will return on map change\n");
+
+	// hit the world, try to play sound based on texture material type
 	vec3_t fwd, angles, forward, right, up;
-	VectorAngles(pTrace->plane.normal, angles);
+	VectorAngles(ptr->plane.normal, angles);
 	AngleVectors(angles, forward, up, right);
 	forward.z = -forward.z;
 	physent_t *pe;
 
-	// get entity at endpoint
-	pe = gEngfuncs.pEventAPI->EV_GetPhysent(pTrace->ent);
-	if (pe && pe->solid == SOLID_BSP) {
-		char chTextureType = CHAR_TEX_CONCRETE;
-		char *pTextureName;
-		char texname[64];
-		char szbuffer[64];
+	float fvol, fvol_impact, fvolbar, fattn;
+	char *rgsz[4], *rgsz_impact[4], texname[64], szbuffer[64], *pTextureName, chTextureType;
+	int cnt, impacts, entity, alpha, red, green, blue;
+	bool fDoPuffs, fDoStreakSplash;
 
-		// get texture name
-		pTextureName = (char *)gEngfuncs.pEventAPI->EV_TraceTexture(pTrace->ent, vecSrc, vecEnd);
+	entity = gEngfuncs.pEventAPI->EV_IndexFromTrace( ptr );
 
-		if (pTextureName) {
-			strcpy(texname, pTextureName);
+	//defaults
+	chTextureType = 0;
+	fDoPuffs = false;
+	fDoStreakSplash = false;
+	fvol_impact = 0.5;
+	impacts = 0;
+	cnt = 0;
+	chTextureType = CHAR_TEX_CONCRETE;
+	fattn = ATTN_NORM;
+	alpha = 255; //wallsmoke alpha
+	red = 97; //wallsmoke red
+	green = 86; //wallsmoke green
+	blue = 53; //wallsmoke blue
+
+	// Player
+	if ( entity >= 1 && entity <= gEngfuncs.GetMaxClients() ) {
+		// hit body
+		chTextureType = CHAR_TEX_FLESH;
+	} else if ( entity == 0 ) {
+		// get texture from entity or world (world is ent(0))
+		pTextureName = (char *)gEngfuncs.pEventAPI->EV_TraceTexture( ptr->ent, vecSrc, vecEnd );
+		
+		if ( pTextureName ) {
+			strcpy( texname, pTextureName );
 			pTextureName = texname;
 
 			if (*pTextureName == '-' || *pTextureName == '+') {
@@ -318,120 +198,253 @@ void EV_HLDM_SmokePuff(pmtrace_t *pTrace, float *vecSrc, float *vecEnd) {
 			if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ') {
 				pTextureName++;
 			}
-
-			strcpy(szbuffer, pTextureName);
-			szbuffer[CBTEXTURENAMEMAX - 1] = 0;
-			chTextureType = PM_FindTextureType(szbuffer);
-		}
-
-		VectorAdd(pTrace->endpos, pTrace->plane.normal, fwd);
-
-		bool fDoPuffs;
-		switch (chTextureType) {
-			// do smoke puff and eventually add sparks
-			case CHAR_TEX_TILE:
-				//int iDebrisTile = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_tile.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisTile, 8, 0.1, 0.1, 255, 150, 150);
-				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/tile_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-				}
-				fDoPuffs = true;
-			break;
-			case CHAR_TEX_CONCRETE:
-				//int iDebrisConcrete = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_concrete.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisConcrete, 8, 0.1, 0.1, 255, 150, 150);
-				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/concrete_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-				}
-				fDoPuffs = true;
-			break;
-			case CHAR_TEX_METAL:
-			case CHAR_TEX_VENT:
-			case CHAR_TEX_GRATE:
-			case CHAR_TEX_COMPUTER:
-				//gEngfuncs.pEfxAPI->R_TempSprite( pTrace->endpos, vec3_origin, 0.1, m_iMetalGlow, kRenderGlow, kRenderFxNoDissipation, 200.0 / 255.0, 0.3, FTENT_FADEOUT );
-				//int m_iMetalGlow = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/metal_puff.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRITETRAIL, pTrace->endpos, fwd, m_iMetalGlow, 8, 0.6, gEngfuncs.pfnRandomFloat( 10, 20 ) / 100.0, 100, 100, 50 );
-				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/metal_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-				}
-
-				// spawn light
-				EV_Dynamic_MuzzleFlash(pTrace->endpos, 0.8 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.01);
-
-				// spawn some sparks
-				gEngfuncs.pEfxAPI->R_SparkShower(pTrace->endpos);
-
-				// Show Sparks
-				gEngfuncs.pEfxAPI->R_SparkEffect(pTrace->endpos, 2, -200, 200);
-
-				gEngfuncs.pEfxAPI->R_StreakSplash(pTrace->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 0, 5, 50, 100, 500);
-				gEngfuncs.pEfxAPI->R_StreakSplash(pTrace->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 9, 5, 50, 100, 100);
-				gEngfuncs.pEfxAPI->R_StreakSplash(pTrace->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 0, 5, 50, 100, 500);
-				gEngfuncs.pEfxAPI->R_StreakSplash(pTrace->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 0, 5, 50, 100, 500);
-				gEngfuncs.pEfxAPI->R_StreakSplash(pTrace->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 0, 5, 50, 100, 500);
-				fDoPuffs = false;
-			break;
-			default:
-			case CHAR_TEX_GRASS:
-			case CHAR_TEX_DIRT:
-				//int iDebrisGrass = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_grass.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRAY, pTrace->endpos, fwd, iDebrisGrass, 8, 0.1, 0.1, 255, 150, 150 );
-				/*
-				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/dirt_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-				} */
-				fDoPuffs = true;
-			break;
-			case CHAR_TEX_WOOD:
-				//int iDebrisWood = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_wood.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRAY, pTrace->endpos, fwd, iDebrisWood, 8, 0.1, 0.1, 255, 150, 150 );
-				switch (gEngfuncs.pfnRandomLong(0, 3)) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/wood_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-				}
-				fDoPuffs = false;
-			break;
-			case CHAR_TEX_SNOW:
-			case CHAR_TEX_DEEP_SNOW:
-				//int iDebrisSnow = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_snow.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisSnow, 8, 0.1, 0.1, 255, 150, 150);
-				fDoPuffs = false;
-			break;
-			case CHAR_TEX_GLASS:
-				//int iDebrisGlass = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/debris_glass.spr");
-				//gEngfuncs.pEfxAPI->R_Sprite_Trail(TE_SPRAY, pTrace->endpos, fwd, iDebrisGlass, 8, 0.1, 0.1, 255, 150, 150);
-				switch( gEngfuncs.pfnRandomLong( 0, 3 ) ) {
-					case 0:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet1.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );break;
-					case 1:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet2.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );break;
-					case 2:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet3.wav", 0.5, ATTN_NORM, 0, PITCH_NORM );break;
-					case 3:gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "debris/glass_impact_bullet4.wav", 0.5, ATTN_NORM, 0, PITCH_NORM); break;
-				}
-				fDoPuffs = false;
-			break;
+			
+			strcpy( szbuffer, pTextureName );
+			szbuffer[ CBTEXTURENAMEMAX - 1 ] = 0;
+				
+			// get texture type
+			chTextureType = PM_FindTextureType( szbuffer );	
 		}
 	}
+
+	VectorAdd(ptr->endpos, ptr->plane.normal, fwd);
+	if (gEngfuncs.PM_PointContents(ptr->endpos, NULL) == CONTENT_SKY)
+		return FALSE;
+
+	physent_t *pEntity = gEngfuncs.pEventAPI->EV_GetPhysent(ptr->ent);
+	if (pEntity->rendermode == kRenderTransAlpha && chTextureType == CHAR_TEX_CONCRETE)
+		return FALSE;
+	
+	switch (chTextureType) {
+		default:
+		case CHAR_TEX_CONCRETE: 
+			fvol = 0.9;	fvolbar = 0.6;
+			rgsz[0] = "player/pl_step1.wav";
+			rgsz[1] = "player/pl_step2.wav";
+			cnt = 2;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/concrete_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/concrete_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/concrete_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/concrete_impact_bullet4.wav";
+			impacts = 4;
+			alpha = 128; //wallsmoke alpha
+			red = 50; //wallsmoke red
+			green = 50; //wallsmoke green
+			blue = 50; //wallsmoke blue
+			fDoPuffs = true;
+		break;
+		case CHAR_TEX_METAL: 
+			fvol = 0.9; fvolbar = 0.3;
+			rgsz[0] = "player/pl_metal1.wav";
+			rgsz[1] = "player/pl_metal2.wav";
+			cnt = 2;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/metal_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/metal_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/metal_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/metal_impact_bullet4.wav";
+			impacts = 4;
+			fDoStreakSplash = (iBulletType == BULLET_PLAYER_CROWBAR ? false : true);
+		break;
+		case CHAR_TEX_DIRT:	
+			fvol = 0.9; fvolbar = 0.1;
+			rgsz[0] = "player/pl_dirt1.wav";
+			rgsz[1] = "player/pl_dirt2.wav";
+			rgsz[2] = "player/pl_dirt3.wav";
+			cnt = 3;
+
+			//Extended Impact-Bullet
+			fDoPuffs = true;
+		break;
+		case CHAR_TEX_VENT:	
+			fvol = 0.5; fvolbar = 0.3;
+			rgsz[0] = "player/pl_duct1.wav";
+			rgsz[1] = "player/pl_duct1.wav";
+			cnt = 2;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/metal_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/metal_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/metal_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/metal_impact_bullet4.wav";
+			impacts = 4;
+			fDoStreakSplash = (iBulletType == BULLET_PLAYER_CROWBAR ? false : true);
+		break;
+		case CHAR_TEX_GRATE: 
+			fvol = 0.9; fvolbar = 0.5;
+			rgsz[0] = "player/pl_grate1.wav";
+			rgsz[1] = "player/pl_grate4.wav";
+			cnt = 2;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/metal_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/metal_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/metal_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/metal_impact_bullet4.wav";
+			impacts = 4;
+			fDoStreakSplash = (iBulletType == BULLET_PLAYER_CROWBAR ? false : true);
+		break;
+		case CHAR_TEX_TILE:	
+			fvol = 0.8; fvolbar = 0.2;
+			rgsz[0] = "player/pl_tile1.wav";
+			rgsz[1] = "player/pl_tile3.wav";
+			rgsz[2] = "player/pl_tile2.wav";
+			rgsz[3] = "player/pl_tile4.wav";
+			cnt = 4;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/tile_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/tile_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/tile_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/tile_impact_bullet4.wav";
+			impacts = 4;
+			fDoPuffs = true;
+		break;
+		case CHAR_TEX_SLOSH: 
+			fvol = 0.9; fvolbar = 0.0;
+			rgsz[0] = "player/pl_slosh1.wav";
+			rgsz[1] = "player/pl_slosh3.wav";
+			rgsz[2] = "player/pl_slosh2.wav";
+			rgsz[3] = "player/pl_slosh4.wav";
+			cnt = 4;
+		break;
+		case CHAR_TEX_GRASS: 
+			fvol = 0.9; fvolbar = 0.2;
+			rgsz[0] = "player/pl_grass1.wav";
+			rgsz[1] = "player/pl_grass3.wav";
+			rgsz[2] = "player/pl_grass2.wav";
+			rgsz[3] = "player/pl_grass4.wav";
+			cnt = 4;
+
+			//Extended Impact-Bullet
+			fDoPuffs = true;
+		break;
+		case CHAR_TEX_WOOD: 
+			fvol = 0.9; fvolbar = 0.2;
+			rgsz[0] = "debris/wood1.wav";
+			rgsz[1] = "debris/wood2.wav";
+			rgsz[2] = "debris/wood3.wav";
+			cnt = 3;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/wood_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/wood_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/wood_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/wood_impact_bullet4.wav";
+			impacts = 4;
+			fDoPuffs = true;
+		break;
+		case CHAR_TEX_GLASS:
+			fvol = 0.8; fvolbar = 0.2;
+			rgsz[0] = "debris/glass1.wav";
+			rgsz[1] = "debris/glass2.wav";
+			rgsz[2] = "debris/glass3.wav";
+			cnt = 3;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/glass_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/glass_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/glass_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/glass_impact_bullet4.wav";
+			impacts = 4;
+		break;
+		case CHAR_TEX_COMPUTER:
+			fvol = 0.8; fvolbar = 0.2;
+			rgsz[0] = "buttons/spark1.wav";
+			rgsz[1] = "buttons/spark2.wav";
+			rgsz[2] = "buttons/spark3.wav";
+			cnt = 3;
+
+			//Extended Impact-Bullet
+			rgsz_impact[0] = "debris/metal_impact_bullet1.wav";
+			rgsz_impact[1] = "debris/metal_impact_bullet2.wav";
+			rgsz_impact[2] = "debris/metal_impact_bullet3.wav";
+			rgsz_impact[3] = "debris/metal_impact_bullet4.wav";
+			impacts = 4;
+			fDoStreakSplash = true;
+		break;
+		case CHAR_TEX_FLESH:
+			if (iBulletType == BULLET_PLAYER_CROWBAR)
+				return 0.0; // crowbar already makes this sound
+
+			fvol = 1.0;	fvolbar = 0.2;
+			rgsz[0] = "weapons/bullet_hit1.wav";
+			rgsz[1] = "weapons/bullet_hit2.wav";
+			fattn = 1.0;
+			cnt = 2;
+		break;
+	}
+
+	//add metal impact effect
+	if (fDoStreakSplash) {
+		int m_iMetalGlow = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/metal_glow.spr");
+		gEngfuncs.pEfxAPI->R_TempSprite(ptr->endpos, vec3_origin, 0.1, m_iMetalGlow, kRenderGlow, kRenderFxNoDissipation, 150.0 / 200.0, 0.01, FTENT_FADEOUT );
+
+		// spawn light
+		EV_Dynamic_MuzzleFlash(ptr->endpos, 1 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.01);
+
+		// spawn some sparks
+		gEngfuncs.pEfxAPI->R_SparkShower(ptr->endpos);
+
+		// Show Sparks
+		gEngfuncs.pEfxAPI->R_SparkEffect(ptr->endpos, 2, -200, 200);
+
+		gEngfuncs.pEfxAPI->R_StreakSplash(ptr->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 0, 5, 20, 150, 100);
+		gEngfuncs.pEfxAPI->R_StreakSplash(ptr->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 9, 5, 20, 50, 50);
+		gEngfuncs.pEfxAPI->R_StreakSplash(ptr->endpos, forward * gEngfuncs.pfnRandomFloat(-10, 10) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6), 0, 5, 20, 150, 100);
+	}
+
+	//add wallsmoke
+	if (fDoPuffs) {
+		int modelindex = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/wallsmoke.spr");
+		Vector position = ptr->endpos + ptr->plane.normal * 2;
+		Vector velocity = ptr->plane.normal * gEngfuncs.pfnRandomFloat(8, 10);
+
+		TEMPENTITY* pSmoke = gEngfuncs.pEfxAPI->R_TempSprite(
+			position,												// position
+			velocity,												// velocity
+			gEngfuncs.pfnRandomFloat(30, 35) / 100, 				// scale
+			modelindex, 											// model index
+			kRenderNormal, 											// rendermode
+			kRenderFxNoDissipation, 								// renderfx
+			gEngfuncs.pfnRandomFloat(0.25, 0.5), 					// alpha
+			0.01, 													// life
+			FTENT_SPRCYCLE | FTENT_FADEOUT);						// flags
+
+		if (pSmoke) {
+			Vector angles;
+			VectorAngles(velocity, angles);
+			pSmoke->flags |= FTENT_CLIENTCUSTOM;
+			pSmoke->entity.curstate.framerate = 4;
+			pSmoke->entity.baseline.vuser1 = angles;
+			pSmoke->entity.curstate.renderamt = alpha;
+			pSmoke->entity.curstate.rendercolor.r = red;
+			pSmoke->entity.curstate.rendercolor.g = green;
+			pSmoke->entity.curstate.rendercolor.b = blue;
+			pSmoke->callback = EV_WallPuffCallback;
+		}
+	}
+
+	//play extended impact-bullet sound
+	if (impacts >= 1) {
+		gEngfuncs.pEventAPI->EV_PlaySound(-1, ptr->endpos, CHAN_STATIC, rgsz_impact[gEngfuncs.pfnRandomLong(0, impacts - 1)], 0.5, ATTN_NORM, 0, 96 + gEngfuncs.pfnRandomLong(0, 0xf));
+	}
+
+	// play material hit sound
+	if (cnt >= 1) {
+		gEngfuncs.pEventAPI->EV_PlaySound(0, ptr->endpos, CHAN_STATIC, rgsz[gEngfuncs.pfnRandomLong(0, cnt - 1)], fvol, fattn, 0, 96 + gEngfuncs.pfnRandomLong(0, 0xf));
+	}
+	
+	return fvolbar;
 }
 
 //======================
 //	    MIRROR UTILS
 //======================
-vec3_t EV_GetMirrorOrigin(int mirror_index, vec3_t pos)
-{
+vec3_t EV_GetMirrorOrigin(int mirror_index, vec3_t pos) {
 	vec3_t result;
 	VectorCopy(pos, result);
 
@@ -451,8 +464,7 @@ vec3_t EV_GetMirrorOrigin(int mirror_index, vec3_t pos)
 	return result;
 }
 
-vec3_t EV_GetMirrorAngles (int mirror_index, vec3_t angles )
-{
+vec3_t EV_GetMirrorAngles (int mirror_index, vec3_t angles ) {
 	vec3_t result;
 	VectorCopy(angles, result);
 
@@ -472,15 +484,12 @@ vec3_t EV_GetMirrorAngles (int mirror_index, vec3_t angles )
 	return result;
 }
 
-vec3_t EV_MirrorVector( vec3_t angles )
-{
+vec3_t EV_MirrorVector( vec3_t angles ) {
 	vec3_t result;
 	VectorCopy(angles, result);
 
-	if (gHUD.numMirrors)
-	{
-		for (int imc=0; imc < gHUD.numMirrors; imc++)
-		{
+	if (gHUD.numMirrors) {
+		for (int imc=0; imc < gHUD.numMirrors; imc++) {
 			if (!gHUD.Mirrors[imc].enabled)
 				continue;
 			VectorCopy(EV_GetMirrorAngles(imc, angles), result);
@@ -489,13 +498,10 @@ vec3_t EV_MirrorVector( vec3_t angles )
 	return result;
 }
 
-vec3_t EV_MirrorPos( vec3_t endpos )
-{
+vec3_t EV_MirrorPos( vec3_t endpos ) {
 	vec3_t mirpos(0, 0, 0);
-	if (gHUD.numMirrors)
-	{
-		for (int imc=0; imc < gHUD.numMirrors; imc++)
-		{
+	if (gHUD.numMirrors) {
+		for (int imc=0; imc < gHUD.numMirrors; imc++) {
 			if (!gHUD.Mirrors[imc].enabled)
 				continue;
 			
@@ -508,10 +514,10 @@ vec3_t EV_MirrorPos( vec3_t endpos )
 			if (gHUD.Mirrors[imc].radius < dist)
 				continue;
 		
-			
 			VectorCopy(EV_GetMirrorOrigin(imc, endpos), mirpos);
 		}
 	}
+
 	return mirpos;
 }
 
@@ -546,24 +552,21 @@ void EV_HLDM_FindHullIntersection( int idx, vec3_t vecSrc, pmtrace_t pTrace, flo
 	gEngfuncs.pEventAPI->EV_PlayerTrace( vecSrc, vecHullEnd, PM_STUDIO_BOX, -1, &tmpTrace );
 	gEngfuncs.pEventAPI->EV_PopPMStates();
 	
-	if ( tmpTrace.fraction < 1.0 )
-	{
+	if ( tmpTrace.fraction < 1.0 ) {
 		pTrace = tmpTrace;
 		return;
 	}
 
-	for ( i = 0; i < 2; i++ )
-	{
-		for ( j = 0; j < 2; j++ )
-		{
-			for ( k = 0; k < 2; k++ )
-			{
+	for ( i = 0; i < 2; i++ ) {
+		for ( j = 0; j < 2; j++ ) {
+			for ( k = 0; k < 2; k++ ) {
 				vecEnd.x = vecHullEnd.x + minmaxs[i][0];
 				vecEnd.y = vecHullEnd.y + minmaxs[j][1];
 				vecEnd.z = vecHullEnd.z + minmaxs[k][2];
                                         
-                                        gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction( false, true );
-                                        // Store off the old count
+                gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction( false, true );
+
+                // Store off the old count
 				gEngfuncs.pEventAPI->EV_PushPMStates();
 	
 				// Now add in all of the players.
@@ -573,11 +576,9 @@ void EV_HLDM_FindHullIntersection( int idx, vec3_t vecSrc, pmtrace_t pTrace, flo
 				gEngfuncs.pEventAPI->EV_PlayerTrace( vecSrc, vecEnd, PM_STUDIO_BOX, -1, &tmpTrace );
 				gEngfuncs.pEventAPI->EV_PopPMStates();
 				
-				if ( tmpTrace.fraction < 1.0 )
-				{
+				if ( tmpTrace.fraction < 1.0 ) {
 					float thisDistance = (tmpTrace.endpos - vecSrc).Length();
-					if ( thisDistance < distance )
-					{
+					if ( thisDistance < distance ) {
 						pTrace = tmpTrace;
 						distance = thisDistance;
 					}
@@ -587,25 +588,93 @@ void EV_HLDM_FindHullIntersection( int idx, vec3_t vecSrc, pmtrace_t pTrace, flo
 	}
 }
 
-char *EV_HLDM_DamageDecal( physent_t *pe )
+char *EV_HLDM_DamageDecal(pmtrace_t *ptr, physent_t *pe, float *vecSrc, float *vecEnd)
 {
-	static char decalname[ 32 ];
+	// hit the world, try to play sound based on texture material type
+	char chTextureType = 0;
+	int entity;
+	char *pTextureName;
+	char texname[64];
+	char szbuffer[64];
+	static char decalname[32];
 	int idx;
 
-	if ( pe->classnumber == 1 )
-	{
+	entity = gEngfuncs.pEventAPI->EV_IndexFromTrace(ptr);
+
+	if (pe && pe->solid == SOLID_BSP) {
+		// Nothing
+		if (vecSrc == 0 && vecEnd == 0) {
+			// hit body
+			chTextureType = 0;
+		} else {
+			// get texture from entity or world (world is ent(0))
+			pTextureName = (char *)gEngfuncs.pEventAPI->EV_TraceTexture(ptr->ent, vecSrc, vecEnd);
+
+			if (pTextureName) {
+				strcpy(texname, pTextureName);
+				pTextureName = texname;
+
+				if (*pTextureName == '-' || *pTextureName == '+') {
+					pTextureName += 2;
+				}
+
+				if (*pTextureName == '{' || *pTextureName == '!' || *pTextureName == '~' || *pTextureName == ' ') {
+					pTextureName++;
+				}
+
+				strcpy(szbuffer, pTextureName);
+				szbuffer[CBTEXTURENAMEMAX - 1] = 0;
+
+				// get texture type
+				chTextureType = PM_FindTextureType(szbuffer);
+			}
+		}
+	}
+
+	if (pe->rendermode == kRenderTransAlpha)
+		return FALSE;
+
+	if ( pe->classnumber == 1 ) {
 		idx = gEngfuncs.pfnRandomLong( 0, 2 );
 		sprintf( decalname, "{break%i", idx + 1 );
-	}
-	else if ( pe->rendermode != kRenderNormal )
-	{
+	} else if (pe->classnumber == 2) {
+		sprintf(decalname, "{knife");
+	} else if ( pe->rendermode != kRenderNormal ) {
 		sprintf( decalname, "{bproof1" );
+	} else {
+		switch (chTextureType) {
+			default:
+				idx = gEngfuncs.pfnRandomLong(0, 4);
+				sprintf(decalname, "{shot%i", idx + 1);
+			break;
+			case CHAR_TEX_CONCRETE:
+				idx = gEngfuncs.pfnRandomLong(0, 2);
+				sprintf(decalname, "{hole_conc%i", idx + 1);
+			break;
+			case CHAR_TEX_METAL:
+			case CHAR_TEX_GRATE:
+				idx = gEngfuncs.pfnRandomLong(0, 2);
+				sprintf(decalname, "{hole_metal%i", idx + 1);
+			break;
+			case CHAR_TEX_DIRT:
+				idx = gEngfuncs.pfnRandomLong(0, 2);
+				sprintf(decalname, "{hole_dirt%i", idx + 1);
+			break;
+			case CHAR_TEX_WOOD:
+				idx = gEngfuncs.pfnRandomLong(0, 2);
+				sprintf(decalname, "{hole_wood%i", idx + 1);
+			break;
+			case CHAR_TEX_COMPUTER:
+				idx = gEngfuncs.pfnRandomLong(0, 2);
+				sprintf(decalname, "{hole_comp%i", idx + 1);
+			break;
+			case CHAR_TEX_GLASS:
+				idx = gEngfuncs.pfnRandomLong(0, 2);
+				sprintf(decalname, "{break%i", idx + 1);
+			break;
+		}
 	}
-	else
-	{
-		idx = gEngfuncs.pfnRandomLong( 0, 4 );
-		sprintf( decalname, "{shot%i", idx + 1 );
-	}
+
 	return decalname;
 }
 
@@ -635,74 +704,67 @@ void EV_HLDM_CrowbarDecalTrace(pmtrace_t *pTrace, char *decalName )
 
 void EV_HLDM_GunshotDecalTrace(pmtrace_t *pTrace, char *decalName )
 {
-	int iRand;
-	physent_t *pe;
-
-	iRand = gEngfuncs.pfnRandomLong(0,0x7FFF);
-	if ( iRand < (0x7fff/2) )// not every bullet makes a sound.
-	{
-		switch( iRand % 5)
-		{
-		case 0:	gEngfuncs.pEventAPI->EV_PlaySound( -1, pTrace->endpos, 0, "weapons/ric1.wav", 1.0, ATTN_NORM, 0, PITCH_NORM ); break;
-		case 1:	gEngfuncs.pEventAPI->EV_PlaySound( -1, pTrace->endpos, 0, "weapons/ric2.wav", 1.0, ATTN_NORM, 0, PITCH_NORM ); break;
-		case 2:	gEngfuncs.pEventAPI->EV_PlaySound( -1, pTrace->endpos, 0, "weapons/ric3.wav", 1.0, ATTN_NORM, 0, PITCH_NORM ); break;
-		case 3:	gEngfuncs.pEventAPI->EV_PlaySound( -1, pTrace->endpos, 0, "weapons/ric4.wav", 1.0, ATTN_NORM, 0, PITCH_NORM ); break;
-		case 4:	gEngfuncs.pEventAPI->EV_PlaySound( -1, pTrace->endpos, 0, "weapons/ric5.wav", 1.0, ATTN_NORM, 0, PITCH_NORM ); break;
+	physent_t *pe = gEngfuncs.pEventAPI->EV_GetPhysent( pTrace->ent );
+	if (gEngfuncs.PM_PointContents(pTrace->endpos, NULL) != CONTENT_SKY) {
+		if (gEngfuncs.pfnGetCvarFloat("r_particle") == 0) {
+			gEngfuncs.pEfxAPI->R_BulletImpactParticles(pTrace->endpos);
 		}
-	}
 
-	pe = gEngfuncs.pEventAPI->EV_GetPhysent( pTrace->ent );
-
-	struct model_s *mdl = pe->model;
-
-	// Only decal brush models such as the world etc.
-	if (  decalName && decalName[0] && pe && ( pe->solid == SOLID_BSP || pe->movetype == MOVETYPE_PUSHSTEP ) )
-	{
-		if ( CVAR_GET_FLOAT( "r_decals" ) )
+		// Only decal brush models such as the world etc.
+		if (  decalName && decalName[0] && pe && ( pe->solid == SOLID_BSP || pe->movetype == MOVETYPE_PUSHSTEP ) )
 		{
-			int decal_tex = gEngfuncs.pEfxAPI->Draw_DecalIndex( gEngfuncs.pEfxAPI->Draw_DecalIndexFromName( decalName ) );
-			gEngfuncs.pEfxAPI->R_DecalShoot( 
+			if ( CVAR_GET_FLOAT( "r_decals" ) )
+			{
+				int decal_tex = gEngfuncs.pEfxAPI->Draw_DecalIndex( gEngfuncs.pEfxAPI->Draw_DecalIndexFromName( decalName ) );
+				gEngfuncs.pEfxAPI->R_DecalShoot( 
 				decal_tex, 
 				gEngfuncs.pEventAPI->EV_IndexFromTrace( pTrace ), 0, pTrace->endpos, 0 );
-                              gEngfuncs.pEfxAPI->R_SparkStreaks(pTrace->endpos, gEngfuncs.pfnRandomLong(10,25),-120,120);
+				gEngfuncs.pEfxAPI->R_SparkStreaks(pTrace->endpos, gEngfuncs.pfnRandomLong(10,25),-120,120);
 			
-			vec3_t mirpos = EV_MirrorPos(pTrace->endpos); 
-			if(mirpos != vec3_t(0,0,0))
-			{
-				//Mirror decal!
-				gEngfuncs.pEfxAPI->R_DecalShoot(decal_tex,0, 0, mirpos, 0 );
-				gEngfuncs.pEfxAPI->R_SparkStreaks(mirpos,gEngfuncs.pfnRandomLong(10,25),-120,120);
+				vec3_t mirpos = EV_MirrorPos(pTrace->endpos); 
+				if(mirpos != vec3_t(0,0,0)) {
+					//Mirror decal!
+					gEngfuncs.pEfxAPI->R_DecalShoot(decal_tex,0, 0, mirpos, 0 );
+					gEngfuncs.pEfxAPI->R_SparkStreaks(mirpos,gEngfuncs.pfnRandomLong(10,25),-120,120);
+				}
+			}
+
+			int iRand = gEngfuncs.pfnRandomLong(0, 0x7FFF);
+			if (iRand < (0x7fff / 2)) {
+				switch (iRand % 5) {
+					case 0:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric1.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric2.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric3.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric4.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
+					case 4:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric5.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
+				}
 			}
 		}
 	}
 }
 
-void EV_HLDM_DecalGunshot( pmtrace_t *pTrace, int iBulletType )
+void EV_HLDM_DecalGunshot(pmtrace_t *pTrace, int iBulletType, float *vecSrc, float *vecEnd)
 {
-	physent_t *pe;
-
-	pe = gEngfuncs.pEventAPI->EV_GetPhysent( pTrace->ent );
-
+	physent_t *pe = gEngfuncs.pEventAPI->EV_GetPhysent( pTrace->ent );
 	if ( pe && pe->solid == SOLID_BSP )
 	{
 		switch( iBulletType )
 		{
-		case BULLET_PLAYER_CROWBAR:
-			EV_HLDM_CrowbarDecalTrace( pTrace, EV_HLDM_DamageDecal( pe ) );
-			break;
-		case BULLET_PLAYER_9MM:
-		case BULLET_MONSTER_9MM:
-		case BULLET_PLAYER_MP5:
-		case BULLET_MONSTER_MP5:
-		case BULLET_PLAYER_556:
-		case BULLET_MONSTER_556:
-		case BULLET_PLAYER_BUCKSHOT:
-		case BULLET_PLAYER_357:
-		case BULLET_PLAYER_762:
-		case BULLET_MONSTER_357:
-		default:
-			// smoke and decal
-			EV_HLDM_GunshotDecalTrace( pTrace, EV_HLDM_DamageDecal( pe ) );
+			case BULLET_PLAYER_CROWBAR:
+				EV_HLDM_CrowbarDecalTrace( pTrace, EV_HLDM_DamageDecal(pTrace, pe, vecSrc, vecEnd));
+				break;
+			case BULLET_PLAYER_9MM:
+			case BULLET_MONSTER_9MM:
+			case BULLET_PLAYER_MP5:
+			case BULLET_MONSTER_MP5:
+			case BULLET_PLAYER_556:
+			case BULLET_MONSTER_556:
+			case BULLET_PLAYER_BUCKSHOT:
+			case BULLET_PLAYER_357:
+			case BULLET_PLAYER_762:
+			case BULLET_MONSTER_357:
+			default:
+				EV_HLDM_GunshotDecalTrace(pTrace, EV_HLDM_DamageDecal(pTrace, pe, vecSrc, vecEnd));
 			break;
 		}
 	}
@@ -714,39 +776,31 @@ int EV_HLDM_CheckTracer( int idx, float *vecSrc, float *end, float *forward, flo
 	int i;
 	qboolean player = idx >= 1 && idx <= gEngfuncs.GetMaxClients() ? true : false;
 
-	if ( iTracerFreq != 0 && ( (*tracerCount)++ % iTracerFreq) == 0 )
-	{
+	if ( iTracerFreq != 0 && ( (*tracerCount)++ % iTracerFreq) == 0 ) {
 		vec3_t vecTracerSrc;
-
-		if ( player )
-		{
+		if ( player ) {
 			vec3_t offset( 0, 0, -4 );
-
 			// adjust tracer position for player
-			for ( i = 0; i < 3; i++ )
-			{
+			for ( i = 0; i < 3; i++ ) {
 				vecTracerSrc[ i ] = vecSrc[ i ] + offset[ i ] + right[ i ] * 2 + forward[ i ] * 16;
 			}
-		}
-		else
-		{
+		} else {
 			VectorCopy( vecSrc, vecTracerSrc );
 		}
 		
 		if ( iTracerFreq != 1 )		// guns that always trace also always decal
 			tracer = 1;
 
-		switch( iBulletType )
-		{
-		case BULLET_PLAYER_MP5:
-		case BULLET_MONSTER_MP5:
-		case BULLET_PLAYER_556:
-		case BULLET_MONSTER_357:
-		case BULLET_MONSTER_556:
-		case BULLET_MONSTER_9MM:
-		case BULLET_MONSTER_12MM:
-		default:
-			EV_CreateTracer( vecTracerSrc, end );
+		switch( iBulletType ) {
+			case BULLET_PLAYER_MP5:
+			case BULLET_MONSTER_MP5:
+			case BULLET_PLAYER_556:
+			case BULLET_MONSTER_357:
+			case BULLET_MONSTER_556:
+			case BULLET_MONSTER_9MM:
+			case BULLET_MONSTER_12MM:
+			default:
+				EV_CreateTracer( vecTracerSrc, end );
 			break;
 		}
 	}
@@ -761,20 +815,18 @@ int EV_HLDM_CheckTracer( int idx, float *vecSrc, float *end, float *forward, flo
 //======================
 //	Play Empty Sound
 //======================
-
-void EV_PlayEmptySound( event_args_s *args )
-{
-	//play custom empty sound
-	//added pitch tuning for final spirit release
+void EV_PlayEmptySound( event_args_s *args ) {
 	if (args->iparam2 == 0) 
 		args->iparam2 = PITCH_NORM;
 
-	if (args->iparam1 == 0) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "weapons/cock1.wav",    0.8, ATTN_NORM, 0, args->iparam2);
-	if (args->iparam1 == 1) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/button10.wav",     0.8, ATTN_NORM, 0, args->iparam2);
-	if (args->iparam1 == 2) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/button11.wav",     0.8, ATTN_NORM, 0, args->iparam2);
-	if (args->iparam1 == 3) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/lightswitch2.wav", 0.8, ATTN_NORM, 0, args->iparam2);
-	if (args->iparam1 == 4) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "weapons/shotgun_empty.wav", 0.8, ATTN_NORM, 0, args->iparam2);
-	if (args->iparam1 == 5) gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "shockroach/shock_angry.wav", 0.8, ATTN_NORM, 0, args->iparam2);
+	switch (args->iparam1) {
+		default: gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "weapons/cock1.wav", 0.8, ATTN_NORM, 0, args->iparam2); break;
+		case 1: gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/button10.wav", 0.8, ATTN_NORM, 0, args->iparam2); break;
+		case 2: gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/button11.wav", 0.8, ATTN_NORM, 0, args->iparam2); break;
+		case 3: gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "buttons/lightswitch2.wav", 0.8, ATTN_NORM, 0, args->iparam2); break;
+		case 4: gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "weapons/shotgun_empty.wav", 0.8, ATTN_NORM, 0, args->iparam2); break;
+		case 5: gEngfuncs.pEventAPI->EV_PlaySound(args->entindex, args->origin, CHAN_AUTO, "shockroach/shock_angry.wav", 0.8, ATTN_NORM, 0, args->iparam2); break;
+	}
 }
 
 /*
@@ -813,7 +865,6 @@ void EV_HLDM_FireBullets( int idx, float *forward, float *right, float *up, int 
 		}//But other guns already have their spread randomized in the synched spread.
 		else
 		{
-
 			for ( i = 0 ; i < 3; i++ )
 			{
 				vecDir[i] = vecDirShooting[i] + flSpreadX * right[ i ] + flSpreadY * up [ i ];
@@ -835,47 +886,31 @@ void EV_HLDM_FireBullets( int idx, float *forward, float *right, float *up, int 
 		tracer = EV_HLDM_CheckTracer( idx, vecSrc, tr.endpos, forward, right, iBulletType, iTracerFreq, tracerCount );
 
 		// do damage, paint decals
-		if ( tr.fraction != 1.0 )
-		{
-			switch(iBulletType)
-			{
+		if ( tr.fraction != 1.0 ) {
+			switch(iBulletType) {
 			default:
 			case BULLET_PLAYER_9MM:		
-				
 				EV_HLDM_PlayTextureSound( idx, &tr, vecSrc, vecEnd, iBulletType );
-				EV_HLDM_DecalGunshot( &tr, iBulletType );
-				EV_HLDM_SmokePuff(&tr, vecSrc, vecEnd);
-			
-					break;
+				EV_HLDM_DecalGunshot(&tr, iBulletType, vecSrc, vecEnd);
+			break;
 			case BULLET_PLAYER_556:
 			case BULLET_PLAYER_MP5:		
-				
-				if ( !tracer )
-				{
+				if ( !tracer ) {
 					EV_HLDM_PlayTextureSound( idx, &tr, vecSrc, vecEnd, iBulletType );
-					EV_HLDM_DecalGunshot( &tr, iBulletType );
-					EV_HLDM_SmokePuff(&tr, vecSrc, vecEnd);
+					EV_HLDM_DecalGunshot(&tr, iBulletType, vecSrc, vecEnd);
 				}
 				break;
 			case BULLET_PLAYER_BUCKSHOT:
-				
-				EV_HLDM_DecalGunshot( &tr, iBulletType );
-				EV_HLDM_SmokePuff(&tr, vecSrc, vecEnd);
-			
+				EV_HLDM_PlayTextureSound(idx, &tr, vecSrc, vecEnd, iBulletType);
+				EV_HLDM_DecalGunshot(&tr, iBulletType, vecSrc, vecEnd);
 				break;
 			case BULLET_PLAYER_357:
-				
 				EV_HLDM_PlayTextureSound( idx, &tr, vecSrc, vecEnd, iBulletType );
-				EV_HLDM_DecalGunshot( &tr, iBulletType );
-				EV_HLDM_SmokePuff(&tr, vecSrc, vecEnd);
-				
+				EV_HLDM_DecalGunshot(&tr, iBulletType, vecSrc, vecEnd);
 				break;
 			case BULLET_PLAYER_762:
-
 				EV_HLDM_PlayTextureSound(idx, &tr, vecSrc, vecEnd, iBulletType);
-				EV_HLDM_DecalGunshot(&tr, iBulletType);
-				EV_HLDM_SmokePuff(&tr, vecSrc, vecEnd);
-
+				EV_HLDM_DecalGunshot(&tr, iBulletType, vecSrc, vecEnd);
 				break;
 			}
 		}
@@ -883,6 +918,7 @@ void EV_HLDM_FireBullets( int idx, float *forward, float *right, float *up, int 
 		gEngfuncs.pEventAPI->EV_PopPMStates();
 	}
 }
+
 //======================
 //	   CROWBAR START
 //======================
@@ -979,13 +1015,14 @@ void EV_FireCrowbar(event_args_t *args) {
 			}
 
 			// delay the decal a bit
-			EV_HLDM_DecalGunshot( &tr, BULLET_PLAYER_CROWBAR );
+			EV_HLDM_DecalGunshot( &tr, BULLET_PLAYER_CROWBAR, NULL, NULL );
 		}
 	}
 }
 //======================
 //	   CROWBAR END 
 //======================
+
 //======================
 //	   PIPE_WRENCH START
 //======================
@@ -1085,7 +1122,7 @@ void EV_FireWrenchSmall(struct event_args_s *args) {
 			}
 
 			// delay the decal a bit
-			EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
+			EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR, NULL, NULL);
 		}
 	}
 }
@@ -1170,7 +1207,7 @@ void EV_FireWrenchLarge(struct event_args_s *args) {
 			}
 
 			// delay the decal a bit
-			EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
+			EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR, NULL, NULL);
 		}
 	}
 }
@@ -1278,7 +1315,7 @@ void EV_FireKnife(event_args_t *args) {
 				}
 
 				// delay the decal a bit
-				EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
+				EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR, NULL, NULL);
 			}
 		}
 	} else { //SecondaryAttack
@@ -1326,7 +1363,7 @@ void EV_FireKnife(event_args_t *args) {
 					}
 
 					// delay the decal a bit
-					EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR);
+					EV_HLDM_DecalGunshot(&tr, BULLET_PLAYER_CROWBAR, NULL, NULL);
 				}
 			}
 		}
@@ -1914,7 +1951,7 @@ void EV_FireGauss( event_args_t *args )
 			else
 			{
 				// tunnel
-				EV_HLDM_DecalGunshot( &tr, BULLET_MONSTER_12MM );
+				EV_HLDM_DecalGunshot( &tr, BULLET_MONSTER_12MM, NULL, NULL);
 
 				gEngfuncs.pEfxAPI->R_TempSprite( tr.endpos, vec3_origin, 1.0, m_iGlow, kRenderGlow, kRenderFxNoDissipation, flDamage / 255.0, 6.0, FTENT_FADEOUT );
                                         if((vecMirrorDest != vec3_t(0,0,0)) && (vecMirrorSrc != vec3_t(0,0,0)))
@@ -1966,7 +2003,7 @@ void EV_FireGauss( event_args_t *args )
 								gEngfuncs.pEfxAPI->R_Sprite_Trail( TE_SPRITETRAIL, tr.endpos, fwd, m_iBalls, 3, 0.1, gEngfuncs.pfnRandomFloat( 10, 20 ) / 100.0, 100, 255, 100 );
 							}
 
-							EV_HLDM_DecalGunshot( &beam_tr, BULLET_MONSTER_12MM );
+							EV_HLDM_DecalGunshot( &beam_tr, BULLET_MONSTER_12MM, NULL, NULL);
 							
 							gEngfuncs.pEfxAPI->R_TempSprite( beam_tr.endpos, vec3_origin, 0.1, m_iGlow, kRenderGlow, kRenderFxNoDissipation, flDamage / 255.0, 6.0, FTENT_FADEOUT );
 			
@@ -2142,9 +2179,9 @@ void EV_EgonFire( event_args_t *args ) {
 				}
 			}
 
-                     	EndFlare = gEngfuncs.pEfxAPI->R_TempSprite( tr.endpos, vec3_origin, 1.0, m_iFlare, kRenderGlow, kRenderFxNoDissipation, 255, 9999, FTENT_SPRANIMATE );
+            EndFlare = gEngfuncs.pEfxAPI->R_TempSprite( tr.endpos, vec3_origin, 1.0, m_iFlare, kRenderGlow, kRenderFxNoDissipation, 255, 9999, FTENT_SPRANIMATE );
 			if((vecMirrorDest != vec3_t(0,0,0)) && (vecMirrorSrc != vec3_t(0,0,0)) && b_mir)
-                     		EndMirFlare = gEngfuncs.pEfxAPI->R_TempSprite( mtr.endpos, vec3_origin, 1.0, m_iFlare, kRenderGlow, kRenderFxNoDissipation, 255, 9999, FTENT_SPRANIMATE );
+				EndMirFlare = gEngfuncs.pEfxAPI->R_TempSprite( mtr.endpos, vec3_origin, 1.0, m_iFlare, kRenderGlow, kRenderFxNoDissipation, 255, 9999, FTENT_SPRANIMATE );
 		}
 	}
 }
@@ -2221,7 +2258,7 @@ void EV_UpdateBeams ( void )
 	mangles = EV_MirrorVector(angles);
 	AngleVectors( mangles, right, NULL, NULL );
 	vecMirrorSrc = EV_MirrorPos( vecSrc );
-          VectorMA( vecMirrorSrc, 2048, right, vecMirrorDest );
+   VectorMA( vecMirrorSrc, 2048, right, vecMirrorDest );
 	
 	gEngfuncs.pEventAPI->EV_SetUpPlayerPrediction( false, true );	
 	gEngfuncs.pEventAPI->EV_PushPMStates();
@@ -2506,7 +2543,7 @@ void EV_Decals( struct event_args_s *args )
 	int idx;
 	pmtrace_t tr;
 	pmtrace_t *pTrace = &tr;
-          physent_t *pe;
+    physent_t *pe;
           
 	idx = args->entindex;
 	VectorCopy( args->origin, pTrace->endpos );
@@ -2563,7 +2600,7 @@ void EV_Decals( struct event_args_s *args )
 	else if(args->iparam2 == 6)//monsters shoot
 	{
         if ( pe && pe->solid == SOLID_BSP )
-			EV_HLDM_GunshotDecalTrace( pTrace, EV_HLDM_DamageDecal( pe ) );
+			EV_HLDM_GunshotDecalTrace( pTrace, EV_HLDM_DamageDecal(pTrace, pe, null, null));
 	}
 }
 //======================
@@ -2571,7 +2608,7 @@ void EV_Decals( struct event_args_s *args )
 //======================
 
 //======================
-//           EFX START
+//     EFX START
 //======================
 void EV_Explode( struct event_args_s *args ) {
 	int m_iExplodeSprite;
@@ -2590,6 +2627,7 @@ void EV_Explode( struct event_args_s *args ) {
 
 	EV_Dynamic_MuzzleFlash(args->origin, (args->fparam1 - 50) * 0.06 + gEngfuncs.pfnRandomFloat(-0.2, 0.2), 255, 255, 128, 0.3);
 	gEngfuncs.pEfxAPI->R_Explosion( args->origin, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOPARTICLES );
+	
 	if(mirpos != vec3_t(0,0,0))
 		gEngfuncs.pEfxAPI->R_Explosion( mirpos, m_iExplodeSprite, (args->fparam1 - 50) * 0.06, 15, TE_EXPLFLAG_NODLIGHTS | TE_EXPLFLAG_NOSOUND | TE_EXPLFLAG_NOPARTICLES );
 }

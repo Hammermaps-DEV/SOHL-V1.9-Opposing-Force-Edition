@@ -19,11 +19,8 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // NPC: Voltigore * http://half-life.wikia.com/wiki/Voltigore
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00002 / Date: 17.01.2016
 //=========================================================
 
 #include	"extdll.h"

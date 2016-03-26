@@ -20,8 +20,6 @@
 ***/
 //=========================================================
 // DEAD OTIS PROP
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 13.02.2016
 //=========================================================
 
 #include	"extdll.h"

@@ -334,7 +334,6 @@ extern void			UTIL_Remove( CBaseEntity *pEntity );
 extern BOOL			UTIL_IsValidEntity( edict_t *pent );
 extern BOOL			UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 );
 extern BOOL			UTIL_IsFacing( entvars_t *pevTest, const Vector &reference ); //LRC
-extern void			UTIL_WhiteSparks(const Vector &origin, const Vector &direction, int color, int count, int speed, int velocityRange);
 extern char			*UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize);
 
 // Use for ease-in, ease-out style interpolation (accel/decel)
@@ -463,9 +462,12 @@ extern DLL_GLOBAL ULONG g_ulFrameCount;
 
 #define VEC_HULL_MIN		Vector(-16, -16, -36)
 #define VEC_HULL_MAX		Vector( 16,  16,  36)
-#define VEC_HUMAN_HULL_MIN	Vector( -16, -16, 0 )
+#define VEC_HUMAN_HULL_MIN	Vector(-16, -16, 0 )
 #define VEC_HUMAN_HULL_MAX	Vector( 16, 16, 72 )
 #define VEC_HUMAN_HULL_DUCK	Vector( 16, 16, 36 )
+
+#define VEC_HEADCRAB_HULL_MIN	Vector(-12, -12, 0)
+#define VEC_HEADCRAB_HULL_MAX	Vector(12, 12, 24)
 
 #define VEC_VIEW			Vector( 0, 0, 28 )
 

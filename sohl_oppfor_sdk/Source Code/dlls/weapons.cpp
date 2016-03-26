@@ -572,6 +572,7 @@ void W_Precache(void)
 	PRECACHE_SOUND("weapons/spore_hit2.wav");//sporegrenade
 	PRECACHE_SOUND("weapons/spore_hit3.wav");//sporegrenade
 
+	PRECACHE_MODEL("sprites/metal_glow.spr");
 }
 
 void CBasePlayerItem::KeyValue( KeyValueData *pkvd )

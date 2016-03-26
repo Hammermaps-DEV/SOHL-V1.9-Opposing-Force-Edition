@@ -19,12 +19,10 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // NPC: Shock-Roach * http://half-life.wikia.com/wiki/Shock_Roach
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00004 / Date: 17.10.2015
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"

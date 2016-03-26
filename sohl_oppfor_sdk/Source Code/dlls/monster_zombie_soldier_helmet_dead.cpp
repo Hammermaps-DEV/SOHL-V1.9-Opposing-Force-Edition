@@ -20,9 +20,8 @@
 ***/
 //=========================================================
 // PROP: DEAD Soldier Helmet Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 19.10.2015
 //=========================================================
+
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"

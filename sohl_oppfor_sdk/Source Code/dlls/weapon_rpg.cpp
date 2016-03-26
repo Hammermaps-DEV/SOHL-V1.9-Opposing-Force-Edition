@@ -18,12 +18,9 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // Weapon: HECU Rocket Propelled Grenade
 // http://half-life.wikia.com/wiki/HECU_RPG
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 24.01.2016
 //=========================================================
 
 #include "extdll.h"

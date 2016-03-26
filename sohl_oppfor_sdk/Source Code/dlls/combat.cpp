@@ -1690,8 +1690,7 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 				pEntity->TraceAttack(pevAttacker, 50, vecDir, &tr, DMG_CLUB);
 				TEXTURETYPE_PlaySound(&tr, vecSrc, vecEnd, iBulletType);
 				// only decal glass
-				if ( !FNullEnt(tr.pHit) && VARS(tr.pHit)->rendermode != 0)
-				{
+				if ( !FNullEnt(tr.pHit) && VARS(tr.pHit)->rendermode != 0) {
 					UTIL_DecalTrace( &tr, DECAL_GLASSBREAK1 + RANDOM_LONG(0,2) );
 				}
 
@@ -1738,53 +1737,23 @@ Vector CBaseEntity::FireBulletsPlayer ( ULONG cShots, Vector vecSrc, Vector vecD
 				if (chTextureType == CHAR_TEX_METAL)
 				{
 					UTIL_Ricochet(tr.vecEndPos, 0.5);
-
-					if (RANDOM_LONG(0, 99) < 40)
-						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
-
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
-
 					b_CanMakeParticles = FALSE;
 				}
 				else if (chTextureType == CHAR_TEX_VENT)
 				{
 					UTIL_Ricochet(tr.vecEndPos, 0.5);
-
-					if (RANDOM_LONG(0, 99) < 40)
-						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
-
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
-
 					b_CanMakeParticles = FALSE;
 				}
 				else if (chTextureType == CHAR_TEX_COMPUTER)
 				{
 					UTIL_Ricochet(tr.vecEndPos, 0.5);
-
-					if (RANDOM_LONG(0, 99) < 40)
-						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
-
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
-
 					UTIL_Sparks(tr.vecEndPos);
-
 					b_CanMakeParticles = FALSE;
 				}
 				else if (chTextureType == CHAR_TEX_GRATE)
 				{
 					UTIL_Ricochet(tr.vecEndPos, 0.5);
-
-					if (RANDOM_LONG(0, 99) < 40)
-						UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 500);
-
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 9, 5, 5, 100);
-					UTIL_WhiteSparks(tr.vecEndPos, tr.vecPlaneNormal, 0, 5, 500, 20);
-
 					UTIL_Sparks(tr.vecEndPos);
-
 					b_CanMakeParticles = FALSE;
 				}
 			}

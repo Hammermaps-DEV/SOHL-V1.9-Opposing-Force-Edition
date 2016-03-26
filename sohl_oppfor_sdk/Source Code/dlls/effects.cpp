@@ -4078,13 +4078,13 @@ void CEnvDecal::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 
 	switch(pev->impulse) {
 		case 1: iTexture = DECAL_GUNSHOT1	 +	RANDOM_LONG(0,4); break;
-		case 2: iTexture = DECAL_BLOOD1		 +	RANDOM_LONG(0,5); break;
+		case 2: iTexture = DECAL_BLOOD1		 +	RANDOM_LONG(0,7); break;
 		case 3: iTexture = DECAL_YBLOOD1	 +	RANDOM_LONG(0,5); break;
 		case 4: iTexture = DECAL_GLASSBREAK1 +	RANDOM_LONG(0,2); break;
 		case 5: iTexture = DECAL_BIGSHOT1	 +	RANDOM_LONG(0,4); break;
 		case 6: iTexture = DECAL_SCORCH1	 +	RANDOM_LONG(0,2); break;
 		case 7: iTexture = DECAL_SPIT1		 +	RANDOM_LONG(0,1); break;
-		case 8: iTexture = DECAL_OFSCORCH1   +  RANDOM_LONG(0,5); break;
+		case 8: iTexture = DECAL_SHOCKSCORCH1 +  RANDOM_LONG(0,2); break;
 		case 9: iTexture = DECAL_SPORESPLAT1 +  RANDOM_LONG(0,2); break;
 	}
 

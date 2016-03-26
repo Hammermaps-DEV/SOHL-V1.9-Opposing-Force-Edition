@@ -233,7 +233,6 @@
     <ClCompile Include="hud_msg.cpp" />
     <ClCompile Include="hud_redraw.cpp" />
     <ClCompile Include="hud_servers.cpp" />
-    <ClCompile Include="hud_sound.cpp" />
     <ClCompile Include="hud_spectator.cpp" />
     <ClCompile Include="hud_update.cpp" />
     <ClCompile Include="input.cpp" />

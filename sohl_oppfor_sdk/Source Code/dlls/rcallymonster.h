@@ -148,6 +148,7 @@ public:
 	BOOL			CheckRangeAttack2(float flDot, float flDist);
 	void			ShootMP5(void);
 	void			ShootShotgun(void);
+	void			ShootShotgunDouble(void);
 	void			ShootDesertEagle(void);
 	void			ShootM249(void);
 	void			ShootGlock(void);
@@ -201,7 +202,6 @@ public:
 	virtual int	Restore( CRestore &restore );
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	
 	static char *m_szFriends[TLK_CFRIENDS];		// array of friend names
 	static float g_talkWaitTime;
 	
@@ -226,6 +226,7 @@ public:
 	float		m_flNextGrenadeCheck;
 	float		m_flLastSaidSmelled;// last time we talked about something that stinks
 	float		m_flStopTalkTime;// when in the future that I'll be done saying this sentence.
+	float		m_fLockShootTime;
 
 	EHANDLE		m_hTalkTarget;	// who to look at while talking
 	EHANDLE		m_hHealTarget;	// who to heal
@@ -257,6 +258,7 @@ public:
 			return pSquadLeader;
 		return this;
 	}
+
 	CRCAllyMonster *MySquadMember( int i ) 
 	{ 
 		if (i >= MAXRC_SQUAD_MEMBERS-1)
@@ -264,16 +266,13 @@ public:
 		else
 			return (CRCAllyMonster *)((CBaseEntity *)m_hSquadMember[i]); 
 	}
+
 	int	InSquad ( void ) { return m_hSquadLeader != NULL; }
 	int IsLeader ( void ) { return m_hSquadLeader == this; }
-	int SquadJoin ( int searchRadius );
 	int SquadRecruit ( int searchRadius, int maxMembers );
 	int	SquadCount( void );
 	void SquadRemove( CRCAllyMonster *pRemove );
-	void SquadUnlink( void );
 	BOOL SquadAdd( CRCAllyMonster *pAdd );
-	void SquadDisband( void );
-	void SquadAddConditions ( int iConditions );
 	void SquadMakeEnemy ( CBaseEntity *pEnemy );
 	void SquadPasteEnemyInfo ( void );
 	void SquadCopyEnemyInfo ( void );

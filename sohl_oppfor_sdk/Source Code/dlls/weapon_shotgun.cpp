@@ -18,11 +18,8 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // Weapon: Shotgun * http://half-life.wikia.com/wiki/HECU_SPAS-12
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00002 / Date: 07.02.2016
 //=========================================================
 
 #include "extdll.h"

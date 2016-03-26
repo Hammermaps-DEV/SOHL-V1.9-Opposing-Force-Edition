@@ -55,6 +55,7 @@ class CHFGrunt : public CRCAllyMonster {
 
 		BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
 		int		m_cClipSize;
+		int		m_nShotgunDouble;
 
 		int		m_iSentence;
 		int		m_iHead;

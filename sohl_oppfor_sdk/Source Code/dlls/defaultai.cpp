@@ -1096,7 +1096,7 @@ Schedule_t* CBaseMonster :: GetScheduleOfType ( int Type )
 	case SCHED_AISCRIPT:
 		{
 //			ALERT(at_console, "Doing AISCRIPT\n");
-			ASSERT( m_pCine != NULL );
+//			ASSERT( m_pCine != NULL );
 			if ( !m_pCine )
 			{
 				ALERT( at_aiconsole, "Script failed for %s\n", STRING(pev->classname) );

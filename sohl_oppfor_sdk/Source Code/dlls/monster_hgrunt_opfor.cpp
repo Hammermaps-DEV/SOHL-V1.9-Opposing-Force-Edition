@@ -770,7 +770,6 @@ Schedule_t slFGruntHideReload[] =
 		HL_ARRAYSIZE ( tlFGruntHideReload ),
 		bits_COND_HEAVY_DAMAGE	|
 		bits_COND_HEAR_SOUND,
-
 		bits_SOUND_DANGER,
 		"FGruntHideReload"
 	}
@@ -792,18 +791,15 @@ Schedule_t	slFGruntSweep[] =
 	{ 
 		tlFGruntSweep,
 		HL_ARRAYSIZE ( tlFGruntSweep ), 
-		
 		bits_COND_NEW_ENEMY		|
 		bits_COND_LIGHT_DAMAGE	|
 		bits_COND_HEAVY_DAMAGE	|
 		bits_COND_CAN_RANGE_ATTACK1	|
 		bits_COND_CAN_RANGE_ATTACK2	|
 		bits_COND_HEAR_SOUND,
-
 		bits_SOUND_WORLD		|// sound flags
 		bits_SOUND_DANGER		|
 		bits_SOUND_PLAYER,
-
 		"FGrunt Sweep"
 	},
 };
@@ -841,7 +837,6 @@ Schedule_t	slFGruntRangeAttack1A[] =
 		bits_COND_HEAR_SOUND		|
 		bits_COND_FGRUNT_NOFIRE		|
 		bits_COND_NO_AMMO_LOADED,
-		
 		bits_SOUND_DANGER,
 		"Range Attack1A"
 	},
@@ -881,7 +876,6 @@ Schedule_t	slFGruntRangeAttack1B[] =
 		bits_COND_NO_AMMO_LOADED	|
 		bits_COND_FGRUNT_NOFIRE		|
 		bits_COND_HEAR_SOUND,
-		
 		bits_SOUND_DANGER,
 		"Range Attack1B"
 	},
@@ -930,7 +924,6 @@ Schedule_t	slFGruntRepel[] =
 		bits_COND_LIGHT_DAMAGE		|
 		bits_COND_HEAVY_DAMAGE		|
 		bits_COND_HEAR_SOUND,
-		
 		bits_SOUND_DANGER			|
 		bits_SOUND_COMBAT			|
 		bits_SOUND_PLAYER, 
@@ -1014,7 +1007,6 @@ Schedule_t	slFGruntFindMedic[] =
 		bits_COND_HEAR_SOUND		|
 		bits_COND_PROVOKED,
 		bits_SOUND_DANGER,
-
 		"FGrunt Find Medic"
 	},
 };
@@ -1443,7 +1435,13 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			if (FBitSet(pev->weapons, FGRUNT_M249)) {
 				ShootM249();
 			} else if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
-				ShootShotgun();
+				if (UTIL_GlobalTimeBase() >= m_nShotgunDouble && RANDOM_LONG(0, 4) >= 1 && m_cAmmoLoaded >= 2) {
+					ShootShotgunDouble();
+					m_nShotgunDouble = UTIL_GlobalTimeBase() + RANDOM_FLOAT(3, 6);
+					m_fLockShootTime = UTIL_GlobalTimeBase() + 2;
+				} else {
+					ShootShotgun();
+				}
 			} else {
 				ShootMP5();
 			}

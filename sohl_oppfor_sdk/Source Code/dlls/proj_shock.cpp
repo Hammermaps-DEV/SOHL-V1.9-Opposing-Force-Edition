@@ -155,7 +155,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 
 		// make a splat on the wall
 		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
-		UTIL_DecalTrace(&tr, DECAL_OFSCORCH1 + RANDOM_LONG(0, 5));
+		UTIL_DecalTrace(&tr, DECAL_SHOCKSCORCH1 + RANDOM_LONG(0, 2));
 		UTIL_Sparks(tr.vecPlaneNormal);
 
 		if (pOther->pev->flags & FL_MONSTER | pOther->IsPlayer()) {

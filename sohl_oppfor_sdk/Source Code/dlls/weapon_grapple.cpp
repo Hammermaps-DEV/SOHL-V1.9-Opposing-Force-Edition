@@ -20,12 +20,9 @@
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
 //=========================================================
 // Weapon: Barnacle Grapple * 
 // http://half-life.wikia.com/wiki/Barnacle_Grapple
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00001 / Date: 05.02.2016
 //=========================================================
 
 #include "extdll.h" 

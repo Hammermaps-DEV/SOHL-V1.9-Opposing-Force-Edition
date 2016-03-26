@@ -63,8 +63,7 @@ TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] = {
 IMPLEMENT_SAVERESTORE( CRCAllyMonster, CBaseMonster );
 
 // array of friend names
-char *CRCAllyMonster::m_szFriends[TLK_CFRIENDS] = 
-{
+char *CRCAllyMonster::m_szFriends[TLK_CFRIENDS] = {
 	"monster_barney",
 	"monster_barniel",
 	"monster_otis",
@@ -338,11 +337,7 @@ Schedule_t	slTlkIdleWatchClientTS[] =
 		bits_COND_CLIENT_UNSEEN	|
 		bits_COND_MEDIC_HEAL	|
 		bits_COND_PROVOKED,
-
-		bits_SOUND_COMBAT		|// sound flags - change these, and you'll break the talking code.
-		//bits_SOUND_PLAYER		|
-		//bits_SOUND_WORLD		|
-		
+		bits_SOUND_COMBAT		|
 		bits_SOUND_DANGER		|
 		bits_SOUND_MEAT			|// scents
 		bits_SOUND_CARCASS		|
@@ -362,9 +357,7 @@ Schedule_t	slTlkIdleWatchClientTS[] =
 		bits_COND_CLIENT_UNSEEN	|
 		bits_COND_MEDIC_HEAL	|
 		bits_COND_PROVOKED,
-
 		bits_SOUND_COMBAT		|// sound flags - change these, and you'll break the talking code.
-		
 		bits_SOUND_DANGER		|
 		bits_SOUND_MEAT			|// scents
 		bits_SOUND_CARCASS		|
@@ -1690,6 +1683,7 @@ void CRCAllyMonster::Precache( void ) {
 	PRECACHE_SOUND("fgrunt/medic.wav");
 	PRECACHE_SOUND("hgrunt/gr_reload1.wav");
 	PRECACHE_SOUND("weapons/sbarrel1.wav");
+	PRECACHE_SOUND("weapons/dbarrel1.wav");
 	PRECACHE_SOUND("zombie/claw_miss2.wav");
 	PRECACHE_SOUND("weapons/dryfire1.wav"); //LRC
 	PRECACHE_SOUND("weapons/desert_eagle_fire.wav");
@@ -2345,7 +2339,9 @@ BOOL CRCAllyMonster::CheckMeleeAttack1(float flDot, float flDist) {
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
 BOOL CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
-	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 && flDot >= 0.5 && NoFriendlyFire()) {
+	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048 
+		&& flDot >= 0.5 && NoFriendlyFire() 
+		&& m_fLockShootTime < UTIL_GlobalTimeBase()) {
 		if (!m_hEnemy->IsPlayer() && flDist <= 64) {
 			// kick nonclients who are close enough, but don't shoot at them.
 			return FALSE;
@@ -2355,7 +2351,6 @@ BOOL CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
 		TraceResult	tr;
 		// verify that a bullet fired from the gun will hit the enemy before the world.
 		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
-
 		if (tr.flFraction == 1.0) {
 			return TRUE;
 		}
@@ -2398,7 +2393,7 @@ void CRCAllyMonster::ShootMP5(void) {
 
 		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_4DEGREES, 2048, BULLET_MONSTER_9MM); // shoot +-5 degrees
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_4DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
 		EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSounds9MM);
 		WeaponFlash(vecShootOrigin);
 
@@ -2425,16 +2420,48 @@ void CRCAllyMonster::ShootShotgun(void) {
 	Vector vecShootOrigin = GetGunPosition();
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
-	UTIL_MakeVectors(pev->angles);
+	if (m_cAmmoLoaded > 0) {
+		UTIL_MakeVectors(pev->angles);
 
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
-	FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
-	WeaponFlash(vecShootOrigin);
+		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
+		FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", 1, ATTN_NORM);
+		WeaponFlash(vecShootOrigin);
 
-	pev->effects |= EF_MUZZLEFLASH;
-	m_cAmmoLoaded--;
+		pev->effects |= EF_MUZZLEFLASH;
+		m_cAmmoLoaded--;
+	} else {
+		 EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
+	}
+
+	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
+	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	SetBlending(0, angDir.x);
+}
+
+void CRCAllyMonster::ShootShotgunDouble(void) {
+	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+		return;
+	}
+
+	Vector vecShootOrigin = GetGunPosition();
+	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+
+	if (m_cAmmoLoaded >= 2) {
+		UTIL_MakeVectors(pev->angles);
+
+		Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
+		FireBullets((gSkillData.hgruntShotgunPellets * 2), vecShootOrigin, vecShootDir, VECTOR_CONE_9DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dbarrel1.wav", 1, ATTN_NORM);
+		WeaponFlash(vecShootOrigin);
+
+		pev->effects |= EF_MUZZLEFLASH;
+		m_cAmmoLoaded = (m_cAmmoLoaded - 2);
+	} else {
+		 EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
+	}
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
@@ -2452,25 +2479,28 @@ void CRCAllyMonster::ShootM249(void) {
 	Vector vecShootOrigin = GetGunPosition();
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
-	UTIL_MakeVectors(pev->angles);
+	if (m_cAmmoLoaded > 0) {
+		UTIL_MakeVectors(pev->angles);
 
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 
-	if (m_flLinkToggle >= 2) {
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Link, TE_BOUNCE_SHELL);
-		m_flLinkToggle = 0;
+		if (m_flLinkToggle >= 2) {
+			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Link, TE_BOUNCE_SHELL);
+			m_flLinkToggle = 0;
+		} else {
+			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Shell, TE_BOUNCE_SHELL);
+			m_flLinkToggle++;
+		}
+
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_3DEGREES, 2048, BULLET_MONSTER_556); // shoot +-5 degrees
+		WeaponFlash(vecShootOrigin);
+		EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSoundsSAW);
+
+		pev->effects |= EF_MUZZLEFLASH;
+		m_cAmmoLoaded--;
 	} else {
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Shell, TE_BOUNCE_SHELL);
-		m_flLinkToggle++;
+		 EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
 	}
-
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_3DEGREES, 2048, BULLET_MONSTER_556); // shoot +-5 degrees
-	WeaponFlash(vecShootOrigin);
-	EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSoundsSAW);
-
-	pev->effects |= EF_MUZZLEFLASH;
-
-	m_cAmmoLoaded--;
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
@@ -2488,24 +2518,27 @@ void CRCAllyMonster::ShootDesertEagle(void) {
 	Vector vecShootOrigin = GetGunPosition();
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
-	UTIL_MakeVectors(pev->angles);
+	if (m_cAmmoLoaded > 0) {
+		UTIL_MakeVectors(pev->angles);
 
-	int pitchShift = RANDOM_LONG(0, 20);
-	if (pitchShift > 10)
-		pitchShift = 0;
-	else
-		pitchShift -= 5;
+		int pitchShift = RANDOM_LONG(0, 20);
+		if (pitchShift > 10)
+			pitchShift = 0;
+		else
+			pitchShift -= 5;
 
-	Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_357 ); // shoot +-5 degrees
-	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_fire.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
+		Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_357 ); // shoot +-5 degrees
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_fire.wav", 1, ATTN_NORM, 0, 100 + pitchShift);
 
-	pev->effects |= EF_MUZZLEFLASH;
+		pev->effects |= EF_MUZZLEFLASH;
 
-	WeaponFlash(vecShootOrigin);
-
-	m_cAmmoLoaded--;// take away a bullet!
+		WeaponFlash(vecShootOrigin);
+		m_cAmmoLoaded--;// take away a bullet!
+	} else {
+		 EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
+	}
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	Vector angDir = UTIL_VecToAngles(vecShootDir);
@@ -2522,18 +2555,22 @@ void CRCAllyMonster::ShootGlock(void) {
 	Vector vecShootOrigin = GetGunPosition();
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
-	UTIL_MakeVectors(pev->angles);
+	if (m_cAmmoLoaded > 0) {
+		UTIL_MakeVectors(pev->angles);
 
-	Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
-	EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
-	FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_9MM); // shoot +-5 degrees
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/pl_gun3.wav", 1, ATTN_NORM);
+		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
+		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_9MM); // shoot +-5 degrees
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/pl_gun3.wav", 1, ATTN_NORM);
 
-	pev->effects |= EF_MUZZLEFLASH;
+		pev->effects |= EF_MUZZLEFLASH;
 
-	WeaponFlash(vecShootOrigin);
+		WeaponFlash(vecShootOrigin);
 
-	m_cAmmoLoaded--;// take away a bullet!
+		m_cAmmoLoaded--;// take away a bullet!
+	} else {
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dryfire1.wav", 1, ATTN_NORM);
+	}
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 	Vector angDir = UTIL_VecToAngles(vecShootDir);

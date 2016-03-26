@@ -646,9 +646,6 @@
     <ClCompile Include="hud_spectator.cpp">
       <Filter>Source Files\cl_dll\hud</Filter>
     </ClCompile>
-    <ClCompile Include="hud_sound.cpp">
-      <Filter>Source Files\cl_dll\hud</Filter>
-    </ClCompile>
     <ClCompile Include="hud_servers.cpp">
       <Filter>Source Files\cl_dll\hud</Filter>
     </ClCompile>

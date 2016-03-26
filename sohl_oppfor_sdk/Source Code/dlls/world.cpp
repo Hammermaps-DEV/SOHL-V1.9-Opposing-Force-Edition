@@ -70,24 +70,30 @@ DLL_DECALLIST gDecals[] = {
 	{ "{scorch1", 0 },		// DECAL_SCORCH1
 	{ "{scorch2", 0 },		// DECAL_SCORCH2
 	{ "{scorch3", 0 },		// DECAL_SCORCH3
-	{ "{ofscorch1", 0 },	// DECAL_OFSCORCH1
-	{ "{ofscorch2", 0 },	// DECAL_OFSCORCH2
-	{ "{ofscorch3", 0 },	// DECAL_OFSCORCH3
-	{ "{ofscorch4", 0 },	// DECAL_OFSCORCH4
-	{ "{ofscorch5", 0 },	// DECAL_OFSCORCH5
-	{ "{ofscorch6", 0 },	// DECAL_OFSCORCH6
-	{ "{blood1", 0 },		// DECAL_BLOOD1
-	{ "{blood2", 0 },		// DECAL_BLOOD2
-	{ "{blood3", 0 },		// DECAL_BLOOD3
-	{ "{blood4", 0 },		// DECAL_BLOOD4
-	{ "{blood5", 0 },		// DECAL_BLOOD5
-	{ "{blood6", 0 },		// DECAL_BLOOD6
-	{ "{yblood1", 0 },		// DECAL_YBLOOD1
-	{ "{yblood2", 0 },		// DECAL_YBLOOD2
-	{ "{yblood3", 0 },		// DECAL_YBLOOD3
-	{ "{yblood4", 0 },		// DECAL_YBLOOD4
-	{ "{yblood5", 0 },		// DECAL_YBLOOD5
-	{ "{yblood6", 0 },		// DECAL_YBLOOD6
+	{ "{shock_scorch1", 0 },	// DECAL_SHOCKSCORCH1
+	{ "{shock_scorch2", 0 },	// DECAL_SHOCKSCORCH2
+	{ "{shock_scorch3", 0 },	// DECAL_SHOCKSCORCH3
+	{ "{spore_scorch1", 0 },	// DECAL_SPORESPLAT1
+	{ "{spore_scorch2", 0 },	// DECAL_SPORESPLAT2
+	{ "{spore_scorch3", 0 },	// DECAL_SPORESPLAT3
+	{ "{blood_red1", 0 },		// DECAL_BLOOD1
+	{ "{blood_red2", 0 },		// DECAL_BLOOD2
+	{ "{blood_red3", 0 },		// DECAL_BLOOD3
+	{ "{blood_red4", 0 },		// DECAL_BLOOD4
+	{ "{blood_red5", 0 },		// DECAL_BLOOD5
+	{ "{blood_red6", 0 },		// DECAL_BLOOD6
+	{ "{blood_red7", 0 },		// DECAL_BLOOD7
+	{ "{blood_red8", 0 },		// DECAL_BLOOD8
+	{ "{blood_green1", 0 },		// DECAL_GBLOOD1
+	{ "{blood_green2", 0 },		// DECAL_GBLOOD2
+	{ "{blood_blue1", 0 },		// DECAL_BBLOOD1
+	{ "{blood_blue2", 0 },		// DECAL_BBLOOD2
+	{ "{blood_yellow1", 0 },	// DECAL_YBLOOD1
+	{ "{blood_yellow2", 0 },	// DECAL_YBLOOD2
+	{ "{blood_yellow3", 0 },	// DECAL_YBLOOD3
+	{ "{blood_yellow4", 0 },	// DECAL_YBLOOD4
+	{ "{blood_yellow5", 0 },	// DECAL_YBLOOD5
+	{ "{blood_yellow6", 0 },	// DECAL_YBLOOD6
 	{ "{break1", 0 },		// DECAL_GLASSBREAK1
 	{ "{break2", 0 },		// DECAL_GLASSBREAK2
 	{ "{break3", 0 },		// DECAL_GLASSBREAK3
@@ -98,9 +104,6 @@ DLL_DECALLIST gDecals[] = {
 	{ "{bigshot5", 0 },		// DECAL_BIGSHOT5
 	{ "{spit1", 0 },		// DECAL_SPIT1
 	{ "{spit2", 0 },		// DECAL_SPIT2
-	{ "{spr_splt1", 0 },	// DECAL_SPORESPLAT1
-	{ "{spr_splt2", 0 },	// DECAL_SPORESPLAT2
-	{ "{spr_splt3", 0 },	// DECAL_SPORESPLAT3
 	{ "{bproof1", 0 },		// DECAL_BPROOF1
 	{ "{gargstomp", 0 },	// DECAL_GARGSTOMP1,	// Gargantua stomp crack
 	{ "{smscorch1", 0 },	// DECAL_SMALLSCORCH1,	// Small scorch mark
@@ -592,6 +595,10 @@ void CWorld :: Precache( void )
 	PRECACHE_SOUND("debris/water_impact_bullet3.wav");  //water impact
 
 	PRECACHE_MODEL( "sprites/null.spr" ); //LRC
+
+	PRECACHE_MODEL("sprites/wallsmoke.spr");
+	PRECACHE_MODEL("sprites/gunsmoke.spr");
+
 //
 // Setup light animation tables. 'a' is total darkness, 'z' is maxbright.
 //

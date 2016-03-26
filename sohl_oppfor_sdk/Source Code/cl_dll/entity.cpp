@@ -232,77 +232,6 @@ void CL_DLLEXPORT HUD_TxferPredictionData ( struct entity_state_s *ps, const str
 	memcpy( wd, pwd, 32 * sizeof( weapon_data_t ) );
 }
 
-#if defined( BEAM_TEST )
-// Note can't index beam[ 0 ] in Beam callback, so don't use that index
-// Room for 1 beam ( 0 can't be used )
-static cl_entity_t beams[ 2 ];
-
-void BeamEndModel( void )
-{
-	cl_entity_t *player, *model;
-	int modelindex;
-	struct model_s *mod;
-
-	// Load it up with some bogus data
-	player = gEngfuncs.GetLocalPlayer();
-	if ( !player )
-		return;
-
-	mod = gEngfuncs.CL_LoadModel( "models/sentry3.mdl", &modelindex );
-	if ( !mod )
-		return;
-
-	// Slot 1
-	model = &beams[ 1 ];
-
-	*model = *player;
-	model->player = 0;
-	model->model = mod;
-	model->curstate.modelindex = modelindex;
-		
-	// Move it out a bit
-	model->origin[0] = player->origin[0] - 100;
-	model->origin[1] = player->origin[1];
-
-	model->attachment[0] = model->origin;
-	model->attachment[1] = model->origin;
-	model->attachment[2] = model->origin;
-	model->attachment[3] = model->origin;
-
-	gEngfuncs.CL_CreateVisibleEntity( ET_NORMAL, model );
-}
-
-void Beams( void )
-{
-	static float lasttime;
-	float curtime;
-	struct model_s *mod;
-	int index;
-
-	BeamEndModel();
-	
-	curtime = gEngfuncs.GetClientTime();
-	float end[ 3 ];
-
-	if ( ( curtime - lasttime ) < 10.0 )
-		return;
-
-	mod = gEngfuncs.CL_LoadModel( "sprites/laserbeam.spr", &index );
-	if ( !mod )
-		return;
-
-	lasttime = curtime;
-
-	end [ 0 ] = v_origin.x + 100;
-	end [ 1 ] = v_origin.y + 100;
-	end [ 2 ] = v_origin.z;
-
-	BEAM *p1;
-	p1 = gEngfuncs.pEfxAPI->R_BeamEntPoint( -1, end, index,
-		10.0, 2.0, 0.3, 1.0, 5.0, 0.0, 1.0, 1.0, 1.0, 1.0 );
-}
-#endif
-
 /*
 =========================
 HUD_CreateEntities
@@ -334,30 +263,121 @@ The entity's studio model description indicated an event was
 fired during this frame, handle the event by it's tag ( e.g., muzzleflash, sound )
 =========================
 */
+#define COLOR_VALUE	30
+
 void CL_DLLEXPORT HUD_StudioEvent( const struct mstudioevent_s *event, const struct cl_entity_s *entity )
 {
+	void VectorAngles(const float *forward, float *angles);
+	int iSmoke = CVAR_GET_FLOAT("cl_gunsmoke");
+
+	TEMPENTITY *pSmokeTempEntity;
+	int iGunSmoke = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/gunsmoke.spr");
+
 	switch( event->event )
 	{
-	case 5001:
+		case 5001:
 		gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&entity->attachment[0], atoi( event->options) );
+
+		//*** SMOKE ****
+		if (iSmoke != 0) {
+			pSmokeTempEntity = gEngfuncs.pEfxAPI->R_TempSprite((float *)&entity->attachment[0], Vector(1, 1, 1),
+				gEngfuncs.pfnRandomLong(0.5, 0.2),//0.5
+				iGunSmoke,//iGunSmoke
+				kRenderTransAdd,
+				kRenderFxNone,
+				1.0,//1.0
+				0.5, //1
+				FTENT_SPRANIMATE | FTENT_FADEOUT);
+
+			if (pSmokeTempEntity)
+			{    // sprite created successfully, adjust some things
+				pSmokeTempEntity->fadeSpeed = gEngfuncs.pfnRandomLong(1.0, 2.0);
+				pSmokeTempEntity->entity.curstate.renderamt = 66;
+				pSmokeTempEntity->entity.curstate.rendercolor.r = COLOR_VALUE;
+				pSmokeTempEntity->entity.curstate.rendercolor.g = COLOR_VALUE;
+				pSmokeTempEntity->entity.curstate.rendercolor.b = COLOR_VALUE;
+			}
+		}
 		break;
 	case 5011:
 		gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&entity->attachment[1], atoi( event->options) );
+
+		//*** SMOKE ****
+		if (iSmoke != 0) {
+			pSmokeTempEntity = gEngfuncs.pEfxAPI->R_TempSprite((float *)&entity->attachment[1], Vector(1, 1, 1),
+				gEngfuncs.pfnRandomLong(0.5, 0.2),//0.5
+				iGunSmoke,//iGunSmoke
+				kRenderTransAdd,
+				kRenderFxNone,
+				1.0,//1.0
+				0.5, //1
+				FTENT_SPRANIMATE | FTENT_FADEOUT);
+
+			if (pSmokeTempEntity) {    // sprite created successfully, adjust some things
+				pSmokeTempEntity->fadeSpeed = gEngfuncs.pfnRandomLong(1.0, 2.0);
+				pSmokeTempEntity->entity.curstate.renderamt = 66;
+				pSmokeTempEntity->entity.curstate.rendercolor.r = COLOR_VALUE;
+				pSmokeTempEntity->entity.curstate.rendercolor.g = COLOR_VALUE;
+				pSmokeTempEntity->entity.curstate.rendercolor.b = COLOR_VALUE;
+			}
+		}
 		break;
 	case 5021:
 		gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&entity->attachment[2], atoi( event->options) );
+
+		//*** SMOKE ****
+		if (iSmoke != 0) {
+			pSmokeTempEntity = gEngfuncs.pEfxAPI->R_TempSprite((float *)&entity->attachment[2], Vector(1, 1, 1),
+				gEngfuncs.pfnRandomLong(0.5, 0.2),//0.5
+				iGunSmoke,//iGunSmoke
+				kRenderTransAdd,
+				kRenderFxNone,
+				1.0,//1.0
+				0.5, //1
+				FTENT_SPRANIMATE | FTENT_FADEOUT);
+
+			if (pSmokeTempEntity) {    // sprite created successfully, adjust some things
+				pSmokeTempEntity->fadeSpeed = gEngfuncs.pfnRandomLong(1.0, 2.0);
+				pSmokeTempEntity->entity.curstate.renderamt = 66;
+				pSmokeTempEntity->entity.curstate.rendercolor.r = COLOR_VALUE;
+				pSmokeTempEntity->entity.curstate.rendercolor.g = COLOR_VALUE;
+				pSmokeTempEntity->entity.curstate.rendercolor.b = COLOR_VALUE;
+			}
+		}
 		break;
-	case 5031:
-		gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&entity->attachment[3], atoi( event->options) );
+		case 5031:
+			gEngfuncs.pEfxAPI->R_MuzzleFlash( (float *)&entity->attachment[3], atoi( event->options) );
+
+			//*** SMOKE ****
+			if (iSmoke != 0) {
+				pSmokeTempEntity = gEngfuncs.pEfxAPI->R_TempSprite((float *)&entity->attachment[3], Vector(1, 1, 1),
+					gEngfuncs.pfnRandomLong(0.5, 0.2),//0.5
+					iGunSmoke,//iGunSmoke
+					kRenderTransAdd,
+					kRenderFxNone,
+					1.0,//1.0
+					0.5, //1
+					FTENT_SPRANIMATE | FTENT_FADEOUT);
+
+				if (pSmokeTempEntity) {    // sprite created successfully, adjust some things
+					pSmokeTempEntity->fadeSpeed = gEngfuncs.pfnRandomLong(1.0, 2.0);
+					pSmokeTempEntity->entity.curstate.renderamt = 66;
+					pSmokeTempEntity->entity.curstate.rendercolor.r = COLOR_VALUE;
+					pSmokeTempEntity->entity.curstate.rendercolor.g = COLOR_VALUE;
+					pSmokeTempEntity->entity.curstate.rendercolor.b = COLOR_VALUE;
+				}
+			}
 		break;
-	case 5002:
-		gEngfuncs.pEfxAPI->R_SparkEffect( (float *)&entity->attachment[0], atoi( event->options), -100, 100 );
+		case 5002:
+			gEngfuncs.pEfxAPI->R_SparkEffect( (float *)&entity->attachment[0], atoi( event->options), -100, 100 );
 		break;
-	// Client side sound
-	case 5004:		
-		gEngfuncs.pfnPlaySoundByNameAtLocation( (char *)event->options, 1.0, (float *)&entity->attachment[0] );
+		// Client side sound
+		case 5004:
+			gEngfuncs.Con_Printf("Play Client Side Sound");
+			gEngfuncs.pfnPlaySoundByNameAtLocation( (char *)event->options, 1.0, (float *)&entity->attachment[0] );
 		break;
-	default:
+		default:
+			gEngfuncs.Con_Printf("Case Default");
 		break;
 	}
 }

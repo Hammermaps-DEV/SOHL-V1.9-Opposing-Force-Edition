@@ -1564,7 +1564,7 @@ Schedule_t *CBaseMonster :: GetSchedule ( void )
 		}
 	case MONSTERSTATE_SCRIPT:
 		{
-			ASSERT( m_pCine != NULL );
+			//ASSERT( m_pCine != NULL );
 			if ( !m_pCine )
 			{
 				ALERT( at_aiconsole, "Script failed for %s\n", STRING(pev->classname) );

@@ -21,7 +21,6 @@
 //=========================================================
 // NPC: Scientist Zombie * http://half-life.wikia.com/wiki/Standard_Zombie
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
-// Version: 1.0 / Build: 00003 / Date: 18.10.2015
 //=========================================================
 #include	"extdll.h"
 #include	"util.h"
@@ -113,6 +112,7 @@ void CZombie::Spawn() {
 	if (pev->health == 0)
 		pev->health = gSkillData.zombieHealth;
 
+	pev->effects = 0;
 	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
 	pev->yaw_speed = 120; // should we put this in the monster's changeanim function since turn rates may vary with state/anim?
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
