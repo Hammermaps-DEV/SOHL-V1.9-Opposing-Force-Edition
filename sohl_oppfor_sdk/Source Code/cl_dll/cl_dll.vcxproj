@@ -375,6 +375,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;wsock32.lib;opengl32.lib;glu32.lib;../external/lib/game_controls.lib;../utils/vgui/lib/vgui.lib;../external/lib/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\debug\client.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
