@@ -638,6 +638,33 @@
     <ClInclude Include="..\external\SDL2\SDL_video.h">
       <Filter>Header Files\external\SDL2</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\fmod.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod.hpp">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod_codec.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod_common.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod_dsp.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod_dsp_effects.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod_errors.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\fmod_output.h">
+      <Filter>Header Files\common</Filter>
+    </ClInclude>
+    <ClInclude Include="soundengine.h">
+      <Filter>Header Files\cl_dll</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hud_update.cpp">
@@ -867,6 +894,9 @@
     </ClCompile>
     <ClCompile Include="ev_events.cpp">
       <Filter>Source Files\cl_dll\ev</Filter>
+    </ClCompile>
+    <ClCompile Include="soundengine.cpp">
+      <Filter>Source Files\cl_dll</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

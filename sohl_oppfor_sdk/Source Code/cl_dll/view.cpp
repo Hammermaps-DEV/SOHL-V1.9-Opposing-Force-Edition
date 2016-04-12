@@ -26,6 +26,7 @@
 #include "shake.h"
 #include "hltv.h"
 #include "studio.h"
+#include "soundengine.h"
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
@@ -57,6 +58,10 @@ void VectorAngles( const float *forward, float *angles );
 #include "com_model.h"
 
 extern engine_studio_api_t IEngineStudio;
+
+//View rolling when strafing
+extern cvar_t *cl_rollangle;
+extern cvar_t *cl_rollspeed;
 
 /*
 The view is allowed to move slightly from it's true position for bobbing,
@@ -329,31 +334,26 @@ V_CalcViewRoll
 Roll is induced by movement and damage
 ==============
 */
-void V_CalcViewRoll ( struct ref_params_s *pparams ) {
+void V_CalcViewRoll(struct ref_params_s *pparams) {
 	float		side;
 	cl_entity_t *viewentity;
 
-	//View rolling when strafing
-	extern cvar_t *cl_rollangle;
-	extern cvar_t *cl_rollspeed;
-
-	viewentity = gEngfuncs.GetEntityByIndex( pparams->viewentity );
-	if ( !viewentity )
+	viewentity = gEngfuncs.GetEntityByIndex(pparams->viewentity);
+	if (!viewentity)
 		return;
 
-	pparams->viewangles[ROLL] = V_CalcRoll (pparams->viewangles, pparams->simvel, cl_rollangle->value, cl_rollspeed->value ) * 4;
-	side = V_CalcRoll ( viewentity->angles, pparams->simvel, pparams->movevars->rollangle, pparams->movevars->rollspeed );
-
+	//Roll the angles when strafing Quake style!
+	pparams->viewangles[ROLL] = V_CalcRoll(pparams->viewangles, pparams->simvel, cl_rollangle->value, cl_rollspeed->value) * 4;
+	side = V_CalcRoll(viewentity->angles, pparams->simvel, pparams->movevars->rollangle, pparams->movevars->rollspeed);
 	pparams->viewangles[ROLL] += side;
 
-	if ( pparams->health <= 0 && ( pparams->viewheight[2] != 0 ) ) {
+	if (pparams->health <= 0 && (pparams->viewheight[2] != 0)) {
 		// only roll the view if the player is dead and the viewheight[2] is nonzero 
 		// this is so deadcam in multiplayer will work.
 		pparams->viewangles[ROLL] = 80;	// dead view angle
 		return;
 	}
 }
-
 
 /*
 ==================
@@ -371,6 +371,11 @@ void V_CalcIntermissionRefdef ( struct ref_params_s *pparams )
 	
 	// view is the weapon model (only visible from inside body )
 	view = gEngfuncs.GetViewModel();
+
+	view->curstate.rendermode = ent->curstate.rendermode;
+	view->curstate.renderfx = ent->curstate.renderfx;
+	view->curstate.rendercolor = ent->curstate.rendercolor;
+	view->curstate.renderamt = ent->curstate.renderamt;
 
 	VectorCopy ( pparams->simorg, pparams->vieworg );
 	VectorCopy ( pparams->cl_viewangles, pparams->viewangles );
@@ -676,14 +681,11 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 	V_DropPunchAngle(pparams->frametime, (float *)&ev_punchangle);
 
 	// smooth out stair step ups
-#if 1
-	if (!pparams->smoothing && pparams->onground && pparams->simorg[2] - oldz > 0)
-	{
+	if (!pparams->smoothing && pparams->onground && pparams->simorg[2] - oldz > 0) {
 		float steptime;
 
 		steptime = pparams->time - lasttime;
 		if (steptime < 0)
-			//FIXME		I_Error ("steptime < 0");
 			steptime = 0;
 
 		oldz += steptime * 150;
@@ -693,12 +695,9 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 			oldz = pparams->simorg[2] - 18;
 		pparams->vieworg[2] += oldz - pparams->simorg[2];
 		view->origin[2] += oldz - pparams->simorg[2];
-	}
-	else
-	{
+	} else {
 		oldz = pparams->simorg[2];
 	}
-#endif
 
 	{
 		static float lastorg[3];
@@ -789,9 +788,8 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 	}
 
 	lasttime = pparams->time;
-
 	v_origin = pparams->vieworg;
-	RenderFog();
+
 	if (gHUD.viewFlags & 1 && gHUD.m_iSkyMode == SKY_OFF) // custom view active (trigger_viewset)
 	{
 		cl_entity_t *viewentity;
@@ -848,6 +846,8 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 		}
 		pparams->nextView = 1;
 	}
+
+	RenderFog();
 }
 
 void V_SmoothInterpolateAngles( float * startAngle, float * endAngle, float * finalAngle, float degreesPerSec )
@@ -1703,6 +1703,7 @@ void DLLEXPORT V_CalcRefdef( struct ref_params_s *pparams )
 		V_CalcNormalRefdef ( pparams );
 	}
 
+	gSoundEngine.SetupFrame(pparams);
 }
 
 /*

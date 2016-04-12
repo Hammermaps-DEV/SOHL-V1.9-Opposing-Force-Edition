@@ -25,6 +25,7 @@
 #include <stdio.h>
 
 #include "parsemsg.h"
+#include "soundengine.h"
 
 DECLARE_MESSAGE(m_Geiger, Geiger )
 
@@ -175,8 +176,7 @@ int CHudGeiger::Draw (float flTime)
 				j += rand() & 1;
 
 			sprintf(sz, "player/geiger%d.wav", j + 1);
-			PlaySound(sz, flvol);
-			
+			gSoundEngine.PlaySound("common/wpn_select.wav", g_vecZero, SND_2D, 0, CVAR_GET_FLOAT("volume_sfx"));
 		}
 	}
 

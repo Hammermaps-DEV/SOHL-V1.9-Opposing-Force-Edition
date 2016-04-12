@@ -28,6 +28,7 @@
 #include "wrect.h"
 #include "cl_dll.h"
 #include "ammo.h"
+#include "fmod.hpp"
 
 #define DHN_DRAWZERO 1
 #define DHN_2DIGITS  2
@@ -239,13 +240,19 @@ protected:
 class CHudSound: public CHudBase
 {
 public:
-	int Init( void );
-	int VidInit( void );
+	int Init(void);
+	int VidInit(void);
 	int MsgFunc_Fsound(const char *pszName, int iSize, void *pbuf);
-	int PlayStream( const char* name );
+	void PlayStream(const char* name);
+	void PlayMemSound(const char* name);
 	int Draw(float flTime);//used for get pause
-	int Close( void );
+	void Close(void);
 private:
+	FMOD::System *system;
+	FMOD::Channel *channel = 0;
+	FMOD::Sound *sound, *sound_to_play;
+	FMOD_CREATESOUNDEXINFO exinfo;
+	void *buff = 0;
 	int m_iStatus;
 	float m_flVolume;
 };
@@ -675,6 +682,7 @@ public:
 	void _cdecl MsgFunc_SetMirror( const char *pszName, int iSize, void *pbuf );
 	void _cdecl MsgFunc_ResetMirror( const char *pszName, int iSize, void *pbuf );
     void _cdecl MsgFunc_AddShine( const char *pszName, int iSize, void *pbuf );    		//LRC
+	int  _cdecl MsgFunc_FSound(const char *pszName, int iSize, void *pbuf);
 
 	// Screen information
 	SCREENINFO	m_scrinfo;

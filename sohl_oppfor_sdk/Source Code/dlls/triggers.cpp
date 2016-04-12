@@ -2713,9 +2713,7 @@ public:
 	static TYPEDESCRIPTION m_SaveData[];
 };
 
-LINK_ENTITY_TO_CLASS( ambient_music, CTargetFMODAudio );
 LINK_ENTITY_TO_CLASS( ambient_fmodstream, CTargetFMODAudio );
-LINK_ENTITY_TO_CLASS( trigger_mp3audio, CTargetFMODAudio );
 
 TYPEDESCRIPTION	CTargetFMODAudio::m_SaveData[] = 
 {
@@ -2724,28 +2722,24 @@ TYPEDESCRIPTION	CTargetFMODAudio::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE( CTargetFMODAudio, CPointEntity );
 
-void CTargetFMODAudio :: Spawn( void )
-{
+void CTargetFMODAudio :: Spawn( void ) {
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
 
 	m_bPlaying = FALSE; // start out not playing
 }
 
-void CTargetFMODAudio::Activate( void )
-{
+void CTargetFMODAudio::Activate( void ) {
 	CPointEntity::Activate();
 	UTIL_DesiredAction( this );
 }
 
-void CTargetFMODAudio::DesiredAction( void )
-{
+void CTargetFMODAudio::DesiredAction( void ) {
 	if( m_bPlaying ) // run music on restore level 
 		pev->nextthink = UTIL_GlobalTimeBase() + 1;
 }
 
-void CTargetFMODAudio::Think( void )
-{
+void CTargetFMODAudio::Think( void ) {
 	int flags = 1;
 
 	if( m_hActivator == NULL ) return;

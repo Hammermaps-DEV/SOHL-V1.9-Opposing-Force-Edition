@@ -1,0 +1,271 @@
+{
+"classname" "worldspawn"
+"defaultteam" "0"
+"newunit" "0"
+"gametitle" "0"
+"startdark" "0"
+"MaxRange" "4096"
+"WaveHeight" "0.0"
+"sounds" "1"
+"mapversion" "220"
+"wad" "\Steam\SteamApps\common\Half-Life\valve\halflife.wad;\Steam\SteamApps\common\Half-Life\valve\liquids.wad;\Steam\SteamApps\common\Half-Life\valve\xeno.wad;\Steam\SteamApps\common\Half-Life\sohl_oppfor\decals.wad;\Steam\SteamApps\common\Half-Life\sohl_oppfor\sohl.wad;\Steam\SteamApps\common\Half-Life\sohl_oppfor\zhlt.wad"
+"_generator" "Jackhammer 1.1.855 (vpHalfLife)"
+{
+( 256 -256 160 ) ( 256 -256 0 ) ( 256 256 160 ) C1A0_WX [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 288 256 160 ) ( 288 256 0 ) ( 288 -256 160 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 256 160 ) ( 256 256 0 ) ( 288 256 160 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 288 -256 160 ) ( 288 -256 0 ) ( 256 -256 160 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 256 0 ) ( 256 -256 0 ) ( 288 256 0 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 288 -256 160 ) ( 256 -256 160 ) ( 288 256 160 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -288 -256 160 ) ( -288 -256 0 ) ( -288 256 160 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 256 160 ) ( -256 256 0 ) ( -256 -256 160 ) C1A0_WX [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -288 256 160 ) ( -288 256 0 ) ( -256 256 160 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 -256 160 ) ( -256 -256 0 ) ( -288 -256 160 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -288 256 0 ) ( -288 -256 0 ) ( -256 256 0 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( -256 -256 160 ) ( -288 -256 160 ) ( -256 256 160 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -256 256 160 ) ( -256 256 0 ) ( -256 288 160 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 288 160 ) ( 256 288 0 ) ( 256 256 160 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 288 160 ) ( -256 288 0 ) ( 256 288 160 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 256 160 ) ( 256 256 0 ) ( -256 256 160 ) C1A0_WX [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 288 0 ) ( -256 256 0 ) ( 256 288 0 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 256 256 160 ) ( -256 256 160 ) ( 256 288 160 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -256 -288 160 ) ( -256 -288 0 ) ( -256 -256 160 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 -256 160 ) ( 256 -256 0 ) ( 256 -288 160 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 -256 160 ) ( -256 -256 0 ) ( 256 -256 160 ) C1A0_WX [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 -288 160 ) ( 256 -288 0 ) ( -256 -288 160 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 -256 0 ) ( -256 -288 0 ) ( 256 -256 0 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 256 -288 160 ) ( -256 -288 160 ) ( 256 -256 160 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -256 -256 192 ) ( -256 -256 160 ) ( -256 256 192 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 256 192 ) ( 256 256 160 ) ( 256 -256 192 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 256 192 ) ( -256 256 160 ) ( 256 256 192 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 -256 192 ) ( 256 -256 160 ) ( -256 -256 192 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 256 160 ) ( -256 -256 160 ) ( 256 256 160 ) C2A4E_W1 [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 256 -256 192 ) ( -256 -256 192 ) ( 256 256 192 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( -256 -256 0 ) ( -256 -256 -32 ) ( -256 256 0 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 256 0 ) ( 256 256 -32 ) ( 256 -256 0 ) NULL [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 256 0 ) ( -256 256 -32 ) ( 256 256 0 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( 256 -256 0 ) ( 256 -256 -32 ) ( -256 -256 0 ) NULL [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 1 1
+( -256 256 -32 ) ( -256 -256 -32 ) ( 256 256 -32 ) NULL [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+( 256 -256 0 ) ( -256 -256 0 ) ( 256 256 0 ) C1A0_LABFLRC [ 1 0 0 0 ] [ 0 -1 0 0 ] 0 1 1
+}
+{
+( 17 190 40 ) ( 17 190 0 ) ( 17 174 40 ) WOLLA [ 0 1 0 -56 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 1 174 40 ) ( 1 174 0 ) ( 1 190 40 ) WOLLA [ 0 1 0 -56 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 17 174 40 ) ( 17 174 0 ) ( 1 174 40 ) WOLLA [ 1 0 0 -4 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 1 190 40 ) ( 1 190 0 ) ( 17 190 40 ) WOLLA [ 1 0 0 -4 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 1 190 0 ) ( 1 174 0 ) ( 17 190 0 ) WOLLA [ 1 0 0 -1 ] [ 0 -1 0 110 ] 0 1 1
+( 17 174 40 ) ( 1 174 40 ) ( 17 190 40 ) WOLLA [ 1 0 0 -1 ] [ 0 -1 0 110 ] 0 1 1
+}
+{
+( 16 12 40 ) ( 16 12 0 ) ( 16 -4 40 ) WOLLA [ 0 1 0 16 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 0 -4 40 ) ( 0 -4 0 ) ( 0 12 40 ) WOLLA [ 0 1 0 16 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 -4 40 ) ( 16 -4 0 ) ( 0 -4 40 ) WOLLA [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 0 12 40 ) ( 0 12 0 ) ( 16 12 40 ) WOLLA [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 0 12 0 ) ( 0 -4 0 ) ( 16 12 0 ) WOLLA [ 1 0 0 0 ] [ 0 -1 0 -68 ] 0 1 1
+( 16 -4 40 ) ( 0 -4 40 ) ( 16 12 40 ) WOLLA [ 1 0 0 0 ] [ 0 -1 0 -68 ] 0 1 1
+}
+{
+( 0 -160 40 ) ( 0 -160 0 ) ( 0 -144 40 ) WOLLA [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 -144 40 ) ( 16 -144 0 ) ( 16 -160 40 ) WOLLA [ 0 1 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 0 -144 40 ) ( 0 -144 0 ) ( 16 -144 40 ) WOLLA [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 -160 40 ) ( 16 -160 0 ) ( 0 -160 40 ) WOLLA [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 -160 40 ) ( 0 -160 40 ) ( 16 -144 40 ) WOLLA [ 1 0 0 -0 ] [ 0 -1 0 -224 ] 0 1 1
+( 0 -144 0 ) ( 0 -160 0 ) ( 16 -144 0 ) WOLLA [ 1 0 0 -0 ] [ 0 -1 0 -224 ] 0 1 1
+}
+}
+{
+"classname" "info_player_start"
+"angles" "0 0 0"
+"spawnflags" "0"
+"skill" "0"
+"origin" "-192 0 37"
+}
+{
+"classname" "light"
+"_falloff" "2"
+"m_iTurnOffStyle" "0"
+"m_iTurnOffTime" "0"
+"m_iTurnOnStyle" "0"
+"m_iTurnOnTime" "0"
+"m_iOffStyle" "0"
+"m_iOnStyle" "0"
+"style" "0"
+"_light" "255 255 128 200"
+"light" "255 255 128 200"
+"origin" "0 0 128"
+}
+{
+"classname" "func_button"
+"spawnflags" "1"
+"delay" "0"
+"wait" "0"
+"sounds" "0"
+"lip" "0"
+"speed" "25"
+"unlocked_sentence" "0"
+"locked_sentence" "0"
+"unlocked_sound" "0"
+"locked_sound" "0"
+"style" "0"
+"zhlt_lightflags" "0"
+"rendercolor" "0 0 0"
+"renderamt" "0"
+"rendermode" "0"
+"renderfx" "0"
+"angles" "0 0 0"
+"target" "musictestmp3"
+{
+( 17 190 52 ) ( 17 190 40 ) ( 17 174 52 ) WOLLA [ 0 -1 0 56 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 17 174 52 ) ( 17 174 40 ) ( 12 174 52 ) WOLLA [ 1 0 0 -4 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 12 190 52 ) ( 1 190 40 ) ( 17 190 52 ) WOLLA [ 1 0 0 -4 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 17 190 40 ) ( 1 190 40 ) ( 17 174 40 ) WOLLA [ 0 -1 0 46 ] [ -1 -0 0 1 ] 0 1 1
+( 12 174 52 ) ( 12 190 52 ) ( 17 174 52 ) WOLLA [ 0 -1 0 46 ] [ -1 -0 0 1 ] 0 1 1
+( 12 174 52 ) ( 1 174 40 ) ( 12 190 52 ) +0BUTTON2 [ 0 -1 0 28 ] [ 0 0 -1 10.6667 ] 0 0.5 0.375
+}
+}
+{
+"classname" "ambient_fmodstream"
+"spawnflags" "0"
+"light" "255 255 128 200"
+"message" "music/mp3test.mp3"
+"targetname" "musictestmp3"
+"origin" "65 174 128"
+}
+{
+"classname" "func_button"
+"spawnflags" "1"
+"delay" "0"
+"wait" "0"
+"sounds" "0"
+"lip" "0"
+"speed" "25"
+"unlocked_sentence" "0"
+"locked_sentence" "0"
+"unlocked_sound" "0"
+"locked_sound" "0"
+"style" "0"
+"zhlt_lightflags" "0"
+"rendercolor" "0 0 0"
+"renderamt" "0"
+"rendermode" "0"
+"renderfx" "0"
+"angles" "0 0 0"
+"target" "musictestwma"
+{
+( 16 12 52 ) ( 16 12 40 ) ( 16 -4 52 ) WOLLA [ 0 -1 0 -16 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 -4 52 ) ( 16 -4 40 ) ( 11 -4 52 ) WOLLA [ 1 0 0 -0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 11 12 52 ) ( 0 12 40 ) ( 16 12 52 ) WOLLA [ 1 0 0 -0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 12 40 ) ( 0 12 40 ) ( 16 -4 40 ) WOLLA [ 0 -1 0 -4 ] [ -1 -0 0 0 ] 0 1 1
+( 11 -4 52 ) ( 11 12 52 ) ( 16 -4 52 ) WOLLA [ 0 -1 0 -4 ] [ -1 -0 0 0 ] 0 1 1
+( 11 -4 52 ) ( 0 -4 40 ) ( 11 12 52 ) +0BUTTON2 [ 0 -1 0 -8 ] [ 0 0 -1 10.6667 ] 0 0.5 0.375
+}
+}
+{
+"classname" "ambient_fmodstream"
+"spawnflags" "0"
+"light" "255 255 128 200"
+"message" "music/wmatest.wma"
+"targetname" "musictestwma"
+"origin" "64 0 128"
+}
+{
+"classname" "ambient_fmodstream"
+"spawnflags" "0"
+"light" "255 255 128 200"
+"message" "music/oggtest.ogg"
+"targetname" "musictestogg"
+"origin" "64 -96 128"
+}
+{
+"classname" "func_button"
+"spawnflags" "1"
+"delay" "0"
+"wait" "0"
+"sounds" "0"
+"lip" "0"
+"speed" "25"
+"unlocked_sentence" "0"
+"locked_sentence" "0"
+"unlocked_sound" "0"
+"locked_sound" "0"
+"style" "0"
+"zhlt_lightflags" "0"
+"rendercolor" "0 0 0"
+"renderamt" "0"
+"rendermode" "0"
+"renderfx" "0"
+"angles" "0 0 0"
+"target" "musictestogg"
+{
+( 16 -144 52 ) ( 16 -144 40 ) ( 16 -160 52 ) WOLLA [ 0 -1 0 -0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 11 -144 52 ) ( 0 -144 40 ) ( 16 -144 52 ) WOLLA [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 16 -160 52 ) ( 16 -160 40 ) ( 11 -160 52 ) WOLLA [ 1 0 0 0 ] [ 0 0 -1 0 ] 0 0.25 0.456
+( 11 -160 52 ) ( 11 -144 52 ) ( 16 -160 52 ) WOLLA [ 0 -1 0 -32 ] [ -1 -0 0 -0 ] 0 1 1
+( 16 -144 40 ) ( 0 -144 40 ) ( 16 -160 40 ) WOLLA [ 0 -1 0 -32 ] [ -1 -0 0 -0 ] 0 1 1
+( 11 -160 52 ) ( 0 -160 40 ) ( 11 -144 52 ) +0BUTTON2 [ 0 -1 0 -0 ] [ 0 0 -1 10.6667 ] 0 0.5 0.375
+}
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSO"
+"origin" "-90 -150 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSG"
+"origin" "-64 -151 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSG"
+"origin" "-42 -151 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSW"
+"origin" "-65 1 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSM"
+"origin" "-44 2 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSA"
+"origin" "-22 3 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSM"
+"origin" "-61 183 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{CAPSP"
+"origin" "-39 183 0"
+}
+{
+"classname" "infodecal"
+"skill" "0"
+"texture" "{SMALL#S3"
+"origin" "-18 183 0"
+}

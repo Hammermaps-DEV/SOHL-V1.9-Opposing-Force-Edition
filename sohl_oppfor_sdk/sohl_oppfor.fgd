@@ -5933,18 +5933,16 @@
 	deceleration(string) : "Stop Deceleration units/sec^2" : "500"
 	m_iszViewEntity(string) : "Entity to view from (blank = this)"
 ]
-
-//NEW 1.4
-//1.5 the default folder of /sounds/fmod/ was removed from the code
-@PointClass base(Targetname) = ambient_fmodstream: "FMOD Audio player (MP3/OGG/WMA)"
+//NEW 1.9
+@PointClass base(Targetname) = ambient_fmodstream: "FMOD Audio player (MP3/OGG/WMA/FSB..)"
 [
-     message(string) : "File Name (relative to \spirit\)"
+     message(string) : "File Name (relative to \moddir\sound\)"
      spawnflags(flags) =
      [
           1: "Remove on fire" : 0
+		  2: "Loop this Track" : 0
      ]
 ]
-
 @SolidClass base(Targetname) = trigger_cdaudio : "Trigger CD Audio"
 [
 	health(choices) : "Track #" : -1 =

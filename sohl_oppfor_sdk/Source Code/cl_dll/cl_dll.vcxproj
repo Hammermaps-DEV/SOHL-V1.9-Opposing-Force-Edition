@@ -28,6 +28,14 @@
     <ClInclude Include="..\common\event_api.h" />
     <ClInclude Include="..\common\event_args.h" />
     <ClInclude Include="..\common\event_flags.h" />
+    <ClInclude Include="..\common\fmod.h" />
+    <ClInclude Include="..\common\fmod.hpp" />
+    <ClInclude Include="..\common\fmod_codec.h" />
+    <ClInclude Include="..\common\fmod_common.h" />
+    <ClInclude Include="..\common\fmod_dsp.h" />
+    <ClInclude Include="..\common\fmod_dsp_effects.h" />
+    <ClInclude Include="..\common\fmod_errors.h" />
+    <ClInclude Include="..\common\fmod_output.h" />
     <ClInclude Include="..\common\hltv.h" />
     <ClInclude Include="..\common\in_buttons.h" />
     <ClInclude Include="..\common\ivoicetweak.h" />
@@ -182,6 +190,7 @@
     <ClInclude Include="particles\particle_texture.h" />
     <ClInclude Include="particles\system_manager.h" />
     <ClInclude Include="rain.h" />
+    <ClInclude Include="soundengine.h" />
     <ClInclude Include="StudioModelRenderer.h" />
     <ClInclude Include="studio_util.h" />
     <ClInclude Include="tf_defs.h" />
@@ -253,6 +262,7 @@
     <ClCompile Include="particles\tga_loader.cpp" />
     <ClCompile Include="rain.cpp" />
     <ClCompile Include="saytext.cpp" />
+    <ClCompile Include="soundengine.cpp" />
     <ClCompile Include="soundsystem.cpp" />
     <ClCompile Include="statusbar.cpp" />
     <ClCompile Include="status_icons.cpp" />
@@ -365,7 +375,6 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;wsock32.lib;opengl32.lib;glu32.lib;../utils/vgui/lib/vgui.lib;../external/lib/SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\debug\client.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>

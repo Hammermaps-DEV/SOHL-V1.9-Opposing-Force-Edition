@@ -41,15 +41,16 @@ extern "C"
 #include "winsani_out.h"
 #endif
 #include "exports.h"
-#
 #include "tri.h"
 #include "vgui_TeamFortressViewport.h"
 #include "../public/interface.h"
+#include "soundengine.h"
 
 cl_enginefunc_t gEngfuncs;
 CHud gHUD;
 
 TeamFortressViewport *gViewPort = NULL;
+CSoundEngine gSoundEngine;
 
 #include "particleman.h"
 CSysModule *g_hParticleManModule = NULL;

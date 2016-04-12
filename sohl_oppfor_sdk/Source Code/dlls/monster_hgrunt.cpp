@@ -21,6 +21,7 @@
 //=========================================================
 // NPC: Human Grunt
 //=========================================================
+
 #include	"extdll.h"
 #include	"plane.h"
 #include	"util.h"
@@ -184,6 +185,739 @@ enum {
 } HGRUNT_SENTENCE_TYPES;
 
 //=========================================================
+// AI Schedules Specific to this monster
+//=========================================================
+
+//=========================================================
+// GruntFail
+//=========================================================
+Task_t	tlGruntFail[] =
+{
+	{ TASK_STOP_MOVING,			0 },
+	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
+	{ TASK_WAIT,				(float)2 },
+	{ TASK_WAIT_PVS,			(float)0 },
+};
+
+Schedule_t	slGruntFail[] =
+{
+	{
+		tlGruntFail,
+		HL_ARRAYSIZE(tlGruntFail),
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_RANGE_ATTACK2 |
+	bits_COND_CAN_MELEE_ATTACK1 |
+	bits_COND_CAN_MELEE_ATTACK2,
+	0,
+	"Grunt Fail"
+	},
+};
+
+//=========================================================
+// Grunt Combat Fail
+//=========================================================
+Task_t	tlGruntCombatFail[] =
+{
+	{ TASK_STOP_MOVING,			0 },
+	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
+	{ TASK_WAIT_FACE_ENEMY,		(float)2 },
+	{ TASK_WAIT_PVS,			(float)0 },
+};
+
+Schedule_t	slGruntCombatFail[] =
+{
+	{
+		tlGruntCombatFail,
+		HL_ARRAYSIZE(tlGruntCombatFail),
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_RANGE_ATTACK2,
+	0,
+	"Grunt Combat Fail"
+	},
+};
+
+//=========================================================
+// Victory dance!
+//=========================================================
+Task_t	tlGruntVictoryDance[] =
+{
+	{ TASK_STOP_MOVING,						(float)0 },
+	{ TASK_FACE_ENEMY,						(float)0 },
+	{ TASK_WAIT,							(float)1.5 },
+	{ TASK_GET_PATH_TO_ENEMY_CORPSE,		(float)0 },
+	{ TASK_WALK_PATH,						(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,				(float)0 },
+	{ TASK_FACE_ENEMY,						(float)0 },
+	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE },
+};
+
+Schedule_t	slGruntVictoryDance[] =
+{
+	{
+		tlGruntVictoryDance,
+		HL_ARRAYSIZE(tlGruntVictoryDance),
+	bits_COND_NEW_ENEMY |
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE,
+	0,
+	"GruntVictoryDance"
+	},
+};
+
+//=========================================================
+// Establish line of fire - move to a position that allows
+// the grunt to attack.
+//=========================================================
+Task_t tlGruntEstablishLineOfFire[] =
+{
+	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_GRUNT_ELOF_FAIL },
+	{ TASK_GET_PATH_TO_ENEMY,	(float)0 },
+	{ TASK_GRUNT_SPEAK_SENTENCE,(float)0 },
+	{ TASK_RUN_PATH,			(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,	(float)0 },
+};
+
+Schedule_t slGruntEstablishLineOfFire[] =
+{
+	{
+		tlGruntEstablishLineOfFire,
+		HL_ARRAYSIZE(tlGruntEstablishLineOfFire),
+	bits_COND_NEW_ENEMY |
+	bits_COND_ENEMY_DEAD |
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_MELEE_ATTACK1 |
+	bits_COND_CAN_RANGE_ATTACK2 |
+	bits_COND_CAN_MELEE_ATTACK2 |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER,
+	"GruntEstablishLineOfFire"
+	},
+};
+
+//=========================================================
+// GruntFoundEnemy - grunt established sight with an enemy
+// that was hiding from the squad.
+//=========================================================
+Task_t	tlGruntFoundEnemy[] =
+{
+	{ TASK_STOP_MOVING,				0 },
+	{ TASK_FACE_ENEMY,				(float)0 },
+	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,(float)ACT_SIGNAL1 },
+};
+
+Schedule_t	slGruntFoundEnemy[] =
+{
+	{
+		tlGruntFoundEnemy,
+		HL_ARRAYSIZE(tlGruntFoundEnemy),
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER,
+	"GruntFoundEnemy"
+	},
+};
+
+//=========================================================
+// GruntCombatFace Schedule
+//=========================================================
+Task_t	tlGruntCombatFace1[] =
+{
+	{ TASK_STOP_MOVING,				0 },
+	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE },
+	{ TASK_FACE_ENEMY,				(float)0 },
+	{ TASK_WAIT,					(float)1.5 },
+	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_SWEEP },
+};
+
+Schedule_t	slGruntCombatFace[] =
+{
+	{
+		tlGruntCombatFace1,
+		HL_ARRAYSIZE(tlGruntCombatFace1),
+	bits_COND_NEW_ENEMY |
+	bits_COND_ENEMY_DEAD |
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_RANGE_ATTACK2,
+	0,
+	"Combat Face"
+	},
+};
+
+//=========================================================
+// Suppressing fire - don't stop shooting until the clip is
+// empty or grunt gets hurt.
+//=========================================================
+Task_t	tlGruntSignalSuppress[] =
+{
+	{ TASK_STOP_MOVING,					0 },
+	{ TASK_FACE_IDEAL,					(float)0 },
+	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float)ACT_SIGNAL2 },
+	{ TASK_FACE_ENEMY,					(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
+	{ TASK_RANGE_ATTACK1,				(float)0 },
+	{ TASK_FACE_ENEMY,					(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
+	{ TASK_RANGE_ATTACK1,				(float)0 },
+	{ TASK_FACE_ENEMY,					(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
+	{ TASK_RANGE_ATTACK1,				(float)0 },
+	{ TASK_FACE_ENEMY,					(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
+	{ TASK_RANGE_ATTACK1,				(float)0 },
+	{ TASK_FACE_ENEMY,					(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
+	{ TASK_RANGE_ATTACK1,				(float)0 },
+};
+
+Schedule_t	slGruntSignalSuppress[] =
+{
+	{
+		tlGruntSignalSuppress,
+		HL_ARRAYSIZE(tlGruntSignalSuppress),
+	bits_COND_ENEMY_DEAD |
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_HEAR_SOUND |
+	bits_COND_GRUNT_NOFIRE |
+	bits_COND_NO_AMMO_LOADED,
+
+	bits_SOUND_DANGER,
+	"SignalSuppress"
+	},
+};
+
+Task_t	tlGruntSuppress[] =
+{
+	{ TASK_STOP_MOVING,			0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+};
+
+Schedule_t	slGruntSuppress[] =
+{
+	{
+		tlGruntSuppress,
+		HL_ARRAYSIZE(tlGruntSuppress),
+	bits_COND_ENEMY_DEAD |
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_HEAR_SOUND |
+	bits_COND_GRUNT_NOFIRE |
+	bits_COND_NO_AMMO_LOADED,
+
+	bits_SOUND_DANGER,
+	"Suppress"
+	},
+};
+
+
+//=========================================================
+// grunt wait in cover - we don't allow danger or the ability
+// to attack to break a grunt's run to cover schedule, but
+// when a grunt is in cover, we do want them to attack if they can.
+//=========================================================
+Task_t	tlGruntWaitInCover[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE },
+	{ TASK_WAIT_FACE_ENEMY,			(float)1 },
+};
+
+Schedule_t	slGruntWaitInCover[] =
+{
+	{
+		tlGruntWaitInCover,
+		HL_ARRAYSIZE(tlGruntWaitInCover),
+	bits_COND_NEW_ENEMY |
+	bits_COND_HEAR_SOUND |
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_RANGE_ATTACK2 |
+	bits_COND_CAN_MELEE_ATTACK1 |
+	bits_COND_CAN_MELEE_ATTACK2,
+
+	bits_SOUND_DANGER,
+	"GruntWaitInCover"
+	},
+};
+
+//=========================================================
+// run to cover.
+// !!!BUGBUG - set a decent fail schedule here.
+//=========================================================
+Task_t	tlGruntTakeCover1[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_GRUNT_TAKECOVER_FAILED },
+	{ TASK_WAIT,					(float)0.2 },
+	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0 },
+	{ TASK_GRUNT_SPEAK_SENTENCE,	(float)0 },
+	{ TASK_RUN_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER },
+	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_WAIT_FACE_ENEMY },
+};
+
+Schedule_t	slGruntTakeCover[] =
+{
+	{
+		tlGruntTakeCover1,
+		HL_ARRAYSIZE(tlGruntTakeCover1),
+	0,
+	0,
+	"TakeCover"
+	},
+};
+
+//=========================================================
+// drop grenade then run to cover.
+//=========================================================
+Task_t	tlGruntGrenadeCover1[] =
+{
+	{ TASK_STOP_MOVING,						(float)0 },
+	{ TASK_FIND_COVER_FROM_ENEMY,			(float)99 },
+	{ TASK_FIND_FAR_NODE_COVER_FROM_ENEMY,	(float)384 },
+	{ TASK_PLAY_SEQUENCE,					(float)ACT_SPECIAL_ATTACK1 },
+	{ TASK_CLEAR_MOVE_WAIT,					(float)0 },
+	{ TASK_RUN_PATH,						(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,				(float)0 },
+	{ TASK_SET_SCHEDULE,					(float)SCHED_GRUNT_WAIT_FACE_ENEMY },
+};
+
+Schedule_t	slGruntGrenadeCover[] =
+{
+	{
+		tlGruntGrenadeCover1,
+		HL_ARRAYSIZE(tlGruntGrenadeCover1),
+	0,
+	0,
+	"GrenadeCover"
+	},
+};
+
+
+//=========================================================
+// drop grenade then run to cover.
+//=========================================================
+Task_t	tlGruntTossGrenadeCover1[] =
+{
+	{ TASK_FACE_ENEMY,						(float)0 },
+	{ TASK_RANGE_ATTACK2, 					(float)0 },
+	{ TASK_SET_SCHEDULE,					(float)SCHED_TAKE_COVER_FROM_ENEMY },
+};
+
+Schedule_t	slGruntTossGrenadeCover[] =
+{
+	{
+		tlGruntTossGrenadeCover1,
+		HL_ARRAYSIZE(tlGruntTossGrenadeCover1),
+	0,
+	0,
+	"TossGrenadeCover"
+	},
+};
+
+//=========================================================
+// hide from the loudest sound source (to run from grenade)
+//=========================================================
+Task_t	tlGruntTakeCoverFromBestSound[] =
+{
+	{ TASK_SET_FAIL_SCHEDULE,			(float)SCHED_COWER },// duck and cover if cannot move from explosion
+	{ TASK_STOP_MOVING,					(float)0 },
+	{ TASK_FIND_COVER_FROM_BEST_SOUND,	(float)0 },
+	{ TASK_RUN_PATH,					(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,			(float)0 },
+	{ TASK_REMEMBER,					(float)bits_MEMORY_INCOVER },
+	{ TASK_TURN_LEFT,					(float)179 },
+};
+
+Schedule_t	slGruntTakeCoverFromBestSound[] =
+{
+	{
+		tlGruntTakeCoverFromBestSound,
+		HL_ARRAYSIZE(tlGruntTakeCoverFromBestSound),
+	0,
+	0,
+	"GruntTakeCoverFromBestSound"
+	},
+};
+
+//=========================================================
+// Grunt reload schedule
+//=========================================================
+Task_t	tlGruntHideReload[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_RELOAD },
+	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0 },
+	{ TASK_RUN_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER },
+	{ TASK_FACE_ENEMY,				(float)0 },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_RELOAD },
+};
+
+Schedule_t slGruntHideReload[] =
+{
+	{
+		tlGruntHideReload,
+		HL_ARRAYSIZE(tlGruntHideReload),
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER,
+	"GruntHideReload"
+	}
+};
+
+//=========================================================
+// Do a turning sweep of the area
+//=========================================================
+Task_t	tlGruntSweep[] =
+{
+	{ TASK_TURN_LEFT,			(float)179 },
+	{ TASK_WAIT,				(float)1 },
+	{ TASK_TURN_LEFT,			(float)179 },
+	{ TASK_WAIT,				(float)1 },
+};
+
+Schedule_t	slGruntSweep[] =
+{
+	{
+		tlGruntSweep,
+		HL_ARRAYSIZE(tlGruntSweep),
+
+	bits_COND_NEW_ENEMY |
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_CAN_RANGE_ATTACK1 |
+	bits_COND_CAN_RANGE_ATTACK2 |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_WORLD |// sound flags
+	bits_SOUND_DANGER |
+	bits_SOUND_PLAYER,
+
+	"Grunt Sweep"
+	},
+};
+
+//=========================================================
+// primary range attack. Overriden because base class stops attacking when the enemy is occluded.
+// grunt's grenade toss requires the enemy be occluded.
+//=========================================================
+Task_t	tlGruntRangeAttack1A[] =
+{
+	{ TASK_STOP_MOVING,			(float)0 },
+	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,		(float)ACT_CROUCH },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+};
+
+Schedule_t	slGruntRangeAttack1A[] =
+{
+	{
+		tlGruntRangeAttack1A,
+		HL_ARRAYSIZE(tlGruntRangeAttack1A),
+	bits_COND_NEW_ENEMY |
+	bits_COND_ENEMY_DEAD |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_ENEMY_OCCLUDED |
+	bits_COND_HEAR_SOUND |
+	bits_COND_GRUNT_NOFIRE |
+	bits_COND_NO_AMMO_LOADED,
+
+	bits_SOUND_DANGER,
+	"Range Attack1A"
+	},
+};
+
+
+//=========================================================
+// primary range attack. Overriden because base class stops attacking when the enemy is occluded.
+// grunt's grenade toss requires the enemy be occluded.
+//=========================================================
+Task_t	tlGruntRangeAttack1B[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,(float)ACT_IDLE_ANGRY },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
+	{ TASK_RANGE_ATTACK1,		(float)0 },
+};
+
+Schedule_t	slGruntRangeAttack1B[] =
+{
+	{
+		tlGruntRangeAttack1B,
+		HL_ARRAYSIZE(tlGruntRangeAttack1B),
+	bits_COND_NEW_ENEMY |
+	bits_COND_ENEMY_DEAD |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_ENEMY_OCCLUDED |
+	bits_COND_NO_AMMO_LOADED |
+	bits_COND_GRUNT_NOFIRE |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER,
+	"Range Attack1B"
+	},
+};
+
+//=========================================================
+// secondary range attack. Overriden because base class stops attacking when the enemy is occluded.
+// grunt's grenade toss requires the enemy be occluded.
+//=========================================================
+Task_t	tlGruntRangeAttack2[] =
+{
+	{ TASK_STOP_MOVING,				(float)0 },
+	{ TASK_GRUNT_FACE_TOSS_DIR,		(float)0 },
+	{ TASK_PLAY_SEQUENCE,			(float)ACT_RANGE_ATTACK2 },
+	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_WAIT_FACE_ENEMY },// don't run immediately after throwing grenade.
+};
+
+Schedule_t	slGruntRangeAttack2[] =
+{
+	{
+		tlGruntRangeAttack2,
+		HL_ARRAYSIZE(tlGruntRangeAttack2),
+	0,
+	0,
+	"RangeAttack2"
+	},
+};
+
+
+//=========================================================
+// repel 
+//=========================================================
+Task_t	tlGruntRepel[] =
+{
+	{ TASK_STOP_MOVING,			(float)0 },
+	{ TASK_FACE_IDEAL,			(float)0 },
+	{ TASK_PLAY_SEQUENCE,		(float)ACT_GLIDE },
+};
+
+Schedule_t	slGruntRepel[] =
+{
+	{
+		tlGruntRepel,
+		HL_ARRAYSIZE(tlGruntRepel),
+	bits_COND_SEE_ENEMY |
+	bits_COND_NEW_ENEMY |
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER |
+	bits_SOUND_COMBAT |
+	bits_SOUND_PLAYER,
+	"Repel"
+	},
+};
+
+
+//=========================================================
+// repel 
+//=========================================================
+Task_t	tlGruntRepelAttack[] =
+{
+	{ TASK_STOP_MOVING,			(float)0 },
+	{ TASK_FACE_ENEMY,			(float)0 },
+	{ TASK_PLAY_SEQUENCE,		(float)ACT_FLY },
+};
+
+Schedule_t	slGruntRepelAttack[] =
+{
+	{
+		tlGruntRepelAttack,
+		HL_ARRAYSIZE(tlGruntRepelAttack),
+	bits_COND_ENEMY_OCCLUDED,
+	0,
+	"Repel Attack"
+	},
+};
+
+//=========================================================
+// repel land
+//=========================================================
+Task_t	tlGruntRepelLand[] =
+{
+	{ TASK_STOP_MOVING,			(float)0 },
+	{ TASK_PLAY_SEQUENCE,		(float)ACT_LAND },
+	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0 },
+	{ TASK_RUN_PATH,				(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
+	{ TASK_CLEAR_LASTPOSITION,		(float)0 },
+};
+
+Schedule_t	slGruntRepelLand[] =
+{
+	{
+		tlGruntRepelLand,
+		HL_ARRAYSIZE(tlGruntRepelLand),
+	bits_COND_SEE_ENEMY |
+	bits_COND_NEW_ENEMY |
+	bits_COND_LIGHT_DAMAGE |
+	bits_COND_HEAVY_DAMAGE |
+	bits_COND_HEAR_SOUND,
+
+	bits_SOUND_DANGER |
+	bits_SOUND_COMBAT |
+	bits_SOUND_PLAYER,
+	"Repel Land"
+	},
+};
+
+
+DEFINE_CUSTOM_SCHEDULES(CHGrunt)
+{
+	slGruntFail,
+		slGruntCombatFail,
+		slGruntVictoryDance,
+		slGruntEstablishLineOfFire,
+		slGruntFoundEnemy,
+		slGruntCombatFace,
+		slGruntSignalSuppress,
+		slGruntSuppress,
+		slGruntWaitInCover,
+		slGruntTakeCover,
+		slGruntGrenadeCover,
+		slGruntTossGrenadeCover,
+		slGruntTakeCoverFromBestSound,
+		slGruntHideReload,
+		slGruntSweep,
+		slGruntRangeAttack1A,
+		slGruntRangeAttack1B,
+		slGruntRangeAttack2,
+		slGruntRepel,
+		slGruntRepelAttack,
+		slGruntRepelLand,
+};
+
+IMPLEMENT_CUSTOM_SCHEDULES(CHGrunt, CSquadMonster);
+
+//=========================================================
+// SetActivity 
+//=========================================================
+void CHGrunt::SetActivity(Activity NewActivity) {
+	int	iSequence = ACTIVITY_NOT_AVAILABLE;
+	void *pmodel = GET_MODEL_PTR(ENT(pev));
+
+	switch (NewActivity) {
+		case ACT_RANGE_ATTACK1:
+			// grunt is either shooting standing or shooting crouched
+			if (FBitSet(pev->weapons, HGRUNT_9MMAR)) {
+				if (m_fStanding) {
+					// get aimable sequence
+					iSequence = LookupSequence("standing_mp5");
+				} else {
+					// get crouching shoot
+					iSequence = LookupSequence("crouching_mp5");
+				}
+			} else {
+				if (m_fStanding) {
+					// get aimable sequence
+					iSequence = LookupSequence("standing_shotgun");
+				} else {
+					// get crouching shoot
+					iSequence = LookupSequence("crouching_shotgun");
+				}
+			}
+		break;
+		case ACT_RANGE_ATTACK2:
+			// grunt is going to a secondary long range attack. This may be a thrown 
+			// grenade or fired grenade, we must determine which and pick proper sequence
+			if (pev->weapons & HGRUNT_HANDGRENADE) {
+				// get toss anim
+				iSequence = LookupSequence("throwgrenade");
+			}
+			// LRC: added a test to stop a marine without a launcher from firing.
+			else if (pev->weapons & HGRUNT_GRENADELAUNCHER) {
+				// get launch anim
+				iSequence = LookupSequence("launchgrenade");
+			} else {
+				ALERT(at_debug, "No grenades available. "); // flow into the error message we get at the end...
+			}
+		break;
+		case ACT_RUN:
+			if (pev->health <= HGRUNT_LIMP_HEALTH) {
+				// limp!
+				iSequence = LookupActivity(ACT_RUN_HURT);
+			} else {
+				iSequence = LookupActivity(NewActivity);
+			}
+		break;
+		case ACT_WALK:
+			if (pev->health <= HGRUNT_LIMP_HEALTH) {
+				// limp!
+				iSequence = LookupActivity(ACT_WALK_HURT);
+			} else {
+				iSequence = LookupActivity(NewActivity);
+			}
+		break;
+		case ACT_IDLE:
+			if (m_MonsterState == MONSTERSTATE_COMBAT) {
+				NewActivity = ACT_IDLE_ANGRY;
+			}
+			iSequence = LookupActivity(NewActivity);
+		break;
+		default:
+			iSequence = LookupActivity(NewActivity);
+		break;
+	}
+
+	m_Activity = NewActivity; // Go ahead and set this so it doesn't keep trying when the anim is not present
+
+	// Set to the desired anim, or default anim if the desired is not present
+	if (iSequence > ACTIVITY_NOT_AVAILABLE) {
+		if (pev->sequence != iSequence || !m_fSequenceLoops) {
+			pev->frame = 0;
+		}
+
+		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
+		ResetSequenceInfo();
+		SetYawSpeed();
+	} else {
+		// Not available try to get default anim
+		ALERT(at_debug, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		pev->sequence = 0;	// Set to the reset anim (if it's there)
+	}
+
+	CBaseMonster::SetActivity(m_Activity);
+}
+
+//=========================================================
 // Speak Sentence - say your cued up sentence.
 //
 // Some grunt sentences (take cover and charge) rely on actually
@@ -227,9 +961,7 @@ int CHGrunt::IRelationship(CBaseEntity *pTarget) {
 // GibMonster - make gun fly through the air.
 //=========================================================
 void CHGrunt::GibMonster(void) {
-	Vector	vecGunPos;
-	Vector	vecGunAngles;
-
+	Vector	vecGunPos, vecGunAngles;
 	if (GetBodygroup(2) != 2 && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP))
 	{// throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
@@ -274,8 +1006,10 @@ void CHGrunt::GibMonster(void) {
 int CHGrunt::ISoundMask(void) {
 	return	bits_SOUND_WORLD |
 			bits_SOUND_COMBAT |
-			bits_SOUND_PLAYER |
-			bits_SOUND_DANGER;
+			bits_SOUND_MEAT |
+			bits_SOUND_GARBAGE |
+			bits_SOUND_DANGER |
+			bits_SOUND_PLAYER;
 }
 
 //=========================================================
@@ -346,7 +1080,6 @@ BOOL CHGrunt::FCanCheckAttacks(void) {
 //=========================================================
 BOOL CHGrunt::CheckMeleeAttack1(float flDot, float flDist) {
 	CBaseMonster *pEnemy;
-
 	if (m_hEnemy != NULL) {
 		pEnemy = m_hEnemy->MyMonsterPointer();
 		if (!pEnemy) {
@@ -1132,763 +1865,6 @@ void CHGrunt::PainSound(void) {
 //=========================================================
 void CHGrunt::DeathSound(void) {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
-}
-
-//=========================================================
-// AI Schedules Specific to this monster
-//=========================================================
-
-//=========================================================
-// GruntFail
-//=========================================================
-Task_t	tlGruntFail[] =
-{
-	{ TASK_STOP_MOVING,			0 },
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT,				(float)2 },
-	{ TASK_WAIT_PVS,			(float)0 },
-};
-
-Schedule_t	slGruntFail[] =
-{
-	{
-		tlGruntFail,
-		HL_ARRAYSIZE(tlGruntFail),
-	bits_COND_CAN_RANGE_ATTACK1 |
-	bits_COND_CAN_RANGE_ATTACK2 |
-	bits_COND_CAN_MELEE_ATTACK1 |
-	bits_COND_CAN_MELEE_ATTACK2,
-	0,
-	"Grunt Fail"
-	},
-};
-
-//=========================================================
-// Grunt Combat Fail
-//=========================================================
-Task_t	tlGruntCombatFail[] =
-{
-	{ TASK_STOP_MOVING,			0 },
-	{ TASK_SET_ACTIVITY,		(float)ACT_IDLE },
-	{ TASK_WAIT_FACE_ENEMY,		(float)2 },
-	{ TASK_WAIT_PVS,			(float)0 },
-};
-
-Schedule_t	slGruntCombatFail[] =
-{
-	{
-		tlGruntCombatFail,
-		HL_ARRAYSIZE(tlGruntCombatFail),
-	bits_COND_CAN_RANGE_ATTACK1 |
-	bits_COND_CAN_RANGE_ATTACK2,
-	0,
-	"Grunt Combat Fail"
-	},
-};
-
-//=========================================================
-// Victory dance!
-//=========================================================
-Task_t	tlGruntVictoryDance[] =
-{
-	{ TASK_STOP_MOVING,						(float)0 },
-	{ TASK_FACE_ENEMY,						(float)0 },
-	{ TASK_WAIT,							(float)1.5 },
-	{ TASK_GET_PATH_TO_ENEMY_CORPSE,		(float)0 },
-	{ TASK_WALK_PATH,						(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,				(float)0 },
-	{ TASK_FACE_ENEMY,						(float)0 },
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_VICTORY_DANCE },
-};
-
-Schedule_t	slGruntVictoryDance[] =
-{
-	{
-		tlGruntVictoryDance,
-		HL_ARRAYSIZE(tlGruntVictoryDance),
-	bits_COND_NEW_ENEMY |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_HEAVY_DAMAGE,
-	0,
-	"GruntVictoryDance"
-	},
-};
-
-//=========================================================
-// Establish line of fire - move to a position that allows
-// the grunt to attack.
-//=========================================================
-Task_t tlGruntEstablishLineOfFire[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_GRUNT_ELOF_FAIL },
-	{ TASK_GET_PATH_TO_ENEMY,	(float)0 },
-	{ TASK_GRUNT_SPEAK_SENTENCE,(float)0 },
-	{ TASK_RUN_PATH,			(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,	(float)0 },
-};
-
-Schedule_t slGruntEstablishLineOfFire[] =
-{
-	{
-		tlGruntEstablishLineOfFire,
-		HL_ARRAYSIZE(tlGruntEstablishLineOfFire),
-	bits_COND_NEW_ENEMY |
-	bits_COND_ENEMY_DEAD |
-	bits_COND_CAN_RANGE_ATTACK1 |
-	bits_COND_CAN_MELEE_ATTACK1 |
-	bits_COND_CAN_RANGE_ATTACK2 |
-	bits_COND_CAN_MELEE_ATTACK2 |
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_DANGER,
-	"GruntEstablishLineOfFire"
-	},
-};
-
-//=========================================================
-// GruntFoundEnemy - grunt established sight with an enemy
-// that was hiding from the squad.
-//=========================================================
-Task_t	tlGruntFoundEnemy[] =
-{
-	{ TASK_STOP_MOVING,				0 },
-	{ TASK_FACE_ENEMY,				(float)0 },
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,(float)ACT_SIGNAL1 },
-};
-
-Schedule_t	slGruntFoundEnemy[] =
-{
-	{
-		tlGruntFoundEnemy,
-		HL_ARRAYSIZE(tlGruntFoundEnemy),
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_DANGER,
-	"GruntFoundEnemy"
-	},
-};
-
-//=========================================================
-// GruntCombatFace Schedule
-//=========================================================
-Task_t	tlGruntCombatFace1[] =
-{
-	{ TASK_STOP_MOVING,				0 },
-	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE },
-	{ TASK_FACE_ENEMY,				(float)0 },
-	{ TASK_WAIT,					(float)1.5 },
-	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_SWEEP },
-};
-
-Schedule_t	slGruntCombatFace[] =
-{
-	{
-		tlGruntCombatFace1,
-		HL_ARRAYSIZE(tlGruntCombatFace1),
-	bits_COND_NEW_ENEMY |
-	bits_COND_ENEMY_DEAD |
-	bits_COND_CAN_RANGE_ATTACK1 |
-	bits_COND_CAN_RANGE_ATTACK2,
-	0,
-	"Combat Face"
-	},
-};
-
-//=========================================================
-// Suppressing fire - don't stop shooting until the clip is
-// empty or grunt gets hurt.
-//=========================================================
-Task_t	tlGruntSignalSuppress[] =
-{
-	{ TASK_STOP_MOVING,					0 },
-	{ TASK_FACE_IDEAL,					(float)0 },
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float)ACT_SIGNAL2 },
-	{ TASK_FACE_ENEMY,					(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
-	{ TASK_RANGE_ATTACK1,				(float)0 },
-	{ TASK_FACE_ENEMY,					(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
-	{ TASK_RANGE_ATTACK1,				(float)0 },
-	{ TASK_FACE_ENEMY,					(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
-	{ TASK_RANGE_ATTACK1,				(float)0 },
-	{ TASK_FACE_ENEMY,					(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
-	{ TASK_RANGE_ATTACK1,				(float)0 },
-	{ TASK_FACE_ENEMY,					(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,			(float)0 },
-	{ TASK_RANGE_ATTACK1,				(float)0 },
-};
-
-Schedule_t	slGruntSignalSuppress[] =
-{
-	{
-		tlGruntSignalSuppress,
-		HL_ARRAYSIZE(tlGruntSignalSuppress),
-	bits_COND_ENEMY_DEAD |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_HEAR_SOUND |
-	bits_COND_GRUNT_NOFIRE |
-	bits_COND_NO_AMMO_LOADED,
-
-	bits_SOUND_DANGER,
-	"SignalSuppress"
-	},
-};
-
-Task_t	tlGruntSuppress[] =
-{
-	{ TASK_STOP_MOVING,			0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-};
-
-Schedule_t	slGruntSuppress[] =
-{
-	{
-		tlGruntSuppress,
-		HL_ARRAYSIZE(tlGruntSuppress),
-	bits_COND_ENEMY_DEAD |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_HEAR_SOUND |
-	bits_COND_GRUNT_NOFIRE |
-	bits_COND_NO_AMMO_LOADED,
-
-	bits_SOUND_DANGER,
-	"Suppress"
-	},
-};
-
-
-//=========================================================
-// grunt wait in cover - we don't allow danger or the ability
-// to attack to break a grunt's run to cover schedule, but
-// when a grunt is in cover, we do want them to attack if they can.
-//=========================================================
-Task_t	tlGruntWaitInCover[] =
-{
-	{ TASK_STOP_MOVING,				(float)0 },
-	{ TASK_SET_ACTIVITY,			(float)ACT_IDLE },
-	{ TASK_WAIT_FACE_ENEMY,			(float)1 },
-};
-
-Schedule_t	slGruntWaitInCover[] =
-{
-	{
-		tlGruntWaitInCover,
-		HL_ARRAYSIZE(tlGruntWaitInCover),
-	bits_COND_NEW_ENEMY |
-	bits_COND_HEAR_SOUND |
-	bits_COND_CAN_RANGE_ATTACK1 |
-	bits_COND_CAN_RANGE_ATTACK2 |
-	bits_COND_CAN_MELEE_ATTACK1 |
-	bits_COND_CAN_MELEE_ATTACK2,
-
-	bits_SOUND_DANGER,
-	"GruntWaitInCover"
-	},
-};
-
-//=========================================================
-// run to cover.
-// !!!BUGBUG - set a decent fail schedule here.
-//=========================================================
-Task_t	tlGruntTakeCover1[] =
-{
-	{ TASK_STOP_MOVING,				(float)0 },
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_GRUNT_TAKECOVER_FAILED },
-	{ TASK_WAIT,					(float)0.2 },
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0 },
-	{ TASK_GRUNT_SPEAK_SENTENCE,	(float)0 },
-	{ TASK_RUN_PATH,				(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
-	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER },
-	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_WAIT_FACE_ENEMY },
-};
-
-Schedule_t	slGruntTakeCover[] =
-{
-	{
-		tlGruntTakeCover1,
-		HL_ARRAYSIZE(tlGruntTakeCover1),
-	0,
-	0,
-	"TakeCover"
-	},
-};
-
-//=========================================================
-// drop grenade then run to cover.
-//=========================================================
-Task_t	tlGruntGrenadeCover1[] =
-{
-	{ TASK_STOP_MOVING,						(float)0 },
-	{ TASK_FIND_COVER_FROM_ENEMY,			(float)99 },
-	{ TASK_FIND_FAR_NODE_COVER_FROM_ENEMY,	(float)384 },
-	{ TASK_PLAY_SEQUENCE,					(float)ACT_SPECIAL_ATTACK1 },
-	{ TASK_CLEAR_MOVE_WAIT,					(float)0 },
-	{ TASK_RUN_PATH,						(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,				(float)0 },
-	{ TASK_SET_SCHEDULE,					(float)SCHED_GRUNT_WAIT_FACE_ENEMY },
-};
-
-Schedule_t	slGruntGrenadeCover[] =
-{
-	{
-		tlGruntGrenadeCover1,
-		HL_ARRAYSIZE(tlGruntGrenadeCover1),
-	0,
-	0,
-	"GrenadeCover"
-	},
-};
-
-
-//=========================================================
-// drop grenade then run to cover.
-//=========================================================
-Task_t	tlGruntTossGrenadeCover1[] =
-{
-	{ TASK_FACE_ENEMY,						(float)0 },
-	{ TASK_RANGE_ATTACK2, 					(float)0 },
-	{ TASK_SET_SCHEDULE,					(float)SCHED_TAKE_COVER_FROM_ENEMY },
-};
-
-Schedule_t	slGruntTossGrenadeCover[] =
-{
-	{
-		tlGruntTossGrenadeCover1,
-		HL_ARRAYSIZE(tlGruntTossGrenadeCover1),
-	0,
-	0,
-	"TossGrenadeCover"
-	},
-};
-
-//=========================================================
-// hide from the loudest sound source (to run from grenade)
-//=========================================================
-Task_t	tlGruntTakeCoverFromBestSound[] =
-{
-	{ TASK_SET_FAIL_SCHEDULE,			(float)SCHED_COWER },// duck and cover if cannot move from explosion
-	{ TASK_STOP_MOVING,					(float)0 },
-	{ TASK_FIND_COVER_FROM_BEST_SOUND,	(float)0 },
-	{ TASK_RUN_PATH,					(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,			(float)0 },
-	{ TASK_REMEMBER,					(float)bits_MEMORY_INCOVER },
-	{ TASK_TURN_LEFT,					(float)179 },
-};
-
-Schedule_t	slGruntTakeCoverFromBestSound[] =
-{
-	{
-		tlGruntTakeCoverFromBestSound,
-		HL_ARRAYSIZE(tlGruntTakeCoverFromBestSound),
-	0,
-	0,
-	"GruntTakeCoverFromBestSound"
-	},
-};
-
-//=========================================================
-// Grunt reload schedule
-//=========================================================
-Task_t	tlGruntHideReload[] =
-{
-	{ TASK_STOP_MOVING,				(float)0 },
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_RELOAD },
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0 },
-	{ TASK_RUN_PATH,				(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
-	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER },
-	{ TASK_FACE_ENEMY,				(float)0 },
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_RELOAD },
-};
-
-Schedule_t slGruntHideReload[] =
-{
-	{
-		tlGruntHideReload,
-		HL_ARRAYSIZE(tlGruntHideReload),
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_DANGER,
-	"GruntHideReload"
-	}
-};
-
-//=========================================================
-// Do a turning sweep of the area
-//=========================================================
-Task_t	tlGruntSweep[] =
-{
-	{ TASK_TURN_LEFT,			(float)179 },
-	{ TASK_WAIT,				(float)1 },
-	{ TASK_TURN_LEFT,			(float)179 },
-	{ TASK_WAIT,				(float)1 },
-};
-
-Schedule_t	slGruntSweep[] =
-{
-	{
-		tlGruntSweep,
-		HL_ARRAYSIZE(tlGruntSweep),
-
-	bits_COND_NEW_ENEMY |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_CAN_RANGE_ATTACK1 |
-	bits_COND_CAN_RANGE_ATTACK2 |
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_WORLD |// sound flags
-	bits_SOUND_DANGER |
-	bits_SOUND_PLAYER,
-
-	"Grunt Sweep"
-	},
-};
-
-//=========================================================
-// primary range attack. Overriden because base class stops attacking when the enemy is occluded.
-// grunt's grenade toss requires the enemy be occluded.
-//=========================================================
-Task_t	tlGruntRangeAttack1A[] =
-{
-	{ TASK_STOP_MOVING,			(float)0 },
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,		(float)ACT_CROUCH },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-};
-
-Schedule_t	slGruntRangeAttack1A[] =
-{
-	{
-		tlGruntRangeAttack1A,
-		HL_ARRAYSIZE(tlGruntRangeAttack1A),
-	bits_COND_NEW_ENEMY |
-	bits_COND_ENEMY_DEAD |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_ENEMY_OCCLUDED |
-	bits_COND_HEAR_SOUND |
-	bits_COND_GRUNT_NOFIRE |
-	bits_COND_NO_AMMO_LOADED,
-
-	bits_SOUND_DANGER,
-	"Range Attack1A"
-	},
-};
-
-
-//=========================================================
-// primary range attack. Overriden because base class stops attacking when the enemy is occluded.
-// grunt's grenade toss requires the enemy be occluded.
-//=========================================================
-Task_t	tlGruntRangeAttack1B[] =
-{
-	{ TASK_STOP_MOVING,				(float)0 },
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,(float)ACT_IDLE_ANGRY },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_GRUNT_CHECK_FIRE,	(float)0 },
-	{ TASK_RANGE_ATTACK1,		(float)0 },
-};
-
-Schedule_t	slGruntRangeAttack1B[] =
-{
-	{
-		tlGruntRangeAttack1B,
-		HL_ARRAYSIZE(tlGruntRangeAttack1B),
-	bits_COND_NEW_ENEMY |
-	bits_COND_ENEMY_DEAD |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_ENEMY_OCCLUDED |
-	bits_COND_NO_AMMO_LOADED |
-	bits_COND_GRUNT_NOFIRE |
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_DANGER,
-	"Range Attack1B"
-	},
-};
-
-//=========================================================
-// secondary range attack. Overriden because base class stops attacking when the enemy is occluded.
-// grunt's grenade toss requires the enemy be occluded.
-//=========================================================
-Task_t	tlGruntRangeAttack2[] =
-{
-	{ TASK_STOP_MOVING,				(float)0 },
-	{ TASK_GRUNT_FACE_TOSS_DIR,		(float)0 },
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_RANGE_ATTACK2 },
-	{ TASK_SET_SCHEDULE,			(float)SCHED_GRUNT_WAIT_FACE_ENEMY },// don't run immediately after throwing grenade.
-};
-
-Schedule_t	slGruntRangeAttack2[] =
-{
-	{
-		tlGruntRangeAttack2,
-		HL_ARRAYSIZE(tlGruntRangeAttack2),
-	0,
-	0,
-	"RangeAttack2"
-	},
-};
-
-
-//=========================================================
-// repel 
-//=========================================================
-Task_t	tlGruntRepel[] =
-{
-	{ TASK_STOP_MOVING,			(float)0 },
-	{ TASK_FACE_IDEAL,			(float)0 },
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_GLIDE },
-};
-
-Schedule_t	slGruntRepel[] =
-{
-	{
-		tlGruntRepel,
-		HL_ARRAYSIZE(tlGruntRepel),
-	bits_COND_SEE_ENEMY |
-	bits_COND_NEW_ENEMY |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_DANGER |
-	bits_SOUND_COMBAT |
-	bits_SOUND_PLAYER,
-	"Repel"
-	},
-};
-
-
-//=========================================================
-// repel 
-//=========================================================
-Task_t	tlGruntRepelAttack[] =
-{
-	{ TASK_STOP_MOVING,			(float)0 },
-	{ TASK_FACE_ENEMY,			(float)0 },
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_FLY },
-};
-
-Schedule_t	slGruntRepelAttack[] =
-{
-	{
-		tlGruntRepelAttack,
-		HL_ARRAYSIZE(tlGruntRepelAttack),
-	bits_COND_ENEMY_OCCLUDED,
-	0,
-	"Repel Attack"
-	},
-};
-
-//=========================================================
-// repel land
-//=========================================================
-Task_t	tlGruntRepelLand[] =
-{
-	{ TASK_STOP_MOVING,			(float)0 },
-	{ TASK_PLAY_SEQUENCE,		(float)ACT_LAND },
-	{ TASK_GET_PATH_TO_LASTPOSITION,(float)0 },
-	{ TASK_RUN_PATH,				(float)0 },
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0 },
-	{ TASK_CLEAR_LASTPOSITION,		(float)0 },
-};
-
-Schedule_t	slGruntRepelLand[] =
-{
-	{
-		tlGruntRepelLand,
-		HL_ARRAYSIZE(tlGruntRepelLand),
-	bits_COND_SEE_ENEMY |
-	bits_COND_NEW_ENEMY |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_HEAVY_DAMAGE |
-	bits_COND_HEAR_SOUND,
-
-	bits_SOUND_DANGER |
-	bits_SOUND_COMBAT |
-	bits_SOUND_PLAYER,
-	"Repel Land"
-	},
-};
-
-
-DEFINE_CUSTOM_SCHEDULES(CHGrunt)
-{
-	slGruntFail,
-		slGruntCombatFail,
-		slGruntVictoryDance,
-		slGruntEstablishLineOfFire,
-		slGruntFoundEnemy,
-		slGruntCombatFace,
-		slGruntSignalSuppress,
-		slGruntSuppress,
-		slGruntWaitInCover,
-		slGruntTakeCover,
-		slGruntGrenadeCover,
-		slGruntTossGrenadeCover,
-		slGruntTakeCoverFromBestSound,
-		slGruntHideReload,
-		slGruntSweep,
-		slGruntRangeAttack1A,
-		slGruntRangeAttack1B,
-		slGruntRangeAttack2,
-		slGruntRepel,
-		slGruntRepelAttack,
-		slGruntRepelLand,
-};
-
-IMPLEMENT_CUSTOM_SCHEDULES(CHGrunt, CSquadMonster);
-
-//=========================================================
-// SetActivity 
-//=========================================================
-void CHGrunt::SetActivity(Activity NewActivity)
-{
-	int	iSequence = ACTIVITY_NOT_AVAILABLE;
-	void *pmodel = GET_MODEL_PTR(ENT(pev));
-
-	switch (NewActivity)
-	{
-	case ACT_RANGE_ATTACK1:
-		// grunt is either shooting standing or shooting crouched
-		if (FBitSet(pev->weapons, HGRUNT_9MMAR))
-		{
-			if (m_fStanding)
-			{
-				// get aimable sequence
-				iSequence = LookupSequence("standing_mp5");
-			}
-			else
-			{
-				// get crouching shoot
-				iSequence = LookupSequence("crouching_mp5");
-			}
-		}
-		else
-		{
-			if (m_fStanding)
-			{
-				// get aimable sequence
-				iSequence = LookupSequence("standing_shotgun");
-			}
-			else
-			{
-				// get crouching shoot
-				iSequence = LookupSequence("crouching_shotgun");
-			}
-		}
-		break;
-	case ACT_RANGE_ATTACK2:
-		// grunt is going to a secondary long range attack. This may be a thrown 
-		// grenade or fired grenade, we must determine which and pick proper sequence
-		if (pev->weapons & HGRUNT_HANDGRENADE)
-		{
-			// get toss anim
-			iSequence = LookupSequence("throwgrenade");
-		}
-		// LRC: added a test to stop a marine without a launcher from firing.
-		else if (pev->weapons & HGRUNT_GRENADELAUNCHER)
-		{
-			// get launch anim
-			iSequence = LookupSequence("launchgrenade");
-		}
-		else
-		{
-			ALERT(at_debug, "No grenades available. "); // flow into the error message we get at the end...
-		}
-		break;
-	case ACT_RUN:
-		if (pev->health <= HGRUNT_LIMP_HEALTH)
-		{
-			// limp!
-			iSequence = LookupActivity(ACT_RUN_HURT);
-		}
-		else
-		{
-			iSequence = LookupActivity(NewActivity);
-		}
-		break;
-	case ACT_WALK:
-		if (pev->health <= HGRUNT_LIMP_HEALTH)
-		{
-			// limp!
-			iSequence = LookupActivity(ACT_WALK_HURT);
-		}
-		else
-		{
-			iSequence = LookupActivity(NewActivity);
-		}
-		break;
-	case ACT_IDLE:
-		if (m_MonsterState == MONSTERSTATE_COMBAT)
-		{
-			NewActivity = ACT_IDLE_ANGRY;
-		}
-		iSequence = LookupActivity(NewActivity);
-		break;
-	default:
-		iSequence = LookupActivity(NewActivity);
-		break;
-	}
-
-	m_Activity = NewActivity; // Go ahead and set this so it doesn't keep trying when the anim is not present
-
-							  // Set to the desired anim, or default anim if the desired is not present
-	if (iSequence > ACTIVITY_NOT_AVAILABLE)
-	{
-		if (pev->sequence != iSequence || !m_fSequenceLoops)
-		{
-			pev->frame = 0;
-		}
-
-		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
-		ResetSequenceInfo();
-		SetYawSpeed();
-	}
-	else
-	{
-		// Not available try to get default anim
-		ALERT(at_debug, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
-		pev->sequence = 0;	// Set to the reset anim (if it's there)
-	}
 }
 
 //=========================================================

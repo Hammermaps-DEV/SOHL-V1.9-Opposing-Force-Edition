@@ -1,24 +1,24 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
-//
-// hud.cpp
-//
-// implementation of CHud class
-//
+*   All Rights Reserved.
+*
+*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*
+***/
 
-//LRC - define to help track what calls are made on changelevel, save/restore, etc
 #define ENGINE_DEBUG
 
 #include "hud.h"
@@ -35,6 +35,7 @@
 #include "rain.h"
 #include "com_weapons.h"
 #include "particle_header.h"
+#include "soundengine.h"
 
 class CHLVoiceStatusHelper : public IVoiceStatusHelper
 {
@@ -106,6 +107,10 @@ int __MsgFunc_SetFog(const char *pszName, int iSize, void *pbuf)
 {
 	gHUD.MsgFunc_SetFog( pszName, iSize, pbuf );
 	return 1;
+}
+
+int __MsgFunc_FSound(const char *pszName, int iSize, void *pbuf) {
+	return gHUD.MsgFunc_FSound(pszName, iSize, pbuf);
 }
 
 //LRC
@@ -347,7 +352,6 @@ int __MsgFunc_AllowSpec(const char *pszName, int iSize, void *pbuf)
 	return 0;
 }
 
- 
 // This is called every time the DLL is loaded
 void CHud :: Init( void )
 {
@@ -370,6 +374,7 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( SetMirror );
 	HOOK_MESSAGE( ResetMirror );
 	HOOK_MESSAGE( Particles );
+	HOOK_MESSAGE( FSound );
 	
 	// TFFree CommandMenu
 	HOOK_COMMAND( "+commandmenu", OpenCommandMenu );
@@ -413,6 +418,8 @@ void CHud :: Init( void )
 	cl_lw = gEngfuncs.pfnGetCvarPointer( "cl_lw" );
 	RainInfo = gEngfuncs.pfnRegisterVariable( "cl_raininfo", "0", 0 );
 
+	CVAR_CREATE("volume_sfx", "100", FCVAR_ARCHIVE);
+
 	//Explosion Effects
 	CVAR_CREATE("sv_grenadegib", "1", FCVAR_ARCHIVE);
 	CVAR_CREATE("cl_expdetail", "1", FCVAR_ARCHIVE);
@@ -447,7 +454,6 @@ void CHud :: Init( void )
 	// In case we get messages before the first update -- time will be valid
 	m_flTime = 1.0;
 
-
 	m_Ammo.Init();
 	m_Health.Init();
 	m_SayText.Init();
@@ -464,6 +470,7 @@ void CHud :: Init( void )
 	m_StatusIcons.Init();
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 	m_Particle.Init();
+	gSoundEngine.Init();
 
 	m_Menu.Init();
 	InitRain();	
@@ -483,6 +490,7 @@ CHud :: ~CHud()
 	delete [] m_rgszSpriteNames;
 
 	ResetRain();
+	gSoundEngine.ResetEngine();
 
 	//LRC - clear all shiny surfaces
 	if (m_pShinySurface)
@@ -504,6 +512,7 @@ CHud :: ~CHud()
 	}
 
 	ServersShutdown();
+	gSoundEngine.Shutdown();
 }
 
 // GetSpriteIndex()
@@ -536,6 +545,7 @@ void CHud :: VidInit( void )
 	m_hsprCursor = 0;
 	numMirrors = 0;
 	ResetRain();
+	gSoundEngine.ResetEngine();
 
 	//LRC - clear all shiny surfaces
 	if (m_pShinySurface)
@@ -634,12 +644,15 @@ void CHud :: VidInit( void )
 	m_StatusIcons.VidInit();
 	GetClientVoiceMgr()->VidInit();
 	m_Particle.VidInit(); // (LRC) -- 30/08/02 November235: Particles to Order
+	gSoundEngine.VidInit();
 
-	if(pParticleManager)
-		delete pParticleManager;
+	if (!pParticleManager) {
+		pParticleManager = new CParticleSystemManager;
+		pParticleManager->PrecacheTextures();
+	}
 
-	pParticleManager = new CParticleSystemManager;
-	pParticleManager->PrecacheTextures();
+	pParticleManager->RemoveParticles();
+	pParticleManager->RemoveSystems();
 
 	ENGINEPRINT("==========================================\n");
 	ENGINEPRINT("Client-DLL for Spirit of Half-Life: Revision Build 1.9\n");
@@ -668,6 +681,19 @@ int CHud::MsgFunc_HUDColor(const char *pszName,  int iSize, void *pbuf)
 }
 
 float g_lastFOV = 0.0;
+
+//==================================================
+// FMOD Stream
+//==================================================
+int CHud::MsgFunc_FSound(const char *pszName, int iSize, void *pbuf) {
+	static char songname[256];
+	BEGIN_READ(pbuf, iSize);
+	char readname[256];
+	strncpy(readname, READ_STRING(), sizeof(readname));
+	readname[sizeof(readname) - 1] = '\0';
+	gSoundEngine.PlayMusic(readname, READ_BYTE());
+	return 1;
+}
 
 /*
 ============
@@ -769,8 +795,8 @@ int CHud::MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf)
 	int def_fov = CVAR_GET_FLOAT( "default_fov" );
 
 	//Weapon prediction already takes care of changing the fog. ( g_lastFOV ).
-	if ( cl_lw && cl_lw->value )
-		return 1;
+	//if ( cl_lw && cl_lw->value )
+	//	return 1;
 
 	g_lastFOV = newfov;
 

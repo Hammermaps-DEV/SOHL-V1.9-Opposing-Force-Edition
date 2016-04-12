@@ -26,6 +26,9 @@
 #include <stdio.h>
 
 #include "vgui_TeamFortressViewport.h"
+#include "soundengine.h" 
+
+#pragma warning(disable: 4244)
 
 extern float *GetClientColor( int clientIndex );
 
@@ -221,7 +224,7 @@ void CHudSayText :: SayTextPrint( const char *pszBuf, int iBufSize, int clientIn
 	}
 
 	m_iFlags |= HUD_ACTIVE;
-	PlaySound( "misc/talk.wav", 1 );
+	gSoundEngine.PlaySound("misc/talk.wav", g_vecZero, SND_HUD, 0, CVAR_GET_FLOAT("volume_sfx"));
 
 	if ( ScreenHeight >= 480 )
 		Y_START = ScreenHeight - 60;
