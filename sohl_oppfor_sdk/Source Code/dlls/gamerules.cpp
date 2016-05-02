@@ -263,6 +263,18 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.snarkDmgPop = GetSkillCvar( "sk_snark_dmg_pop");
 
 	//=========================================================
+	// NPCs: Diablo
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.diabloHealth				= GetSkillCvar("sk_diablo_health");
+	gSkillData.diabloDmgOneSlash		= GetSkillCvar("sk_diablo_dmg_one_slash");
+	gSkillData.diabloDmgBothSlash		= GetSkillCvar("sk_diablo_dmg_both_slash");
+	gSkillData.diabloHead				= GetSkillCvar("sk_diablo_head"); //Hitgroup
+	gSkillData.diabloChest				= GetSkillCvar("sk_diablo_chest"); //Hitgroup
+	gSkillData.diabloStomach			= GetSkillCvar("sk_diablo_stomach"); //Hitgroup
+	gSkillData.diabloLeg				= GetSkillCvar("sk_diablo_leg"); //Hitgroup
+
+	//=========================================================
 	// NPCs: Zombie Scientist
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================

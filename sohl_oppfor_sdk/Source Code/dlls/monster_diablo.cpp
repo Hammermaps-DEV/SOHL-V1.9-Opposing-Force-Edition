@@ -16,16 +16,21 @@
 *   All Rights Reserved.
 *
 *	Base Source-Code written by Marc-Antoine Lortie (https://github.com/malortie).
+*	New Schedule types by Julien * Half-Life : Invasion * (http://www.moddb.com/mods/half-life-invasion)
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
-
+//=========================================================
+// NPC: Diablo
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
 #include	"soundent.h"
+#include	"weapons.h"
 #include	"monster_diablo.h"
 
 //=========================================================
@@ -34,10 +39,19 @@
 #define	DIABLO_AE_ATTACK_LEFT		0x01
 #define	DIABLO_AE_ATTACK_BOTH		0x02
 #define	DIABLO_AE_ATTACK_RIGHT		0x03
+#define DIABLO_AE_STEP				0x04
 
 #define DIABLO_FLINCH_DELAY				2
 #define	DIABLO_MELEE_ATTACK_RADIUS		70
 #define	DIABLO_TOLERANCE_MELEE2_RANGE	85
+
+//=========================================================
+// New Schedule types
+//=========================================================
+enum {
+	SCHED_DIABLO_RANGE_ATTACK1,
+	SCHED_DIABLO_RANGE_ATTACK2,
+};
 
 //=========================================================
 // CDiablo
@@ -91,6 +105,13 @@ const char *CDiablo::pPainSounds[] = {
 	"diablo/diablo_pain2.wav"
 };
 
+const char *CDiablo::pStepSounds[] = {
+	"player/pl_step1.wav",
+	"player/pl_step2.wav",
+	"player/pl_step3.wav",
+	"player/pl_step4.wav"
+};
+
 //=========================================================
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. In the base class implementation,
@@ -119,7 +140,7 @@ int	CDiablo::Classify(void) {
 //=========================================================
 void CDiablo::SetYawSpeed(void) {
 	switch (m_Activity) {
-		default:					pev->yaw_speed = 140;   break;
+		default: pev->yaw_speed = 140; break;
 	}
 }
 
@@ -127,16 +148,146 @@ void CDiablo::SetYawSpeed(void) {
 // TakeDamage
 //=========================================================
 int CDiablo::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
-	// Take 30% damage from bullets
-	if (bitsDamageType == DMG_BULLET) {
+	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (m_flDebug)
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
+
+		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+		if (pEnt->IsPlayer()) {
+			pev->health = pev->max_health / 2;
+			if (flDamage > 0) //Override all damage
+				SetConditions(bits_COND_LIGHT_DAMAGE);
+
+			if (flDamage >= 20) //Override all damage
+				SetConditions(bits_COND_HEAVY_DAMAGE);
+
+			return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+		}
+
+		if (pevAttacker->owner) {
+			pEnt = CBaseEntity::Instance(pevAttacker->owner);
+			if (pEnt->IsPlayer()) {
+				pev->health = pev->max_health / 2;
+				if (flDamage > 0) //Override all damage
+					SetConditions(bits_COND_LIGHT_DAMAGE);
+
+				if (flDamage >= 20) //Override all damage
+					SetConditions(bits_COND_HEAVY_DAMAGE);
+
+				return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+			}
+		}
+	}
+
+	// Take xx% damage from bullets
+	if (bitsDamageType == DMG_BULLET && m_flBulletDR != 0) {
+		if (m_flDebug)
+			ALERT(at_console, "%s:TakeDamage:DMG_BULLET:Reduce Damage\n", STRING(pev->classname));
+
 		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
 		vecDir = vecDir.Normalize();
 		float flForce = DamageForce(flDamage);
 		pev->velocity = pev->velocity + vecDir * flForce;
-		flDamage *= 0.3;
+		flDamage *= m_flBulletDR;
 	}
 
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+}
+
+//=========================================================
+// TraceAttack - Damage based on Hitgroups
+//=========================================================
+void CDiablo::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
+	if (!IsAlive()) {
+		CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+		return;
+	}
+
+	if (pev->takedamage) {
+		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
+		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+			if (pEnt->IsPlayer()) { return; }
+			if (pevAttacker->owner) {
+				pEnt = CBaseEntity::Instance(pevAttacker->owner);
+				if (pEnt->IsPlayer()) { return; }
+			}
+		}
+
+		switch (ptr->iHitgroup) {
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+			flDamage = m_flHitgroupHead*flDamage;
+			break;
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			flDamage = m_flHitgroupChest*flDamage;
+			break;
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			flDamage = m_flHitgroupStomach*flDamage;
+			break;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg*flDamage;
+			break;
+		}
+	}
+
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+}
+
+//=========================================================
+// CheckRangeAttack1
+//=========================================================
+BOOL CDiablo::CheckRangeAttack1(float flDot, float flDist) {
+	if (flDist >= 128) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+//=========================================================
+// CheckRangeAttack2
+//=========================================================
+BOOL CDiablo::CheckRangeAttack2(float flDot, float flDist) {
+	if (flDist < 128) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+//=========================================================
+// CheckMeleeAttack1
+//=========================================================
+BOOL CDiablo::CheckMeleeAttack1(float flDot, float flDist) {
+	if (flDist <= 64 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND)) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+//=========================================================
+// CheckMeleeAttack2
+//=========================================================
+BOOL CDiablo::CheckMeleeAttack2(float flDot, float flDist) {
+	if (flDist <= 92 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND)) {
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 //=========================================================
@@ -174,7 +325,7 @@ void CDiablo::AttackSound(void) {
 void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
 		case DIABLO_AE_ATTACK_RIGHT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, /*gSkillData.diabloDmgOneSlash*/ 1, DMG_SLASH | DMG_NEVERGIB);
+			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, gSkillData.diabloDmgOneSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
 			if (pHurt) {
 				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
 					pHurt->pev->punchangle.z = -20;
@@ -198,7 +349,7 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		}
 		break;
 		case DIABLO_AE_ATTACK_LEFT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, /*gSkillData.diabloDmgOneSlash*/ 1, DMG_SLASH | DMG_NEVERGIB);
+			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, gSkillData.diabloDmgOneSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
 			if (pHurt) {
 				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
 					pHurt->pev->punchangle.z = 20;
@@ -219,7 +370,7 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		}
 		break;
 		case DIABLO_AE_ATTACK_BOTH: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_TOLERANCE_MELEE2_RANGE, /*gSkillData.diabloDmgBothSlash*/ 1, DMG_SLASH | DMG_NEVERGIB);
+			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_TOLERANCE_MELEE2_RANGE, gSkillData.diabloDmgBothSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
 			if (pHurt) {
 				pHurt->pev->punchangle.z = RANDOM_LONG(-10, 10);
 				pHurt->pev->punchangle.x = RANDOM_LONG(-20, -30);
@@ -237,6 +388,10 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			}
 
 			if (RANDOM_LONG(0, 1)) { AttackSound(); }
+		}
+		break;
+		case DIABLO_AE_STEP: {
+			EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pStepSounds);
 		}
 		break;
 		default:
@@ -263,13 +418,26 @@ void CDiablo::Spawn(void) {
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 
 	if (pev->health == 0)
-		pev->health = 50;//gSkillData.diabloHealth;
+		pev->health = gSkillData.diabloHealth;
 
+	pev->effects = 0;
 	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->yaw_speed = 140;
 
+	m_flFieldOfView = VIEW_FIELD_FULL;
 	m_MonsterState = MONSTERSTATE_NONE;
-	m_afCapability = bits_CAP_DOORS_GROUP;
+	m_afCapability = bits_CAP_HEAR |
+					 bits_CAP_RANGE_ATTACK1 |
+					 bits_CAP_MELEE_ATTACK1 |
+					 bits_CAP_MELEE_ATTACK2;
+
+	m_flBulletDR = 0.3; //damage from bullets
+	m_flDebug = false; //Debug Massages
+
+	m_flHitgroupHead = gSkillData.diabloHead;
+	m_flHitgroupChest = gSkillData.diabloChest;
+	m_flHitgroupStomach = gSkillData.diabloStomach;
+	m_flHitgroupLeg = gSkillData.diabloLeg;
 
 	MonsterInit();
 }
@@ -291,6 +459,7 @@ void CDiablo::Precache(void) {
 	PRECACHE_SOUND_ARRAY(pIdleSounds);
 	PRECACHE_SOUND_ARRAY(pAlertSounds);
 	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pStepSounds);
 }
 
 //=========================================================
@@ -304,6 +473,60 @@ void CDiablo::SetActivity(Activity newActivity) {
 
 	CBaseMonster::SetActivity(newActivity);
 }
+
+//=========================================================
+// AI Schedules
+//=========================================================
+Task_t	tlDiabloRangeAttack1[] = {
+	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_TAKE_COVER_FROM_ENEMY },
+	{ TASK_GET_PATH_TO_ENEMY,	(float)0 },
+	{ TASK_RUN_PATH,			(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,	(float)0 },
+
+};
+
+Schedule_t	slDiabloRangeAttack1[] = {
+	{
+		tlDiabloRangeAttack1,
+		ARRAYSIZE(tlDiabloRangeAttack1),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_ENEMY_OCCLUDED |
+		bits_COND_NO_AMMO_LOADED |
+		bits_COND_CAN_MELEE_ATTACK1 |
+		bits_COND_HEAR_SOUND,
+	},
+};
+
+Task_t	tlDiabloRangeAttack2[] = {
+	{ TASK_GET_PATH_TO_ENEMY,	(float)0 },
+	{ TASK_WALK_PATH,			(float)0 },
+	{ TASK_WAIT_FOR_MOVEMENT,	(float)0 },
+};
+
+Schedule_t	slDiabloRangeAttack2[] = {
+	{
+		tlDiabloRangeAttack2,
+		ARRAYSIZE(tlDiabloRangeAttack2),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_ENEMY_OCCLUDED |
+		bits_COND_NO_AMMO_LOADED |
+		bits_COND_CAN_RANGE_ATTACK1 |
+		bits_COND_CAN_MELEE_ATTACK1 |
+		bits_COND_HEAR_SOUND,
+	},
+};
+
+DEFINE_CUSTOM_SCHEDULES(CDiablo) {
+	slDiabloRangeAttack1,
+};
+
+IMPLEMENT_CUSTOM_SCHEDULES(CDiablo, CBaseMonster);
 
 //=========================================================
 // AI Schedules Specific to this monster
@@ -324,3 +547,52 @@ int CDiablo::IgnoreConditions(void) {
 	return iIgnore;
 
 }
+
+//=========================================================
+// GetSchedule
+//=========================================================
+Schedule_t *CDiablo::GetSchedule(void) {
+	switch (m_MonsterState) {
+		case MONSTERSTATE_COMBAT: {
+			if (HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
+				return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+			}
+
+			if (HasConditions(bits_COND_CAN_MELEE_ATTACK2)) {
+				return GetScheduleOfType(SCHED_MELEE_ATTACK2);
+			}
+
+			if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+				return GetScheduleOfType(SCHED_DIABLO_RANGE_ATTACK1);
+			}
+
+			if (HasConditions(bits_COND_CAN_RANGE_ATTACK2)) {
+				return GetScheduleOfType(SCHED_DIABLO_RANGE_ATTACK2);
+			}
+
+			if (pev->health <= 75) {
+				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
+			}
+		}
+	}
+
+	return CBaseMonster::GetSchedule();
+}
+
+//=========================================================
+// GetScheduleOfType
+//=========================================================
+Schedule_t* CDiablo::GetScheduleOfType(int Type) {
+	switch (Type) {
+		case SCHED_DIABLO_RANGE_ATTACK1: {
+			return &slDiabloRangeAttack1[0];
+		}
+		case SCHED_DIABLO_RANGE_ATTACK2: {
+			return &slDiabloRangeAttack2[0];
+		}
+		default: {
+			return CBaseMonster::GetScheduleOfType(Type);
+		}
+	}
+}
+

@@ -178,6 +178,7 @@ inline BOOL FStringNull(char *string)	{ return strlen(string) - 1; }
 #define	VIEW_FIELD_WIDE		(float)-0.7 // +-135 degrees 0.1 // +-85 degrees, used for full FOV checks 
 #define	VIEW_FIELD_NARROW	(float)0.7 // +-45 degrees, more narrow check used to set up ranged attacks
 #define	VIEW_FIELD_ULTRA_NARROW	(float)0.9 // +-25 degrees, more narrow check used to set up ranged attacks
+#define	VIEW_FIELD_NORMAL	(float)0.5 // +-15 degrees, more narrow check used to set up ranged attacks
 
 // All monsters need this data
 #define		DONT_BLEED			-1

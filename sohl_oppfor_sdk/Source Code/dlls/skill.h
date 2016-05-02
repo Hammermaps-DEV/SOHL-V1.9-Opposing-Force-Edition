@@ -112,6 +112,15 @@ struct skilldata_t
 	float snarkDmgBite;
 	float snarkDmgPop;
 
+	//Diablo
+	float diabloHealth;
+	float diabloDmgOneSlash;
+	float diabloDmgBothSlash;
+	float diabloHead;
+	float diabloChest;
+	float diabloStomach;
+	float diabloLeg;
+
 	//=========================================================
 	// NPCs: Zombie,Zombie Soldier,Zombie Barney
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
@@ -157,10 +166,7 @@ struct skilldata_t
 	float zombieBarneyLeg;
 	float zombieBarneyArm;
 
-	//=========================================================
-	// NPCs: Pit Drone
-	// For Spirit of Half-Life v1.9: Opposing-Force Edition
-	//=========================================================
+	// Pit Drone
 	float pitdroneHealth;
 	float pitdroneDmgBite;
 	float pitdroneDmgWhip;
@@ -171,10 +177,7 @@ struct skilldata_t
 	float pitdroneLeg;
 	float pitdroneArm;
 
-	//=========================================================
-	// NPCs: Voltigore
-	// For Spirit of Half-Life v1.9: Opposing-Force Edition
-	//=========================================================
+	// Voltigore
 	float voltigoreHealth;
 	float voltigoreDmgPunch;
 	float voltigoreDmgBeam;
@@ -183,11 +186,6 @@ struct skilldata_t
 	float voltigoreStomach;
 	float voltigoreLeg;
 	float voltigoreArm;
-
-	//=========================================================
-	// NPCs: #########################
-	// For Spirit of Half-Life v1.9: Opposing-Force Edition
-	//=========================================================
 
 	// Opposing-Force
 	float fgruntHealth;

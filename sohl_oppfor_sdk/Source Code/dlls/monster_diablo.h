@@ -43,7 +43,13 @@ class CDiablo : public CBaseMonster {
 		void IdleSound(void);
 		void AttackSound(void);
 
+		BOOL CheckRangeAttack1(float flDot, float flDist);
+		BOOL CheckRangeAttack2(float flDot, float flDist);
+		BOOL CheckMeleeAttack1(float flDot, float flDist);
+		BOOL CheckMeleeAttack2(float flDot, float flDist);
+
 		static const char *pAttackSounds[];
+		static const char *pStepSounds[];
 		static const char *pIdleSounds[];
 		static const char *pAlertSounds[];
 		static const char *pPainSounds[];
@@ -52,12 +58,23 @@ class CDiablo : public CBaseMonster {
 		static const char *pAttackHitSoundsEXT[];
 		static const char *pAttackMissSoundsEXT[];
 
-		// No range attacks
-		BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }
-		BOOL CheckRangeAttack2(float flDot, float flDist) { return FALSE; }
 		int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
 		void SetActivity(Activity NewActivity);
+
+		Schedule_t	*GetSchedule(void);
+		Schedule_t  *GetScheduleOfType(int Type);
+
+		CUSTOM_SCHEDULES;
+
+	protected:
+		BOOL m_flDebug = false;
+		float m_flBulletDR = 0.0;
+		float m_flHitgroupHead;
+		float m_flHitgroupChest;
+		float m_flHitgroupStomach;
+		float m_flHitgroupLeg;
 };
 
 #endif // MONSTER_DIABLO_H

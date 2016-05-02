@@ -342,6 +342,38 @@ cvar_t	sk_snark_dmg_pop2 = {"sk_snark_dmg_pop2","0"};
 cvar_t	sk_snark_dmg_pop3 = {"sk_snark_dmg_pop3","0"};
 
 //=========================================================
+// NPCs: Diablo
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
+cvar_t	sk_diablo_health1 = { "sk_diablo_health1","0" };
+cvar_t	sk_diablo_health2 = { "sk_diablo_health2","0" };
+cvar_t	sk_diablo_health3 = { "sk_diablo_health3","0" };
+
+cvar_t	sk_diablo_dmg_one_slash1 = { "sk_diablo_dmg_one_slash1","0" };
+cvar_t	sk_diablo_dmg_one_slash2 = { "sk_diablo_dmg_one_slash2","0" };
+cvar_t	sk_diablo_dmg_one_slash3 = { "sk_diablo_dmg_one_slash3","0" };
+
+cvar_t	sk_diablo_dmg_both_slash1 = { "sk_diablo_dmg_both_slash1","0" };
+cvar_t	sk_diablo_dmg_both_slash2 = { "sk_diablo_dmg_both_slash2","0" };
+cvar_t	sk_diablo_dmg_both_slash3 = { "sk_diablo_dmg_both_slash3","0" };
+
+cvar_t	sk_diablo_head1 = { "sk_diablo_head1","0" };
+cvar_t	sk_diablo_head2 = { "sk_diablo_head2","0" };
+cvar_t	sk_diablo_head3 = { "sk_diablo_head3","0" };
+
+cvar_t	sk_diablo_chest1 = { "sk_diablo_chest1","0" };
+cvar_t	sk_diablo_chest2 = { "sk_diablo_chest2","0" };
+cvar_t	sk_diablo_chest3 = { "sk_diablo_chest3","0" };
+
+cvar_t	sk_diablo_stomach1 = { "sk_diablo_stomach1","0" };
+cvar_t	sk_diablo_stomach2 = { "sk_diablo_stomach2","0" };
+cvar_t	sk_diablo_stomach3 = { "sk_diablo_stomach3","0" };
+
+cvar_t	sk_diablo_leg1 = { "sk_diablo_leg1","0" };
+cvar_t	sk_diablo_leg2 = { "sk_diablo_leg2","0" };
+cvar_t	sk_diablo_leg3 = { "sk_diablo_leg3","0" };
+
+//=========================================================
 // NPCs: Zombie,Zombie Soldier,Zombie Barney
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
@@ -1222,6 +1254,38 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_snark_dmg_pop1 );
 	CVAR_REGISTER ( &sk_snark_dmg_pop2 );
 	CVAR_REGISTER ( &sk_snark_dmg_pop3 );
+
+	//=========================================================
+	// NPCs: Diablo
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	CVAR_REGISTER(&sk_diablo_health1);
+	CVAR_REGISTER(&sk_diablo_health2);
+	CVAR_REGISTER(&sk_diablo_health3);
+
+	CVAR_REGISTER(&sk_diablo_dmg_one_slash1);
+	CVAR_REGISTER(&sk_diablo_dmg_one_slash2);
+	CVAR_REGISTER(&sk_diablo_dmg_one_slash3);
+
+	CVAR_REGISTER(&sk_diablo_dmg_both_slash1);
+	CVAR_REGISTER(&sk_diablo_dmg_both_slash2);
+	CVAR_REGISTER(&sk_diablo_dmg_both_slash3);
+
+	CVAR_REGISTER(&sk_diablo_head1);
+	CVAR_REGISTER(&sk_diablo_head2);
+	CVAR_REGISTER(&sk_diablo_head3);
+
+	CVAR_REGISTER(&sk_diablo_chest1);
+	CVAR_REGISTER(&sk_diablo_chest2);
+	CVAR_REGISTER(&sk_diablo_chest3);
+
+	CVAR_REGISTER(&sk_diablo_stomach1);
+	CVAR_REGISTER(&sk_diablo_stomach2);
+	CVAR_REGISTER(&sk_diablo_stomach3);
+
+	CVAR_REGISTER(&sk_diablo_leg1);
+	CVAR_REGISTER(&sk_diablo_leg2);
+	CVAR_REGISTER(&sk_diablo_leg3);
 
 	//=========================================================
 	// NPCs: Zombie,Zombie Soldier,Zombie Barney

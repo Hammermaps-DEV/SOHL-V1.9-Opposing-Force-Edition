@@ -56,40 +56,40 @@ IMPLEMENT_SAVERESTORE(CZombie, CBaseMonster);
 const char *CZombie::pAttackHitSounds[] = {
 	"zombie/claw_strike1.wav",
 	"zombie/claw_strike2.wav",
-	"zombie/claw_strike3.wav",
+	"zombie/claw_strike3.wav"
 };
 
 const char *CZombie::pAttackMissSounds[] = {
 	"zombie/claw_miss1.wav",
-	"zombie/claw_miss2.wav",
+	"zombie/claw_miss2.wav"
 };
 
 const char *CZombie::pAttackSounds[] = {
 	"zombie/zo_attack1.wav",
-	"zombie/zo_attack2.wav",
+	"zombie/zo_attack2.wav"
 };
 
 const char *CZombie::pIdleSounds[] = {
 	"zombie/zo_idle1.wav",
 	"zombie/zo_idle2.wav",
 	"zombie/zo_idle3.wav",
-	"zombie/zo_idle4.wav",
+	"zombie/zo_idle4.wav"
 };
 
 const char *CZombie::pAlertSounds[] = {
 	"zombie/zo_alert10.wav",
 	"zombie/zo_alert20.wav",
-	"zombie/zo_alert30.wav",
+	"zombie/zo_alert30.wav"
 };
 
 const char *CZombie::pPainSounds[] = {
 	"zombie/zo_pain1.wav",
-	"zombie/zo_pain2.wav",
+	"zombie/zo_pain2.wav"
 };
 
 const char *CZombie::pDeathSounds[] = {
 	"zombie/zo_pain1.wav",
-	"zombie/zo_pain2.wav",
+	"zombie/zo_pain2.wav"
 };
 
 //=========================================================
@@ -113,11 +113,12 @@ void CZombie::Spawn() {
 		pev->health = gSkillData.zombieHealth;
 
 	pev->effects = 0;
-	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
-	pev->yaw_speed = 120; // should we put this in the monster's changeanim function since turn rates may vary with state/anim?
-	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	pev->view_ofs = VEC_VIEW;
+	pev->yaw_speed = 120;
+	
+	m_flFieldOfView = VIEW_FIELD_NORMAL;
 	m_MonsterState = MONSTERSTATE_NONE;
-	m_afCapability = bits_CAP_DOORS_GROUP;
+	m_afCapability = bits_CAP_DOORS_GROUP | bits_CAP_HEAR;
 	m_flBulletDR = 0.3; //damage from bullets
 	m_flDebug = false; //Debug Massages
 
