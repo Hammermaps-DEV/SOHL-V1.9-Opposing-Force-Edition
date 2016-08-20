@@ -176,18 +176,18 @@ void CMassn::HandleAnimEvent(MonsterEvent_t *pEvent)
 			// the first round of the three round burst plays the sound and puts a sound in the world sound list.
 			if (RANDOM_LONG(0, 1))
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", 1, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun1.wav", VOL_NORM, ATTN_NORM);
 			}
 			else
 			{
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", 1, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_mgun2.wav", VOL_NORM, ATTN_NORM);
 			}
 		}
 		else if (FBitSet(pev->weapons, MASSN_SNIPERRIFLE))
 		{
 			Sniperrifle();
 
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sniper_bolt1.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sniper_bolt1.wav", VOL_NORM, ATTN_NORM);
 		}
 
 		CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);

@@ -780,7 +780,7 @@ void CApache::FireRocket(void) {
 	pSprite->pev->avelocity.y = RANDOM_FLOAT(-50, 50);
 	pSprite->pev->avelocity.z = RANDOM_FLOAT(-50, 50);
 
-	EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/rocketfire1.wav", 1.0, 0.3, 0, 100);
+	EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "weapons/rocketfire1.wav", VOL_NORM, 0.3, 0, 100);
 	CBaseEntity *pRocket = CBaseEntity::Create("hvr_rocket", vecSrc, pev->angles, edict());
 	if (pRocket)
 		pRocket->pev->velocity = pev->velocity + gpGlobals->v_forward * 150;
@@ -836,7 +836,7 @@ BOOL CApache::FireGun() {
 
 	if (DotProduct(vecGun, vecTarget) > 0.98) {
 		FireBullets(1, posGun, vecGun, VECTOR_CONE_4DEGREES, 8192, BULLET_MONSTER_12MM, 1);
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "apache/fire1.wav", 1, 0.3);
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "apache/fire1.wav", VOL_NORM, 0.3);
 		return TRUE;
 	}
 

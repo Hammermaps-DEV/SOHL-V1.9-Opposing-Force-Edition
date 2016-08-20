@@ -1065,7 +1065,7 @@ void CHFGrunt :: StartTask( Task_t *pTask ) {
 						if ( pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs( pMedic->pev, "monster_human_medic_ally" ) ) {
 							if ( !pMedic->IsFollowing() ) {
 								ALERT( at_console, "I've found my medic!\n" );
-								EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+								EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
 								pMedic->GruntHealerCall( this );
 								TaskComplete();
 							}
@@ -1085,7 +1085,7 @@ void CHFGrunt :: StartTask( Task_t *pTask ) {
 						CRCAllyMonster *pMedic = pFriend->MyTalkSquadMonsterPointer();
 						if ( pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs( pMedic->pev, "monster_human_medic_ally" )) {
 							if ( !pMedic->IsFollowing() ) {
-								EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", 1, ATTN_NORM, 0, GetVoicePitch());
+								EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
 								pMedic->GruntHealerCall( this );
 								TaskComplete();
 							}
@@ -1371,9 +1371,9 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 		break;
 		case HGRUNT_ALLY_AE_RELOAD:
 			if (FBitSet( pev->weapons, FGRUNT_M249)) {
-				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_reload2.wav", 1, ATTN_NORM);
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_reload2.wav", VOL_NORM, ATTN_NORM);
 			} else {
-				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM );
+				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM );
 			}
 
 			m_cAmmoLoaded = m_cClipSize;
@@ -1401,7 +1401,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 		}
 		break;
 		case HGRUNT_ALLY_AE_GREN_LAUNCH: {
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", 0.8, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/glauncher.wav", VOL_LOW, ATTN_NORM);
 			//LRC: firing due to a script?
 			if (m_pCine) {
 				Vector vecToss;

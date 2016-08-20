@@ -110,7 +110,7 @@ const char *CIchthyosaur::pDieSounds[] =
 };
 
 #define EMIT_ICKY_SOUND( chan, array ) \
-	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,HL_ARRAYSIZE( array )-1) ], 1.0, 0.6, 0, RANDOM_LONG(95,105) ); 
+	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,HL_ARRAYSIZE( array )-1) ], VOL_NORM, 0.6, 0, RANDOM_LONG(95,105) ); 
 
 
 void CIchthyosaur :: IdleSound( void )	

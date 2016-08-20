@@ -1136,7 +1136,6 @@ int CTalkMonster :: FIdleSpeak ( void )
 				if (!FBitSet(m_bitsSaid, bit_saidDamageHeavy) && 
 					(m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 8))
 				{
-					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT3], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence( m_szGrp[TLK_PLHURT3], duration, VOL_NORM, ATTN_IDLE );
 					SetBits(m_bitsSaid, bit_saidDamageHeavy);
 					return TRUE;
@@ -1144,7 +1143,6 @@ int CTalkMonster :: FIdleSpeak ( void )
 				else if (!FBitSet(m_bitsSaid, bit_saidDamageMedium) && 
 					(m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 4))
 				{
-					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT2], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence( m_szGrp[TLK_PLHURT2], duration, VOL_NORM, ATTN_IDLE );
 					SetBits(m_bitsSaid, bit_saidDamageMedium);
 					return TRUE;
@@ -1152,7 +1150,6 @@ int CTalkMonster :: FIdleSpeak ( void )
 				else if (!FBitSet(m_bitsSaid, bit_saidDamageLight) &&
 					(m_hTargetEnt->pev->health <= m_hTargetEnt->pev->max_health / 2))
 				{
-					//EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, m_szGrp[TLK_PLHURT1], 1.0, ATTN_IDLE, 0, pitch);
 					PlaySentence( m_szGrp[TLK_PLHURT1], duration, VOL_NORM, ATTN_IDLE );
 					SetBits(m_bitsSaid, bit_saidDamageLight);
 					return TRUE;

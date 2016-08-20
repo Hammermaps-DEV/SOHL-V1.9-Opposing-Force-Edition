@@ -135,7 +135,7 @@ void CPython::SecondaryAttack(void) {
 	if (IsMultiplayer()) {
 		m_fSpotActive = !m_fSpotActive;
 		if (!m_fSpotActive && m_pSpot) {
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_off.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_off.wav", VOL_NORM, ATTN_NORM);
 			m_pSpot->Killed(NULL, GIB_NORMAL);
 			m_pSpot = NULL;
 		}
@@ -252,7 +252,7 @@ void CPython::UpdateSpot(void) {
 	if (m_fSpotActive) {
 		if (!m_pSpot) {
 			m_pSpot = CLaserSpot::CreateSpot();
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_on.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_on.wav", VOL_NORM, ATTN_NORM);
 		}
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);

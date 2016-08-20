@@ -282,7 +282,7 @@ void CStrooper::HandleAnimEvent(MonsterEvent_t *pEvent) {
 			pShock->pev->velocity = vecGunAngles * 1200;
 
 			// Play fire sound.
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/shock_fire.wav", VOL_NORM, ATTN_NORM);
 
 			CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
 		}
@@ -427,16 +427,16 @@ void CStrooper::PainSound(void)
 void CStrooper::DeathSound(void) {
 	switch (RANDOM_LONG(0, 3)) {
 	case 0:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die1.wav", 1, ATTN_IDLE);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die1.wav", VOL_NORM, ATTN_IDLE);
 		break;
 	case 1:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die2.wav", 1, ATTN_IDLE);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die2.wav", VOL_NORM, ATTN_IDLE);
 		break;
 	case 2:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die3.wav", 1, ATTN_IDLE);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die3.wav", VOL_NORM, ATTN_IDLE);
 		break;
 	case 3:
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die4.wav", 1, ATTN_IDLE);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die4.wav", VOL_NORM, ATTN_IDLE);
 		break;
 	}
 }

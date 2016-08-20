@@ -135,7 +135,7 @@ void CVoltigoreEnergyBall::Touch(CBaseEntity *pOther) {
 		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
 		UTIL_DecalTrace(&tr, DECAL_SCORCH1 + RANDOM_LONG(0, 2));
 		::RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 32, CLASS_ALIEN_BIOWEAPON, DMG_ENERGYBEAM | DMG_SHOCK);
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", VOL_NORM, ATTN_NORM);
 		UTIL_Sparks(pev->origin);
 	} else {
 		pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_SHOCK);

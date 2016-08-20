@@ -120,7 +120,7 @@ void CGauss::SecondaryAttack(void) {
 	// don't fire underwater
 	if ( m_pPlayer->pev->waterlevel == 3 ) {
 		if ( m_fInAttack != 0 ) {
-			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0,0x3f));
+			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", VOL_NORM, ATTN_NORM, 0, 80 + RANDOM_LONG(0,0x3f));
 			SendWeaponAnim((int)GAUSS_IDLE::sequence);
 			m_fInAttack = 0;
 			m_iChargeLevel = 0;
@@ -193,8 +193,8 @@ void CGauss::SecondaryAttack(void) {
 
 	if ( m_flChargeTime < UTIL_GlobalTimeBase() - 10 ) {
 		// Player charged up too long. Zap him.
-		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", 1.0, ATTN_NORM, 0, 80 + RANDOM_LONG(0,0x3f));
-		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM,   "weapons/electro6.wav", 1.0, ATTN_NORM, 0, 75 + RANDOM_LONG(0,0x3f));
+		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/electro4.wav", VOL_NORM, ATTN_NORM, 0, 80 + RANDOM_LONG(0,0x3f));
+		EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM,   "weapons/electro6.wav", VOL_NORM, ATTN_NORM, 0, 75 + RANDOM_LONG(0,0x3f));
 			
 		m_fInAttack = 0;
 		m_iChargeLevel = 0;

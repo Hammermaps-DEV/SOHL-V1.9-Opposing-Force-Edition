@@ -149,7 +149,7 @@ void CPortal::Touch(CBaseEntity *pOther)
 		// make a splat on the wall
 		UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
 		UTIL_DecalTrace(&tr, DECAL_SCORCH1 + RANDOM_LONG(0, 2));
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", 1, ATTN_NORM, 0, 100);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", VOL_NORM, ATTN_NORM, 0, 100);
 		UTIL_Sparks(pev->origin);
 	} else {
 		if (g_pGameRules->IsMultiplayer()) {
@@ -172,7 +172,7 @@ void CPortal::Touch(CBaseEntity *pOther)
 					pSpr->AnimateAndDie(6);
 					pSpr->SetTransparency(kRenderGlow, 184, 250, 214, 255, kRenderFxNoDissipation);
 
-					EMIT_SOUND(ENT(pOther->pev), CHAN_WEAPON, "weapons/displacer_teleport_player.wav", 1, ATTN_NORM);
+					EMIT_SOUND(ENT(pOther->pev), CHAN_WEAPON, "weapons/displacer_teleport_player.wav", VOL_NORM, ATTN_NORM);
 
 					vecSrc = pTarget->pev->origin;
 					MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);
@@ -193,11 +193,11 @@ void CPortal::Touch(CBaseEntity *pOther)
 			if (pOther->pev->health <= 200 && !FClassnameIs(pOther->pev, "monster_nihilanth")
 				&& !FClassnameIs(pOther->pev, "monster_apache") && !FClassnameIs(pOther->pev, "monster_osprey")
 			    && !FClassnameIs(pOther->pev, "monster_gargantua") && !FClassnameIs(pOther->pev, "monster_bigmomma")) {
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport_player.wav", 1, ATTN_NORM, 0, 100);
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport_player.wav", VOL_NORM, ATTN_NORM, 0, 100);
 				pOther->Killed(pev, GIB_NEVER);
 				pOther->SUB_Remove();
 			} else {
-				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport.wav", 1, ATTN_NORM, 0, 100);
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport.wav", VOL_NORM, ATTN_NORM, 0, 100);
 				pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_SHOCK);
 			}
 		} else {

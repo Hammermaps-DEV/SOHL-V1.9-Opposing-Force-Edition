@@ -253,19 +253,19 @@ void CEnvExplosion::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 			}
 
 			switch (RANDOM_LONG(0, 4)) {
-				case 0:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode1.wav", 1, ATTN_NORM);	break;
-				case 1:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode2.wav", 1, ATTN_NORM);	break;
-				case 2:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode3.wav", 1, ATTN_NORM);	break;
-				case 3:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode4.wav", 1, ATTN_NORM);	break;
-				case 4:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode5.wav", 1, ATTN_NORM);	break;
+				case 0:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode1.wav", VOL_NORM, ATTN_NORM);	break;
+				case 1:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode2.wav", VOL_NORM, ATTN_NORM);	break;
+				case 2:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode3.wav", VOL_NORM, ATTN_NORM);	break;
+				case 3:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode4.wav", VOL_NORM, ATTN_NORM);	break;
+				case 4:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode5.wav", VOL_NORM, ATTN_NORM);	break;
 			}
 
 			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 2.0, 1000);
 
 			switch (RANDOM_LONG(0, 2)) {
-				case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);	break;
-				case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);	break;
-				case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);	break;
+				case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", VOL_LOWER, ATTN_NORM);	break;
+				case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", VOL_LOWER, ATTN_NORM);	break;
+				case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", VOL_LOWER, ATTN_NORM);	break;
 			}
 	}
 	else

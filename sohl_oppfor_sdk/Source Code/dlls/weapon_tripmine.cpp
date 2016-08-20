@@ -140,8 +140,8 @@ void CTripmineGrenade :: Spawn( void )
 	if (pev->owner != NULL)
 	{
 		// play deploy sound
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "weapons/mine_deploy.wav", 1.0, ATTN_NORM );
-		EMIT_SOUND( ENT(pev), CHAN_BODY, "weapons/mine_charge.wav", 0.2, ATTN_NORM ); // chargeup
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "weapons/mine_deploy.wav", VOL_NORM, ATTN_NORM );
+		EMIT_SOUND( ENT(pev), CHAN_BODY, "weapons/mine_charge.wav", VOL_LOWER, ATTN_NORM ); // chargeup
 
 		m_pRealOwner = pev->owner;// see CTripmineGrenade for why.
 	}
@@ -165,7 +165,7 @@ void CTripmineGrenade :: Precache( void )
 void CTripmineGrenade :: WarningThink( void  )
 {
 	// play warning sound
-	EMIT_SOUND( ENT(pev), CHAN_VOICE, "buttons/Blip2.wav", 1.0, ATTN_NORM );
+	EMIT_SOUND( ENT(pev), CHAN_VOICE, "buttons/Blip2.wav", VOL_NORM, ATTN_NORM );
 
 	// set to power up
 	SetThink(&CTripmineGrenade :: PowerupThink );
@@ -230,7 +230,7 @@ void CTripmineGrenade :: PowerupThink( void  )
 		MakeBeam( );
 
 		// play enabled sound
-		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "weapons/mine_activate.wav", 0.5, ATTN_NORM, 1.0, 75 );
+		EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "weapons/mine_activate.wav", VOL_LOWER, ATTN_NORM, 1.0, 75 );
 	}
 	SetNextThink( 0.1 );
 }
@@ -358,7 +358,7 @@ void CTripmineGrenade::Killed( entvars_t *pevAttacker, int iGib )
 	SetThink(&CTripmineGrenade:: DelayDeathThink );
 	SetNextThink( RANDOM_FLOAT( 0.1, 0.3 ) );
 
-	EMIT_SOUND( ENT(pev), CHAN_BODY, "common/null.wav", 0.5, ATTN_NORM ); // shut off chargeup
+	EMIT_SOUND( ENT(pev), CHAN_BODY, "common/null.wav", VOL_NORM, ATTN_NORM ); // shut off chargeup
 }
 
 
@@ -428,7 +428,7 @@ void CTripmine::Holster( )
 	}
 
 	SendWeaponAnim( TRIPMINE_HOLSTER );
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", 1.0, ATTN_NORM);
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CTripmine::PrimaryAttack( void )

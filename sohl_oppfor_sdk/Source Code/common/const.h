@@ -640,6 +640,7 @@
 #define VOL_NORM		1.0
 #define VOL_LOW			0.8
 #define VOL_LOWER		0.5
+#define VOL_NONE		0
 
 // plats
 #define	PLAT_LOW_TRIGGER	1

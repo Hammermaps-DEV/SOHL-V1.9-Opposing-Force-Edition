@@ -762,10 +762,10 @@ void CHAssassin :: RunAI( void )
 		{
 			switch( RANDOM_LONG( 0, 3 ) )
 			{
-			case 0:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step1.wav", 0.5, ATTN_NORM);	break;
-			case 1:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step3.wav", 0.5, ATTN_NORM);	break;
-			case 2:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step2.wav", 0.5, ATTN_NORM);	break;
-			case 3:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step4.wav", 0.5, ATTN_NORM);	break;
+			case 0:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step1.wav", VOL_LOWER, ATTN_NORM);	break;
+			case 1:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step3.wav", VOL_LOWER, ATTN_NORM);	break;
+			case 2:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step2.wav", VOL_LOWER, ATTN_NORM);	break;
+			case 3:	EMIT_SOUND( ENT(pev), CHAN_BODY, "player/pl_step4.wav", VOL_LOWER, ATTN_NORM);	break;
 			}
 		}
 	}

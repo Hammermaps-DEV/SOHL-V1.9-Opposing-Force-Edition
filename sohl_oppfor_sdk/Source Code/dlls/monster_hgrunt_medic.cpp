@@ -1109,7 +1109,7 @@ void CMedic::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		}
 		break;
 		case MEDIC_AE_RELOAD: {
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM);
 			m_cAmmoLoaded = m_cClipSize;
 			ClearConditions(bits_COND_NO_AMMO_LOADED);
 		}

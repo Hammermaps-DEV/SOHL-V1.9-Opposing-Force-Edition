@@ -426,7 +426,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 
 			if (bits_COND_NO_AMMO_LOADED) {
 				m_flhorns = m_flammo;
-				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_reload.wav", 1.0, ATTN_IDLE, 0, 100);
+				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "pitdrone/pit_drone_reload.wav", VOL_NORM, ATTN_IDLE, 0, 100);
 				UpdateHorns();
 				ClearConditions(bits_COND_NO_AMMO_LOADED);
 			}

@@ -1200,7 +1200,7 @@ void CLaser::KeyValue( KeyValueData *pkvd )
 	}
 	else if (FStrEq(pkvd->szKeyName, "width"))
 	{
-		SetWidth( atof(pkvd->szValue) );
+		SetWidth((int)atof(pkvd->szValue));
 		pkvd->fHandled = TRUE;
 	}
 	else if (FStrEq(pkvd->szKeyName, "NoiseAmplitude"))
@@ -3689,7 +3689,7 @@ void CEnvWarpBall::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 		}
 		iTimes++;
 	}
-	EMIT_SOUND( edict(), CHAN_BODY, "debris/beamstart2.wav", 1, ATTN_NORM );
+	EMIT_SOUND( edict(), CHAN_BODY, "debris/beamstart2.wav", VOL_NORM, ATTN_NORM );
 
 	CSprite *pSpr = CSprite::SpriteCreate( "sprites/Fexplo1.spr", pev->origin, TRUE );
 	pSpr->AnimateAndDie( 10 );
@@ -3704,7 +3704,7 @@ void CEnvWarpBall::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 
 void CEnvWarpBall::Think( void )
 {
-	EMIT_SOUND( edict(), CHAN_ITEM, "debris/beamstart7.wav", 1, ATTN_NORM );
+	EMIT_SOUND( edict(), CHAN_ITEM, "debris/beamstart7.wav", VOL_NORM, ATTN_NORM );
 	SUB_UseTargets( this, USE_TOGGLE, 0);
 }
 
@@ -4269,7 +4269,7 @@ void CItemSoda::Spawn( void )
 
 void CItemSoda::CanThink ( void )
 {
-	EMIT_SOUND (ENT(pev), CHAN_WEAPON, "weapons/g_bounce3.wav", 1, ATTN_NORM );
+	EMIT_SOUND (ENT(pev), CHAN_WEAPON, "weapons/g_bounce3.wav", VOL_NORM, ATTN_NORM );
 
 	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize ( pev, Vector ( -8, -8, 0 ), Vector ( 8, 8, 8 ) );

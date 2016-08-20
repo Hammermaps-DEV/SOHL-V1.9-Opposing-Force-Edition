@@ -99,7 +99,7 @@ void CStomp::Spawn( void )
 	pev->model = MAKE_STRING(GARG_STOMP_SPRITE_NAME);
 	pev->rendermode = kRenderTransTexture;
 	pev->renderamt = 0;
-	EMIT_SOUND_DYN( edict(), CHAN_BODY, GARG_STOMP_BUZZ_SOUND, 1, ATTN_NORM, 0, PITCH_NORM * 0.55);
+	EMIT_SOUND_DYN( edict(), CHAN_BODY, GARG_STOMP_BUZZ_SOUND, VOL_NORM, ATTN_NORM, 0, PITCH_NORM * 0.55);
 }
 
 
@@ -376,7 +376,7 @@ void CGargantua::StompAttack( void )
 	UTIL_TraceLine( vecStart, vecEnd, ignore_monsters, edict(), &trace );
 	CStomp::StompCreate( vecStart, trace.vecEndPos, 0 );
 	UTIL_ScreenShake( pev->origin, 12.0, 100.0, 2.0, 1000 );
-	EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pStompSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pStompSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
+	EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pStompSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pStompSounds)-1) ], VOL_NORM, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
 
 	UTIL_TraceLine( pev->origin, pev->origin - Vector(0,0,20), ignore_monsters, edict(), &trace );
 	if ( trace.flFraction < 1.0 )
@@ -420,8 +420,8 @@ void CGargantua :: FlameCreate( void )
 			CSoundEnt::InsertSound( bits_SOUND_COMBAT, posGun, 384, 0.3 );
 		}
 	}
-	EMIT_SOUND_DYN ( edict(), CHAN_BODY, pBeamAttackSounds[ 1 ], 1.0, ATTN_NORM, 0, PITCH_NORM );
-	EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pBeamAttackSounds[ 2 ], 1.0, ATTN_NORM, 0, PITCH_NORM );
+	EMIT_SOUND_DYN ( edict(), CHAN_BODY, pBeamAttackSounds[ 1 ], VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
+	EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pBeamAttackSounds[ 2 ], VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
 }
 
 
@@ -576,7 +576,7 @@ void CGargantua :: FlameDestroy( void )
 {
 	int i;
 
-	EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pBeamAttackSounds[ 0 ], 1.0, ATTN_NORM, 0, PITCH_NORM );
+	EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pBeamAttackSounds[ 0 ], VOL_NORM, ATTN_NORM, 0, PITCH_NORM );
 	for ( i = 0; i < 4; i++ )
 	{
 		if ( m_pFlame[i] )
@@ -743,7 +743,7 @@ void CGargantua::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 	{
 		if ( m_painSoundTime < UTIL_GlobalTimeBase() )
 		{
-			EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pPainSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM );
+			EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, pPainSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pPainSounds)-1) ], VOL_NORM, ATTN_GARG, 0, PITCH_NORM );
 			m_painSoundTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 2.5, 4 );
 		}
 	}
@@ -898,10 +898,10 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t *pEvent)
 					//UTIL_MakeVectors(pev->angles);	// called by CheckTraceHullAttack
 					pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_right * 100;
 				}
-				EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackHitSounds)-1) ], 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0,15) );
+				EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pAttackHitSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackHitSounds)-1) ], VOL_NORM, ATTN_NORM, 0, 50 + RANDOM_LONG(0,15) );
 			}
 			else // Play a random attack miss sound
-				EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pAttackMissSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackMissSounds)-1) ], 1.0, ATTN_NORM, 0, 50 + RANDOM_LONG(0,15) );
+				EMIT_SOUND_DYN ( edict(), CHAN_WEAPON, pAttackMissSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackMissSounds)-1) ], VOL_NORM, ATTN_NORM, 0, 50 + RANDOM_LONG(0,15) );
 
 			Vector forward;
 			UTIL_MakeVectorsPrivate( pev->angles, forward, NULL, NULL );
@@ -911,7 +911,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t *pEvent)
 	case GARG_AE_RIGHT_FOOT:
 	case GARG_AE_LEFT_FOOT:
 		UTIL_ScreenShake( pev->origin, 4.0, 3.0, 1.0, 750 );
-		EMIT_SOUND_DYN ( edict(), CHAN_BODY, pFootSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pFootSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
+		EMIT_SOUND_DYN ( edict(), CHAN_BODY, pFootSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pFootSounds)-1) ], VOL_NORM, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
 		break;
 
 	case GARG_AE_STOMP:
@@ -921,7 +921,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t *pEvent)
 
 	case GARG_AE_BREATHE:
 		if ( !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) || m_MonsterState != MONSTERSTATE_IDLE)
-			EMIT_SOUND_DYN ( edict(), CHAN_VOICE, pBreatheSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pBreatheSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
+			EMIT_SOUND_DYN ( edict(), CHAN_VOICE, pBreatheSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pBreatheSounds)-1) ], VOL_NORM, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
 		break;
 
 	default:
@@ -1002,7 +1002,7 @@ void CGargantua::StartTask( Task_t *pTask )
 
 	case TASK_SOUND_ATTACK:
 		if ( RANDOM_LONG(0,100) < 30 )
-			EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, pAttackSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM );
+			EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, pAttackSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pAttackSounds)-1) ], VOL_NORM, ATTN_GARG, 0, PITCH_NORM );
 		TaskComplete();
 		break;
 	

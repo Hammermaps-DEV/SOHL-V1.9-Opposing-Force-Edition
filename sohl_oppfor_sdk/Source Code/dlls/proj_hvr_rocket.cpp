@@ -61,7 +61,7 @@ void CApacheHVR::IgniteThink(void)
 	pev->effects |= EF_LIGHT;
 
 	// make rocket sound
-	EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "weapons/rocket1.wav", 1.0, 0.5, 0, 100);
+	EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "weapons/rocket1.wav", VOL_NORM, 0.5, 0, 100);
 
 	// rocket trail
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);

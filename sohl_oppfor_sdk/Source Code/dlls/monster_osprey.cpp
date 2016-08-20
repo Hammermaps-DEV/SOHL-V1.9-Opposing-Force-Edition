@@ -505,7 +505,7 @@ void COsprey::Flight( )
 			if (pitch != m_iPitch)
 			{
 				m_iPitch = pitch;
-				EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_rotor4.wav", 1.0, 0.15, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
+				EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, "apache/ap_rotor4.wav", VOL_NORM, 0.15, SND_CHANGE_PITCH | SND_CHANGE_VOL, pitch);
 				// ALERT( at_console, "%.0f\n", pitch );
 			}
 		}
@@ -847,7 +847,7 @@ void COsprey :: DyingThink( void )
 			pWreckage->pev->framerate = 0;
 			pWreckage->pev->dmgtime = UTIL_GlobalTimeBase() + 5;
 
-			EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", 1.0, 0.3);
+			EMIT_SOUND(ENT(pev), CHAN_STATIC, "weapons/mortarhit.wav", VOL_NORM, 0.3);
 			RadiusDamage(pev->origin, pev, pev, 600, CLASS_NONE, DMG_BLAST);
 			UTIL_ScreenShake(pev->origin, 12.0, 100.0, 3.0, 8000);
 		}

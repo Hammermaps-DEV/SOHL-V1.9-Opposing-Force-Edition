@@ -34,6 +34,17 @@ int grgLogoFrame[MAX_LOGO_FRAMES] =
 	29, 29, 29, 29, 29, 28, 27, 26, 25, 24, 30, 31 
 };
 
+const unsigned char colors[8][3] =
+{
+	{ 127, 127, 127 }, // additive cannot be black
+	{ 255,   0,   0 },
+	{ 0, 255,   0 },
+	{ 255, 255,   0 },
+	{ 0,   0, 255 },
+	{ 0, 255, 255 },
+	{ 255,   0, 255 },
+	{ 240, 180,  24 }
+};
 
 extern int g_iVisibleMouse;
 
@@ -212,17 +223,29 @@ void ScaleColors( int &r, int &g, int &b, int a )
 	b = (int)(b * x);
 }
 
-int CHud :: DrawHudString(int xpos, int ypos, int iMaxX, char *szIt, int r, int g, int b )
+int CHud::DrawHudString(int xpos, int ypos, int iMaxX, char *szIt, int r, int g, int b)
 {
-	// draw the string until we hit the null character or a newline character
-	for ( ; *szIt != 0 && *szIt != '\n'; szIt++ )
-	{
-		int next = xpos + gHUD.m_scrinfo.charWidths[ *szIt ]; // variable-width fonts look cool
-		if ( next > iMaxX )
-			return xpos;
+	// xash3d: reset unicode state
+	TextMessageDrawChar(0, 0, 0, 0, 0, 0);
 
-		TextMessageDrawChar( xpos, ypos, *szIt, r, g, b );
-		xpos = next;		
+	// draw the string until we hit the null character or a newline character
+	for (; *szIt != 0 && *szIt != '\n'; szIt++)
+	{
+		int w = gHUD.m_scrinfo.charWidths['M'];
+		if (xpos + w  > iMaxX)
+			return xpos;
+		if ((*szIt == '^') && (*(szIt + 1) >= '0') && (*(szIt + 1) <= '7'))
+		{
+			szIt++;
+			r = colors[*szIt - '0'][0];
+			g = colors[*szIt - '0'][1];
+			b = colors[*szIt - '0'][2];
+			if (!*(++szIt))
+				return xpos;
+		}
+		int c = (unsigned int)(unsigned char)*szIt;
+
+		xpos += TextMessageDrawChar(xpos, ypos, c, r, g, b);
 	}
 
 	return xpos;

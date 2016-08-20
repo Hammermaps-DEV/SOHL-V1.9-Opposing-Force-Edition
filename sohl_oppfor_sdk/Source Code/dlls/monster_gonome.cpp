@@ -379,10 +379,10 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent) {
 
 			switch (RANDOM_LONG(0, 1)) {
 				case 0:
-					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack2.wav", 1, ATTN_NORM);
+					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack2.wav", VOL_NORM, ATTN_NORM);
 				break;
 				case 1:
-					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack3.wav", 1, ATTN_NORM);
+					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack3.wav", VOL_NORM, ATTN_NORM);
 				break;
 			}
 
@@ -431,10 +431,10 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent) {
 				int iPitch = RANDOM_FLOAT(90, 110);
 				switch (RANDOM_LONG(0, 1)) {
 					case 0:
-						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", 1, ATTN_NORM, 0, iPitch);
+						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 					break;
 					case 1:
-						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", 1, ATTN_NORM, 0, iPitch);
+						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 					break;
 				}
 
@@ -854,13 +854,13 @@ void CGonome::StartTask(Task_t *pTask)
 	{
 		case TASK_MELEE_ATTACK1:
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee1.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee1.wav", VOL_NORM, ATTN_NORM);
 			CBaseMonster::StartTask(pTask);
 		}
 		break;
 		case TASK_MELEE_ATTACK2:
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee2.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee2.wav", VOL_NORM, ATTN_NORM);
 			CBaseMonster::StartTask(pTask);
 		}
 		break;

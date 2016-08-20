@@ -441,7 +441,7 @@ void CMultiSource::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	{
 		// the change activated me
 		ALERT( at_aiconsole, "Multisource %s enabled (%d inputs)\n", STRING(pev->targetname), m_iTotal );
-		USE_TYPE useType = USE_TOGGLE;
+		useType = USE_TOGGLE;
 		if ( m_globalstate )
 			useType = USE_ON;
 		SUB_UseTargets( NULL, useType, 0 );
@@ -694,7 +694,7 @@ int CBaseButton::TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 
 	if ( code == BUTTON_RETURN )
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), VOL_NORM, ATTN_NORM);
 
 		// Toggle buttons fire when they get back to their "home" position
 		if ( !(pev->spawnflags & SF_BUTTON_TOGGLE) )
@@ -910,7 +910,7 @@ void CBaseButton::ButtonUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 	{
 		if (!m_fStayPushed && FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE))
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), VOL_NORM, ATTN_NORM);
 			
 			//SUB_UseTargets( m_eoActivator );
 			ButtonReturn();
@@ -977,7 +977,7 @@ void CBaseButton:: ButtonTouch( CBaseEntity *pOther )
 
 	if ( code == BUTTON_RETURN )
 	{
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), VOL_NORM, ATTN_NORM);
 		SUB_UseTargets( m_hActivator, USE_TOGGLE, 0 );
 		ButtonReturn();
 	}
@@ -990,7 +990,7 @@ void CBaseButton:: ButtonTouch( CBaseEntity *pOther )
 //
 void CBaseButton::ButtonActivate( )
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), VOL_NORM, ATTN_NORM);
 	
 	if (!UTIL_IsMasterTriggered(m_sMaster, m_hActivator))
 	{
@@ -1109,7 +1109,7 @@ void CBaseButton::ButtonBackHome( void )
 
 	if ( FBitSet(pev->spawnflags, SF_BUTTON_TOGGLE) )
 	{
-		//EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+		//EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), VOL_NORM, ATTN_NORM);
 		
 		SUB_UseTargets( m_hActivator, USE_TOGGLE, 0 );
 	}
@@ -1362,7 +1362,7 @@ void CMomentaryRotButton::KeyValue( KeyValueData *pkvd )
 
 void CMomentaryRotButton::PlaySound( void )
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, (char*)STRING(pev->noise), VOL_NORM, ATTN_NORM);
 }
 
 // BUGBUG: This design causes a latentcy.  When the button is retriggered, the first impulse

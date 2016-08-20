@@ -112,7 +112,7 @@ void CGrapple::PrimaryAttack() {
 		CalculateWeaponTime((int)GRAPPLE_FIRE::frames, (int)GRAPPLE_FIRE::fps);
 	//0.58;
 
-	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_fire.wav", 1, ATTN_NORM);
+	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_fire.wav", VOL_NORM, ATTN_NORM);
 	m_pPlayer->m_pGrappleExists = 1;
 	m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
@@ -130,11 +130,11 @@ void CGrapple::PrimaryAttack() {
 //=========================================================
 void CGrapple::FlyThink(void) {
 	if (m_pPlayer->m_afPhysicsFlags & PFLAG_ON_GRAPPLE) {
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", VOL_NORM, ATTN_NORM);
 		SendWeaponAnim((int)GRAPPLE_FIRETRAVEL::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.6;
 	} else if (!m_pPlayer->m_pGrappleExists && !PrimaryAttackEnd) {
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_release.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_release.wav", VOL_NORM, ATTN_NORM);
 
 		SendWeaponAnim((int)GRAPPLE_FIRERELEASE::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.98;
@@ -153,7 +153,7 @@ void CGrapple::FlyThink(void) {
 		SendWeaponAnim((int)GRAPPLE_FIREREACHED::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.1;
 	} else if(!m_pPlayer->m_pGrapplePullBack && !PrimaryAttackEnd) {
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", VOL_NORM, ATTN_NORM);
 		SendWeaponAnim((int)GRAPPLE_FIREWAITING::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.56;
 	}
@@ -205,7 +205,7 @@ void CGrapple::WeaponIdle(void) {
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 	} else if (flRand <= 0.7) {
 		iAnim = (int)GRAPPLE_SHORTIDLE::sequence;
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_wait.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_wait.wav", VOL_NORM, ATTN_NORM);
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)GRAPPLE_SHORTIDLE::frames, (int)GRAPPLE_SHORTIDLE::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);

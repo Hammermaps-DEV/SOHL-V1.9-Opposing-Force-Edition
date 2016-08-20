@@ -273,11 +273,11 @@ void CHoundeye :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			break;
 
 		case HOUND_AE_ANGERSOUND1:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain3.wav", 1, ATTN_NORM);	
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain3.wav", VOL_NORM, ATTN_NORM);
 			break;
 
 		case HOUND_AE_ANGERSOUND2:
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain1.wav", 1, ATTN_NORM);	
+			EMIT_SOUND(ENT(pev), CHAN_VOICE, "houndeye/he_pain1.wav", VOL_NORM, ATTN_NORM);
 			break;
 
 		case HOUND_AE_CLOSE_EYE:
@@ -371,13 +371,13 @@ void CHoundeye :: IdleSound ( void )
 	switch ( RANDOM_LONG(0,2) )
 	{
 	case 0:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_idle1.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_idle1.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 1:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_idle2.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_idle2.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 2:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_idle3.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_idle3.wav", VOL_NORM, ATTN_NORM );	
 		break;
 	}
 }
@@ -390,10 +390,10 @@ void CHoundeye :: WarmUpSound ( void )
 	switch ( RANDOM_LONG(0,1) )
 	{
 	case 0:
-		EMIT_SOUND( ENT(pev), CHAN_WEAPON, "houndeye/he_attack1.wav", 0.7, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_WEAPON, "houndeye/he_attack1.wav", VOL_LOW, ATTN_NORM );	
 		break;
 	case 1:
-		EMIT_SOUND( ENT(pev), CHAN_WEAPON, "houndeye/he_attack3.wav", 0.7, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_WEAPON, "houndeye/he_attack3.wav", VOL_LOW, ATTN_NORM );
 		break;
 	}
 }
@@ -406,13 +406,13 @@ void CHoundeye :: WarnSound ( void )
 	switch ( RANDOM_LONG(0,2) )
 	{
 	case 0:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_hunt1.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_hunt1.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 1:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_hunt2.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_hunt2.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 2:
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_hunt3.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_hunt3.wav", VOL_NORM, ATTN_NORM );
 		break;
 	}
 }
@@ -431,13 +431,13 @@ void CHoundeye :: AlertSound ( void )
 	switch ( RANDOM_LONG(0,2) )
 	{
 	case 0:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_alert1.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_alert1.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 1:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_alert2.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_alert2.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 2:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_alert3.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_alert3.wav", VOL_NORM, ATTN_NORM );
 		break;
 	}
 }
@@ -469,13 +469,13 @@ void CHoundeye :: PainSound ( void )
 	switch ( RANDOM_LONG(0,2) )
 	{
 	case 0:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_pain3.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_pain3.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 1:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_pain4.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_pain4.wav", VOL_NORM, ATTN_NORM );
 		break;
 	case 2:	
-		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_pain5.wav", 1, ATTN_NORM );	
+		EMIT_SOUND( ENT(pev), CHAN_VOICE, "houndeye/he_pain5.wav", VOL_NORM, ATTN_NORM );
 		break;
 	}
 }
@@ -540,9 +540,9 @@ void CHoundeye :: SonicAttack ( void )
 
 	switch ( RANDOM_LONG( 0, 2 ) )
 	{
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast1.wav", 1, ATTN_NORM);	break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast2.wav", 1, ATTN_NORM);	break;
-	case 2:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast3.wav", 1, ATTN_NORM);	break;
+	case 0:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast1.wav", VOL_NORM, ATTN_NORM);	break;
+	case 1:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast2.wav", VOL_NORM, ATTN_NORM);	break;
+	case 2:	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "houndeye/he_blast3.wav", VOL_NORM, ATTN_NORM);	break;
 	}
 
 	// blast circles

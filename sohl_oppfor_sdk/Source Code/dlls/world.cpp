@@ -516,6 +516,7 @@ void CWorld :: Precache( void )
 	// Set up game rules
 	if (g_pGameRules) {
 		delete g_pGameRules;
+		g_pGameRules = NULL;
 	}
 
 	g_pGameRules = InstallGameRules( );

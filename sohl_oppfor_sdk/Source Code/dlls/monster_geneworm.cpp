@@ -602,7 +602,7 @@ void CGeneWorm::PainSound(void)
 
 void CGeneWorm::DeathSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), 2, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), VOL_NORM, ATTN_NORM);
 }
 
 void CGeneWorm::IdleSound(void)

@@ -1379,15 +1379,14 @@ int V_FindViewModelByWeaponModel(int weaponindex) {
 	struct model_s * weaponModel = IEngineStudio.GetModelByIndex( weaponindex );
 	if ( weaponModel ) {
 		int i = 0;
-		while ( modelmap[i] != NULL ) {
+		while (modelmap[i][0] != NULL) {
 			if ( !strnicmp( weaponModel->name, modelmap[i][0], strlen(weaponModel->name)) ) {
 				return gEngfuncs.pEventAPI->EV_FindModelIndex( modelmap[i][1] );
 			} i++;
 		}
+	}
 
-		return 0;
-	} else
-		return 0;
+	return 0;
 }
 
 

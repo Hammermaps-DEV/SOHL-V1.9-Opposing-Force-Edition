@@ -169,7 +169,7 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 
 	char killedwith[32];
 	strcpy( killedwith, "d_" );
-	strncat( killedwith, READ_STRING(), 32 );
+	strncat(killedwith, READ_STRING(), sizeof(killedwith) - strlen(killedwith) - 1);
 
 	if (gViewPort)
 		gViewPort->DeathMsg( killer, victim );

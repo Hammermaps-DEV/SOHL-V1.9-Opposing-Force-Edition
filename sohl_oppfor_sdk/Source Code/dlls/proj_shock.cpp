@@ -122,7 +122,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 	entvars_t *pevOwner;
 
 	// splat sound
-	EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "weapons/shock_impact.wav", 1, ATTN_NORM, 0, RANDOM_FLOAT(80, 110));
+	EMIT_SOUND_DYN(ENT(pev), CHAN_ITEM, "weapons/shock_impact.wav", VOL_NORM, ATTN_NORM, 0, RANDOM_FLOAT(80, 110));
 
 	// lighting on impact
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);

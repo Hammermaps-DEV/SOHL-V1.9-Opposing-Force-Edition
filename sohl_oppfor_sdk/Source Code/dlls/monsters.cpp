@@ -2658,13 +2658,13 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		if ( !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) || m_MonsterState != MONSTERSTATE_IDLE)
 		{
 			if( !strnicmp( pEvent->options, "common/npc_step", 15 )) StepSound();
-			else EMIT_SOUND( edict(), CHAN_BODY, pEvent->options, 1.0, ATTN_IDLE );
+			else EMIT_SOUND( edict(), CHAN_BODY, pEvent->options, VOL_NORM, ATTN_IDLE );
 		}
 		break;
 
 	case SCRIPT_EVENT_SOUND_VOICE:
 		if ( !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) || m_MonsterState != MONSTERSTATE_IDLE)
-			EMIT_SOUND( edict(), CHAN_VOICE, pEvent->options, 1.0, ATTN_IDLE );
+			EMIT_SOUND( edict(), CHAN_VOICE, pEvent->options, VOL_NORM, ATTN_IDLE );
 		break;
 
 	case SCRIPT_EVENT_SENTENCE_RND1:		// Play a named sentence group 33% of the time
@@ -2672,7 +2672,7 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 			break;
 		// fall through...
 	case SCRIPT_EVENT_SENTENCE:			// Play a named sentence group
-		SENTENCEG_PlayRndSz( edict(), pEvent->options, 1.0, ATTN_IDLE, 0, 100 );
+		SENTENCEG_PlayRndSz( edict(), pEvent->options, VOL_NORM, ATTN_IDLE, 0, 100 );
 		break;
 
 	case SCRIPT_EVENT_FIREEVENT:		// Fire a trigger
@@ -2693,11 +2693,11 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		{
 			if ( RANDOM_LONG( 0, 1 ) == 0 )
 			{
-				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, "common/bodydrop3.wav", 1, ATTN_NORM, 0, 90 );
+				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, "common/bodydrop3.wav", VOL_NORM, ATTN_NORM, 0, 90 );
 			}
 			else
 			{
-				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, "common/bodydrop4.wav", 1, ATTN_NORM, 0, 90 );
+				EMIT_SOUND_DYN( ENT(pev), CHAN_BODY, "common/bodydrop4.wav", VOL_NORM, ATTN_NORM, 0, 90 );
 			}
 		}
 		break;
@@ -2707,11 +2707,11 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		{
 			if ( RANDOM_LONG( 0, 1 ) == 0 )
 			{
-				EMIT_SOUND( ENT(pev), CHAN_BODY, "common/bodydrop3.wav", 1, ATTN_NORM );
+				EMIT_SOUND( ENT(pev), CHAN_BODY, "common/bodydrop3.wav", VOL_NORM, ATTN_NORM );
 			}
 			else
 			{
-				EMIT_SOUND( ENT(pev), CHAN_BODY, "common/bodydrop4.wav", 1, ATTN_NORM );
+				EMIT_SOUND( ENT(pev), CHAN_BODY, "common/bodydrop4.wav", VOL_NORM, ATTN_NORM );
 			}
 		}
 		break;
@@ -2719,7 +2719,7 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 	case MONSTER_EVENT_SWISHSOUND:
 		{
 			// NO MONSTER may use this anim event unless that monster's precache precaches this sound!!!
-			EMIT_SOUND( ENT(pev), CHAN_BODY, "zombie/claw_miss2.wav", 1, ATTN_NORM );
+			EMIT_SOUND( ENT(pev), CHAN_BODY, "zombie/claw_miss2.wav", VOL_NORM, ATTN_NORM );
 			break;
 		}
 
@@ -3290,7 +3290,7 @@ void CBaseMonster::PlayScriptedSentence( const char *pszSentence, float duration
 
 void CBaseMonster::SentenceStop( void )
 {
-	EMIT_SOUND( edict(), CHAN_VOICE, "common/null.wav", 1.0, ATTN_IDLE );
+	EMIT_SOUND( edict(), CHAN_VOICE, "common/null.wav", VOL_NORM, ATTN_IDLE );
 }
 
 

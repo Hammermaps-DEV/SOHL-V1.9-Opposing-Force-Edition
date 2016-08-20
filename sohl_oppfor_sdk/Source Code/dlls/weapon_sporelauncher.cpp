@@ -243,7 +243,7 @@ void CSporelauncher::Charge(bool m_BeginAttack) {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iChargeLevel = 2;
 
-				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/splauncher_reload.wav", 1, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
+				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/splauncher_reload.wav", VOL_NORM, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
 				
 				SendWeaponAnim((int)SPLAUNCHER_RELOAD_LOAD::sequence);
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +

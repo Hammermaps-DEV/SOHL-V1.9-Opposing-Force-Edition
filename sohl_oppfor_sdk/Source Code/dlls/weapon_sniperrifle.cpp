@@ -222,7 +222,7 @@ void CSniperrifle::ZoomUpdate(void) {
 	if (m_pPlayer->pev->button & IN_ATTACK2) {
 		if (m_iChargeLevel == 0) {
 			if (m_flShockTime > UTIL_GlobalTimeBase()) return;
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/sniper_zoom.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/sniper_zoom.wav", VOL_NORM, ATTN_NORM);
 			m_iChargeLevel = 1;
 			m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.5;
 		}

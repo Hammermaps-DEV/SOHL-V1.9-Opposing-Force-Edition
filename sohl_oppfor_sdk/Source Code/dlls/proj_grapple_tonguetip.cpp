@@ -86,7 +86,7 @@ void CGrappleHook::Precache(void)
 
 void CGrappleHook::Hit(CBaseEntity* Target)
 {
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/bgrapple_impact.wav", 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/bgrapple_impact.wav", VOL_LOW, ATTN_NORM);
 
 	TraceResult TResult;
 	Vector StartPosition;

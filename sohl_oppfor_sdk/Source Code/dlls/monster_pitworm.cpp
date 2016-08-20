@@ -319,7 +319,7 @@ int CPitWorm::Classify(void)
 //=========================================================
 void CPitWorm::IdleSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
@@ -327,7 +327,7 @@ void CPitWorm::IdleSound(void)
 //=========================================================
 void CPitWorm::AlertSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAlertSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAlertSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
@@ -335,7 +335,7 @@ void CPitWorm::AlertSound(void)
 //=========================================================
 void CPitWorm::DeathSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
@@ -343,7 +343,7 @@ void CPitWorm::DeathSound(void)
 //=========================================================
 void CPitWorm::AngrySound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAngrySounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAngrySounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
@@ -351,7 +351,7 @@ void CPitWorm::AngrySound(void)
 //=========================================================
 void CPitWorm::FlinchSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pFlinchSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pFlinchSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
@@ -359,7 +359,7 @@ void CPitWorm::FlinchSound(void)
 //=========================================================
 void CPitWorm::SwipeSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pSwipeSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pSwipeSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
@@ -367,7 +367,7 @@ void CPitWorm::SwipeSound(void)
 //=========================================================
 void CPitWorm::BeamSound(void)
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, "pitworm/pit_worm_attack_eyeblast.wav", 2, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, "pitworm/pit_worm_attack_eyeblast.wav", VOL_NORM, ATTN_NORM);
 }
 
 

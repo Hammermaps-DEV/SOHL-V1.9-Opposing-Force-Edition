@@ -159,7 +159,7 @@ void CLegacyCineMonster :: Die( void )
 //
 void CLegacyCineMonster :: Pain( void )
 {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pain3.wav", 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pain3.wav", VOL_NORM, ATTN_NORM);
 }
 
 void CLegacyCineMonster :: CineThink( void )

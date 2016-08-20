@@ -201,7 +201,7 @@ void CRpg::UpdateSpot( void ) {
 	if (m_iOverloadLevel) {
 		if (!m_pSpot) {
 			m_pSpot = CLaserSpot::CreateSpot();
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_on.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_on.wav", VOL_NORM, ATTN_NORM);
 			m_pPlayer->m_fSpotActive = true;
 		}
 
@@ -244,7 +244,7 @@ void CRpg::UpdateScreen ( void ) {
 				pev->skin = 1;
 
 			pev->skin++;
-			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/beep.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/beep.wav", VOL_LOW, ATTN_NORM);
 		} else {
 			pev->skin = 5;
 			if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && !m_iClip) {
@@ -269,7 +269,7 @@ void CRpg::ShutdownScreen ( void ) {
 	if (m_pSpot) {
 		m_pSpot->Killed( NULL, GIB_NEVER );
 		m_pSpot = NULL;
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_off.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_off.wav", VOL_LOW, ATTN_NORM);
 		m_pPlayer->m_fSpotActive = false;
 	}
 

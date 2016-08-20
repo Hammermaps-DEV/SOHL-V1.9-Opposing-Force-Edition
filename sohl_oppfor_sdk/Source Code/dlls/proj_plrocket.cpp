@@ -90,7 +90,7 @@ void CRpgRocket::RocketTouch(CBaseEntity *pOther) {
 		// my launcher is still around, tell it I'm dead.
 		m_pLauncher->m_iChargeLevel--;
 		if (m_pLauncher->m_pSpot)//make sound only if laser spot created
-			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "weapons/beep2.wav", 1, ATTN_NORM);//play sound at player
+			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "weapons/beep2.wav", VOL_LOW, ATTN_NORM);//play sound at player
 
 		m_pLauncher->m_pActiveRocket = true;
 	}
@@ -108,7 +108,7 @@ void CRpgRocket::Detonate(void) {
 		// my launcher is still around, tell it I'm dead.
 		m_pLauncher->m_iChargeLevel--;
 		if (m_pLauncher->m_pSpot)//make sound only if laser spot created
-			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "weapons/beep2.wav", 1, ATTN_NORM);//play sound at player
+			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "weapons/beep2.wav", VOL_LOW, ATTN_NORM);//play sound at player
 
 		m_pLauncher->m_pActiveRocket = false;
 	}
@@ -146,7 +146,7 @@ void CRpgRocket::CreateTrail(void)
 	if (!b_setup)
 	{
 		// make rocket sound after save\load
-		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav", 1, 0.5);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav", VOL_NORM, 0.5);
 		// restore rocket trail
 		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 		WRITE_BYTE(TE_BEAMFOLLOW);

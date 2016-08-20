@@ -198,7 +198,7 @@ void CShockrifle::Reload(void) {
 		return;
 
 	while (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] < SHOCK_MAX_CARRY && m_flRechargeTime < UTIL_GlobalTimeBase()) {
-		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shock_recharge.wav", 1, ATTN_NORM);
+		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/shock_recharge.wav", VOL_LOW, ATTN_NORM);
 		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]++;
 		m_flRechargeTime += 0.45;
 	}
@@ -225,7 +225,7 @@ void CShockrifle::WeaponIdle(void) {
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 
 			if (RANDOM_FLOAT(0, 10) >= 5)
-				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 0.8, ATTN_IDLE, 0, 90 + (RANDOM_LONG(-5, 5)));
+				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_LOW, ATTN_IDLE, 0, 90 + (RANDOM_LONG(-5, 5)));
 
 			SendWeaponAnim(iAnim);
 		} else if (flRand >= 0.7) {
@@ -235,7 +235,7 @@ void CShockrifle::WeaponIdle(void) {
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 
 			if(RANDOM_FLOAT(0, 10) >= 5)
-				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 0.8, ATTN_IDLE, 0, 90+(RANDOM_LONG(-5, 5)));
+				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_LOW, ATTN_IDLE, 0, 90+(RANDOM_LONG(-5, 5)));
 
 			SendWeaponAnim(iAnim);
 		} else {

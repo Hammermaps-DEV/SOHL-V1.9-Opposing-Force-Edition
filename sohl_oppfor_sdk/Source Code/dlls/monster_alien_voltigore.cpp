@@ -441,14 +441,14 @@ void CVoltigore::IdleSound(void) {
 		SENTENCEG_PlayRndSz(ENT(pev), "VLT_IDLE", 0.85, ATTN_NORM, 0, RANDOM_LONG(85, 120));
 	}
 
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
 void CVoltigore::PainSound(void) {
-	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), 1, ATTN_NORM, 0, RANDOM_LONG(85, 120));
+	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(85, 120));
 }
 
 //=========================================================
@@ -580,14 +580,14 @@ void CVoltigore::HandleAnimEvent(MonsterEvent_t *pEvent) {
 // DeathSound
 //=========================================================
 void CVoltigore::DeathSound(void) {
-	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
 // AttackSound
 //=========================================================
 void CVoltigore::AttackSound(void) {
-	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "voltigore/voltigore_attack_shock.wav", 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "voltigore/voltigore_attack_shock.wav", VOL_NORM, ATTN_NORM);
 }
 
 //========================================================
@@ -811,8 +811,8 @@ void CVoltigore::StartTask(Task_t *pTask) {
 			m_fShouldUpdateBeam = TRUE;
 
 			// Play the beam 'glow' sound.
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "debris/zap4.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
-			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "debris/beamstart1.wav", 1, ATTN_NORM, 0, PITCH_HIGH);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "debris/zap4.wav", VOL_NORM, ATTN_NORM, 0, PITCH_HIGH);
+			EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "debris/beamstart1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_HIGH);
 			CBaseMonster::StartTask(pTask);
 		}
 		break;

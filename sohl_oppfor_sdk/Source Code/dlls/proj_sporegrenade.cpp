@@ -255,7 +255,7 @@ void CSporeGrenade::ExplodeThink(CBaseEntity *pOther) {
 void CSporeGrenade::Explode(void) {
 	SetTouch(NULL);
 	SetThink(NULL);
-	EMIT_SOUND(ENT(pev), CHAN_ITEM, "weapons/splauncher_impact.wav", 1, ATTN_NORM);
+	EMIT_SOUND(ENT(pev), CHAN_ITEM, "weapons/splauncher_impact.wav", VOL_NORM, ATTN_NORM);
 
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_SPRITE);		// This makes a dynamic light and the explosion sprites/sound
