@@ -43,16 +43,16 @@ public:
 
 	virtual void UpdateGoal(void);
 	virtual BOOL HasDead(void);
-	virtual void EXPORT FlyThink(void);
-	virtual void EXPORT DeployThink(void);
+	void EXPORT FlyThink(void);
+	void EXPORT DeployThink(void);
 	virtual void Flight(void);
-	virtual void EXPORT HitTouch(CBaseEntity *pOther);
-	virtual void EXPORT FindAllThink(void);
-	virtual void EXPORT HoverThink(void);
+	void EXPORT HitTouch(CBaseEntity *pOther);
+	void EXPORT FindAllThink(void);
+	void EXPORT HoverThink(void);
 	CBaseMonster *MakeGrunt(Vector vecSrc);
-	virtual void EXPORT CrashTouch(CBaseEntity *pOther);
-	virtual void EXPORT DyingThink(void);
-	virtual void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT CrashTouch(CBaseEntity *pOther);
+	void EXPORT DyingThink(void);
+	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
