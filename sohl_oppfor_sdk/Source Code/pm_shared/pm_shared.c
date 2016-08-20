@@ -36,15 +36,16 @@
 vec3_t flPlayerOrigin;
 
 #ifdef CLIENT_DLL
-	// Spectator Mode
-	int		iJumpSpectator;
-	float	vJumpOrigin[3];
-	float	vJumpAngles[3];
+// Spectator Mode
+int		iJumpSpectator;
+float	vJumpOrigin[3];
+float	vJumpAngles[3];
 #endif
 
-static int pm_shared_initialized = 0;
+static int pm_shared_initialized = false;
 
-#pragma warning( disable : 4305 )
+#pragma warning(disable : 4305)
+#pragma warning(disable : 4244)
 
 typedef enum {mod_brush, mod_sprite, mod_alias, mod_studio} modtype_t;
 
@@ -200,29 +201,27 @@ void PM_SortTextures( void )
 
 void PM_InitTextureTypes(char *filename)
 {
-	char buffer[512];
-	int i, j;
+	char buffer[512], texType;
+	int i, j, iFound;
 	byte *pMemFile;
-	int fileSize = 0, filePos = 0;
+	int fileSize = 0, filePos = 0, gcTextures = 0;
 	static qboolean bTextureTypeInit = false;
 
 	if ( bTextureTypeInit )
 		return;
 
-	memset(&(grgszTextureName[0][0]), 0, CTEXTURESMAX * CBTEXTURENAMEMAX);
-	memset(grgchTextureType, 0, CTEXTURESMAX);
-
-	gcTextures = 0;
-	memset(buffer, 0, 512);
+	memset(grgszTextureName, 0, sizeof(grgszTextureName));
+	memset(grgchTextureType, 0, sizeof(grgchTextureType));
+	memset(buffer, 0, sizeof(buffer));
 
 	fileSize = pmove->COM_FileSize(filename);
 	pMemFile = pmove->COM_LoadFile(filename, 5, NULL );
+
 	if ( !pMemFile )
 		return;
 
-	filePos = 0;
 	// for each line in the file...
-	while ( pmove->memfgets( pMemFile, fileSize, &filePos, buffer, 511 ) != NULL && (gcTextures < CTEXTURESMAX) )
+	while (pmove->memfgets( pMemFile, fileSize, &filePos, buffer, sizeof(buffer)) && (gcTextures < CTEXTURESMAX) )
 	{
 		// skip whitespace
 		i = 0;
@@ -237,7 +236,8 @@ void PM_InitTextureTypes(char *filename)
 			continue;
 
 		// get texture type
-		grgchTextureType[gcTextures] = toupper(buffer[i++]);
+		texType = toupper(buffer[i++]);
+		grgchTextureType[gcTextures] = texType;
 
 		// skip whitespace
 		while(buffer[i] && isspace(buffer[i]))
@@ -257,7 +257,15 @@ void PM_InitTextureTypes(char *filename)
 		// null-terminate name and save in sentences array
 		j = min (j, CBTEXTURENAMEMAX-1+i);
 		buffer[j] = 0;
-		strcpy(&(grgszTextureName[gcTextures++][0]), &(buffer[i]));
+
+		iFound = FindTextureLinear(&(buffer[i]));
+		//Duplicate entry, just update the type. - Solokiller
+		if (iFound != -1) {
+			grgchTextureType[iFound] = texType;
+		} else {
+			grgchTextureType[gcTextures] = texType;
+			strcpy(&(grgszTextureName[gcTextures++][0]), &(buffer[i]));
+		}
 	}
 
 	// Must use engine to free since we are in a .dll
@@ -266,6 +274,21 @@ void PM_InitTextureTypes(char *filename)
 	PM_SortTextures();
 
 	bTextureTypeInit = true;
+}
+
+int FindTextureLinear(const char* const pszName)
+{
+	int m_iTextures = 0;
+	char m_szTextureName[CTEXTURESMAX][CBTEXTURENAMEMAX];
+	for (int i = 0; i < m_iTextures; i++)
+	{
+		if (stricmp(m_szTextureName[i], pszName) == 0)
+		{
+			return i;
+		}
+	}
+
+	return -1;
 }
 
 char PM_FindTextureType( char *name )
@@ -501,44 +524,35 @@ void PM_PlayStepSound( int step, float fvol )
 
 		switch (irand)
 		{
-		// right foot
-		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		// left foot
-		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			// right foot
+			case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			// left foot
+			case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
 		}
 		break;
 	case STEP_LADDER:
 		switch (irand)
 		{
-		// right foot
-		case 0:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder1.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
-		case 1:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder3.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
-		// left foot
-		case 2:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder2.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
-		case 3:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder4.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+			// right foot
+			case 0:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder1.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+			case 1:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder3.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+			// left foot
+			case 2:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder2.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+			case 3:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder4.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
 		}
 	break;
 	case STEP_SNOW:
 		switch(irand)
 		{
 			// right foot
-			case 0:	
-				pmove->PM_PlaySound( CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow1.wav" : "player/pl_snow5.wav"), fvol, ATTN_NORM, 0, PITCH_NORM );
-			break;
-			case 1:	
-				pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow3.wav" : "player/pl_snow7.wav"), fvol, ATTN_NORM, 0, PITCH_NORM);
-			break;
+			case 0: pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow1.wav" : "player/pl_snow5.wav"), fvol, ATTN_NORM, 0, PITCH_NORM ); break;
+			case 1:	pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow3.wav" : "player/pl_snow7.wav"), fvol, ATTN_NORM, 0, PITCH_NORM); break;
 			// left foot
-			case 2:	
-				pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow2.wav" : "player/pl_snow6.wav"), fvol, ATTN_NORM, 0, PITCH_NORM);
-			break;
-			case 3:	
-				pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow4.wav" : "player/pl_snow8.wav"), fvol, ATTN_NORM, 0, PITCH_NORM);
-			break;
+			case 2:	pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow2.wav" : "player/pl_snow6.wav"), fvol, ATTN_NORM, 0, PITCH_NORM); break;
+			case 3:	pmove->PM_PlaySound(CHAN_BODY, (pmove->RandomLong(0, 1) ? "player/pl_snow4.wav" : "player/pl_snow8.wav"), fvol, ATTN_NORM, 0, PITCH_NORM); break;
 		}
-
 		break;
 	case STEP_GRASS:
 		switch(irand)
@@ -1270,7 +1284,7 @@ void PM_WalkMove ()
 	}
 
 	if (oldonground == -1 &&   // Don't walk up stairs if not on ground.
-		(pmove->waterlevel  == 0 || pmove->watertype == CONTENT_FOG))
+		(pmove->waterlevel == WATERLEVEL_DRY || pmove->watertype == CONTENT_FOG))
 		return;
 
 	if (pmove->waterjumptime)         // If we are jumping out of water, don't do anything more.
@@ -1615,7 +1629,7 @@ void PM_AirMove (void)
 
 qboolean PM_InWater( void )
 {
-	return ( pmove->waterlevel > 1 && pmove->watertype != CONTENT_FOG );
+	return ( pmove->waterlevel > WATERLEVEL_FEET && pmove->watertype != CONTENT_FOG );
 }
 
 /*
@@ -1628,10 +1642,8 @@ Sets pmove->waterlevel and pmove->watertype values.
 qboolean PM_CheckWater ()
 {
 	vec3_t	point;
-	int		cont;
-	int		truecont;
-	float     height;
-	float		heightover2;
+	int		cont, truecont;
+	float   height, heightover2;
 
 	// Pick a spot just above the players feet.
 	point[0] = pmove->origin[0] + (pmove->player_mins[pmove->usehull][0] + pmove->player_maxs[pmove->usehull][0]) * 0.5;
@@ -1639,7 +1651,7 @@ qboolean PM_CheckWater ()
 	point[2] = pmove->origin[2] + pmove->player_mins[pmove->usehull][2] + 1;
 	
 	// Assume that we are not in water at all.
-	pmove->waterlevel = 0;
+	pmove->waterlevel = WATERLEVEL_DRY;
 	pmove->watertype = CONTENTS_EMPTY;
 
 	// Grab point contents.
@@ -1651,7 +1663,7 @@ qboolean PM_CheckWater ()
 		pmove->watertype = cont;
 
 		// We are at least at level one
-		pmove->waterlevel = 1;
+		pmove->waterlevel = WATERLEVEL_FEET;
 
 		height = (pmove->player_mins[pmove->usehull][2] + pmove->player_maxs[pmove->usehull][2]);
 		heightover2 = height * 0.5;
@@ -1663,14 +1675,14 @@ qboolean PM_CheckWater ()
 		if ((cont <= CONTENTS_WATER && cont > CONTENTS_TRANSLUCENT ) || (cont >= CONTENTS_FOG && cont <= CONTENTS_FLYFIELD))
 		{
 			// Set a higher water level.
-			pmove->waterlevel = 2;
+			pmove->waterlevel = WATERLEVEL_WAIST;
 
 			// Now check the eye position.  (view_ofs is relative to the origin)
 			point[2] = pmove->origin[2] + pmove->view_ofs[2];
 
 			cont = pmove->PM_PointContents (point, NULL );
 			if ((cont <= CONTENTS_WATER && cont > CONTENTS_TRANSLUCENT ) || cont == CONTENTS_FOG) // Flyfields never cover the eyes
-				pmove->waterlevel = 3;  // In over our eyes
+				pmove->waterlevel = WATERLEVEL_HEAD;  // In over our eyes
 		}
 
 		// Adjust velocity based on water current, if any.
@@ -1688,7 +1700,7 @@ qboolean PM_CheckWater ()
 		}
 	}
 
-	return pmove->waterlevel > 1;
+	return pmove->waterlevel > WATERLEVEL_FEET;
 }
 
 /*
@@ -3534,5 +3546,5 @@ void PM_Init( struct playermove_s *ppmove )
 	PM_CreateStuckTable();
 	PM_InitTextureTypes("sound/materials.txt");
 
-	pm_shared_initialized = 1;
+	pm_shared_initialized = true;
 }

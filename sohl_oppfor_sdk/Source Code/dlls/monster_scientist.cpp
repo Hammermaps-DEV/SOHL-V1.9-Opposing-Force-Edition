@@ -696,9 +696,9 @@ void CScientist :: TalkInit()
 		m_szGrp[TLK_PLHURT2] =	"!SC_CUREB"; 
 		m_szGrp[TLK_PLHURT3] =	"!SC_CUREC";
 
-		m_szGrp[TLK_PHELLO] =	"SC_PHELLO";
-		m_szGrp[TLK_PIDLE] =	"SC_PIDLE";
-		m_szGrp[TLK_PQUESTION] = "SC_PQUEST";
+		m_szGrp[TLK_PHELLO]    = NULL;
+		m_szGrp[TLK_PIDLE]     = NULL;
+		m_szGrp[TLK_PQUESTION] = NULL;
 		m_szGrp[TLK_SMELL] =	"SC_SMELL";
 	
 		m_szGrp[TLK_WOUND] =	"SC_WOUND";

@@ -374,7 +374,7 @@ void CL_DLLEXPORT HUD_StudioEvent( const struct mstudioevent_s *event, const str
 		break;
 		// Client side sound
 		case 5004:
-			gEngfuncs.Con_Printf("Play Client Side Sound");
+			//gEngfuncs.Con_Printf("Play Client Side Sound");
 			gEngfuncs.pfnPlaySoundByNameAtLocation( (char *)event->options, 1.0, (float *)&entity->attachment[0] );
 		break;
 		default:

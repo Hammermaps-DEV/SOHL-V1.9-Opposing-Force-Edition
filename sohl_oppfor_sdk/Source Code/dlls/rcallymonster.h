@@ -130,7 +130,6 @@ public:
 	
 	// Base Monster functions
 	void			Precache( void );
-	void			TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	int				TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	void			Touch(	CBaseEntity *pOther );
 	void			Killed( entvars_t *pevAttacker, int iGib );

@@ -1392,18 +1392,16 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 			case HITGROUP_HEAD:
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-				if ((GetBodygroup(1) == 0 || GetBodygroup(1) == 5) &&
-					(bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB))) {
+
+				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
 					flDamage -= 20;
 					if (flDamage <= 0) {
 						UTIL_Ricochet(ptr->vecEndPos, 1.0);
 						flDamage = 0.01;
 					}
-				}
-				else {
+				} else {
 					flDamage = m_flHitgroupHead*flDamage;
 				}
-				ptr->iHitgroup = HITGROUP_HEAD;
 			break;
 			case HITGROUP_CHEST:
 				if (m_flDebug)
@@ -1458,7 +1456,9 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 		}
 	}
 
-	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 }
 
 //=========================================================

@@ -263,9 +263,7 @@ void COtis::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, T
 			case HITGROUP_HEAD:
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-
-				if (GetBodygroup(HEAD_GROUP) == HEAD_HELMET & 
-					bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+				if ((GetBodygroup(HEAD_GROUP) == HEAD_HELMET) && bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
 					flDamage -= 20;
 					if (flDamage <= 0) {
 						UTIL_Ricochet(ptr->vecEndPos, 1.0);

@@ -437,10 +437,6 @@ int CVoltigore::ISoundMask(void) {
 // IdleSound 
 //=========================================================
 void CVoltigore::IdleSound(void) {
-	if (RANDOM_LONG(0, 2) == 0) {
-		SENTENCEG_PlayRndSz(ENT(pev), "VLT_IDLE", 0.85, ATTN_NORM, 0, RANDOM_LONG(85, 120));
-	}
-
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_NORM, ATTN_NORM);
 }
 

@@ -3520,10 +3520,14 @@ void CChangeLevel :: Spawn( void )
 
 void CChangeLevel :: ExecuteChangeLevel( void )
 {
+	MESSAGE_BEGIN(MSG_ALL, SVC_CDTRACK);
+		WRITE_BYTE(3);
+		WRITE_BYTE(3);
+	MESSAGE_END();
+
 	MESSAGE_BEGIN( MSG_ALL, SVC_INTERMISSION );
 	MESSAGE_END();
 }
-
 
 FILE_GLOBAL char st_szNextMap[cchMapNameMost];
 FILE_GLOBAL char st_szNextSpot[cchMapNameMost];
@@ -3563,8 +3567,8 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 
 	ASSERT(!FStrEq(m_szMapName, ""));
 
-	// Don't work in deathmatch
-	if ( g_pGameRules->IsDeathmatch() )
+	// Don't work in deathmatch, work in coop
+	if (!g_pGameRules->IsCoOp() && g_pGameRules->IsDeathmatch())
 		return;
 
 	// Some people are firing these multiple times in a frame, disable
@@ -3572,7 +3576,6 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 		return;
 
 	pev->dmgtime = UTIL_GlobalTimeBase();
-
 
 	CBaseEntity *pPlayer = CBaseEntity::Instance( g_engfuncs.pfnPEntityOfEntIndex( 1 ) );
 	if ( !InTransitionVolume( pPlayer, m_szLandmarkName ) )
@@ -3609,6 +3612,7 @@ void CChangeLevel :: ChangeLevelNow( CBaseEntity *pActivator )
 		strcpy(st_szNextSpot, m_szLandmarkName);
 		gpGlobals->vecLandmarkOffset = VARS(pentLandmark)->origin;
 	}
+
 //	ALERT( at_console, "Level touches %d levels\n", ChangeList( levels, 16 ) );
 	ALERT( at_debug, "CHANGE LEVEL: %s %s\n", st_szNextMap, st_szNextSpot );
 	CHANGE_LEVEL( st_szNextMap, st_szNextSpot );

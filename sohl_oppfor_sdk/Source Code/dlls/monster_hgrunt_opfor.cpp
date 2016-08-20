@@ -1483,7 +1483,6 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 		if (m_fImmortal)
 			flDamage = 0;
 
-		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
 		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
@@ -1497,17 +1496,16 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 			case HITGROUP_HEAD:
 				if (m_flDebug)
 					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-				if ((GetBodygroup(1) == 0 || GetBodygroup(1) == 5) &&
-					(bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB))) {
+
+				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
 					flDamage -= 20;
-					if (flDamage <= 0) {
+					if (flDamage <= 0 && (GetBodygroup(FG_HEAD_GROUP) == FG_HEAD_MASK || GetBodygroup(FG_HEAD_GROUP) == FG_HEAD_MP)) {
 						UTIL_Ricochet(ptr->vecEndPos, 1.0);
 						flDamage = 0.01;
 					}
 				} else {
 					flDamage = m_flHitgroupHead*flDamage;
 				}
-				ptr->iHitgroup = HITGROUP_HEAD;
 			break;
 			case HITGROUP_CHEST:
 				if (m_flDebug)
@@ -1538,7 +1536,9 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 		}
 	}
 
-	CBaseMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType ); //To CBaseMonster
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 }
 
 //=========================================================

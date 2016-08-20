@@ -30,6 +30,7 @@ public:
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	BOOL CheckRangeAttack1(float flDot, float flDist);
 
 	void HealerFollow(CBaseEntity *pHealTarget);

@@ -964,6 +964,78 @@ void CMedic :: StartTask( Task_t *pTask ) {
 	}
 }
 
+
+//=========================================================
+// TraceAttack - make sure we're not taking it in the helmet
+//=========================================================
+void CMedic::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
+	if (!IsAlive()) {
+		return;
+	}
+
+	if (pev->takedamage) {
+		if (m_fImmortal)
+			flDamage = 0;
+
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
+			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+			if (pEnt->IsPlayer()) { return; }
+			if (pevAttacker->owner) {
+				pEnt = CBaseEntity::Instance(pevAttacker->owner);
+				if (pEnt->IsPlayer()) { return; }
+			}
+		}
+
+		switch (ptr->iHitgroup) {
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
+				flDamage -= 20;
+				if (flDamage <= 0) {
+					UTIL_Ricochet(ptr->vecEndPos, 1.0);
+					flDamage = 0.01;
+				}
+			}
+			else {
+				flDamage = m_flHitgroupHead*flDamage;
+			}
+			break;
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupChest*flDamage) / 2;
+			}
+			break;
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupStomach*flDamage) / 2;
+			}
+			break;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm*flDamage;
+			break;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg*flDamage;
+			break;
+		}
+	}
+
+	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
+	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
+	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+}
+
 //=========================================================
 // RunTask
 //=========================================================

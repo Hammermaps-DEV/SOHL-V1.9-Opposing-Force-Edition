@@ -150,16 +150,6 @@ BOOL CBaseMonster :: FScheduleValid ( void )
 
 	if ( HasConditions( m_pSchedule->iInterruptMask | bits_COND_SCHEDULE_DONE | bits_COND_TASK_FAILED ) )
 	{
-#ifdef DEBUG
-		if ( HasConditions ( bits_COND_TASK_FAILED ) && m_failSchedule == SCHED_NONE )
-		{
-			// fail! Send a visual indicator.
-			Vector tmp = pev->origin;
-			tmp.z = pev->absmax.z + 16;
-			UTIL_Sparks( tmp );
-		}
-#endif // DEBUG
-
 		// some condition has interrupted the schedule, or the schedule is done
 		return FALSE;
 	}
