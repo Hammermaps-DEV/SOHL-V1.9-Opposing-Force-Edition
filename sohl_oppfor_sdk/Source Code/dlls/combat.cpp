@@ -1253,8 +1253,8 @@ BOOL CBaseEntity :: FVisible ( CBaseEntity *pEntity )
 	TraceResult tr;
 	Vector		vecLookerOrigin;
 	Vector		vecTargetOrigin;
-	
-	if (FBitSet( pEntity->pev->flags, FL_NOTARGET ))
+
+	if (!pEntity || !pEntity->pev || FBitSet( pEntity->pev->flags, FL_NOTARGET ))
 		return FALSE;
 
 	// don't look through water
