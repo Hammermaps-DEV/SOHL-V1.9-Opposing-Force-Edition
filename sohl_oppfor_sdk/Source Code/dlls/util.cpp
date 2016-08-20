@@ -2528,8 +2528,6 @@ void CSave :: WritePositionVector( const char *pname, const Vector &value )
 void CSave :: WritePositionVector( const char *pname, const float *value, int count )
 {
 	int i;
-	Vector tmp, input;
-
 	BufferHeader( pname, sizeof(float) * 3 * count );
 	for ( i = 0; i < count; i++ )
 	{
