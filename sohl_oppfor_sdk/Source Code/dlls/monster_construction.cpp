@@ -222,17 +222,17 @@ void CConstruction::TalkInit() {
 		m_szGrp[TLK_IDLE] = "GUS_IDLE";
 		m_szGrp[TLK_STARE] = "GUS_STARE";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_USE] = "GUS_PFOLLOW";
 		else
 			m_szGrp[TLK_USE] = "GUS_OK";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_UNUSE] = "GUS_PWAIT";
 		else
 			m_szGrp[TLK_UNUSE] = "GUS_WAIT";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_DECLINE] = "GUS_POK";
 		else
 			m_szGrp[TLK_DECLINE] = "GUS_NOTOK";
@@ -266,7 +266,7 @@ void CConstruction::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector v
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {

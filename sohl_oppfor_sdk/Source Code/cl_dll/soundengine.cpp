@@ -441,7 +441,7 @@ void CSoundEngine::FatalError(char *pszFormat, ...)
 	gEngfuncs.pfnClientCmd("escape\n");
 
 	va_start(pszArgList, pszFormat);
-	vsprintf(szText, pszFormat, pszArgList);
+	snprintf(szText, 1024, pszFormat, pszArgList);
 	va_end(pszArgList);
 
 	MessageBox(NULL, szText, "Sound engine error!", MB_OK | MB_SETFOREGROUND | MB_ICONERROR);
@@ -950,7 +950,7 @@ void CSoundEngine::PlaySound(const char *szFile, vec3_t vOrigin, int iFlags, int
 
 		// Fograin92 START
 		//char xszPath[256];
-		//sprintf(xszPath, "PlaySound -> SentenceID -> %i\n", iID);
+		//snprintf(xszPath, 256, "PlaySound -> SentenceID -> %i\n", iID);
 		//gEngfuncs.Con_Printf(xszPath);
 		// Fograin92 END
 
@@ -965,9 +965,9 @@ void CSoundEngine::PlaySound(const char *szFile, vec3_t vOrigin, int iFlags, int
 		strcat(szPath, ".wav");
 
 		// Fograin92 START
-		//sprintf(xszPath, "PlaySound->szFile-> %s\n", szFile);
+		//snprintf(xszPath, 256, "PlaySound->szFile-> %s\n", szFile);
 		//gEngfuncs.Con_Printf(xszPath);
-		//sprintf(xszPath, "PlaySound->szPath-> %s\n", szPath);
+		//snprintf(xszPath, 256, "PlaySound->szPath-> %s\n", szPath);
 		//gEngfuncs.Con_Printf(xszPath);
 		// Fograin92 END
 	}
@@ -1299,7 +1299,7 @@ void CSoundEngine::PlayMusic(char *pszFile, int flags)
 	}
 
 	char szPath[256];
-	sprintf(szPath, "%s/sound/%s", gEngfuncs.pfnGetGameDirectory(), pszFile);
+	snprintf(szPath, 256, "%s/sound/%s", gEngfuncs.pfnGetGameDirectory(), pszFile);
 
 	m_iFlags = flags;
 	flags = (FMOD_SOFTWARE | FMOD_2D);
@@ -1645,7 +1645,7 @@ void CSoundEngine::LoadSentences(void)
 
 		// If we got here, it means we found a valid entry
 		sentence_t *pSentence = &m_sSentences[m_iNumSentences];
-		sprintf(pSentence->szID, "!%i", m_iNumSentences); //Set ID
+		snprintf(pSentence->szID, 64, "!%i", m_iNumSentences); //Set ID
 		m_iNumSentences++;
 
 		int iDefaultPitch = 100;
@@ -2125,7 +2125,7 @@ PM_PlaySample
 extern "C" void PM_PlaySample(const char *szFile, float fVolume, int iPitch, float *origin)
 {
 	//char szPath[256];
-	//sprintf(szPath, "Foot-> %s", szFile);
+	//snprintf(szPath, 256, "Foot-> %s", szFile);
 	//gEngfuncs.Con_Printf(szPath);
 	gSoundEngine.PlaySound(szFile, origin, SND_RELATIVE, CHAN_BODY, fVolume * 2, iPitch);
 }
@@ -2172,7 +2172,7 @@ extern "C" __declspec(dllexport) void CL_EmitSound(void *pEdict, void *pPath, in
 {
 	// Fograin92: Display sound/sentence name and pass it
 	//char szPath[256];
-	//sprintf(szPath, "%s", pPath);
+	//snprintf(szPath, 256, "%s", pPath);
 	//gEngfuncs.Con_Printf("Volume %f\n", flVolume);
 	gSoundEngine.PlaySound((char *)pPath, g_vecZero, iFlags, iChannel, flVolume, iPitch, flAttenuation, (edict_t *)pEdict, iEntIndex);
 }

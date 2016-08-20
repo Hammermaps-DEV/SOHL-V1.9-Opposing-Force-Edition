@@ -84,20 +84,12 @@ TYPEDESCRIPTION	CBaseMonster::m_SaveData[] =
 	DEFINE_FIELD( CBaseMonster, m_IdealMonsterState, FIELD_INTEGER ),
 	DEFINE_FIELD( CBaseMonster, m_iTaskStatus, FIELD_INTEGER ),
 
-	//Schedule_t			*m_pSchedule;
-
 	DEFINE_FIELD( CBaseMonster, m_iScheduleIndex, FIELD_INTEGER ),
 	DEFINE_FIELD( CBaseMonster, m_afConditions, FIELD_INTEGER ),
-	//WayPoint_t			m_Route[ ROUTE_SIZE ];
-//	DEFINE_FIELD( CBaseMonster, m_movementGoal, FIELD_INTEGER ),
-//	DEFINE_FIELD( CBaseMonster, m_iRouteIndex, FIELD_INTEGER ),
-//	DEFINE_FIELD( CBaseMonster, m_moveWaitTime, FIELD_FLOAT ),
 
 	DEFINE_FIELD( CBaseMonster, m_vecMoveGoal, FIELD_POSITION_VECTOR ),
 	DEFINE_FIELD( CBaseMonster, m_movementActivity, FIELD_INTEGER ),
 
-	//		int					m_iAudibleList; // first index of a linked list of sounds that the monster can hear.
-//	DEFINE_FIELD( CBaseMonster, m_afSoundTypes, FIELD_INTEGER ),
 	DEFINE_FIELD( CBaseMonster, m_vecLastPosition, FIELD_POSITION_VECTOR ),
 	DEFINE_FIELD( CBaseMonster, m_iHintNode, FIELD_INTEGER ),
 	DEFINE_FIELD( CBaseMonster, m_afMemory, FIELD_INTEGER ),
@@ -343,7 +335,7 @@ void CBaseMonster :: Look ( int iDistance )
 	CBaseEntity	*pSightEnt = NULL;// the current visible entity that we're dealing with
 
 	// See no evil if prisoner is set
-	if ( !FBitSet( pev->spawnflags, SF_MONSTER_PRISONER ) )
+	if ( !FBitSet( pev->spawnflags, SF_MONSTER_SPAWNFLAG_16 ) )
 	{
 		CBaseEntity *pList[100];
 
@@ -357,7 +349,7 @@ void CBaseMonster :: Look ( int iDistance )
 			// !!!temporarily only considering other monsters and clients, don't see prisoners
 
 			if ( pSightEnt != this												&& 
-				 !FBitSet( pSightEnt->pev->spawnflags, SF_MONSTER_PRISONER )	&& 
+				 !FBitSet( pSightEnt->pev->spawnflags, SF_MONSTER_SPAWNFLAG_16 )	&& 
 				 pSightEnt->pev->health > 0 )
 			{
 				// the looker will want to consider this entity
@@ -366,7 +358,7 @@ void CBaseMonster :: Look ( int iDistance )
 				{
 					if ( pSightEnt->IsPlayer() )
 					{
-						if ( pev->spawnflags & SF_MONSTER_WAIT_TILL_SEEN )
+						if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_1 )
 						{
 							CBaseMonster *pClient;
 
@@ -380,7 +372,7 @@ void CBaseMonster :: Look ( int iDistance )
 							else
 							{
 								// player sees us, become normal now.
-								pev->spawnflags &= ~SF_MONSTER_WAIT_TILL_SEEN;
+								pev->spawnflags &= ~SF_MONSTER_SPAWNFLAG_1;
 							}
 						}
 
@@ -768,75 +760,6 @@ BOOL CBaseMonster::MoveToNode( Activity movementAct, float waitTime, const Vecto
 	m_vecMoveGoal = goal;
 	return FRefreshRoute();
 }
-
-
-#ifdef _DEBUG
-void DrawRoute( entvars_t *pev, WayPoint_t *m_Route, int m_iRouteIndex, int r, int g, int b )
-{
-	int			i;
-
-	if ( m_Route[m_iRouteIndex].iType == 0 )
-	{
-		ALERT( at_aiconsole, "Can't draw route!\n" );
-		return;
-	}
-
-//	UTIL_ParticleEffect ( m_Route[ m_iRouteIndex ].vecLocation, g_vecZero, 255, 25 );
-
-	MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-		WRITE_BYTE( TE_BEAMPOINTS);
-		WRITE_COORD( pev->origin.x );
-		WRITE_COORD( pev->origin.y );
-		WRITE_COORD( pev->origin.z );
-		WRITE_COORD( m_Route[ m_iRouteIndex ].vecLocation.x );
-		WRITE_COORD( m_Route[ m_iRouteIndex ].vecLocation.y );
-		WRITE_COORD( m_Route[ m_iRouteIndex ].vecLocation.z );
-
-		WRITE_SHORT( g_sModelIndexLaser );
-		WRITE_BYTE( 0 ); // frame start
-		WRITE_BYTE( 10 ); // framerate
-		WRITE_BYTE( 1 ); // life
-		WRITE_BYTE( 16 );  // width
-		WRITE_BYTE( 0 );   // noise
-		WRITE_BYTE( r );   // r, g, b
-		WRITE_BYTE( g );   // r, g, b
-		WRITE_BYTE( b );   // r, g, b
-		WRITE_BYTE( 255 );	// brightness
-		WRITE_BYTE( 10 );		// speed
-	MESSAGE_END();
-
-	for ( i = m_iRouteIndex ; i < ROUTE_SIZE - 1; i++ )
-	{
-		if ( (m_Route[ i ].iType & bits_MF_IS_GOAL) || (m_Route[ i+1 ].iType == 0) )
-			break;
-
-		
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_BEAMPOINTS );
-			WRITE_COORD( m_Route[ i ].vecLocation.x );
-			WRITE_COORD( m_Route[ i ].vecLocation.y );
-			WRITE_COORD( m_Route[ i ].vecLocation.z );
-			WRITE_COORD( m_Route[ i + 1 ].vecLocation.x );
-			WRITE_COORD( m_Route[ i + 1 ].vecLocation.y );
-			WRITE_COORD( m_Route[ i + 1 ].vecLocation.z );
-			WRITE_SHORT( g_sModelIndexLaser );
-			WRITE_BYTE( 0 ); // frame start
-			WRITE_BYTE( 10 ); // framerate
-			WRITE_BYTE( 1 ); // life
-			WRITE_BYTE( 8 );  // width
-			WRITE_BYTE( 0 );   // noise
-			WRITE_BYTE( r );   // r, g, b
-			WRITE_BYTE( g );   // r, g, b
-			WRITE_BYTE( b );   // r, g, b
-			WRITE_BYTE( 255 );	// brightness
-			WRITE_BYTE( 10 );		// speed
-		MESSAGE_END();
-
-//		UTIL_ParticleEffect ( m_Route[ i ].vecLocation, g_vecZero, 255, 25 );
-	}
-}
-#endif
-
 
 int ShouldSimplify( int routeType )
 {
@@ -1967,7 +1890,7 @@ void CBaseMonster :: MonsterInit ( void )
 	m_IdealActivity = ACT_IDLE;
 
 	SetBits (pev->flags, FL_MONSTER);
-	if ( pev->spawnflags & SF_MONSTER_HITMONSTERCLIP )
+	if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_4 )
 		pev->flags |= FL_MONSTERCLIP;
 	
 	ClearSchedule();
@@ -2064,7 +1987,7 @@ void CBaseMonster :: StartMonster ( void )
 		DROP_TO_FLOOR ( ENT(pev) );
 		// Try to move the monster to make sure it's not stuck in a brush.
 		//LRC- there are perfectly good reasons for making a monster stuck, so it shouldn't always be an error.
-		if (!WALK_MOVE ( ENT(pev), 0, 0, WALKMOVE_NORMAL ) && !FBitSet( pev->spawnflags, SF_MONSTER_NO_YELLOW_BLOBS))
+		if (!WALK_MOVE ( ENT(pev), 0, 0, WALKMOVE_NORMAL ) && !FBitSet( pev->spawnflags, SF_MONSTER_SPAWNFLAG_128))
 		{
 			ALERT(at_debug, "%s \"%s\" stuck in wall--level design error\n", STRING(pev->classname), STRING(pev->targetname));
 			pev->effects = EF_BRIGHTFIELD;
@@ -2732,7 +2655,7 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		break;
 
 	case SCRIPT_EVENT_SOUND:			// Play a named wave file
-		if ( !(pev->spawnflags & SF_MONSTER_GAG) || m_MonsterState != MONSTERSTATE_IDLE)
+		if ( !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) || m_MonsterState != MONSTERSTATE_IDLE)
 		{
 			if( !strnicmp( pEvent->options, "common/npc_step", 15 )) StepSound();
 			else EMIT_SOUND( edict(), CHAN_BODY, pEvent->options, 1.0, ATTN_IDLE );
@@ -2740,7 +2663,7 @@ void CBaseMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 		break;
 
 	case SCRIPT_EVENT_SOUND_VOICE:
-		if ( !(pev->spawnflags & SF_MONSTER_GAG) || m_MonsterState != MONSTERSTATE_IDLE)
+		if ( !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) || m_MonsterState != MONSTERSTATE_IDLE)
 			EMIT_SOUND( edict(), CHAN_VOICE, pEvent->options, 1.0, ATTN_IDLE );
 		break;
 
@@ -3038,9 +2961,9 @@ void CBaseMonster::ReportAIState( void )
 
 	ALERT( level, "\n" );
 	ALERT( level, "Yaw speed:%3.1f,Health: %3.1f\n", pev->yaw_speed, pev->health );
-	if ( pev->spawnflags & SF_MONSTER_PRISONER )
+	if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_16 )
 		ALERT( level, " PRISONER! " );
-	if ( pev->spawnflags & SF_MONSTER_PREDISASTER )
+	if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_256 )
 		ALERT( level, " Pre-Disaster! " );
 	ALERT( level, "\n" );
 }
@@ -3598,7 +3521,7 @@ void CBaseMonster::GlowShellUpdate(void)
 BOOL CBaseMonster :: ShouldFadeOnDeath( void )
 {
 	// if flagged to fade out or I have an owner (I came from a monster spawner)
-	if ( (pev->spawnflags & SF_MONSTER_FADECORPSE) || !FNullEnt( pev->owner ) )
+	if ( (pev->spawnflags & SF_MONSTER_SPAWNFLAG_512) || !FNullEnt( pev->owner ) )
 		return TRUE;
 
 	return FALSE;

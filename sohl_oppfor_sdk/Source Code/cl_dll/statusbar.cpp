@@ -151,7 +151,7 @@ void CHudStatusBar :: ParseStatusString( int line_num )
 
 							break;
 						case 'i':  // number
-							sprintf( szRepString, "%d", indexval );
+							snprintf( szRepString, 32, "%d", indexval );
 							break;
 						default:
 							szRepString[0] = 0;

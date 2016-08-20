@@ -339,7 +339,7 @@ BOOL CHeadCrab::CheckRangeAttack1(float flDot, float flDist) {
 // TakeDamage
 //=========================================================
 int CHeadCrab::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
-	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
 			pev->health = pev->max_health / 2;

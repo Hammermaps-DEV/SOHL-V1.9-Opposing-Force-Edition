@@ -98,8 +98,7 @@ int	CMassn::Classify(void) {
 // Purpose:
 //=========================================================
 void CMassn::IdleSound(void)
-{
-}
+{}
 
 //=========================================================
 // Shoot
@@ -294,29 +293,9 @@ void CMassn::Precache()
 
 	PRECACHE_SOUND("zombie/claw_miss2.wav");// because we use the basemonster SWIPE animation event
 
-											// get voice pitch
-	if (RANDOM_LONG(0, 1))
-		m_voicePitch = 109 + RANDOM_LONG(0, 7);
-	else
-		m_voicePitch = 100;
-
+	m_voicePitch = 109 + RANDOM_LONG(0, 16); // get voice pitch
 	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
 }
-
-//=========================================================
-// PainSound
-//=========================================================
-void CMassn::PainSound(void)
-{
-}
-
-//=========================================================
-// DeathSound 
-//=========================================================
-void CMassn::DeathSound(void)
-{
-}
-
 
 //=========================================================
 // CAssassinRepel - when triggered, spawns a monster_male_assassin

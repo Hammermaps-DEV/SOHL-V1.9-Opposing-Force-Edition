@@ -188,23 +188,23 @@ int CHudTextMessage::MsgFunc_TextMsg( const char *pszName, int iSize, void *pbuf
 	switch ( msg_dest )
 	{
 	case HUD_PRINTCENTER:
-		sprintf( psz, msg_text, sstr1, sstr2, sstr3, sstr4 );
+		snprintf( psz, 512, msg_text, sstr1, sstr2, sstr3, sstr4 );
 		CenterPrint( ConvertCRtoNL( psz ) );
 		break;
 
 	case HUD_PRINTNOTIFY:
 		psz[0] = 1;  // mark this message to go into the notify buffer
-		sprintf( psz+1, msg_text, sstr1, sstr2, sstr3, sstr4 );
+		snprintf( psz+1, 512, msg_text, sstr1, sstr2, sstr3, sstr4 );
 		ConsolePrint( ConvertCRtoNL( psz ) );
 		break;
 
 	case HUD_PRINTTALK:
-		sprintf( psz, msg_text, sstr1, sstr2, sstr3, sstr4 );
+		snprintf( psz, 512, msg_text, sstr1, sstr2, sstr3, sstr4 );
 		gHUD.m_SayText.SayTextPrint( ConvertCRtoNL( psz ), 128 );
 		break;
 
 	case HUD_PRINTCONSOLE:
-		sprintf( psz, msg_text, sstr1, sstr2, sstr3, sstr4 );
+		snprintf( psz, 512, msg_text, sstr1, sstr2, sstr3, sstr4 );
 		ConsolePrint( ConvertCRtoNL( psz ) );
 		break;
 	}

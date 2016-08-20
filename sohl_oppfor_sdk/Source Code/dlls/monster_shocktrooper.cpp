@@ -44,8 +44,6 @@
 
 int g_fStrooperQuestion;	// true if an idle grunt asked a question. Cleared when someone answers.
 
-extern DLL_GLOBAL int		g_iSkillLevel;
-
 extern Schedule_t	slGruntTakeCover[];
 extern Schedule_t	slGruntGrenadeCover[];
 extern Schedule_t	slGruntTossGrenadeCover[];

@@ -18,14 +18,6 @@
 
 #define MAX_CARRY	24
 
-typedef struct
-{
-	int isValid;
-	EHANDLE hGrunt;
-	Vector	vecOrigin;
-	Vector  vecAngles;
-} t_ospreygrunt;
-
 class COsprey : public CBaseMonster
 {
 public:
@@ -34,29 +26,28 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 	int		ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	virtual void Spawn(void);
-	virtual void Precache(void);
-	virtual int  Classify(void);
-	virtual int  BloodColor(void) { return DONT_BLEED; }
-	virtual void Killed(entvars_t *pevAttacker, int iGib);
-	virtual void KeyValue(KeyValueData *pkvd);
+	void Spawn(void);
+	void Precache(void);
+	int  Classify(void) { return CLASS_MACHINE; };
+	int  BloodColor(void) { return DONT_BLEED; }
+	void Killed(entvars_t *pevAttacker, int iGib);
 
-	virtual void UpdateGoal(void);
-	virtual BOOL HasDead(void);
-	virtual void EXPORT FlyThink(void);
-	virtual void EXPORT DeployThink(void);
-	virtual void Flight(void);
-	virtual void EXPORT HitTouch(CBaseEntity *pOther);
-	virtual void EXPORT FindAllThink(void);
-	virtual void EXPORT HoverThink(void);
+	void UpdateGoal(void);
+	BOOL HasDead(void);
+	void EXPORT FlyThink(void);
+	void EXPORT DeployThink(void);
+	void Flight(void);
+	void EXPORT HitTouch(CBaseEntity *pOther);
+	void EXPORT FindAllThink(void);
+	void EXPORT HoverThink(void);
 	CBaseMonster *MakeGrunt(Vector vecSrc);
-	virtual void EXPORT CrashTouch(CBaseEntity *pOther);
-	virtual void EXPORT DyingThink(void);
-	virtual void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT CrashTouch(CBaseEntity *pOther);
+	void EXPORT DyingThink(void);
+	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	virtual int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
-	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	virtual void ShowDamage(void);
+	// int  TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	void ShowDamage(void);
 
 	CBaseEntity *m_pGoalEnt;
 	Vector m_vel1;
@@ -67,7 +58,6 @@ public:
 	Vector m_ang2;
 	float m_startTime;
 	float m_dTime;
-	char * m_monster_spawn;
 
 	Vector m_velocity;
 
@@ -77,11 +67,7 @@ public:
 	float m_flRightHealth;
 	float m_flLeftHealth;
 
-	static const char *pDebrisSounds[];
-	static const char *pExplodeSounds[];
-
 	int	m_iUnits;
-	int	m_iMonster;
 	EHANDLE m_hGrunt[MAX_CARRY];
 	Vector m_vecOrigin[MAX_CARRY];
 	EHANDLE m_hRepel[4];

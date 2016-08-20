@@ -446,7 +446,7 @@ void ParseRainFile(void)
 	}
 
 	mapname[strlen(mapname) - 4] = 0;
-	sprintf(mapname, "%s.pcs", mapname);
+	snprintf(mapname, 64, "%s.pcs", mapname);
 
 	pfile = (char *)gEngfuncs.COM_LoadFile(mapname, 5, NULL);
 	if (!pfile)

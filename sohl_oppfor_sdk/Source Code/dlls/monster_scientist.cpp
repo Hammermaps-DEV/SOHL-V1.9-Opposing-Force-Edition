@@ -676,15 +676,15 @@ void CScientist :: TalkInit()
 		m_szGrp[TLK_QUESTION] =	"SC_QUESTION";
 		m_szGrp[TLK_IDLE] =		"SC_IDLE";
 		m_szGrp[TLK_STARE] =	"SC_STARE";
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_USE] =	"SC_PFOLLOW";
 		else
 			m_szGrp[TLK_USE] =	"SC_OK";
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_UNUSE] = "SC_PWAIT";
 		else
 			m_szGrp[TLK_UNUSE] = "SC_WAIT";
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_DECLINE] =	"SC_POK";
 		else
 			m_szGrp[TLK_DECLINE] =	"SC_NOTOK";
@@ -1162,7 +1162,7 @@ void CSittingScientist :: Spawn( )
 	m_afCapability		= bits_CAP_HEAR | bits_CAP_TURN_HEAD;
 
 	if (!FBitSet(pev->spawnflags, SF_SITTINGSCI_POSTDISASTER)) //LRC- allow a sitter to be postdisaster.
-		SetBits(pev->spawnflags, SF_MONSTER_PREDISASTER); // predisaster only!
+		SetBits(pev->spawnflags, SF_MONSTER_SPAWNFLAG_256); // predisaster only!
 
 	if ( pev->body == -1 )
 	{// -1 chooses a random head

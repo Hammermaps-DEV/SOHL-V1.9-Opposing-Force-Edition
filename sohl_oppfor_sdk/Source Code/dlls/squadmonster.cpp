@@ -421,7 +421,7 @@ void CSquadMonster :: StartMonster( void )
 		if ( !FStringNull( pev->netname ) )
 		{
 			// if I have a groupname, I can only recruit if I'm flagged as leader
-			if ( !( pev->spawnflags & SF_MONSTER_SQUADLEADER) )
+			if ( !( pev->spawnflags & SF_MONSTER_SPAWNFLAG_32) )
 			{
 				return;
 			}

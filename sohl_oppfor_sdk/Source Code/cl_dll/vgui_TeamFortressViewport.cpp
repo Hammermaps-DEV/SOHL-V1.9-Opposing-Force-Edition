@@ -181,10 +181,10 @@ char* GetVGUITGAName(const char *pszName)
 		i = 320;
 	else
 		i = 640;
-	sprintf(sz, pszName, i);
+	snprintf(sz, 256, pszName, i);
 
 	gamedir = gEngfuncs.pfnGetGameDirectory();
-	sprintf(gd, "%s/gfx/vgui/%s.tga",gamedir,sz);
+	snprintf(gd, 256, "%s/gfx/vgui/%s.tga",gamedir,sz);
 
 	return gd;
 }
@@ -921,7 +921,7 @@ CCommandMenu *TeamFortressViewport::CreateDisguiseSubmenu( CommandButton *pButto
 		CommandButton *pDisguiseButton = new CommandButton( CHudTextMessage::BufferedLocaliseTextString( sLocalisedClasses[i] ), 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y );
 		
 		char sz[256]; 
-		sprintf(sz, "%s %d", commandText, i );
+		snprintf(sz, 256, "%s %d", commandText, i );
 		pDisguiseButton->addActionSignal(new CMenuHandler_StringCommand(sz));
 		
 		pMenu->AddButton( pDisguiseButton );
@@ -956,7 +956,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 		for (int i = 0; i < 4; i++)
 		{
 			char sz[256]; 
-			sprintf(sz, "jointeam %d", i+1);
+			snprintf(sz, 256, "jointeam %d", i+1);
 			m_pTeamButtons[i] = new TeamButton(i+1, "teamname", 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y);
 			m_pTeamButtons[i]->addActionSignal(new CMenuHandler_StringCommandWatch( sz ));
 			pMenu->AddButton( m_pTeamButtons[i] ); 
@@ -991,7 +991,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 			CHudTextMessage::LocaliseTextString( sLocalisedClasses[i], sz, 256 );
 			ClassButton *pClassButton = new ClassButton( i, sz, 0, BUTTON_SIZE_Y, CMENU_SIZE_X, BUTTON_SIZE_Y, false);
 
-			sprintf(sz, "%s", sTFClassSelection[i]);
+			snprintf(sz, 256, "%s", sTFClassSelection[i]);
 			pClassButton->addActionSignal(new CMenuHandler_StringCommandClassSelect(sz));
 			pMenu->AddButton( pClassButton );
 		}
@@ -1079,7 +1079,7 @@ CommandButton *TeamFortressViewport::CreateCustomButton( char *pButtonText, char
 			m_pDisguiseButtons[i]->setParentMenu( pDisguiseMenu );
 
 			char sz[256]; 
-			sprintf( sz, "disguise %d", i );
+			snprintf( sz, 256, "disguise %d", i );
 			CreateDisguiseSubmenu( m_pDisguiseButtons[i], pDisguiseMenu, sz, iYOffset, CMENU_SIZE_X - 1 );
 		}
 	}
@@ -1418,8 +1418,8 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 			gHUD.m_TextMessage.MsgFunc_TextMsg( NULL, strlen( tempString ) + 1, tempString );
 		}
 		
-		sprintf(bottomText,"#Spec_Mode%d", g_iUser1 );
-		sprintf(helpString2,"#Spec_Mode%d", g_iUser1 );
+		snprintf(bottomText, 128,"#Spec_Mode%d", g_iUser1 );
+		snprintf(helpString2, 128,"#Spec_Mode%d", g_iUser1 );
 
 		if ( gEngfuncs.IsSpectateOnly() )
 			strcat(helpString2, " - HLTV");
@@ -1462,7 +1462,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 		if ( gHUD.m_Spectator.m_autoDirector->value )
 		{
 			char tempString[128];
-			sprintf(tempString, "#Spec_Auto %s", helpString2);
+			snprintf(tempString, 128, "#Spec_Auto %s", helpString2);
 			strcpy( helpString2, tempString );
 		}
 
@@ -1655,11 +1655,11 @@ CMenuPanel* TeamFortressViewport::CreateTextWindow( int iTextToShow )
 
 		if ( g_iPlayerClass == PC_CIVILIAN )
 		{
-			sprintf(sz, "classes/long_civilian.txt");
+			snprintf(sz, 256, "classes/long_civilian.txt");
 		}
 		else
 		{
-			sprintf(sz, "classes/long_%s.txt", sTFClassSelection[ g_iPlayerClass ]);
+			snprintf(sz, 256, "classes/long_%s.txt", sTFClassSelection[ g_iPlayerClass ]);
 		}
 		char *pfile = (char*)gEngfuncs.COM_LoadFile( sz, 5, NULL );
 		if (pfile)

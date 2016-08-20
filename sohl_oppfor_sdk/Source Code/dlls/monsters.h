@@ -43,20 +43,39 @@
 #define HITGROUP_HEAD_HELMET_BN		10 //Added for Otis & Barney
 #define HITGROUP_HEAD_HELMET_GT		11 //Added for Torch
 
+// =====================================
 // Monster Spawnflags
-#define	SF_MONSTER_WAIT_TILL_SEEN		1// spawnflag that makes monsters wait until player can see them before attacking.
-#define	SF_MONSTER_GAG					2 // no idle noises from this monster
-#define SF_MONSTER_HITMONSTERCLIP		4
-//										8
-#define SF_MONSTER_PRISONER				16 // monster won't attack anyone, no one will attacke him.
-#define SF_MONSTER_SQUADLEADER			32 // monster is squad leader
-#define SF_MONSTER_INVINCIBLE			64 // dont take damage from player
-#define SF_MONSTER_NO_YELLOW_BLOBS		128 //LRC- if the monster is stuck, don't give errors or show yellow blobs.
-#define SF_MONSTER_PREDISASTER			256	//this is a predisaster scientist or barney. Influences how they speak.
-#define SF_MONSTER_FADECORPSE			512 // Fade out corpse after death
-#define SF_MONSTER_NO_WPN_DROP			1024 //LRC- never drop your weapon (player can't pick it up.)
-#define SF_MONSTER_CUSTOM_FLAG_1		2048 // Don't Drop Explosives
-#define SF_MONSTER_CUSTOM_FLAG_2		4096
+// =====================================
+
+//FGD - Flag Group 1
+#define	SF_MONSTER_SPAWNFLAG_1		    1
+#define	SF_MONSTER_SPAWNFLAG_2			2
+#define SF_MONSTER_SPAWNFLAG_4			4
+#define SF_MONSTER_SPAWNFLAG_8			8
+#define SF_MONSTER_SPAWNFLAG_16			16
+#define SF_MONSTER_SPAWNFLAG_32			32
+#define SF_MONSTER_SPAWNFLAG_64			64
+#define SF_MONSTER_SPAWNFLAG_128		128
+
+//FGD - Flag Group 2
+#define SF_MONSTER_SPAWNFLAG_256		256
+#define SF_MONSTER_SPAWNFLAG_512		512
+#define SF_MONSTER_SPAWNFLAG_1024		1024
+#define SF_MONSTER_SPAWNFLAG_2048		2048
+#define SF_MONSTER_SPAWNFLAG_4096		4096
+#define SF_MONSTER_SPAWNFLAG_8192		8192
+#define SF_MONSTER_SPAWNFLAG_16384		16384
+#define SF_MONSTER_SPAWNFLAG_32768		32768
+
+//FGD - Flag Group 3
+#define SF_MONSTER_SPAWNFLAG_65536		65536
+#define SF_MONSTER_SPAWNFLAG_131072		131072
+#define SF_MONSTER_SPAWNFLAG_262144		262144
+#define SF_MONSTER_SPAWNFLAG_524288		524288
+#define SF_MONSTER_SPAWNFLAG_1048576	1048576
+#define SF_MONSTER_SPAWNFLAG_2097152	2097152
+#define SF_MONSTER_SPAWNFLAG_4194304	4194304
+#define SF_MONSTER_SPAWNFLAG_8388608	8388608
 
 //LRC - this clashes with 'not in deathmatch'. Replaced with m_iPlayerReact.
 //#define SF_MONSTER_INVERT_PLAYERREACT	2048 //LRC- if this monster would usually attack the player, don't attack unless provoked. If you would usually NOT attack the player, attack him.
@@ -67,12 +86,9 @@
 #define SF_MONSTER_TURRET_STARTINACTIVE	64
 #define SF_MONSTER_WAIT_UNTIL_PROVOKED	64 // don't attack the player unless provoked
 
-
-
 // MoveToOrigin stuff
 #define		MOVE_START_TURN_DIST	64 // when this far away from moveGoal, start turning to face next goal
 #define		MOVE_STUCK_DIST			32 // if a monster can't step this far, it is stuck.
-
 
 // MoveToOrigin stuff
 #define		MOVE_NORMAL				0// normal move in the direction monster is facing
@@ -90,6 +106,8 @@ extern DLL_GLOBAL CONSTANT float g_flLongRange;
 extern void EjectBrass (const Vector &vecOrigin, const Vector &vecVelocity, float rotation, int model, int soundtype );
 extern void ExplodeModel( const Vector &vecOrigin, float speed, int model, int count );
 extern void WeaponFlash (const Vector &vecOrigin );
+
+extern int gmsgParticles;//define external message
 
 BOOL FBoxVisible ( entvars_t *pevLooker, entvars_t *pevTarget );
 BOOL FBoxVisible ( entvars_t *pevLooker, entvars_t *pevTarget, Vector &vecTargetOrigin, float flSize = 0.0 );

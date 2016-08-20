@@ -12,28 +12,25 @@
 *   use or distribution of this code by or to any unlicensed person is illegal.
 *
 ****/
+//=========================================================
+// NPC: AH-64 Apache * http://half-life.wikia.com/wiki/AH-64_Apache
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
+//=========================================================
 #ifndef MONSTER_APACHE_H
 #define MONSTER_APACHE_H
 
 class CApache : public CBaseMonster
 {
 	public:
-		int	Save(CSave &save);
-		int	Restore(CRestore &restore);
-		static	TYPEDESCRIPTION m_SaveData[];
-
 		virtual void Spawn(void);
 		virtual void Precache(void);
-		int  Classify(void) { return CLASS_HUMAN_MILITARY; };
-		int  BloodColor(void) { return DONT_BLEED; }
-		void Killed(entvars_t *pevAttacker, int iGib);
-		void GibMonster(void);
-
-		void SetObjectCollisionBox(void)
-		{
-			pev->absmin = pev->origin + Vector(-300, -300, -172);
-			pev->absmax = pev->origin + Vector(300, 300, 8);
-		}
+		virtual int  Classify(void);
+		virtual int  BloodColor(void) { return DONT_BLEED; }
+		virtual void Killed(entvars_t *pevAttacker, int iGib);
+		virtual void GibMonster(void) { return; };
+		virtual int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+		virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		virtual void SetObjectCollisionBox(void);
 
 		void EXPORT HuntThink(void);
 		void EXPORT FlyTouch(CBaseEntity *pOther);
@@ -42,14 +39,19 @@ class CApache : public CBaseMonster
 		void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 		void EXPORT NullThink(void);
 
-		void ShowDamage(void);
-		void Flight(void);
-		void FireRocket(void);
-		BOOL FireGun(void);
+		virtual void ShowDamage(void);
+		virtual void Flight(void);
+		virtual void FireRocket(void);
+		virtual BOOL FireGun(void);
 
-		int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+		virtual int	Save(CSave &save);
+		virtual int	Restore(CRestore &restore);
 
+		static	TYPEDESCRIPTION m_SaveData[];
+
+		static const char *pRotorSounds[];
+		static const char *pDebrisSounds[];
+		static const char *pExplodeSounds[];
 	protected:
 		int m_iRockets;
 		float m_flForce;
@@ -67,31 +69,18 @@ class CApache : public CBaseMonster
 		float m_flLastSeen;
 		float m_flPrevSeen;
 
+		bool m_flDebug;
+
 		int m_iSoundState; // don't save this
 
 		int m_iSpriteTexture;
 		int m_iExplode;
 		int m_iBodyGibs;
+		int m_iRotorSound;
 
 		float m_flGoalSpeed;
 
 		int m_iDoSmokePuff;
-		CBeam *m_pBeam;
-};
-
-class CApacheHVR : public CGrenade
-{
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT IgniteThink(void);
-	void EXPORT AccelerateThink(void);
-
-	int		Save(CSave &save);
-	int		Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	int m_iTrail;
-	Vector m_vecForward;
 };
 
 #endif // MONSTER_APACHE_H

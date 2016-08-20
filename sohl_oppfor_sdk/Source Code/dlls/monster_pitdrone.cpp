@@ -267,7 +267,7 @@ void CPitDrone::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDi
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {
@@ -612,7 +612,7 @@ BOOL CPitDrone::ShouldSpeak(void) {
 		return false;
 	}
 
-	if (pev->spawnflags & SF_MONSTER_GAG) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) {
 		if (m_MonsterState != MONSTERSTATE_COMBAT) {
 			// if gagged, don't talk outside of combat.
 			// if not going to talk because of this, put the talk time 

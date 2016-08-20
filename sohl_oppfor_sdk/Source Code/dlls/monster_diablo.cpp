@@ -148,9 +148,9 @@ void CDiablo::SetYawSpeed(void) {
 // TakeDamage
 //=========================================================
 int CDiablo::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
-	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
@@ -205,7 +205,7 @@ void CDiablo::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {

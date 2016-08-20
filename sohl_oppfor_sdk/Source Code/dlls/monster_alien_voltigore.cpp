@@ -246,7 +246,7 @@ void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); return; }
 			if (pevAttacker->owner) {
@@ -853,21 +853,21 @@ void CVoltigore::Killed(entvars_t *pevAttacker, int iGib) {
 	// gibs
 	vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-	WRITE_BYTE(TE_BREAKMODEL);
-	WRITE_COORD(vecSpot.x);
-	WRITE_COORD(vecSpot.y);
-	WRITE_COORD(vecSpot.z);
-	WRITE_COORD(100);
-	WRITE_COORD(100);
-	WRITE_COORD(32);
-	WRITE_COORD(0);
-	WRITE_COORD(0);
-	WRITE_COORD(200);
-	WRITE_BYTE(8);
-	WRITE_SHORT(m_iVgib);	//model id#
-	WRITE_BYTE(5);
-	WRITE_BYTE(200);// 10.0 seconds
-	WRITE_BYTE(BREAK_FLESH);
+		WRITE_BYTE(TE_BREAKMODEL);
+		WRITE_COORD(vecSpot.x);
+		WRITE_COORD(vecSpot.y);
+		WRITE_COORD(vecSpot.z);
+		WRITE_COORD(100);
+		WRITE_COORD(100);
+		WRITE_COORD(32);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(200);
+		WRITE_BYTE(8);
+		WRITE_SHORT(m_iVgib);	//model id#
+		WRITE_BYTE(8);
+		WRITE_BYTE(200);// 10.0 seconds
+		WRITE_BYTE(BREAK_FLESH);
 	MESSAGE_END();
 
 	SetThink(&CVoltigore::SUB_Remove);
@@ -1009,10 +1009,18 @@ void CVoltigore::ClearBeams() {
 			UTIL_Remove(m_pBeam[i]);
 			m_pBeam[i] = NULL;
 		}
+
+		if (m_pSprite)
+		{
+			UTIL_Remove(m_pSprite);
+			m_pSprite = NULL;
+		}
 	}
 
 	m_iBeams = 0;
 	pev->skin = 0;
+
+	STOP_SOUND(ENT(pev), CHAN_WEAPON, "debris/zap4.wav");
 }
 
 void CVoltigore::DieBlast() {
@@ -1033,27 +1041,27 @@ void CVoltigore::DieBlast() {
 			pBeam->PointsInit(tr.vecEndPos, pev->origin);
 			pBeam->SetStartPos(tr.vecEndPos);
 			pBeam->SetEndPos(pev->origin);
-			pBeam->SetColor(125, 61, 177);
-			pBeam->SetNoise(80);
+			pBeam->SetColor(255, 0, 255);
+			pBeam->SetNoise(65);
 			pBeam->SetBrightness(255);
 			pBeam->SetWidth(30);
 			pBeam->SetScrollRate(35);
-			pBeam->LiveForTime(0.4);
+			pBeam->LiveForTime(2.5);
 		}
 		iTimes++;
 	}
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_DLIGHT);
-	WRITE_COORD(pev->origin.x);	// X
-	WRITE_COORD(pev->origin.y);	// Y
-	WRITE_COORD(pev->origin.z);	// Z
-	WRITE_BYTE(16);		// radius * 0.1
-	WRITE_BYTE(225);     // R
-	WRITE_BYTE(115);     // G
-	WRITE_BYTE(255);     // B
-	WRITE_BYTE(8);		// time * 10
-	WRITE_BYTE(0);		// decay * 0.1
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(pev->origin.x);	// X
+		WRITE_COORD(pev->origin.y);	// Y
+		WRITE_COORD(pev->origin.z);	// Z
+		WRITE_BYTE(16);		// radius * 0.1
+		WRITE_BYTE(225);     // R
+		WRITE_BYTE(115);     // G
+		WRITE_BYTE(255);     // B
+		WRITE_BYTE(8);		// time * 10
+		WRITE_BYTE(0);		// decay * 0.1
 	MESSAGE_END();
 
 	pev->origin.z = pev->origin.z - 64;

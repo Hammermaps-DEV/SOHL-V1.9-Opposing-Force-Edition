@@ -298,8 +298,11 @@ enum ParticleIDs
 	iWaterIcky,				// Fograin92: Icky water splash
 
 	// Explosions FX
+	iDefaultSmoke,		//well, we need some smoke for that fire... :)
 	iExplosionDefault,		// Fograin92: Default explosion (FULL FX)
-	iDefaultSporeExplosion,  // Spore Explosion
+	iDefaultSporeExplosion, // Spore Explosion
+	iDefaultFinalFire,		//the monster is placed in their final position, start burn it
+	iDefaultFinalSmoke,		//well, we need some smoke for that fire... :)
 
 	// BSP Impact
 	iImpactBSPconcrete,

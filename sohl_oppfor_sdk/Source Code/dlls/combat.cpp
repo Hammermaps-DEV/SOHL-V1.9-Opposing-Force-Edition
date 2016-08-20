@@ -264,7 +264,6 @@ void CGib :: SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int notfirst, con
 }
 
 //LRC - work out gibs from blood colour, instead of from class.
-
 BOOL CBaseMonster :: HasHumanGibs( void )
 {
 	int myClass = Classify();
@@ -279,15 +278,6 @@ BOOL CBaseMonster :: HasHumanGibs( void )
 	{
 		return (this->m_bloodColor == BLOOD_COLOR_RED);
 	}
-
-//	if ( myClass == CLASS_HUMAN_MILITARY ||
-//		 myClass == CLASS_PLAYER_ALLY	||
-//		 myClass == CLASS_HUMAN_PASSIVE  ||
-//		 myClass == CLASS_PLAYER )
-//
-//		 return TRUE;
-//
-//	return FALSE;
 }
 
 
@@ -306,19 +296,6 @@ BOOL CBaseMonster :: HasAlienGibs( void )
 	{
 		return (this->m_bloodColor == BLOOD_COLOR_GREEN);
 	}
-
-//	int myClass = Classify();
-//
-//	if ( myClass == CLASS_ALIEN_MILITARY ||
-//		 myClass == CLASS_ALIEN_MONSTER	||
-//		 myClass == CLASS_ALIEN_PASSIVE  ||
-//		 myClass == CLASS_INSECT  ||
-//		 myClass == CLASS_ALIEN_PREDATOR  ||
-//		 myClass == CLASS_ALIEN_PREY )
-//
-//		 return TRUE;
-//
-//	return FALSE;
 }
 
 
@@ -347,29 +324,20 @@ void CBaseMonster :: GibMonster( void )
 
 	if ( iszCustomGibs = HasCustomGibs() ) //LRC - monster_generic can have a custom gibset
 	{
-		if ( CVAR_GET_FLOAT("violence_hgibs") != 0 )
-		{
-			CGib::SpawnHeadGib( pev, STRING(iszCustomGibs) );
-			CGib::SpawnRandomGibs( pev, 4, 1, STRING(iszCustomGibs) );
-		}
+		CGib::SpawnHeadGib( pev, STRING(iszCustomGibs) );
+		CGib::SpawnRandomGibs( pev, 4, 1, STRING(iszCustomGibs) );
 		gibbed = TRUE;
 	}
 	// only humans throw skulls !!!UNDONE - eventually monsters will have their own sets of gibs
 	else if ( HasHumanGibs() )
 	{
-		if ( CVAR_GET_FLOAT("violence_hgibs") != 0 )// Only the player will ever fail this test
-		{
-			CGib::SpawnHeadGib( pev );
-			CGib::SpawnRandomGibs( pev, 4, 1 );	// throw some human gibs.
-		}
+		CGib::SpawnHeadGib( pev );
+		CGib::SpawnRandomGibs( pev, 4, 1 );	// throw some human gibs.
 		gibbed = TRUE;
 	}
 	else if ( HasAlienGibs() )
 	{
-		if ( CVAR_GET_FLOAT("violence_agibs") != 0 )// Should never fail this test, but someone might call it directly
-		{
-			CGib::SpawnRandomGibs( pev, 4, 0 );	// Throw alien gibs
-		}
+		CGib::SpawnRandomGibs( pev, 4, 0 );	// Throw alien gibs
 		gibbed = TRUE;
 	}
 
@@ -590,31 +558,10 @@ BOOL CBaseMonster::ShouldGibMonster( int iGib )
 
 void CBaseMonster::CallGibMonster( void )
 {
-	BOOL fade = FALSE;
-
-	if ( HasHumanGibs() )
-	{
-		if ( CVAR_GET_FLOAT("violence_hgibs") == 0 )
-			fade = TRUE;
-	}
-	else if ( HasAlienGibs() )
-	{
-		if ( CVAR_GET_FLOAT("violence_agibs") == 0 )
-			fade = TRUE;
-	}
-
 	pev->takedamage = DAMAGE_NO;
 	pev->solid = SOLID_NOT;// do something with the body. while monster blows up
-
-	if ( fade )
-	{
-		FadeMonster();
-	}
-	else
-	{
-		pev->effects = EF_NODRAW; // make the model invisible.
-		GibMonster();
-	}
+	pev->effects = EF_NODRAW; // make the model invisible.
+	GibMonster();
 
 	pev->deadflag = DEAD_DEAD;
 	FCheckAITrigger();
@@ -625,7 +572,7 @@ void CBaseMonster::CallGibMonster( void )
 		pev->health = 0;
 	}
 	
-	if ( ShouldFadeOnDeath() && !fade )
+	if ( ShouldFadeOnDeath())
 		UTIL_Remove(this);
 }
 
@@ -1824,22 +1771,6 @@ void CBaseEntity :: TraceBleed( float flDamage, Vector vecDir, TraceResult *ptr,
 	float flNoise;
 	int cCount;
 	int i;
-
-/*
-	if ( !IsAlive() )
-	{
-		// dealing with a dead monster. 
-		if ( pev->max_health <= 0 )
-		{
-			// no blood decal for a monster that has already decalled its limit.
-			return; 
-		}
-		else
-		{
-			pev->max_health--;
-		}
-	}
-*/
 
 	if (flDamage < 10)
 	{

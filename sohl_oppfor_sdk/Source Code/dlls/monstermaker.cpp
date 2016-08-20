@@ -264,11 +264,11 @@ CBaseMonster* CMonsterMaker::MakeMonster( void )
 	SetBits( pevCreate->spawnflags, SF_MONSTER_FALL_TO_GROUND );
 
 	if (pev->spawnflags & SF_MONSTERMAKER_NO_WPN_DROP)
-		SetBits( pevCreate->spawnflags, SF_MONSTER_NO_WPN_DROP);
+		SetBits( pevCreate->spawnflags, SF_MONSTER_SPAWNFLAG_1024);
 
 	// Children hit monsterclip brushes
 	if ( pev->spawnflags & SF_MONSTERMAKER_MONSTERCLIP )
-		SetBits( pevCreate->spawnflags, SF_MONSTER_HITMONSTERCLIP );
+		SetBits( pevCreate->spawnflags, SF_MONSTER_SPAWNFLAG_4 );
 
 	DispatchSpawn( ENT( pevCreate ) );
 	pevCreate->owner = edict();

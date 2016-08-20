@@ -161,9 +161,9 @@ void COtis::Precache() {
 // TakeDamage
 //=========================================================
 int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) {
-	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
@@ -249,7 +249,7 @@ void COtis::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, T
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {
@@ -398,17 +398,17 @@ void COtis::TalkInit() {
 		m_szGrp[TLK_IDLE] = "OT_IDLE";
 		m_szGrp[TLK_STARE] = "OT_STARE";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			m_szGrp[TLK_USE] = "OT_PFOLLOW";
 		else
 			m_szGrp[TLK_USE] = "OT_OK";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_UNUSE] = "OT_PWAIT";
 		else
 			m_szGrp[TLK_UNUSE] = "OT_WAIT";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_DECLINE] = "OT_POK";
 		else
 			m_szGrp[TLK_DECLINE] = "OT_NOTOK";
@@ -438,7 +438,7 @@ void COtis::TalkInit() {
 // Monster is Killed, change body and drop weapon
 //=========================================================
 void COtis::Killed(entvars_t *pevAttacker, int iGib) {
-	if (GetBodygroup(GUN_GROUP) == GUN_EAGLE && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
+	if (GetBodygroup(GUN_GROUP) == GUN_EAGLE && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector vecGunPos, vecGunAngles;
 		SetBodygroup(GUN_GROUP, GUN_NO_GUN);
 		GetAttachment(0, vecGunPos, vecGunAngles);

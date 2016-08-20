@@ -565,8 +565,6 @@
 // byte ( color ) this is an index into an array of color vectors in the engine. (0 - )
 // byte ( length * 10 )
 
-
-
 #define	MSG_BROADCAST		0		// unreliable to all
 #define	MSG_ONE				1		// reliable to one (msg_entity)
 #define	MSG_ALL				2		// reliable to all
@@ -597,7 +595,7 @@
 
 #define CONTENTS_TRANSLUCENT	-15
 */
-#define	CONTENTS_LADDER				-16
+#define	CONTENTS_LADDER		-16
 
 //LRC- New (long overdue) content types for Spirit
 #define	CONTENT_FLYFIELD			-17
@@ -607,13 +605,13 @@
 #define CONTENT_SPECIAL2			-21
 #define CONTENT_SPECIAL3			-22
 
+
 #define CONTENT_EMPTY	-1
 #define CONTENT_SOLID	-2
 #define	CONTENT_WATER	-3
 #define CONTENT_SLIME	-4
 #define CONTENT_LAVA	-5
 #define CONTENT_SKY		-6
-#define CONTENT_SOLID	-2
 
 // channels
 #define CHAN_AUTO			0
@@ -640,6 +638,8 @@
 
 // volume values
 #define VOL_NORM		1.0
+#define VOL_LOW			0.8
+#define VOL_LOWER		0.5
 
 // plats
 #define	PLAT_LOW_TRIGGER	1

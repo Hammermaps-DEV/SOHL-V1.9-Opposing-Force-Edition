@@ -81,6 +81,9 @@
     <Filter Include="Header Files\dlls\props">
       <UniqueIdentifier>{40df2770-e295-42dd-906d-39f0dcb3a415}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\dlls\rope">
+      <UniqueIdentifier>{10c4c228-4192-4241-a3c6-a418193a07bd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ammo_9mmbox.cpp">
@@ -437,9 +440,6 @@
     <ClCompile Include="explode.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="env_electrified_wire.cpp">
-      <Filter>Source Files\dlls</Filter>
-    </ClCompile>
     <ClCompile Include="effects.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
@@ -462,9 +462,6 @@
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
     <ClCompile Include="combat.cpp">
-      <Filter>Source Files\dlls</Filter>
-    </ClCompile>
-    <ClCompile Include="env_rope_segment.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
@@ -635,9 +632,6 @@
     <ClCompile Include="monster_massn.cpp">
       <Filter>Source Files\dlls\monsters</Filter>
     </ClCompile>
-    <ClCompile Include="env_rope.cpp">
-      <Filter>Source Files\dlls</Filter>
-    </ClCompile>
     <ClCompile Include="weapon_sniperrifle.cpp">
       <Filter>Source Files\dlls\weapons</Filter>
     </ClCompile>
@@ -673,6 +667,15 @@
     </ClCompile>
     <ClCompile Include="monster_diablo.cpp">
       <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_blkop_osprey.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_blkop_apache.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
+    </ClCompile>
+    <ClCompile Include="proj_hvr_rocket.cpp">
+      <Filter>Source Files\dlls\projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1153,12 +1156,6 @@
     <ClInclude Include="monster_massn.h">
       <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
-    <ClInclude Include="env_rope_segment.h">
-      <Filter>Header Files\dlls</Filter>
-    </ClInclude>
-    <ClInclude Include="env_rope.h">
-      <Filter>Header Files\dlls</Filter>
-    </ClInclude>
     <ClInclude Include="weapon_sniperrifle.h">
       <Filter>Header Files\dlls\weapons</Filter>
     </ClInclude>
@@ -1194,6 +1191,24 @@
     </ClInclude>
     <ClInclude Include="monster_diablo.h">
       <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_blkop_osprey.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_blkop_apache.h">
+      <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="proj_hvr_rocket.h">
+      <Filter>Header Files\dlls\projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="rope_segment.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="env_rope.h">
+      <Filter>Header Files\dlls\env</Filter>
+    </ClInclude>
+    <ClInclude Include="rope_sample.h">
+      <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

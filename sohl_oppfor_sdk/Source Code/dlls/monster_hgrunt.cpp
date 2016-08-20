@@ -962,7 +962,7 @@ int CHGrunt::IRelationship(CBaseEntity *pTarget) {
 //=========================================================
 void CHGrunt::GibMonster(void) {
 	Vector	vecGunPos, vecGunAngles;
-	if (GetBodygroup(2) != 2 && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP))
+	if (GetBodygroup(2) != 2 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024))
 	{// throw a gun if the grunt has one
 		GetAttachment(0, vecGunPos, vecGunAngles);
 
@@ -1020,7 +1020,7 @@ BOOL CHGrunt::FOkToSpeak(void) {
 	if (UTIL_GlobalTimeBase() <= CTalkMonster::g_talkWaitTime)
 		return FALSE;
 
-	if (pev->spawnflags & SF_MONSTER_GAG) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) {
 		if (m_MonsterState != MONSTERSTATE_COMBAT) {
 			// no talking outside of combat if gagged.
 			return FALSE;
@@ -1531,7 +1531,7 @@ void CHGrunt::HandleAnimEvent(MonsterEvent_t *pEvent)
 	{
 	case HGRUNT_AE_DROP_GUN:
 	{
-		if (pev->spawnflags & SF_MONSTER_NO_WPN_DROP) break; //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) break; //LRC
 
 		Vector	vecGunPos;
 		Vector	vecGunAngles;

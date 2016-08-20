@@ -788,12 +788,15 @@ void CBasePlayerItem::DefaultTouch( CBaseEntity *pOther )
 				i = 5;
 			else i = 0; // for cycler_weapon
 
-			sprintf(sample, "!%s", weapon_name + i);
+			snprintf(sample, 32, "!%s", weapon_name + i);
 			pPlayer->SetSuitUpdate(sample, FALSE, SUIT_NEXT_IN_30SEC);
 		}
 	}
 
 	SUB_UseTargets( pOther, USE_TOGGLE, 0 ); // UNDONE: when should this happen?
+
+	if (m_pfnThink == &CBasePlayerItem::FallThink)
+		SetThink(NULL);
 }
 
 void CBasePlayerItem::Spawn(void)

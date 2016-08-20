@@ -291,7 +291,7 @@ void CSittingCleansuitScientist::Spawn(void)
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD;
 
-	SetBits(pev->spawnflags, SF_MONSTER_PREDISASTER); // predisaster only!
+	SetBits(pev->spawnflags, SF_MONSTER_SPAWNFLAG_256); // predisaster only!
 
 	if (pev->body == -1)
 	{// -1 chooses a random head

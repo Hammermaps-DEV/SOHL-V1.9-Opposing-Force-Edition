@@ -82,7 +82,7 @@ void CSquidSpit:: Spawn( void )
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 255;
 
-	SET_MODEL(ENT(pev), "sprites/bigspit.spr");
+	SET_MODEL(ENT(pev), "sprites/spit.spr");
 	pev->frame = 0;
 	pev->scale = 0.5;
 
@@ -671,7 +671,7 @@ void CBullsquid :: Precache()
 	else
 		PRECACHE_MODEL("models/bullsquid.mdl");
 	
-	PRECACHE_MODEL("sprites/bigspit.spr");// spit projectile.
+	PRECACHE_MODEL("sprites/spit.spr");// spit projectile.
 	
 	iSquidSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr");// client side spittle.
 

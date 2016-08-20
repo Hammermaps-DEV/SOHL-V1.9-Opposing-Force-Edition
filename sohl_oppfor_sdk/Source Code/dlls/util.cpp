@@ -173,7 +173,7 @@ int PRECACHE_SOUND( char* s )
 	char *sound = s;		//sounds from model events can contains a symbol '*'.
 				//remove this for sucessfully loading a sound	
           if (sound[0] == '*')sound++;	//only for fake path, engine needs this prefix!
-	sprintf(path, "sound/%s", sound);
+	snprintf(path, 256, "sound/%s", sound);
 	
 	//verify file exists
 	byte *data = LOAD_FILE_FOR_ME(path, NULL);
@@ -522,9 +522,9 @@ DBG_AssertFunction(
 		return;
 	char szOut[512];
 	if (szMessage != NULL)
-		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
+		snprintf(szOut, 512, "ASSERT FAILED:\n %s \n(%s@%d)\n%s", szExpr, szFile, szLine, szMessage);
 	else
-		sprintf(szOut, "ASSERT FAILED:\n %s \n(%s@%d)\n", szExpr, szFile, szLine);
+		snprintf(szOut, 512, "ASSERT FAILED:\n %s \n(%s@%d)\n", szExpr, szFile, szLine);
 	ALERT(at_debug, szOut);
 	}
 #endif	// DEBUG
@@ -1355,31 +1355,10 @@ void UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity )
 }
 
 
-char *UTIL_dtos1( int d )
+char *UTIL_dtos( int d )
 {
 	static char buf[8];
-	sprintf( buf, "%d", d );
-	return buf;
-}
-
-char *UTIL_dtos2( int d )
-{
-	static char buf[8];
-	sprintf( buf, "%d", d );
-	return buf;
-}
-
-char *UTIL_dtos3( int d )
-{
-	static char buf[8];
-	sprintf( buf, "%d", d );
-	return buf;
-}
-
-char *UTIL_dtos4( int d )
-{
-	static char buf[8];
-	sprintf( buf, "%d", d );
+	snprintf( buf, 8, "%d", d );
 	return buf;
 }
 
@@ -1554,7 +1533,7 @@ char* UTIL_VarArgs( char *format, ... )
 	static char		string[1024];
 	
 	va_start (argptr, format);
-	vsprintf (string, format,argptr);
+	snprintf(string, 1024, format,argptr);
 	va_end (argptr);
 
 	return string;	
@@ -2171,7 +2150,7 @@ void UTIL_LogPrintf( char *fmt, ... )
 	static char		string[1024];
 	
 	va_start ( argptr, fmt );
-	vsprintf ( string, fmt, argptr );
+	snprintf( string, 1024, fmt, argptr );
 	va_end   ( argptr );
 
 	// Print to server console
@@ -3337,7 +3316,7 @@ bool UTIL_FileExists(char *name) {
 int UTIL_PrecacheAurora(string_t s) { return UTIL_PrecacheAurora((char *)STRING(s)); }
 int UTIL_PrecacheAurora(const char *s) {
 	char path[128]; //path length
-	sprintf(path, "particles/%s.aur", s);
+	snprintf(path, 128, "particles/%s.aur", s);
 
 	byte *data = LOAD_FILE_FOR_ME(path, NULL);
 	if (data)

@@ -147,8 +147,29 @@ void CGameRules::RefreshSkillData ( void )
 	gSkillData.agruntHealth = GetSkillCvar( "sk_agrunt_health" );
 	gSkillData.agruntDmgPunch = GetSkillCvar( "sk_agrunt_dmg_punch");
 
-	// Apache 
+	//=========================================================
+	// NPCs: Apache
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
 	gSkillData.apacheHealth = GetSkillCvar( "sk_apache_health");
+
+	//=========================================================
+	// NPCs: Osprey
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.ospreyHealth = GetSkillCvar("sk_osprey_health");
+
+	//=========================================================
+	// NPCs: Apache BlackOP
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.apacheBlkopHealth = GetSkillCvar("sk_apache_blkop_health");
+
+	//=========================================================
+	// NPCs: Osprey BlackOP
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	gSkillData.ospreyBlkopHealth = GetSkillCvar("sk_osprey_blkop_health");
 
 	//=========================================================
 	// NPCs: Barney

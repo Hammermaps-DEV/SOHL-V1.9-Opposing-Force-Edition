@@ -126,7 +126,7 @@ HL_HSPRITE LoadSprite(const char *pszName)
 	else
 		i = 640;
 
-	sprintf(sz, pszName, i);
+	snprintf(sz, 256, pszName, i);
 
 	return SPR_Load(sz);
 }
@@ -157,7 +157,7 @@ bool Sys_LoadLibrary (const char* dllname, dllhandle_t* handle, const dllfunctio
 	for (gamefunc = fcts; gamefunc && gamefunc->name != NULL; gamefunc++)
 		*gamefunc->funcvariable = NULL;
 
-	sprintf(dllpath, "%s/cl_dlls/%s", gEngfuncs.pfnGetGameDirectory(), dllname);
+	snprintf(dllpath, 128, "%s/cl_dlls/%s", gEngfuncs.pfnGetGameDirectory(), dllname);
 	dllhandle = LoadLibrary (dllpath);
         
 	// No DLL found

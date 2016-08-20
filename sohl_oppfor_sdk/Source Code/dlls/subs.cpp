@@ -255,7 +255,7 @@ void FireTargets( const char *targetName, CBaseEntity *pActivator, CBaseEntity *
 			if (targetName[i] == '.')//value specifier
 			{
 				value = atof(&targetName[i+1]);
-				sprintf(szBuf, targetName);
+				snprintf(szBuf, 80, targetName);
 				szBuf[i] = 0;
 				targetName = szBuf;
 				pTarget = UTIL_FindEntityByTargetname(NULL, targetName, inputActivator);						

@@ -48,7 +48,7 @@ int UseTexture(HL_HSPRITE &hsprSpr, char * str)
 	if (hsprSpr == 0)
 	{
 		char sz[256];
-		sprintf( sz, str );
+		snprintf( sz, 256, str );
 		hsprSpr = SPR_Load( sz );
 	}
 
@@ -78,7 +78,7 @@ CShinySurface::CShinySurface( float fScale, float fAlpha, float fMinX, float fMa
 	m_fMaxX = fMaxX; m_fMaxY = fMaxY;
 	m_fZ = fZ;
 	m_hsprSprite = 0;
-	sprintf( m_szSprite, szSprite );
+	snprintf( m_szSprite, 128, szSprite );
 	m_pNext = NULL;
 }
 

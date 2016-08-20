@@ -102,14 +102,13 @@ void CGrappleHook::Hit(CBaseEntity* Target)
 	if (count)
 	{
 		m_iHitMonster = 1;	// Fograin92: Let's assume we hit bigger monster.
-
-							// Fograin92: Loop through everything we did hit.
+		// Fograin92: Loop through everything we did hit.
 		for (int i = 0; i < count; i++)
 		{
 			//ALERT(at_console, "Hit: %s\n", STRING(pList[i]->pev->classname));
 			myHitMonster = pList[i]; // Fograin92: Hook pointer to our monster.
 
-									 // Fograin92: Check what did we hit
+			// Fograin92: Check what did we hit
 			if ((FClassnameIs(pList[i]->pev, "monster_babycrab"))
 				|| (FClassnameIs(pList[i]->pev, "monster_headcrab"))
 				|| (FClassnameIs(pList[i]->pev, "monster_cockroach"))

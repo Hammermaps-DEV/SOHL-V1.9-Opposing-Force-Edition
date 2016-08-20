@@ -3254,7 +3254,7 @@ void CEnvFootsteps::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 			if (pev->frags)
 			{
 				char sTemp[4];
-				sprintf(sTemp, "%d", (int)pev->frags);
+				snprintf(sTemp, 4, "%d", (int)pev->frags);
 				g_engfuncs.pfnSetPhysicsKeyValue( pActivator->edict(), "stype", sTemp );
 				//pActivator->pev->iFootstepType = pev->frags;
 			}

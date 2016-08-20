@@ -815,21 +815,21 @@ void CRCAllyMonster::TalkInit(void) {
 		strcpy(szAssign, "STARE");
 		m_szGrp[TLK_STARE] = STRING(ALLOC_STRING(szBuf));
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			strcpy(szAssign, "PFOLLOW");
 		else
 			strcpy(szAssign, "OK");
 
 		m_szGrp[TLK_USE] = STRING(ALLOC_STRING(szBuf));
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			strcpy(szAssign, "PWAIT");
 		else
 			strcpy(szAssign, "WAIT");
 
 		m_szGrp[TLK_UNUSE] = STRING(ALLOC_STRING(szBuf));
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			strcpy(szAssign, "POK");
 		else
 			strcpy(szAssign, "NOTOK");
@@ -1009,7 +1009,7 @@ int CRCAllyMonster::FOkToSpeak(void) {
 	if (UTIL_GlobalTimeBase() <= CRCAllyMonster::g_talkWaitTime)
 		return FALSE;
 
-	if (pev->spawnflags & SF_MONSTER_GAG)
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_2)
 		return FALSE;
 
 	// if player is not in pvs, don't speak
@@ -1063,7 +1063,7 @@ int CRCAllyMonster::FIdleHello(void) {
 			if (FInViewCone(pPlayer) && FVisible(pPlayer)) {
 				m_hTalkTarget = pPlayer;
 
-				if (FBitSet(pev->spawnflags, SF_MONSTER_PREDISASTER))
+				if (FBitSet(pev->spawnflags, SF_MONSTER_SPAWNFLAG_256))
 					PlaySentence(m_szGrp[TLK_PHELLO], RANDOM_FLOAT(3, 3.5), VOL_NORM, ATTN_IDLE);
 				else
 					PlaySentence(m_szGrp[TLK_HELLO], RANDOM_FLOAT(3, 3.5), VOL_NORM, ATTN_IDLE);
@@ -1109,7 +1109,7 @@ int CRCAllyMonster::FIdleSpeak(void) {
 		return FALSE;
 
 	// set idle groups based on pre/post disaster
-	if (FBitSet(pev->spawnflags, SF_MONSTER_PREDISASTER)) {
+	if (FBitSet(pev->spawnflags, SF_MONSTER_SPAWNFLAG_256)) {
 		szIdleGroup = m_szGrp[TLK_PIDLE];
 		szQuestionGroup = m_szGrp[TLK_PQUESTION];
 		// set global min delay for next conversation
@@ -1253,7 +1253,7 @@ void CRCAllyMonster::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector 
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); }
 			if (pevAttacker->owner) {
@@ -1567,7 +1567,7 @@ void CRCAllyMonster::FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, 
 	if (pCaller != NULL && pCaller->IsPlayer() && CanFollow()) {
 		if (!IsFollowing()) {
 			// Pre-disaster followers can't be used unless they've got a master to override their behaviour...
-			if (IsLockedByMaster() || (pev->spawnflags & SF_MONSTER_PREDISASTER && !m_sMaster)) {
+			if (IsLockedByMaster() || (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256 && !m_sMaster)) {
 				//ALERT(at_console,"Decline\n");
 				DeclineFollowing();
 			}
@@ -1988,7 +1988,7 @@ void CRCAllyMonster::StartMonster(void)
 		if (!FStringNull(pev->netname))
 		{
 			// if I have a groupname, I can only recruit if I'm flagged as leader
-			if (!(pev->spawnflags & SF_MONSTER_SQUADLEADER))
+			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_32))
 			{
 				return;
 			}
@@ -2601,9 +2601,9 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	if (m_fImmortal)
 		flDamage = 0;
 
-	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {

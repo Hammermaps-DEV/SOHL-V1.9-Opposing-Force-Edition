@@ -79,7 +79,7 @@ int g_BannedPlayerPrintCount;
 void ForEachBannedPlayer(char id[16])
 {
 	char str[256];
-	sprintf(str, "Ban %d: %2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x\n",
+	snprintf(str, 256, "Ban %d: %2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x%2x\n",
 		g_BannedPlayerPrintCount++,
 		id[0], id[1], id[2], id[3], 
 		id[4], id[5], id[6], id[7], 
@@ -491,13 +491,13 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 		if(gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			char msg[256];
-			sprintf(msg, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
+			snprintf(msg, 256, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
 			gEngfuncs.pfnConsolePrint(msg);
 		}
 	}
 
 	char str[2048];
-	sprintf(str, "vban");
+	snprintf(str, 2048, "vban");
 	bool bChange = false;
 
 	for(unsigned long dw=0; dw < VOICE_MAX_PLAYERS_DW; dw++)
@@ -522,7 +522,7 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 
 		// Ok, the server needs to be updated.
 		char numStr[512];
-		sprintf(numStr, " %x", banMask);
+		snprintf(numStr, 512, " %x", banMask);
 		strcat(str, numStr);
 	}
 
@@ -531,7 +531,7 @@ void CVoiceStatus::UpdateServerState(bool bForce)
 		if(gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 		{
 			char msg[256];
-			sprintf(msg, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
+			snprintf(msg, 256, "CVoiceStatus::UpdateServerState: Sending '%s'\n", str);
 			gEngfuncs.pfnConsolePrint(msg);
 		}
 
@@ -616,10 +616,10 @@ void CVoiceStatus::HandleVoiceMaskMsg(int iSize, void *pbuf)
 			char str[256];
 			gEngfuncs.pfnConsolePrint("CVoiceStatus::HandleVoiceMaskMsg\n");
 			
-			sprintf(str, "    - m_AudiblePlayers[%d] = %lu\n", dw, m_AudiblePlayers.GetDWord(dw));
+			snprintf(str, 256,"    - m_AudiblePlayers[%d] = %lu\n", dw, m_AudiblePlayers.GetDWord(dw));
 			gEngfuncs.pfnConsolePrint(str);
 			
-			sprintf(str, "    - m_ServerBannedPlayers[%d] = %lu\n", dw, m_ServerBannedPlayers.GetDWord(dw));
+			snprintf(str, 256, "    - m_ServerBannedPlayers[%d] = %lu\n", dw, m_ServerBannedPlayers.GetDWord(dw));
 			gEngfuncs.pfnConsolePrint(str);
 		}
 	}
@@ -844,7 +844,7 @@ void CVoiceStatus::SetPlayerBlockedState(int iPlayer, bool blocked)
 	if (gEngfuncs.pfnGetCvarFloat("voice_clientdebug"))
 	{
 		char str[256];
-		sprintf(str, "CVoiceStatus::SetPlayerBlockedState: setting player %d ban to %d\n", iPlayer, !m_BanMgr.GetPlayerBan(playerID));
+		snprintf(str, 256, "CVoiceStatus::SetPlayerBlockedState: setting player %d ban to %d\n", iPlayer, !m_BanMgr.GetPlayerBan(playerID));
 		gEngfuncs.pfnConsolePrint(str);
 	}
 

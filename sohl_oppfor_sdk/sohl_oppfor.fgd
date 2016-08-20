@@ -3423,7 +3423,8 @@
 	spawnflags(Flags) = 
 	[
 		8 : "No Wreckage"    : 0
-		64: "Start Inactive" : 0
+		32: "Start Inactive" : 0
+		256: "No Rockets"    : 0
 	]
 ]
 @PointClass base(Monster) size(-16 -16 0, 16 16 36) studio("models/baby_headcrab.mdl") = monster_babycrab : "Baby Headcrab" []
@@ -3913,17 +3914,26 @@
 //* crashed the game if no such corner was available.
 @PointClass base(Monster) size(-480 -480 -112, 480 480 24) studio("models/osprey.mdl") = monster_osprey : "Osprey"
 [
+    m_iMonster(Choices) : "Monster Spawn" : 0 =
+	[
+		0 : "Human Grunt"
+		1 : "Human Grunt (Ally)"
+		2 : "Human Grunt (Ally Medic)"
+		3 : "Human Grunt (Ally Torch)"
+		4 : "Random Human Grunt (Ally)"
+		5 : "Black Ops"
+	]
 	spawnflags(Flags) = 
 	[
 		//* Until triggered, the osprey won't move or drop grunts.
-		64 : "Start Inactive" : 0
+		32 : "Start Inactive" : 0
 	]
 ]
 //* Like @monster_bloater: no AI, no death animation.
 @PointClass base(Monster) size(-6 -6 0, 6 6 6) studio("models/bigrat.mdl") = monster_rat : "Rat" []
 @PointClass base(TalkMonster) size(-16 -16 0, 16 16 72) studio("models/scientist.mdl") = monster_scientist : "Scientist" 
 [
-      body(Choices) : "Body" : -1 =
+    body(Choices) : "Body" : -1 =
 	[
 		-1: "Random"
 		0 : "Glasses"
@@ -4065,7 +4075,7 @@
 ]
 @PointClass base(Targetname, Angles, Appearflags,RenderFields) size(-16 -16 0, 16 16 72) studio("models/scientist.mdl") = monster_scientist_dead : "Dead Scientist" 
 [
-      body(Choices) : "Body" : -1 =
+    body(Choices) : "Body" : -1 =
 	[
 		-1: "Random"
 		0 : "Glasses"
@@ -4073,7 +4083,7 @@
 		2 : "Luther (black skin)"
 		3 : "Slick"
 	]
-      pose(Choices) : "Pose" : 0 =
+    pose(Choices) : "Pose" : 0 =
 	[
 		0 : "On back"
 		1 : "On Stomach"
@@ -4238,7 +4248,7 @@
 ]
 @PointClass base(Monster) size(-14 -14 22, 14 14 72) studio("models/scientist.mdl") = monster_sitting_scientist : "Sitting Scientist" 
 [
-      body(Choices) : "Body" : -1 =
+    body(Choices) : "Body" : -1 =
 	[
 		-1: "Random"
 		0 : "Glasses"
@@ -6610,3 +6620,14 @@
 @PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(200 100 50) = info_displacer_xen_target : "Displacer XEN Target" []
 //NEW 1.9 
 @PointClass base(Targetname) size(-4 -4 -4, 4 4 4) color(200 100 50) = info_displacer_earth_target : "Displacer EARTH Target" []
+//NEW 1.9 
+@PointClass base(Monster, Sequence) studio("models/blkop_apache.mdl") = monster_blkop_apache : "Black Ops Apache" 
+[
+	spawnflags(Flags) = 
+	[
+		8 : "No Wreckage"    : 0
+		32: "Start Inactive" : 0
+		256: "No Rockets"    : 0
+	]
+]
+

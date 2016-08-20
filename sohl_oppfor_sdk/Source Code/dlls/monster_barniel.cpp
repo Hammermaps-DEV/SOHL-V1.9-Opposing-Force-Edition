@@ -106,9 +106,9 @@ void CBarniel::Precache() {
 // TakeDamage
 //=========================================================
 int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) {
-	if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_INVINCIBLE\n", STRING(pev->classname));
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
@@ -198,7 +198,7 @@ void CBarniel::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {
@@ -332,17 +332,17 @@ void CBarniel::TalkInit() {
 		m_szGrp[TLK_IDLE] = "BN_IDLE";
 		m_szGrp[TLK_STARE] = "BN_STARE";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			m_szGrp[TLK_USE] = "BN_PFOLLOW";
 		else
 			m_szGrp[TLK_USE] = "BN_OK";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_UNUSE] = "BN_PWAIT";
 		else
 			m_szGrp[TLK_UNUSE] = "BN_WAIT";
 
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER)
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
 			m_szGrp[TLK_DECLINE] = "BN_POK";
 		else
 			m_szGrp[TLK_DECLINE] = "BN_NOTOK";
@@ -368,7 +368,7 @@ void CBarniel::TalkInit() {
 // Monster is Killed, change body and drop weapon
 //=========================================================
 void CBarniel::Killed(entvars_t *pevAttacker, int iGib) {
-	if (pev->body < m_iBaseBody + BARNIEL_BODY_GUNGONE && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
+	if (pev->body < m_iBaseBody + BARNIEL_BODY_GUNGONE && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector vecGunPos, vecGunAngles;
 		pev->body = m_iBaseBody + BARNIEL_BODY_GUNGONE;
 		GetAttachment(0, vecGunPos, vecGunAngles);

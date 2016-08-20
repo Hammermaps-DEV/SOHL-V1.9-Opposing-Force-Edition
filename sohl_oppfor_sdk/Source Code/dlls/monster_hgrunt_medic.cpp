@@ -999,7 +999,7 @@ void CMedic :: RunTask( Task_t *pTask ) {
 // GibMonster - make gun fly through the air.
 //=========================================================
 void CMedic::GibMonster(void) {
-	if (GetBodygroup(3) != 2 && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
+	if (GetBodygroup(3) != 2 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
 		GetAttachment(0, vecGunPos, vecGunAngles);

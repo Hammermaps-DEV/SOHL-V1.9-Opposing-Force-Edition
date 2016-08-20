@@ -175,7 +175,7 @@ int CHudGeiger::Draw (float flTime)
 			if (i > 2)
 				j += rand() & 1;
 
-			sprintf(sz, "player/geiger%d.wav", j + 1);
+			snprintf(sz, 256, "player/geiger%d.wav", j + 1);
 			gSoundEngine.PlaySound("common/wpn_select.wav", g_vecZero, SND_2D, 0, CVAR_GET_FLOAT("volume_sfx"));
 		}
 	}

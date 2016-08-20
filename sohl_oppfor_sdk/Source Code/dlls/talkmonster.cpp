@@ -820,17 +820,17 @@ void CTalkMonster :: TalkInit( void )
 		m_szGrp[TLK_IDLE]  = STRING(ALLOC_STRING(szBuf));
 		strcpy(szAssign,"STARE");
 		m_szGrp[TLK_STARE]  = STRING(ALLOC_STRING(szBuf));
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			strcpy(szAssign,"PFOLLOW");
 		else
 			strcpy(szAssign,"OK");
 		m_szGrp[TLK_USE]  = STRING(ALLOC_STRING(szBuf));
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			strcpy(szAssign,"PWAIT");
 		else
 			strcpy(szAssign,"WAIT");
 		m_szGrp[TLK_UNUSE]  = STRING(ALLOC_STRING(szBuf));
-		if (pev->spawnflags & SF_MONSTER_PREDISASTER) //LRC
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
 			strcpy(szAssign,"POK");
 		else
 			strcpy(szAssign,"NOTOK");
@@ -998,7 +998,7 @@ int CTalkMonster :: FOkToSpeak( void )
 	if (UTIL_GlobalTimeBase() <= CTalkMonster::g_talkWaitTime)
 		return FALSE;
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_2 )
 		return FALSE;
 
 	if ( m_MonsterState == MONSTERSTATE_PRONE )
@@ -1058,7 +1058,7 @@ int CTalkMonster :: FIdleHello( void )
 			{
 				m_hTalkTarget = pPlayer;
 
-				if (FBitSet(pev->spawnflags, SF_MONSTER_PREDISASTER))
+				if (FBitSet(pev->spawnflags, SF_MONSTER_SPAWNFLAG_256))
 					PlaySentence( m_szGrp[TLK_PHELLO], RANDOM_FLOAT(3, 3.5), VOL_NORM,  ATTN_IDLE );
 				else
 					PlaySentence( m_szGrp[TLK_HELLO], RANDOM_FLOAT(3, 3.5), VOL_NORM,  ATTN_IDLE );
@@ -1105,7 +1105,7 @@ int CTalkMonster :: FIdleSpeak ( void )
 		return FALSE;
 
 	// set idle groups based on pre/post disaster
-	if (FBitSet(pev->spawnflags, SF_MONSTER_PREDISASTER))
+	if (FBitSet(pev->spawnflags, SF_MONSTER_SPAWNFLAG_256))
 	{
 		szIdleGroup = m_szGrp[TLK_PIDLE];
 		szQuestionGroup = m_szGrp[TLK_PQUESTION];
@@ -1498,7 +1498,7 @@ void CTalkMonster :: FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller,
 		if ( !IsFollowing() )
 		{
 			// Pre-disaster followers can't be used unless they've got a master to override their behaviour...
-			if (IsLockedByMaster() || (pev->spawnflags & SF_MONSTER_PREDISASTER && !m_sMaster))
+			if (IsLockedByMaster() || (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256 && !m_sMaster))
 			{
 				//ALERT(at_console,"Decline\n");
 			DeclineFollowing();

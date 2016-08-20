@@ -2120,11 +2120,11 @@ void CEnvCustomize :: Affect (CBaseEntity *pTarget, USE_TYPE useType)
 			ALERT(at_debug, " playerreact=%d", m_iPlayerReact);
 	}
 
-//	SetCustomFlag( m_iPrisoner, pMonster->pev->spawnflags, SF_MONSTER_PRISONER, useType, "prisoner");
-	switch (GetActionFor(m_iPrisoner, pMonster->pev->spawnflags & SF_MONSTER_PRISONER, useType, "prisoner") )
+//	SetCustomFlag( m_iPrisoner, pMonster->pev->spawnflags, SF_MONSTER_SPAWNFLAG_16, useType, "prisoner");
+	switch (GetActionFor(m_iPrisoner, pMonster->pev->spawnflags & SF_MONSTER_SPAWNFLAG_16, useType, "prisoner") )
 	{
 	case CUSTOM_FLAG_ON:
-		pMonster->pev->spawnflags |= SF_MONSTER_PRISONER;
+		pMonster->pev->spawnflags |= SF_MONSTER_SPAWNFLAG_16;
 		if (pMonster->m_hEnemy)
 		{
 			pMonster->m_hEnemy = NULL;
@@ -2133,7 +2133,7 @@ void CEnvCustomize :: Affect (CBaseEntity *pTarget, USE_TYPE useType)
 		}
 		break;
 	case CUSTOM_FLAG_OFF:
-		pMonster->pev->spawnflags &= ~SF_MONSTER_PRISONER;
+		pMonster->pev->spawnflags &= ~SF_MONSTER_SPAWNFLAG_16;
 		break;
 	}
 
@@ -2625,7 +2625,7 @@ void CTriggerHevCharge :: AnnounceThink ( )
 	if (pct > 0)
 	pct--;
 		
-	sprintf( szcharge,"!HEV_%1dP", pct );
+	snprintf( szcharge, 64,"!HEV_%1dP", pct );
 	//ALERT(at_debug, "Announce %s\n", szcharge);
 			
 	((CBasePlayer*)pPlayer)->SetSuitUpdate(szcharge, FALSE, SUIT_REPEAT_OK);
@@ -2862,7 +2862,7 @@ void PlayCDTrack( int iTrack )
 	{
 		char string [ 64 ];
 
-		sprintf( string, "cd play %3d\n", iTrack );
+		snprintf( string, 64, "cd play %3d\n", iTrack );
 		CLIENT_COMMAND ( pClient, string);
 	}
 }
@@ -5124,7 +5124,7 @@ void CTriggerCommand::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 
 	if (pev->netname)
 	{
-		sprintf( szCommand, "%s\n", STRING(pev->netname) );
+		snprintf( szCommand, 256, "%s\n", STRING(pev->netname) );
 		SERVER_COMMAND( szCommand );
 	}
 }
@@ -5166,13 +5166,13 @@ void CTriggerChangeCVar::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 	{
 		if (pev->spawnflags & SF_CVAR_ACTIVE)
 		{
-			sprintf( szCommand, "%s \"%s\"\n",  STRING(pev->netname), m_szStoredString );
+			snprintf( szCommand, 256, "%s \"%s\"\n",  STRING(pev->netname), m_szStoredString );
 			pev->spawnflags &= ~SF_CVAR_ACTIVE;
 		}
 		else
 		{
 			strncpy(m_szStoredString, CVAR_GET_STRING(STRING(pev->netname)), 256);
-			sprintf( szCommand, "%s \"%s\"\n", STRING(pev->netname), STRING(pev->message) );
+			snprintf( szCommand, 256, "%s \"%s\"\n", STRING(pev->netname), STRING(pev->message) );
 			pev->spawnflags |= SF_CVAR_ACTIVE;
 
 			if (pev->armorvalue >= 0)
@@ -5190,7 +5190,7 @@ void CTriggerChangeCVar::Think( void )
 
 	if (pev->spawnflags & SF_CVAR_ACTIVE)
 	{
-		sprintf( szCommand, "%s %s\n", STRING(pev->netname), m_szStoredString );
+		snprintf( szCommand, 256, "%s %s\n", STRING(pev->netname), m_szStoredString );
 		SERVER_COMMAND( szCommand );
 		pev->spawnflags &= ~SF_CVAR_ACTIVE;
 	}

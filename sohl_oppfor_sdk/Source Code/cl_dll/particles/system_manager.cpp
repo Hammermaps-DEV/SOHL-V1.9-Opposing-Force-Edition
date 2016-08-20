@@ -189,9 +189,9 @@ void CParticleSystemManager::CreatePresetPS(unsigned int iPreset, particle_syste
 
 			// play a sound as well
 			switch (gEngfuncs.pfnRandomLong(0, 2)) {
-				case 0:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, 0, "debris/water_impact_bullet1.wav", 1.0, ATTN_NONE, 0, PITCH_NORM); break;
-				case 1:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, 0, "debris/water_impact_bullet2.wav", 1.0, ATTN_NONE, 0, PITCH_NORM); break;
-				case 2:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, 0, "debris/water_impact_bullet3.wav", 1.0, ATTN_NONE, 0, PITCH_NORM); break;
+				case 0:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, CHAN_BODY, "debris/water_impact_bullet1.wav", VOL_LOWER, ATTN_NORM, 0, PITCH_NORM); break;
+				case 1:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, CHAN_BODY, "debris/water_impact_bullet2.wav", VOL_LOWER, ATTN_NORM, 0, PITCH_NORM); break;
+				case 2:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, CHAN_BODY, "debris/water_impact_bullet3.wav", VOL_LOWER, ATTN_NORM, 0, PITCH_NORM); break;
 			}
 		break;
 		case iExplosionDefault: {
@@ -207,9 +207,9 @@ void CParticleSystemManager::CreatePresetPS(unsigned int iPreset, particle_syste
 
 			// play a sound as well
 			switch (gEngfuncs.pfnRandomLong(0, 2)) {
-				case 0:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, 0, "explosions/explode_dist1.wav", 1.0, ATTN_NONE, 0, PITCH_NORM); break;
-				case 1:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, 0, "explosions/explode_dist2.wav", 1.0, ATTN_NONE, 0, PITCH_NORM); break;
-				case 2:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, 0, "explosions/explode_dist3.wav", 1.0, ATTN_NONE, 0, PITCH_NORM); break;
+				case 0:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, CHAN_AUTO, "explosions/explode_dist1.wav", VOL_NORM, ATTN_NONE, 0, PITCH_NORM); break;
+				case 1:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, CHAN_AUTO, "explosions/explode_dist2.wav", VOL_NORM, ATTN_NONE, 0, PITCH_NORM); break;
+				case 2:gEngfuncs.pEventAPI->EV_PlaySound(0, pSystem->vPosition, CHAN_AUTO, "explosions/explode_dist3.wav", VOL_NORM, ATTN_NONE, 0, PITCH_NORM); break;
 			}
 
 			// create dynamic light
@@ -221,6 +221,28 @@ void CParticleSystemManager::CreatePresetPS(unsigned int iPreset, particle_syste
 			dl->color.b = 24;
 			dl->decay = 0.2;
 			dl->die = (gEngfuncs.GetClientTime() + 0.1);
+		}
+		break;
+		case iDefaultFinalFire: {
+			CreateMappedPS("particles/fire/e_fire_final.txt", pSystem);
+
+			// create dynamic light
+			dlight_t *dl = gEngfuncs.pEfxAPI->CL_AllocDlight(0);
+			VectorCopy(pSystem->vPosition, dl->origin);
+			dl->radius = 500;
+			dl->color.r = 254;
+			dl->color.g = 120;
+			dl->color.b = 24;
+			dl->decay = 0.2;
+			dl->die = (gEngfuncs.GetClientTime() + 0.1);
+		}
+		break;
+		case iDefaultFinalSmoke: {
+			CreateMappedPS("particles/fire/e_fire_smoke.txt", pSystem);
+		}
+		break;
+		case iDefaultSmoke: {
+			CreateMappedPS("particles/fire/e_smoke.txt", pSystem);
 		}
 		break;
 		case iDefaultSporeExplosion: {

@@ -91,7 +91,7 @@ void SpectatorSpray(void)
 	pmtrace_t * trace = gEngfuncs.PM_TraceLine( v_origin, forward, PM_TRACELINE_PHYSENTSONLY, 2, -1 );
 	if ( trace->fraction != 1.0 )
 	{
-		sprintf(string, "drc_spray %.2f %.2f %.2f %i", 
+		snprintf(string, 128, "drc_spray %.2f %.2f %.2f %i",
 			trace->endpos[0], trace->endpos[1], trace->endpos[2], trace->ent );
 		gEngfuncs.pfnServerCmd(string);
 	}
@@ -461,7 +461,7 @@ int CHudSpectator::Draw(float flTime)
 		color = GetClientColor( i+1 );
 
 		// draw the players name and health underneath
-		sprintf(string, "%s", g_PlayerInfoList[i+1].name );
+		snprintf(string, 256, "%s", g_PlayerInfoList[i+1].name );
 		
 		lx = strlen(string)*3; // 3 is avg. character length :)
 
@@ -622,7 +622,7 @@ void CHudSpectator::FindNextPlayer(bool bReverse)
 	{
 		char cmdstring[32];
 		// forward command to server
-		sprintf(cmdstring,"follownext %i",bReverse?1:0);
+		snprintf(cmdstring, 32,"follownext %i",bReverse?1:0);
 		gEngfuncs.pfnServerCmd(cmdstring);
 		return;
 	}
@@ -883,8 +883,8 @@ void CHudSpectator::SetModes(int iNewMainMode, int iNewInsetMode)
 		} 
 
 		char string[128];
-		sprintf(string, "#Spec_Mode%d", g_iUser1 );
-		sprintf(string, "%c%s", HUD_PRINTCENTER, CHudTextMessage::BufferedLocaliseTextString( string ));
+		snprintf(string, 128, "#Spec_Mode%d", g_iUser1 );
+		snprintf(string, 128, "%c%s", HUD_PRINTCENTER, CHudTextMessage::BufferedLocaliseTextString( string ));
 		gHUD.m_TextMessage.MsgFunc_TextMsg(NULL, strlen(string)+1, string );
 	}
 
@@ -933,7 +933,7 @@ bool CHudSpectator::ParseOverviewFile( )
 	strcpy(levelname, m_OverviewData.map + 5);
 	levelname[strlen(levelname)-4] = 0;
 	
-	sprintf(filename, "overviews/%s.txt", levelname );
+	snprintf(filename, 255, "overviews/%s.txt", levelname );
 
 	pfile = (char *)gEngfuncs.COM_LoadFile( filename, 5, NULL);
 
@@ -1526,7 +1526,7 @@ void CHudSpectator::CheckSettings()
 		{
 			// tell proxy our new chat mode
 			char chatcmd[32];
-			sprintf(chatcmd, "ignoremsg %i", m_chatEnabled?0:1 );
+			snprintf(chatcmd, 32, "ignoremsg %i", m_chatEnabled?0:1 );
 			gEngfuncs.pfnServerCmd(chatcmd);
 		}
 	}

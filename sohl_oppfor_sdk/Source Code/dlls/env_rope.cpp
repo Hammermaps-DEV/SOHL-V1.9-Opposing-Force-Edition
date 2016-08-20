@@ -212,13 +212,8 @@ void CRope::CreateSegments()
 
 	joint = pev->origin + (down * 16);
 
-	m_pSegments[0] = (CRopeSegment*)CBaseEntity::Create(
-		"rope_segment",
-		joint,
-		angles);
-
+	m_pSegments[0] = (CRopeSegment*)CBaseEntity::Create("rope_segment",joint,angles);
 	m_pSegments[0]->m_vecJointPos = joint;
-
 	m_pSegments[0]->m_pPrev = NULL;
 
 	int i;

@@ -989,7 +989,7 @@ void CTorch :: RunTask( Task_t *pTask ) {
 // GibMonster - make gun fly through the air.
 //=========================================================
 void CTorch :: GibMonster ( void ) {
-	if (!(pev->spawnflags & SF_MONSTER_NO_WPN_DROP) && GetBodygroup(2) != 2) {
+	if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) && GetBodygroup(2) != 2) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
 
@@ -1201,7 +1201,7 @@ void CTorch :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			KillGas ();
 		break;
 		case TORCH_AE_DROP_GUN: {
-			if (pev->spawnflags & SF_MONSTER_NO_WPN_DROP) break; //LRC
+			if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) break; //LRC
 
 			Vector	vecGunPos;
 			Vector	vecGunAngles;
@@ -1378,7 +1378,7 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 			flDamage = 0;
 
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { CBaseMonster::TraceAttack(pevAttacker, 0, vecDir, ptr, bitsDamageType); }
 			if (pevAttacker->owner) {

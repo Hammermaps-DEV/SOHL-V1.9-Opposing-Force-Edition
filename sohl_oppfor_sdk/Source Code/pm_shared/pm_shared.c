@@ -147,6 +147,7 @@ typedef struct hull_s
 #define	CONTENTS_CURRENT_DOWN	-14
 
 #define CONTENTS_TRANSLUCENT	-15
+
 //LRC
 #define CONTENTS_FLYFIELD		-17
 #define CONTENTS_FLYFIELD_GRAVITY	-18
@@ -501,13 +502,24 @@ void PM_PlayStepSound( int step, float fvol )
 		switch (irand)
 		{
 		// right foot
-		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_ladder1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_ladder3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
 		// left foot
-		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_ladder2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_ladder4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_wade4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
 		}
 		break;
+	case STEP_LADDER:
+		switch (irand)
+		{
+		// right foot
+		case 0:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder1.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+		case 1:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder3.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+		// left foot
+		case 2:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder2.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+		case 3:	pmove->PM_PlaySound(CHAN_BODY, "player/pl_ladder4.wav", fvol, ATTN_NORM, 0, PITCH_NORM);  break;
+		}
+	break;
 	case STEP_SNOW:
 		switch(irand)
 		{
@@ -531,12 +543,12 @@ void PM_PlayStepSound( int step, float fvol )
 	case STEP_GRASS:
 		switch(irand)
 		{
-		// right foot
-		case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		// left foot
-		case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
-		case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			// right foot
+			case 0:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass1.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			case 1:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass3.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			// left foot
+			case 2:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass2.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
+			case 3:	pmove->PM_PlaySound( CHAN_BODY, "player/pl_grass4.wav", fvol, ATTN_NORM, 0, PITCH_NORM );  break;
 		}
 		break;
 	}

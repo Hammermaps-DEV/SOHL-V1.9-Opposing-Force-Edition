@@ -375,7 +375,8 @@ void CMiniTurret::Precache()
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
-		PRECACHE_MODEL ("models/miniturret.mdl");	
+		PRECACHE_MODEL ("models/miniturret.mdl");
+
 	PRECACHE_SOUND("weapons/hks1.wav");
 	PRECACHE_SOUND("weapons/hks2.wav");
 	PRECACHE_SOUND("weapons/hks3.wav");
@@ -1192,7 +1193,11 @@ void CSentry::Precache()
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
-		PRECACHE_MODEL ("models/sentry.mdl");	
+		PRECACHE_MODEL ("models/sentry.mdl");
+
+	PRECACHE_SOUND("weapons/hks1.wav");
+	PRECACHE_SOUND("weapons/hks2.wav");
+	PRECACHE_SOUND("weapons/hks3.wav");
 }
 
 void CSentry::Spawn()

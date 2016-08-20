@@ -71,6 +71,21 @@ cvar_t	sk_apache_health1	= {"sk_apache_health1","0"};
 cvar_t	sk_apache_health2	= {"sk_apache_health2","0"};
 cvar_t	sk_apache_health3	= {"sk_apache_health3","0"};
 
+// Osprey
+cvar_t	sk_osprey_health1 = { "sk_osprey_health1","0" };
+cvar_t	sk_osprey_health2 = { "sk_osprey_health2","0" };
+cvar_t	sk_osprey_health3 = { "sk_osprey_health3","0" };
+
+// Apache BlackOP
+cvar_t	sk_apache_blkop_health1 = { "sk_apache_blkop_health1","0" };
+cvar_t	sk_apache_blkop_health2 = { "sk_apache_blkop_health2","0" };
+cvar_t	sk_apache_blkop_health3 = { "sk_apache_blkop_health3","0" };
+
+// Osprey BlackOP
+cvar_t	sk_osprey_blkop_health1 = { "sk_osprey_blkop_health1","0" };
+cvar_t	sk_osprey_blkop_health2 = { "sk_osprey_blkop_health2","0" };
+cvar_t	sk_osprey_blkop_health3 = { "sk_osprey_blkop_health3","0" };
+
 // Barney
 cvar_t	sk_barney_health1	= {"sk_barney_health1","0"};
 cvar_t	sk_barney_health2	= {"sk_barney_health2","0"};
@@ -983,6 +998,21 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_apache_health1 );
 	CVAR_REGISTER ( &sk_apache_health2 );
 	CVAR_REGISTER ( &sk_apache_health3 );
+
+	// Osprey
+	CVAR_REGISTER(&sk_osprey_health1);
+	CVAR_REGISTER(&sk_osprey_health2);
+	CVAR_REGISTER(&sk_osprey_health3);
+
+	// Apache BlackOP
+	CVAR_REGISTER(&sk_apache_blkop_health1);
+	CVAR_REGISTER(&sk_apache_blkop_health2);
+	CVAR_REGISTER(&sk_apache_blkop_health3);
+
+	// Osprey BlackOP
+	CVAR_REGISTER(&sk_osprey_blkop_health1);
+	CVAR_REGISTER(&sk_osprey_blkop_health2);
+	CVAR_REGISTER(&sk_osprey_blkop_health3);
 
 	// Barney
 	CVAR_REGISTER ( &sk_barney_health1 );

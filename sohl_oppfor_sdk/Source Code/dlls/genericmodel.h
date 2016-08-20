@@ -12,6 +12,6 @@ public:
 	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	char RandomMDL[100];
+	char RandomMDL[128];
 	string_t m_iszSequence;
 };

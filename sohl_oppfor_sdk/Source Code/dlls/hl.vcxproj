@@ -30,11 +30,10 @@
     <ClCompile Include="ammo_spore.cpp" />
     <ClCompile Include="ammo_spore_plant.cpp" />
     <ClCompile Include="baseactanimating.cpp" />
-    <ClCompile Include="env_electrified_wire.cpp" />
-    <ClCompile Include="env_rope.cpp" />
-    <ClCompile Include="env_rope_segment.cpp" />
     <ClCompile Include="func_grass.cpp" />
     <ClCompile Include="genericmodel.cpp" />
+    <ClCompile Include="monster_blkop_apache.cpp" />
+    <ClCompile Include="monster_blkop_osprey.cpp" />
     <ClCompile Include="monster_diablo.cpp" />
     <ClCompile Include="monster_massn.cpp" />
     <ClCompile Include="proj_grapple_tonguetip.cpp" />
@@ -102,6 +101,7 @@
     <ClCompile Include="particle_emitter.cpp" />
     <ClCompile Include="proj_gonomespit.cpp" />
     <ClCompile Include="proj_grenade.cpp" />
+    <ClCompile Include="proj_hvr_rocket.cpp" />
     <ClCompile Include="proj_pitdronespit.cpp" />
     <ClCompile Include="proj_bolt.cpp" />
     <ClCompile Include="proj_plrocket.cpp" />
@@ -245,7 +245,6 @@
     <ClInclude Include="enginecallback.h" />
     <ClInclude Include="env_lensflare.h" />
     <ClInclude Include="env_rope.h" />
-    <ClInclude Include="env_rope_segment.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
     <ClInclude Include="func_break.h" />
@@ -253,6 +252,8 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
     <ClInclude Include="genericmodel.h" />
+    <ClInclude Include="monster_blkop_apache.h" />
+    <ClInclude Include="monster_blkop_osprey.h" />
     <ClInclude Include="monster_diablo.h" />
     <ClInclude Include="monster_massn.h" />
     <ClInclude Include="proj_grapple_tonguetip.h" />
@@ -331,6 +332,7 @@
     <ClInclude Include="nodes.h" />
     <ClInclude Include="particle_emitter.h" />
     <ClInclude Include="proj_gonomespit.h" />
+    <ClInclude Include="proj_hvr_rocket.h" />
     <ClInclude Include="proj_pitdronespit.h" />
     <ClInclude Include="plane.h" />
     <ClInclude Include="player.h" />
@@ -343,6 +345,8 @@
     <ClInclude Include="prop_bushs.h" />
     <ClInclude Include="prop_generic.h" />
     <ClInclude Include="rcallymonster.h" />
+    <ClInclude Include="rope_sample.h" />
+    <ClInclude Include="rope_segment.h" />
     <ClInclude Include="saverestore.h" />
     <ClInclude Include="schedule.h" />
     <ClInclude Include="scripted.h" />

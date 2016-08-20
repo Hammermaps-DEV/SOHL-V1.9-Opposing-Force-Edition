@@ -256,7 +256,7 @@ void CHFGrunt::Spawn(void) {
 	m_cAmmoLoaded = m_cClipSize;
 
 	//When is leader, set Beret or Major skin
-	if ((pev->spawnflags & SF_MONSTER_SQUADLEADER) && m_iHead == -1) {
+	if ((pev->spawnflags & SF_MONSTER_SPAWNFLAG_32) && m_iHead == -1) {
 		switch ((int)RANDOM_FLOAT(0, 3)) {
 			//Random Skins
 			case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET); break;
@@ -1148,7 +1148,7 @@ void CHFGrunt :: RunTask( Task_t *pTask ) {
 // GibMonster - make gun fly through the air.
 //=========================================================
 void CHFGrunt :: GibMonster ( void ) {
-	if ( GetBodygroup( 3 ) != 3 && !(pev->spawnflags & SF_MONSTER_NO_WPN_DROP)) {
+	if ( GetBodygroup( 3 ) != 3 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
 		GetAttachment( 0, vecGunPos, vecGunAngles );
@@ -1167,7 +1167,7 @@ void CHFGrunt :: GibMonster ( void ) {
 			pGun->pev->avelocity = Vector ( 0, RANDOM_FLOAT( 200, 400 ), 0 );
 		}
 	
-		if (!(pev->spawnflags & SF_MONSTER_FADECORPSE)) { //Hack for "Don't Drop Explosives"
+		if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_512)) { //Hack for "Don't Drop Explosives"
 			if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
 				pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 				if (pGun) {
@@ -1177,7 +1177,7 @@ void CHFGrunt :: GibMonster ( void ) {
 			}
 		}
 
-		if (!(pev->spawnflags & SF_MONSTER_FADECORPSE)) { //Hack for "Don't Drop Explosives"
+		if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_512)) { //Hack for "Don't Drop Explosives"
 			if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
 				pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 				if (pGun) {
@@ -1331,7 +1331,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 	Vector	vecShootDir, vecShootOrigin;
 	switch( pEvent->event ) {
 		case HGRUNT_ALLY_AE_DROP_GUN: {
-			if (pev->spawnflags & SF_MONSTER_NO_WPN_DROP) break; //LRC
+			if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) break; //LRC
 
 			Vector	vecGunPos, vecGunAngles;
 			GetAttachment(0, vecGunPos, vecGunAngles);
@@ -1348,7 +1348,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			}
 
 			CBaseEntity *pGun;
-			if (!(pev->spawnflags & SF_MONSTER_CUSTOM_FLAG_1)) {
+			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2048)) {
 				if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
 					pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 					if (pGun) {
@@ -1358,7 +1358,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 				}
 			}
 
-			if (!(pev->spawnflags & SF_MONSTER_CUSTOM_FLAG_1)) {
+			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2048)) {
 				if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
 					pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 					if (pGun) {
@@ -1484,7 +1484,7 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 			flDamage = 0;
 
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
-		if (pev->spawnflags & SF_MONSTER_INVINCIBLE) {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {

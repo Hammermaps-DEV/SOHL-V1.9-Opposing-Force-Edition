@@ -237,7 +237,7 @@ BOOL CAGrunt::ShouldSpeak( void )
 		return FALSE;
 	}
 
-	if ( pev->spawnflags & SF_MONSTER_GAG )
+	if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_2 )
 	{
 		if ( m_MonsterState != MONSTERSTATE_COMBAT )
 		{
@@ -1150,7 +1150,7 @@ Schedule_t* CAGrunt :: GetScheduleOfType ( int Type )
 
 void CAGrunt::Killed( entvars_t *pevAttacker, int iGib )
 {
-	if ( pev->spawnflags & SF_MONSTER_NO_WPN_DROP )
+	if ( pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024 )
 	{// drop the hornetgun!
 		Vector vecGunPos;
 		Vector vecGunAngles;

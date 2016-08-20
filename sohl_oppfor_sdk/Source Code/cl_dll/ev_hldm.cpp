@@ -636,41 +636,41 @@ char *EV_HLDM_DamageDecal(pmtrace_t *ptr, physent_t *pe, float *vecSrc, float *v
 
 	if ( pe->classnumber == 1 ) {
 		idx = gEngfuncs.pfnRandomLong( 0, 2 );
-		sprintf( decalname, "{break%i", idx + 1 );
+		snprintf( decalname, 32, "{break%i", idx + 1 );
 	} else if (pe->classnumber == 2) {
-		sprintf(decalname, "{knife");
+		snprintf(decalname, 32, "{knife");
 	} else if ( pe->rendermode != kRenderNormal ) {
-		sprintf( decalname, "{bproof1" );
+		snprintf( decalname, 32, "{bproof1" );
 	} else {
 		switch (chTextureType) {
 			default:
 				idx = gEngfuncs.pfnRandomLong(0, 4);
-				sprintf(decalname, "{shot%i", idx + 1);
+				snprintf(decalname, 32, "{shot%i", idx + 1);
 			break;
 			case CHAR_TEX_CONCRETE:
 				idx = gEngfuncs.pfnRandomLong(0, 2);
-				sprintf(decalname, "{hole_conc%i", idx + 1);
+				snprintf(decalname, 32, "{hole_conc%i", idx + 1);
 			break;
 			case CHAR_TEX_METAL:
 			case CHAR_TEX_GRATE:
 				idx = gEngfuncs.pfnRandomLong(0, 2);
-				sprintf(decalname, "{hole_metal%i", idx + 1);
+				snprintf(decalname, 32, "{hole_metal%i", idx + 1);
 			break;
 			case CHAR_TEX_DIRT:
 				idx = gEngfuncs.pfnRandomLong(0, 2);
-				sprintf(decalname, "{hole_dirt%i", idx + 1);
+				snprintf(decalname, 32, "{hole_dirt%i", idx + 1);
 			break;
 			case CHAR_TEX_WOOD:
 				idx = gEngfuncs.pfnRandomLong(0, 2);
-				sprintf(decalname, "{hole_wood%i", idx + 1);
+				snprintf(decalname, 32, "{hole_wood%i", idx + 1);
 			break;
 			case CHAR_TEX_COMPUTER:
 				idx = gEngfuncs.pfnRandomLong(0, 2);
-				sprintf(decalname, "{hole_comp%i", idx + 1);
+				snprintf(decalname, 32, "{hole_comp%i", idx + 1);
 			break;
 			case CHAR_TEX_GLASS:
 				idx = gEngfuncs.pfnRandomLong(0, 2);
-				sprintf(decalname, "{break%i", idx + 1);
+				snprintf(decalname, 32, "{break%i", idx + 1);
 			break;
 		}
 	}
@@ -732,11 +732,11 @@ void EV_HLDM_GunshotDecalTrace(pmtrace_t *pTrace, char *decalName )
 			int iRand = gEngfuncs.pfnRandomLong(0, 0x7FFF);
 			if (iRand < (0x7fff / 2)) {
 				switch (iRand % 5) {
-					case 0:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric1.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric2.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric3.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
-					case 3:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric4.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
-					case 4:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, 0, "weapons/ric5.wav", 1.0, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, CHAN_STATIC, "weapons/ric1.wav", VOL_LOW, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, CHAN_STATIC, "weapons/ric2.wav", VOL_LOW, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, CHAN_STATIC, "weapons/ric3.wav", VOL_LOW, ATTN_NORM, 0, PITCH_NORM); break;
+					case 3:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, CHAN_STATIC, "weapons/ric4.wav", VOL_LOW, ATTN_NORM, 0, PITCH_NORM); break;
+					case 4:	gEngfuncs.pEventAPI->EV_PlaySound(-1, pTrace->endpos, CHAN_STATIC, "weapons/ric5.wav", VOL_LOW, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 			}
 		}
@@ -1085,8 +1085,8 @@ void EV_FireWrenchSmall(struct event_args_s *args) {
 
 			// play wiff or swish sound
 			switch (gEngfuncs.pfnRandomLong(0, 1)) {
-				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF)); break;
-				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF)); break;
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss1.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF)); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_miss2.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xF)); break;
 			}
 		}
 	}
@@ -1106,8 +1106,8 @@ void EV_FireWrenchSmall(struct event_args_s *args) {
 
 		if (pHit && args->bparam1) {
 			switch (gEngfuncs.pfnRandomLong(0, 1)) {
-				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_hitbod2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 			}
 			fHitWorld = FALSE;
 		}
@@ -1192,8 +1192,8 @@ void EV_FireWrenchLarge(struct event_args_s *args) {
 		pHit = gEngfuncs.pEventAPI->EV_GetPhysent(tr.ent);
 		if (pHit && args->bparam1) {
 			switch (gEngfuncs.pfnRandomLong(0, 1)) {
-				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_hitbod1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_hitbod2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+				case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_hitbod1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+				case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/pwrench_big_hitbod2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 			}
 			fHitWorld = FALSE;
 		}
@@ -1278,9 +1278,9 @@ void EV_FireKnife(event_args_t *args) {
 
 				// play wiff or swish sound
 				switch (gEngfuncs.pfnRandomLong(0, 2)) {
-					case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-					case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife3.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+					case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 			}
 		} else {
@@ -1299,8 +1299,8 @@ void EV_FireKnife(event_args_t *args) {
 
 			if (pHit && args->bparam1) {
 				switch (gEngfuncs.pfnRandomLong(0, 1)) {
-					case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-					case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+					case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+					case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 				}
 				fHitWorld = FALSE;
 			}
@@ -1330,9 +1330,9 @@ void EV_FireKnife(event_args_t *args) {
 
 					// play wiff or swish sound
 					switch (gEngfuncs.pfnRandomLong(0, 2)) {
-						case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-						case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-						case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife3.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+						case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+						case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+						case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife3.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 					}
 				}
 			} else {
@@ -1347,8 +1347,8 @@ void EV_FireKnife(event_args_t *args) {
 
 				if (pHit && args->bparam1) {
 					switch (gEngfuncs.pfnRandomLong(0, 1)) {
-						case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
-						case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", 1, ATTN_NORM, 0, PITCH_NORM); break;
+						case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh1.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
+						case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/knife_hit_flesh2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM); break;
 					}
 					fHitWorld = FALSE;
 				}
@@ -1466,8 +1466,8 @@ void EV_FireMP5( event_args_t *args ) {
 	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHELL ); 
 
 	switch( gEngfuncs.pfnRandomLong( 0, 1 ) ) {
-		case 0: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/hks1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) ); break;
-		case 1: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/hks2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) ); break;
+		case 0: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/hks1.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) ); break;
+		case 1: gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/hks2.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong( 0, 0xf ) ); break;
 	}
 
 	EV_GetGunPosition( args, vecSrc, origin );
@@ -1538,9 +1538,9 @@ void EV_FireM249(event_args_t *args) {
 	shell_link_count++;
 
 	switch (gEngfuncs.pfnRandomLong(0, 2)) {
-		case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire1.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
-		case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire2.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
-		case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire3.wav", 1, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
+		case 0: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire1.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
+		case 1: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire2.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
+		case 2: gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/saw_fire3.wav", VOL_NORM, ATTN_NORM, 0, 94 + gEngfuncs.pfnRandomLong(0, 0xf)); break;
 	}
 
 	EV_GetGunPosition(args, vecSrc, origin);
@@ -1652,9 +1652,9 @@ void EV_FireSpore(event_args_t *args) {
 	}
 
 	if (args->bparam2)
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/splauncher_fire.wav", 1, ATTN_NORM, 0, 100);
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/splauncher_fire.wav", VOL_NORM, ATTN_NORM, 0, 100);
 	else
-		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/splauncher_altfire.wav", 1, ATTN_NORM, 0, 100);
+		gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/splauncher_altfire.wav", VOL_NORM, ATTN_NORM, 0, 100);
 
 	Vector	vecSpitOffset;
 	Vector	vecSpitDir;
@@ -1785,7 +1785,7 @@ void EV_SpinGauss( event_args_t *args )
 	int pitch = args->iparam1;
 	int iSoundState = args->bparam1 ? SND_CHANGE_PITCH : 0;
 
-	gEngfuncs.pEventAPI->EV_PlaySound( args->entindex, args->origin, CHAN_WEAPON, "ambience/pulsemachine.wav", 1.0, ATTN_NORM, iSoundState, pitch );
+	gEngfuncs.pEventAPI->EV_PlaySound( args->entindex, args->origin, CHAN_WEAPON, "ambience/pulsemachine.wav", VOL_NORM, ATTN_NORM, iSoundState, pitch );
 }
 
 /*
@@ -2510,10 +2510,10 @@ void EV_Displacer(event_args_t *args) {
 			// Fire mode
 			switch (args->iparam2) {
 				case 1: // FIRESTATE_FORWARD (primary attack)
-					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 				break;
 				case 2: // FIRESTATE_BACKWARD (secondary attack)
-					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin2.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_spin2.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 				break;
 			}
 		break;
@@ -2521,11 +2521,11 @@ void EV_Displacer(event_args_t *args) {
 			// Fire mode
 			switch (args->iparam2) {
 				case 1: // FIRESTATE_FORWARD (primary attack)
-					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_fire.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+					gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_fire.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 				break;
 				case 2: // FIRESTATE_BACKWARD (secondary attack)
 					if (!args->bparam1)
-						gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_self.wav", 1, ATTN_NORM, 0, PITCH_NORM);
+						gEngfuncs.pEventAPI->EV_PlaySound(idx, origin, CHAN_WEAPON, "weapons/displacer_self.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
 				break;
 			}
 		break;

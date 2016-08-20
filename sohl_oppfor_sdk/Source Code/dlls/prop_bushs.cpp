@@ -45,9 +45,9 @@ void CPropBushs::Spawn(void) {
 	if (strchr(strdup(STRING(m_isBush)), '0') && !pev->model) {
 		int m_iBush = RANDOM_LONG(2, PROP_BUSH_MODELS);
 		if (m_iBush < 10) {
-			sprintf(RandomMDL, "%models/bush/bush_0%d.mdl", m_iBush);
+			snprintf(RandomMDL, 128, "%models/bush/bush_0%d.mdl", m_iBush);
 		} else {
-			sprintf(RandomMDL, "%models/bush/bush_%d.mdl", m_iBush);
+			snprintf(RandomMDL, 128, "%models/bush/bush_%d.mdl", m_iBush);
 		}
 	}
 

@@ -152,6 +152,8 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 		UTIL_RandomBloodVector() * RANDOM_FLOAT(300, 500);
 
 		if (CVAR_GET_FLOAT("sv_grenadegib") == 1) {
+			//ALERT( at_console, "Grenade iContents: %i\n", abs(iContents));
+
 			if (iContents != CONTENTS_WATER) {
 				//Granate Gibs
 				MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
@@ -194,9 +196,9 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 	flRndSound = RANDOM_FLOAT(0, 1);
 
 	switch (RANDOM_LONG(0, 2)) {
-	case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);	break;
-	case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);	break;
-	case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);	break;
+		case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", 0.55, ATTN_NORM);	break;
+		case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", 0.55, ATTN_NORM);	break;
+		case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", 0.55, ATTN_NORM);	break;
 	}
 
 	pev->effects |= EF_NODRAW;

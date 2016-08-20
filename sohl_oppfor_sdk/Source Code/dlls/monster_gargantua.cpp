@@ -920,7 +920,7 @@ void CGargantua::HandleAnimEvent(MonsterEvent_t *pEvent)
 		break;
 
 	case GARG_AE_BREATHE:
-		if ( !(pev->spawnflags & SF_MONSTER_GAG) || m_MonsterState != MONSTERSTATE_IDLE)
+		if ( !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2) || m_MonsterState != MONSTERSTATE_IDLE)
 			EMIT_SOUND_DYN ( edict(), CHAN_VOICE, pBreatheSounds[ RANDOM_LONG(0,HL_ARRAYSIZE(pBreatheSounds)-1) ], 1.0, ATTN_GARG, 0, PITCH_NORM + RANDOM_LONG(-10,10) );
 		break;
 
@@ -1294,7 +1294,7 @@ void SpawnExplosion( Vector center, float randomRange, float time, int magnitude
 	center.y += RANDOM_FLOAT( -randomRange, randomRange );
 
 	CBaseEntity *pExplosion = CBaseEntity::Create( "env_explosion", center, g_vecZero, NULL );
-	sprintf( buf, "%3d", magnitude );
+	snprintf( buf, 128, "%3d", magnitude );
 	kvd.szKeyName = "iMagnitude";
 	kvd.szValue = buf;
 	pExplosion->KeyValue( &kvd );

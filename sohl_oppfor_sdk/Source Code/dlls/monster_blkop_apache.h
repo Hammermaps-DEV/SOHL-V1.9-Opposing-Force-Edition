@@ -13,25 +13,18 @@
 *
 ****/
 //=========================================================
-// NPC: Black Ops * http://half-life.wikia.com/wiki/Black_Ops
+// NPC: AH-64 Apache * http://half-life.wikia.com/wiki/AH-64_Apache
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
-#ifndef MONSTER_MASSN_H
-#define MONSTER_MASSN_H
+#ifndef MONSTER_BLKOP_APACHE_H
+#define MONSTER_BLKOP_APACHE_H
 
-// class definition
-class CMassn : public CHGrunt {
-	public:
-		int  Classify(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
-		void Sniperrifle(void);
-
-		BOOL FOkToSpeak(void);
-
-		void Spawn(void);
-		void Precache(void);
-
-		void IdleSound(void);
+class CBlackOPApache : public CApache
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int  Classify(void);
 };
 
-#endif // MONSTER_MASSN_H
+#endif // MONSTER_BLKOP_APACHE_H

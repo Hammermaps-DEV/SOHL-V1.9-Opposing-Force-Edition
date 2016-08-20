@@ -16,7 +16,7 @@
 #ifndef MONSTER_ALIEN_SLAVE_H
 #define MONSTER_ALIEN_SLAVE_H
 
-#define		ISLAVE_MAX_BEAMS	8
+#define	ISLAVE_MAX_BEAMS	8
 
 class CISlave : public CSquadMonster
 {
@@ -71,6 +71,16 @@ public:
 	static const char *pAttackMissSounds[];
 	static const char *pPainSounds[];
 	static const char *pDeathSounds[];
+
+protected:
+	BOOL m_flDebug = false;
+	float m_flHitgroupHead;
+	float m_flHitgroupChest;
+	float m_flHitgroupStomach;
+	float m_flHitgroupArm;
+	float m_flHitgroupLeg;
+	float m_flDmgOneSlash;
+	float m_flDmgBothSlash;
 };
 
 #endif // MONSTER_ALIEN_SLAVE_H

@@ -19,9 +19,10 @@
 *
 ***/
 //=========================================================
-// Alien slave monster
+// NPC: Alien slave * Vortigaunt * 
+// http://half-life.wikia.com/wiki/Vortigaunt
+// For Spirit of Half-Life v1.9: Opposing-Force Edition
 //=========================================================
-
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
@@ -33,73 +34,135 @@
 #include	"soundent.h"
 #include    "monster_alien_slave.h"
 
-extern DLL_GLOBAL int		g_iSkillLevel;
-
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-#define		ISLAVE_AE_CLAW		( 1 )
-#define		ISLAVE_AE_CLAWRAKE	( 2 )
-#define		ISLAVE_AE_ZAP_POWERUP	( 3 )
-#define		ISLAVE_AE_ZAP_SHOOT		( 4 )
-#define		ISLAVE_AE_ZAP_DONE		( 5 )
+#define		ISLAVE_AE_CLAW			0x01
+#define		ISLAVE_AE_CLAWRAKE		0x02
+#define		ISLAVE_AE_ZAP_POWERUP	0x03
+#define		ISLAVE_AE_ZAP_SHOOT		0x04
+#define		ISLAVE_AE_ZAP_DONE		0x05
 
+#define		HITGROUPS				1
+#define		HITGROUP_HEAD			1
+#define		HITGROUP_ARM_RIGHT		2
+#define		HITGROUP_ARM_LEFT		3
+#define		HITGROUP_LEG_RIGHT		4
+#define		HITGROUP_LEG_LEFT		5
+
+//=========================================================
+// Monster's link to Class & Saverestore Begins
+//=========================================================
 LINK_ENTITY_TO_CLASS( monster_alien_slave, CISlave );
 LINK_ENTITY_TO_CLASS( monster_vortigaunt, CISlave );
 
-TYPEDESCRIPTION	CISlave::m_SaveData[] = 
-{
+TYPEDESCRIPTION	CISlave::m_SaveData[] = {
 	DEFINE_FIELD( CISlave, m_iBravery, FIELD_INTEGER ),
-
 	DEFINE_ARRAY( CISlave, m_pBeam, FIELD_CLASSPTR, ISLAVE_MAX_BEAMS ),
 	DEFINE_FIELD( CISlave, m_iBeams, FIELD_INTEGER ),
 	DEFINE_FIELD( CISlave, m_flNextAttack, FIELD_TIME ),
-
 	DEFINE_FIELD( CISlave, m_voicePitch, FIELD_INTEGER ),
-
 	DEFINE_FIELD( CISlave, m_hDead, FIELD_EHANDLE ),
-
 };
 
 IMPLEMENT_SAVERESTORE( CISlave, CSquadMonster );
 
-
-
-
-const char *CISlave::pAttackHitSounds[] = 
-{
+//=========================================================
+// Monster Sounds
+//=========================================================
+const char *CISlave::pAttackHitSounds[] = {
 	"zombie/claw_strike1.wav",
 	"zombie/claw_strike2.wav",
 	"zombie/claw_strike3.wav",
 };
 
-const char *CISlave::pAttackMissSounds[] = 
-{
+const char *CISlave::pAttackMissSounds[] = {
 	"zombie/claw_miss1.wav",
 	"zombie/claw_miss2.wav",
 };
 
-const char *CISlave::pPainSounds[] = 
-{
+const char *CISlave::pPainSounds[] = {
 	"aslave/slv_pain1.wav",
 	"aslave/slv_pain2.wav",
 };
 
-const char *CISlave::pDeathSounds[] = 
-{
+const char *CISlave::pDeathSounds[] = {
 	"aslave/slv_die1.wav",
 	"aslave/slv_die2.wav",
 };
 
 //=========================================================
+// Spawn Alien slave * Vortigaunt *
+//=========================================================
+void CISlave::Spawn() {
+	Precache();
+
+	if (pev->model)
+		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
+	else
+		SET_MODEL(ENT(pev), "models/islave.mdl");
+
+	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
+
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_GREEN;
+
+	if (pev->health == 0)
+		pev->health = gSkillData.slaveHealth;
+
+	pev->effects = 0;
+	pev->view_ofs = Vector(0, 0, 64);// position of the eyes relative to monster's origin.
+
+	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
+	m_MonsterState = MONSTERSTATE_NONE;
+	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_RANGE_ATTACK2 | bits_CAP_DOORS_GROUP;
+	m_voicePitch = RANDOM_LONG(85, 110);
+	m_flDebug = false; //Debug Massages
+
+	m_flHitgroupHead = gSkillData.zombieHead;
+	m_flHitgroupChest = gSkillData.zombieChest;
+	m_flHitgroupStomach = gSkillData.zombieStomach;
+	m_flHitgroupArm = gSkillData.zombieArm;
+	m_flHitgroupLeg = gSkillData.zombieLeg;
+	m_flDmgOneSlash = gSkillData.zombieDmgOneSlash;
+	m_flDmgBothSlash = gSkillData.zombieDmgBothSlash;
+
+	MonsterInit();
+}
+
+//=========================================================
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CISlave :: Classify ( void )
-{
-	return m_iClass?m_iClass:CLASS_ALIEN_MILITARY;
+int	CISlave::Classify(void) {
+	return m_iClass ? m_iClass : CLASS_ALIEN_MILITARY;
 }
 
+//=========================================================
+// Precache - precaches all resources this monster needs
+//=========================================================
+void CISlave::Precache() {
+	if (pev->model)
+		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
+	else
+		PRECACHE_MODEL("models/islave.mdl");
+
+	PRECACHE_MODEL("sprites/lgtning.spr");
+
+	PRECACHE_SOUND("debris/zap1.wav");
+	PRECACHE_SOUND("debris/zap4.wav");
+	PRECACHE_SOUND("weapons/electro4.wav");
+	PRECACHE_SOUND("hassault/hw_shoot1.wav");
+	PRECACHE_SOUND("zombie/zo_pain2.wav");
+	PRECACHE_SOUND("headcrab/hc_headbite.wav");
+	PRECACHE_SOUND("weapons/cbar_miss1.wav");
+
+	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
+	PRECACHE_SOUND_ARRAY(pAttackMissSounds);
+	PRECACHE_SOUND_ARRAY(pPainSounds);
+	PRECACHE_SOUND_ARRAY(pDeathSounds);
+}
 
 int CISlave::IRelationship( CBaseEntity *pTarget )
 {
@@ -438,70 +501,6 @@ void CISlave :: StartTask ( Task_t *pTask )
 
 	CSquadMonster :: StartTask ( pTask );
 }
-
-
-//=========================================================
-// Spawn
-//=========================================================
-void CISlave :: Spawn()
-{
-	Precache( );
-
-	if (pev->model)
-		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
-	else
-		SET_MODEL(ENT(pev), "models/islave.mdl");
-	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
-
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_GREEN;
-	pev->effects		= 0;
-	if (pev->health == 0)
-		pev->health			= gSkillData.slaveHealth;
-	pev->view_ofs		= Vector ( 0, 0, 64 );// position of the eyes relative to monster's origin.
-	m_flFieldOfView		= VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
-	m_MonsterState		= MONSTERSTATE_NONE;
-	m_afCapability		= bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_RANGE_ATTACK2 | bits_CAP_DOORS_GROUP;
-
-	m_voicePitch		= RANDOM_LONG( 85, 110 );
-
-	MonsterInit();
-}
-
-//=========================================================
-// Precache - precaches all resources this monster needs
-//=========================================================
-void CISlave :: Precache()
-{
-	int i;
-
-	if (pev->model)
-		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
-	else
-		PRECACHE_MODEL("models/islave.mdl");
-	PRECACHE_MODEL("sprites/lgtning.spr");
-	PRECACHE_SOUND("debris/zap1.wav");
-	PRECACHE_SOUND("debris/zap4.wav");
-	PRECACHE_SOUND("weapons/electro4.wav");
-	PRECACHE_SOUND("hassault/hw_shoot1.wav");
-	PRECACHE_SOUND("zombie/zo_pain2.wav");
-	PRECACHE_SOUND("headcrab/hc_headbite.wav");
-	PRECACHE_SOUND("weapons/cbar_miss1.wav");
-
-	for ( i = 0; i < HL_ARRAYSIZE( pAttackHitSounds ); i++ )
-		PRECACHE_SOUND((char *)pAttackHitSounds[i]);
-
-	for ( i = 0; i < HL_ARRAYSIZE( pAttackMissSounds ); i++ )
-		PRECACHE_SOUND((char *)pAttackMissSounds[i]);
-
-	for ( i = 0; i < HL_ARRAYSIZE( pPainSounds ); i++ )
-		PRECACHE_SOUND((char *)pPainSounds[i]);
-
-	for ( i = 0; i < HL_ARRAYSIZE( pDeathSounds ); i++ )
-		PRECACHE_SOUND((char *)pDeathSounds[i]);
-}	
-
 
 //=========================================================
 // TakeDamage - get provoked when injured

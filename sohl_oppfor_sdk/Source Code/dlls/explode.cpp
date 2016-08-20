@@ -192,7 +192,7 @@ void CEnvExplosion::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 	// draw decal
 	if (! ( pev->spawnflags & SF_ENVEXPLOSION_NODECAL))
 	{
-          	CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
+        CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
 		PLAYBACK_EVENT_FULL( FEV_RELIABLE|FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), 0, 0, 0 );
 	}
 
@@ -374,7 +374,7 @@ void ExplosionCreate( const Vector &center, const Vector &angles, edict_t *pOwne
 	char			buf[128];
 
 	CBaseEntity *pExplosion = CBaseEntity::Create( "env_explosion", center, angles, pOwner );
-	sprintf( buf, "%3d", magnitude );
+	snprintf( buf, 128, "%3d", magnitude );
 	kvd.szKeyName = "iMagnitude";
 	kvd.szValue = buf;
 	pExplosion->KeyValue( &kvd );

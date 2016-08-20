@@ -130,7 +130,7 @@ static byte *LoadFileByResolution( const char *filePrefix, int xRes, const char 
 
 		// try load
 		char fname[256];
-		sprintf( fname, "%s%d%s", filePrefix, g_ResArray[resNum], filePostfix );
+		snprintf( fname, 256, "%s%d%s", filePrefix, g_ResArray[resNum], filePostfix );
 		pFile = gEngfuncs.COM_LoadFile( fname, 5, NULL );
 
 		if ( pFile )
@@ -398,7 +398,7 @@ buildDefaultFont:
 
 			if(g_CV_BitmapFonts && g_CV_BitmapFonts->value)
 			{
-				sprintf(fontFilename, "gfx\\vgui\\fonts\\%d_%s.tga", m_xRes, m_pSchemeList[i].schemeName);
+				snprintf(fontFilename, 512, "gfx\\vgui\\fonts\\%d_%s.tga", m_xRes, m_pSchemeList[i].schemeName);
 				pFontData = gEngfuncs.COM_LoadFile( fontFilename, 5, &fontFileLength );
 				if(!pFontData)
 					CONPRINT("Missing bitmap font: %s\n", fontFilename);
