@@ -1,0 +1,36 @@
+commonSettings
+{
+	cvars
+	{
+		max_fps 60.00
+		r_lighting_g 255.00
+		r_wireframecolor_b 0.00
+		r_wireframecolor_g 0.00
+		r_wireframecolor_r 255.00
+		r_lighting_b 255.00
+		r_lighting_r 255.00
+	}
+}
+gameConfigs
+{
+}
+hlmvSettings
+{
+	//No active config
+	recentFiles
+	{
+	}
+	groundColor "216 216 175"
+	backgroundColor "63 127 127"
+	crosshairColor "255 0 0"
+	floorLength 100.000000
+	studiomdl ""
+	mdldec ""
+	StudioMdlConfigs
+	{
+	}
+	MdlDecConfigs
+	{
+	}
+	defaultOutputFileDir ""
+}

@@ -6630,4 +6630,10 @@
 		256: "No Rockets"    : 0
 	]
 ]
+@PointClass base(Targetname) iconsprite("sprites/env.spr") = env_warpball : "Teleport-in effect"
+[
+      target(string) : "Initial position (blank = here) [LP]"
+	health(string) : "Max lightning-arc length" : "90"
+	frags(integer) : "Number of lightning bolts" : 12
+]
 

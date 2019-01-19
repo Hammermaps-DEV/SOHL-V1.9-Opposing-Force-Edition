@@ -19,8 +19,13 @@ class CRat : public CBaseMonster
 {
 public:
 	void Spawn(void);
+
 	void Precache(void);
+
 	void SetYawSpeed(void);
+
+	int Classify(void) { return m_iClass ? m_iClass : CLASS_INSECT; }
+
 	void EXPORT MonsterThink(void);
 	void Move(float flInterval);
 	void PickNewDest(int iCondition);

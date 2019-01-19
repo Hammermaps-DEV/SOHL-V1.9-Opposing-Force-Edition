@@ -134,7 +134,6 @@ int PRECACHE_MODEL( char* s )
 	}
           
 	char *ext = COM_FileExtension( s );
-	
 	if (FStrEq( ext, "mdl"))
 	{
 		//this is model

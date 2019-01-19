@@ -31,8 +31,6 @@
 LINK_ENTITY_TO_CLASS(prop_generic, CPropGeneric);
 
 void CPropGeneric::Spawn(void) {
-	Vector vecSize = pev->size;
-
 	Precache();
 
 	if (pev->model)
@@ -40,18 +38,37 @@ void CPropGeneric::Spawn(void) {
 	else
 		SET_MODEL(ENT(pev), "models/error.mdl");
 
-	UTIL_SetOrigin(this, pev->origin);
+	SetBoneController(0, 0);
+	SetBoneController(1, 0);
 
 	pev->solid = SOLID_SLIDEBOX;
 
-	Vector vecMax = vecSize / 2;
-	Vector vecMin = -vecMax;
-	vecMin.z = 0;
-	vecMax.z = vecSize.z;
-	UTIL_SetSize(pev, vecMin, vecMax);
+	// Automatically set collision box
+	studiohdr_t *pstudiohdr;
+	pstudiohdr = (studiohdr_t *)GET_MODEL_PTR(edict());
 
-	SetBoneController(0, 0);
-	SetBoneController(1, 0);
+	if (pstudiohdr == NULL)
+	{
+		Vector vecSize = pev->size;
+		Vector vecMax = vecSize / 2;
+		Vector vecMin = -vecMax;
+		vecMin.z = 0;
+		vecMax.z = vecSize.z;
+		UTIL_SetSize(pev, vecMin, vecMax);
+		ALERT(at_console, "^2prop_default: Unable to get model pointer!\n");
+		return;
+	}
+	
+	mstudioseqdesc_t *pseqdesc = (mstudioseqdesc_t *)((byte *)pstudiohdr + pstudiohdr->seqindex);
+	UTIL_SetSize(pev, pseqdesc[pev->sequence].bbmin, pseqdesc[pev->sequence].bbmax);
+
+	UTIL_SetOrigin(this, pev->origin);
+	if (DROP_TO_FLOOR(ENT(pev)) == 0)
+	{
+		ALERT(at_error, "Prop %s fell out of level at %f,%f,%f\n", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+		UTIL_Remove(this);
+		return;
+	}
 }
 
 void CPropGeneric::Precache(void) {

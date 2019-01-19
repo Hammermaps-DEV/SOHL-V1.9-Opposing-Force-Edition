@@ -66,14 +66,18 @@ void CRat::Spawn() {
 	else
 		SET_MODEL(ENT(pev), "models/bigrat.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 2));
+
 	pev->solid = SOLID_SLIDEBOX;
 	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
+
 	pev->effects = 0;
 	pev->health = 1;
 	m_flFieldOfView = 0.5;
 	m_MonsterState = MONSTERSTATE_NONE;
+
 	MonsterInit();
+
 	SetActivity(ACT_IDLE);
 	pev->takedamage = DAMAGE_YES;
 	m_fLightHacked = FALSE;

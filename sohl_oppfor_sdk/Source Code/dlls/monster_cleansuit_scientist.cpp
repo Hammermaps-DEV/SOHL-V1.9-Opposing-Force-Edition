@@ -268,7 +268,6 @@ public:
 
 LINK_ENTITY_TO_CLASS(monster_sitting_cleansuit_scientist, CSittingCleansuitScientist);
 
-
 //
 // ********** Cleansuit Scientist SPAWN **********
 //
