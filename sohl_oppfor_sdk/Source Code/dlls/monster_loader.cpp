@@ -16,6 +16,7 @@
 *   All Rights Reserved.
 *
 *	Base Source-Code written by Marc-Antoine Lortie (https://github.com/malortie).
+*   Update Source-Code written by SamVanheer (https://github.com/SamVanheer).
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/
@@ -29,9 +30,6 @@
 #include	"schedule.h"
 #include	"monster_loader.h"
 
-//=========================================================
-// Monster's Anim Events Go Here
-//=========================================================
 LINK_ENTITY_TO_CLASS(monster_op4loader, CLoader);
 LINK_ENTITY_TO_CLASS(monster_loader, CLoader);
 
@@ -46,7 +44,7 @@ void CLoader::Spawn()
 	else
 		SET_MODEL(ENT(pev), "models/loader.mdl");
 
-	if (FStrEq(STRING(pev->model), "models/player.mdl") || FStrEq(STRING(pev->model), "models/holo.mdl"))
+	if (!FStrEq(STRING(pev->model), "models/loader.mdl"))
 		UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 	else
 		UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
