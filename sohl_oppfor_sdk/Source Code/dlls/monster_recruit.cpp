@@ -222,3 +222,8 @@ void CRecruit::PlayScriptedSentence( const char *pszSentence, float duration, fl
 	m_flTalkTime = UTIL_GlobalTimeBase() + duration;
 	m_hTalkTarget = pListener;
 }
+
+int CRecruit::ObjectCaps(void)
+{
+	return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE;
+}

@@ -234,3 +234,8 @@ void CDrillsergeant::DrillUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 {
 	PlaySentence("DR_POK", 2, VOL_NORM, ATTN_NORM);
 }
+
+int CDrillsergeant::ObjectCaps(void)
+{
+	return FCAP_ACROSS_TRANSITION | FCAP_IMPULSE_USE;
+}

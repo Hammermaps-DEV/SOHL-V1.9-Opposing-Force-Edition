@@ -692,6 +692,12 @@
     <ClCompile Include="rope\CRopeSegment.cpp">
       <Filter>Source Files\dlls\rope</Filter>
     </ClCompile>
+    <ClCompile Include="AllyMonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="FSquadTalkMonster.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1236,6 +1242,12 @@
     </ClInclude>
     <ClInclude Include="rope\CRopeSegment.h">
       <Filter>Source Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="AllyMonster.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="FSquadTalkMonster.h">
+      <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

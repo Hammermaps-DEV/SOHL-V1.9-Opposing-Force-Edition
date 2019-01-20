@@ -121,7 +121,8 @@ class CBaseEntity;
 class CBaseMonster;
 class CBasePlayerItem;
 class CSquadMonster;
-class CRCAllyMonster;
+class COFSquadTalkMonster;
+class CRCAllyMonster; //COFSquadTalkMonster to CRCAllyMonster
 class CThinker;
 
 #define	SF_NORESPAWN	( 1 << 30 )// !!!set this bit on guns and stuff that should never respawn.
@@ -192,7 +193,7 @@ public:
 	virtual void		SetNextThink( float delay, BOOL correctSpeed );
 	virtual void		AbsoluteNextThink( float time ) { AbsoluteNextThink(time, FALSE); }
 	virtual void		AbsoluteNextThink( float time, BOOL correctSpeed );
-	void			SetEternalThink( );
+	void				SetEternalThink( );
 
 	void	DontThink( void );
 	virtual void ThinkCorrection( void );
@@ -283,9 +284,10 @@ public:
 	virtual void	TraceBleed( float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType );
 //LRC- superceded by GetState ( pActivator ).
 //	virtual BOOL    IsTriggered( CBaseEntity *pActivator ) {return TRUE;}
-	virtual CBaseMonster *MyMonsterPointer( void ) { return NULL;}
-	virtual CSquadMonster *MySquadMonsterPointer( void ) { return NULL;}
-	virtual CRCAllyMonster *MyTalkSquadMonsterPointer( void ) { return NULL;}
+	virtual CBaseMonster *MyMonsterPointer( void ) { return nullptr;}
+	virtual CSquadMonster *MySquadMonsterPointer( void ) { return nullptr;}
+	virtual CRCAllyMonster *MyTalkSquadMonsterPointer( void ) { return nullptr;}
+	virtual COFSquadTalkMonster *MySquadTalkMonsterPointer(void) { return nullptr; }
 	virtual	int		GetToggleState( void ) { return TS_AT_TOP; }
 	virtual void	AddPoints( int score, BOOL bAllowNegativeScore ) {}
 	virtual void	AddPointsToTeam( int score, BOOL bAllowNegativeScore ) {}

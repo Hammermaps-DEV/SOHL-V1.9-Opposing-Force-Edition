@@ -344,6 +344,8 @@ public:
 
 	CBaseEntity* DropItem ( char *pszItemName, const Vector &vecPos, const Vector &vecAng );// drop an item.
 
+	BOOL JumpToTarget(Activity movementAct, float waitTime);
+
 	//LRC
 	float	CalcRatio( CBaseEntity *pLocus )
 	{

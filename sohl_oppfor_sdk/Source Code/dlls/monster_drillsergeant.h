@@ -25,6 +25,7 @@ public:
 	int  Classify(void);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	int ISoundMask(void);
+	int ObjectCaps(void) override;
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);

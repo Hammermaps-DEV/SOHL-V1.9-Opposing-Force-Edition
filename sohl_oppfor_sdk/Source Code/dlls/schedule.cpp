@@ -505,6 +505,13 @@ void CBaseMonster :: RunTask ( Task_t *pTask )
 			}
 			break;
 		}
+	case TASK_WAIT_FOR_JUMP:
+		if (pev->flags & FL_ONGROUND)
+		{
+			if (!HasConditions(bits_COND_TASK_FAILED))
+				TaskIsComplete();
+		}
+		break;
 	}
 }
 
@@ -1376,7 +1383,32 @@ case TASK_GET_PATH_TO_BESTSCENT:
 		m_failSchedule = SCHED_NONE;
 		TaskComplete();
 		break;
+	case TASK_JUMP_TO_TARGET:
+	{
+		if ((m_hTargetEnt->pev->origin - pev->origin).Length() >= 1.0)
+		{
+			if (!m_hTargetEnt || !JumpToTarget(ACT_LEAP, 2.0))
+			{
+				m_afConditions |= 0x40000000u;
+				TaskFail();
+				ALERT(at_aiconsole, "%s Failed to reach target!!!\n", STRING(pev->classname));
+				RouteClear();
+			}
+		}
 
+		TaskComplete();
+		break;
+	}
+	case TASK_WAIT_FOR_JUMP:
+	{
+		if (pev->flags & FL_ONGROUND)
+		{
+			if (!HasConditions(bits_COND_TASK_FAILED))
+				TaskIsComplete();
+		}
+
+		break;
+	}
 	default:
 		{
 			ALERT ( at_aiconsole, "No StartTask entry for %d\n", (SHARED_TASKS)pTask->iTask );
@@ -1573,4 +1605,24 @@ Schedule_t *CBaseMonster :: GetSchedule ( void )
 	}
 
 	return &slError[ 0 ];
+}
+
+BOOL CBaseMonster::JumpToTarget(Activity movementAct, float waitTime)
+{
+	m_movementGoal = MOVEGOAL_TARGETENT;
+	m_movementActivity = movementAct;
+	m_moveWaitTime = waitTime;
+
+	pev->origin.z += 1;
+
+	if (pev->flags & FL_ONGROUND)
+		pev->flags &= ~FL_ONGROUND;
+
+	g_engfuncs.pfnCVarGetFloat("sv_gravity");
+
+	pev->velocity = m_hTargetEnt->pev->origin + Vector(0, 0, 160) - pev->origin;
+
+	pev->velocity.z *= pev->origin.z * sqrt(160.0 / (pev->origin.z * 0.5)) / 160.0;
+
+	return true;
 }
