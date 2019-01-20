@@ -55,45 +55,27 @@
 
 #define FGRUNT_MEDIC_WAIT			5
 
-#define	FGRUNT_SENTENCE_VOLUME			(float)0.35 // volume of grunt sentences
+#define	FGRUNT_SENTENCE_VOLUME		(float)0.35 // volume of grunt sentences
 
-namespace CHFGruntWeaponFlag
-{
-	enum CHFGruntWeaponFlag
-	{
-		FGRUNT_9MMAR = 1 << 0,
-		FGRUNT_HANDGRENADE = 1 << 1,
-		FGRUNT_GRENADELAUNCHER = 1 << 2,
-		FGRUNT_SHOTGUN = 1 << 3,
-		FGRUNT_M249 = 1 << 4
-	};
-}
+#define FGRUNT_9MMAR				(1 << 0)
+#define FGRUNT_HANDGRENADE			(1 << 1)
+#define FGRUNT_GRENADELAUNCHER		(1 << 2)
+#define FGRUNT_SHOTGUN				(1 << 3)
+#define FGRUNT_M249					(1 << 4)
 
-// Torso group
-namespace CHFGruntTorso
-{
-	enum CHFGruntTorso
-	{
-		FG_TORSO_GROUP = 2,
-		FG_TORSO_DEFAULT = 0,
-		FG_TORSO_M249,
-		FG_TORSO_FLAT,
-		FG_TORSO_SHOTGUN
-	};
-}
+// Torso group for weapons
+#define	FG_TORSO_GROUP				2
+#define FG_TORSO_DEFAULT			0
+#define FG_TORSO_M249				1
+#define FG_TORSO_FLAT				2
+#define FG_TORSO_SHOTGUN			3
 
 // Weapon group
-namespace CHFGruntGunGroup
-{
-	enum CHFGruntGunGroup
-	{
-		FG_GUN_GROUP = 3,
-		FG_GUN_MP5 = 0,
-		FG_GUN_SHOTGUN,
-		FG_GUN_SAW,
-		FG_GUN_NONE
-	};
-}
+#define FG_GUN_GROUP				3
+#define FG_GUN_MP5					0
+#define FG_GUN_SHOTGUN				1
+#define FG_GUN_SAW					2
+#define FG_GUN_NONE					3
 
 //=========================================================
 // Monster's specific conditions
@@ -111,21 +93,15 @@ enum {
 //=========================================================
 // Monster heads
 //=========================================================
-namespace CHFGruntHead
-{
-	enum CHFGruntHead
-	{
-		FG_HEAD_GROUP = 0,
-		FG_HEAD_MASK = 0,
-		FG_HEAD_BERET,
-		FG_HEAD_SHOTGUN,
-		FG_HEAD_SAW,
-		FG_HEAD_SAW_BLACK,
-		FG_HEAD_MP,
-		FG_HEAD_MAJOR,
-		FG_HEAD_BERET_BLACK
-	};
-}
+#define FG_HEAD_GROUP				1
+#define FG_HEAD_MASK				0
+#define FG_HEAD_BERET				1
+#define FG_HEAD_SHOTGUN				2
+#define FG_HEAD_SAW					3
+#define FG_HEAD_SAW_BLACK			4
+#define FG_HEAD_MP					5
+#define FG_HEAD_MAJOR				6
+#define FG_HEAD_BERET_BLACK			7
 
 //=========================================================
 // Monster's specific schedule types
@@ -275,33 +251,33 @@ void CHFGrunt::Spawn(void) {
 	m_HackedGunPos = Vector(0, 0, 55);
 
 	m_cClipSize = FGRUNT_CLIP_SIZE_9MM;
-	if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
+	if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
 		if (!IsLeader() && m_iHead == -1) {
-			SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SHOTGUN);
+			SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SHOTGUN);
 		}
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SHOTGUN);
-		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_SHOTGUN);
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_SHOTGUN);
+		SetBodygroup(FG_TORSO_GROUP, FG_TORSO_SHOTGUN);
 		m_cClipSize = 8;
-	} else if(FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SAW);
-		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_M249);
+	} else if(FBitSet(pev->weapons, FGRUNT_M249)) {
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_SAW);
+		SetBodygroup(FG_TORSO_GROUP, FG_TORSO_M249);
 		//Random Skins
 		if (!IsLeader() && m_iHead == -1) {
 			switch ((int)RANDOM_FLOAT(0, 2)) {
-				case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW); break;
-				case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK); break;
+				case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW); break;
+				case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
 			}
 		}
 
 		m_cClipSize = FGRUNT_CLIP_SIZE_M249;
 	} else {
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_MP5);
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_MP5);
 		if (!IsLeader() && m_iHead == -1) {
 			switch ((int)RANDOM_FLOAT(0, 3)) {
 				//Random Skins
-				case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MASK); break;
-				case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW); break;
-				case 2: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK); break;
+				case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MASK); break;
+				case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW); break;
+				case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
 			}
 		}
 	}
@@ -311,27 +287,29 @@ void CHFGrunt::Spawn(void) {
 	if ((pev->spawnflags & SF_MONSTER_SPAWNFLAG_32) && m_iHead == -1) {
 		switch ((int)RANDOM_FLOAT(0, 3)) {
 			//Random Skins
-			case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET); break;
-			case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET_BLACK); break;
-			case 2: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MAJOR); break;
+			case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET); break;
+			case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET_BLACK); break;
+			case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MAJOR); break;
 		}
 	}
 
 	//Overwrite Skins over Editor
 	if (m_iHead != -1) {
-		switch (INT(m_iHead)) {
-			case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MASK); break;
-			case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET); break;
-			case 2: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SHOTGUN); break;
-			case 3: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW); break;
-			case 4: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK); break;
-			case 5: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MP); break;
-			case 6: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MAJOR); break;
-			case 7: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET_BLACK); break;
+		switch ((int)(m_iHead)) {
+			case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MASK); break;
+			case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET); break;
+			case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SHOTGUN); break;
+			case 3: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW); break;
+			case 4: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
+			case 5: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MP); break;
+			case 6: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MAJOR); break;
+			case 7: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET_BLACK); break;
 		}
 	}
 
-	CRCAllyMonster::g_talkWaitTime = 0;
+	ALERT(at_console, "%i:CHFGruntHead\n", GetBodygroup(FG_HEAD_GROUP));
+
+	g_talkWaitTime = 0;
 
 	MonsterInit();
 	StartMonster();
@@ -1142,9 +1120,9 @@ void CHFGrunt :: GibMonster ( void ) {
 		GetAttachment( 0, vecGunPos, vecGunAngles );
 		
 		CBaseEntity *pGun;
-		if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN )) {
+		if (FBitSet( pev->weapons, FGRUNT_SHOTGUN )) {
 			pGun = DropItem( "weapon_shotgun", vecGunPos, vecGunAngles );
-		} else if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
+		} else if (FBitSet(pev->weapons, FGRUNT_M249)) {
 			pGun = DropItem( "weapon_m249", vecGunPos, vecGunAngles );
 		} else {
 			pGun = DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
@@ -1156,7 +1134,7 @@ void CHFGrunt :: GibMonster ( void ) {
 		}
 	
 		if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_512)) { //Hack for "Don't Drop Explosives"
-			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
+			if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
 				pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 				if (pGun) {
 					pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
@@ -1166,7 +1144,7 @@ void CHFGrunt :: GibMonster ( void ) {
 		}
 
 		if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_512)) { //Hack for "Don't Drop Explosives"
-			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER)) {
+			if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
 				pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 				if (pGun) {
 					pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
@@ -1215,7 +1193,7 @@ void CHFGrunt :: SetYawSpeed ( void ) {
 // attack. 
 //=========================================================
 BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
-	if (! FBitSet(pev->weapons, (CHFGruntWeaponFlag::FGRUNT_HANDGRENADE | CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER)) || FBitSet(pev->weapons, (CHFGruntWeaponFlag::FGRUNT_M249 )) ) {
+	if (! FBitSet(pev->weapons, (FGRUNT_HANDGRENADE | FGRUNT_GRENADELAUNCHER)) || FBitSet(pev->weapons, (FGRUNT_M249 )) ) {
 		return FALSE;
 	}
 	
@@ -1239,7 +1217,7 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 	
 	Vector vecTarget;
-	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
+	if (FBitSet( pev->weapons, FGRUNT_HANDGRENADE)) {
 		// find feet
 		if (RANDOM_LONG(0,1)) {
 			// magically know where they are
@@ -1275,7 +1253,7 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 
 		
-	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
+	if (FBitSet( pev->weapons, FGRUNT_HANDGRENADE)) {
 		Vector vecToss = VecCheckToss( pev, GetGunPosition(), vecTarget, 0.5 );
 
 		if ( vecToss != g_vecZero ) {
@@ -1325,11 +1303,11 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			GetAttachment(0, vecGunPos, vecGunAngles);
 
 			// switch to body group with no gun.
-			SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_NONE);
+			SetBodygroup(FG_GUN_GROUP, FG_GUN_NONE);
 
-			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
+			if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
 				DropItem("weapon_shotgun", vecGunPos, vecGunAngles);
-			} else if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
+			} else if (FBitSet(pev->weapons, FGRUNT_M249)) {
 				DropItem("weapon_m249", vecGunPos, vecGunAngles);
 			} else {
 				DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
@@ -1337,7 +1315,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 
 			CBaseEntity *pGun;
 			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2048)) {
-				if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
+				if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
 					pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 					if (pGun) {
 						pGun->pev->velocity = Vector(RANDOM_FLOAT(-30, 60), RANDOM_FLOAT(-20, 30), RANDOM_FLOAT(120, 220));
@@ -1347,7 +1325,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			}
 
 			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2048)) {
-				if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER)) {
+				if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
 					pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 					if (pGun) {
 						pGun->pev->velocity = Vector(RANDOM_FLOAT(-30, 60), RANDOM_FLOAT(-20, 30), RANDOM_FLOAT(120, 220));
@@ -1358,7 +1336,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 		}
 		break;
 		case HGRUNT_ALLY_AE_RELOAD:
-			if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
+			if (FBitSet( pev->weapons, FGRUNT_M249)) {
 				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_reload2.wav", VOL_NORM, ATTN_NORM);
 			} else {
 				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM );
@@ -1420,9 +1398,9 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 		case HGRUNT_ALLY_AE_BURST1:
 		case HGRUNT_ALLY_AE_BURST2:
 		case HGRUNT_ALLY_AE_BURST3: {
-			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
+			if (FBitSet(pev->weapons, FGRUNT_M249)) {
 				ShootM249();
-			} else if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
+			} else if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
 				if (UTIL_GlobalTimeBase() >= m_nShotgunDouble && RANDOM_LONG(0, 4) >= 1 && m_cAmmoLoaded >= 2) {
 					ShootShotgunDouble();
 					m_nShotgunDouble = UTIL_GlobalTimeBase() + RANDOM_FLOAT(3, 6);
@@ -1487,7 +1465,7 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 
 				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
 					flDamage -= 20;
-					if (flDamage <= 0 && (GetBodygroup(CHFGruntHead::FG_HEAD_GROUP) == CHFGruntHead::FG_HEAD_MASK || GetBodygroup(CHFGruntHead::FG_HEAD_GROUP) == CHFGruntHead::FG_HEAD_MP)) {
+					if (flDamage <= 0 && (GetBodygroup(FG_HEAD_GROUP) == FG_HEAD_MASK || GetBodygroup(FG_HEAD_GROUP) == FG_HEAD_MP)) {
 						UTIL_Ricochet(ptr->vecEndPos, 1.0);
 						flDamage = 0.01;
 					}
@@ -1610,7 +1588,7 @@ Schedule_t* CHFGrunt :: GetScheduleOfType ( int Type ) {
 		break;
 		case SCHED_RANGE_ATTACK1: {
 			//Always stand when using Saw
-			if (pev->weapons & CHFGruntWeaponFlag::FGRUNT_M249)
+			if (pev->weapons & FGRUNT_M249)
 			{
 				m_fStanding = true;
 				return &slFGruntRangeAttack1B[0];
@@ -1713,7 +1691,7 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 	switch ( NewActivity) {
 		case ACT_RANGE_ATTACK1:
 			// grunt is either shooting standing or shooting crouched
-			if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_9MMAR)) {
+			if (FBitSet( pev->weapons, FGRUNT_9MMAR)) {
 				if ( m_fStanding ) {
 					// get aimable sequence
 					iSequence = LookupSequence( "standing_mp5" );
@@ -1721,7 +1699,7 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 					// get crouching shoot
 					iSequence = LookupSequence( "crouching_mp5" );
 				}
-			} else if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
+			} else if (FBitSet( pev->weapons, FGRUNT_SHOTGUN)) {
 				if ( m_fStanding ) {
 					// get aimable sequence
 					iSequence = LookupSequence( "standing_shotgun" );
@@ -1742,10 +1720,10 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 		case ACT_RANGE_ATTACK2:
 			// grunt is going to a secondary long range attack. This may be a thrown 
 			// grenade or fired grenade, we must determine which and pick proper sequence
-			if ( pev->weapons & CHFGruntWeaponFlag::FGRUNT_HANDGRENADE ) {
+			if ( pev->weapons & FGRUNT_HANDGRENADE ) {
 				// get toss anim
 				iSequence = LookupSequence( "throwgrenade" );
-			} else if (pev->weapons & CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER) { // LRC: added a test to stop a marine without a launcher from firing.
+			} else if (pev->weapons & FGRUNT_GRENADELAUNCHER) { // LRC: added a test to stop a marine without a launcher from firing.
 				// get launch anim
 				iSequence = LookupSequence( "launchgrenade" );
 			} else {
@@ -1933,7 +1911,7 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 				}
 			} else if ( HasConditions ( bits_COND_CAN_MELEE_ATTACK1 ) ) { // can kick
 				return GetScheduleOfType ( SCHED_MELEE_ATTACK1 );
-			} else if ( FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER) && HasConditions ( bits_COND_CAN_RANGE_ATTACK2 ) && OccupySlot( bits_SLOTS_FGRUNT_GRENADE ) ) { // can grenade launch
+			} else if ( FBitSet( pev->weapons, FGRUNT_GRENADELAUNCHER) && HasConditions ( bits_COND_CAN_RANGE_ATTACK2 ) && OccupySlot( bits_SLOTS_FGRUNT_GRENADE ) ) { // can grenade launch
 				// shoot a grenade if you can
 				return GetScheduleOfType( SCHED_RANGE_ATTACK2 );
 			} else if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) ) { // can shoot
@@ -2142,39 +2120,39 @@ void CDeadFGrunt :: Spawn( ) {
 
 	if ( pev->weapons == 0 || pev->weapons == -1 )
 	{
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_NONE );
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_NONE );
 	}
-	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN ))
+	if (FBitSet( pev->weapons, FGRUNT_SHOTGUN ))
 	{
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SHOTGUN );
-		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_SHOTGUN );
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_SHOTGUN );
+		SetBodygroup(FG_TORSO_GROUP, FG_TORSO_SHOTGUN );
 	}
-	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_9MMAR))
+	if (FBitSet( pev->weapons, FGRUNT_9MMAR))
 	{
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_MP5 );
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_MP5 );
 	}
-	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249 ))
+	if (FBitSet( pev->weapons, FGRUNT_M249 ))
 	{
-		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SAW );
-		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_M249 );
+		SetBodygroup(FG_GUN_GROUP, FG_GUN_SAW );
+		SetBodygroup(FG_TORSO_GROUP, FG_TORSO_M249 );
 	}
 
 	if ( m_iHead == 0 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MASK );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MASK );
 	if ( m_iHead == 1 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET );
 	if ( m_iHead == 2 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SHOTGUN );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SHOTGUN );
 	if ( m_iHead == 3 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW );
 	if ( m_iHead == 4 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK );
 	if ( m_iHead == 5 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MP );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MP );
 	if ( m_iHead == 6 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MAJOR );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MAJOR );
 	if ( m_iHead == 7 )
-		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET_BLACK );
+		SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET_BLACK );
 
 	MonsterInitDead();
 }
