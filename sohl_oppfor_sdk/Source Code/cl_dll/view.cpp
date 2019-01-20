@@ -172,7 +172,7 @@ float V_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollspe
     
 	side = DotProduct (velocity, right);
     sign = side < 0 ? -1 : 1;
-    side = V_fabs( side );
+    side = fabs( side );
     
 	value = rollangle;
     if (side < rollspeed)
@@ -242,7 +242,7 @@ void V_DriftPitch ( struct ref_params_s *pparams )
 	// don't count small mouse motion
 	if (pd.nodrift)
 	{
-		if (V_fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
+		if (fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
 			pd.driftmove = 0;
 		else
 			pd.driftmove += pparams->frametime;
@@ -870,7 +870,7 @@ void V_SmoothInterpolateAngles( float * startAngle, float * endAngle, float * fi
 			d += 360.0f;
 		}
 
-		absd = V_fabs(d);
+		absd = fabs(d);
 
 		if ( absd > 0.01f )
 		{
@@ -1050,7 +1050,7 @@ float MaxAngleBetweenAngles(  float * a1, float * a2 )
 			d += 360;
 		}
 
-		d = V_fabs(d);
+		d = fabs(d);
 
 		if ( d > maxd )
 			maxd=d;

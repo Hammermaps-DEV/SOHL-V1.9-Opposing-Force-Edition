@@ -360,9 +360,9 @@ void CEgon::UpdateEffect( const Vector &startPoint, const Vector &endPoint, floa
 	m_pBeam->SetWidth( 40 - (timeBlend*20) );
 
 	if ( m_fireMode == FIRE_WIDE )
-		m_pBeam->SetColor( 30 + (25*timeBlend), 30  + (30*timeBlend), 64 + 80* V_fabs(sin(UTIL_GlobalTimeBase()*10)) );
+		m_pBeam->SetColor( 30 + (25*timeBlend), 30  + (30*timeBlend), 64 + 80* fabs(sin(UTIL_GlobalTimeBase()*10)) );
 	else
-		m_pBeam->SetColor( 60 + (25*timeBlend), 120 + (30*timeBlend), 64 + 80* V_fabs(sin(UTIL_GlobalTimeBase()*10)) );
+		m_pBeam->SetColor( 60 + (25*timeBlend), 120 + (30*timeBlend), 64 + 80* fabs(sin(UTIL_GlobalTimeBase()*10)) );
 
 	UTIL_SetOrigin( m_pSprite, endPoint );
 	m_pSprite->pev->frame += 8 * gpGlobals->frametime;

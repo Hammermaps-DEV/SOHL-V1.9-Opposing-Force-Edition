@@ -974,7 +974,7 @@ void CRCAllyMonster::Touch(CBaseEntity *pOther) {
 			return;
 
 		// Heuristic for determining if the player is pushing me away
-		float speed = V_fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
+		float speed = fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
 		if (speed > 50) {
 			SetConditions(bits_COND_CLIENT_PUSH);
 			MakeIdealYaw(pOther->pev->origin);

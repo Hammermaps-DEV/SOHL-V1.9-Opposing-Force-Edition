@@ -221,7 +221,7 @@ void CTrainSetSpeed :: UpdateSpeed( void )
 	if( !m_pTrain || !m_pTrain->pev->speed )
 		return;	// no train or train not moving
 
-	if(V_fabs( m_pTrain->pev->speed - pev->speed ) <= 1.0f )
+	if(fabs( m_pTrain->pev->speed - pev->speed ) <= 1.0f )
 	{
 		SUB_UseTargets( m_hActivator, USE_TOGGLE, 0 );
 		return;	// reached

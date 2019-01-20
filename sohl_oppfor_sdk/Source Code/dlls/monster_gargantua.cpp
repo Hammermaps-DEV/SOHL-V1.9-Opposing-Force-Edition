@@ -1158,7 +1158,7 @@ void CGargantua::RunTask( Task_t *pTask )
 				if ( dir.Length() > 400 )
 					cancel = TRUE;
 			}
-			if (V_fabs(angles.y) > 60 )
+			if (fabs(angles.y) > 60 )
 				cancel = TRUE;
 			
 			if ( cancel )

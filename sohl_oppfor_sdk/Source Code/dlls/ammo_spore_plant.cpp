@@ -132,11 +132,11 @@ void CSporeAmmoPlant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector
 		ALERT(at_aiconsole, "angles %f %f %f\n", pev->angles.x, pev->angles.y, pev->angles.z);
 		Vector angles = pev->angles + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6;
 
-		if (V_fabs(angles.x) != 0)
+		if (fabs(angles.x) != 0)
 			angles.x = angles.x + 90;
-		if (V_fabs(angles.y) != 0)
+		if (fabs(angles.y) != 0)
 			angles.y = angles.y + 90;
-		if (V_fabs(angles.z) != 0)
+		if (fabs(angles.z) != 0)
 			angles.y = angles.y + 90;
 		
 		ALERT(at_aiconsole, "angles %f %f %f\n", angles.x, angles.y, angles.z);

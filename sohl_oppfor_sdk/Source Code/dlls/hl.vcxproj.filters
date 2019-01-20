@@ -84,6 +84,9 @@
     <Filter Include="Header Files\dlls\rope">
       <UniqueIdentifier>{10c4c228-4192-4241-a3c6-a418193a07bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\rope">
+      <UniqueIdentifier>{bbff3e1c-771e-4c20-ad05-9d5340187ef6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ammo_9mmbox.cpp">
@@ -677,6 +680,18 @@
     <ClCompile Include="proj_hvr_rocket.cpp">
       <Filter>Source Files\dlls\projectile</Filter>
     </ClCompile>
+    <ClCompile Include="rope\CElectrifiedWire.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="rope\CRope.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="rope\CRopeSample.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="rope\CRopeSegment.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1209,6 +1224,18 @@
     </ClInclude>
     <ClInclude Include="rope_sample.h">
       <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="rope\CElectrifiedWire.h">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="rope\CRope.h">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="rope\CRopeSample.h">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="rope\CRopeSegment.h">
+      <Filter>Source Files\dlls\rope</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

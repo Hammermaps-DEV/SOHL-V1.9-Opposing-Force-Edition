@@ -287,7 +287,7 @@ BOOL CBullsquid :: CheckRangeAttack1 ( float flDot, float flDist )
 	{
 		if ( m_hEnemy != NULL )
 		{
-			if (V_fabs( pev->origin.z - m_hEnemy->pev->origin.z ) > 256 )
+			if (fabs( pev->origin.z - m_hEnemy->pev->origin.z ) > 256 )
 			{
 				// don't try to spit at someone up really high or down really low.
 				return FALSE;

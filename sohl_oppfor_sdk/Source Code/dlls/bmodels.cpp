@@ -219,7 +219,7 @@ void CFuncConveyor :: Spawn( void )
 void CFuncConveyor :: UpdateSpeed( float speed )
 {
 	// Encode it as an integer with 4 fractional bits
-	int speedCode = (int)(V_fabs(speed) * 16.0);
+	int speedCode = (int)(fabs(speed) * 16.0);
 
 	if ( speed < 0 )
 		pev->rendercolor.x = 1;
@@ -956,7 +956,7 @@ void CPendulum :: Spawn( void )
 	if (pev->speed == 0)
 		pev->speed = 100;
 
-	m_accel = (pev->speed * pev->speed) / (2 * V_fabs(m_distance));	// Calculate constant acceleration from speed and distance
+	m_accel = (pev->speed * pev->speed) / (2 * fabs(m_distance));	// Calculate constant acceleration from speed and distance
 	m_maxSpeed = pev->speed;
 	m_start = pev->angles;
 	m_center = pev->angles + (m_distance * 0.5) * pev->movedir;

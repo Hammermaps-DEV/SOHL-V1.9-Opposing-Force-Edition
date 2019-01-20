@@ -836,7 +836,7 @@ void CFuncTank :: Think( void )
 //	pev->avelocity = g_vecZero;
 	TrackTarget();
 
-	if (V_fabs(pev->avelocity.x) > 1.0f || V_fabs(pev->avelocity.y) > 1.0f )
+	if (fabs(pev->avelocity.x) > 1.0f || fabs(pev->avelocity.y) > 1.0f )
 		StartRotSound();
 	else
 		StopRotSound();
@@ -1085,7 +1085,7 @@ void CFuncTank::TrackTarget( void )
 	UTIL_SetAvelocity(this, setAVel);
 
 	// notify the TankSequence if we're (pretty close to) facing the target
-	if (m_pSequence && V_fabs(distY) < 0.1f && V_fabs(distX) < 0.1f)
+	if (m_pSequence && fabs(distY) < 0.1f && fabs(distX) < 0.1f)
 		m_pSequence->FacingNotify();
 
 	// firing in tanksequences:
@@ -1134,7 +1134,7 @@ void CFuncTank::TrackTarget( void )
 		}
 	}
 	// firing with automatic guns:
-	else if ( CanFire() && ( (V_fabs(distX) < m_pitchTolerance && V_fabs(distY) < m_yawTolerance) || (pev->spawnflags & SF_TANK_LINEOFSIGHT) ) )
+	else if ( CanFire() && ( (fabs(distX) < m_pitchTolerance && fabs(distY) < m_yawTolerance) || (pev->spawnflags & SF_TANK_LINEOFSIGHT) ) )
 	{
 		BOOL fire = FALSE;
 		Vector forward;

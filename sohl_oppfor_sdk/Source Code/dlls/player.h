@@ -91,6 +91,7 @@ enum sbar_data
 #define CHAT_INTERVAL 1.0f
 
 class CParticleEmitter;
+class CRope;
 
 class CBasePlayer : public CBaseMonster
 {
@@ -352,6 +353,32 @@ public:
 	friend class CDisplacer;
 
 	int	Rain_needsUpdate;
+
+	bool IsOnRope() const { return (m_afPhysicsFlags & PFLAG_ON_ROPE) != 0; }
+
+	void SetOnRopeState(bool bOnRope)
+	{
+		if (bOnRope)
+			m_afPhysicsFlags |= PFLAG_ON_ROPE;
+		else
+			m_afPhysicsFlags &= ~PFLAG_ON_ROPE;
+	}
+
+	CRope* GetRope() { return m_pRope; }
+
+	void SetRope(CRope* pRope)
+	{
+		m_pRope = pRope;
+	}
+
+	void SetIsClimbing(const bool bIsClimbing)
+	{
+		m_bIsClimbing = bIsClimbing;
+	}
+private:
+	float m_flLastClimbTime = 0;
+	bool m_bIsClimbing = false;
+	CRope* m_pRope;
 };
 
 #define AUTOAIM_2DEGREES  0.0348994967025
