@@ -15,11 +15,23 @@
 #ifndef MONSTER_LOADER_H
 #define MONSTER_LOADER_H
 
+#include "soundent.h"
+
+#define	SF_LOADER_NOTSOLID	4 
+
 class CLoader : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void SetYawSpeed() override;
+	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
+	void HandleAnimEvent(MonsterEvent_t* pEvent) override;
+	void StartTask(Task_t* pTask) override;
+	void SetTurnActivity() override;
+	int Classify() override { return CLASS_PLAYER_ALLY; }
+	int ISoundMask() override { return bits_SOUND_NONE; }
 };
 
 #endif // MONSTER_LOADER_H

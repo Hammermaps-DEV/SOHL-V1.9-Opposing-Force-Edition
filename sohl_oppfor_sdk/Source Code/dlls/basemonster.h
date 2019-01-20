@@ -254,7 +254,7 @@ public:
 		virtual BOOL FValidateHintType( short sHint );
 		int FindHintNode ( void );
 		virtual BOOL FCanActiveIdle ( void );
-		void SetTurnActivity ( void );
+		virtual void SetTurnActivity ( void );
 		float FLSoundVolume ( CSound *pSound );
 
 		BOOL MoveToNode( Activity movementAct, float waitTime, const Vector &goal );
