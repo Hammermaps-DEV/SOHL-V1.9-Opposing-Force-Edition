@@ -282,7 +282,7 @@ void CMappedParticle::Draw( void )
 	
 	if (iNumFrames)
 		flInverse = 1 / sqrt((float)iNumFrames);
-	if ((int)sqrt((float)iNumFrames) != (int)abs(sqrt((float)iNumFrames)))
+	if ((int)sqrt((float)iNumFrames) != (int)fabs(sqrt((float)iNumFrames)))
 		return;
 
 	if (iNumFrames == 0)

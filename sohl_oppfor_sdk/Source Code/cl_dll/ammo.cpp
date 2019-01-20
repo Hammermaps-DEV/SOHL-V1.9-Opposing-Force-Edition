@@ -494,7 +494,7 @@ int CHudAmmo::MsgFunc_AmmoX(const char *pszName, int iSize, void *pbuf)
 	int iIndex = READ_SHORT();
 	int iCount = READ_SHORT();
 
-	gWR.SetAmmo( iIndex, abs(iCount) );
+	gWR.SetAmmo( iIndex, fabs(iCount) );
 
 	return 1;
 }
@@ -506,7 +506,7 @@ int CHudAmmo::MsgFunc_AmmoPickup( const char *pszName, int iSize, void *pbuf )
 	int iCount = READ_BYTE();
 
 	// Add ammo to the history
-	gHR.AddToHistory( HISTSLOT_AMMO, iIndex, abs(iCount) );
+	gHR.AddToHistory( HISTSLOT_AMMO, iIndex, fabs(iCount) );
 
 	return 1;
 }
@@ -611,7 +611,7 @@ int CHudAmmo::MsgFunc_CurWeapon(const char *pszName, int iSize, void *pbuf )
 		return 0;
 
 	if ( iClip < -1 )
-		pWeapon->iClip = abs(iClip);
+		pWeapon->iClip = fabs(iClip);
 	else
 		pWeapon->iClip = iClip;
 

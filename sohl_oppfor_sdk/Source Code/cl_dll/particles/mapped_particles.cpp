@@ -365,20 +365,20 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 		}
 		// fps for the anim
 		else if(!stricmp(sSetting, "fps")) {
-			m_pSystem->iFPS = abs(atoi(sValue));
+			m_pSystem->iFPS = fabs(atoi(sValue));
 		}
 		// first frame we will use
 		else if(!stricmp(sSetting, "starting_frame")) {
-			m_pSystem->iStartingFrame = abs(atoi(sValue));
+			m_pSystem->iStartingFrame = fabs(atoi(sValue));
 		}
 		// last frame we will use
 		else if(!stricmp(sSetting, "ending_frame")) {
-			m_pSystem->iEndingFrame = abs(atoi(sValue));
+			m_pSystem->iEndingFrame = fabs(atoi(sValue));
 		}
 		// how many frames in this image, must be a sqaure number
 		else if(!stricmp(sSetting, "frames_in_image")) {
-			flTemp = abs(atof(sValue)); // must be position
-			if((int)sqrt(flTemp) == (int)abs(sqrt(flTemp))) {
+			flTemp = fabs(atof(sValue)); // must be position
+			if((int)sqrt(flTemp) == (int)fabs(sqrt(flTemp))) {
 				if(flTemp <= 0.0f)
 					flTemp = 1.0f;
 				m_pSystem->iFramesPerTexture = (int)flTemp;

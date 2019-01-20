@@ -432,14 +432,14 @@ void CAmbientGeneric :: RampThink( void )
 		if (m_dpv.lfofrac < 0)
 		{
 			m_dpv.lfofrac = 0;
-			m_dpv.lforate = abs(m_dpv.lforate);
+			m_dpv.lforate = fabs(m_dpv.lforate);
 			pos = 0;
 		}
 		else if (pos > 255)
 		{
 			pos = 255;
 			m_dpv.lfofrac = (255 << 8);
-			m_dpv.lforate = -abs(m_dpv.lforate);
+			m_dpv.lforate = -fabs(m_dpv.lforate);
 		}
 
 		switch(m_dpv.lfotype)
@@ -580,7 +580,7 @@ void CAmbientGeneric :: InitModulationParms(void)
 	m_dpv.volfrac = m_dpv.vol << 8;
 
 	m_dpv.lfofrac = 0;
-	m_dpv.lforate = abs(m_dpv.lforate);
+	m_dpv.lforate = fabs(m_dpv.lforate);
 
 	m_dpv.cspincount = 1;
 	

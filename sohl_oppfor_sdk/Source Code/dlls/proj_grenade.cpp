@@ -152,7 +152,7 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 		UTIL_RandomBloodVector() * RANDOM_FLOAT(300, 500);
 
 		if (CVAR_GET_FLOAT("sv_grenadegib") == 1) {
-			//ALERT( at_console, "Grenade iContents: %i\n", abs(iContents));
+			//ALERT( at_console, "Grenade iContents: %i\n", fabs(iContents));
 
 			if (iContents != CONTENTS_WATER) {
 				//Granate Gibs

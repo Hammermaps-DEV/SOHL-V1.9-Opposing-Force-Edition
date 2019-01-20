@@ -138,7 +138,7 @@ void CStudioModelRenderer::StudioCalcBoneAdj( float dadt, float *adj, const byte
 			// check for 360% wrapping
 			if (pbonecontroller[j].type & STUDIO_RLOOP)
 			{
-				if (abs(pcontroller1[i] - pcontroller2[i]) > 128)
+				if (fabs(pcontroller1[i] - pcontroller2[i]) > 128)
 				{
 					int a, b;
 					a = (pcontroller1[j] + 128) % 256;
