@@ -55,25 +55,45 @@
 
 #define FGRUNT_MEDIC_WAIT			5
 
-#define FGRUNT_9MMAR				(1 << 0)
-#define FGRUNT_HANDGRENADE			(1 << 1)
-#define FGRUNT_GRENADELAUNCHER		(1 << 2)
-#define FGRUNT_SHOTGUN				(1 << 3)
-#define FGRUNT_M249					(1 << 4)
+#define	FGRUNT_SENTENCE_VOLUME			(float)0.35 // volume of grunt sentences
 
-// Torso group for weapons
-#define	FG_TORSO_GROUP				2
-#define FG_TORSO_DEFAULT			0
-#define FG_TORSO_M249				1
-#define FG_TORSO_FLAT				2
-#define FG_TORSO_SHOTGUN			3
+namespace CHFGruntWeaponFlag
+{
+	enum CHFGruntWeaponFlag
+	{
+		FGRUNT_9MMAR = 1 << 0,
+		FGRUNT_HANDGRENADE = 1 << 1,
+		FGRUNT_GRENADELAUNCHER = 1 << 2,
+		FGRUNT_SHOTGUN = 1 << 3,
+		FGRUNT_M249 = 1 << 4
+	};
+}
+
+// Torso group
+namespace CHFGruntTorso
+{
+	enum CHFGruntTorso
+	{
+		FG_TORSO_GROUP = 2,
+		FG_TORSO_DEFAULT = 0,
+		FG_TORSO_M249,
+		FG_TORSO_FLAT,
+		FG_TORSO_SHOTGUN
+	};
+}
 
 // Weapon group
-#define FG_GUN_GROUP				3
-#define FG_GUN_MP5					0
-#define FG_GUN_SHOTGUN				1
-#define FG_GUN_SAW					2
-#define FG_GUN_NONE					3
+namespace CHFGruntGunGroup
+{
+	enum CHFGruntGunGroup
+	{
+		FG_GUN_GROUP = 3,
+		FG_GUN_MP5 = 0,
+		FG_GUN_SHOTGUN,
+		FG_GUN_SAW,
+		FG_GUN_NONE
+	};
+}
 
 //=========================================================
 // Monster's specific conditions
@@ -85,22 +105,27 @@
 //=========================================================
 enum {
 	TASK_HGRUNT_ALLY_FACE_TOSS_DIR = LAST_TALKMONSTER_TASK + 1,
-	TASK_HGRUNT_ALLY_CHECK_FIRE,
-	TASK_HGRUNT_ALLY_FIND_MEDIC
+	TASK_HGRUNT_ALLY_CHECK_FIRE
 };
 
 //=========================================================
 // Monster heads
 //=========================================================
-#define FG_HEAD_GROUP				1
-#define FG_HEAD_MASK				0
-#define FG_HEAD_BERET				1
-#define FG_HEAD_SHOTGUN				2
-#define FG_HEAD_SAW					3
-#define FG_HEAD_SAW_BLACK			4
-#define FG_HEAD_MP					5
-#define FG_HEAD_MAJOR				6
-#define FG_HEAD_BERET_BLACK			7
+namespace CHFGruntHead
+{
+	enum CHFGruntHead
+	{
+		FG_HEAD_GROUP = 0,
+		FG_HEAD_MASK = 0,
+		FG_HEAD_BERET,
+		FG_HEAD_SHOTGUN,
+		FG_HEAD_SAW,
+		FG_HEAD_SAW_BLACK,
+		FG_HEAD_MP,
+		FG_HEAD_MAJOR,
+		FG_HEAD_BERET_BLACK
+	};
+}
 
 //=========================================================
 // Monster's specific schedule types
@@ -116,8 +141,7 @@ enum {
 	SCHED_HGRUNT_ALLY_REPEL_LAND,
 	SCHED_HGRUNT_ALLY_WAIT_FACE_ENEMY,
 	SCHED_HGRUNT_ALLY_TAKECOVER_FAILED,// special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
-	SCHED_HGRUNT_ALLY_ELOF_FAIL,
-	SCHED_HGRUNT_ALLY_FIND_MEDIC
+	SCHED_HGRUNT_ALLY_ELOF_FAIL
 };
 
 //=========================================================
@@ -181,6 +205,33 @@ void CHFGrunt :: KeyValue( KeyValueData *pkvd ) {
 }
 
 //=========================================================
+// Killed
+//=========================================================
+void CHFGrunt::Killed(entvars_t* pevAttacker, int iGib)
+{
+	if (m_MonsterState != MONSTERSTATE_DEAD)
+	{
+		if (HasMemory(bits_MEMORY_SUSPICIOUS) || UTIL_IsFacing(pevAttacker, pev->origin))
+		{
+			Remember(bits_MEMORY_PROVOKED);
+			StopFollowing(true);
+		}
+	}
+
+	if (m_hWaitMedic)
+	{
+		auto v4 = m_hWaitMedic.Entity<CRCAllyMonster>();
+		if (v4->pev->deadflag)
+			m_hWaitMedic = nullptr;
+		else
+			v4->HealMe(nullptr);
+	}
+
+	SetUse(nullptr);
+	CRCAllyMonster::Killed(pevAttacker, iGib);
+}
+
+//=========================================================
 // Spawn Human Grunt Ally
 //=========================================================
 void CHFGrunt::Spawn(void) {
@@ -214,6 +265,7 @@ void CHFGrunt::Spawn(void) {
 
 	m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1;
 	m_flNextPainTime = UTIL_GlobalTimeBase();
+	m_flMedicWaitTime = UTIL_GlobalTimeBase();
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
@@ -223,33 +275,33 @@ void CHFGrunt::Spawn(void) {
 	m_HackedGunPos = Vector(0, 0, 55);
 
 	m_cClipSize = FGRUNT_CLIP_SIZE_9MM;
-	if(FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
+	if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
 		if (!IsLeader() && m_iHead == -1) {
-			SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SHOTGUN);
+			SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SHOTGUN);
 		}
-		SetBodygroup(FG_GUN_GROUP, FG_GUN_SHOTGUN);
-		SetBodygroup(FG_TORSO_GROUP, FG_TORSO_SHOTGUN);
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SHOTGUN);
+		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_SHOTGUN);
 		m_cClipSize = 8;
-	} else if(FBitSet(pev->weapons, FGRUNT_M249)) {
-		SetBodygroup(FG_GUN_GROUP, FG_GUN_SAW);
-		SetBodygroup(FG_TORSO_GROUP, FG_TORSO_M249);
+	} else if(FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SAW);
+		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_M249);
 		//Random Skins
 		if (!IsLeader() && m_iHead == -1) {
 			switch ((int)RANDOM_FLOAT(0, 2)) {
-				case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW); break;
-				case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
+				case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW); break;
+				case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK); break;
 			}
 		}
 
 		m_cClipSize = FGRUNT_CLIP_SIZE_M249;
 	} else {
-		SetBodygroup(FG_GUN_GROUP, FG_GUN_MP5);
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_MP5);
 		if (!IsLeader() && m_iHead == -1) {
 			switch ((int)RANDOM_FLOAT(0, 3)) {
 				//Random Skins
-				case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MASK); break;
-				case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW); break;
-				case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
+				case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MASK); break;
+				case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW); break;
+				case 2: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK); break;
 			}
 		}
 	}
@@ -259,23 +311,23 @@ void CHFGrunt::Spawn(void) {
 	if ((pev->spawnflags & SF_MONSTER_SPAWNFLAG_32) && m_iHead == -1) {
 		switch ((int)RANDOM_FLOAT(0, 3)) {
 			//Random Skins
-			case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET); break;
-			case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET_BLACK); break;
-			case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MAJOR); break;
+			case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET); break;
+			case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET_BLACK); break;
+			case 2: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MAJOR); break;
 		}
 	}
 
 	//Overwrite Skins over Editor
 	if (m_iHead != -1) {
 		switch (INT(m_iHead)) {
-			case 0: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MASK); break;
-			case 1: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET); break;
-			case 2: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SHOTGUN); break;
-			case 3: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW); break;
-			case 4: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_SAW_BLACK); break;
-			case 5: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MP); break;
-			case 6: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_MAJOR); break;
-			case 7: SetBodygroup(FG_HEAD_GROUP, FG_HEAD_BERET_BLACK); break;
+			case 0: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MASK); break;
+			case 1: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET); break;
+			case 2: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SHOTGUN); break;
+			case 3: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW); break;
+			case 4: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK); break;
+			case 5: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MP); break;
+			case 6: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MAJOR); break;
+			case 7: SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET_BLACK); break;
 		}
 	}
 
@@ -983,34 +1035,6 @@ Schedule_t	slFGruntRepelLand[] =
 	},
 };
 
-//=========================================================
-// Find medic. Grunt stops moving and calls the nearest medic,
-// if none is around, we don't do much. I don't think I have much
-// to put in here, other than to make the grunt stop moving, and
-// run the medic calling task, I guess.
-//=========================================================
-Task_t	tlFGruntFindMedic[] =
-{
-	{ TASK_STOP_MOVING,					(float)0	},
-	{ TASK_HGRUNT_ALLY_FIND_MEDIC,		(float)0	},
-};
-
-Schedule_t	slFGruntFindMedic[] =
-{
-	{ 
-		tlFGruntFindMedic,
-		HL_ARRAYSIZE ( tlFGruntFindMedic ), 
-		bits_COND_NEW_ENEMY			|
-		bits_COND_SEE_FEAR			|
-		bits_COND_LIGHT_DAMAGE		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_HEAR_SOUND		|
-		bits_COND_PROVOKED,
-		bits_SOUND_DANGER,
-		"FGrunt Find Medic"
-	},
-};
-
 DEFINE_CUSTOM_SCHEDULES( CHFGrunt )
 {
 	slFGruntFollow,
@@ -1037,7 +1061,6 @@ DEFINE_CUSTOM_SCHEDULES( CHFGrunt )
 	slFGruntRepel,
 	slFGruntRepelAttack,
 	slFGruntRepelLand,
-	slFGruntFindMedic,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES( CHFGrunt, CRCAllyMonster );
@@ -1053,51 +1076,6 @@ void CHFGrunt :: StartTask( Task_t *pTask ) {
 				SetConditions( bits_COND_FGRUNT_NOFIRE );
 			}
 			TaskComplete();
-		break;
-		case TASK_HGRUNT_ALLY_FIND_MEDIC:
-			// First try looking for a medic in my squad
-			if ( InSquad() ) {
-				CRCAllyMonster *pSquadLeader = MySquadLeader( );
-				if ( pSquadLeader ) for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++) {
-					CRCAllyMonster *pMember = pSquadLeader->MySquadMember(i);
-					if ( pMember && pMember != this ) {
-						CRCAllyMonster *pMedic = pMember->MyTalkSquadMonsterPointer();
-						if ( pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs( pMedic->pev, "monster_human_medic_ally" ) ) {
-							if ( !pMedic->IsFollowing() ) {
-								ALERT( at_console, "I've found my medic!\n" );
-								EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
-								pMedic->GruntHealerCall( this );
-								TaskComplete();
-							}
-						}
-					}
-				}
-			}
-
-			// If not, search bsp.
-			if ( !TaskIsComplete() ) {
-				CBaseEntity *pFriend = NULL;
-				int i;
-
-				// for each friend in this bsp...
-				for ( i = 0; i < TLK_CFRIENDS; i++ ) {
-					while (pFriend = EnumFriends( pFriend, i, TRUE )) {
-						CRCAllyMonster *pMedic = pFriend->MyTalkSquadMonsterPointer();
-						if ( pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs( pMedic->pev, "monster_human_medic_ally" )) {
-							if ( !pMedic->IsFollowing() ) {
-								EMIT_SOUND_DYN( ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
-								pMedic->GruntHealerCall( this );
-								TaskComplete();
-							}
-						}
-					}
-				}
-			}
-
-			if ( !TaskIsComplete() ) {
-				TaskFail();
-			}
-			m_flMedicWaitTime = FGRUNT_MEDIC_WAIT + UTIL_GlobalTimeBase(); // Call again in ten seconds anyway.
 		break;
 		case TASK_WALK_PATH:
 		case TASK_RUN_PATH:
@@ -1148,15 +1126,25 @@ void CHFGrunt :: RunTask( Task_t *pTask ) {
 // GibMonster - make gun fly through the air.
 //=========================================================
 void CHFGrunt :: GibMonster ( void ) {
+	if (m_hWaitMedic)
+	{
+		auto pMedic = m_hWaitMedic.Entity<CRCAllyMonster>();
+
+		if (pMedic->pev->deadflag != DEAD_NO)
+			m_hWaitMedic = nullptr;
+		else
+			pMedic->HealMe(nullptr);
+	}
+
 	if ( GetBodygroup( 3 ) != 3 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
 		GetAttachment( 0, vecGunPos, vecGunAngles );
 		
 		CBaseEntity *pGun;
-		if (FBitSet( pev->weapons, FGRUNT_SHOTGUN )) {
+		if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN )) {
 			pGun = DropItem( "weapon_shotgun", vecGunPos, vecGunAngles );
-		} else if (FBitSet(pev->weapons, FGRUNT_M249)) {
+		} else if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
 			pGun = DropItem( "weapon_m249", vecGunPos, vecGunAngles );
 		} else {
 			pGun = DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
@@ -1168,7 +1156,7 @@ void CHFGrunt :: GibMonster ( void ) {
 		}
 	
 		if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_512)) { //Hack for "Don't Drop Explosives"
-			if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
+			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
 				pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 				if (pGun) {
 					pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
@@ -1178,7 +1166,7 @@ void CHFGrunt :: GibMonster ( void ) {
 		}
 
 		if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_512)) { //Hack for "Don't Drop Explosives"
-			if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
+			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER)) {
 				pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 				if (pGun) {
 					pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
@@ -1227,7 +1215,7 @@ void CHFGrunt :: SetYawSpeed ( void ) {
 // attack. 
 //=========================================================
 BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
-	if (! FBitSet(pev->weapons, (FGRUNT_HANDGRENADE | FGRUNT_GRENADELAUNCHER)) || FBitSet(pev->weapons, ( FGRUNT_M249 )) ) {
+	if (! FBitSet(pev->weapons, (CHFGruntWeaponFlag::FGRUNT_HANDGRENADE | CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER)) || FBitSet(pev->weapons, (CHFGruntWeaponFlag::FGRUNT_M249 )) ) {
 		return FALSE;
 	}
 	
@@ -1251,7 +1239,7 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 	
 	Vector vecTarget;
-	if (FBitSet( pev->weapons, FGRUNT_HANDGRENADE)) {
+	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
 		// find feet
 		if (RANDOM_LONG(0,1)) {
 			// magically know where they are
@@ -1287,7 +1275,7 @@ BOOL CHFGrunt :: CheckRangeAttack2 ( float flDot, float flDist ) {
 	}
 
 		
-	if (FBitSet( pev->weapons, FGRUNT_HANDGRENADE)) {
+	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
 		Vector vecToss = VecCheckToss( pev, GetGunPosition(), vecTarget, 0.5 );
 
 		if ( vecToss != g_vecZero ) {
@@ -1337,11 +1325,11 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			GetAttachment(0, vecGunPos, vecGunAngles);
 
 			// switch to body group with no gun.
-			SetBodygroup(FG_GUN_GROUP, FG_GUN_NONE);
+			SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_NONE);
 
-			if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
+			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
 				DropItem("weapon_shotgun", vecGunPos, vecGunAngles);
-			} else if (FBitSet(pev->weapons, FGRUNT_M249)) {
+			} else if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
 				DropItem("weapon_m249", vecGunPos, vecGunAngles);
 			} else {
 				DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
@@ -1349,7 +1337,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 
 			CBaseEntity *pGun;
 			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2048)) {
-				if (FBitSet(pev->weapons, FGRUNT_HANDGRENADE)) {
+				if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_HANDGRENADE)) {
 					pGun = DropItem("weapon_handgrenade", vecGunPos, vecGunAngles);
 					if (pGun) {
 						pGun->pev->velocity = Vector(RANDOM_FLOAT(-30, 60), RANDOM_FLOAT(-20, 30), RANDOM_FLOAT(120, 220));
@@ -1359,7 +1347,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 			}
 
 			if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_2048)) {
-				if (FBitSet(pev->weapons, FGRUNT_GRENADELAUNCHER)) {
+				if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER)) {
 					pGun = DropItem("ammo_ARgrenades", vecGunPos, vecGunAngles);
 					if (pGun) {
 						pGun->pev->velocity = Vector(RANDOM_FLOAT(-30, 60), RANDOM_FLOAT(-20, 30), RANDOM_FLOAT(120, 220));
@@ -1370,7 +1358,7 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 		}
 		break;
 		case HGRUNT_ALLY_AE_RELOAD:
-			if (FBitSet( pev->weapons, FGRUNT_M249)) {
+			if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
 				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/saw_reload2.wav", VOL_NORM, ATTN_NORM);
 			} else {
 				EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM );
@@ -1432,9 +1420,9 @@ void CHFGrunt :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 		case HGRUNT_ALLY_AE_BURST1:
 		case HGRUNT_ALLY_AE_BURST2:
 		case HGRUNT_ALLY_AE_BURST3: {
-			if (FBitSet(pev->weapons, FGRUNT_M249)) {
+			if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249)) {
 				ShootM249();
-			} else if (FBitSet(pev->weapons, FGRUNT_SHOTGUN)) {
+			} else if (FBitSet(pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
 				if (UTIL_GlobalTimeBase() >= m_nShotgunDouble && RANDOM_LONG(0, 4) >= 1 && m_cAmmoLoaded >= 2) {
 					ShootShotgunDouble();
 					m_nShotgunDouble = UTIL_GlobalTimeBase() + RANDOM_FLOAT(3, 6);
@@ -1499,7 +1487,7 @@ void CHFGrunt :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vec
 
 				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
 					flDamage -= 20;
-					if (flDamage <= 0 && (GetBodygroup(FG_HEAD_GROUP) == FG_HEAD_MASK || GetBodygroup(FG_HEAD_GROUP) == FG_HEAD_MP)) {
+					if (flDamage <= 0 && (GetBodygroup(CHFGruntHead::FG_HEAD_GROUP) == CHFGruntHead::FG_HEAD_MASK || GetBodygroup(CHFGruntHead::FG_HEAD_GROUP) == CHFGruntHead::FG_HEAD_MP)) {
 						UTIL_Ricochet(ptr->vecEndPos, 1.0);
 						flDamage = 0.01;
 					}
@@ -1575,17 +1563,34 @@ Schedule_t* CHFGrunt :: GetScheduleOfType ( int Type ) {
 				return psched;	
 		}
 		break;
-		case SCHED_TAKE_COVER_FROM_ENEMY: {
-			return &slFGruntTakeCover[ 0 ];
+		case SCHED_TAKE_COVER_FROM_ENEMY: 
+		{
+			if (InSquad())
+			{
+				if (g_iSkillLevel == SKILL_HARD && HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_FGRUNT_GRENADE))
+				{
+					if (FOkToSpeak())
+					{
+						SENTENCEG_PlayRndSz(ENT(pev), "FG_THROW", FGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+						JustSpoke();
+					}
+					return slFGruntTossGrenadeCover;
+				}
+				else
+				{
+					return &slFGruntTakeCover[0];
+				}
+			}
+			else
+			{
+				return &slFGruntTakeCover[0];
+			}
 		}
 		break;
 		case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
 			return &slFGruntTakeCoverFromBestSound[ 0 ];
 		}
 		break;
-		case SCHED_HGRUNT_ALLY_FIND_MEDIC: {
-			return &slFGruntFindMedic[ 0 ];
-		}
 		break;
 		case SCHED_HGRUNT_ALLY_TAKECOVER_FAILED: {
 			if ( HasConditions( bits_COND_CAN_RANGE_ATTACK1 ) && OccupySlot( bits_SLOTS_FGRUNT_ENGAGE ) ) {
@@ -1604,6 +1609,13 @@ Schedule_t* CHFGrunt :: GetScheduleOfType ( int Type ) {
 		}
 		break;
 		case SCHED_RANGE_ATTACK1: {
+			//Always stand when using Saw
+			if (pev->weapons & CHFGruntWeaponFlag::FGRUNT_M249)
+			{
+				m_fStanding = true;
+				return &slFGruntRangeAttack1B[0];
+			}
+
 			// randomly stand or crouch
 			if (RANDOM_LONG(0,9) == 0)
 				m_fStanding = RANDOM_LONG(0,1);
@@ -1701,7 +1713,7 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 	switch ( NewActivity) {
 		case ACT_RANGE_ATTACK1:
 			// grunt is either shooting standing or shooting crouched
-			if (FBitSet( pev->weapons, FGRUNT_9MMAR)) {
+			if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_9MMAR)) {
 				if ( m_fStanding ) {
 					// get aimable sequence
 					iSequence = LookupSequence( "standing_mp5" );
@@ -1709,7 +1721,7 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 					// get crouching shoot
 					iSequence = LookupSequence( "crouching_mp5" );
 				}
-			} else if (FBitSet( pev->weapons, FGRUNT_SHOTGUN)) {
+			} else if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN)) {
 				if ( m_fStanding ) {
 					// get aimable sequence
 					iSequence = LookupSequence( "standing_shotgun" );
@@ -1730,10 +1742,10 @@ void CHFGrunt :: SetActivity ( Activity NewActivity ) {
 		case ACT_RANGE_ATTACK2:
 			// grunt is going to a secondary long range attack. This may be a thrown 
 			// grenade or fired grenade, we must determine which and pick proper sequence
-			if ( pev->weapons & FGRUNT_HANDGRENADE ) {
+			if ( pev->weapons & CHFGruntWeaponFlag::FGRUNT_HANDGRENADE ) {
 				// get toss anim
 				iSequence = LookupSequence( "throwgrenade" );
-			} else if (pev->weapons & FGRUNT_GRENADELAUNCHER) { // LRC: added a test to stop a marine without a launcher from firing.
+			} else if (pev->weapons & CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER) { // LRC: added a test to stop a marine without a launcher from firing.
 				// get launch anim
 				iSequence = LookupSequence( "launchgrenade" );
 			} else {
@@ -1847,6 +1859,18 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 				return CBaseMonster :: GetSchedule();
 			}
 
+			if (m_hWaitMedic)
+			{
+				auto pMedic = m_hWaitMedic.Entity<CRCAllyMonster>();
+
+				if (pMedic->pev->deadflag != DEAD_NO)
+					m_hWaitMedic = nullptr;
+				else
+					pMedic->HealMe(nullptr);
+
+				m_flMedicWaitTime = UTIL_GlobalTimeBase() + FGRUNT_MEDIC_WAIT;
+			}
+
 			if ( HasConditions(bits_COND_NEW_ENEMY) ) { // new enemy
 				if ( InSquad() ) {
 					MySquadLeader()->m_fEnemyEluded = FALSE;
@@ -1909,7 +1933,7 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 				}
 			} else if ( HasConditions ( bits_COND_CAN_MELEE_ATTACK1 ) ) { // can kick
 				return GetScheduleOfType ( SCHED_MELEE_ATTACK1 );
-			} else if ( FBitSet( pev->weapons, FGRUNT_GRENADELAUNCHER) && HasConditions ( bits_COND_CAN_RANGE_ATTACK2 ) && OccupySlot( bits_SLOTS_FGRUNT_GRENADE ) ) { // can grenade launch
+			} else if ( FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_GRENADELAUNCHER) && HasConditions ( bits_COND_CAN_RANGE_ATTACK2 ) && OccupySlot( bits_SLOTS_FGRUNT_GRENADE ) ) { // can grenade launch
 				// shoot a grenade if you can
 				return GetScheduleOfType( SCHED_RANGE_ATTACK2 );
 			} else if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) ) { // can shoot
@@ -1964,13 +1988,45 @@ Schedule_t *CHFGrunt :: GetSchedule ( void ) {
 	break;
 	case MONSTERSTATE_ALERT:	
 	case MONSTERSTATE_IDLE:
+		if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
+		{
+			// flinch if hurt
+			return GetScheduleOfType(SCHED_SMALL_FLINCH);
+		}
+
 		if ( HasConditions ( bits_COND_NO_AMMO_LOADED ) ) {
 			return GetScheduleOfType ( SCHED_RELOAD );
 		}
 
-		if ( pev->health < pev->max_health && pev->health <= 20 && ( m_flMedicWaitTime < UTIL_GlobalTimeBase() )) {
-			// Find a medic 
-			return GetScheduleOfType( SCHED_HGRUNT_ALLY_FIND_MEDIC ); // Unresolved
+		//if we're not waiting on a medic and we're hurt, call out for a medic
+		if (!m_hWaitMedic
+			&& UTIL_GlobalTimeBase() > m_flMedicWaitTime
+			&& pev->health <= 20.0)
+		{
+			auto pMedic = MySquadMedic();
+
+			if (!pMedic)
+			{
+				pMedic = FindSquadMedic(1024);
+			}
+
+			if (pMedic)
+			{
+				if (pMedic->pev->deadflag == DEAD_NO)
+				{
+					ALERT(at_aiconsole, "Injured Grunt found Medic\n");
+
+					if (pMedic->HealMe(this))
+					{
+						ALERT(at_aiconsole, "Injured Grunt called for Medic\n");
+
+						EMIT_SOUND_DYN(edict(), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+						JustSpoke();
+						m_flMedicWaitTime = UTIL_GlobalTimeBase() + FGRUNT_MEDIC_WAIT;
+					}
+				}
+			}
 		}
 
 		if ( m_hEnemy == NULL && IsFollowing() ) {
@@ -2086,39 +2142,39 @@ void CDeadFGrunt :: Spawn( ) {
 
 	if ( pev->weapons == 0 || pev->weapons == -1 )
 	{
-		SetBodygroup( FG_GUN_GROUP, FG_GUN_NONE );
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_NONE );
 	}
-	if (FBitSet( pev->weapons, FGRUNT_SHOTGUN ))
+	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_SHOTGUN ))
 	{
-		SetBodygroup( FG_GUN_GROUP, FG_GUN_SHOTGUN );
-		SetBodygroup( FG_TORSO_GROUP, FG_TORSO_SHOTGUN );
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SHOTGUN );
+		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_SHOTGUN );
 	}
-	if (FBitSet( pev->weapons, FGRUNT_9MMAR))
+	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_9MMAR))
 	{
-		SetBodygroup( FG_GUN_GROUP, FG_GUN_MP5 );
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_MP5 );
 	}
-	if (FBitSet( pev->weapons, FGRUNT_M249 ))
+	if (FBitSet( pev->weapons, CHFGruntWeaponFlag::FGRUNT_M249 ))
 	{
-		SetBodygroup( FG_GUN_GROUP, FG_GUN_SAW );
-		SetBodygroup( FG_TORSO_GROUP, FG_TORSO_M249 );
+		SetBodygroup(CHFGruntGunGroup::FG_GUN_GROUP, CHFGruntGunGroup::FG_GUN_SAW );
+		SetBodygroup(CHFGruntTorso::FG_TORSO_GROUP, CHFGruntTorso::FG_TORSO_M249 );
 	}
 
 	if ( m_iHead == 0 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_MASK );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MASK );
 	if ( m_iHead == 1 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_BERET );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET );
 	if ( m_iHead == 2 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_SHOTGUN );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SHOTGUN );
 	if ( m_iHead == 3 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_SAW );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW );
 	if ( m_iHead == 4 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_SAW_BLACK );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_SAW_BLACK );
 	if ( m_iHead == 5 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_MP );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MP );
 	if ( m_iHead == 6 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_MAJOR );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_MAJOR );
 	if ( m_iHead == 7 )
-		SetBodygroup( FG_HEAD_GROUP, FG_HEAD_BERET_BLACK );
+		SetBodygroup(CHFGruntHead::FG_HEAD_GROUP, CHFGruntHead::FG_HEAD_BERET_BLACK );
 
 	MonsterInitDead();
 }

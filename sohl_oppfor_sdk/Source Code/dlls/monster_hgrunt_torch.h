@@ -29,6 +29,7 @@ public:
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 	void KeyValue(KeyValueData *pkvd);
+	void Killed(entvars_t* pevAttacker, int iGib);
 	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	BOOL CheckRangeAttack1(float flDot, float flDist);
 

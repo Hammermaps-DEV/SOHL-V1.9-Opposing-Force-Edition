@@ -52,7 +52,6 @@ TYPEDESCRIPTION	CRCAllyMonster::m_SaveData[] = {
 	DEFINE_FIELD(CRCAllyMonster, m_flLastSaidSmelled, FIELD_TIME),
 	DEFINE_FIELD(CRCAllyMonster, m_flStopTalkTime, FIELD_TIME),
 	DEFINE_FIELD(CRCAllyMonster, m_hTalkTarget, FIELD_EHANDLE),
-	DEFINE_FIELD(CRCAllyMonster, m_hHealTarget, FIELD_EHANDLE),
 	DEFINE_FIELD(CRCAllyMonster, m_hSquadLeader, FIELD_EHANDLE),
 	DEFINE_ARRAY(CRCAllyMonster, m_hSquadMember, FIELD_EHANDLE, MAXRC_SQUAD_MEMBERS - 1),
 	DEFINE_FIELD(CRCAllyMonster, m_fEnemyEluded, FIELD_BOOLEAN),
@@ -128,13 +127,12 @@ Schedule_t	slIdleResponseTS[] =
 	{
 		tlIdleResponseTS,
 		HL_ARRAYSIZE(tlIdleResponseTS),
-	bits_COND_NEW_ENEMY |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_MEDIC_HEAL |
-	bits_COND_HEAVY_DAMAGE,
-	0,
-	"Idle Response"
-
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_MEDIC_HEAL |
+		bits_COND_HEAVY_DAMAGE,
+		0,
+		"Idle Response"
 	},
 };
 
@@ -153,13 +151,13 @@ Schedule_t	slIdleSpeakTS[] =
 	{
 		tlIdleSpeakTS,
 		HL_ARRAYSIZE(tlIdleSpeakTS),
-	bits_COND_NEW_ENEMY |
-	bits_COND_CLIENT_PUSH |
-	bits_COND_LIGHT_DAMAGE |
-	bits_COND_MEDIC_HEAL |
-	bits_COND_HEAVY_DAMAGE,
-	0,
-	"Idle Speak"
+		bits_COND_NEW_ENEMY |
+		bits_COND_CLIENT_PUSH |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_MEDIC_HEAL |
+		bits_COND_HEAVY_DAMAGE,
+		0,
+		"Idle Speak"
 	},
 };
 
@@ -365,7 +363,6 @@ Schedule_t	slTlkIdleWatchClientTS[] =
 	"TlkIdleWatchClientStare"
 	},
 };
-
 
 Task_t	tlTlkIdleEyecontactTS[] =
 {
@@ -728,10 +725,13 @@ void CRCAllyMonster::AlertFriends(void) {
 	int i;
 
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++) {
-		while (pFriend = EnumFriends(pFriend, i, TRUE)) {
+	for (i = 0; i < TLK_CFRIENDS; i++) 
+	{
+		while (pFriend = EnumFriends(pFriend, i, TRUE)) 
+		{
 			CBaseMonster *pMonster = pFriend->MyMonsterPointer();
-			if (pMonster->IsAlive()) {
+			if (pMonster->IsAlive()) 
+			{
 				// don't provoke a friend that's playing a death animation. They're a goner
 				pMonster->m_afMemory |= bits_MEMORY_PROVOKED;
 			}
@@ -756,6 +756,34 @@ void CRCAllyMonster::ShutUpFriends(void)
 			if (pMonster)
 			{
 				pMonster->SentenceStop();
+			}
+		}
+	}
+}
+
+//=========================================================
+// LimitFollowers
+//=========================================================
+void CRCAllyMonster::LimitFollowers(CBaseEntity *pPlayer, int maxFollowers)
+{
+	CBaseEntity *pFriend = NULL;
+	int i, count;
+
+	count = 0;
+	// for each friend in this bsp...
+	for (i = 0; i < TLK_CFRIENDS; i++)
+	{
+		while (pFriend = EnumFriends(pFriend, i, FALSE))
+		{
+			CBaseMonster *pMonster = pFriend->MyMonsterPointer();
+			if (pMonster)
+			{
+				if (pMonster->m_hTargetEnt == pPlayer)
+				{
+					count++;
+					if (count > maxFollowers)
+						pMonster->StopFollowing(TRUE);
+				}
 			}
 		}
 	}
@@ -1337,6 +1365,54 @@ Schedule_t* CRCAllyMonster::GetScheduleOfType(int iType) {
 }
 
 //=========================================================
+// MySquadMedic
+//=========================================================
+CRCAllyMonster* CRCAllyMonster::MySquadMedic()
+{
+	for (auto& member : m_hSquadMember)
+	{
+		auto pMember = member.Entity<CRCAllyMonster>();
+
+		if (pMember && FClassnameIs(pMember->pev, "monster_human_medic_ally"))
+		{
+			return pMember;
+		}
+	}
+
+	return nullptr;
+}
+
+//=========================================================
+// FindSquadMedic
+//=========================================================
+CRCAllyMonster* CRCAllyMonster::FindSquadMedic(int searchRadius)
+{
+	for (CBaseEntity* pEntity = nullptr; (pEntity = UTIL_FindEntityInSphere(pEntity, pev->origin, searchRadius)); )
+	{
+		CRCAllyMonster *pMonster = pEntity->MyTalkSquadMonsterPointer();
+
+		if (pMonster
+			&& pMonster != this
+			&& pMonster->IsAlive()
+			&& !pMonster->m_pCine
+			&& FClassnameIs(pMonster->pev, "monster_human_medic_ally"))
+		{
+			return pMonster;
+		}
+	}
+
+	return nullptr;
+}
+
+//=========================================================
+// HealMe
+//=========================================================
+BOOL CRCAllyMonster::HealMe(CRCAllyMonster* pTarget)
+{
+	return false;
+}
+
+//=========================================================
 // IsTalking - am I saying a sentence right now?
 //=========================================================
 BOOL CRCAllyMonster::IsTalking(void) {
@@ -1501,7 +1577,10 @@ void CRCAllyMonster::FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, 
 				//ALERT(at_console,"Decline\n");
 				DeclineFollowing();
 			}
-			else {
+			else 
+			{
+				LimitFollowers(pCaller, 1);
+
 				if (m_afMemory & bits_MEMORY_PROVOKED) {
 					//ALERT(at_console,"Fail\n");
 					ALERT(at_aiconsole, "I'm not following you, you evil person!\n");
@@ -1518,23 +1597,6 @@ void CRCAllyMonster::FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, 
 			StopFollowing(TRUE);
 		}
 	}
-}
-
-//=========================================================
-// GruntHealerCall
-//=========================================================
-void CRCAllyMonster::GruntHealerCall(CBaseEntity *pGrunt)
-{
-	// Don't allow use during a scripted_sentence
-	if (m_useTime > UTIL_GlobalTimeBase())
-		return;
-
-	ALERT(at_console, "Call for the medic!\n");
-
-	SetConditions(bits_COND_MEDIC_HEAL);// Set this condition for the medic to recognise.
-	m_hHealTarget = pGrunt;// The grunt we need to heal.
-	m_hTargetEnt = m_hHealTarget;
-	m_hTalkTarget = m_hTargetEnt;
 }
 
 //=========================================================

@@ -901,35 +901,29 @@ void CTorch::StartTask(Task_t *pTask) {
 			// First try looking for a medic in my squad
 			if (InSquad()) {
 				CRCAllyMonster *pSquadLeader = MySquadLeader();
-				if (pSquadLeader) for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++) {
+				if (pSquadLeader) for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++)
+				{
 					CRCAllyMonster *pMember = pSquadLeader->MySquadMember(i);
-					if (pMember && pMember != this) {
-						CRCAllyMonster *pMedic = pMember->MyTalkSquadMonsterPointer();
-						if (pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs(pMedic->pev, "monster_human_medic_ally")) {
-							if (!pMedic->IsFollowing()) {
-								ALERT(at_console, "I've found my medic!\n");
-								EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
-								pMedic->GruntHealerCall(this);
-								TaskComplete();
-							}
+					if (pMember && pMember != this)
+					{
+						CRCAllyMonster *pMedic = MySquadMedic();
+						if (!pMedic)
+						{
+							pMedic = FindSquadMedic(1024);
 						}
-					}
-				}
-			}
 
-			// If not, search bsp.
-			if (!TaskIsComplete()) {
-				CBaseEntity *pFriend = NULL;
-				int i;
+						if (pMedic && pMedic->pev->deadflag == DEAD_NO)
+						{
+							ALERT(at_aiconsole, "Injured Grunt found Medic\n");
 
-				// for each friend in this bsp...
-				for (i = 0; i < TLK_CFRIENDS; i++) {
-					while (pFriend = EnumFriends(pFriend, i, TRUE)) {
-						CRCAllyMonster *pMedic = pFriend->MyTalkSquadMonsterPointer();
-						if (pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs(pMedic->pev, "monster_human_medic_ally")) {
-							if (!pMedic->IsFollowing()) {
-								EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
-								pMedic->GruntHealerCall(this);
+							if (pMedic->HealMe(this))
+							{
+								ALERT(at_aiconsole, "Injured Grunt called for Medic\n");
+
+								EMIT_SOUND_DYN(edict(), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+								JustSpoke();
+								m_flMedicWaitTime = UTIL_GlobalTimeBase() + 5.0;
 								TaskComplete();
 							}
 						}
@@ -989,6 +983,16 @@ void CTorch :: RunTask( Task_t *pTask ) {
 // GibMonster - make gun fly through the air.
 //=========================================================
 void CTorch :: GibMonster ( void ) {
+	if (m_hWaitMedic)
+	{
+		CRCAllyMonster *pMedic = m_hWaitMedic.Entity<CRCAllyMonster>();
+
+		if (pMedic->pev->deadflag != DEAD_NO)
+			m_hWaitMedic = nullptr;
+		else
+			pMedic->HealMe(nullptr);
+	}
+
 	if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) && GetBodygroup(2) != 2) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
@@ -1001,6 +1005,11 @@ void CTorch :: GibMonster ( void ) {
 			pGun->pev->velocity = Vector(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
 			pGun->pev->avelocity = Vector(0, RANDOM_FLOAT(200, 400), 0);
 		}
+	}
+
+	if (m_pBeam) {
+		UTIL_Remove(m_pBeam);
+		m_pBeam = NULL;
 	}
 
 	CBaseMonster :: GibMonster();
@@ -1303,6 +1312,7 @@ void CTorch :: Spawn() {
 
 	m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1;
 	m_flNextPainTime	= UTIL_GlobalTimeBase();
+	m_flMedicWaitTime = UTIL_GlobalTimeBase();
 
 	m_flDebug = false; //Debug Massages
 
@@ -1743,8 +1753,25 @@ Schedule_t *CTorch :: GetSchedule ( void ) {
 		case MONSTERSTATE_COMBAT: {
 			// dead enemy
 			if ( HasConditions( bits_COND_ENEMY_DEAD ) ) {
+				if (FOkToSpeak())
+				{
+					PlaySentence("FG_KILL", 4, VOL_NORM, ATTN_NORM);
+				}
+
 				// call base class, all code to handle dead enemies is centralized there.
 				return CBaseMonster :: GetSchedule();
+			}
+
+			if (m_hWaitMedic)
+			{
+				CRCAllyMonster *pMedic = m_hWaitMedic.Entity<CRCAllyMonster>();
+
+				if (pMedic->pev->deadflag != DEAD_NO)
+					m_hWaitMedic = nullptr;
+				else
+					pMedic->HealMe(nullptr);
+
+				m_flMedicWaitTime = UTIL_GlobalTimeBase() + 5.0;
 			}
 
 			// new enemy
@@ -1866,6 +1893,37 @@ Schedule_t *CTorch :: GetSchedule ( void ) {
 				return GetScheduleOfType ( SCHED_RELOAD );
 			}
 
+			//if we're not waiting on a medic and we're hurt, call out for a medic
+			if (!m_hWaitMedic
+				&& UTIL_GlobalTimeBase() > m_flMedicWaitTime
+				&& pev->health <= 20.0)
+			{
+				auto pMedic = MySquadMedic();
+
+				if (!pMedic)
+				{
+					pMedic = FindSquadMedic(1024);
+				}
+
+				if (pMedic)
+				{
+					if (pMedic->pev->deadflag == DEAD_NO)
+					{
+						ALERT(at_aiconsole, "Injured Grunt found Medic\n");
+
+						if (pMedic->HealMe(this))
+						{
+							ALERT(at_aiconsole, "Injured Grunt called for Medic\n");
+
+							EMIT_SOUND_DYN(edict(), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+							JustSpoke();
+							m_flMedicWaitTime = UTIL_GlobalTimeBase() + 5.0;
+						}
+					}
+				}
+			}
+
 			if ( m_hEnemy == NULL && IsFollowing() ) {
 				if ( !m_hTargetEnt->IsAlive() ) {
 					// UNDONE: Comment about the recently dead player here?
@@ -1890,6 +1948,45 @@ Schedule_t *CTorch :: GetSchedule ( void ) {
 	}
 	
 	return CRCAllyMonster :: GetSchedule();
+}
+
+//=========================================================
+// Killed
+//=========================================================
+void CTorch::Killed(entvars_t* pevAttacker, int iGib)
+{
+	if (m_hTargetEnt != nullptr)
+	{
+		m_hTargetEnt.Entity<CRCAllyMonster>()->m_hWaitMedic = nullptr;
+	}
+
+	if (m_MonsterState != MONSTERSTATE_DEAD)
+	{
+		if (HasMemory(bits_MEMORY_SUSPICIOUS) || (pevAttacker, pev->origin))
+		{
+			Remember(bits_MEMORY_PROVOKED);
+
+			StopFollowing(true);
+		}
+	}
+
+	if (m_hWaitMedic)
+	{
+		auto v4 = m_hWaitMedic.Entity<CRCAllyMonster>();
+		if (v4->pev->deadflag)
+			m_hWaitMedic = nullptr;
+		else
+			v4->HealMe(nullptr);
+	}
+
+	SetUse(nullptr);
+
+	if (m_pBeam) {
+		UTIL_Remove(m_pBeam);
+		m_pBeam = NULL;
+	}
+
+	CRCAllyMonster::Killed(pevAttacker, iGib);
 }
 
 //=========================================================

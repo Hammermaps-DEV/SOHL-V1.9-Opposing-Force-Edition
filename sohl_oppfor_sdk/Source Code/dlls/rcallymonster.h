@@ -189,8 +189,14 @@ public:
 	void			StopFollowing( BOOL clearSchedule );
 	void			StartFollowing( CBaseEntity *pLeader );
 	void			DeclineFollowing(void);
+	void			LimitFollowers(CBaseEntity *pPlayer, int maxFollowers);
 
-	void			GruntHealerCall( CBaseEntity *pGrunt );
+	// For Medic
+	CRCAllyMonster* MySquadMedic();
+
+	CRCAllyMonster* FindSquadMedic(int searchRadius);
+
+	BOOL HealMe(CRCAllyMonster* pTarget);
 
 	void EXPORT		FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	
@@ -227,8 +233,9 @@ public:
 	float		m_flStopTalkTime;// when in the future that I'll be done saying this sentence.
 	float		m_fLockShootTime;
 
+	EHANDLE		m_hWaitMedic;
+
 	EHANDLE		m_hTalkTarget;	// who to look at while talking
-	EHANDLE		m_hHealTarget;	// who to heal
 
 	// squad leader info
 	EHANDLE	m_hSquadLeader;		// who is my leader
@@ -240,6 +247,9 @@ public:
 
 	// squad member info
 	int	m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
+
+	float m_flLastHitByPlayer;
+	int m_iPlayerHits;
 
 	int  CheckEnemy ( CBaseEntity *pEnemy );
 	void StartMonster ( void );

@@ -15,7 +15,6 @@
     <ClCompile Include="..\pm_shared\pm_debug.c" />
     <ClCompile Include="..\pm_shared\pm_math.c" />
     <ClCompile Include="..\pm_shared\pm_shared.c" />
-    <ClCompile Include="AllyMonster.cpp" />
     <ClCompile Include="ammo_357.cpp" />
     <ClCompile Include="ammo_556.cpp" />
     <ClCompile Include="ammo_762.cpp" />
@@ -31,7 +30,6 @@
     <ClCompile Include="ammo_spore.cpp" />
     <ClCompile Include="ammo_spore_plant.cpp" />
     <ClCompile Include="baseactanimating.cpp" />
-    <ClCompile Include="FSquadTalkMonster.cpp" />
     <ClCompile Include="func_grass.cpp" />
     <ClCompile Include="genericmodel.cpp" />
     <ClCompile Include="monster_blkop_apache.cpp" />
@@ -238,7 +236,6 @@
     <ClInclude Include="..\pm_shared\pm_movevars.h" />
     <ClInclude Include="activity.h" />
     <ClInclude Include="activitymap.h" />
-    <ClInclude Include="AllyMonster.h" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="baseactanimating.h" />
     <ClInclude Include="basemonster.h" />
@@ -254,7 +251,6 @@
     <ClInclude Include="env_rope.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
-    <ClInclude Include="FSquadTalkMonster.h" />
     <ClInclude Include="func_break.h" />
     <ClInclude Include="func_grass.h" />
     <ClInclude Include="game.h" />

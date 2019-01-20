@@ -33,6 +33,7 @@ class CHFGrunt : public CRCAllyMonster {
 		void RunTask(Task_t *pTask);
 		void StartTask(Task_t *pTask);
 		void KeyValue(KeyValueData *pkvd);
+		void Killed(entvars_t* pevAttacker, int iGib);
 		virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 		BOOL CheckRangeAttack2(float flDot, float flDist);
 
@@ -51,7 +52,6 @@ class CHFGrunt : public CRCAllyMonster {
 
 		// UNDONE: What is this for?  It isn't used?
 		float m_flLastEnemySightTime;
-		float m_flMedicWaitTime;
 
 		BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
 		int		m_cClipSize;

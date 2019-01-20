@@ -2956,7 +2956,6 @@ void CBaseMonster::ReportAIState( void )
 		}
 
 		ALERT ( level, "Leader." );
-		ALERT( at_console, "Heal target is %s\n", pTalkSquadMonster->m_hHealTarget );
 	}
 
 	ALERT( level, "\n" );

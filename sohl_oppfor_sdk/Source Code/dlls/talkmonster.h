@@ -168,6 +168,7 @@ public:
 	int			m_iszUnUse;						// Custom +USE sentence group (stop following)
 	int			m_iszDecline;					// Custom +USE sentence group (refuse to follow) LRC
 	int			m_iszSpeakAs;					// Change the prefix for all this monster's speeches LRC
+	BOOL		m_fStartSuspicious;
 
 	float		m_flLastSaidSmelled;// last time we talked about something that stinks
 	float		m_flStopTalkTime;// when in the future that I'll be done saying this sentence.

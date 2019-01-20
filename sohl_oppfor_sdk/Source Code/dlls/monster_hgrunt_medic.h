@@ -30,13 +30,18 @@ public:
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	BOOL CheckRangeAttack1(float flDot, float flDist);
+	void SpeakSentence(void);
+	void MonsterThink(void);
 
 	void HealerFollow(CBaseEntity *pHealTarget);
 
-	BOOL CanHeal(void); // Can we heal the player, or the injured grunt?
-	void Heal(void);// Lets apply the healing.
+	BOOL HealMe(CRCAllyMonster* pTarget);
+	void HealOff();
+	void HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	void HealerActivate(CBaseMonster* pTarget);
 
 	// Override these to set behavior
 	Schedule_t *GetScheduleOfType(int Type);
@@ -58,14 +63,22 @@ public:
 
 	int		m_iHead;
 	int		m_iSentence;
-	float	m_flHealAnount;
+
+	int m_iHealCharge;
+	BOOL m_fUseHealing;
+	BOOL m_fHealing;
+	BOOL m_fHealActive;
+	BOOL m_fHealAudioPlaying;
+	BOOL m_fFollowChecking;
+	BOOL m_fFollowChecked;
+	float m_flFollowCheckTime;
+	float m_flLastRejectAudio;
+
+	float m_flLastUseTime;
 
 	static const char *pGruntSentences[];
 
 	CUSTOM_SCHEDULES;
-
-private:
-	float m_healTime;
 };
 
 class CMedicRepel : public CHFGruntRepel

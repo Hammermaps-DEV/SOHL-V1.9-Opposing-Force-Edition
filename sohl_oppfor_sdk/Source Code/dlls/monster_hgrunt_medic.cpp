@@ -60,6 +60,8 @@
 #define MEDIC_HEAD_WHITE			0
 #define MEDIC_HEAD_BLACK			1
 
+#define	MEDIC_SENTENCE_VOLUME		(float)0.35 // volume of grunt sentences
+
 //=========================================================
 // monster-specific conditions
 //=========================================================
@@ -70,9 +72,8 @@
 //=========================================================
 enum  {
 	TASK_MEDIC_FACE_TOSS_DIR = LAST_TALKMONSTER_TASK + 1,
-	TASK_MEDIC_CHECK_FIRE,
-	TASK_MEDIC_SAY_HEAL,
-	TASK_MEDIC_HEAL,
+	TASK_MEDIC_ALLY_SPEAK_SENTENCE,
+	TASK_MEDIC_CHECK_FIRE
 };
 //=========================================================
 // Monster's Anim Events Go Here
@@ -106,6 +107,7 @@ enum {
 	SCHED_MEDIC_REPEL_LAND,
 	SCHED_MEDIC_WAIT_FACE_ENEMY,
 	SCHED_MEDIC_TAKECOVER_FAILED,// special schedule type that forces analysis of conditions and picks the best possible schedule to recover from this type of failure.
+	SCHED_MEDIC_ALLY_HEAL_ALLY,
 	SCHED_MEDIC_ELOF_FAIL,
 };
 
@@ -119,10 +121,15 @@ TYPEDESCRIPTION	CMedic::m_SaveData[] = {
 	DEFINE_FIELD( CMedic, m_fStanding, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CMedic, m_fFirstEncounter, FIELD_BOOLEAN ),
 	DEFINE_FIELD( CMedic, m_cClipSize, FIELD_INTEGER ),
-	DEFINE_FIELD( CMedic, m_healTime, FIELD_TIME ),
-	DEFINE_FIELD( CMedic, m_flHealAnount, FIELD_FLOAT ),
+	DEFINE_FIELD( CMedic, m_fFollowChecking, FIELD_BOOLEAN),
+	DEFINE_FIELD( CMedic, m_fFollowChecked, FIELD_BOOLEAN),
+	DEFINE_FIELD( CMedic, m_iHealCharge, FIELD_INTEGER),
+	DEFINE_FIELD( CMedic, m_fUseHealing, FIELD_BOOLEAN),
+	DEFINE_FIELD( CMedic, m_fHealing, FIELD_BOOLEAN),
 	DEFINE_FIELD( CMedic, m_iHead, FIELD_INTEGER ),
 	DEFINE_FIELD( CMedic, m_fDepleteLine, FIELD_BOOLEAN ),
+	DEFINE_FIELD( CMedic, m_flFollowCheckTime, FIELD_FLOAT),
+	DEFINE_FIELD( CMedic, m_flLastRejectAudio, FIELD_FLOAT),
 };
 
 IMPLEMENT_SAVERESTORE( CMedic, CRCAllyMonster );
@@ -163,6 +170,34 @@ void CMedic :: KeyValue( KeyValueData *pkvd ) {
 		CRCAllyMonster::KeyValue(pkvd);
 	}
 }
+
+//=========================================================
+// Speak Sentence - say your cued up sentence.
+//
+// Some grunt sentences (take cover and charge) rely on actually
+// being able to execute the intended action. It's really lame
+// when a grunt says 'COVER ME' and then doesn't move. The problem
+// is that the sentences were played when the decision to TRY
+// to move to cover was made. Now the sentence is played after 
+// we know for sure that there is a valid path. The schedule
+// may still fail but in most cases, well after the grunt has 
+// started moving.
+//=========================================================
+void CMedic::SpeakSentence(void)
+{
+	if (m_iSentence == MEDIC_SENT_NONE)
+	{
+		// no sentence cued up.
+		return;
+	}
+
+	if (FOkToSpeak())
+	{
+		SENTENCEG_PlayRndSz(ENT(pev), pGruntSentences[m_iSentence], MEDIC_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+		JustSpoke();
+	}
+}
+
 
 //=========================================================
 // JustSpoke
@@ -862,29 +897,79 @@ Schedule_t	slMedicRepelLand[] =
 		"Repel Land"
 	},
 };
-//=========================================================
-// heal - heal the player or grunt
-// 
-//=========================================================
-Task_t	tlMedicHeal[] =
+
+Task_t	tlMedicNewHealTarget[] =
 {
-	{ TASK_MOVE_TO_TARGET_RANGE,			(float)50		},	// Move within 60 of target ent (client)
-	{ TASK_SET_FAIL_SCHEDULE,				(float)SCHED_TARGET_CHASE },	// If you fail, catch up with that guy! (change this to put syringe away and then chase)
-	{ TASK_FACE_IDEAL,						(float)0		},
-	{ TASK_MEDIC_SAY_HEAL,					(float)0		},
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET,		(float)ACT_ARM	},			// Whip out the needle
-	{ TASK_MEDIC_HEAL,						(float)0	},	// Put it in the player
-	{ TASK_PLAY_SEQUENCE_FACE_TARGET,		(float)ACT_DISARM	},			// Put away the needle
+	{ TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE },
+	{ TASK_MOVE_TO_TARGET_RANGE, 50 },
+	{ TASK_FACE_IDEAL, 0 },
+	{ TASK_MEDIC_ALLY_SPEAK_SENTENCE, 0 },
 };
 
-Schedule_t	slMedicHeal[] =
+Schedule_t	slMedicNewHealTarget[] =
 {
 	{
-		tlMedicHeal,
-		HL_ARRAYSIZE ( tlMedicHeal ),
-		0,	// Don't interrupt or he'll end up running around with a needle all the time
+		tlMedicNewHealTarget,
+		ARRAYSIZE(tlMedicNewHealTarget),
 		0,
-		"Heal"
+		0,
+		"Draw Needle"
+	},
+};
+
+Task_t	tlMedicDrawNeedle[] =
+{
+	{ TASK_STOP_MOVING, 0 },
+	{ TASK_PLAY_SEQUENCE_FACE_TARGET, ACT_ARM },
+	{ TASK_SET_FAIL_SCHEDULE, SCHED_TARGET_CHASE },
+	{ TASK_MOVE_TO_TARGET_RANGE, 50 },
+	{ TASK_FACE_IDEAL, 0, },
+	{ TASK_MEDIC_ALLY_SPEAK_SENTENCE, 0 }
+};
+
+Schedule_t	slMedicDrawNeedle[] =
+{
+	{
+		tlMedicDrawNeedle,
+		ARRAYSIZE(tlMedicDrawNeedle),
+		0,
+		0,
+		"Draw Needle"
+	},
+};
+
+Task_t	tlMedicDrawGun[] =
+{
+	{ TASK_PLAY_SEQUENCE, ACT_DISARM },
+	{ TASK_WAIT_FOR_MOVEMENT, 0 },
+};
+
+Schedule_t	slMedicDrawGun[] =
+{
+	{
+		tlMedicDrawGun,
+		ARRAYSIZE(tlMedicDrawGun),
+		0,
+		0,
+		"Draw Gun"
+	},
+};
+
+Task_t	tlMedicHealTarget[] =
+{
+	{ TASK_MELEE_ATTACK2, 0 },
+	{ TASK_WAIT, 0.2f },
+	{ TASK_TLK_HEADRESET, 0 },
+};
+
+Schedule_t	slMedicHealTarget[] =
+{
+	{
+		tlMedicHealTarget,
+		ARRAYSIZE(tlMedicHealTarget),
+		0,
+		0,
+		"Medic Ally Heal Target"
 	},
 };
 
@@ -914,7 +999,10 @@ DEFINE_CUSTOM_SCHEDULES( CMedic )
 	slMedicRepel,
 	slMedicRepelAttack,
 	slMedicRepelLand,
-	slMedicHeal,
+	slMedicNewHealTarget,
+	slMedicDrawNeedle,
+	slMedicDrawGun,
+	slMedicHealTarget,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES( CMedic, CRCAllyMonster );
@@ -925,12 +1013,6 @@ IMPLEMENT_CUSTOM_SCHEDULES( CMedic, CRCAllyMonster );
 void CMedic :: StartTask( Task_t *pTask ) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 	switch ( pTask->iTask ) {
-		case TASK_MEDIC_SAY_HEAL:
-			Talk( 2 );
-			m_hTalkTarget = m_hTargetEnt;
-			PlaySentence( "MG_HEAL", 2, VOL_NORM, ATTN_IDLE );
-			TaskComplete();
-		break;
 		case TASK_MEDIC_CHECK_FIRE:
 			if ( !NoFriendlyFire() ) {
 				SetConditions( bits_COND_MEDIC_NOFIRE );
@@ -947,10 +1029,6 @@ void CMedic :: StartTask( Task_t *pTask ) {
 			m_IdealActivity = ACT_RELOAD;
 		break;
 		case TASK_MEDIC_FACE_TOSS_DIR: break;
-		case TASK_MEDIC_HEAL:
-			m_IdealActivity = ACT_MELEE_ATTACK2;
-			Heal();
-		break;
 		case TASK_FACE_IDEAL:
 		case TASK_FACE_ENEMY:
 			CRCAllyMonster :: StartTask( pTask );
@@ -958,12 +1036,68 @@ void CMedic :: StartTask( Task_t *pTask ) {
 				m_IdealActivity = ACT_GLIDE;
 			}
 		break;
+		case TASK_MELEE_ATTACK2:
+		{
+			m_IdealActivity = ACT_MELEE_ATTACK2;
+
+			if (!m_fHealAudioPlaying)
+			{
+				EMIT_SOUND(edict(), CHAN_WEAPON, "fgrunt/medic_give_shot.wav", VOL_NORM, ATTN_NORM);
+				m_fHealAudioPlaying = true;
+			}
+			break;
+		}
+		case TASK_WAIT_FOR_MOVEMENT:
+		{
+			if (!m_fHealing)
+				return CRCAllyMonster::StartTask(pTask);
+
+			if (m_hTargetEnt)
+			{
+				auto pTarget = m_hTargetEnt.Entity<CBaseEntity>();
+				auto pTargetMonster = pTarget->MyTalkSquadMonsterPointer();
+
+				if (pTargetMonster)
+					pTargetMonster->m_hWaitMedic = nullptr;
+
+				m_fHealing = false;
+				m_fUseHealing = false;
+
+				STOP_SOUND(edict(), CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
+
+				m_fFollowChecked = false;
+				m_fFollowChecking = false;
+
+				if (m_movementGoal == MOVEGOAL_TARGETENT)
+					RouteClear();
+
+				m_hTargetEnt = nullptr;
+
+				m_fHealActive = false;
+
+				return CRCAllyMonster::StartTask(pTask);
+			}
+
+			m_fHealing = false;
+			m_fUseHealing = false;
+
+			STOP_SOUND(edict(), CHAN_WEAPON, "fgrunt/medic_give_shot.wav");
+
+			m_fFollowChecked = false;
+			m_fFollowChecking = false;
+
+			if (m_movementGoal == MOVEGOAL_TARGETENT)
+				RouteClear();
+
+			m_IdealActivity = ACT_DISARM;
+			m_fHealActive = false;
+			break;
+		}
 		default: 
 			CRCAllyMonster :: StartTask( pTask );
 		break;
 	}
 }
-
 
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
@@ -1034,6 +1168,66 @@ void CMedic::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, 
 	SpawnBlood(ptr->vecEndPos, BloodColor(), flDamage);// a little surface blood.
 	TraceBleed(flDamage, vecDir, ptr, bitsDamageType);
 	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
+	CRCAllyMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
+}
+
+//=========================================================
+// TakeDamage - overridden for the grunt because the grunt
+// needs to forget that he is in cover if he's hurt. (Obviously
+// not in a safe place anymore).
+//=========================================================
+int CMedic::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
+{
+	// make sure friends talk about it if player hurts talkmonsters...
+	int ret = CRCAllyMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
+
+	if (!IsAlive() || pev->deadflag == DEAD_DYING)
+		return ret;
+
+	if (m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT))
+	{
+		Forget(bits_MEMORY_INCOVER);
+
+		m_flPlayerDamage += flDamage;
+
+		// This is a heurstic to determine if the player intended to harm me
+		// If I have an enemy, we can't establish intent (may just be crossfire)
+		if (m_hEnemy == NULL)
+		{
+			// If the player was facing directly at me, or I'm already suspicious, get mad
+			if (UTIL_GlobalTimeBase() - m_flLastHitByPlayer < 4.0 && m_iPlayerHits > 2
+				&& ((m_afMemory & bits_MEMORY_SUSPICIOUS) || UTIL_IsFacing(pevAttacker, pev->origin)))
+			{
+				// Alright, now I'm pissed!
+				PlaySentence("FG_MAD", 4, VOL_NORM, ATTN_NORM);
+
+				Remember(bits_MEMORY_PROVOKED);
+				StopFollowing(TRUE);
+				ALERT(at_console, "HGrunt Ally is now MAD!\n");
+			}
+			else
+			{
+				// Hey, be careful with that
+				PlaySentence("FG_SHOT", 4, VOL_NORM, ATTN_NORM);
+				Remember(bits_MEMORY_SUSPICIOUS);
+
+				if (4.0 > UTIL_GlobalTimeBase() - m_flLastHitByPlayer)
+					++m_iPlayerHits;
+				else
+					m_iPlayerHits = 0;
+
+				m_flLastHitByPlayer = UTIL_GlobalTimeBase();
+
+				ALERT(at_console, "HGrunt Ally is now SUSPICIOUS!\n");
+			}
+		}
+		else if (!m_hEnemy->IsPlayer())
+		{
+			PlaySentence("FG_SHOT", 4, VOL_NORM, ATTN_NORM);
+		}
+	}
+
+	return ret;
 }
 
 //=========================================================
@@ -1050,18 +1244,47 @@ void CMedic :: RunTask( Task_t *pTask ) {
 			}
 		}
 		break;
-		case TASK_MEDIC_HEAL: {
-			if ( m_fSequenceFinished ) {
+		case TASK_MELEE_ATTACK2:
+		{
+			if (m_fSequenceFinished)
+			{
+				if (m_fUseHealing)
+				{
+					if (UTIL_GlobalTimeBase() - m_flLastUseTime > 0.3)
+						m_Activity = ACT_RESET;
+				}
+				else
+				{
+					m_fHealActive = true;
+
+					if (m_hTargetEnt)
+					{
+						auto pHealTarget = m_hTargetEnt.Entity<CBaseEntity>();
+
+						const auto toHeal = V_min(5, pHealTarget->pev->max_health - pHealTarget->pev->health);
+
+						if (toHeal != 0 && pHealTarget->TakeHealth(toHeal, DMG_GENERIC))
+						{
+							m_iHealCharge -= toHeal;
+						}
+						else
+						{
+							m_Activity = ACT_RESET;
+						}
+					}
+					else
+					{
+						m_Activity = m_fHealing ? ACT_MELEE_ATTACK2 : ACT_RESET;
+					}
+				}
+
 				TaskComplete();
-			} else {
-				if ( TargetDistance() > 90 )
-					TaskComplete();
-				pev->ideal_yaw = UTIL_VecToYaw( m_hTargetEnt->pev->origin - pev->origin );
-				ChangeYaw( pev->yaw_speed );
 			}
+
+			break;
 		}
-		break;
-		default: {
+		default: 
+		{
 			CRCAllyMonster :: RunTask( pTask );
 		}
 		break;
@@ -1181,7 +1404,11 @@ void CMedic::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		}
 		break;
 		case MEDIC_AE_RELOAD: {
-			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM);
+			if (pev->weapons == MEDIC_EAGLE)
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_reload.wav", VOL_NORM, ATTN_NORM);
+			else
+				EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM);
+
 			m_cAmmoLoaded = m_cClipSize;
 			ClearConditions(bits_COND_NO_AMMO_LOADED);
 		}
@@ -1252,8 +1479,6 @@ void CMedic::Spawn(void) {
 	if (pev->health == 0) //LRC
 		pev->health = gSkillData.medicHealth;
 
-	m_flHealAnount = gSkillData.medicHeal;
-
 	pev->view_ofs		= Vector ( 0, 0, 50 );// position of the eyes relative to monster's origin.
 	m_flFieldOfView		= VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState		= MONSTERSTATE_NONE;
@@ -1269,9 +1494,16 @@ void CMedic::Spawn(void) {
 	m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1;
 	m_flNextPainTime	= UTIL_GlobalTimeBase();
 
+	m_flLastUseTime = 0;
+	m_iHealCharge = gSkillData.medicHeal;
+	m_fHealActive = false;
+	m_fUseHealing = false;
+	m_fHealing = false;
+	m_fFollowChecked = false;
+	m_fFollowChecking = false;
+
 	m_afCapability		= bits_CAP_HEAR | bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	m_hHealTarget		= NULL;
 	m_fEnemyEluded		= FALSE;
 	m_fFirstEncounter	= TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
@@ -1346,6 +1578,8 @@ void CMedic::HealerFollow( CBaseEntity *pHealTarget ) {
 //=========================================================
 Schedule_t* CMedic::GetScheduleOfType(int Type) {
 	Schedule_t *psched;
+
+
 
 	switch( Type )
 	{
@@ -1617,8 +1851,23 @@ Schedule_t *CMedic::GetSchedule(void) {
 		}
 	}
 
-	if (HasConditions(bits_COND_ENEMY_DEAD) && FOkToSpeak()) {
-		PlaySentence("FG_KILL", 4, VOL_NORM, ATTN_NORM);
+	if (m_fHealing)
+	{
+		if (m_hTargetEnt)
+		{
+			auto pHealTarget = m_hTargetEnt.Entity<CBaseEntity>();
+
+			if ((pHealTarget->pev->origin - pev->origin).Make2D().Length() <= 50.0
+				&& (!m_fUseHealing || UTIL_GlobalTimeBase() - m_flLastUseTime <= 0.25)
+				&& m_iHealCharge
+				&& pHealTarget->IsAlive()
+				&& pHealTarget->pev->health != pHealTarget->pev->max_health)
+			{
+				return slMedicHealTarget;
+			}
+		}
+
+		return slMedicDrawGun;
 	}
 
 	// grunts place HIGH priority on running away from danger sounds.
@@ -1650,8 +1899,25 @@ Schedule_t *CMedic::GetSchedule(void) {
 	switch( m_MonsterState ) {
 		case MONSTERSTATE_COMBAT: {
 			if (HasConditions(bits_COND_ENEMY_DEAD)) { // dead enemy
+				if (FOkToSpeak())
+				{
+					PlaySentence("FG_KILL", 4, VOL_NORM, ATTN_NORM);
+				}
+
 				// call base class, all code to handle dead enemies is centralized there.
 				return CBaseMonster::GetSchedule();
+			}
+
+			if (m_hWaitMedic)
+			{
+				CRCAllyMonster *pMedic = m_hWaitMedic.Entity<CRCAllyMonster>();
+
+				if (pMedic->pev->deadflag != DEAD_NO)
+					m_hWaitMedic = nullptr;
+				else
+					pMedic->HealMe(nullptr);
+
+				m_flMedicWaitTime = UTIL_GlobalTimeBase() + 5.0;
 			}
 
 			if (HasConditions(bits_COND_NEW_ENEMY)) { // new enemy
@@ -1770,11 +2036,46 @@ Schedule_t *CMedic::GetSchedule(void) {
 				return GetScheduleOfType ( SCHED_RELOAD );
 			}
 
+			if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
+			{
+				// flinch if hurt
+				return GetScheduleOfType(SCHED_SMALL_FLINCH);
+			}
+
+			//if we're not waiting on a medic and we're hurt, call out for a medic
+			if (!m_hWaitMedic
+				&& UTIL_GlobalTimeBase() > m_flMedicWaitTime
+				&& pev->health <= 20.0)
+			{
+				auto pMedic = MySquadMedic();
+
+				if (!pMedic)
+				{
+					pMedic = FindSquadMedic(1024);
+				}
+
+				if (pMedic)
+				{
+					if (pMedic->pev->deadflag == DEAD_NO)
+					{
+						ALERT(at_aiconsole, "Injured Grunt found Medic\n");
+
+						if (pMedic->HealMe(this))
+						{
+							ALERT(at_aiconsole, "Injured Grunt called for Medic\n");
+
+							EMIT_SOUND_DYN(edict(), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, PITCH_NORM);
+
+							JustSpoke();
+							m_flMedicWaitTime = UTIL_GlobalTimeBase() + 5.0;
+						}
+					}
+				}
+			}
+
 			if ( m_hEnemy == NULL && IsFollowing() ) {
 				// If I'm already close enough to my target
 				if ( TargetDistance() <= 128 ) {
-					if ( CanHeal() )	// Heal opportunistically
-						return slMedicHeal;
 					if ( HasConditions( bits_COND_CLIENT_PUSH ) )	// Player wants me to move
 						return GetScheduleOfType( SCHED_MOVE_AWAY_FOLLOW );
 				}
@@ -1804,39 +2105,224 @@ Schedule_t *CMedic::GetSchedule(void) {
 	return CRCAllyMonster :: GetSchedule();
 }
 
-//=========================================================
-// CanHeal
-//=========================================================
-BOOL CMedic::CanHeal( void ) { 
-	ALERT(at_console, "Heal amount is %f\n", m_flHealAnount );
-	if ( m_flHealAnount <= 0 ) {
-		if ( !m_fDepleteLine ) {
-			PlaySentence( "MG_NOTHEAL", 2, VOL_NORM, ATTN_IDLE );
-			m_fDepleteLine = TRUE;
+BOOL CMedic::HealMe(CRCAllyMonster* pTarget)
+{
+	if (pTarget)
+	{
+		if (m_hTargetEnt && !m_hTargetEnt->IsPlayer())
+		{
+			auto pCurrentTarget = m_hTargetEnt->MyTalkSquadMonsterPointer();
+
+			if (pCurrentTarget && pCurrentTarget->MySquadLeader() == MySquadLeader())
+			{
+				return false;
+			}
+
+			if (pTarget->MySquadLeader() != MySquadLeader())
+			{
+				return false;
+			}
 		}
 
-		return FALSE;
+		if (m_MonsterState != MONSTERSTATE_COMBAT && m_iHealCharge)
+		{
+			HealerActivate(pTarget);
+			return true;
+		}
+	}
+	else
+	{
+		if (m_hTargetEnt)
+		{
+			auto v14 = m_hTargetEnt->MyTalkSquadMonsterPointer();
+			if (v14)
+				v14->m_hWaitMedic = nullptr;
+		}
+
+		m_hTargetEnt = nullptr;
+
+		if (m_movementGoal == MOVEGOAL_TARGETENT)
+			RouteClear();
+
+		ClearSchedule();
+		ChangeSchedule(slMedicDrawGun);
 	}
 
-	if ( (m_healTime > UTIL_GlobalTimeBase()) || (m_hTargetEnt == NULL) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.9)) ) {
-		return FALSE;
-	}
-	return TRUE;
+	return false;
 }
 
-//=========================================================
-// Heal
-//=========================================================
-void CMedic::Heal( void ) {
-	if ( !CanHeal() )
-		return;
+void CMedic::HealOff()
+{
+	m_fHealing = false;
 
-	m_flHealAnount -= (m_hTargetEnt->pev->max_health - m_hTargetEnt->pev->health);
-	Vector target = m_hTargetEnt->pev->origin - pev->origin;
-	if ( target.Length() > 100 )
-		return;
+	if (m_movementGoal == MOVEGOAL_TARGETENT)
+		RouteClear();
 
-	m_hTargetEnt->TakeHealth( m_hTargetEnt->pev->max_health - m_hTargetEnt->pev->health, DMG_GENERIC );
+	m_hTargetEnt = nullptr;
+	ClearSchedule();
+
+	SetThink(nullptr);
+	pev->nextthink = 0;
+}
+
+void CMedic::HealerActivate(CBaseMonster* pTarget)
+{
+	if (m_hTargetEnt)
+	{
+		auto pMonster = m_hTargetEnt->MyTalkSquadMonsterPointer();
+
+		if (pMonster)
+			pMonster->m_hWaitMedic = nullptr;
+
+		//TODO: this makes little sense given the null check above
+		pMonster->m_hWaitMedic = this;
+
+		m_hTargetEnt = pTarget;
+
+		m_fHealing = false;
+
+		ClearSchedule();
+
+		ChangeSchedule(slMedicNewHealTarget);
+	}
+	else if (m_iHealCharge > 0
+		&& pTarget->IsAlive()
+		&& pTarget->pev->max_health > pTarget->pev->health
+		&& !m_fHealing)
+	{
+		if (m_hTargetEnt && m_hTargetEnt->IsPlayer())
+		{
+			StopFollowing(false);
+		}
+
+		m_hTargetEnt = pTarget;
+
+		auto pMonster = pTarget->MyTalkSquadMonsterPointer();
+
+		if (pMonster)
+			pMonster->m_hWaitMedic = this;
+
+		m_fHealing = true;
+
+		ClearSchedule();
+
+		EMIT_SOUND(edict(), CHAN_VOICE, "fgrunt/medical.wav", VOL_NORM, ATTN_NORM);
+
+		ChangeSchedule(slMedicDrawNeedle);
+	}
+}
+
+void CMedic::MonsterThink()
+{
+	if (m_fFollowChecking && !m_fFollowChecked && UTIL_GlobalTimeBase() - m_flFollowCheckTime > 0.5)
+	{
+		m_fFollowChecking = false;
+
+		//TODO: not suited for multiplayer
+		auto pPlayer = UTIL_FindEntityByClassname(nullptr, "player");
+
+		FollowerUse(pPlayer, pPlayer, USE_TOGGLE, 0);
+	}
+
+	CRCAllyMonster::MonsterThink();
+}
+
+void CMedic::HealerUse(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	if (m_useTime > UTIL_GlobalTimeBase()
+		|| m_flLastUseTime > UTIL_GlobalTimeBase()
+		|| pActivator == m_hEnemy)
+	{
+		return;
+	}
+
+	if (m_fFollowChecked || m_fFollowChecking)
+	{
+		if (!m_fFollowChecked && m_fFollowChecking)
+		{
+			if (UTIL_GlobalTimeBase() - m_flFollowCheckTime < 0.3)
+				return;
+
+			m_fFollowChecked = true;
+			m_fFollowChecking = false;
+		}
+
+		const auto newTarget = !m_fUseHealing && m_hTargetEnt && m_fHealing;
+
+		if (newTarget)
+		{
+			if (pActivator->pev->health >= pActivator->pev->max_health)
+				return;
+
+			m_fHealing = false;
+
+			auto pMonster = m_hTargetEnt->MyTalkSquadMonsterPointer();
+
+			if (pMonster)
+				pMonster->m_hWaitMedic = nullptr;
+		}
+
+		if (m_iHealCharge > 0
+			&& pActivator->IsAlive()
+			&& pActivator->pev->max_health > pActivator->pev->health)
+		{
+			if (!m_fHealing)
+			{
+				if (m_hTargetEnt && m_hTargetEnt->IsPlayer())
+				{
+					StopFollowing(false);
+				}
+
+				m_hTargetEnt = pActivator;
+
+				m_fHealing = true;
+				m_fUseHealing = true;
+
+				ClearSchedule();
+
+				m_fHealAudioPlaying = false;
+
+				if (newTarget)
+				{
+					ChangeSchedule(slMedicNewHealTarget);
+				}
+				else
+				{
+					SENTENCEG_PlayRndSz(edict(), "MG_HEAL", MEDIC_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+					ChangeSchedule(slMedicDrawNeedle);
+				}
+			}
+
+			if (m_fHealActive)
+			{
+				if (pActivator->TakeHealth(2, DMG_GENERIC))
+				{
+					m_iHealCharge -= 2;
+				}
+			}
+			else if (pActivator->TakeHealth(1, DMG_GENERIC))
+			{
+				--m_iHealCharge;
+			}
+		}
+		else
+		{
+			m_fFollowChecked = false;
+			m_fFollowChecking = false;
+
+			if (UTIL_GlobalTimeBase() - m_flLastRejectAudio > 4.0 && m_iHealCharge <= 0 && !m_fHealing)
+			{
+				m_flLastRejectAudio = UTIL_GlobalTimeBase();
+				SENTENCEG_PlayRndSz(edict(), "MG_NOTHEAL", MEDIC_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
+			}
+		}
+
+		m_flLastUseTime = UTIL_GlobalTimeBase() + 0.2;
+		return;
+	}
+
+	m_fFollowChecking = true;
+	m_flFollowCheckTime = UTIL_GlobalTimeBase();
 }
 
 //=========================================================

@@ -1394,6 +1394,15 @@ void CTalkMonster :: PrescheduleThink ( void )
 	{
 		SetConditions ( bits_COND_CLIENT_UNSEEN );
 	}
+
+	if (m_fStartSuspicious)
+	{
+		if (!HasMemory(bits_MEMORY_PROVOKED))
+		{
+			ALERT(at_console, "Talk Monster Pre-Provoked\n");
+			Remember(bits_MEMORY_PROVOKED);
+		}
+	}
 }
 
 // try to smell something
@@ -1544,6 +1553,11 @@ void CTalkMonster::KeyValue( KeyValueData *pkvd )
 	else if (FStrEq(pkvd->szKeyName, "SpeakAs")) //LRC
 	{
 		m_iszSpeakAs = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "suspicious"))
+	{
+		m_fStartSuspicious = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else 
