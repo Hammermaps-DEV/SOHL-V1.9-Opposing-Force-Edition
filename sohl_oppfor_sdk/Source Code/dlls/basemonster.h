@@ -283,7 +283,7 @@ public:
 		BOOL FacingIdeal( void );
 
 		BOOL FCheckAITrigger( void );// checks and, if necessary, fires the monster's trigger target. 
-		BOOL NoFriendlyFire( void );
+		bool NoFriendlyFire( void );
 
 		BOOL BBoxFlat( void );
 

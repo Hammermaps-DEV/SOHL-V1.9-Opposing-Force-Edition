@@ -437,9 +437,9 @@ void CSquadMonster :: StartMonster( void )
 	}
 }
 
-BOOL CSquadMonster :: NoFriendlyFire( void )
+bool CSquadMonster :: NoFriendlyFire( void )
 {
-	return NoFriendlyFire( FALSE ); //default: don't like the player
+	return NoFriendlyFire( false ); //default: don't like the player
 }
 
 //=========================================================
@@ -450,18 +450,14 @@ BOOL CSquadMonster :: NoFriendlyFire( void )
 //
 // Can now, also, check whether the player is in the box. LRC
 //=========================================================
-BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly ) {
+bool CSquadMonster :: NoFriendlyFire(bool playerAlly ) {
 	if ( !playerAlly && !InSquad() ) {
-		return TRUE;
+		return true;
 	}
 
 	CPlane	backPlane;
 	CPlane  leftPlane;
 	CPlane	rightPlane;
-
-	Vector	vecLeftSide;
-	Vector	vecRightSide;
-	Vector	v_left;
 
 	//!!!BUGBUG - to fix this, the planes must be aligned to where the monster will be firing its gun, not the direction it is facing!!!
 
@@ -472,14 +468,14 @@ BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly ) {
 	else
 	{
 		// if there's no enemy, pretend there's a friendly in the way, so the grunt won't shoot.
-		return FALSE;
+		return false;
 	}
 
 	//UTIL_MakeVectors ( pev->angles );
-	
-	vecLeftSide = pev->origin - ( gpGlobals->v_right * ( pev->size.x * 1.5 ) );
-	vecRightSide = pev->origin + ( gpGlobals->v_right * ( pev->size.x * 1.5 ) );
-	v_left = gpGlobals->v_right * -1;
+
+	const Vector vecLeftSide = pev->origin - ( gpGlobals->v_right * ( pev->size.x * 1.5 ) );
+	const Vector vecRightSide = pev->origin + ( gpGlobals->v_right * ( pev->size.x * 1.5 ) );
+	const Vector v_left = gpGlobals->v_right * -1;
 
 	leftPlane.InitializePlane ( gpGlobals->v_right, vecLeftSide );
 	rightPlane.InitializePlane ( v_left, vecRightSide );
@@ -503,7 +499,7 @@ BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly ) {
 				 rightPlane.PointInFront ( pMember->pev->origin) )
 			{
 				// this guy is in the check volume! Don't shoot!
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -517,11 +513,11 @@ BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly ) {
 			rightPlane.PointInFront ( pentPlayer->v.origin ) )
 		{
 			// the player is in the check volume! Don't shoot!
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -530,9 +526,7 @@ BOOL CSquadMonster :: NoFriendlyFire( BOOL playerAlly ) {
 //=========================================================
 MONSTERSTATE CSquadMonster :: GetIdealState ( void )
 {
-	int	iConditions;
-
-	iConditions = IScheduleFlags();
+	int iConditions = IScheduleFlags();
 	
 	// If no schedule conditions, the new ideal state is probably the reason we're in here.
 	switch ( m_MonsterState )

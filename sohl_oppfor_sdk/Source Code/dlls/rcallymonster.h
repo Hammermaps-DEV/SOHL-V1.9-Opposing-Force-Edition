@@ -124,18 +124,18 @@ class CRCAllyMonster : public CBaseMonster
 {
 public:
 	void			TalkInit( void );				
-	CBaseEntity		*FindNearestFriend(BOOL fPlayer);
+	CBaseEntity		*FindNearestFriend(bool fPlayer);
 	float			TargetDistance( void );
 	void			StopTalking( void ) { SentenceStop(); }
 	
 	// Base Monster functions
-	void			Precache( void );
-	int				TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	void			Touch(	CBaseEntity *pOther );
-	void			Killed( entvars_t *pevAttacker, int iGib );
-	int				IRelationship ( CBaseEntity *pTarget );
-	virtual int		CanPlaySentence( BOOL fDisregardState );
-	virtual void	PlaySentence( const char *pszSentence, float duration, float volume, float attenuation );
+	void			Precache( void ) override;
+	int				TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
+	void			Touch(	CBaseEntity *pOther ) override;
+	void			Killed( entvars_t *pevAttacker, int iGib ) override;
+	int				IRelationship ( CBaseEntity *pTarget ) override;
+	int				CanPlaySentence( BOOL fDisregardState );
+	void			PlaySentence( const char *pszSentence, float duration, float volume, float attenuation );
 	void			PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener );
 	void			KeyValue( KeyValueData *pkvd );
 	int				Classify(void);
@@ -169,10 +169,10 @@ public:
 	void			PrescheduleThink( void );
 
 	// Conversations / communication
-	int				GetVoicePitch( void );
+	int				GetVoicePitch( void ) const;
 	void			IdleRespond( void );
 	int				FIdleSpeak( void );
-	int				FIdleStare( void );
+	void			FIdleStare( void );
 	int				FIdleHello( void );
 	void			IdleHeadTurn( Vector &vecFriend );
 	int				FOkToSpeak( void );
@@ -256,8 +256,8 @@ public:
 	void VacateSlot( void );
 	void ScheduleChange( void );
 	BOOL OccupySlot( int iDesiredSlot );
-	BOOL NoFriendlyFire(void);
-	BOOL NoFriendlyFire(BOOL playerAlly);
+	bool NoFriendlyFire(void);
+	bool NoFriendlyFire(bool playerAlly);
 
 	// squad functions still left in base class
 	CRCAllyMonster *MySquadLeader( ) 

@@ -408,9 +408,9 @@ IMPLEMENT_CUSTOM_SCHEDULES(CRCAllyMonster, CBaseMonster);
 //=========================================================
 void CRCAllyMonster::SetActivity(Activity newActivity) {
 	if (newActivity == ACT_IDLE && IsTalking())
-		newActivity = ACT_IDLE;
+		newActivity = ACT_SIGNAL3;
 
-	if (newActivity == ACT_IDLE && (LookupActivity(ACT_IDLE) == ACTIVITY_NOT_AVAILABLE))
+	if (newActivity == ACT_SIGNAL3 && (LookupActivity(ACT_SIGNAL3) == ACTIVITY_NOT_AVAILABLE))
 		newActivity = ACT_IDLE;
 
 	CBaseMonster::SetActivity(newActivity);
@@ -616,9 +616,7 @@ void CRCAllyMonster::RunTask(Task_t *pTask)
 
 	case TASK_WALK_PATH_FOR_UNITS:
 	{
-		float distance;
-
-		distance = (m_vecLastPosition - pev->origin).Length2D();
+		float distance = (m_vecLastPosition - pev->origin).Length2D();
 
 		// Walk path until far enough away
 		if (distance > pTask->flData || MovementIsComplete())
@@ -677,7 +675,7 @@ void CRCAllyMonster::Killed(entvars_t *pevAttacker, int iGib) {
 		AlertFriends();
 	}
 
-	m_hTargetEnt = NULL;
+	m_hTargetEnt = nullptr;
 	StopTalking();
 	SetUse(NULL);
 	CBaseMonster::Killed(pevAttacker, iGib);
@@ -688,19 +686,18 @@ void CRCAllyMonster::Killed(entvars_t *pevAttacker, int iGib) {
 //=========================================================
 CBaseEntity	*CRCAllyMonster::EnumFriends(CBaseEntity *pPrevious, int listNumber, BOOL bTrace) {
 	CBaseEntity *pFriend = pPrevious;
-	char *pszFriend;
 	TraceResult tr;
-	Vector vecCheck;
 
-	pszFriend = m_szFriends[FriendNumber(listNumber)];
+	char *pszFriend = m_szFriends[FriendNumber(listNumber)];
 	while (pFriend = UTIL_FindEntityByClassname(pFriend, pszFriend))
 	{
 		if (pFriend == this || !pFriend->IsAlive())
 			// don't talk to self or dead people
 			continue;
+
 		if (bTrace)
 		{
-			vecCheck = pFriend->pev->origin;
+			Vector vecCheck = pFriend->pev->origin;
 			vecCheck.z = pFriend->pev->absmax.z;
 
 			UTIL_TraceLine(pev->origin, vecCheck, ignore_monsters, ENT(pev), &tr);
@@ -714,18 +711,17 @@ CBaseEntity	*CRCAllyMonster::EnumFriends(CBaseEntity *pPrevious, int listNumber,
 		}
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //=========================================================
 // AlertFriends
 //=========================================================
 void CRCAllyMonster::AlertFriends(void) {
-	CBaseEntity *pFriend = NULL;
-	int i;
+	CBaseEntity *pFriend = nullptr;
 
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++) 
+	for (int i = 0; i < TLK_CFRIENDS; i++) 
 	{
 		while (pFriend = EnumFriends(pFriend, i, TRUE)) 
 		{
@@ -744,11 +740,10 @@ void CRCAllyMonster::AlertFriends(void) {
 //=========================================================
 void CRCAllyMonster::ShutUpFriends(void)
 {
-	CBaseEntity *pFriend = NULL;
-	int i;
+	CBaseEntity *pFriend = nullptr;
 
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++)
+	for (int i = 0; i < TLK_CFRIENDS; i++)
 	{
 		while (pFriend = EnumFriends(pFriend, i, TRUE))
 		{
@@ -766,12 +761,11 @@ void CRCAllyMonster::ShutUpFriends(void)
 //=========================================================
 void CRCAllyMonster::LimitFollowers(CBaseEntity *pPlayer, int maxFollowers)
 {
-	CBaseEntity *pFriend = NULL;
-	int i, count;
+	CBaseEntity *pFriend = nullptr;
 
-	count = 0;
+	int count = 0;
 	// for each friend in this bsp...
-	for (i = 0; i < TLK_CFRIENDS; i++)
+	for (int i = 0; i < TLK_CFRIENDS; i++)
 	{
 		while (pFriend = EnumFriends(pFriend, i, FALSE))
 		{
@@ -825,7 +819,7 @@ void CRCAllyMonster::HandleAnimEvent(MonsterEvent_t *pEvent) {
 // Init talk data
 //=========================================================
 void CRCAllyMonster::TalkInit(void) {
-	CRCAllyMonster::g_talkWaitTime = 0;
+	g_talkWaitTime = 0;
 
 	if (m_iszSpeakAs) {
 		char szBuf[64];
@@ -918,14 +912,12 @@ void CRCAllyMonster::TalkInit(void) {
 // Scan for nearest, visible friend. If fPlayer is true, look for
 // nearest player
 //=========================================================
-CBaseEntity *CRCAllyMonster::FindNearestFriend(BOOL fPlayer) {
-	CBaseEntity *pFriend = NULL;
-	CBaseEntity *pNearest = NULL;
+CBaseEntity *CRCAllyMonster::FindNearestFriend(bool fPlayer) {
+	CBaseEntity *pFriend = nullptr;
+	CBaseEntity *pNearest = nullptr;
 	float range = 10000000.0;
 	TraceResult tr;
 	Vector vecStart = pev->origin;
-	Vector vecCheck;
-	int i;
 	char *pszFriend;
 	int cfriends;
 
@@ -938,7 +930,7 @@ CBaseEntity *CRCAllyMonster::FindNearestFriend(BOOL fPlayer) {
 
 	// for each type of friend...
 
-	for (i = cfriends - 1; i > -1; i--) {
+	for (int i = cfriends - 1; i > -1; i--) {
 		if (fPlayer)
 			pszFriend = "player";
 		else
@@ -959,7 +951,7 @@ CBaseEntity *CRCAllyMonster::FindNearestFriend(BOOL fPlayer) {
 			if (!pMonster || pMonster->m_MonsterState == MONSTERSTATE_SCRIPT || pMonster->m_MonsterState == MONSTERSTATE_PRONE)
 				continue;
 
-			vecCheck = pFriend->pev->origin;
+			Vector vecCheck = pFriend->pev->origin;
 			vecCheck.z = pFriend->pev->absmax.z;
 
 			// if closer than previous friend, and in range, see if he's visible
@@ -983,7 +975,8 @@ CBaseEntity *CRCAllyMonster::FindNearestFriend(BOOL fPlayer) {
 //=========================================================
 // GetVoicePitch
 //=========================================================
-int CRCAllyMonster::GetVoicePitch(void) {
+int CRCAllyMonster::GetVoicePitch(void) const
+{
 	return m_voicePitch + RANDOM_LONG(0, 6);
 }
 
@@ -1064,14 +1057,13 @@ int CRCAllyMonster::CanPlaySentence(BOOL fDisregardState) {
 //=========================================================
 // FIdleStare
 //=========================================================
-int CRCAllyMonster::FIdleStare(void) {
+void CRCAllyMonster::FIdleStare(void) {
 	if (!FOkToSpeak())
-		return FALSE;
+		return;
 
 	PlaySentence(m_szGrp[TLK_STARE], RANDOM_FLOAT(5, 7.5), VOL_NORM, ATTN_IDLE);
 
-	m_hTalkTarget = FindNearestFriend(TRUE);
-	return TRUE;
+	m_hTalkTarget = FindNearestFriend(true);
 }
 
 //=========================================================
@@ -1085,7 +1077,7 @@ int CRCAllyMonster::FIdleHello(void) {
 	// if this is first time scientist has seen player, greet him
 	if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer)) {
 		// get a player
-		CBaseEntity *pPlayer = FindNearestFriend(TRUE);
+		CBaseEntity *pPlayer = FindNearestFriend(true);
 
 		if (pPlayer) {
 			if (FInViewCone(pPlayer) && FVisible(pPlayer)) {
@@ -1182,7 +1174,7 @@ int CRCAllyMonster::FIdleSpeak(void) {
 	}
 
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
-	CBaseEntity *pFriend = FindNearestFriend(FALSE);
+	CBaseEntity *pFriend = FindNearestFriend(false);
 
 	if (pFriend && !(pFriend->IsMoving()) && (RANDOM_LONG(0, 99) < 75)) {
 		PlaySentence(szQuestionGroup, duration, VOL_NORM, ATTN_IDLE);
@@ -1201,7 +1193,7 @@ int CRCAllyMonster::FIdleSpeak(void) {
 	// otherwise, play an idle statement, try to face client when making a statement.
 	if (RANDOM_LONG(0, 1)) {
 		//SENTENCEG_PlayRndSz( ENT(pev), szIdleGroup, 1.0, ATTN_IDLE, 0, pitch );
-		CBaseEntity *pFriend = FindNearestFriend(TRUE);
+		CBaseEntity *pFriend = FindNearestFriend(true);
 
 		if (pFriend) {
 			m_hTalkTarget = pFriend;
@@ -1741,8 +1733,8 @@ void CRCAllyMonster::SquadRemove(CRCAllyMonster *pRemove) {
 		for (int i = 0; i < MAXRC_SQUAD_MEMBERS - 1; i++) {
 			CRCAllyMonster *pMember = MySquadMember(i);
 			if (pMember) {
-				pMember->m_hSquadLeader = NULL;
-				m_hSquadMember[i] = NULL;
+				pMember->m_hSquadLeader = nullptr;
+				m_hSquadMember[i] = nullptr;
 			}
 		}
 	}
@@ -1751,14 +1743,14 @@ void CRCAllyMonster::SquadRemove(CRCAllyMonster *pRemove) {
 		if (pSquadLeader) {
 			for (int i = 0; i < MAXRC_SQUAD_MEMBERS - 1; i++) {
 				if (pSquadLeader->m_hSquadMember[i] == this) {
-					pSquadLeader->m_hSquadMember[i] = NULL;
+					pSquadLeader->m_hSquadMember[i] = nullptr;
 					break;
 				}
 			}
 		}
 	}
 
-	pRemove->m_hSquadLeader = NULL;
+	pRemove->m_hSquadLeader = nullptr;
 }
 
 //=========================================================
@@ -1866,7 +1858,6 @@ int CRCAllyMonster::SquadCount(void) {
 // link them as a group.  returns the group size
 //=========================================================
 int CRCAllyMonster::SquadRecruit(int searchRadius, int maxMembers) {
-	int squadCount;
 	int iMyClass = Classify();// cache this monster's class
 
 
@@ -1879,9 +1870,9 @@ int CRCAllyMonster::SquadRecruit(int searchRadius, int maxMembers) {
 
 	// I am my own leader
 	m_hSquadLeader = this;
-	squadCount = 1;
+	int squadCount = 1;
 
-	CBaseEntity *pEntity = NULL;
+	CBaseEntity *pEntity = nullptr;
 
 	if (!FStringNull(pev->netname))
 	{
@@ -1935,7 +1926,7 @@ int CRCAllyMonster::SquadRecruit(int searchRadius, int maxMembers) {
 	// no single member squads
 	if (squadCount == 1)
 	{
-		m_hSquadLeader = NULL;
+		m_hSquadLeader = nullptr;
 	}
 
 	return squadCount;
@@ -1946,9 +1937,7 @@ int CRCAllyMonster::SquadRecruit(int searchRadius, int maxMembers) {
 //=========================================================
 int CRCAllyMonster::CheckEnemy(CBaseEntity *pEnemy)
 {
-	int iUpdatedLKP;
-
-	iUpdatedLKP = CBaseMonster::CheckEnemy(m_hEnemy);
+	int iUpdatedLKP = CBaseMonster::CheckEnemy(m_hEnemy);
 
 	// communicate with squad members about the enemy IF this individual has the same enemy as the squad leader.
 	if (InSquad() && (CBaseEntity *)m_hEnemy == MySquadLeader()->m_hEnemy)
@@ -2002,34 +1991,30 @@ void CRCAllyMonster::StartMonster(void)
 // Builds a large box in front of the grunt and checks to see 
 // if any squad members are in that box. 
 //=========================================================
-BOOL CRCAllyMonster::NoFriendlyFire(void) {
-	return NoFriendlyFire(FALSE); //default: don't like the player
+bool CRCAllyMonster::NoFriendlyFire(void) {
+	return NoFriendlyFire(false); //default: don't like the player
 }
 
-BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly) {
+bool CRCAllyMonster::NoFriendlyFire(bool playerAlly) {
 	if (!playerAlly && !InSquad()) {
-		return TRUE;
+		return true;
 	}
 
 	CPlane	backPlane;
 	CPlane  leftPlane;
 	CPlane	rightPlane;
 
-	Vector	vecLeftSide;
-	Vector	vecRightSide;
-	Vector	v_left;
-
 	if (m_hEnemy != NULL) {
 		UTIL_MakeVectors(UTIL_VecToAngles(m_hEnemy->Center() - pev->origin));
 	}
 	else {
 		// if there's no enemy, pretend there's a friendly in the way, so the grunt won't shoot.
-		return FALSE;
+		return false;
 	}
 
-	vecLeftSide = pev->origin - (gpGlobals->v_right * (pev->size.x * 1.5));
-	vecRightSide = pev->origin + (gpGlobals->v_right * (pev->size.x * 1.5));
-	v_left = gpGlobals->v_right * -1;
+	const Vector vecLeftSide = pev->origin - (gpGlobals->v_right * (pev->size.x * 1.5));
+	const Vector vecRightSide = pev->origin + (gpGlobals->v_right * (pev->size.x * 1.5));
+	const Vector v_left = gpGlobals->v_right * -1;
 
 	leftPlane.InitializePlane(gpGlobals->v_right, vecLeftSide);
 	rightPlane.InitializePlane(v_left, vecRightSide);
@@ -2048,7 +2033,7 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly) {
 			leftPlane.PointInFront(pentPlayer->v.origin) &&
 			rightPlane.PointInFront(pentPlayer->v.origin)) {
 			// the player is in the check volume! Don't shoot!
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -2060,7 +2045,7 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly) {
 				leftPlane.PointInFront(pMember->pev->origin) &&
 				rightPlane.PointInFront(pMember->pev->origin)) {
 				// this guy is in the check volume! Don't shoot!
-				return FALSE;
+				return false;
 			}
 		}
 	}
@@ -2072,11 +2057,11 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly) {
 			leftPlane.PointInFront(pentPlayer->v.origin) &&
 			rightPlane.PointInFront(pentPlayer->v.origin)) {
 			// the player is in the check volume! Don't shoot!
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -2135,7 +2120,7 @@ BOOL CRCAllyMonster::SquadEnemySplit(void)
 	for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++)
 	{
 		CRCAllyMonster *pMember = pSquadLeader->MySquadMember(i);
-		if (pMember != NULL && pMember->m_hEnemy != NULL && pMember->m_hEnemy != pEnemy)
+		if (pMember != nullptr && pMember->m_hEnemy != NULL && pMember->m_hEnemy != pEnemy)
 		{
 			return TRUE;
 		}
@@ -2177,7 +2162,7 @@ CBaseEntity *CRCAllyMonster::Kick(void) {
 	UTIL_TraceHull(vecStart, vecEnd, dont_ignore_monsters, head_hull, ENT(pev), &tr);
 
 	if (tr.pHit) {
-		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
+		CBaseEntity *pEntity = Instance(tr.pHit);
 		return pEntity;
 	}
 
@@ -2307,17 +2292,17 @@ Vector CRCAllyMonster::GetGunPosition() {
 // Shoot MP5
 //=========================================================
 void CRCAllyMonster::ShootMP5(void) {
-	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+	if ((m_hEnemy == NULL && m_pCine == nullptr) || !NoFriendlyFire()) {
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+	const Vector vecShootOrigin = GetGunPosition();
+	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_cAmmoLoaded > 0) {
 		UTIL_MakeVectors(pev->angles);
 
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		const Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_4DEGREES, 2048, BULLET_MONSTER_MP5); // shoot +-5 degrees
 		EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSounds9MM);
@@ -2332,7 +2317,7 @@ void CRCAllyMonster::ShootMP5(void) {
 	}
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	const Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
 }
 
@@ -2340,17 +2325,17 @@ void CRCAllyMonster::ShootMP5(void) {
 // Shoot Shotgun
 //=========================================================
 void CRCAllyMonster::ShootShotgun(void) {
-	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+	if ((m_hEnemy == NULL && m_pCine == nullptr) || !NoFriendlyFire()) {
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+	const Vector vecShootOrigin = GetGunPosition();
+	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_cAmmoLoaded > 0) {
 		UTIL_MakeVectors(pev->angles);
 
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
 		FireBullets(gSkillData.hgruntShotgunPellets, vecShootOrigin, vecShootDir, VECTOR_CONE_15DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/sbarrel1.wav", VOL_NORM, ATTN_NORM);
@@ -2369,17 +2354,17 @@ void CRCAllyMonster::ShootShotgun(void) {
 }
 
 void CRCAllyMonster::ShootShotgunDouble(void) {
-	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+	if ((m_hEnemy == NULL && m_pCine == nullptr) || !NoFriendlyFire()) {
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+	const Vector vecShootOrigin = GetGunPosition();
+	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_cAmmoLoaded >= 2) {
 		UTIL_MakeVectors(pev->angles);
 
-		Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iShotgunShell, TE_BOUNCE_SHOTSHELL);
 		FireBullets((gSkillData.hgruntShotgunPellets * 2), vecShootOrigin, vecShootDir, VECTOR_CONE_9DEGREES, 2048, BULLET_PLAYER_BUCKSHOT, 0); // shoot +-7.5 degrees
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/dbarrel1.wav", VOL_NORM, ATTN_NORM);
@@ -2401,17 +2386,17 @@ void CRCAllyMonster::ShootShotgunDouble(void) {
 // Shoot M249
 //=========================================================
 void CRCAllyMonster::ShootM249(void) {
-	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+	if ((m_hEnemy == NULL && m_pCine == nullptr) || !NoFriendlyFire()) {
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+	const Vector vecShootOrigin = GetGunPosition();
+	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_cAmmoLoaded > 0) {
 		UTIL_MakeVectors(pev->angles);
 
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 
 		if (m_flLinkToggle >= 2) {
 			EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iM249Link, TE_BOUNCE_SHELL);
@@ -2446,8 +2431,8 @@ void CRCAllyMonster::ShootDesertEagle(void) {
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+	const Vector vecShootOrigin = GetGunPosition();
+	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_cAmmoLoaded > 0) {
 		UTIL_MakeVectors(pev->angles);
@@ -2473,24 +2458,24 @@ void CRCAllyMonster::ShootDesertEagle(void) {
 	}
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	const Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
 }
 //=========================================================
 // Shoot 9mm Glock
 //=========================================================
 void CRCAllyMonster::ShootGlock(void) {
-	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
+	if ((m_hEnemy == NULL && m_pCine == nullptr) || !NoFriendlyFire()) {
 		return;
 	}
 
-	Vector vecShootOrigin = GetGunPosition();
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
+	const Vector vecShootOrigin = GetGunPosition();
+	const Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
 
 	if (m_cAmmoLoaded > 0) {
 		UTIL_MakeVectors(pev->angles);
 
-		Vector	vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
+		const Vector vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(40, 90) + gpGlobals->v_up * RANDOM_FLOAT(75, 200) + gpGlobals->v_forward * RANDOM_FLOAT(-40, 40);
 		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iBrassShell, TE_BOUNCE_SHELL);
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_1DEGREES, 1024, BULLET_MONSTER_9MM); // shoot +-5 degrees
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/pl_gun3.wav", VOL_NORM, ATTN_NORM);
@@ -2506,7 +2491,7 @@ void CRCAllyMonster::ShootGlock(void) {
 	}
 
 	CSoundEnt::InsertSound(bits_SOUND_COMBAT, pev->origin, 384, 0.3);
-	Vector angDir = UTIL_VecToAngles(vecShootDir);
+	const Vector angDir = UTIL_VecToAngles(vecShootDir);
 	SetBlending(0, angDir.x);
 }
 
@@ -2597,7 +2582,7 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		if (m_flDebug)
 			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
-		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+		CBaseEntity *pEnt = Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
 			pev->health = pev->max_health / 2;
 			if (flDamage > 0) //Override all damage
@@ -2610,7 +2595,7 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 		}
 
 		if (pevAttacker->owner) {
-			pEnt = CBaseEntity::Instance(pevAttacker->owner);
+			pEnt = Instance(pevAttacker->owner);
 			if (pEnt->IsPlayer()) {
 				pev->health = pev->max_health / 2;
 				if (flDamage > 0) //Override all damage
@@ -2630,10 +2615,10 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	}
 
 	if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT)) {
-		CBaseEntity *pFriend = FindNearestFriend(FALSE);
+		CBaseEntity *pFriend = FindNearestFriend(false);
 		if (pFriend && pFriend->IsAlive()) {
 			// only if not dead or dying!
-			CRCAllyMonster *pTalkMonster = (CRCAllyMonster *)pFriend;
+			auto pTalkMonster = dynamic_cast<CRCAllyMonster *>(pFriend);
 			pTalkMonster->ChangeSchedule(slIdleStopShootingTS);
 		}
 

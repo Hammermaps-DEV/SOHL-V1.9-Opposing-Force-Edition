@@ -100,7 +100,7 @@ class CTalkMonster : public CBaseMonster
 {
 public:
 	void			TalkInit( void );				
-	CBaseEntity		*FindNearestFriend(BOOL fPlayer);
+	CBaseEntity		*FindNearestFriend(bool fPlayer);
 	float			TargetDistance( void );
 	void			StopTalking( void ) { SentenceStop(); }
 	
@@ -128,7 +128,7 @@ public:
 	int				GetVoicePitch( void );
 	void			IdleRespond( void );
 	int				FIdleSpeak( void );
-	int				FIdleStare( void );
+	void			FIdleStare( void );
 	int				FIdleHello( void );
 	void			IdleHeadTurn( Vector &vecFriend );
 	int				FOkToSpeak( void );

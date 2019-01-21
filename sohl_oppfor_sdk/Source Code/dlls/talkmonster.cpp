@@ -869,7 +869,7 @@ void CTalkMonster :: TalkInit( void )
 // Scan for nearest, visible friend. If fPlayer is true, look for
 // nearest player
 //=========================================================
-CBaseEntity *CTalkMonster :: FindNearestFriend(BOOL fPlayer)
+CBaseEntity *CTalkMonster :: FindNearestFriend(bool fPlayer)
 {
 	CBaseEntity *pFriend = NULL;
 	CBaseEntity *pNearest = NULL;
@@ -1026,15 +1026,14 @@ int CTalkMonster::CanPlaySentence( BOOL fDisregardState )
 //=========================================================
 // FIdleStare
 //=========================================================
-int CTalkMonster :: FIdleStare( void )
+void CTalkMonster :: FIdleStare( void )
 {
 	if (!FOkToSpeak())
-		return FALSE;
+		return;
 
 	PlaySentence( m_szGrp[TLK_STARE], RANDOM_FLOAT(5, 7.5), VOL_NORM, ATTN_IDLE );
 
-	m_hTalkTarget = FindNearestFriend( TRUE );
-	return TRUE;
+	m_hTalkTarget = FindNearestFriend( true );
 }
 
 //=========================================================
@@ -1050,7 +1049,7 @@ int CTalkMonster :: FIdleHello( void )
 	if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer))
 	{
 		// get a player
-		CBaseEntity *pPlayer = FindNearestFriend(TRUE);
+		CBaseEntity *pPlayer = FindNearestFriend(true);
 
 		if (pPlayer)
 		{
@@ -1165,7 +1164,7 @@ int CTalkMonster :: FIdleSpeak ( void )
 	}
 
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
-	CBaseEntity *pFriend = FindNearestFriend(FALSE);
+	CBaseEntity *pFriend = FindNearestFriend(false);
 
 	if (pFriend && !(pFriend->IsMoving()) && (RANDOM_LONG(0,99) < 75))
 	{
@@ -1186,7 +1185,7 @@ int CTalkMonster :: FIdleSpeak ( void )
 	if ( RANDOM_LONG(0,1) )
 	{
 		//SENTENCEG_PlayRndSz( ENT(pev), szIdleGroup, 1.0, ATTN_IDLE, 0, pitch );
-		CBaseEntity *pFriend = FindNearestFriend(TRUE);
+		CBaseEntity *pFriend = FindNearestFriend(true);
 
 		if ( pFriend )
 		{
@@ -1264,7 +1263,7 @@ int CTalkMonster :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker,
 		// if player damaged this entity, have other friends talk about it
 		if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && FBitSet(pevAttacker->flags, FL_CLIENT))
 		{
-			CBaseEntity *pFriend = FindNearestFriend(FALSE);
+			CBaseEntity *pFriend = FindNearestFriend(false);
 
 			if (pFriend && pFriend->IsAlive())
 			{
