@@ -479,18 +479,11 @@ void GameDLLInit(void)
 
 	// REGISTER CVARS FOR SKILL LEVEL STUFF
 	// Agrunt
-	CVAR_REGISTER(&sk_agrunt_health1);
-	CVAR_REGISTER(&sk_agrunt_health2);
-	CVAR_REGISTER(&sk_agrunt_health3);
-
-	CVAR_REGISTER(&sk_agrunt_dmg_punch1);
-	CVAR_REGISTER(&sk_agrunt_dmg_punch2);
-	CVAR_REGISTER(&sk_agrunt_dmg_punch3);
+	REGISTER_SKILL_CVARS(agrunt_health);
+	REGISTER_SKILL_CVARS(agrunt_dmg_punch);
 
 	// Apache
-	CVAR_REGISTER(&sk_apache_health1);
-	CVAR_REGISTER(&sk_apache_health2);
-	CVAR_REGISTER(&sk_apache_health3);
+	REGISTER_SKILL_CVARS(apache_health);
 
 	// Osprey
 	CVAR_REGISTER(&sk_osprey_health1);
@@ -508,9 +501,7 @@ void GameDLLInit(void)
 	CVAR_REGISTER(&sk_osprey_blkop_health3);
 
 	// Barney
-	CVAR_REGISTER(&sk_barney_health1);
-	CVAR_REGISTER(&sk_barney_health2);
-	CVAR_REGISTER(&sk_barney_health3);
+	REGISTER_SKILL_CVARS(barney_health);
 
 	CVAR_REGISTER(&sk_barney_head1);
 	CVAR_REGISTER(&sk_barney_head2);
@@ -583,232 +574,91 @@ void GameDLLInit(void)
 	CVAR_REGISTER(&sk_otis_arm3);
 
 	// Bullsquid
-	CVAR_REGISTER(&sk_bullsquid_health1);
-	CVAR_REGISTER(&sk_bullsquid_health2);
-	CVAR_REGISTER(&sk_bullsquid_health3);
-
-	CVAR_REGISTER(&sk_bullsquid_dmg_bite1);
-	CVAR_REGISTER(&sk_bullsquid_dmg_bite2);
-	CVAR_REGISTER(&sk_bullsquid_dmg_bite3);
-
-	CVAR_REGISTER(&sk_bullsquid_dmg_whip1);
-	CVAR_REGISTER(&sk_bullsquid_dmg_whip2);
-	CVAR_REGISTER(&sk_bullsquid_dmg_whip3);
-
-	CVAR_REGISTER(&sk_bullsquid_dmg_spit1);
-	CVAR_REGISTER(&sk_bullsquid_dmg_spit2);
-	CVAR_REGISTER(&sk_bullsquid_dmg_spit3);
+	REGISTER_SKILL_CVARS(bullsquid_health);
+	REGISTER_SKILL_CVARS(bullsquid_dmg_bite);
+	REGISTER_SKILL_CVARS(bullsquid_dmg_whip);
+	REGISTER_SKILL_CVARS(bullsquid_dmg_spit);
 
 	// Bigmomma
-	CVAR_REGISTER(&sk_bigmomma_health_factor1);
-	CVAR_REGISTER(&sk_bigmomma_health_factor2);
-	CVAR_REGISTER(&sk_bigmomma_health_factor3);
-
-	CVAR_REGISTER(&sk_bigmomma_dmg_slash1);
-	CVAR_REGISTER(&sk_bigmomma_dmg_slash2);
-	CVAR_REGISTER(&sk_bigmomma_dmg_slash3);
-
-	CVAR_REGISTER(&sk_bigmomma_dmg_blast1);
-	CVAR_REGISTER(&sk_bigmomma_dmg_blast2);
-	CVAR_REGISTER(&sk_bigmomma_dmg_blast3);
-
-	CVAR_REGISTER(&sk_bigmomma_radius_blast1);
-	CVAR_REGISTER(&sk_bigmomma_radius_blast2);
-	CVAR_REGISTER(&sk_bigmomma_radius_blast3);
+	REGISTER_SKILL_CVARS(bigmomma_health_factor);
+	REGISTER_SKILL_CVARS(bigmomma_dmg_slash);
+	REGISTER_SKILL_CVARS(bigmomma_dmg_blast);
+	REGISTER_SKILL_CVARS(bigmomma_radius_blast);
 
 	// Gargantua
-	CVAR_REGISTER(&sk_gargantua_health1);
-	CVAR_REGISTER(&sk_gargantua_health2);
-	CVAR_REGISTER(&sk_gargantua_health3);
-
-	CVAR_REGISTER(&sk_gargantua_dmg_slash1);
-	CVAR_REGISTER(&sk_gargantua_dmg_slash2);
-	CVAR_REGISTER(&sk_gargantua_dmg_slash3);
-
-	CVAR_REGISTER(&sk_gargantua_dmg_fire1);
-	CVAR_REGISTER(&sk_gargantua_dmg_fire2);
-	CVAR_REGISTER(&sk_gargantua_dmg_fire3);
-
-	CVAR_REGISTER(&sk_gargantua_dmg_stomp1);
-	CVAR_REGISTER(&sk_gargantua_dmg_stomp2);
-	CVAR_REGISTER(&sk_gargantua_dmg_stomp3);
+	REGISTER_SKILL_CVARS(gargantua_health);
+	REGISTER_SKILL_CVARS(gargantua_dmg_slash);
+	REGISTER_SKILL_CVARS(gargantua_dmg_fire);
+	REGISTER_SKILL_CVARS(gargantua_dmg_stomp);
 
 	// Hassassin
-	CVAR_REGISTER(&sk_hassassin_health1);
-	CVAR_REGISTER(&sk_hassassin_health2);
-	CVAR_REGISTER(&sk_hassassin_health3);
+	REGISTER_SKILL_CVARS(hassassin_health);
 
 	// Headcrab
-	CVAR_REGISTER(&sk_headcrab_health1);
-	CVAR_REGISTER(&sk_headcrab_health2);
-	CVAR_REGISTER(&sk_headcrab_health3);
+	REGISTER_SKILL_CVARS(headcrab_health);
+	REGISTER_SKILL_CVARS(headcrab_dmg_bite);
 
-	CVAR_REGISTER(&sk_headcrab_dmg_bite1);
-	CVAR_REGISTER(&sk_headcrab_dmg_bite2);
-	CVAR_REGISTER(&sk_headcrab_dmg_bite3);
-
-	// Hgrunt 
-	CVAR_REGISTER(&sk_hgrunt_health1);
-	CVAR_REGISTER(&sk_hgrunt_health2);
-	CVAR_REGISTER(&sk_hgrunt_health3);
-
-	CVAR_REGISTER(&sk_hgrunt_kick1);
-	CVAR_REGISTER(&sk_hgrunt_kick2);
-	CVAR_REGISTER(&sk_hgrunt_kick3);
-
-	CVAR_REGISTER(&sk_hgrunt_pellets1);
-	CVAR_REGISTER(&sk_hgrunt_pellets2);
-	CVAR_REGISTER(&sk_hgrunt_pellets3);
-
-	CVAR_REGISTER(&sk_hgrunt_gspeed1);
-	CVAR_REGISTER(&sk_hgrunt_gspeed2);
-	CVAR_REGISTER(&sk_hgrunt_gspeed3);
+	// Hgrunt
+	REGISTER_SKILL_CVARS(hgrunt_health);
+	REGISTER_SKILL_CVARS(hgrunt_kick);
+	REGISTER_SKILL_CVARS(hgrunt_pellets);
+	REGISTER_SKILL_CVARS(hgrunt_gspeed);
 
 	// Houndeye
-	CVAR_REGISTER(&sk_houndeye_health1);
-	CVAR_REGISTER(&sk_houndeye_health2);
-	CVAR_REGISTER(&sk_houndeye_health3);
-
-	CVAR_REGISTER(&sk_houndeye_dmg_blast1);
-	CVAR_REGISTER(&sk_houndeye_dmg_blast2);
-	CVAR_REGISTER(&sk_houndeye_dmg_blast3);
+	REGISTER_SKILL_CVARS(houndeye_health);
+	REGISTER_SKILL_CVARS(houndeye_dmg_blast);
 
 	// ISlave
-	CVAR_REGISTER(&sk_islave_health1);
-	CVAR_REGISTER(&sk_islave_health2);
-	CVAR_REGISTER(&sk_islave_health3);
-
-	CVAR_REGISTER(&sk_islave_dmg_claw1);
-	CVAR_REGISTER(&sk_islave_dmg_claw2);
-	CVAR_REGISTER(&sk_islave_dmg_claw3);
-
-	CVAR_REGISTER(&sk_islave_dmg_clawrake1);
-	CVAR_REGISTER(&sk_islave_dmg_clawrake2);
-	CVAR_REGISTER(&sk_islave_dmg_clawrake3);
-
-	CVAR_REGISTER(&sk_islave_dmg_zap1);
-	CVAR_REGISTER(&sk_islave_dmg_zap2);
-	CVAR_REGISTER(&sk_islave_dmg_zap3);
+	REGISTER_SKILL_CVARS(islave_health);
+	REGISTER_SKILL_CVARS(islave_dmg_claw);
+	REGISTER_SKILL_CVARS(islave_dmg_clawrake);
+	REGISTER_SKILL_CVARS(islave_dmg_zap);
 
 	// Icthyosaur
-	CVAR_REGISTER(&sk_ichthyosaur_health1);
-	CVAR_REGISTER(&sk_ichthyosaur_health2);
-	CVAR_REGISTER(&sk_ichthyosaur_health3);
-
-	CVAR_REGISTER(&sk_ichthyosaur_shake1);
-	CVAR_REGISTER(&sk_ichthyosaur_shake2);
-	CVAR_REGISTER(&sk_ichthyosaur_shake3);
+	REGISTER_SKILL_CVARS(ichthyosaur_health);
+	REGISTER_SKILL_CVARS(ichthyosaur_shake);
 
 	// Leech
-	CVAR_REGISTER(&sk_leech_health1);
-	CVAR_REGISTER(&sk_leech_health2);
-	CVAR_REGISTER(&sk_leech_health3);
-
-	CVAR_REGISTER(&sk_leech_dmg_bite1);
-	CVAR_REGISTER(&sk_leech_dmg_bite2);
-	CVAR_REGISTER(&sk_leech_dmg_bite3);
+	REGISTER_SKILL_CVARS(leech_health);
+	REGISTER_SKILL_CVARS(leech_dmg_bite);
 
 	// Controller
-	CVAR_REGISTER(&sk_controller_health1);
-	CVAR_REGISTER(&sk_controller_health2);
-	CVAR_REGISTER(&sk_controller_health3);
-
-	CVAR_REGISTER(&sk_controller_dmgzap1);
-	CVAR_REGISTER(&sk_controller_dmgzap2);
-	CVAR_REGISTER(&sk_controller_dmgzap3);
-
-	CVAR_REGISTER(&sk_controller_speedball1);
-	CVAR_REGISTER(&sk_controller_speedball2);
-	CVAR_REGISTER(&sk_controller_speedball3);
-
-	CVAR_REGISTER(&sk_controller_dmgball1);
-	CVAR_REGISTER(&sk_controller_dmgball2);
-	CVAR_REGISTER(&sk_controller_dmgball3);
+	REGISTER_SKILL_CVARS(controller_health);
+	REGISTER_SKILL_CVARS(controller_dmgzap);
+	REGISTER_SKILL_CVARS(controller_speedball);
+	REGISTER_SKILL_CVARS(controller_dmgball);
 
 	// Nihilanth
-	CVAR_REGISTER(&sk_nihilanth_health1);
-	CVAR_REGISTER(&sk_nihilanth_health2);
-	CVAR_REGISTER(&sk_nihilanth_health3);
-
-	CVAR_REGISTER(&sk_nihilanth_zap1);
-	CVAR_REGISTER(&sk_nihilanth_zap2);
-	CVAR_REGISTER(&sk_nihilanth_zap3);
+	REGISTER_SKILL_CVARS(nihilanth_health);
+	REGISTER_SKILL_CVARS(nihilanth_zap);
 
 	// Scientist
-	CVAR_REGISTER(&sk_scientist_health1);
-	CVAR_REGISTER(&sk_scientist_health2);
-	CVAR_REGISTER(&sk_scientist_health3);
+	REGISTER_SKILL_CVARS(scientist_health);
 
 	// Construction
-	CVAR_REGISTER(&sk_construction_health1);
-	CVAR_REGISTER(&sk_construction_health2);
-	CVAR_REGISTER(&sk_construction_health3);
-
-
-	CVAR_REGISTER(&sk_construction_head1);
-	CVAR_REGISTER(&sk_construction_head2);
-	CVAR_REGISTER(&sk_construction_head3);
-
-	CVAR_REGISTER(&sk_construction_chest1);
-	CVAR_REGISTER(&sk_construction_chest2);
-	CVAR_REGISTER(&sk_construction_chest3);
-
-	CVAR_REGISTER(&sk_construction_stomach1);
-	CVAR_REGISTER(&sk_construction_stomach2);
-	CVAR_REGISTER(&sk_construction_stomach3);
-
-	CVAR_REGISTER(&sk_construction_leg1);
-	CVAR_REGISTER(&sk_construction_leg2);
-	CVAR_REGISTER(&sk_construction_leg3);
-
-	CVAR_REGISTER(&sk_construction_arm1);
-	CVAR_REGISTER(&sk_construction_arm2);
-	CVAR_REGISTER(&sk_construction_arm3);
+	REGISTER_SKILL_CVARS(construction_health);
+	REGISTER_SKILL_CVARS(construction_head);
+	REGISTER_SKILL_CVARS(construction_chest);
+	REGISTER_SKILL_CVARS(construction_stomach);
+	REGISTER_SKILL_CVARS(construction_leg);
+	REGISTER_SKILL_CVARS(construction_arm);
 
 	// Snark
-	CVAR_REGISTER(&sk_snark_health1);
-	CVAR_REGISTER(&sk_snark_health2);
-	CVAR_REGISTER(&sk_snark_health3);
-
-	CVAR_REGISTER(&sk_snark_dmg_bite1);
-	CVAR_REGISTER(&sk_snark_dmg_bite2);
-	CVAR_REGISTER(&sk_snark_dmg_bite3);
-
-	CVAR_REGISTER(&sk_snark_dmg_pop1);
-	CVAR_REGISTER(&sk_snark_dmg_pop2);
-	CVAR_REGISTER(&sk_snark_dmg_pop3);
+	REGISTER_SKILL_CVARS(snark_health);
+	REGISTER_SKILL_CVARS(snark_dmg_bite);
+	REGISTER_SKILL_CVARS(snark_dmg_pop);
 
 	//=========================================================
 	// NPCs: Diablo
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================
-	CVAR_REGISTER(&sk_diablo_health1);
-	CVAR_REGISTER(&sk_diablo_health2);
-	CVAR_REGISTER(&sk_diablo_health3);
-
-	CVAR_REGISTER(&sk_diablo_dmg_one_slash1);
-	CVAR_REGISTER(&sk_diablo_dmg_one_slash2);
-	CVAR_REGISTER(&sk_diablo_dmg_one_slash3);
-
-	CVAR_REGISTER(&sk_diablo_dmg_both_slash1);
-	CVAR_REGISTER(&sk_diablo_dmg_both_slash2);
-	CVAR_REGISTER(&sk_diablo_dmg_both_slash3);
-
-	CVAR_REGISTER(&sk_diablo_head1);
-	CVAR_REGISTER(&sk_diablo_head2);
-	CVAR_REGISTER(&sk_diablo_head3);
-
-	CVAR_REGISTER(&sk_diablo_chest1);
-	CVAR_REGISTER(&sk_diablo_chest2);
-	CVAR_REGISTER(&sk_diablo_chest3);
-
-	CVAR_REGISTER(&sk_diablo_stomach1);
-	CVAR_REGISTER(&sk_diablo_stomach2);
-	CVAR_REGISTER(&sk_diablo_stomach3);
-
-	CVAR_REGISTER(&sk_diablo_leg1);
-	CVAR_REGISTER(&sk_diablo_leg2);
-	CVAR_REGISTER(&sk_diablo_leg3);
+	REGISTER_SKILL_CVARS(diablo_health);
+	REGISTER_SKILL_CVARS(diablo_dmg_one_slash);
+	REGISTER_SKILL_CVARS(diablo_dmg_both_slash);
+	REGISTER_SKILL_CVARS(diablo_head);
+	REGISTER_SKILL_CVARS(diablo_chest);
+	REGISTER_SKILL_CVARS(diablo_stomach);
+	REGISTER_SKILL_CVARS(diablo_leg);
 
 	//=========================================================
 	// NPCs: Zombie,Zombie Soldier,Zombie Barney
@@ -816,563 +666,231 @@ void GameDLLInit(void)
 	//=========================================================
 
 	// Zombie Scientist
-	CVAR_REGISTER(&sk_zombie_health1);
-	CVAR_REGISTER(&sk_zombie_health2);
-	CVAR_REGISTER(&sk_zombie_health3);
-
-	CVAR_REGISTER(&sk_zombie_dmg_one_slash1);
-	CVAR_REGISTER(&sk_zombie_dmg_one_slash2);
-	CVAR_REGISTER(&sk_zombie_dmg_one_slash3);
-
-	CVAR_REGISTER(&sk_zombie_dmg_both_slash1);
-	CVAR_REGISTER(&sk_zombie_dmg_both_slash2);
-	CVAR_REGISTER(&sk_zombie_dmg_both_slash3);
-
-	CVAR_REGISTER(&sk_zombie_head1);
-	CVAR_REGISTER(&sk_zombie_head2);
-	CVAR_REGISTER(&sk_zombie_head3);
-
-	CVAR_REGISTER(&sk_zombie_chest1);
-	CVAR_REGISTER(&sk_zombie_chest2);
-	CVAR_REGISTER(&sk_zombie_chest3);
-
-	CVAR_REGISTER(&sk_zombie_stomach1);
-	CVAR_REGISTER(&sk_zombie_stomach2);
-	CVAR_REGISTER(&sk_zombie_stomach3);
-
-	CVAR_REGISTER(&sk_zombie_leg1);
-	CVAR_REGISTER(&sk_zombie_leg2);
-	CVAR_REGISTER(&sk_zombie_leg3);
-
-	CVAR_REGISTER(&sk_zombie_arm1);
-	CVAR_REGISTER(&sk_zombie_arm2);
-	CVAR_REGISTER(&sk_zombie_arm3);
+	REGISTER_SKILL_CVARS(zombie_health);
+	REGISTER_SKILL_CVARS(zombie_dmg_one_slash);
+	REGISTER_SKILL_CVARS(zombie_dmg_both_slash);
+	REGISTER_SKILL_CVARS(zombie_head);
+	REGISTER_SKILL_CVARS(zombie_chest);
+	REGISTER_SKILL_CVARS(zombie_stomach);
+	REGISTER_SKILL_CVARS(zombie_leg);
+	REGISTER_SKILL_CVARS(zombie_arm);
 
 	// Zombie Soldier
-	CVAR_REGISTER(&sk_zombie_soldier_health1);
-	CVAR_REGISTER(&sk_zombie_soldier_health2);
-	CVAR_REGISTER(&sk_zombie_soldier_health3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_dmg_one_slash1);
-	CVAR_REGISTER(&sk_zombie_soldier_dmg_one_slash2);
-	CVAR_REGISTER(&sk_zombie_soldier_dmg_one_slash3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_dmg_both_slash1);
-	CVAR_REGISTER(&sk_zombie_soldier_dmg_both_slash2);
-	CVAR_REGISTER(&sk_zombie_soldier_dmg_both_slash3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_head1);
-	CVAR_REGISTER(&sk_zombie_soldier_head2);
-	CVAR_REGISTER(&sk_zombie_soldier_head3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_chest1);
-	CVAR_REGISTER(&sk_zombie_soldier_chest2);
-	CVAR_REGISTER(&sk_zombie_soldier_chest3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_stomach1);
-	CVAR_REGISTER(&sk_zombie_soldier_stomach2);
-	CVAR_REGISTER(&sk_zombie_soldier_stomach3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_leg1);
-	CVAR_REGISTER(&sk_zombie_soldier_leg2);
-	CVAR_REGISTER(&sk_zombie_soldier_leg3);
-
-	CVAR_REGISTER(&sk_zombie_soldier_arm1);
-	CVAR_REGISTER(&sk_zombie_soldier_arm2);
-	CVAR_REGISTER(&sk_zombie_soldier_arm3);
+	REGISTER_SKILL_CVARS(zombie_soldier_health);
+	REGISTER_SKILL_CVARS(zombie_soldier_dmg_one_slash);
+	REGISTER_SKILL_CVARS(zombie_soldier_dmg_both_slash);
+	REGISTER_SKILL_CVARS(zombie_soldier_head);
+	REGISTER_SKILL_CVARS(zombie_soldier_chest);
+	REGISTER_SKILL_CVARS(zombie_soldier_stomach);
+	REGISTER_SKILL_CVARS(zombie_soldier_leg);
+	REGISTER_SKILL_CVARS(zombie_soldier_arm);
 
 	// Zombie Construction
-	CVAR_REGISTER(&sk_zombie_construction_health1);
-	CVAR_REGISTER(&sk_zombie_construction_health2);
-	CVAR_REGISTER(&sk_zombie_construction_health3);
-
-	CVAR_REGISTER(&sk_zombie_construction_dmg_one_slash1);
-	CVAR_REGISTER(&sk_zombie_construction_dmg_one_slash2);
-	CVAR_REGISTER(&sk_zombie_construction_dmg_one_slash3);
-
-	CVAR_REGISTER(&sk_zombie_construction_dmg_both_slash1);
-	CVAR_REGISTER(&sk_zombie_construction_dmg_both_slash2);
-	CVAR_REGISTER(&sk_zombie_construction_dmg_both_slash3);
-
-	CVAR_REGISTER(&sk_zombie_construction_head1);
-	CVAR_REGISTER(&sk_zombie_construction_head2);
-	CVAR_REGISTER(&sk_zombie_construction_head3);
-
-	CVAR_REGISTER(&sk_zombie_construction_chest1);
-	CVAR_REGISTER(&sk_zombie_construction_chest2);
-	CVAR_REGISTER(&sk_zombie_construction_chest3);
-
-	CVAR_REGISTER(&sk_zombie_construction_stomach1);
-	CVAR_REGISTER(&sk_zombie_construction_stomach2);
-	CVAR_REGISTER(&sk_zombie_construction_stomach3);
-
-	CVAR_REGISTER(&sk_zombie_construction_leg1);
-	CVAR_REGISTER(&sk_zombie_construction_leg2);
-	CVAR_REGISTER(&sk_zombie_construction_leg3);
-
-	CVAR_REGISTER(&sk_zombie_construction_arm1);
-	CVAR_REGISTER(&sk_zombie_construction_arm2);
-	CVAR_REGISTER(&sk_zombie_construction_arm3);
+	REGISTER_SKILL_CVARS(zombie_construction_health);
+	REGISTER_SKILL_CVARS(zombie_construction_dmg_one_slash);
+	REGISTER_SKILL_CVARS(zombie_construction_dmg_both_slash);
+	REGISTER_SKILL_CVARS(zombie_construction_head);
+	REGISTER_SKILL_CVARS(zombie_construction_chest);
+	REGISTER_SKILL_CVARS(zombie_construction_stomach);
+	REGISTER_SKILL_CVARS(zombie_construction_leg);
+	REGISTER_SKILL_CVARS(zombie_construction_arm);
 
 	// Zombie Barney
-	CVAR_REGISTER(&sk_zombie_barney_health1);
-	CVAR_REGISTER(&sk_zombie_barney_health2);
-	CVAR_REGISTER(&sk_zombie_barney_health3);
-
-	CVAR_REGISTER(&sk_zombie_barney_dmg_one_slash1);
-	CVAR_REGISTER(&sk_zombie_barney_dmg_one_slash2);
-	CVAR_REGISTER(&sk_zombie_barney_dmg_one_slash3);
-
-	CVAR_REGISTER(&sk_zombie_barney_dmg_both_slash1);
-	CVAR_REGISTER(&sk_zombie_barney_dmg_both_slash2);
-	CVAR_REGISTER(&sk_zombie_barney_dmg_both_slash3);
-
-	CVAR_REGISTER(&sk_zombie_barney_head1);
-	CVAR_REGISTER(&sk_zombie_barney_head2);
-	CVAR_REGISTER(&sk_zombie_barney_head3);
-
-	CVAR_REGISTER(&sk_zombie_barney_chest1);
-	CVAR_REGISTER(&sk_zombie_barney_chest2);
-	CVAR_REGISTER(&sk_zombie_barney_chest3);
-
-	CVAR_REGISTER(&sk_zombie_barney_stomach1);
-	CVAR_REGISTER(&sk_zombie_barney_stomach2);
-	CVAR_REGISTER(&sk_zombie_barney_stomach3);
-
-	CVAR_REGISTER(&sk_zombie_barney_leg1);
-	CVAR_REGISTER(&sk_zombie_barney_leg2);
-	CVAR_REGISTER(&sk_zombie_barney_leg3);
-
-	CVAR_REGISTER(&sk_zombie_barney_arm1);
-	CVAR_REGISTER(&sk_zombie_barney_arm2);
-	CVAR_REGISTER(&sk_zombie_barney_arm3);
+	REGISTER_SKILL_CVARS(zombie_barney_health);
+	REGISTER_SKILL_CVARS(zombie_barney_dmg_one_slash);
+	REGISTER_SKILL_CVARS(zombie_barney_dmg_both_slash);
+	REGISTER_SKILL_CVARS(zombie_barney_head);
+	REGISTER_SKILL_CVARS(zombie_barney_chest);
+	REGISTER_SKILL_CVARS(zombie_barney_stomach);
+	REGISTER_SKILL_CVARS(zombie_barney_leg);
+	REGISTER_SKILL_CVARS(zombie_barney_arm);
 
 	//=========================================================
 	// NPCs: Pit Drone
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================
-	CVAR_REGISTER(&sk_pitdrone_health1);
-	CVAR_REGISTER(&sk_pitdrone_health2);
-	CVAR_REGISTER(&sk_pitdrone_health3);
-
-	CVAR_REGISTER(&sk_pitdrone_dmg_bite1);
-	CVAR_REGISTER(&sk_pitdrone_dmg_bite2);
-	CVAR_REGISTER(&sk_pitdrone_dmg_bite3);
-
-	CVAR_REGISTER(&sk_pitdrone_dmg_whip1);
-	CVAR_REGISTER(&sk_pitdrone_dmg_whip2);
-	CVAR_REGISTER(&sk_pitdrone_dmg_whip3);
-
-	CVAR_REGISTER(&sk_pitdrone_dmg_spit1);
-	CVAR_REGISTER(&sk_pitdrone_dmg_spit2);
-	CVAR_REGISTER(&sk_pitdrone_dmg_spit3);
-
-	CVAR_REGISTER(&sk_pitdrone_head1);
-	CVAR_REGISTER(&sk_pitdrone_head2);
-	CVAR_REGISTER(&sk_pitdrone_head3);
-
-	CVAR_REGISTER(&sk_pitdrone_chest1);
-	CVAR_REGISTER(&sk_pitdrone_chest2);
-	CVAR_REGISTER(&sk_pitdrone_chest3);
-
-	CVAR_REGISTER(&sk_pitdrone_stomach1);
-	CVAR_REGISTER(&sk_pitdrone_stomach2);
-	CVAR_REGISTER(&sk_pitdrone_stomach3);
-
-	CVAR_REGISTER(&sk_pitdrone_leg1);
-	CVAR_REGISTER(&sk_pitdrone_leg2);
-	CVAR_REGISTER(&sk_pitdrone_leg3);
-
-	CVAR_REGISTER(&sk_pitdrone_arm1);
-	CVAR_REGISTER(&sk_pitdrone_arm2);
-	CVAR_REGISTER(&sk_pitdrone_arm3);
+	REGISTER_SKILL_CVARS(pitdrone_health);
+	REGISTER_SKILL_CVARS(pitdrone_dmg_bite);
+	REGISTER_SKILL_CVARS(pitdrone_dmg_whip);
+	REGISTER_SKILL_CVARS(pitdrone_dmg_spit);
+	REGISTER_SKILL_CVARS(pitdrone_head);
+	REGISTER_SKILL_CVARS(pitdrone_chest);
+	REGISTER_SKILL_CVARS(pitdrone_stomach);
+	REGISTER_SKILL_CVARS(pitdrone_leg);
+	REGISTER_SKILL_CVARS(pitdrone_arm);
 
 	//=========================================================
 	// NPCs: Voltigore
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================
-	CVAR_REGISTER(&sk_voltigore_health1);
-	CVAR_REGISTER(&sk_voltigore_health2);
-	CVAR_REGISTER(&sk_voltigore_health3);
-
-	CVAR_REGISTER(&sk_voltigore_dmg_punch1);
-	CVAR_REGISTER(&sk_voltigore_dmg_punch2);
-	CVAR_REGISTER(&sk_voltigore_dmg_punch3);
-
-	CVAR_REGISTER(&sk_voltigore_dmg_beam1);
-	CVAR_REGISTER(&sk_voltigore_dmg_beam2);
-	CVAR_REGISTER(&sk_voltigore_dmg_beam3);
-
-	CVAR_REGISTER(&sk_voltigore_head1);
-	CVAR_REGISTER(&sk_voltigore_head2);
-	CVAR_REGISTER(&sk_voltigore_head3);
-
-	CVAR_REGISTER(&sk_voltigore_chest1);
-	CVAR_REGISTER(&sk_voltigore_chest2);
-	CVAR_REGISTER(&sk_voltigore_chest3);
-
-	CVAR_REGISTER(&sk_voltigore_stomach1);
-	CVAR_REGISTER(&sk_voltigore_stomach2);
-	CVAR_REGISTER(&sk_voltigore_stomach3);
-
-	CVAR_REGISTER(&sk_voltigore_leg1);
-	CVAR_REGISTER(&sk_voltigore_leg2);
-	CVAR_REGISTER(&sk_voltigore_leg3);
-
-	CVAR_REGISTER(&sk_voltigore_arm1);
-	CVAR_REGISTER(&sk_voltigore_arm2);
-	CVAR_REGISTER(&sk_voltigore_arm3);
+	REGISTER_SKILL_CVARS(voltigore_health);
+	REGISTER_SKILL_CVARS(voltigore_dmg_punch);
+	REGISTER_SKILL_CVARS(voltigore_dmg_beam);
+	REGISTER_SKILL_CVARS(voltigore_head);
+	REGISTER_SKILL_CVARS(voltigore_chest);
+	REGISTER_SKILL_CVARS(voltigore_stomach);
+	REGISTER_SKILL_CVARS(voltigore_leg);
+	REGISTER_SKILL_CVARS(voltigore_arm);
 
 	//=========================================================
-	// NPCs: #########################
+	// NPCs: Ally Grunt
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition
 	//=========================================================
+	REGISTER_SKILL_CVARS(hgrunt_ally_health);
+	REGISTER_SKILL_CVARS(hgrunt_ally_kick);
+	REGISTER_SKILL_CVARS(hgrunt_ally_pellets);
+	REGISTER_SKILL_CVARS(hgrunt_ally_gspeed);
+	REGISTER_SKILL_CVARS(hgrunt_ally_head);
+	REGISTER_SKILL_CVARS(hgrunt_ally_chest);
+	REGISTER_SKILL_CVARS(hgrunt_ally_stomach);
+	REGISTER_SKILL_CVARS(hgrunt_ally_leg);
+	REGISTER_SKILL_CVARS(hgrunt_ally_arm);
 
-	// Opposing-Force
-	// Ally Grunt
-	CVAR_REGISTER(&sk_hgrunt_ally_health1);
-	CVAR_REGISTER(&sk_hgrunt_ally_health2);
-	CVAR_REGISTER(&sk_hgrunt_ally_health3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_kick1);
-	CVAR_REGISTER(&sk_hgrunt_ally_kick2);
-	CVAR_REGISTER(&sk_hgrunt_ally_kick3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_pellets1);
-	CVAR_REGISTER(&sk_hgrunt_ally_pellets2);
-	CVAR_REGISTER(&sk_hgrunt_ally_pellets3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_gspeed1);
-	CVAR_REGISTER(&sk_hgrunt_ally_gspeed2);
-	CVAR_REGISTER(&sk_hgrunt_ally_gspeed3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_head1);
-	CVAR_REGISTER(&sk_hgrunt_ally_head2);
-	CVAR_REGISTER(&sk_hgrunt_ally_head3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_chest1);
-	CVAR_REGISTER(&sk_hgrunt_ally_chest2);
-	CVAR_REGISTER(&sk_hgrunt_ally_chest3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_stomach1);
-	CVAR_REGISTER(&sk_hgrunt_ally_stomach2);
-	CVAR_REGISTER(&sk_hgrunt_ally_stomach3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_leg1);
-	CVAR_REGISTER(&sk_hgrunt_ally_leg2);
-	CVAR_REGISTER(&sk_hgrunt_ally_leg3);
-
-	CVAR_REGISTER(&sk_hgrunt_ally_arm1);
-	CVAR_REGISTER(&sk_hgrunt_ally_arm2);
-	CVAR_REGISTER(&sk_hgrunt_ally_arm3);
-
-	// Ally Grunt Medic
-	CVAR_REGISTER(&sk_medic_ally_health1);
-	CVAR_REGISTER(&sk_medic_ally_health2);
-	CVAR_REGISTER(&sk_medic_ally_health3);
-
-	CVAR_REGISTER(&sk_medic_ally_kick1);
-	CVAR_REGISTER(&sk_medic_ally_kick2);
-	CVAR_REGISTER(&sk_medic_ally_kick3);
-
-	CVAR_REGISTER(&sk_medic_ally_heal1);
-	CVAR_REGISTER(&sk_medic_ally_heal2);
-	CVAR_REGISTER(&sk_medic_ally_heal3);
-
-	// Ally Grunt Torch 
-	CVAR_REGISTER(&sk_torch_ally_health1);
-	CVAR_REGISTER(&sk_torch_ally_health2);
-	CVAR_REGISTER(&sk_torch_ally_health3);
-
-	CVAR_REGISTER(&sk_torch_ally_kick1);
-	CVAR_REGISTER(&sk_torch_ally_kick2);
-	CVAR_REGISTER(&sk_torch_ally_kick3);
+	//=========================================================
+	// NPCs: Ally Grunt Medic
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	REGISTER_SKILL_CVARS(medic_ally_health);
+	REGISTER_SKILL_CVARS(medic_ally_kick);
+	REGISTER_SKILL_CVARS(medic_ally_heal);
+	
+	//=========================================================
+	// NPCs: Ally Grunt Torch
+	// For Spirit of Half-Life v1.9: Opposing-Force Edition
+	//=========================================================
+	REGISTER_SKILL_CVARS(torch_ally_health);
+	REGISTER_SKILL_CVARS(torch_ally_kick);
 
 	// Pitworm
-	CVAR_REGISTER(&sk_pitworm_health1);
-	CVAR_REGISTER(&sk_pitworm_health2);
-	CVAR_REGISTER(&sk_pitworm_health3);
-
-	CVAR_REGISTER(&sk_pitworm_dmg_swipe1);
-	CVAR_REGISTER(&sk_pitworm_dmg_swipe2);
-	CVAR_REGISTER(&sk_pitworm_dmg_swipe3);
-
-	CVAR_REGISTER(&sk_pitworm_dmg_beam1);
-	CVAR_REGISTER(&sk_pitworm_dmg_beam2);
-	CVAR_REGISTER(&sk_pitworm_dmg_beam3);
+	REGISTER_SKILL_CVARS(pitworm_health);
+	REGISTER_SKILL_CVARS(pitworm_dmg_swipe);
+	REGISTER_SKILL_CVARS(pitworm_dmg_beam);
 
 	// Shock Roach
-	CVAR_REGISTER(&sk_shockroach_health1);
-	CVAR_REGISTER(&sk_shockroach_health2);
-	CVAR_REGISTER(&sk_shockroach_health3);
-
-	CVAR_REGISTER(&sk_shockroach_dmg_bite1);
-	CVAR_REGISTER(&sk_shockroach_dmg_bite2);
-	CVAR_REGISTER(&sk_shockroach_dmg_bite3);
-
-	CVAR_REGISTER(&sk_shockroach_lifespan1);
-	CVAR_REGISTER(&sk_shockroach_lifespan2);
-	CVAR_REGISTER(&sk_shockroach_lifespan3);
+	REGISTER_SKILL_CVARS(shockroach_health);
+	REGISTER_SKILL_CVARS(shockroach_dmg_bite);
+	REGISTER_SKILL_CVARS(shockroach_lifespan);
 
 	// Gonome
-	CVAR_REGISTER(&sk_gonome_health1);
-	CVAR_REGISTER(&sk_gonome_health2);
-	CVAR_REGISTER(&sk_gonome_health3);
-
-	CVAR_REGISTER(&sk_gonome_dmg_one_slash1);
-	CVAR_REGISTER(&sk_gonome_dmg_one_slash2);
-	CVAR_REGISTER(&sk_gonome_dmg_one_slash3);
-
-	CVAR_REGISTER(&sk_gonome_dmg_guts1);
-	CVAR_REGISTER(&sk_gonome_dmg_guts2);
-	CVAR_REGISTER(&sk_gonome_dmg_guts3);
-
-	CVAR_REGISTER(&sk_gonome_dmg_one_bite1);
-	CVAR_REGISTER(&sk_gonome_dmg_one_bite2);
-	CVAR_REGISTER(&sk_gonome_dmg_one_bite3);
+	REGISTER_SKILL_CVARS(gonome_health);
+	REGISTER_SKILL_CVARS(gonome_dmg_one_slash);
+	REGISTER_SKILL_CVARS(gonome_dmg_guts);
+	REGISTER_SKILL_CVARS(gonome_dmg_one_bite);
 
 	// ShockTrooper 
-	CVAR_REGISTER(&sk_shocktrooper_health1);
-	CVAR_REGISTER(&sk_shocktrooper_health2);
-	CVAR_REGISTER(&sk_shocktrooper_health3);
-
-	CVAR_REGISTER(&sk_shocktrooper_kick1);
-	CVAR_REGISTER(&sk_shocktrooper_kick2);
-	CVAR_REGISTER(&sk_shocktrooper_kick3);
-
-	CVAR_REGISTER(&sk_shocktrooper_gspeed1);
-	CVAR_REGISTER(&sk_shocktrooper_gspeed2);
-	CVAR_REGISTER(&sk_shocktrooper_gspeed3);
-
-	CVAR_REGISTER(&sk_shocktrooper_maxcharge1);
-	CVAR_REGISTER(&sk_shocktrooper_maxcharge2);
-	CVAR_REGISTER(&sk_shocktrooper_maxcharge3);
-
-	CVAR_REGISTER(&sk_shocktrooper_rchgspeed1);
-	CVAR_REGISTER(&sk_shocktrooper_rchgspeed2);
-	CVAR_REGISTER(&sk_shocktrooper_rchgspeed3);
+	REGISTER_SKILL_CVARS(shocktrooper_health);
+	REGISTER_SKILL_CVARS(shocktrooper_kick);
+	REGISTER_SKILL_CVARS(shocktrooper_gspeed);
+	REGISTER_SKILL_CVARS(shocktrooper_maxcharge);
+	REGISTER_SKILL_CVARS(shocktrooper_rchgspeed);
 
 	//Turret
-	CVAR_REGISTER(&sk_turret_health1);
-	CVAR_REGISTER(&sk_turret_health2);
-	CVAR_REGISTER(&sk_turret_health3);
+	REGISTER_SKILL_CVARS(turret_health);
 
 	// MiniTurret
-	CVAR_REGISTER(&sk_miniturret_health1);
-	CVAR_REGISTER(&sk_miniturret_health2);
-	CVAR_REGISTER(&sk_miniturret_health3);
+	REGISTER_SKILL_CVARS(miniturret_health);
 
 	// Sentry Turret
-	CVAR_REGISTER(&sk_sentry_health1);
-	CVAR_REGISTER(&sk_sentry_health2);
-	CVAR_REGISTER(&sk_sentry_health3);
+	REGISTER_SKILL_CVARS(sentry_health);
 
 	// PLAYER WEAPONS
 
 	// Crowbar whack
-	CVAR_REGISTER(&sk_plr_crowbar1);
-	CVAR_REGISTER(&sk_plr_crowbar2);
-	CVAR_REGISTER(&sk_plr_crowbar3);
+	REGISTER_SKILL_CVARS(plr_crowbar);
 
 	// Pipe Wrench
-	CVAR_REGISTER(&sk_plr_pipewrench1);
-	CVAR_REGISTER(&sk_plr_pipewrench2);
-	CVAR_REGISTER(&sk_plr_pipewrench3);
+	REGISTER_SKILL_CVARS(plr_pipewrench);
 
 	// Knife whack
-	CVAR_REGISTER(&sk_plr_knife1);
-	CVAR_REGISTER(&sk_plr_knife2);
-	CVAR_REGISTER(&sk_plr_knife3);
-
-	CVAR_REGISTER(&sk_plr_knife_charge1);
-	CVAR_REGISTER(&sk_plr_knife_charge2);
-	CVAR_REGISTER(&sk_plr_knife_charge3);
+	REGISTER_SKILL_CVARS(plr_knife);
+	REGISTER_SKILL_CVARS(plr_knife_charge);
 
 	// Glock Round
-	CVAR_REGISTER(&sk_plr_9mm_bullet1);
-	CVAR_REGISTER(&sk_plr_9mm_bullet2);
-	CVAR_REGISTER(&sk_plr_9mm_bullet3);
+	REGISTER_SKILL_CVARS(plr_9mm_bullet);
 
 	// 357 Round
-	CVAR_REGISTER(&sk_plr_357_bullet1);
-	CVAR_REGISTER(&sk_plr_357_bullet2);
-	CVAR_REGISTER(&sk_plr_357_bullet3);
+	REGISTER_SKILL_CVARS(plr_357_bullet);
 
 	// 762 Round
-	CVAR_REGISTER(&sk_plr_762_bullet1);
-	CVAR_REGISTER(&sk_plr_762_bullet2);
-	CVAR_REGISTER(&sk_plr_762_bullet3);
+	REGISTER_SKILL_CVARS(plr_762_bullet);
 
 	// MP5 Round
-	CVAR_REGISTER(&sk_plr_9mmAR_bullet1);
-	CVAR_REGISTER(&sk_plr_9mmAR_bullet2);
-	CVAR_REGISTER(&sk_plr_9mmAR_bullet3);
+	REGISTER_SKILL_CVARS(plr_9mmAR_bullet);
 
 	// M203 grenade
-	CVAR_REGISTER(&sk_plr_9mmAR_grenade1);
-	CVAR_REGISTER(&sk_plr_9mmAR_grenade2);
-	CVAR_REGISTER(&sk_plr_9mmAR_grenade3);
+	REGISTER_SKILL_CVARS(plr_9mmAR_grenade);
 
 	// Shotgun buckshot
-	CVAR_REGISTER(&sk_plr_buckshot1);
-	CVAR_REGISTER(&sk_plr_buckshot2);
-	CVAR_REGISTER(&sk_plr_buckshot3);
+	REGISTER_SKILL_CVARS(plr_buckshot);
 
 	// Crossbow
-	CVAR_REGISTER(&sk_plr_xbow_bolt_monster1);
-	CVAR_REGISTER(&sk_plr_xbow_bolt_monster2);
-	CVAR_REGISTER(&sk_plr_xbow_bolt_monster3);
-
-	CVAR_REGISTER(&sk_plr_xbow_bolt_client1);
-	CVAR_REGISTER(&sk_plr_xbow_bolt_client2);
-	CVAR_REGISTER(&sk_plr_xbow_bolt_client3);
+	REGISTER_SKILL_CVARS(plr_xbow_bolt_monster);
+	REGISTER_SKILL_CVARS(plr_xbow_bolt_client);
 
 	// RPG
-	CVAR_REGISTER(&sk_plr_rpg1);
-	CVAR_REGISTER(&sk_plr_rpg2);
-	CVAR_REGISTER(&sk_plr_rpg3);
+	REGISTER_SKILL_CVARS(plr_rpg);
 
 	// Gauss Gun
-	CVAR_REGISTER(&sk_plr_gauss1);
-	CVAR_REGISTER(&sk_plr_gauss2);
-	CVAR_REGISTER(&sk_plr_gauss3);
+	REGISTER_SKILL_CVARS(plr_gauss);
 
 	// Egon Gun
-	CVAR_REGISTER(&sk_plr_egon_narrow1);
-	CVAR_REGISTER(&sk_plr_egon_narrow2);
-	CVAR_REGISTER(&sk_plr_egon_narrow3);
-
-	CVAR_REGISTER(&sk_plr_egon_wide1);
-	CVAR_REGISTER(&sk_plr_egon_wide2);
-	CVAR_REGISTER(&sk_plr_egon_wide3);
+	REGISTER_SKILL_CVARS(plr_egon_narrow);
+	REGISTER_SKILL_CVARS(plr_egon_wide);
 
 	// Hand Grendade
-	CVAR_REGISTER(&sk_plr_hand_grenade1);
-	CVAR_REGISTER(&sk_plr_hand_grenade2);
-	CVAR_REGISTER(&sk_plr_hand_grenade3);
+	REGISTER_SKILL_CVARS(plr_hand_grenade);
 
 	// Satchel Charge
-	CVAR_REGISTER(&sk_plr_satchel1);
-	CVAR_REGISTER(&sk_plr_satchel2);
-	CVAR_REGISTER(&sk_plr_satchel3);
+	REGISTER_SKILL_CVARS(plr_satchel);
 
 	// Tripmine
-	CVAR_REGISTER(&sk_plr_tripmine1);
-	CVAR_REGISTER(&sk_plr_tripmine2);
-	CVAR_REGISTER(&sk_plr_tripmine3);
+	REGISTER_SKILL_CVARS(plr_tripmine);
 
-	// 556
-	CVAR_REGISTER(&sk_plr_556_bullet1);
-	CVAR_REGISTER(&sk_plr_556_bullet2);
-	CVAR_REGISTER(&sk_plr_556_bullet3);
+	// 556 Player
+	REGISTER_SKILL_CVARS(plr_556_bullet);
 
 	// WORLD WEAPONS
-	CVAR_REGISTER(&sk_12mm_bullet1);
-	CVAR_REGISTER(&sk_12mm_bullet2);
-	CVAR_REGISTER(&sk_12mm_bullet3);
-
-	CVAR_REGISTER(&sk_9mmAR_bullet1);
-	CVAR_REGISTER(&sk_9mmAR_bullet2);
-	CVAR_REGISTER(&sk_9mmAR_bullet3);
-
-	CVAR_REGISTER(&sk_9mm_bullet1);
-	CVAR_REGISTER(&sk_9mm_bullet2);
-	CVAR_REGISTER(&sk_9mm_bullet3);
+	REGISTER_SKILL_CVARS(12mm_bullet);
+	REGISTER_SKILL_CVARS(9mmAR_bullet);
+	REGISTER_SKILL_CVARS(9mm_bullet);
 
 	// 556
-	CVAR_REGISTER(&sk_556_bullet1);
-	CVAR_REGISTER(&sk_556_bullet2);
-	CVAR_REGISTER(&sk_556_bullet3);
+	REGISTER_SKILL_CVARS(556_bullet);
 
 	// HORNET
-	CVAR_REGISTER(&sk_hornet_dmg1);
-	CVAR_REGISTER(&sk_hornet_dmg2);
-	CVAR_REGISTER(&sk_hornet_dmg3);
+	REGISTER_SKILL_CVARS(hornet_dmg);
 
 	// SHOCKROACH
-	CVAR_REGISTER(&sk_plr_shockroachs1);
-	CVAR_REGISTER(&sk_plr_shockroachs2);
-	CVAR_REGISTER(&sk_plr_shockroachs3);
-
-	CVAR_REGISTER(&sk_plr_shockroachm1);
-	CVAR_REGISTER(&sk_plr_shockroachm2);
-	CVAR_REGISTER(&sk_plr_shockroachm3);
+	REGISTER_SKILL_CVARS(plr_shockroachs);
+	REGISTER_SKILL_CVARS(plr_shockroachm);
 
 	// SPOREGRENADE
-	CVAR_REGISTER(&sk_plr_spore1);
-	CVAR_REGISTER(&sk_plr_spore2);
-	CVAR_REGISTER(&sk_plr_spore3);
+	REGISTER_SKILL_CVARS(plr_spore);
 
 	// HEALTH/SUIT CHARGE DISTRIBUTION
-	CVAR_REGISTER(&sk_suitcharger1);
-	CVAR_REGISTER(&sk_suitcharger2);
-	CVAR_REGISTER(&sk_suitcharger3);
-
-	CVAR_REGISTER(&sk_battery1);
-	CVAR_REGISTER(&sk_battery2);
-	CVAR_REGISTER(&sk_battery3);
-
-	CVAR_REGISTER(&sk_healthcharger1);
-	CVAR_REGISTER(&sk_healthcharger2);
-	CVAR_REGISTER(&sk_healthcharger3);
-
-	CVAR_REGISTER(&sk_healthkit1);
-	CVAR_REGISTER(&sk_healthkit2);
-	CVAR_REGISTER(&sk_healthkit3);
-
-	CVAR_REGISTER(&sk_scientist_heal1);
-	CVAR_REGISTER(&sk_scientist_heal2);
-	CVAR_REGISTER(&sk_scientist_heal3);
-
-	CVAR_REGISTER(&sk_flashcharge1);
-	CVAR_REGISTER(&sk_flashcharge2);
-	CVAR_REGISTER(&sk_flashcharge3);
+	REGISTER_SKILL_CVARS(suitcharger);
+	REGISTER_SKILL_CVARS(battery);
+	REGISTER_SKILL_CVARS(healthcharger);
+	REGISTER_SKILL_CVARS(healthkit);
+	REGISTER_SKILL_CVARS(scientist_heal);
+	REGISTER_SKILL_CVARS(flashcharge);
 
 	// monster damage adjusters
-	CVAR_REGISTER(&sk_monster_head1);
-	CVAR_REGISTER(&sk_monster_head2);
-	CVAR_REGISTER(&sk_monster_head3);
-
-	CVAR_REGISTER(&sk_monster_chest1);
-	CVAR_REGISTER(&sk_monster_chest2);
-	CVAR_REGISTER(&sk_monster_chest3);
-
-	CVAR_REGISTER(&sk_monster_stomach1);
-	CVAR_REGISTER(&sk_monster_stomach2);
-	CVAR_REGISTER(&sk_monster_stomach3);
-
-	CVAR_REGISTER(&sk_monster_arm1);
-	CVAR_REGISTER(&sk_monster_arm2);
-	CVAR_REGISTER(&sk_monster_arm3);
-
-	CVAR_REGISTER(&sk_monster_leg1);
-	CVAR_REGISTER(&sk_monster_leg2);
-	CVAR_REGISTER(&sk_monster_leg3);
+	REGISTER_SKILL_CVARS(monster_head);
+	REGISTER_SKILL_CVARS(monster_chest);
+	REGISTER_SKILL_CVARS(monster_stomach);
+	REGISTER_SKILL_CVARS(monster_arm);
+	REGISTER_SKILL_CVARS(monster_leg);
 
 	// player damage adjusters
-	CVAR_REGISTER(&sk_player_head1);
-	CVAR_REGISTER(&sk_player_head2);
-	CVAR_REGISTER(&sk_player_head3);
-
-	CVAR_REGISTER(&sk_player_chest1);
-	CVAR_REGISTER(&sk_player_chest2);
-	CVAR_REGISTER(&sk_player_chest3);
-
-	CVAR_REGISTER(&sk_player_stomach1);
-	CVAR_REGISTER(&sk_player_stomach2);
-	CVAR_REGISTER(&sk_player_stomach3);
-
-	CVAR_REGISTER(&sk_player_arm1);
-	CVAR_REGISTER(&sk_player_arm2);
-	CVAR_REGISTER(&sk_player_arm3);
-
-	CVAR_REGISTER(&sk_player_leg1);
-	CVAR_REGISTER(&sk_player_leg2);
-	CVAR_REGISTER(&sk_player_leg3);
+	REGISTER_SKILL_CVARS(player_head);
+	REGISTER_SKILL_CVARS(player_chest);
+	REGISTER_SKILL_CVARS(player_stomach);
+	REGISTER_SKILL_CVARS(player_arm);
+	REGISTER_SKILL_CVARS(player_leg);
 
 	// END REGISTER CVARS FOR SKILL LEVEL STUFF
 	SERVER_COMMAND("exec skill.cfg\n");
 	SERVER_COMMAND("exec skill_opfor.cfg\n"); // Opposing-Force
 	SERVER_COMMAND("exec skill_hitgroups.cfg\n"); // Hitgroups
 }
-
