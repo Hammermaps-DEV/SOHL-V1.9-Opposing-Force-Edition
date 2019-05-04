@@ -114,7 +114,8 @@ typedef void (CBaseEntity::*USEPTR)( CBaseEntity *pActivator, CBaseEntity *pCall
 #define CLASS_FACTION_A			14 //LRC - very simple new classes, for use with Behaves As
 #define CLASS_FACTION_B			15
 #define CLASS_FACTION_C			16
-#define CLASS_GIBS				17 
+#define CLASS_GIBS				17
+#define CLASS_HUMAN_MILITARY_FRIENDLY 18	// Opposing Force friendlies
 #define	CLASS_BARNACLE			99 // special because no one pays attention to it, and it eats a wide cross-section of creatures.
 
 class CBaseEntity;
@@ -135,17 +136,22 @@ private:
 	edict_t *m_pent;
 	int		m_serialnumber;
 public:
-	edict_t *Get( void );
-	edict_t *Set( edict_t *pent );
+	edict_t *Get(void);
+	edict_t *Set(edict_t *pent);
 
-	operator int ();
+	operator int();
 
 	operator CBaseEntity *();
 
 	CBaseEntity * operator = (CBaseEntity *pEntity);
 	CBaseEntity * operator ->();
-};
 
+	template<typename T>
+	T* Entity()
+	{
+		return static_cast<T*>(operator CBaseEntity *());
+	}
+};
 
 //
 // Base Entity.  All entity types derive from this
@@ -158,11 +164,11 @@ public:
 	entvars_t *pev;		// Don't need to save/restore this pointer, the engine resets it
 
 	// path corners
-	CBaseEntity			*m_pGoalEnt;// path corner we are heading towards
-	CBaseEntity			*m_pLink;// used for temporary link-list operations.
+	CBaseEntity		*m_pGoalEnt;// path corner we are heading towards
+	CBaseEntity		*m_pLink;// used for temporary link-list operations.
 
 	CBaseEntity	*m_pMoveWith;	// LRC- the entity I move with.
-	int		m_MoveWith;	//LRC- Name of that entity
+	int			m_MoveWith;	//LRC- Name of that entity
 	CBaseEntity	*m_pChildMoveWith;	//LRC- one of the entities that's moving with me.
 	CBaseEntity	*m_pSiblingMoveWith; //LRC- another entity that's Moving With the same ent as me. (linked list.)
 	CBaseEntity	*m_pAssistLink; // LRC- link to the next entity which needs to be Assisted before physics are applied.
@@ -178,9 +184,8 @@ public:
 
 	float		m_fNextThink; // LRC - for SetNextThink and SetPhysThink. Marks the time when a think will be performed - not necessarily the same as pev->nextthink!
 	float		m_fPevNextThink; // LRC - always set equal to pev->nextthink, so that we can tell when the latter gets changed by the @#$^¬! engine.
-	int		m_iLFlags; // LRC- a new set of flags. (pev->spawnflags and pev->flags are full...)
-	virtual void	DesiredAction( void ) {}; // LRC - for postponing stuff until PostThink time, not as a think.
-	int		m_iStyle; // LRC - almost anything can have a lightstyle these days...
+	int			m_iLFlags; // LRC- a new set of flags. (pev->spawnflags and pev->flags are full...)
+	int			m_iStyle; // LRC - almost anything can have a lightstyle these days...
 
 	Vector		m_vecSpawnOffset; // LRC- To fix things which (for example) MoveWith a door which Starts Open.
 	BOOL		m_activated; // LRC- moved here from func_train. Signifies that an entity has already been
@@ -188,14 +193,15 @@ public:
 
 	//LRC - decent mechanisms for setting think times!
 	// this should have been done a long time ago, but MoveWith finally forced me.
-	virtual void		SetNextThink( float delay ) { SetNextThink(delay, FALSE); }
-	virtual void		SetNextThink( float delay, BOOL correctSpeed );
-	virtual void		AbsoluteNextThink( float time ) { AbsoluteNextThink(time, FALSE); }
-	virtual void		AbsoluteNextThink( float time, BOOL correctSpeed );
-	void			SetEternalThink( );
+	virtual void	SetNextThink( float delay ) { SetNextThink(delay, FALSE); }
+	virtual void	SetNextThink( float delay, BOOL correctSpeed );
+	virtual void	AbsoluteNextThink( float time ) { AbsoluteNextThink(time, FALSE); }
+	virtual void	AbsoluteNextThink( float time, BOOL correctSpeed );
+	virtual void	SetEternalThink( );
 
-	void	DontThink( void );
-	virtual void ThinkCorrection( void );
+	virtual void	DontThink( void );
+	virtual void	DesiredAction(void) {}; // LRC - for postponing stuff until PostThink time, not as a think.
+	virtual void	ThinkCorrection( void );
 
 	//LRC - loci
 	virtual Vector	CalcPosition( CBaseEntity *pLocus )	{ return pev->origin; }
@@ -228,16 +234,17 @@ public:
 		}
 		else pkvd->fHandled = FALSE;
 	}
+
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
 	//LRC - if I MoveWith something, then only cross transitions if the MoveWith entity does too.
-	virtual int	ObjectCaps( void ) { return m_pMoveWith?m_pMoveWith->ObjectCaps()&FCAP_ACROSS_TRANSITION:FCAP_ACROSS_TRANSITION; }
+	virtual int		ObjectCaps( void ) { return m_pMoveWith?m_pMoveWith->ObjectCaps()&FCAP_ACROSS_TRANSITION:FCAP_ACROSS_TRANSITION; }
 	virtual void	Activate( void ); //LRC
-	void		InitMoveWith( void ); //LRC - called by Activate() to set up moveWith values
-	void		SetParent( int m_iNewParent, int m_iAttachment = 0);//g-cont. two version of SetParent. from xash 0.4
-          void		SetParent( CBaseEntity *pParent, int m_iAttachment = 0 );//g-cont. dynamiclly link parents
-	void		ResetParent( void );
-	void		ClearPointers( void ); //g-cont. directly clear all movewith pointer before changelevel
+	void			InitMoveWith( void ); //LRC - called by Activate() to set up moveWith values
+	void			SetParent( int m_iNewParent, int m_iAttachment = 0);//g-cont. two version of SetParent. from xash 0.4
+    void			SetParent( CBaseEntity *pParent, int m_iAttachment = 0 );//g-cont. dynamiclly link parents
+	void			ResetParent( void );
+	void			ClearPointers( void ); //g-cont. directly clear all movewith pointer before changelevel
 	virtual void	PostSpawn( void ) {} //LRC - called by Activate() to handle entity-specific initialisation.
 	// (mostly setting positions, for MoveWith support)
 
@@ -263,7 +270,6 @@ public:
 // on the same side won't attack each other, even if they have different classnames.
 	virtual int Classify ( void ) { return CLASS_NONE; };
 	virtual void DeathNotice ( entvars_t *pevChild ) {}// monster maker children use this to tell the monster maker that they have died.
-
 
 // LRC- this supports a global concept of "entities with states", so that state_watchers and
 // mastership (mastery? masterhood?) can work universally.
@@ -310,7 +316,6 @@ public:
 	virtual	BOOL	IsPlayer( void ) { return FALSE; }
 	virtual BOOL	IsNetClient( void ) { return FALSE; }
 	virtual const char *TeamID( void ) { return ""; }
-
 
 //	virtual void	SetActivator( CBaseEntity *pActivator ) {}
 	virtual CBaseEntity *GetNextTarget( void );
@@ -379,6 +384,18 @@ public:
 	static CBaseEntity *Instance( entvars_t *pev ) { return Instance( ENT( pev ) ); }
 	static CBaseEntity *Instance( int eoffset) { return Instance( ENT( eoffset) ); }
 
+	template<typename T>
+	static T* Instance(edict_t *pent)
+	{
+		if (!pent)
+			pent = ENT(0);
+		CBaseEntity *pEnt = (CBaseEntity *)GET_PRIVATE(pent);
+		return static_cast<T*>(pEnt);
+	}
+
+	template<typename T>
+	static T* Instance(entvars_t *pev) { return Instance<T>(ENT(pev)); }
+
 	CBaseMonster *GetMonsterPointer( entvars_t *pevMonster )
 	{
 		CBaseEntity *pEntity = Instance( pevMonster );
@@ -429,13 +446,10 @@ public:
 	}
 
 #endif
-
-
 	// virtual functions used by a few classes
 
 	// used by monsters that are created by the MonsterMaker
 	virtual	void UpdateOwner( void ) { return; };
-
 
 	//
 	static CBaseEntity *Create( char *szName, const Vector &vecOrigin, const Vector &vecAngles, edict_t *pentOwner = NULL );

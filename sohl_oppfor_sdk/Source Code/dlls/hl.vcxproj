@@ -112,6 +112,10 @@
     <ClCompile Include="prop_bushs.cpp" />
     <ClCompile Include="prop_generic.cpp" />
     <ClCompile Include="rcallymonster.cpp" />
+    <ClCompile Include="rope\CElectrifiedWire.cpp" />
+    <ClCompile Include="rope\CRope.cpp" />
+    <ClCompile Include="rope\CRopeSample.cpp" />
+    <ClCompile Include="rope\CRopeSegment.cpp" />
     <ClCompile Include="weapon_crossbow.cpp" />
     <ClCompile Include="weapon_crowbar.cpp" />
     <ClCompile Include="defaultai.cpp" />
@@ -244,7 +248,6 @@
     <ClInclude Include="effects.h" />
     <ClInclude Include="enginecallback.h" />
     <ClInclude Include="env_lensflare.h" />
-    <ClInclude Include="env_rope.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
     <ClInclude Include="func_break.h" />
@@ -345,8 +348,10 @@
     <ClInclude Include="prop_bushs.h" />
     <ClInclude Include="prop_generic.h" />
     <ClInclude Include="rcallymonster.h" />
-    <ClInclude Include="rope_sample.h" />
-    <ClInclude Include="rope_segment.h" />
+    <ClInclude Include="rope\CElectrifiedWire.h" />
+    <ClInclude Include="rope\CRope.h" />
+    <ClInclude Include="rope\CRopeSample.h" />
+    <ClInclude Include="rope\CRopeSegment.h" />
     <ClInclude Include="saverestore.h" />
     <ClInclude Include="schedule.h" />
     <ClInclude Include="scripted.h" />

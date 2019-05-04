@@ -16,6 +16,7 @@
 #define PLAYER_H
 
 #include "pm_materials.h"
+#include "rope/CRope.h"
 
 #define PLAYER_FATAL_FALL_SPEED		1024// approx 60 feet
 #define PLAYER_MAX_SAFE_FALL_SPEED	580// approx 20 feet
@@ -37,6 +38,7 @@
 #define		PFLAG_LATCHING		( 1<<6 )		// Player is latching to a target
 #define		PFLAG_ATTACHED		( 1<<7 )		// Player is attached by a barnacle tongue tip
 #define		PFLAG_ON_GRAPPLE 	( 1<<8 ) 		// Added Physics flag for grapple
+#define		PFLAG_ONROPE		( 1<<9 )
 
 //
 // generic player
@@ -91,6 +93,7 @@ enum sbar_data
 #define CHAT_INTERVAL 1.0f
 
 class CParticleEmitter;
+class CRope;
 
 class CBasePlayer : public CBaseMonster
 {
@@ -330,6 +333,7 @@ public:
 	float m_flStatusBarDisappearDelay;
 	char m_SbarString0[ SBAR_STRING_SIZE ];
 	char m_SbarString1[ SBAR_STRING_SIZE ];
+
 	// for trigger_viewset
 	int		viewEntity; // string
 	int		viewFlags;	// 1-active, 2-draw hud
@@ -352,6 +356,33 @@ public:
 	friend class CDisplacer;
 
 	int	Rain_needsUpdate;
+
+	bool IsOnRope() const { return (m_afPhysicsFlags & PFLAG_ONROPE) != 0; }
+
+	void SetOnRopeState(bool bOnRope)
+	{
+		if (bOnRope)
+			m_afPhysicsFlags |= PFLAG_ONROPE;
+		else
+			m_afPhysicsFlags &= ~PFLAG_ONROPE;
+	}
+
+	CRope* GetRope() { return m_pRope; }
+
+	void SetRope(CRope* pRope)
+	{
+		m_pRope = pRope;
+	}
+
+	void SetIsClimbing(const bool bIsClimbing)
+	{
+		m_bIsClimbing = bIsClimbing;
+	}
+
+private:
+	CRope* m_pRope;
+	float m_flLastClimbTime = 0;
+	bool m_bIsClimbing = false;
 };
 
 #define AUTOAIM_2DEGREES  0.0348994967025

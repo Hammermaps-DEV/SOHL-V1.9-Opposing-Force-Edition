@@ -488,7 +488,7 @@ Task_t	tlDiabloRangeAttack1[] = {
 Schedule_t	slDiabloRangeAttack1[] = {
 	{
 		tlDiabloRangeAttack1,
-		ARRAYSIZE(tlDiabloRangeAttack1),
+		HL_ARRAYSIZE(tlDiabloRangeAttack1),
 		bits_COND_NEW_ENEMY |
 		bits_COND_ENEMY_DEAD |
 		bits_COND_LIGHT_DAMAGE |
@@ -509,7 +509,7 @@ Task_t	tlDiabloRangeAttack2[] = {
 Schedule_t	slDiabloRangeAttack2[] = {
 	{
 		tlDiabloRangeAttack2,
-		ARRAYSIZE(tlDiabloRangeAttack2),
+		HL_ARRAYSIZE(tlDiabloRangeAttack2),
 		bits_COND_NEW_ENEMY |
 		bits_COND_ENEMY_DEAD |
 		bits_COND_LIGHT_DAMAGE |

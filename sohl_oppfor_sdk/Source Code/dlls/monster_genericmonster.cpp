@@ -305,7 +305,7 @@ void CGenericMonster::MakeGas( void )
 	// m_flNextAttack = UTIL_GlobalTimeBase() + RANDOM_FLOAT( 0.5, 4.0 );
 	if ( int gas = 1 )
 	{
-		pev->nextthink = UTIL_GlobalTimeBase();
+		SetNextThink(0);
 	}
 }
 

@@ -322,7 +322,7 @@ void CGeneWorm::Spawn()
 	InitBoneControllers();
 
 	SetThink(&CGeneWorm::StartupThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 
 	m_vecDesired = Vector(1, 0, 0);
 	m_posDesired = Vector(pev->origin.x, pev->origin.y, 512);
@@ -349,7 +349,7 @@ void CGeneWorm::Precache()
 void CGeneWorm::NullThink(void)
 {
 	StudioFrameAdvance();
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
+	SetNextThink(0.5);
 }
 
 //=========================================================
@@ -358,7 +358,7 @@ void CGeneWorm::NullThink(void)
 void CGeneWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetThink(&CGeneWorm::HuntThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	SetUse(&CGeneWorm::CommandUse);
 }
 
@@ -379,7 +379,7 @@ void CGeneWorm::StartupThink(void)
 
 	SetThink(&CGeneWorm::HuntThink);
 	SetUse(&CGeneWorm::CommandUse);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 }
 
 
@@ -390,7 +390,7 @@ void CGeneWorm::Killed(entvars_t *pevAttacker, int iGib)
 
 void CGeneWorm::DyingThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -485,7 +485,7 @@ void CGeneWorm::NextActivity(void)
 
 void CGeneWorm::HuntThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 

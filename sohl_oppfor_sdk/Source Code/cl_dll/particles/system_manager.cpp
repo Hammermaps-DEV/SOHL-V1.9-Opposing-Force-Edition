@@ -403,7 +403,7 @@ particle_texture_s* CParticleSystemManager::HasTexture(char* sName) {
 	for (; i < iTextures; i++)
 	{
 		pCacheEntry = m_pTextures[i];
-		if(!stricmp(pCacheEntry->sTexture, sName)) {
+		if(!_stricmp(pCacheEntry->sTexture, sName)) {
 			return pCacheEntry->pTexture;
 		}
 	}

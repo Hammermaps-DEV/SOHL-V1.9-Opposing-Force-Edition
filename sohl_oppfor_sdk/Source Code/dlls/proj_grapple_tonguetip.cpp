@@ -71,7 +71,7 @@ void CGrappleHook::Spawn(void)
 	UTIL_MakeVectors(pev->angles);
 	pev->velocity = gpGlobals->v_forward * 500;
 	pev->gravity = 0;
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.01;	// Fograin92: Changed this to 0.01 it will be much smoother
+	SetNextThink(0.01);
 	pev->dmg = 0;
 }
 
@@ -298,5 +298,5 @@ void CGrappleHook::Move(void)
 		m_pTongue->SetScrollRate(20);
 	}
 
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.01;
+	SetNextThink(0.01);
 }

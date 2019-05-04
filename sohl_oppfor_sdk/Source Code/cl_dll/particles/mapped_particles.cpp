@@ -257,63 +257,63 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 		// i'd love to here it, cause this is fugly
 
 		// number of particles at creation
-		if(!stricmp(sSetting, "starting_particles")) {
+		if(!_stricmp(sSetting, "starting_particles")) {
 			m_pSystem->iStartingParticles = atoi(sValue);
 		}
 		// new particles per second
-		else if(!stricmp(sSetting, "new_particles_per_second")) {
+		else if(!_stricmp(sSetting, "new_particles_per_second")) {
 			m_pSystem->flNewParticlesPerSecond = atof(sValue);
 		}
 		// particle texture
-		else if(!stricmp(sSetting, "texture")) {
+		else if(!_stricmp(sSetting, "texture")) {
 			_snprintf(m_pSystem->sParticleTexture, MAX_PARTICLE_PATH, "%s", sValue);
 		}
 		// size of texture * this value 
-		else if(!stricmp(sSetting, "scale")) {
+		else if(!_stricmp(sSetting, "scale")) {
 			m_pSystem->flParticleScaleSize = atof(sValue);
 		}
 		// how much the particle shrinks/grows per second
-		else if(!stricmp(sSetting, "growth")) {
+		else if(!_stricmp(sSetting, "growth")) {
 			m_pSystem->flScaleIncreasePerSecond = atof(sValue);
 		}
 		// how long the average particle lasts for
-		else if(!stricmp(sSetting, "lifetime")) {
+		else if(!_stricmp(sSetting, "lifetime")) {
 			m_pSystem->flParticleLife = atof(sValue);
 		} 
 		// variation of the particles' lifetime per system instance
-		else if(!stricmp(sSetting, "lifetime_var")) {
+		else if(!_stricmp(sSetting, "lifetime_var")) {
 			m_pSystem->flParticleLifeVariation = atof(sValue);
 		}
 		// how fast the particles in the system rotate
-		else if(!stricmp(sSetting, "rotation_speed")) {
+		else if(!_stricmp(sSetting, "rotation_speed")) {
 			m_pSystem->flParticleRotationSpeed = atof(sValue);
 		} 
 		// how large is the gravity that effects the particles
-		else if(!stricmp(sSetting, "gravity")) {
+		else if(!_stricmp(sSetting, "gravity")) {
 			m_pSystem->flGravity = atof(sValue);
 		}
 		// starting velocity of the particles in x, y and z
-		else if(!stricmp(sSetting, "starting_velocity_x")) {
+		else if(!_stricmp(sSetting, "starting_velocity_x")) {
 			m_pSystem->vStartingVel.x = atof(sValue);
-		} else if(!stricmp(sSetting, "starting_velocity_y")) {
+		} else if(!_stricmp(sSetting, "starting_velocity_y")) {
 			m_pSystem->vStartingVel.y = atof(sValue);
-		} else if(!stricmp(sSetting, "starting_velocity_z")) {
+		} else if(!_stricmp(sSetting, "starting_velocity_z")) {
 			m_pSystem->vStartingVel.z = atof(sValue);
 		}
 		// variation of the velocity per system instance
-		else if(!stricmp(sSetting, "velocity_var_x")) {
+		else if(!_stricmp(sSetting, "velocity_var_x")) {
 			m_pSystem->vVelocityVar.x = atof(sValue);
-		} else if(!stricmp(sSetting, "velocity_var_y")) {
+		} else if(!_stricmp(sSetting, "velocity_var_y")) {
 			m_pSystem->vVelocityVar.y = atof(sValue);
-		} else if(!stricmp(sSetting, "velocity_var_z")) {
+		} else if(!_stricmp(sSetting, "velocity_var_z")) {
 			m_pSystem->vVelocityVar.z = atof(sValue);
 		}
 		// how much velocity is reduced over time
-		else if(!stricmp(sSetting, "damping")) {
+		else if(!_stricmp(sSetting, "damping")) {
 			m_pSystem->flVelocityDampening = atof(sValue);
 		}
 		// how transparent the particles are
-		else if(!stricmp(sSetting, "transparency")) {
+		else if(!_stricmp(sSetting, "transparency")) {
 			iTemp = atoi(sValue);
 		
 			// make sure it isn't out of range
@@ -323,7 +323,7 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 				m_pSystem->iTransparency = iTemp;
 		}
 		// how long the system lasts for
-		else if(!stricmp(sSetting, "system_life")) {
+		else if(!_stricmp(sSetting, "system_life")) {
 			flTemp = atof(sValue);
 
 			if(flTemp < 0.0)
@@ -332,51 +332,51 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 			m_pSystem->flSystemLifetime = flTemp;
 		}
 		// what mode we will display these particles in
-		else if(!stricmp(sSetting, "display_mode")) {
-			if(!stricmp(sValue, "24"))
+		else if(!_stricmp(sSetting, "display_mode")) {
+			if(!_stricmp(sValue, "24"))
 				m_pSystem->iDisplayMode = TWENTY_FOUR_BIT_ADDITIVE;
 			else
 				m_pSystem->iDisplayMode = THIRTY_TWO_BIT;
 		}
 		// emitter shape
-		else if(!stricmp(sSetting, "emitter_shape")) {
-			if(!stricmp(sValue, "plane"))
+		else if(!_stricmp(sSetting, "emitter_shape")) {
+			if(!_stricmp(sValue, "plane"))
 				m_pSystem->iSystemShape = SHAPE_PLANE;
-			else if(!stricmp(sValue, "around_player"))
+			else if(!_stricmp(sValue, "around_player"))
 				m_pSystem->iSystemShape = SHAPE_AROUND_PLAYER;
 			else
 				m_pSystem->iSystemShape = SHAPE_POINT;
 		}
 		// how long the plane is if SHAPE_PLANE or how far around the player if SHAPE_AROUND_PLAYER has been set
-		else if(!stricmp(sSetting, "plane_x_length")) {
+		else if(!_stricmp(sSetting, "plane_x_length")) {
 			m_pSystem->iPlaneXLength = atoi(sValue);
 		}
-		else if(!stricmp(sSetting, "plane_y_length")) {
+		else if(!_stricmp(sSetting, "plane_y_length")) {
 			m_pSystem->iPlaneYLength = atoi(sValue);
 		}
 		// the animation speed mode used
-		else if(!stricmp(sSetting, "anim_speed")) {
-			if(!stricmp(sValue, "fast_to_slow"))
+		else if(!_stricmp(sSetting, "anim_speed")) {
+			if(!_stricmp(sValue, "fast_to_slow"))
 				m_pSystem->iAnimSpeed = START_FAST_END_SLOW;
-			else if(!stricmp(sValue, "custom"))
+			else if(!_stricmp(sValue, "custom"))
 				m_pSystem->iAnimSpeed = CUSTOM;
 			else
 				m_pSystem->iAnimSpeed = ANIMATE_OVER_LIFE;
 		}
 		// fps for the anim
-		else if(!stricmp(sSetting, "fps")) {
+		else if(!_stricmp(sSetting, "fps")) {
 			m_pSystem->iFPS = abs(atoi(sValue));
 		}
 		// first frame we will use
-		else if(!stricmp(sSetting, "starting_frame")) {
+		else if(!_stricmp(sSetting, "starting_frame")) {
 			m_pSystem->iStartingFrame = abs(atoi(sValue));
 		}
 		// last frame we will use
-		else if(!stricmp(sSetting, "ending_frame")) {
+		else if(!_stricmp(sSetting, "ending_frame")) {
 			m_pSystem->iEndingFrame = abs(atoi(sValue));
 		}
 		// how many frames in this image, must be a sqaure number
-		else if(!stricmp(sSetting, "frames_in_image")) {
+		else if(!_stricmp(sSetting, "frames_in_image")) {
 			flTemp = abs(atof(sValue)); // must be position
 			if((int)sqrt(flTemp) == (int)abs(sqrt(flTemp))) {
 				if(flTemp <= 0.0f)
@@ -388,25 +388,25 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 			}
 		}
 		// how looping of the animation is handled
-		else if(!stricmp(sSetting, "loop_behaviour")) {
-			if(!stricmp(sValue, "loop"))
+		else if(!_stricmp(sSetting, "loop_behaviour")) {
+			if(!_stricmp(sValue, "loop"))
 				m_pSystem->iAnimBehaviour = LOOP;
-			else if(!stricmp(sValue, "reverse"))
+			else if(!_stricmp(sValue, "reverse"))
 				m_pSystem->iAnimBehaviour = REVERSE_LOOP;
 			else
 				m_pSystem->iAnimBehaviour = ONCE_THROUGH;
 		}
 		// how collisions with solid brushes are handled
-		else if(!stricmp(sSetting, "collision")) {
-			if(!stricmp(sValue, "stuck"))
+		else if(!_stricmp(sSetting, "collision")) {
+			if(!_stricmp(sValue, "stuck"))
 				m_pSystem->iParticleCollision = PARTICLE_STUCK;
-			else if(!stricmp(sValue, "die"))
+			else if(!_stricmp(sValue, "die"))
 				m_pSystem->iParticleCollision = PARTICLE_DIE;
-			else if(!stricmp(sValue, "bounce"))
+			else if(!_stricmp(sValue, "bounce"))
 				m_pSystem->iParticleCollision = PARTICLE_BOUNCE;
-			else if(!stricmp(sValue, "splash"))
+			else if(!_stricmp(sValue, "splash"))
 				m_pSystem->iParticleCollision = PARTICLE_SPLASH;
-			else if(!stricmp(sValue, "off"))
+			else if(!_stricmp(sValue, "off"))
 				m_pSystem->iParticleCollision = PARTICLE_PASS_THROUGH;
 			else {
 				m_pSystem->iParticleCollision = PARTICLE_NEW_SYSTEM;
@@ -414,89 +414,89 @@ bool CMappedParticleSystem::LoadParticleDefinition( void )
 			}
 		}
 		// the falloff in the number of particles being created after the system has started
-		else if(!stricmp(sSetting, "falloff")) {
-			if(!stricmp(sValue, "lifetime"))
+		else if(!_stricmp(sSetting, "falloff")) {
+			if(!_stricmp(sValue, "lifetime"))
 				m_pSystem->iGenerationFalloff = LINEAR_LIFETIME;
-			else if(!stricmp(sValue, "half"))
+			else if(!_stricmp(sValue, "half"))
 				m_pSystem->iGenerationFalloff = LINEAR_HALF_LIFETIME;
-			else if(!stricmp(sValue, "quarter"))
+			else if(!_stricmp(sValue, "quarter"))
 				m_pSystem->iGenerationFalloff = LINEAR_QUARTER_LIFETIME;
 			else
 				m_pSystem->iGenerationFalloff = NO_FALLOFF;
 		}
 		// light check adapts the particles brightness to the maps light at the particles location
-		else if(!stricmp(sSetting, "light_check")) 
+		else if(!_stricmp(sSetting, "light_check")) 
 		{
-			if(!stricmp(sValue, "never"))
+			if(!_stricmp(sValue, "never"))
 				m_pSystem->iParticleLightCheck = NO_CHECK;
-			else if(!stricmp(sValue, "once"))
+			else if(!_stricmp(sValue, "once"))
 				m_pSystem->iParticleLightCheck = CHECK_ONCE;//CHECK_ONCE;
-			else if(!stricmp(sValue, "every_sort"))
+			else if(!_stricmp(sValue, "every_sort"))
 				m_pSystem->iParticleLightCheck = CHECK_EVERY_SORT;//CHECK_EVERY_SORT;
 			else
 				m_pSystem->iParticleLightCheck = NO_CHECK;
 		}
 		// the falloff in the number of particles being created after the system has started
-		else if(!stricmp(sSetting, "particle_align")) {
-			if(!stricmp(sValue, "player_view"))
+		else if(!_stricmp(sSetting, "particle_align")) {
+			if(!_stricmp(sValue, "player_view"))
 				m_pSystem->iParticleAlign = PLAYER_VIEW;
-			else if(!stricmp(sValue, "locked_z"))
+			else if(!_stricmp(sValue, "locked_z"))
 				m_pSystem->iParticleAlign = LOCKED_Z;
-			else if(!stricmp(sValue, "planar"))
+			else if(!_stricmp(sValue, "planar"))
 				m_pSystem->iParticleAlign = PLANAR;
-			else if(!stricmp(sValue, "none"))
+			else if(!_stricmp(sValue, "none"))
 				m_pSystem->iParticleAlign = NO_ALIGN;
-			else if(!stricmp(sValue, "velocity_vector"))
+			else if(!_stricmp(sValue, "velocity_vector"))
 				m_pSystem->iParticleAlign = VELOCITY_VECTOR;
 			else
 				m_pSystem->iParticleAlign = PLAYER_VIEW;
 		}
 		// rotation velocity
-		else if(!stricmp(sSetting, "rotation_velocity_pitch")) {
+		else if(!_stricmp(sSetting, "rotation_velocity_pitch")) {
 			m_pSystem->vRotationVel.x = atof(sValue);
 		}
-		else if(!stricmp(sSetting, "rotation_velocity_yaw")) {
+		else if(!_stricmp(sSetting, "rotation_velocity_yaw")) {
 			m_pSystem->vRotationVel.y = atof(sValue);
 		}
-		else if(!stricmp(sSetting, "rotation_velocity_roll")) {
+		else if(!_stricmp(sSetting, "rotation_velocity_roll")) {
 			m_pSystem->vRotationVel.z = atof(sValue);
 		}
 		// rotation velocity variation
-		else if(!stricmp(sSetting, "rotation_velocity_var_pitch")) {
+		else if(!_stricmp(sSetting, "rotation_velocity_var_pitch")) {
 			m_pSystem->vRotationVelVarMax.x = atof(sValue);
 		}
-		else if(!stricmp(sSetting, "rotation_velocity_var_yaw")) {
+		else if(!_stricmp(sSetting, "rotation_velocity_var_yaw")) {
 			m_pSystem->vRotationVelVarMax.y = atof(sValue);
 		}
-		else if(!stricmp(sSetting, "rotation_velocity_var_roll")) {
+		else if(!_stricmp(sSetting, "rotation_velocity_var_roll")) {
 			m_pSystem->vRotationVelVarMax.z = atof(sValue);
 		}
 		// the system is effected by wind
-		else if(!stricmp(sSetting, "wind")) {
+		else if(!_stricmp(sSetting, "wind")) {
 			m_pSystem->bWindy = (!!(atoi(sValue)));
 		}
 		// the system fades in
-		else if(!stricmp(sSetting, "fade_in")) {
+		else if(!_stricmp(sSetting, "fade_in")) {
 			m_pSystem->bFadeIn = (!!(atoi(sValue)));
 		}
 		// the system fades out
-		else if(!stricmp(sSetting, "fade_out")) {
+		else if(!_stricmp(sSetting, "fade_out")) {
 			m_pSystem->bFadeOut = (!!(atoi(sValue)));
 		}
 		// smoke - fade out particles close to the player
-		else if(!stricmp(sSetting, "smoke")) {
+		else if(!_stricmp(sSetting, "smoke")) {
 			m_pSystem->bSmoke = (!!(atoi(sValue)));
 		}
 		// ignore_sort - Do not sort these particles with the rest ( saves cpu time )
-		else if(!stricmp(sSetting, "ignore_sort")) {
+		else if(!_stricmp(sSetting, "ignore_sort")) {
 			m_pSystem->bIgnoreSort = (!!(atoi(sValue)));
 		}
 		// randomize - set different scales based on iRandomVal's value
-		else if(!stricmp(sSetting, "randomize")) {
+		else if(!_stricmp(sSetting, "randomize")) {
 			m_pSystem->bUseRandom = (!!(atoi(sValue)));
 		}
 		// different scales values
-		else if(!stricmp(sSetting, "random_modifier")) {
+		else if(!_stricmp(sSetting, "random_modifier")) {
 			m_pSystem->fRandomVal = atof(sValue);
 		}
 		// catch all to accomodate for my spelling at first and then mapper's spelling later on

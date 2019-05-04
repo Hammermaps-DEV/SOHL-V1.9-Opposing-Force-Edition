@@ -115,7 +115,7 @@ void CPortal::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) {
 	pSpit->pev->owner = ENT(pevOwner);
 
 	pSpit->SetThink(&CPortal::Animate);
-	pSpit->pev->nextthink = gpGlobals->time + 0.1;
+	pSpit->SetNextThink(0.1);
 }
 
 void CPortal::Touch(CBaseEntity *pOther)

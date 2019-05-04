@@ -107,37 +107,31 @@ static DLL_FUNCTIONS gFunctionTable =
 
 static void SetObjectCollisionBox( entvars_t *pev );
 
-#ifndef _WIN32
 extern "C" {
-#endif
-int GetEntityAPI( DLL_FUNCTIONS *pFunctionTable, int interfaceVersion )
-{
-	if ( !pFunctionTable || interfaceVersion != INTERFACE_VERSION )
+	int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion)
 	{
-		return FALSE;
-	}
-	
-	memcpy( pFunctionTable, &gFunctionTable, sizeof( DLL_FUNCTIONS ) );
-	return TRUE;
-}
+		if (!pFunctionTable || interfaceVersion != INTERFACE_VERSION)
+		{
+			return FALSE;
+		}
 
-int GetEntityAPI2( DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion )
-{
-	if ( !pFunctionTable || *interfaceVersion != INTERFACE_VERSION )
+		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
+		return TRUE;
+	}
+
+	int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion)
 	{
-		// Tell engine what version we had, so it can figure out who is out of date.
-		*interfaceVersion = INTERFACE_VERSION;
-		return FALSE;
+		if (!pFunctionTable || *interfaceVersion != INTERFACE_VERSION)
+		{
+			// Tell engine what version we had, so it can figure out who is out of date.
+			*interfaceVersion = INTERFACE_VERSION;
+			return FALSE;
+		}
+
+		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
+		return TRUE;
 	}
-	
-	memcpy( pFunctionTable, &gFunctionTable, sizeof( DLL_FUNCTIONS ) );
-	return TRUE;
 }
-
-#ifndef _WIN32
-}
-#endif
-
 
 int DispatchSpawn( edict_t *pent )
 {
@@ -455,6 +449,23 @@ void SaveReadFields( SAVERESTOREDATA *pSaveData, const char *pname, void *pBaseD
 	restoreHelper.ReadFields( pname, pBaseData, pFields, fieldCount );
 }
 
+// give health
+int CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
+{
+	if (!pev->takedamage)
+		return 0;
+
+	// heal
+	if (pev->health >= pev->max_health)
+		return 0;
+
+	pev->health += flHealth;
+
+	if (pev->health > pev->max_health)
+		pev->health = pev->max_health;
+
+	return 1;
+}
 
 edict_t * EHANDLE::Get( void ) 
 { 
@@ -481,7 +492,6 @@ EHANDLE :: operator CBaseEntity *()
 { 
 	return (CBaseEntity *)GET_PRIVATE( Get( ) ); 
 };
-
 
 CBaseEntity * EHANDLE :: operator = (CBaseEntity *pEntity)
 {
@@ -847,18 +857,6 @@ void CBaseEntity :: ThinkCorrection( void )
 	}
 }
 
-// give health
-int CBaseEntity :: TakeHealth( float flHealth, int bitsDamageType )
-{
-	if (!pev->takedamage) return 0;
-	if ( pev->health >= pev->max_health ) return 0;
-
-	pev->health += flHealth;
-          pev->health = V_min(pev->health, pev->max_health);
-
-	return 1;
-}
-
 int CBaseEntity :: TakeArmor( float flArmor )
 {
 	if(!pev->takedamage) return 0;
@@ -985,9 +983,7 @@ int CBaseEntity::Save( CSave &save )
 
 int CBaseEntity::Restore( CRestore &restore )
 {
-	int status;
-
-	status = restore.ReadEntVars( "ENTVARS", pev );
+	int status = restore.ReadEntVars("ENTVARS", pev);
 	if ( status )
 		status = restore.ReadFields( "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData) );
 

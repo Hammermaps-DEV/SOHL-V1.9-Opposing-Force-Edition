@@ -356,7 +356,7 @@ void Host_Say( edict_t *pEntity, int teamonly )
 	if ( player->m_flNextChatTime > UTIL_GlobalTimeBase() )
 		 return;
 
-	if ( !stricmp( pcmd, cpSay) || !stricmp( pcmd, cpSayTeam ) )
+	if ( !_stricmp( pcmd, cpSay) || !_stricmp( pcmd, cpSayTeam ) )
 	{
 		if ( CMD_ARGC() >= 2 )
 		{

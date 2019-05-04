@@ -59,7 +59,8 @@ void CItemGeneric::Spawn(void) {
 
 	// Call startup sequence to look for a sequence to play.
 	SetThink(&CItemGeneric::StartupThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1f;
+
+	SetNextThink(0.1);
 }
 
 //=========================================================
@@ -92,8 +93,7 @@ void CItemGeneric::StartupThink(void) {
 	if (iSequence != -1) {
 		pev->sequence = iSequence;
 		SetThink(&CItemGeneric::SequenceThink);
-		
-		pev->nextthink = UTIL_GlobalTimeBase() + 0.01;
+		SetNextThink(0.01);
 	} else {
 		// Cancel play sequence.
 		SetThink(NULL);
@@ -105,7 +105,7 @@ void CItemGeneric::StartupThink(void) {
 //=========================================================
 void CItemGeneric::SequenceThink(void) {
 	// Set next think time.
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 
 	// Advance frames and dispatch events.
 	StudioFrameAdvance();

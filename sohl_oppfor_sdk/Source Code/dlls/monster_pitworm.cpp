@@ -245,7 +245,7 @@ void CPitWorm::Spawn()
 	InitBoneControllers();
 
 	SetThink(&CPitWorm::StartupThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 
 	m_spawnAngles = pev->angles;
 	m_flInitialYaw = m_spawnAngles.y;
@@ -458,7 +458,7 @@ void CPitWorm::CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 		pev->health = 0;
 
 		SetThink(&CPitWorm::DyingThink);
-		pev->nextthink = UTIL_GlobalTimeBase();
+		SetNextThink(0);
 	}
 	// ALERT(at_console, "USE_TOGGLE\n");
 	break;
@@ -526,7 +526,7 @@ void CPitWorm::StartupThink(void)
 	SetThink(&CPitWorm::HuntThink);
 	SetTouch(&CPitWorm::WormTouch);
 	SetUse(&CPitWorm::CommandUse);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 }
 
 //=========================================================
@@ -535,7 +535,7 @@ void CPitWorm::StartupThink(void)
 void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetThink(&CPitWorm::HuntThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	SetUse(&CPitWorm::CommandUse);
 }
 
@@ -545,7 +545,7 @@ void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 void CPitWorm::NullThink(void)
 {
 	StudioFrameAdvance();
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
+	SetNextThink(0.5);
 }
 
 //=========================================================
@@ -553,7 +553,7 @@ void CPitWorm::NullThink(void)
 //=========================================================
 void CPitWorm::DyingThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -593,7 +593,7 @@ void CPitWorm::DyingThink(void)
 //=========================================================
 void CPitWorm::HuntThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -642,7 +642,7 @@ void CPitWorm::HuntThink(void)
 				m_flBeamTime = 0.0f;
 			}
 
-			pev->nextthink = UTIL_GlobalTimeBase() + 0.01f;
+			SetNextThink(0.01);
 			return;
 		}
 	}
