@@ -138,6 +138,15 @@ void CDisplacer::Holster(void) {
 // SecondaryAttack
 //=========================================================
 void CDisplacer::SecondaryAttack(void) {
+	if (m_pPlayer->IsOnRope())
+	{
+		m_pPlayer->pev->movetype = MOVETYPE_WALK;
+		m_pPlayer->pev->solid = SOLID_SLIDEBOX;
+		m_pPlayer->SetOnRopeState(false);
+		m_pPlayer->GetRope()->DetachObject();
+		m_pPlayer->SetRope(nullptr);
+	}
+
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(2);
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3f;
