@@ -38,22 +38,22 @@
 LINK_ENTITY_TO_CLASS(monster_apache, CApache);
 
 TYPEDESCRIPTION	CApache::m_SaveData[] = {
-	DEFINE_FIELD( CApache, m_iRockets, FIELD_INTEGER ),
-	DEFINE_FIELD( CApache, m_flForce, FIELD_FLOAT ),
-	DEFINE_FIELD( CApache, m_flNextRocket, FIELD_TIME ),
-	DEFINE_FIELD( CApache, m_vecTarget, FIELD_VECTOR ),
-	DEFINE_FIELD( CApache, m_posTarget, FIELD_POSITION_VECTOR ),
-	DEFINE_FIELD( CApache, m_vecDesired, FIELD_VECTOR ),
-	DEFINE_FIELD( CApache, m_posDesired, FIELD_POSITION_VECTOR ),
-	DEFINE_FIELD( CApache, m_vecGoal, FIELD_VECTOR ),
-	DEFINE_FIELD( CApache, m_angGun, FIELD_VECTOR ),
-	DEFINE_FIELD( CApache, m_flLastSeen, FIELD_TIME ),
-	DEFINE_FIELD( CApache, m_flPrevSeen, FIELD_TIME ),
-	DEFINE_FIELD( CApache, m_flGoalSpeed, FIELD_FLOAT ),
-	DEFINE_FIELD( CApache, m_iDoSmokePuff, FIELD_INTEGER ),
+	DEFINE_FIELD(CApache, m_iRockets, FIELD_INTEGER),
+	DEFINE_FIELD(CApache, m_flForce, FIELD_FLOAT),
+	DEFINE_FIELD(CApache, m_flNextRocket, FIELD_TIME),
+	DEFINE_FIELD(CApache, m_vecTarget, FIELD_VECTOR),
+	DEFINE_FIELD(CApache, m_posTarget, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(CApache, m_vecDesired, FIELD_VECTOR),
+	DEFINE_FIELD(CApache, m_posDesired, FIELD_POSITION_VECTOR),
+	DEFINE_FIELD(CApache, m_vecGoal, FIELD_VECTOR),
+	DEFINE_FIELD(CApache, m_angGun, FIELD_VECTOR),
+	DEFINE_FIELD(CApache, m_flLastSeen, FIELD_TIME),
+	DEFINE_FIELD(CApache, m_flPrevSeen, FIELD_TIME),
+	DEFINE_FIELD(CApache, m_flGoalSpeed, FIELD_FLOAT),
+	DEFINE_FIELD(CApache, m_iDoSmokePuff, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CApache, CBaseMonster );
+IMPLEMENT_SAVERESTORE(CApache, CBaseMonster);
 
 //=========================================================
 // Monster Sounds
@@ -83,24 +83,24 @@ const char *CApache::pExplodeSounds[] = {
 // Spawn Apache
 //=========================================================
 void CApache::Spawn(void) {
-	Precache( );
+	Precache();
 
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/apache.mdl");
 
-	UTIL_SetSize( pev, Vector( -32, -32, -64 ), Vector( 32, 32, 0 ) );
-	UTIL_SetOrigin( this, pev->origin );
+	UTIL_SetSize(pev, Vector(-32, -32, -64), Vector(32, 32, 0));
+	UTIL_SetOrigin(this, pev->origin);
 
 	// Motor
 	pev->movetype = MOVETYPE_FLY;
 	pev->solid = SOLID_BBOX;
 	pev->flags |= FL_MONSTER | FL_FLY;
-	pev->takedamage	= DAMAGE_AIM;
+	pev->takedamage = DAMAGE_AIM;
 
 	if (pev->health == 0)
-		pev->health	= gSkillData.apacheHealth;
+		pev->health = gSkillData.apacheHealth;
 
 	m_flFieldOfView = -0.707; // 270 degrees
 
@@ -111,17 +111,18 @@ void CApache::Spawn(void) {
 	}
 
 	pev->sequence = 0;
-	ResetSequenceInfo( );
+	ResetSequenceInfo();
 	pev->frame = RANDOM_LONG(0, 0xFF);
 
 	InitBoneControllers();
 
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_32) {
-		SetUse(&CApache :: StartupUse );
-	} else {
-		SetThink(&CApache :: HuntThink );
-		SetTouch(&CApache :: FlyTouch );
-		SetNextThink( 1.0 );
+		SetUse(&CApache::StartupUse);
+	}
+	else {
+		SetThink(&CApache::HuntThink);
+		SetTouch(&CApache::FlyTouch);
+		SetNextThink(1.0);
 	}
 
 	m_flDebug = false;
@@ -149,8 +150,8 @@ void CApache::Precache(void) {
 	PRECACHE_MODEL("sprites/exp_end.spr");
 
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/white.spr");
-	m_iExplode	= PRECACHE_MODEL( "sprites/fexplo.spr" );
-	m_iBodyGibs = PRECACHE_MODEL( "models/metalplategibs_green.mdl" );
+	m_iExplode = PRECACHE_MODEL("sprites/fexplo.spr");
+	m_iBodyGibs = PRECACHE_MODEL("models/metalplategibs_green.mdl");
 
 	PRECACHE_SOUND_ARRAY(pRotorSounds);
 	PRECACHE_SOUND_ARRAY(pDebrisSounds);
@@ -161,7 +162,7 @@ void CApache::Precache(void) {
 	PRECACHE_SOUND("apache/fire1.wav");
 	PRECACHE_SOUND("weapons/rocketfire1.wav");
 
-	UTIL_PrecacheOther( "hvr_rocket" );
+	UTIL_PrecacheOther("hvr_rocket");
 }
 
 //=========================================================
@@ -205,7 +206,8 @@ void CApache::Killed(entvars_t *pevAttacker, int iGib) {
 
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_8) {
 		m_flNextRocket = UTIL_GlobalTimeBase() + 4.0;
-	} else {
+	}
+	else {
 		m_flNextRocket = UTIL_GlobalTimeBase() + 15.0;
 	}
 }
@@ -249,39 +251,39 @@ void CApache::DyingThink(void) {
 			// create explosion particle system
 			if (CVAR_GET_FLOAT("r_particles") != 0) {
 				MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-					WRITE_SHORT(0);
-					WRITE_BYTE(0);
-					WRITE_COORD(pev->origin.x);
-					WRITE_COORD(pev->origin.y);
-					WRITE_COORD(pev->origin.z);
-					WRITE_COORD(0);
-					WRITE_COORD(0);
-					WRITE_COORD(0);
-					WRITE_SHORT(iExplosionDefault);
+				WRITE_SHORT(0);
+				WRITE_BYTE(0);
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_SHORT(iExplosionDefault);
 				MESSAGE_END();
 
 				MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-					WRITE_SHORT(0);
-					WRITE_BYTE(0);
-					WRITE_COORD(pev->origin.x);
-					WRITE_COORD(pev->origin.y);
-					WRITE_COORD(pev->origin.z);
-					WRITE_COORD(0);
-					WRITE_COORD(0);
-					WRITE_COORD(0);
-					WRITE_SHORT(iDefaultFinalFire);
+				WRITE_SHORT(0);
+				WRITE_BYTE(0);
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_SHORT(iDefaultFinalFire);
 				MESSAGE_END();
 
 				MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-					WRITE_SHORT(0);
-					WRITE_BYTE(0);
-					WRITE_COORD(pev->origin.x);
-					WRITE_COORD(pev->origin.y);
-					WRITE_COORD(pev->origin.z);
-					WRITE_COORD(0);
-					WRITE_COORD(0);
-					WRITE_COORD(0);
-					WRITE_SHORT(iDefaultFinalSmoke);
+				WRITE_SHORT(0);
+				WRITE_BYTE(0);
+				WRITE_COORD(pev->origin.x);
+				WRITE_COORD(pev->origin.y);
+				WRITE_COORD(pev->origin.z);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_COORD(0);
+				WRITE_SHORT(iDefaultFinalSmoke);
 				MESSAGE_END();
 			}
 
@@ -310,15 +312,15 @@ void CApache::DyingThink(void) {
 		MESSAGE_END();
 
 		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-			WRITE_SHORT(0);
-			WRITE_BYTE(0);
-			WRITE_COORD( pev->origin.x );
-			WRITE_COORD( pev->origin.y );
-			WRITE_COORD( pev->origin.z );
-			WRITE_COORD( 0 );
-			WRITE_COORD( 0 );
-			WRITE_COORD( 0 );
-			WRITE_SHORT(iDefaultSmoke);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(pev->origin.x);
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(iDefaultSmoke);
 		MESSAGE_END();
 
 		Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
@@ -365,51 +367,52 @@ void CApache::DyingThink(void) {
 		pev->flags &= ~FL_ONGROUND;
 		SetNextThink(0.2);
 		return;
-	} else {
+	}
+	else {
 		Vector vecSpot = pev->origin + (pev->mins + pev->maxs) * 0.5;
 
 		// fireball
 		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-			WRITE_BYTE(TE_SPRITE);
-			WRITE_COORD(vecSpot.x);
-			WRITE_COORD(vecSpot.y);
-			WRITE_COORD(vecSpot.z + 256);
-			WRITE_SHORT(m_iExplode);
-			WRITE_BYTE(120); // scale * 10
-			WRITE_BYTE(255); // brightness
+		WRITE_BYTE(TE_SPRITE);
+		WRITE_COORD(vecSpot.x);
+		WRITE_COORD(vecSpot.y);
+		WRITE_COORD(vecSpot.z + 256);
+		WRITE_SHORT(m_iExplode);
+		WRITE_BYTE(120); // scale * 10
+		WRITE_BYTE(255); // brightness
 		MESSAGE_END();
 
 		// big smoke
 		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpot);
-			WRITE_BYTE(TE_SMOKE);
-			WRITE_COORD(vecSpot.x);
-			WRITE_COORD(vecSpot.y);
-			WRITE_COORD(vecSpot.z + 512);
-			WRITE_SHORT(g_sModelIndexSmoke);
-			WRITE_BYTE(250); // scale * 10
-			WRITE_BYTE(5); // framerate
+		WRITE_BYTE(TE_SMOKE);
+		WRITE_COORD(vecSpot.x);
+		WRITE_COORD(vecSpot.y);
+		WRITE_COORD(vecSpot.z + 512);
+		WRITE_SHORT(g_sModelIndexSmoke);
+		WRITE_BYTE(250); // scale * 10
+		WRITE_BYTE(5); // framerate
 		MESSAGE_END();
 
 		// blast circle
 		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-			WRITE_BYTE(TE_BEAMCYLINDER);
-			WRITE_COORD(pev->origin.x);
-			WRITE_COORD(pev->origin.y);
-			WRITE_COORD(pev->origin.z);
-			WRITE_COORD(pev->origin.x);
-			WRITE_COORD(pev->origin.y);
-			WRITE_COORD(pev->origin.z + 2000); // reach damage radius over .2 seconds
-			WRITE_SHORT(m_iSpriteTexture);
-			WRITE_BYTE(0); // startframe
-			WRITE_BYTE(0); // framerate
-			WRITE_BYTE(4); // life
-			WRITE_BYTE(32);  // width
-			WRITE_BYTE(0);   // noise
-			WRITE_BYTE(255);   // r, g, b
-			WRITE_BYTE(255);   // r, g, b
-			WRITE_BYTE(192);   // r, g, b
-			WRITE_BYTE(128); // brightness
-			WRITE_BYTE(0);		// speed
+		WRITE_BYTE(TE_BEAMCYLINDER);
+		WRITE_COORD(pev->origin.x);
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_COORD(pev->origin.x);
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z + 2000); // reach damage radius over .2 seconds
+		WRITE_SHORT(m_iSpriteTexture);
+		WRITE_BYTE(0); // startframe
+		WRITE_BYTE(0); // framerate
+		WRITE_BYTE(4); // life
+		WRITE_BYTE(32);  // width
+		WRITE_BYTE(0);   // noise
+		WRITE_BYTE(255);   // r, g, b
+		WRITE_BYTE(255);   // r, g, b
+		WRITE_BYTE(192);   // r, g, b
+		WRITE_BYTE(128); // brightness
+		WRITE_BYTE(0);		// speed
 		MESSAGE_END();
 
 		if (pev->flags & FL_ONGROUND) {
@@ -535,12 +538,13 @@ void CApache::HuntThink(void) {
 
 	if (m_hEnemy != NULL) {
 		// ALERT( at_console, "%s\n", STRING( m_hEnemy->pev->classname ) );
-		if (FVisible(m_hEnemy))	{
+		if (FVisible(m_hEnemy)) {
 			if (m_flLastSeen < UTIL_GlobalTimeBase() - 5)
 				m_flPrevSeen = UTIL_GlobalTimeBase();
 			m_flLastSeen = UTIL_GlobalTimeBase();
 			m_posTarget = m_hEnemy->Center();
-		} else {
+		}
+		else {
 			m_hEnemy = NULL;
 		}
 	}
@@ -552,24 +556,27 @@ void CApache::HuntThink(void) {
 		// ALERT( at_console, "%.0f\n", flLength );
 		if (flLength < 128) {
 			m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_pGoalEnt->pev->target));
-			if (m_pGoalEnt)	{
+			if (m_pGoalEnt) {
 				m_posDesired = m_pGoalEnt->pev->origin;
 				UTIL_MakeAimVectors(m_pGoalEnt->pev->angles);
 				m_vecGoal = gpGlobals->v_forward;
 				flLength = (pev->origin - m_posDesired).Length();
 			}
 		}
-	} else {
+	}
+	else {
 		m_posDesired = pev->origin;
 	}
 
 	if (flLength > 250) {
 		if (m_flLastSeen + 90 > UTIL_GlobalTimeBase() && DotProduct((m_posTarget - pev->origin).Normalize(), (m_posDesired - pev->origin).Normalize()) > 0.25) {
 			m_vecDesired = (m_posTarget - pev->origin).Normalize();
-		} else {
+		}
+		else {
 			m_vecDesired = (m_posDesired - pev->origin).Normalize();
 		}
-	} else {
+	}
+	else {
 		m_vecDesired = m_vecGoal;
 	}
 
@@ -595,7 +602,8 @@ void CApache::HuntThink(void) {
 			m_flNextRocket = UTIL_GlobalTimeBase() + 10;
 			m_iRockets = 10;
 		}
-	} else if (pev->angles.x < 0 && DotProduct(pev->velocity, gpGlobals->v_forward) > -100 && m_flNextRocket < UTIL_GlobalTimeBase()) {
+	}
+	else if (pev->angles.x < 0 && DotProduct(pev->velocity, gpGlobals->v_forward) > -100 && m_flNextRocket < UTIL_GlobalTimeBase()) {
 		if (m_flLastSeen + 60 > UTIL_GlobalTimeBase()) {
 			if (m_hEnemy != NULL) {
 				// make sure it's a good shot
@@ -606,7 +614,8 @@ void CApache::HuntThink(void) {
 					if ((tr.vecEndPos - m_posTarget).Length() < 512 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_256))
 						FireRocket();
 				}
-			} else {
+			}
+			else {
 				TraceResult tr;
 
 				UTIL_TraceLine(pev->origin, pev->origin + vecEst * 4096, dont_ignore_monsters, edict(), &tr);
@@ -635,7 +644,8 @@ void CApache::Flight(void) {
 		if (pev->avelocity.y < 60) {
 			pev->avelocity.y += 8; // 9 * (3.0/2.0);
 		}
-	} else {
+	}
+	else {
 		if (pev->avelocity.y > -60) {
 			pev->avelocity.y -= 8; // 9 * (3.0/2.0);
 		}
@@ -671,7 +681,8 @@ void CApache::Flight(void) {
 			pev->avelocity.z -= 4;
 		else
 			pev->avelocity.z += 2;
-	} else {
+	}
+	else {
 		if (pev->angles.z < 30 && pev->avelocity.z < 15)
 			pev->avelocity.z += 4;
 		else
@@ -689,7 +700,8 @@ void CApache::Flight(void) {
 	// apply power to stay correct height
 	if (m_flForce < 80 && vecEst.z < m_posDesired.z) {
 		m_flForce += 12;
-	} else if (m_flForce > 30) {
+	}
+	else if (m_flForce > 30) {
 		if (vecEst.z > m_posDesired.z)
 			m_flForce -= 8;
 	}
@@ -700,14 +712,17 @@ void CApache::Flight(void) {
 		// ALERT( at_console, "F " );
 		// lean forward
 		pev->avelocity.x -= 12.0;
-	} else if (flDist < 0 && flSpeed > -50 && pev->angles.x + pev->avelocity.x  < 20) {
+	}
+	else if (flDist < 0 && flSpeed > -50 && pev->angles.x + pev->avelocity.x < 20) {
 		// ALERT( at_console, "B " );
 		// lean backward
 		pev->avelocity.x += 12.0;
-	} else if (pev->angles.x + pev->avelocity.x > 0) {
+	}
+	else if (pev->angles.x + pev->avelocity.x > 0) {
 		// ALERT( at_console, "f " );
 		pev->avelocity.x -= 4.0;
-	} else if (pev->angles.x + pev->avelocity.x < 0) {
+	}
+	else if (pev->angles.x + pev->avelocity.x < 0) {
 		// ALERT( at_console, "b " );
 		pev->avelocity.x += 4.0;
 	}
@@ -717,7 +732,8 @@ void CApache::Flight(void) {
 		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, pRotorSounds[m_iRotorSound], 1.0, 0.3, 0, 110);
 		EMIT_SOUND_DYN(ENT(pev), CHAN_BODY, "apache/ap_whine1.wav", 0.1, 0.2, 0, 110);
 		m_iSoundState = SND_CHANGE_PITCH; // hack for going through level transitions
-	} else {
+	}
+	else {
 		CBaseEntity *pPlayer = NULL;
 		pPlayer = UTIL_FindEntityByClassname(NULL, "player");
 		float pitch = DotProduct(pev->velocity - pPlayer->pev->velocity, (pPlayer->pev->origin - pev->origin).Normalize());
@@ -730,7 +746,7 @@ void CApache::Flight(void) {
 			pitch = 101;
 
 		float flVol = (m_flForce / 100.0) + .1;
-		if (flVol > 1.0) 
+		if (flVol > 1.0)
 			flVol = 1.0;
 
 		EMIT_SOUND_DYN(ENT(pev), CHAN_STATIC, pRotorSounds[m_iRotorSound], flVol, 0.3, m_iSoundState | SND_CHANGE_VOL, pitch);
@@ -752,21 +768,21 @@ void CApache::FireRocket(void) {
 	Vector vecSrc = pev->origin + 1.5 * (gpGlobals->v_forward * 21 + gpGlobals->v_right * 70 * side + gpGlobals->v_up * -79);
 
 	switch (m_iRockets % 5) {
-		case 0:	vecSrc = vecSrc + gpGlobals->v_right * 10; break;
-		case 1: vecSrc = vecSrc - gpGlobals->v_right * 10; break;
-		case 2: vecSrc = vecSrc + gpGlobals->v_up * 10; break;
-		case 3: vecSrc = vecSrc - gpGlobals->v_up * 10; break;
-		case 4: break;
+	case 0:	vecSrc = vecSrc + gpGlobals->v_right * 10; break;
+	case 1: vecSrc = vecSrc - gpGlobals->v_right * 10; break;
+	case 2: vecSrc = vecSrc + gpGlobals->v_up * 10; break;
+	case 3: vecSrc = vecSrc - gpGlobals->v_up * 10; break;
+	case 4: break;
 	}
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);
-		WRITE_BYTE(TE_SMOKE);
-		WRITE_COORD(vecSrc.x);
-		WRITE_COORD(vecSrc.y);
-		WRITE_COORD(vecSrc.z);
-		WRITE_SHORT(g_sModelIndexSmoke);
-		WRITE_BYTE(20); // scale * 10
-		WRITE_BYTE(12); // framerate
+	WRITE_BYTE(TE_SMOKE);
+	WRITE_COORD(vecSrc.x);
+	WRITE_COORD(vecSrc.y);
+	WRITE_COORD(vecSrc.z);
+	WRITE_SHORT(g_sModelIndexSmoke);
+	WRITE_BYTE(20); // scale * 10
+	WRITE_BYTE(12); // framerate
 	MESSAGE_END();
 
 	CSprite *pSprite = CSprite::SpriteCreate("sprites/exp_end.spr", vecSrc, TRUE);
@@ -850,27 +866,27 @@ void CApache::ShowDamage(void) {
 	if (m_iDoSmokePuff > 0 || RANDOM_LONG(0, 99) > pev->health) {
 		if (CVAR_GET_FLOAT("r_particles") != 0) {
 			MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-				WRITE_SHORT(0);
-				WRITE_BYTE(0);
-				WRITE_COORD(pev->origin.x);
-				WRITE_COORD(pev->origin.y);
-				WRITE_COORD(pev->origin.z);
-				WRITE_COORD(0);
-				WRITE_COORD(0);
-				WRITE_COORD(0);
-				WRITE_SHORT(iDefaultFinalFire);
+			WRITE_SHORT(0);
+			WRITE_BYTE(0);
+			WRITE_COORD(pev->origin.x);
+			WRITE_COORD(pev->origin.y);
+			WRITE_COORD(pev->origin.z);
+			WRITE_COORD(0);
+			WRITE_COORD(0);
+			WRITE_COORD(0);
+			WRITE_SHORT(iDefaultFinalFire);
 			MESSAGE_END();
 
 			MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-				WRITE_SHORT(0);
-				WRITE_BYTE(0);
-				WRITE_COORD(pev->origin.x);
-				WRITE_COORD(pev->origin.y);
-				WRITE_COORD(pev->origin.z);
-				WRITE_COORD(0);
-				WRITE_COORD(0);
-				WRITE_COORD(0);
-				WRITE_SHORT(iDefaultFinalSmoke);
+			WRITE_SHORT(0);
+			WRITE_BYTE(0);
+			WRITE_COORD(pev->origin.x);
+			WRITE_COORD(pev->origin.y);
+			WRITE_COORD(pev->origin.z);
+			WRITE_COORD(0);
+			WRITE_COORD(0);
+			WRITE_COORD(0);
+			WRITE_SHORT(iDefaultFinalSmoke);
 			MESSAGE_END();
 		}
 
@@ -962,11 +978,12 @@ void CApache::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 		return;
 
 	// hit hard, hits cockpit, hits engines
-	if (flDamage > 50 || ptr->iHitgroup == HITGROUP_HEAD 
+	if (flDamage > 50 || ptr->iHitgroup == HITGROUP_HEAD
 		|| ptr->iHitgroup == HITGROUP_CHEST) {
 		AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 		m_iDoSmokePuff = 3 + (flDamage / 5.0);
-	} else {
+	}
+	else {
 		UTIL_Ricochet(ptr->vecEndPos, 2.0);
 	}
 }

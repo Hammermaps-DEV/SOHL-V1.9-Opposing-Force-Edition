@@ -35,13 +35,13 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_python, CPython );
-LINK_ENTITY_TO_CLASS( weapon_357, CPython );
+LINK_ENTITY_TO_CLASS(weapon_python, CPython);
+LINK_ENTITY_TO_CLASS(weapon_357, CPython);
 
 //=========================================================
 // Spawn Colt Python 357
 //=========================================================
-void CPython::Spawn( ) {
+void CPython::Spawn() {
 	Precache();
 	m_iId = WEAPON_PYTHON;
 
@@ -54,7 +54,7 @@ void CPython::Spawn( ) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CPython::Precache( void ) {
+void CPython::Precache(void) {
 	PRECACHE_MODEL("models/v_357.mdl");
 	PRECACHE_MODEL("models/w_357.mdl");
 	PRECACHE_MODEL("models/p_357.mdl");
@@ -65,7 +65,7 @@ void CPython::Precache( void ) {
 	PRECACHE_SOUND("weapons/reload1.wav");
 	PRECACHE_SOUND("weapons/reload2.wav");
 
-	m_usFirePython = PRECACHE_EVENT( 1, "events/python.sc" );
+	m_usFirePython = PRECACHE_EVENT(1, "events/python.sc");
 }
 
 //=========================================================
@@ -91,8 +91,8 @@ int CPython::GetItemInfo(ItemInfo *p) {
 //=========================================================
 void CPython::PrimaryAttack() {
 	//don't fire underwater
-	if ( m_iClip && m_pPlayer->pev->waterlevel != 3) {
-		if ( m_pSpot && m_fSpotActive )	m_pSpot->Suspend( 1.0 );
+	if (m_iClip && m_pPlayer->pev->waterlevel != 3) {
+		if (m_pSpot && m_fSpotActive)	m_pSpot->Suspend(1.0);
 
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
@@ -100,17 +100,17 @@ void CPython::PrimaryAttack() {
 		m_iClip--;
 
 		// player "shoot" animation
-		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-		UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
-		Vector vecSrc	 = m_pPlayer->GetGunPosition( );
-		Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_10DEGREES );
+		Vector vecSrc = m_pPlayer->GetGunPosition();
+		Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 
 		Vector vecDir;
-		vecDir = m_pPlayer->FireBulletsPlayer( 1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_357, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed );
+		vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_1DEGREES, 8192, BULLET_PLAYER_357, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 
-		PLAYBACK_EVENT_FULL( 0, m_pPlayer->edict(), m_usFirePython, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0 );
+		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usFirePython, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0);
 
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)PYTHON_SHOOT::frames, (int)PYTHON_SHOOT::fps);
 		if (!IsMultiplayer()) {
@@ -122,7 +122,8 @@ void CPython::PrimaryAttack() {
 			// HEV suit - indicate out of ammo condition
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
-	} else {
+	}
+	else {
 		PlayEmptySound(); Reload();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.7;
 	}
@@ -141,7 +142,8 @@ void CPython::SecondaryAttack(void) {
 		}
 
 		m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.3;
-	} else {
+	}
+	else {
 		PrimaryAttack();
 	}
 }
@@ -173,13 +175,13 @@ void CPython::Holster() {
 //=========================================================
 // Reload
 //=========================================================
-void CPython::Reload( void ) {
+void CPython::Reload(void) {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
 		return;
 	}
 
-	if (m_pSpot && m_fSpotActive) { 
-		m_pSpot->Suspend(2.0); 
+	if (m_pSpot && m_fSpotActive) {
+		m_pSpot->Suspend(2.0);
 	}
 
 	if (DefaultReload(PYTHON_MAX_CLIP, (int)PYTHON_RELOAD::sequence,
@@ -193,15 +195,15 @@ void CPython::Reload( void ) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CPython::WeaponIdle( void ) {
+void CPython::WeaponIdle(void) {
 	if (IsMultiplayer()) {
 		UpdateSpot(); //Spot Update
 	}
 
 	if (m_flSoundDelay != 0 && m_flSoundDelay <= UTIL_GlobalTimeBase()) { //Finsh Reload
-		m_flSoundDelay = 0;      
+		m_flSoundDelay = 0;
 		for (int i = 0; i < 6; i++) {
-			EjectBrass(m_pPlayer->pev->origin, Vector( RANDOM_FLOAT( -10.0, 10.0 ), RANDOM_FLOAT( -10.0, 10.0 ), (float)0.0 ), m_pPlayer->pev->angles.y, m_iShell, TE_BOUNCE_SHELL); 
+			EjectBrass(m_pPlayer->pev->origin, Vector(RANDOM_FLOAT(-10.0, 10.0), RANDOM_FLOAT(-10.0, 10.0), (float)0.0), m_pPlayer->pev->angles.y, m_iShell, TE_BOUNCE_SHELL);
 		}
 	}
 
@@ -219,23 +221,27 @@ void CPython::WeaponIdle( void ) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PYTHON_IDLE1::frames, (int)PYTHON_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.7) {
+		}
+		else if (flRand <= 0.7) {
 			iAnim = (int)PYTHON_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PYTHON_IDLE2::frames, (int)PYTHON_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.9) {
+		}
+		else if (flRand <= 0.9) {
 			iAnim = (int)PYTHON_IDLE3::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)PYTHON_IDLE3::frames, (int)PYTHON_IDLE3::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			if (RANDOM_FLOAT(0, 1) && !m_fSpotActive && IsMultiplayer()) {
 				iAnim = (int)PYTHON_FIDGET::sequence;
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)PYTHON_FIDGET::frames, (int)PYTHON_FIDGET::fps);
 				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-			} else {
+			}
+			else {
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 				m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 			}

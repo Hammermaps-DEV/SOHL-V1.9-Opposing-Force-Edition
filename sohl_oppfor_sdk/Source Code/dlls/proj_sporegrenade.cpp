@@ -100,7 +100,8 @@ void CSporeGrenade::Spawn(void) {
 	if (pev->movetype == MOVETYPE_FLY) {
 		SetThink(&CSporeGrenade::FlyThink);
 		SetTouch(&CSporeGrenade::ExplodeThink);
-	} else {
+	}
+	else {
 		SetThink(&CSporeGrenade::FlyThink);
 		SetTouch(&CSporeGrenade::BounceThink);
 	}
@@ -147,29 +148,29 @@ void CSporeGrenade::FlyThink(void) {
 	UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_SPRITE_SPRAY);
-		WRITE_COORD(pev->origin.x + RANDOM_LONG(-5, 5));
-		WRITE_COORD(pev->origin.y + RANDOM_LONG(-5, 5));
-		WRITE_COORD(pev->origin.z + RANDOM_LONG(-5, 5));
-		WRITE_COORD(tr.vecPlaneNormal.Normalize().x);
-		WRITE_COORD(tr.vecPlaneNormal.Normalize().y);
-		WRITE_COORD(tr.vecPlaneNormal.Normalize().z);
-		WRITE_SHORT(g_sModelIndexTinySpit);
-		WRITE_BYTE(RANDOM_LONG(3, 8)); // count
-		WRITE_BYTE(RANDOM_FLOAT(10, 15)); // speed
-		WRITE_BYTE(RANDOM_FLOAT(4, 9) * 100);
+	WRITE_COORD(pev->origin.x + RANDOM_LONG(-5, 5));
+	WRITE_COORD(pev->origin.y + RANDOM_LONG(-5, 5));
+	WRITE_COORD(pev->origin.z + RANDOM_LONG(-5, 5));
+	WRITE_COORD(tr.vecPlaneNormal.Normalize().x);
+	WRITE_COORD(tr.vecPlaneNormal.Normalize().y);
+	WRITE_COORD(tr.vecPlaneNormal.Normalize().z);
+	WRITE_SHORT(g_sModelIndexTinySpit);
+	WRITE_BYTE(RANDOM_LONG(3, 8)); // count
+	WRITE_BYTE(RANDOM_FLOAT(10, 15)); // speed
+	WRITE_BYTE(RANDOM_FLOAT(4, 9) * 100);
 	MESSAGE_END();
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(15);     // radius
-		WRITE_BYTE(0);		// r
-		WRITE_BYTE(180);	// g
-		WRITE_BYTE(0);	// b
-		WRITE_BYTE(1);     // life * 10
-		WRITE_BYTE(0); // decay
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(15);     // radius
+	WRITE_BYTE(0);		// r
+	WRITE_BYTE(180);	// g
+	WRITE_BYTE(0);	// b
+	WRITE_BYTE(1);     // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
 
 	if (pev->movetype == MOVETYPE_BOUNCE) {
@@ -216,12 +217,13 @@ void CSporeGrenade::BounceThink(CBaseEntity *pOther) {
 	if (pev->flags & FL_ONGROUND) {
 		pev->velocity = pev->velocity * 0.8;
 		pev->sequence = RANDOM_LONG(1, 1);
-	} else {
+	}
+	else {
 		// play bounce sound
 		switch (RANDOM_LONG(0, 2)) {
-			case 0: EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/spore_hit1.wav", 0.25, ATTN_NORM); break;
-			case 1: EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/spore_hit2.wav", 0.25, ATTN_NORM); break;
-			case 2: EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/spore_hit3.wav", 0.25, ATTN_NORM); break;
+		case 0: EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/spore_hit1.wav", 0.25, ATTN_NORM); break;
+		case 1: EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/spore_hit2.wav", 0.25, ATTN_NORM); break;
+		case 2: EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/spore_hit3.wav", 0.25, ATTN_NORM); break;
 		}
 	}
 
@@ -260,30 +262,30 @@ void CSporeGrenade::Explode(void) {
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_SPRITE);		// This makes a dynamic light and the explosion sprites/sound
 	WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		switch (RANDOM_LONG(0, 1)) {
-			case 0:
-				WRITE_SHORT(g_sModelIndexSpore1);
-			break;
-			default:
-			case 1:
-				WRITE_SHORT(g_sModelIndexSpore3);
-			break;
-		}
-		WRITE_BYTE(25); // scale * 10
-		WRITE_BYTE(155); // framerate
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	switch (RANDOM_LONG(0, 1)) {
+	case 0:
+		WRITE_SHORT(g_sModelIndexSpore1);
+		break;
+	default:
+	case 1:
+		WRITE_SHORT(g_sModelIndexSpore3);
+		break;
+	}
+	WRITE_BYTE(25); // scale * 10
+	WRITE_BYTE(155); // framerate
 	MESSAGE_END();
 
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
-		WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_SHORT(g_sModelIndexSpore1);
-		WRITE_BYTE((pev->dmg - 50) * .60); // scale * 10
-		WRITE_BYTE(15); // framerate
-		WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
+	WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+	WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_SHORT(g_sModelIndexSpore1);
+	WRITE_BYTE((pev->dmg - 50) * .60); // scale * 10
+	WRITE_BYTE(15); // framerate
+	WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
 	MESSAGE_END();
 
 	TraceResult tr;
@@ -291,43 +293,43 @@ void CSporeGrenade::Explode(void) {
 
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
 	WRITE_BYTE(TE_SPRITE_SPRAY);		// This makes a dynamic light and the explosion sprites/sound
-		WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_COORD(tr.vecPlaneNormal.x);
-		WRITE_COORD(tr.vecPlaneNormal.y);
-		WRITE_COORD(tr.vecPlaneNormal.z);
-		WRITE_SHORT(g_sModelIndexTinySpit);
-		WRITE_BYTE(50); // count
-		WRITE_BYTE(30); // speed
-		WRITE_BYTE(640);
+	WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_COORD(tr.vecPlaneNormal.x);
+	WRITE_COORD(tr.vecPlaneNormal.y);
+	WRITE_COORD(tr.vecPlaneNormal.z);
+	WRITE_SHORT(g_sModelIndexTinySpit);
+	WRITE_BYTE(50); // count
+	WRITE_BYTE(30); // speed
+	WRITE_BYTE(640);
 	MESSAGE_END();
 
 	if (CVAR_GET_FLOAT("r_particles")) {
 		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-			WRITE_SHORT(0);
-			WRITE_BYTE(0);
-			WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
-			WRITE_COORD(pev->origin.y);
-			WRITE_COORD(pev->origin.z);
-			WRITE_COORD(0);
-			WRITE_COORD(0);
-			WRITE_COORD(0);
-			WRITE_SHORT(iDefaultSporeExplosion);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(pev->origin.x);	// Send to PAS because of the sound
+		WRITE_COORD(pev->origin.y);
+		WRITE_COORD(pev->origin.z);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_COORD(0);
+		WRITE_SHORT(iDefaultSporeExplosion);
 		MESSAGE_END();
 	}
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(20);		// radius * 0.1
-		WRITE_BYTE(0);		// r
-		WRITE_BYTE(180);		// g
-		WRITE_BYTE(0);		// b
-		WRITE_BYTE(20);		// time * 10
-		WRITE_BYTE(20);		// decay * 0.1
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(20);		// radius * 0.1
+	WRITE_BYTE(0);		// r
+	WRITE_BYTE(180);		// g
+	WRITE_BYTE(0);		// b
+	WRITE_BYTE(20);		// time * 10
+	WRITE_BYTE(20);		// decay * 0.1
 	MESSAGE_END();
 
 	entvars_t *pevOwner;
@@ -346,7 +348,7 @@ void CSporeGrenade::Explode(void) {
 
 	pev->velocity = g_vecZero;
 
-	if(m_pSprite) {
+	if (m_pSprite) {
 		UTIL_Remove(m_pSprite);
 		m_pSprite = NULL;
 	}

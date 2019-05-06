@@ -45,20 +45,20 @@ LINK_ENTITY_TO_CLASS(monster_gus, CConstruction);
 //=======================================================
 // Custom Schedules
 //=======================================================
-extern Schedule_t *slFollow,*slFaceTarget, *slIdleSciStand, *slFear, *slScientistCover, *slScientistHide, 
+extern Schedule_t *slFollow, *slFaceTarget, *slIdleSciStand, *slFear, *slScientistCover, *slScientistHide,
 *slScientistStartle, *slStopFollowing, *slSciPanic, *slFollowScared, *slFaceTargetScared;
 DEFINE_CUSTOM_SCHEDULES(CConstruction) {
 	slFollow,
-	slFaceTarget,
-	slIdleSciStand,
-	slFear,
-	slScientistCover,
-	slScientistHide,
-	slScientistStartle,
-	slStopFollowing,
-	slSciPanic,
-	slFollowScared,
-	slFaceTargetScared,
+		slFaceTarget,
+		slIdleSciStand,
+		slFear,
+		slScientistCover,
+		slScientistHide,
+		slScientistStartle,
+		slStopFollowing,
+		slSciPanic,
+		slFollowScared,
+		slFaceTargetScared,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(CConstruction, CTalkMonster);
@@ -124,42 +124,42 @@ void CConstruction::Precache(void) {
 //=========================================================
 void CConstruction::StartTask(Task_t *pTask) {
 	switch (pTask->iTask) {
-		case TASK_SCREAM:
+	case TASK_SCREAM:
+		Scream();
+		TaskComplete();
+		break;
+	case TASK_RANDOM_SCREAM:
+		if (RANDOM_FLOAT(0, 1) < pTask->flData)
 			Scream();
-			TaskComplete();
-		break;
-		case TASK_RANDOM_SCREAM:
-			if (RANDOM_FLOAT(0, 1) < pTask->flData)
-				Scream();
 
-			TaskComplete();
+		TaskComplete();
 		break;
-		case TASK_SAY_FEAR:
-			if (FOkToSpeak()) {
-				Talk(2);
-				m_hTalkTarget = m_hEnemy;
-				if (m_hEnemy->IsPlayer())
-					PlaySentence("SC_PLFEAR", 5, VOL_NORM, ATTN_NORM);
-				else
-					PlaySentence("SC_FEAR", 5, VOL_NORM, ATTN_NORM);
-			}
-			TaskComplete();
-		break;
-		case TASK_RUN_PATH_SCARED:
-			m_movementActivity = ACT_RUN_SCARED;
-		break;
-		case TASK_MOVE_TO_TARGET_RANGE_SCARED:
-			if ((m_hTargetEnt->pev->origin - pev->origin).Length() < 1)
-				TaskComplete();
+	case TASK_SAY_FEAR:
+		if (FOkToSpeak()) {
+			Talk(2);
+			m_hTalkTarget = m_hEnemy;
+			if (m_hEnemy->IsPlayer())
+				PlaySentence("SC_PLFEAR", 5, VOL_NORM, ATTN_NORM);
 			else
-			{
-				m_vecMoveGoal = m_hTargetEnt->pev->origin;
-				if (!MoveToTarget(ACT_WALK_SCARED, 0.5))
-					TaskFail();
-			}
+				PlaySentence("SC_FEAR", 5, VOL_NORM, ATTN_NORM);
+		}
+		TaskComplete();
 		break;
-		default:
-			CTalkMonster::StartTask(pTask);
+	case TASK_RUN_PATH_SCARED:
+		m_movementActivity = ACT_RUN_SCARED;
+		break;
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
+		if ((m_hTargetEnt->pev->origin - pev->origin).Length() < 1)
+			TaskComplete();
+		else
+		{
+			m_vecMoveGoal = m_hTargetEnt->pev->origin;
+			if (!MoveToTarget(ACT_WALK_SCARED, 0.5))
+				TaskFail();
+		}
+		break;
+	default:
+		CTalkMonster::StartTask(pTask);
 		break;
 	}
 }
@@ -169,43 +169,45 @@ void CConstruction::StartTask(Task_t *pTask) {
 //=========================================================
 void CConstruction::RunTask(Task_t *pTask) {
 	switch (pTask->iTask) {
-		case TASK_RUN_PATH_SCARED:
-			if (MovementIsComplete())
-				TaskComplete();
+	case TASK_RUN_PATH_SCARED:
+		if (MovementIsComplete())
+			TaskComplete();
 
-			if (RANDOM_LONG(0, 31) < 8)
-				Scream();
+		if (RANDOM_LONG(0, 31) < 8)
+			Scream();
 		break;
-		case TASK_MOVE_TO_TARGET_RANGE_SCARED:
-			if (RANDOM_LONG(0, 63)< 8)
-				Scream();
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
+		if (RANDOM_LONG(0, 63) < 8)
+			Scream();
 
-			if (m_hEnemy == NULL) {
-				TaskFail();
-			} else {
-				float distance;
+		if (m_hEnemy == NULL) {
+			TaskFail();
+		}
+		else {
+			float distance;
 
+			distance = (m_vecMoveGoal - pev->origin).Length2D();
+			// Re-evaluate when you think your finished, or the target has moved too far
+			if ((distance < pTask->flData) || (m_vecMoveGoal - m_hTargetEnt->pev->origin).Length() > pTask->flData * 0.5) {
+				m_vecMoveGoal = m_hTargetEnt->pev->origin;
 				distance = (m_vecMoveGoal - pev->origin).Length2D();
-				// Re-evaluate when you think your finished, or the target has moved too far
-				if ((distance < pTask->flData) || (m_vecMoveGoal - m_hTargetEnt->pev->origin).Length() > pTask->flData * 0.5) {
-					m_vecMoveGoal = m_hTargetEnt->pev->origin;
-					distance = (m_vecMoveGoal - pev->origin).Length2D();
-					FRefreshRoute();
-				}
-
-				// Set the appropriate activity based on an overlapping range
-				// overlap the range to prevent oscillation
-				if (distance < pTask->flData) {
-					TaskComplete();
-					RouteClear();		// Stop moving
-				} else if (distance < 190 && m_movementActivity != ACT_WALK_SCARED)
-					m_movementActivity = ACT_WALK_SCARED;
-				else if (distance >= 270 && m_movementActivity != ACT_RUN_SCARED)
-					m_movementActivity = ACT_RUN_SCARED;
+				FRefreshRoute();
 			}
+
+			// Set the appropriate activity based on an overlapping range
+			// overlap the range to prevent oscillation
+			if (distance < pTask->flData) {
+				TaskComplete();
+				RouteClear();		// Stop moving
+			}
+			else if (distance < 190 && m_movementActivity != ACT_WALK_SCARED)
+				m_movementActivity = ACT_WALK_SCARED;
+			else if (distance >= 270 && m_movementActivity != ACT_RUN_SCARED)
+				m_movementActivity = ACT_RUN_SCARED;
+		}
 		break;
-		default:
-			CTalkMonster::RunTask(pTask);
+	default:
+		CTalkMonster::RunTask(pTask);
 		break;
 	}
 }
@@ -216,7 +218,7 @@ void CConstruction::RunTask(Task_t *pTask) {
 void CConstruction::TalkInit() {
 	CScientist::TalkInit();
 
-	if (!m_iszSpeakAs){
+	if (!m_iszSpeakAs) {
 		m_szGrp[TLK_ANSWER] = "GUS_ANSWER";
 		m_szGrp[TLK_QUESTION] = "GUS_QUESTION";
 		m_szGrp[TLK_IDLE] = "GUS_IDLE";
@@ -276,42 +278,43 @@ void CConstruction::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector v
 		}
 
 		switch (ptr->iHitgroup) {
-			case HITGROUP_HEAD:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
-					flDamage -= 20;
-					if (flDamage <= 0) {
-						UTIL_Ricochet(ptr->vecEndPos, 1.0);
-						flDamage = 0.01;
-					}
-				} else {
-					flDamage = m_flHitgroupHead*flDamage;
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+				flDamage -= 20;
+				if (flDamage <= 0) {
+					UTIL_Ricochet(ptr->vecEndPos, 1.0);
+					flDamage = 0.01;
 				}
-				ptr->iHitgroup = HITGROUP_HEAD;
+			}
+			else {
+				flDamage = m_flHitgroupHead * flDamage;
+			}
+			ptr->iHitgroup = HITGROUP_HEAD;
 			break;
-			case HITGROUP_CHEST:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
-				flDamage = m_flHitgroupChest*flDamage;
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			flDamage = m_flHitgroupChest * flDamage;
 			break;
-			case HITGROUP_STOMACH:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
-				flDamage = m_flHitgroupStomach*flDamage;
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			flDamage = m_flHitgroupStomach * flDamage;
 			break;
-			case HITGROUP_LEFTARM:
-			case HITGROUP_RIGHTARM:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
-				flDamage = m_flHitgroupArm*flDamage;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm * flDamage;
 			break;
-			case HITGROUP_LEFTLEG:
-			case HITGROUP_RIGHTLEG:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
-				flDamage = m_flHitgroupLeg*flDamage;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
 	}
@@ -329,11 +332,11 @@ void CConstruction::MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, f
 		m_IdealActivity = m_movementActivity;
 
 	switch (m_Activity) {
-		case ACT_WALK:
-			m_flGroundSpeed = 55;
+	case ACT_WALK:
+		m_flGroundSpeed = 55;
 		break;
-		case ACT_RUN:
-			m_flGroundSpeed = 190;
+	case ACT_RUN:
+		m_flGroundSpeed = 190;
 		break;
 	}
 

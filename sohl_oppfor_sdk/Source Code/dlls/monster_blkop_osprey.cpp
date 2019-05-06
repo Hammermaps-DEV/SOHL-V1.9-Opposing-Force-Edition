@@ -160,7 +160,7 @@ void COsprey::Spawn(void) {
 }
 
 //=========================================================
-// Classify - indicates this monster's place in the 
+// Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
 int	COsprey::Classify(void) {

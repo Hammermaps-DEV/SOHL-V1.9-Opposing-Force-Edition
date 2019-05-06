@@ -26,12 +26,12 @@
 #define WEAPON_HGUN_H
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class HGUN_IDLE1		{ sequence = 0, frames = 31, fps = 16 };
-enum class HGUN_FIDGETSWAY  { sequence = 1, frames = 41, fps = 16 };
+enum class HGUN_IDLE1 { sequence = 0, frames = 31, fps = 16 };
+enum class HGUN_FIDGETSWAY { sequence = 1, frames = 41, fps = 16 };
 enum class HGUN_FIDGETSHAKE { sequence = 2, frames = 36, fps = 16 };
-enum class HGUN_DOWN		{ sequence = 3, frames = 19, fps = 16 };
-enum class HGUN_UP			{ sequence = 4, frames = 31, fps = 30 };
-enum class HGUN_SHOOT		{ sequence = 5, frames = 11, fps = 24 };
+enum class HGUN_DOWN { sequence = 3, frames = 19, fps = 16 };
+enum class HGUN_UP { sequence = 4, frames = 31, fps = 30 };
+enum class HGUN_SHOOT { sequence = 5, frames = 11, fps = 24 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //Hivehand Base-Class | Base | Attack | Animations | Vars | Events

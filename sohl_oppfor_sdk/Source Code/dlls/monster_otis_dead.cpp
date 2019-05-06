@@ -59,10 +59,12 @@ void CDeadOtis::KeyValue(KeyValueData *pkvd) {
 	if (FStrEq(pkvd->szKeyName, "pose")) {
 		m_iPose = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else if (FStrEq(pkvd->szKeyName, "head")) {
+	}
+	else if (FStrEq(pkvd->szKeyName, "head")) {
 		head = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CDeadBarney::KeyValue(pkvd);
 }
 

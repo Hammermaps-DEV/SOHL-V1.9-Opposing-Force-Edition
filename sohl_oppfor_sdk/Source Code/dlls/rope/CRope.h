@@ -60,7 +60,7 @@ public:
 
 	void Think() override;
 
-	void Touch( CBaseEntity* pOther ) override;
+	void Touch(CBaseEntity* pOther) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -73,7 +73,7 @@ public:
 	*	Initializes the springs.
 	*	@param uiNumSprings Number of springs to create.
 	*/
-	void InitializeSprings( const size_t uiNumSprings );
+	void InitializeSprings(const size_t uiNumSprings);
 
 	/**
 	*	Runs simulation on the samples.
@@ -84,19 +84,19 @@ public:
 	*	Computes forces on the given sample list.
 	*	@param pSystem List of sample data. m_NumSamples Elements large.
 	*/
-	void ComputeForces( RopeSampleData* pSystem );
+	void ComputeForces(RopeSampleData* pSystem);
 
 	/**
 	*	Computes forces on the given sample list.
 	*	@param pSystem List of samples. m_NumSamples Elements large.
 	*/
-	void ComputeForces( CRopeSample** ppSystem );
+	void ComputeForces(CRopeSample** ppSystem);
 
 	/**
 	*	Computes forces for the given sample data.
 	*	@param data Sample data.
 	*/
-	void ComputeSampleForce( RopeSampleData& data );
+	void ComputeSampleForce(RopeSampleData& data);
 
 	/**
 	*	Computes spring force for the given sample datas.
@@ -104,7 +104,7 @@ public:
 	*	@param second Second sample.
 	*	@param spring Spring.
 	*/
-	void ComputeSpringForce( RopeSampleData& first, RopeSampleData& second, const Spring& spring );
+	void ComputeSpringForce(RopeSampleData& first, RopeSampleData& second, const Spring& spring);
 
 	/**
 	*	Runs RK4 integration.
@@ -112,34 +112,34 @@ public:
 	*	@param ppSampleSource Previous sample state.
 	*	@param ppSampleTarget Next sample state.
 	*/
-	void RK4Integrate( const float flDeltaTime, CRopeSample** ppSampleSource, CRopeSample** ppSampleTarget );
+	void RK4Integrate(const float flDeltaTime, CRopeSample** ppSampleSource, CRopeSample** ppSampleTarget);
 
 	/**
 	*	Traces model positions and angles and corrects them.
 	*	@param ppPrimarySegs Visible segments.
 	*	@param ppHiddenSegs hidden segments.
 	*/
-	void TraceModels( CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSegs );
+	void TraceModels(CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSegs);
 
 	/**
 	*	Traces model positions and angles, makes visible segments visible and hidden segments hidden.
 	*/
-	void SetRopeSegments( const size_t uiNumSegments, 
-						  CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSegs );
+	void SetRopeSegments(const size_t uiNumSegments,
+		CRopeSegment** ppPrimarySegs, CRopeSegment** ppHiddenSegs);
 
 	/**
 	*	Moves the attached object up.
 	*	@param flDeltaTime Time between previous and current movement.
 	*	@return true if the object is still on the rope, false otherwise.
 	*/
-	bool MoveUp( const float flDeltaTime );
+	bool MoveUp(const float flDeltaTime);
 
 	/**
 	*	Moves the attached object down.
 	*	@param flDeltaTime Time between previous and current movement.
 	*	@return true if the object is still on the rope, false otherwise.
 	*/
-	bool MoveDown( const float flDeltaTime );
+	bool MoveDown(const float flDeltaTime);
 
 	/**
 	*	@return The attached object's velocity.
@@ -150,19 +150,19 @@ public:
 	*	Applies force from the player. Only applies if there is currently an object attached to the rope.
 	*	@param vecForce Force.
 	*/
-	void ApplyForceFromPlayer( const Vector& vecForce );
+	void ApplyForceFromPlayer(const Vector& vecForce);
 
 	/**
 	*	Applies force to a specific segment.
 	*	@param vecForce Force.
 	*	@param uiSegment Segment index.
 	*/
-	void ApplyForceToSegment( const Vector& vecForce, const size_t uiSegment );
+	void ApplyForceToSegment(const Vector& vecForce, const size_t uiSegment);
 
 	/**
 	*	Attached an object to the given segment.
 	*/
-	void AttachObjectToSegment( CRopeSegment* pSegment );
+	void AttachObjectToSegment(CRopeSegment* pSegment);
 
 	/**
 	*	Detaches an attached object.
@@ -207,7 +207,7 @@ public:
 	/**
 	*	Sets whether this rope is allowed to make sounds.
 	*/
-	void SetSoundAllowed( const bool bAllowed )
+	void SetSoundAllowed(const bool bAllowed)
 	{
 		m_bMakeSound = bAllowed;
 	}
@@ -235,7 +235,7 @@ public:
 	/**
 	*	@return Segment length for the given segment.
 	*/
-	float GetSegmentLength( size_t uiSegmentIndex ) const;
+	float GetSegmentLength(size_t uiSegmentIndex) const;
 
 	/**
 	*	@return Total rope length.
@@ -250,29 +250,29 @@ public:
 	/**
 	*	@return Whether the given segment index is valid.
 	*/
-	bool IsValidSegmentIndex( const size_t uiSegment ) const;
+	bool IsValidSegmentIndex(const size_t uiSegment) const;
 
 	/**
 	*	@return The origin of the given segment.
 	*/
-	Vector GetSegmentOrigin( const size_t uiSegment ) const;
+	Vector GetSegmentOrigin(const size_t uiSegment) const;
 
 	/**
 	*	@return The attachment point of the given segment.
 	*/
-	Vector GetSegmentAttachmentPoint( const size_t uiSegment ) const;
+	Vector GetSegmentAttachmentPoint(const size_t uiSegment) const;
 
 	/**
 	*	@param pSegment Segment.
 	*	Sets the attached object segment.
 	*/
-	void SetAttachedObjectsSegment( CRopeSegment* pSegment );
+	void SetAttachedObjectsSegment(CRopeSegment* pSegment);
 
 	/**
 	*	@param uiSegmentIndex Segment index.
 	*	@return The segment direction normal from its origin.
 	*/
-	Vector GetSegmentDirFromOrigin( const size_t uiSegmentIndex ) const;
+	Vector GetSegmentDirFromOrigin(const size_t uiSegmentIndex) const;
 
 	/**
 	*	@return The attached object position.
@@ -282,8 +282,8 @@ public:
 private:
 	size_t m_uiSegments;
 
-	CRopeSegment* seg[ MAX_SEGMENTS ];
-	CRopeSegment* altseg[ MAX_SEGMENTS ];
+	CRopeSegment* seg[MAX_SEGMENTS];
+	CRopeSegment* altseg[MAX_SEGMENTS];
 
 	bool m_bToggle;
 
@@ -296,9 +296,9 @@ private:
 	float m_flHookConstant;
 	float m_flSpringDampning;
 
-	CRopeSample* m_CurrentSys[ MAX_SAMPLES ];
-	CRopeSample* m_TargetSys[ MAX_SAMPLES ];
-	RopeSampleData* m_TempSys[ MAX_TEMP_SAMPLES ];
+	CRopeSample* m_CurrentSys[MAX_SAMPLES];
+	CRopeSample* m_TargetSys[MAX_SAMPLES];
+	RopeSampleData* m_TempSys[MAX_TEMP_SAMPLES];
 
 	size_t m_uiNumSamples;
 

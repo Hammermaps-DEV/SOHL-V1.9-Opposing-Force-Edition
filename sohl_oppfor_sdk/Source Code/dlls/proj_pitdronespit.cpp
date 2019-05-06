@@ -154,7 +154,8 @@ void CPitDroneSpit::TrackTarget(void) {
 
 	if (m_hEnemy != NULL && FVisible(m_hEnemy)) {
 		m_vecEnemyLKP = m_hEnemy->BodyTarget(pev->origin);
-	} else {
+	}
+	else {
 		m_vecEnemyLKP = m_vecEnemyLKP + pev->velocity * 700 * 0.1;
 	}
 
@@ -197,7 +198,7 @@ void CPitDroneSpit::TrackTouch(CBaseEntity *pOther) {
 }
 
 void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
-	if(pOther->pev->takedamage) {
+	if (pOther->pev->takedamage) {
 		TraceResult tr = UTIL_GetGlobalTrace();
 		entvars_t	*pevOwner;
 		pevOwner = VARS(pev->owner);
@@ -213,7 +214,8 @@ void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 		if (!IsMultiplayer()) {
 			Killed(pev, GIB_NEVER);
 		}
-	} else {
+	}
+	else {
 		EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pMissSounds);
 		SetThink(&CPitDroneSpit::SUB_Remove);
 		SetNextThink(0);

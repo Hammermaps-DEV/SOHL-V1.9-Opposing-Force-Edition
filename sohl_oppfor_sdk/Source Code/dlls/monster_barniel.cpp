@@ -208,36 +208,36 @@ void CBarniel::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 		}
 
 		switch (ptr->iHitgroup) {
-			case HITGROUP_HEAD:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-				flDamage = m_flHitgroupHead*flDamage;
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+			flDamage = m_flHitgroupHead * flDamage;
 			break;
-			case HITGROUP_CHEST:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupChest*flDamage) / 2;
-				}
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupChest*flDamage) / 2;
+			}
 			break;
-			case HITGROUP_STOMACH:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupStomach*flDamage) / 2;
-				}
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupStomach*flDamage) / 2;
+			}
 			break;
-			case HITGROUP_LEFTARM:
-			case HITGROUP_RIGHTARM:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
-				flDamage = m_flHitgroupArm*flDamage;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm * flDamage;
 			break;
-			case HITGROUP_LEFTLEG:
-			case HITGROUP_RIGHTLEG:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
-				flDamage = m_flHitgroupLeg*flDamage;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
 	}
@@ -258,7 +258,8 @@ void CBarniel::AlertSound(void) {
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_ATTACK");
 				PlaySentence(szBuf, RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
-			} else {
+			}
+			else {
 				PlaySentence("BN_ATTACK", RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			}
 		}
@@ -307,7 +308,8 @@ void CBarniel::Fire9mmPistol(void) {
 		case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot1.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift); break;
 		case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot2.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift); break;
 		}
-	} else {
+	}
+	else {
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/bn_attack2.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift);
 	}

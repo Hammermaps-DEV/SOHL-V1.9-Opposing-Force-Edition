@@ -18,26 +18,26 @@
 
 class CConstruction : public CScientist
 {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void RunTask(Task_t *pTask);
-		void StartTask(Task_t *pTask);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void RunTask(Task_t *pTask);
+	void StartTask(Task_t *pTask);
 
-		void TalkInit(void);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-		void MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval);
+	void TalkInit(void);
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	void MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval);
 
-		CUSTOM_SCHEDULES;
+	CUSTOM_SCHEDULES;
 
-	private:
-		bool m_flDebug;
-		float m_flHitgroupHead;
-		float m_flHitgroupChest;
-		float m_flHitgroupStomach;
-		float m_flHitgroupArm;
-		float m_flHitgroupLeg;
-		float m_flDmgPunch;
+private:
+	bool m_flDebug;
+	float m_flHitgroupHead;
+	float m_flHitgroupChest;
+	float m_flHitgroupStomach;
+	float m_flHitgroupArm;
+	float m_flHitgroupLeg;
+	float m_flDmgPunch;
 };
 
 #endif // MONSTER_CONSTRUCTION_H

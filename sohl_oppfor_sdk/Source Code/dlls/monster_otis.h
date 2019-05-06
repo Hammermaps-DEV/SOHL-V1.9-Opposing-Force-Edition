@@ -25,31 +25,31 @@
 
 // class definition
 class COtis : public CBarney {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void FirePistol(void);
-		void KeyValue(KeyValueData *pkvd);
-		void AlertSound(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void FirePistol(void);
+	void KeyValue(KeyValueData *pkvd);
+	void AlertSound(void);
+	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-		int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-		void DeclineFollowing(void);
+	void DeclineFollowing(void);
 
-		Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule(void);
 
-		void TalkInit(void);
-		void Killed(entvars_t *pevAttacker, int iGib);
+	void TalkInit(void);
+	void Killed(entvars_t *pevAttacker, int iGib);
 
-		virtual int	Save(CSave &save);
-		virtual int	Restore(CRestore &restore);
-		static	TYPEDESCRIPTION m_SaveData[];
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
+	static	TYPEDESCRIPTION m_SaveData[];
 
-		static const char *pAttackSounds[];
+	static const char *pAttackSounds[];
 
-		int	head;
+	int	head;
 };
 
 #endif // MONSTER_OTIS_H

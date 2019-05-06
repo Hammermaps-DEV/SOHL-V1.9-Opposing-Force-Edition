@@ -59,7 +59,8 @@ void CGrass::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "definition_file")) {
 		strncat(sParticleDefintionFile, pkvd->szValue, strlen(pkvd->szValue));
 		pkvd->fHandled = true;
-	} else {
+	}
+	else {
 		CBaseEntity::KeyValue(pkvd);
 	}
 }
@@ -77,15 +78,15 @@ void CGrass::MakeAware(CBaseEntity *pEnt)
 
 	// lets give them everything
 	MESSAGE_BEGIN(MSG_ONE, gmsgGrassParticles, NULL, pEnt->pev);
-		WRITE_SHORT(iID);
-		WRITE_BYTE(0);
-		WRITE_COORD(pev->absmax.x);
-		WRITE_COORD(pev->absmax.y);
-		WRITE_COORD(pev->absmax.z);
-		WRITE_COORD(pev->absmin.x);
-		WRITE_COORD(pev->absmin.y);
-		WRITE_COORD(pev->absmin.z);
-		WRITE_STRING(sParticleDefintionFile);
+	WRITE_SHORT(iID);
+	WRITE_BYTE(0);
+	WRITE_COORD(pev->absmax.x);
+	WRITE_COORD(pev->absmax.y);
+	WRITE_COORD(pev->absmax.z);
+	WRITE_COORD(pev->absmin.x);
+	WRITE_COORD(pev->absmin.y);
+	WRITE_COORD(pev->absmin.z);
+	WRITE_STRING(sParticleDefintionFile);
 	MESSAGE_END();
 }
 
@@ -97,14 +98,17 @@ void CGrass::GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	// determine whether we are turning on or off
 	if (useType == USE_OFF) {
 		bTurnOn = false;
-	} else if (useType == USE_ON) {
+	}
+	else if (useType == USE_ON) {
 		bTurnOn = true;
-	} else if (useType == USE_SET) {
+	}
+	else if (useType == USE_SET) {
 		if (value != 0)
 			bTurnOn = true;
 		else
 			bTurnOn = false;
-	} else {
+	}
+	else {
 		if (bIsOn == true)
 			bTurnOn = false;
 		else
@@ -114,25 +118,26 @@ void CGrass::GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	if (bTurnOn == false) {
 		// lets remove this ps
 		MESSAGE_BEGIN(MSG_ALL, gmsgGrassParticles);
-			WRITE_SHORT(iID);
-			WRITE_BYTE(1);
+		WRITE_SHORT(iID);
+		WRITE_BYTE(1);
 		MESSAGE_END();
 		bIsOn = false;
-	} else {
+	}
+	else {
 		// increment the count just in case
 		iID = ++iParticleIDCount;
 
 		// tell everyone about our new grass
 		MESSAGE_BEGIN(MSG_ALL, gmsgGrassParticles);
-			WRITE_SHORT(iID);
-			WRITE_BYTE(0);
-			WRITE_COORD(pev->absmax.x);
-			WRITE_COORD(pev->absmax.y);
-			WRITE_COORD(pev->absmax.z);
-			WRITE_COORD(pev->absmin.x);
-			WRITE_COORD(pev->absmin.y);
-			WRITE_COORD(pev->absmin.z);
-			WRITE_STRING(sParticleDefintionFile);
+		WRITE_SHORT(iID);
+		WRITE_BYTE(0);
+		WRITE_COORD(pev->absmax.x);
+		WRITE_COORD(pev->absmax.y);
+		WRITE_COORD(pev->absmax.z);
+		WRITE_COORD(pev->absmin.x);
+		WRITE_COORD(pev->absmin.y);
+		WRITE_COORD(pev->absmin.z);
+		WRITE_STRING(sParticleDefintionFile);
 		MESSAGE_END();
 
 		bIsOn = true;

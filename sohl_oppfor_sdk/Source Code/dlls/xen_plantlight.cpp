@@ -74,24 +74,24 @@ void CXenPLight::Think(void) {
 	SetNextThink(0.1);
 
 	switch (GetActivity()) {
-		case ACT_CROUCH:
-			if (m_fSequenceFinished) {
-				SetActivity(ACT_CROUCHIDLE);
-				LightOff();
-			}
+	case ACT_CROUCH:
+		if (m_fSequenceFinished) {
+			SetActivity(ACT_CROUCHIDLE);
+			LightOff();
+		}
 		break;
-		case ACT_CROUCHIDLE:
-			if (UTIL_GlobalTimeBase() > pev->dmgtime) {
-				SetActivity(ACT_STAND);
-				LightOn();
-			}
+	case ACT_CROUCHIDLE:
+		if (UTIL_GlobalTimeBase() > pev->dmgtime) {
+			SetActivity(ACT_STAND);
+			LightOn();
+		}
 		break;
-		case ACT_STAND:
-			if (m_fSequenceFinished)
-				SetActivity(ACT_IDLE);
+	case ACT_STAND:
+		if (m_fSequenceFinished)
+			SetActivity(ACT_IDLE);
 		break;
-		case ACT_IDLE:
-		default:
+	case ACT_IDLE:
+	default:
 		break;
 	}
 }

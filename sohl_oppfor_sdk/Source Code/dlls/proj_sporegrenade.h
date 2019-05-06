@@ -22,20 +22,20 @@
 
 // Contact/Timed spore grenade
 class CSporeGrenade : public CBaseMonster {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void Glow(void);
-		void Explode(void);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void Glow(void);
+	void Explode(void);
 
-		void EXPORT ExplodeThink(CBaseEntity *pOther);
-		void EXPORT BounceThink(CBaseEntity *pOther);
-		void EXPORT FlyThink(void);
+	void EXPORT ExplodeThink(CBaseEntity *pOther);
+	void EXPORT BounceThink(CBaseEntity *pOther);
+	void EXPORT FlyThink(void);
 
-		static CSporeGrenade *ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time);
-		static CSporeGrenade *ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
-	private:
-		CSprite *m_pSprite;
+	static CSporeGrenade *ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time);
+	static CSporeGrenade *ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
+private:
+	CSprite *m_pSprite;
 };
 
 #endif // SPORE_GRENADE_H

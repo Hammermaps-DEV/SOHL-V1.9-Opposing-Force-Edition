@@ -24,67 +24,67 @@
 
 // class definition
 class CHFGrunt : public CRCAllyMonster {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void SetYawSpeed(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
-		void SetActivity(Activity NewActivity);
-		void RunTask(Task_t *pTask);
-		void StartTask(Task_t *pTask);
-		void KeyValue(KeyValueData *pkvd);
-		virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-		BOOL CheckRangeAttack2(float flDot, float flDist);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void SetYawSpeed(void);
+	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	void SetActivity(Activity NewActivity);
+	void RunTask(Task_t *pTask);
+	void StartTask(Task_t *pTask);
+	void KeyValue(KeyValueData *pkvd);
+	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	BOOL CheckRangeAttack2(float flDot, float flDist);
 
-		// Override these to set behavior
-		Schedule_t *GetScheduleOfType(int Type);
-		Schedule_t *GetSchedule(void);
+	// Override these to set behavior
+	Schedule_t *GetScheduleOfType(int Type);
+	Schedule_t *GetSchedule(void);
 
-		void GibMonster(void);
-		void JustSpoke(void);
+	void GibMonster(void);
+	void JustSpoke(void);
 
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-		virtual int	Save(CSave &save);
-		virtual int	Restore(CRestore &restore);
-		static	TYPEDESCRIPTION m_SaveData[];
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
+	static	TYPEDESCRIPTION m_SaveData[];
 
-		// UNDONE: What is this for?  It isn't used?
-		float m_flLastEnemySightTime;
-		float m_flMedicWaitTime;
+	// UNDONE: What is this for?  It isn't used?
+	float m_flLastEnemySightTime;
+	float m_flMedicWaitTime;
 
-		BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
-		int		m_cClipSize;
-		int		m_nShotgunDouble;
+	BOOL	m_fFirstEncounter;// only put on the handsign show in the squad's first encounter.
+	int		m_cClipSize;
+	int		m_nShotgunDouble;
 
-		int		m_iSentence;
-		int		m_iHead;
+	int		m_iSentence;
+	int		m_iHead;
 
-		static const char *pGruntSentences[];
+	static const char *pGruntSentences[];
 
-		CUSTOM_SCHEDULES;
+	CUSTOM_SCHEDULES;
 };
 
 // class definition
 class CHFGruntRepel : public CBaseMonster {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-		int m_iSpriteTexture;	// Don't save, precache
+public:
+	void Spawn(void);
+	void Precache(void);
+	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	int m_iSpriteTexture;	// Don't save, precache
 };
 
 // class definition
 class CDeadFGrunt : public CBaseMonster {
-	public:
-		void Spawn(void);
-		int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+public:
+	void Spawn(void);
+	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
 
-		void KeyValue(KeyValueData *pkvd);
+	void KeyValue(KeyValueData *pkvd);
 
-		int		m_iHead;
-		int	m_iPose;// which sequence to display
-		static char *m_szPoses[7];
+	int		m_iHead;
+	int	m_iPose;// which sequence to display
+	static char *m_szPoses[7];
 };
 
 #endif // MONSTER_HGRUNT_OPFOR_H

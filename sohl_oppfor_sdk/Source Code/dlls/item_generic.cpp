@@ -77,7 +77,8 @@ void CItemGeneric::KeyValue(KeyValueData* pkvd) {
 	if (FStrEq(pkvd->szKeyName, "sequencename")) {
 		m_iszSequenceName = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CBaseAnimating::KeyValue(pkvd);
 }
 
@@ -94,7 +95,8 @@ void CItemGeneric::StartupThink(void) {
 		pev->sequence = iSequence;
 		SetThink(&CItemGeneric::SequenceThink);
 		SetNextThink(0.01);
-	} else {
+	}
+	else {
 		// Cancel play sequence.
 		SetThink(NULL);
 	}
@@ -121,7 +123,8 @@ void CItemGeneric::SequenceThink(void) {
 			SetThink(NULL);
 			m_fSequenceFinished = TRUE;
 			return;
-		} else {
+		}
+		else {
 			pev->frame = 0;
 			ResetSequenceInfo();
 		}

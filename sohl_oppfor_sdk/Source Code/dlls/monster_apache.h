@@ -21,66 +21,66 @@
 
 class CApache : public CBaseMonster
 {
-	public:
-		virtual void Spawn(void);
-		virtual void Precache(void);
-		virtual int  Classify(void);
-		virtual int  BloodColor(void) { return DONT_BLEED; }
-		virtual void Killed(entvars_t *pevAttacker, int iGib);
-		virtual void GibMonster(void) { return; };
-		virtual int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-		virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-		virtual void SetObjectCollisionBox(void);
+public:
+	virtual void Spawn(void);
+	virtual void Precache(void);
+	virtual int  Classify(void);
+	virtual int  BloodColor(void) { return DONT_BLEED; }
+	virtual void Killed(entvars_t *pevAttacker, int iGib);
+	virtual void GibMonster(void) { return; };
+	virtual int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	virtual void SetObjectCollisionBox(void);
 
-		void EXPORT HuntThink(void);
-		void EXPORT FlyTouch(CBaseEntity *pOther);
-		void EXPORT CrashTouch(CBaseEntity *pOther);
-		void EXPORT DyingThink(void);
-		void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-		void EXPORT NullThink(void);
+	void EXPORT HuntThink(void);
+	void EXPORT FlyTouch(CBaseEntity *pOther);
+	void EXPORT CrashTouch(CBaseEntity *pOther);
+	void EXPORT DyingThink(void);
+	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT NullThink(void);
 
-		virtual void ShowDamage(void);
-		virtual void Flight(void);
-		virtual void FireRocket(void);
-		virtual BOOL FireGun(void);
+	virtual void ShowDamage(void);
+	virtual void Flight(void);
+	virtual void FireRocket(void);
+	virtual BOOL FireGun(void);
 
-		virtual int	Save(CSave &save);
-		virtual int	Restore(CRestore &restore);
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
 
-		static	TYPEDESCRIPTION m_SaveData[];
+	static	TYPEDESCRIPTION m_SaveData[];
 
-		static const char *pRotorSounds[];
-		static const char *pDebrisSounds[];
-		static const char *pExplodeSounds[];
-	protected:
-		int m_iRockets;
-		float m_flForce;
-		float m_flNextRocket;
+	static const char *pRotorSounds[];
+	static const char *pDebrisSounds[];
+	static const char *pExplodeSounds[];
+protected:
+	int m_iRockets;
+	float m_flForce;
+	float m_flNextRocket;
 
-		Vector m_vecTarget;
-		Vector m_posTarget;
+	Vector m_vecTarget;
+	Vector m_posTarget;
 
-		Vector m_vecDesired;
-		Vector m_posDesired;
+	Vector m_vecDesired;
+	Vector m_posDesired;
 
-		Vector m_vecGoal;
+	Vector m_vecGoal;
 
-		Vector m_angGun;
-		float m_flLastSeen;
-		float m_flPrevSeen;
+	Vector m_angGun;
+	float m_flLastSeen;
+	float m_flPrevSeen;
 
-		bool m_flDebug;
+	bool m_flDebug;
 
-		int m_iSoundState; // don't save this
+	int m_iSoundState; // don't save this
 
-		int m_iSpriteTexture;
-		int m_iExplode;
-		int m_iBodyGibs;
-		int m_iRotorSound;
+	int m_iSpriteTexture;
+	int m_iExplode;
+	int m_iBodyGibs;
+	int m_iRotorSound;
 
-		float m_flGoalSpeed;
+	float m_flGoalSpeed;
 
-		int m_iDoSmokePuff;
+	int m_iDoSmokePuff;
 };
 
 #endif // MONSTER_APACHE_H

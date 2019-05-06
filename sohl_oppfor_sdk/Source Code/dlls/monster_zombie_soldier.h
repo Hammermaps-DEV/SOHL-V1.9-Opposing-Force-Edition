@@ -24,10 +24,10 @@
 
 // class definition
 class CZombieSoldier : public CZombie {
-	public:
-		// void
-		void Spawn(void);
-		void Precache(void);
+public:
+	// void
+	void Spawn(void);
+	void Precache(void);
 };
 
 #endif // MONSTER_ZOMBIE_SOLDIER_H

@@ -137,7 +137,8 @@ void CVoltigoreEnergyBall::Touch(CBaseEntity *pOther) {
 		::RadiusDamage(pev->origin, pev, pevOwner, pev->dmg, 32, CLASS_ALIEN_BIOWEAPON, DMG_ENERGYBEAM | DMG_SHOCK);
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", VOL_NORM, ATTN_NORM);
 		UTIL_Sparks(pev->origin);
-	} else {
+	}
+	else {
 		pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_SHOCK);
 		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", VOL_NORM, ATTN_NORM);
 	}
@@ -175,16 +176,16 @@ void CVoltigoreEnergyBall::Think(void) {
 	pBeam->LiveForTime(0.3);
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(25);     // radius
-		WRITE_BYTE(125);     // R
-		WRITE_BYTE(61);     // G
-		WRITE_BYTE(177);     // B
-		WRITE_BYTE(1);     // life * 10
-		WRITE_BYTE(0); // decay
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(25);     // radius
+	WRITE_BYTE(125);     // R
+	WRITE_BYTE(61);     // G
+	WRITE_BYTE(177);     // B
+	WRITE_BYTE(1);     // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
 
 	if (UTIL_PointContents(pev->origin) == CONTENT_WATER) { //Impact on Water
@@ -199,7 +200,7 @@ void CVoltigoreEnergyBall::Think(void) {
 }
 
 void CVoltigoreEnergyBall::Glow(void) {
-	if(m_pSprite) {
+	if (m_pSprite) {
 		UTIL_Remove(m_pSprite);
 		m_pSprite = NULL;
 	}

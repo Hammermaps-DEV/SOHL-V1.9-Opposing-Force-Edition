@@ -753,7 +753,7 @@ void GameDLLInit(void)
 	REGISTER_SKILL_CVARS(medic_ally_health);
 	REGISTER_SKILL_CVARS(medic_ally_kick);
 	REGISTER_SKILL_CVARS(medic_ally_heal);
-	
+
 	//=========================================================
 	// NPCs: Ally Grunt Torch
 	// For Spirit of Half-Life v1.9: Opposing-Force Edition

@@ -118,14 +118,14 @@ void CSporeAmmoPlant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector
 		Vector vecSrc = pev->origin + gpGlobals->v_forward * -20;
 
 		MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
-			WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
-			WRITE_COORD(vecSrc.x);	// Send to PAS because of the sound
-			WRITE_COORD(vecSrc.y);
-			WRITE_COORD(vecSrc.z);
-			WRITE_SHORT(m_iExplode);
-			WRITE_BYTE(25); // scale * 10
-			WRITE_BYTE(12); // framerate
-			WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
+		WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+		WRITE_COORD(vecSrc.x);	// Send to PAS because of the sound
+		WRITE_COORD(vecSrc.y);
+		WRITE_COORD(vecSrc.z);
+		WRITE_SHORT(m_iExplode);
+		WRITE_BYTE(25); // scale * 10
+		WRITE_BYTE(12); // framerate
+		WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
 		MESSAGE_END();
 
 
@@ -138,7 +138,7 @@ void CSporeAmmoPlant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector
 			angles.y = angles.y + 90;
 		if (V_fabs(angles.z) != 0)
 			angles.y = angles.y + 90;
-		
+
 		ALERT(at_aiconsole, "angles %f %f %f\n", angles.x, angles.y, angles.z);
 		CSporeGrenade::ShootTimed(this->pev, vecSrc, angles, RANDOM_FLOAT(3, 5));
 
@@ -184,7 +184,8 @@ void CSporeAmmoPlant::IdleThink(void)
 		m_flTimeSporeIdle = UTIL_GlobalTimeBase() + 18;
 		SetThink(&CSporeAmmoPlant::BornThink);
 		return;
-	} else {
+	}
+	else {
 		pev->sequence = SPOREAMMO_IDLE1;
 	}
 }

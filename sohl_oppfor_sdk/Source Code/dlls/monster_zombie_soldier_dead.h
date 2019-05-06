@@ -23,10 +23,10 @@
 
 // class definition
 class CDeadZombieSoldier : public CDeadZombie {
-	public:
-		// void
-		void Spawn(void);
-		void Precache(void);
+public:
+	// void
+	void Spawn(void);
+	void Precache(void);
 };
 
 #endif // MONSTER_ZOMBIE_SOLDIER_DEAD_

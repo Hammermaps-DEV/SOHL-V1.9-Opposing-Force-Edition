@@ -80,7 +80,8 @@ void CBlackOPApache::Spawn(void) {
 
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_32) {
 		SetUse(&CApache::StartupUse);
-	} else {
+	}
+	else {
 		SetThink(&CApache::HuntThink);
 		SetTouch(&CApache::FlyTouch);
 		SetNextThink(1.0);

@@ -110,18 +110,20 @@ void CKnife::SecondaryAttack() {
 // Charge - This used by PrimaryAttack
 //=========================================================
 void CKnife::Charge(bool Swing) {
-	if(!Swing) {
+	if (!Swing) {
 		if (m_fInAttack == 0) {
 			PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usKnife, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 1, 0, pev->body, 0, 0, 0);
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)KNIFE_CHARGE::frames, (int)KNIFE_CHARGE::fps);
 			m_fInAttack = 1;
-		} else if (m_fInAttack == 1) {
+		}
+		else if (m_fInAttack == 1) {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_fInAttack = 2;
 			}
-		} 
-	} else {
-		if(m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
+		}
+	}
+	else {
+		if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 			TraceResult tr;
 			UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 			Vector vecSrc = m_pPlayer->GetGunPosition();
@@ -297,7 +299,8 @@ void CKnife::WeaponIdle(void) {
 
 	if (m_fInAttack != 0) {
 		Charge(true);
-	} else {
+	}
+	else {
 		int iAnim;
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {

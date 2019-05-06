@@ -1180,9 +1180,6 @@
     <ClInclude Include="proj_portal.h">
       <Filter>Header Files\dlls\projectile</Filter>
     </ClInclude>
-    <ClInclude Include="env_lensflare.h">
-      <Filter>Header Files\dlls\env</Filter>
-    </ClInclude>
     <ClInclude Include="genericmodel.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>

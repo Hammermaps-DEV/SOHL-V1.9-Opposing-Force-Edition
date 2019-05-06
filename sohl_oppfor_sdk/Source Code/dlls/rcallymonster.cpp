@@ -541,7 +541,7 @@ void CRCAllyMonster::RunTask(Task_t *pTask)
 		edict_t *pPlayer;
 
 		// track head to the client for a while.
-		if (m_MonsterState == MONSTERSTATE_IDLE		&&
+		if (m_MonsterState == MONSTERSTATE_IDLE &&
 			!IsMoving() &&
 			!IsTalking())
 		{

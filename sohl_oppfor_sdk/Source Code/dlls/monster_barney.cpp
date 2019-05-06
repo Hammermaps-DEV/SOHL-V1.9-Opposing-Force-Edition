@@ -59,16 +59,16 @@
 LINK_ENTITY_TO_CLASS(monster_barney, CBarney);
 
 TYPEDESCRIPTION	CBarney::m_SaveData[] = {
-	DEFINE_FIELD( CBarney, m_iBaseBody, FIELD_INTEGER ), //LRC
-	DEFINE_FIELD( CBarney, m_fGunDrawn, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CBarney, m_painTime, FIELD_TIME ),
-	DEFINE_FIELD( CBarney, m_checkAttackTime, FIELD_TIME ),
-	DEFINE_FIELD( CBarney, m_lastAttackCheck, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CBarney, m_flPlayerDamage, FIELD_FLOAT ),
-	DEFINE_FIELD( CBarney, head, FIELD_INTEGER),
+	DEFINE_FIELD(CBarney, m_iBaseBody, FIELD_INTEGER), //LRC
+	DEFINE_FIELD(CBarney, m_fGunDrawn, FIELD_BOOLEAN),
+	DEFINE_FIELD(CBarney, m_painTime, FIELD_TIME),
+	DEFINE_FIELD(CBarney, m_checkAttackTime, FIELD_TIME),
+	DEFINE_FIELD(CBarney, m_lastAttackCheck, FIELD_BOOLEAN),
+	DEFINE_FIELD(CBarney, m_flPlayerDamage, FIELD_FLOAT),
+	DEFINE_FIELD(CBarney, head, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CBarney, CTalkMonster );
+IMPLEMENT_SAVERESTORE(CBarney, CTalkMonster);
 
 //=========================================================
 // KeyValue
@@ -77,7 +77,8 @@ void CBarney::KeyValue(KeyValueData *pkvd) {
 	if (FStrEq(pkvd->szKeyName, "head")) {
 		head = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CTalkMonster::KeyValue(pkvd);
 }
 
@@ -134,7 +135,8 @@ void CBarney::Spawn() {
 	// Make sure hands are white.
 	if (m_iBaseBody) {
 		SetBodygroup(HEAD_GROUP, m_iBaseBody);
-	} else {
+	}
+	else {
 		SetBodygroup(HEAD_GROUP, RANDOM_LONG(0, NUM_BARNEY_HEADS - 1));
 	}
 
@@ -159,14 +161,14 @@ void CBarney::Spawn() {
 // relationship table.
 //=========================================================
 int	CBarney::Classify(void) {
-	return m_iClass?m_iClass:CLASS_PLAYER_ALLY;
+	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
 }
 
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
 void CBarney::Precache() {
-	if(pev->model)
+	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/barney.mdl");
@@ -229,30 +231,35 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat(szBuf, "_MAD");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				} else {
+				}
+				else {
 					PlaySentence("BA_MAD", 4, VOL_NORM, ATTN_NORM);
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
 				StopFollowing(TRUE);
-			} else {
+			}
+			else {
 				if (m_iszSpeakAs) {
 					char szBuf[32];
 					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat(szBuf, "_SHOT");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				} else {
+				}
+				else {
 					PlaySentence("BA_SHOT", 4, VOL_NORM, ATTN_NORM);
 				}
 				Remember(bits_MEMORY_SUSPICIOUS);
 			}
-		} else if (!(m_hEnemy->IsPlayer()) && pev->deadflag == DEAD_NO) {
+		}
+		else if (!(m_hEnemy->IsPlayer()) && pev->deadflag == DEAD_NO) {
 			if (m_iszSpeakAs) {
 				char szBuf[32];
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_SHOT");
 				PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-			} else {
+			}
+			else {
 				PlaySentence("BA_SHOT", 4, VOL_NORM, ATTN_NORM);
 			}
 		}
@@ -282,46 +289,47 @@ void CBarney::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 		}
 
 		switch (ptr->iHitgroup) {
-			case HITGROUP_HEAD_HELMET_BN:
-			case HITGROUP_HEAD:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
-					flDamage -= 20;
-					if (flDamage <= 0) {
-						UTIL_Ricochet(ptr->vecEndPos, 1.0);
-						flDamage = 0.01;
-					}
-				} else {
-					flDamage = m_flHitgroupHead*flDamage;
+		case HITGROUP_HEAD_HELMET_BN:
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+				flDamage -= 20;
+				if (flDamage <= 0) {
+					UTIL_Ricochet(ptr->vecEndPos, 1.0);
+					flDamage = 0.01;
 				}
-				ptr->iHitgroup = HITGROUP_HEAD;
+			}
+			else {
+				flDamage = m_flHitgroupHead * flDamage;
+			}
+			ptr->iHitgroup = HITGROUP_HEAD;
 			break;
-			case HITGROUP_CHEST:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupChest*flDamage) / 2;
-				}
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupChest*flDamage) / 2;
+			}
 			break;
-			case HITGROUP_STOMACH:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupStomach*flDamage) / 2;
-				}
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupStomach*flDamage) / 2;
+			}
 			break;
-			case HITGROUP_LEFTARM:
-			case HITGROUP_RIGHTARM:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
-				flDamage = m_flHitgroupArm*flDamage;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm * flDamage;
 			break;
-			case HITGROUP_LEFTLEG:
-			case HITGROUP_RIGHTLEG:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
-				flDamage = m_flHitgroupLeg*flDamage;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
 	}
@@ -360,7 +368,8 @@ void CBarney::AlertSound(void) {
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_ATTACK");
 				PlaySentence(szBuf, RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
-			} else {
+			}
+			else {
 				PlaySentence("BA_ATTACK", RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			}
 		}
@@ -373,19 +382,19 @@ void CBarney::AlertSound(void) {
 //=========================================================
 void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case BARNEY_AE_SHOOT:
-			FirePistol();
+	case BARNEY_AE_SHOOT:
+		FirePistol();
 		break;
-		case BARNEY_AE_DRAW:
-			SetBodygroup(GUN_GROUP, GUN_DRAWN);
-			m_fGunDrawn = TRUE;
+	case BARNEY_AE_DRAW:
+		SetBodygroup(GUN_GROUP, GUN_DRAWN);
+		m_fGunDrawn = TRUE;
 		break;
-		case BARNEY_AE_DISARM:
-			SetBodygroup(GUN_GROUP, GUN_NONE);
-			m_fGunDrawn = FALSE;
+	case BARNEY_AE_DISARM:
+		SetBodygroup(GUN_GROUP, GUN_NONE);
+		m_fGunDrawn = FALSE;
 		break;
-		default:
-			CTalkMonster::HandleAnimEvent(pEvent);
+	default:
+		CTalkMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -394,7 +403,7 @@ void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 // CheckRangeAttack1
 //=========================================================
 BOOL CBarney::CheckRangeAttack1(float flDot, float flDist) {
-	if (flDist <= 1024 && flDot >= 0.5)	{
+	if (flDist <= 1024 && flDot >= 0.5) {
 		if (UTIL_GlobalTimeBase() > m_checkAttackTime) {
 			TraceResult tr;
 			Vector shootOrigin = pev->origin + Vector(0, 0, 55);
@@ -438,10 +447,11 @@ void CBarney::FirePistol(void) {
 	if (pev->frags) {
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_357);
 		switch (RANDOM_LONG(0, 1)) {
-			case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot1.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift); break;
-			case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot2.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift); break;
+		case 0: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot1.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift); break;
+		case 1: EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/357_shot2.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift); break;
 		}
-	} else {
+	}
+	else {
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift);
 	}
@@ -465,10 +475,10 @@ Task_t	tlBaFollow[] = {
 Schedule_t	slBaFollow[] = {
 	{
 		tlBaFollow,
-		HL_ARRAYSIZE ( tlBaFollow ),
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		HL_ARRAYSIZE(tlBaFollow),
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND |
 		bits_COND_PROVOKED,
 		bits_SOUND_DANGER,
@@ -483,13 +493,13 @@ Schedule_t	slBaFollow[] = {
 Task_t	tlBarneyEnemyDraw[] = {
 	{ TASK_STOP_MOVING,					0				},
 	{ TASK_FACE_ENEMY,					0				},
-	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float) ACT_ARM },
+	{ TASK_PLAY_SEQUENCE_FACE_ENEMY,	(float)ACT_ARM },
 };
 
 Schedule_t slBarneyEnemyDraw[] = {
 	{
 		tlBarneyEnemyDraw,
-		HL_ARRAYSIZE ( tlBarneyEnemyDraw ),
+		HL_ARRAYSIZE(tlBarneyEnemyDraw),
 		0,
 		0,
 		"Barney Enemy Draw"
@@ -506,11 +516,11 @@ Task_t	tlBaFaceTarget[] = {
 Schedule_t	slBaFaceTarget[] = {
 	{
 		tlBaFaceTarget,
-		HL_ARRAYSIZE ( tlBaFaceTarget ),
-		bits_COND_CLIENT_PUSH	|
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		HL_ARRAYSIZE(tlBaFaceTarget),
+		bits_COND_CLIENT_PUSH |
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND |
 		bits_COND_PROVOKED,
 		bits_SOUND_DANGER,
@@ -526,48 +536,48 @@ Task_t	tlIdleBaStand[] = {
 };
 
 Schedule_t	slIdleBaStand[] = {
-	{ 
+	{
 		tlIdleBaStand,
-		HL_ARRAYSIZE ( tlIdleBaStand ), 
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
-		bits_COND_HEAR_SOUND	|
-		bits_COND_SMELL			|
+		HL_ARRAYSIZE(tlIdleBaStand),
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_HEAR_SOUND |
+		bits_COND_SMELL |
 		bits_COND_PROVOKED,
-		bits_SOUND_COMBAT		|
-		bits_SOUND_DANGER		|
-		bits_SOUND_MEAT			|
-		bits_SOUND_CARCASS		|
+		bits_SOUND_COMBAT |
+		bits_SOUND_DANGER |
+		bits_SOUND_MEAT |
+		bits_SOUND_CARCASS |
 		bits_SOUND_GARBAGE,
 		"IdleStand"
 	},
 };
 
-DEFINE_CUSTOM_SCHEDULES( CBarney ) {
+DEFINE_CUSTOM_SCHEDULES(CBarney) {
 	slBaFollow,
-	slBarneyEnemyDraw,
-	slBaFaceTarget,
-	slIdleBaStand,
+		slBarneyEnemyDraw,
+		slBaFaceTarget,
+		slIdleBaStand,
 };
 
 
-IMPLEMENT_CUSTOM_SCHEDULES( CBarney, CTalkMonster );
+IMPLEMENT_CUSTOM_SCHEDULES(CBarney, CTalkMonster);
 
-void CBarney :: StartTask( Task_t *pTask ) {
-	CTalkMonster::StartTask( pTask );	
+void CBarney::StartTask(Task_t *pTask) {
+	CTalkMonster::StartTask(pTask);
 }
 
-void CBarney :: RunTask( Task_t *pTask ) {
-	switch ( pTask->iTask ) {
-		case TASK_RANGE_ATTACK1:
-			if (m_hEnemy != NULL && (m_hEnemy->IsPlayer())) {
-				pev->framerate = 1.5;
-			}
-			CTalkMonster::RunTask( pTask );
+void CBarney::RunTask(Task_t *pTask) {
+	switch (pTask->iTask) {
+	case TASK_RANGE_ATTACK1:
+		if (m_hEnemy != NULL && (m_hEnemy->IsPlayer())) {
+			pev->framerate = 1.5;
+		}
+		CTalkMonster::RunTask(pTask);
 		break;
-		default:
-			CTalkMonster::RunTask( pTask );
+	default:
+		CTalkMonster::RunTask(pTask);
 		break;
 	}
 }
@@ -576,34 +586,34 @@ void CBarney :: RunTask( Task_t *pTask ) {
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CBarney :: ISoundMask ( void)  {
-	return	bits_SOUND_WORLD	|
-			bits_SOUND_COMBAT	|
-			bits_SOUND_CARCASS	|
-			bits_SOUND_MEAT		|
-			bits_SOUND_GARBAGE	|
-			bits_SOUND_DANGER	|
-			bits_SOUND_PLAYER;
+int CBarney::ISoundMask(void) {
+	return	bits_SOUND_WORLD |
+		bits_SOUND_COMBAT |
+		bits_SOUND_CARCASS |
+		bits_SOUND_MEAT |
+		bits_SOUND_GARBAGE |
+		bits_SOUND_DANGER |
+		bits_SOUND_PLAYER;
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBarney :: SetYawSpeed ( void ) {
+void CBarney::SetYawSpeed(void) {
 	int ys = 0;
-	switch ( m_Activity ) {
-		case ACT_IDLE:		
-			ys = 70;
+	switch (m_Activity) {
+	case ACT_IDLE:
+		ys = 70;
 		break;
-		case ACT_WALK:
-			ys = 70;
+	case ACT_WALK:
+		ys = 70;
 		break;
-		case ACT_RUN:
-			ys = 90;
+	case ACT_RUN:
+		ys = 90;
 		break;
-		default:
-			ys = 70;
+	default:
+		ys = 70;
 		break;
 	}
 
@@ -613,42 +623,42 @@ void CBarney :: SetYawSpeed ( void ) {
 //=========================================================
 // Init talk data
 //=========================================================
-void CBarney :: TalkInit() {	
+void CBarney::TalkInit() {
 	CTalkMonster::TalkInit();
 
 	if (!m_iszSpeakAs) {
-		m_szGrp[TLK_ANSWER]		=	"BA_ANSWER";
-		m_szGrp[TLK_QUESTION]	=	"BA_QUESTION";
-		m_szGrp[TLK_IDLE]		=	"BA_IDLE";
-		m_szGrp[TLK_STARE]		=	"BA_STARE";
+		m_szGrp[TLK_ANSWER] = "BA_ANSWER";
+		m_szGrp[TLK_QUESTION] = "BA_QUESTION";
+		m_szGrp[TLK_IDLE] = "BA_IDLE";
+		m_szGrp[TLK_STARE] = "BA_STARE";
 
 		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256) //LRC
-			m_szGrp[TLK_USE]	 = 	"BA_PFOLLOW";
+			m_szGrp[TLK_USE] = "BA_PFOLLOW";
 		else
-			m_szGrp[TLK_USE]     = 	"BA_OK";
+			m_szGrp[TLK_USE] = "BA_OK";
 
 		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
-			m_szGrp[TLK_UNUSE]   = 	"BA_PWAIT";
+			m_szGrp[TLK_UNUSE] = "BA_PWAIT";
 		else
-			m_szGrp[TLK_UNUSE]   = 	"BA_WAIT";
+			m_szGrp[TLK_UNUSE] = "BA_WAIT";
 
 		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_256)
-			m_szGrp[TLK_DECLINE] =	"BA_POK";
+			m_szGrp[TLK_DECLINE] = "BA_POK";
 		else
-			m_szGrp[TLK_DECLINE] =	"BA_NOTOK";
+			m_szGrp[TLK_DECLINE] = "BA_NOTOK";
 
-		m_szGrp[TLK_STOP]      =    "BA_STOP";
-		m_szGrp[TLK_NOSHOOT]   =	"BA_SCARED";
-		m_szGrp[TLK_HELLO]     =	"BA_HELLO";
-		m_szGrp[TLK_PLHURT1]   =	"!BA_CUREA";
-		m_szGrp[TLK_PLHURT2]   =	"!BA_CUREB"; 
-		m_szGrp[TLK_PLHURT3]   =	"!BA_CUREC";
-		m_szGrp[TLK_PHELLO]    =	NULL;
-		m_szGrp[TLK_PIDLE]     =	NULL;
-		m_szGrp[TLK_PQUESTION] =    "BA_PQUEST";
-		m_szGrp[TLK_SMELL]     =	"BA_SMELL";
-		m_szGrp[TLK_WOUND]     =	"BA_WOUND";
-		m_szGrp[TLK_MORTAL]    =	"BA_MORTAL";
+		m_szGrp[TLK_STOP] = "BA_STOP";
+		m_szGrp[TLK_NOSHOOT] = "BA_SCARED";
+		m_szGrp[TLK_HELLO] = "BA_HELLO";
+		m_szGrp[TLK_PLHURT1] = "!BA_CUREA";
+		m_szGrp[TLK_PLHURT2] = "!BA_CUREB";
+		m_szGrp[TLK_PLHURT3] = "!BA_CUREC";
+		m_szGrp[TLK_PHELLO] = NULL;
+		m_szGrp[TLK_PIDLE] = NULL;
+		m_szGrp[TLK_PQUESTION] = "BA_PQUEST";
+		m_szGrp[TLK_SMELL] = "BA_SMELL";
+		m_szGrp[TLK_WOUND] = "BA_WOUND";
+		m_szGrp[TLK_MORTAL] = "BA_MORTAL";
 	}
 
 	m_voicePitch = (95 + RANDOM_LONG(0, 10));
@@ -657,49 +667,50 @@ void CBarney :: TalkInit() {
 //=========================================================
 // Monster is Killed, change body and drop weapon
 //=========================================================
-void CBarney::Killed( entvars_t *pevAttacker, int iGib ) {
-	if ( pev->body < m_iBaseBody + GUN_DRAWN && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
+void CBarney::Killed(entvars_t *pevAttacker, int iGib) {
+	if (pev->body < m_iBaseBody + GUN_DRAWN && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector vecGunPos, vecGunAngles;
 		SetBodygroup(GUN_GROUP, GUN_NO_GUN);
-		GetAttachment( 0, vecGunPos, vecGunAngles );
+		GetAttachment(0, vecGunPos, vecGunAngles);
 		CBaseEntity *pGun = DropItem((pev->frags ? "weapon_357" : "weapon_9mmhandgun"), vecGunPos, vecGunAngles);
 	}
 
-	SetUse( NULL );	
-	CTalkMonster::Killed( pevAttacker, iGib );
+	SetUse(NULL);
+	CTalkMonster::Killed(pevAttacker, iGib);
 }
 
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-Schedule_t* CBarney :: GetScheduleOfType ( int Type ) {
+Schedule_t* CBarney::GetScheduleOfType(int Type) {
 	Schedule_t *psched;
-	switch( Type ) {
-		case SCHED_ARM_WEAPON:
-			if ( m_hEnemy != NULL ) {
-				return slBarneyEnemyDraw;
-			}
+	switch (Type) {
+	case SCHED_ARM_WEAPON:
+		if (m_hEnemy != NULL) {
+			return slBarneyEnemyDraw;
+		}
 		break;
-		case SCHED_TARGET_FACE:
-			psched = CTalkMonster::GetScheduleOfType(Type);
-			if (psched == slIdleStand)
-				return slBaFaceTarget;
-			else
-				return psched;
+	case SCHED_TARGET_FACE:
+		psched = CTalkMonster::GetScheduleOfType(Type);
+		if (psched == slIdleStand)
+			return slBaFaceTarget;
+		else
+			return psched;
 		break;
-		case SCHED_TARGET_CHASE:
-			return slBaFollow;
+	case SCHED_TARGET_CHASE:
+		return slBaFollow;
 		break;
-		case SCHED_IDLE_STAND:
-			psched = CTalkMonster::GetScheduleOfType(Type);
-			if (psched == slIdleStand){
-				return slIdleBaStand;
-			} else
-				return psched;	
+	case SCHED_IDLE_STAND:
+		psched = CTalkMonster::GetScheduleOfType(Type);
+		if (psched == slIdleStand) {
+			return slIdleBaStand;
+		}
+		else
+			return psched;
 		break;
 	}
 
-	return CTalkMonster::GetScheduleOfType( Type );
+	return CTalkMonster::GetScheduleOfType(Type);
 }
 
 //=========================================================
@@ -708,81 +719,83 @@ Schedule_t* CBarney :: GetScheduleOfType ( int Type ) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CBarney :: GetSchedule ( void ) {
-	if ( HasConditions( bits_COND_HEAR_SOUND ) ) {
+Schedule_t *CBarney::GetSchedule(void) {
+	if (HasConditions(bits_COND_HEAR_SOUND)) {
 		CSound *pSound;
 		pSound = PBestSound();
-		ASSERT( pSound != NULL );
-		if ( pSound && (pSound->m_iType & bits_SOUND_DANGER) )
-			return GetScheduleOfType( SCHED_TAKE_COVER_FROM_BEST_SOUND );
+		ASSERT(pSound != NULL);
+		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
+			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
 	}
 
-	if ( HasConditions( bits_COND_ENEMY_DEAD ) && FOkToSpeak() ) {
+	if (HasConditions(bits_COND_ENEMY_DEAD) && FOkToSpeak()) {
 		if (m_iszSpeakAs) {
 			char szBuf[32];
-			strcpy(szBuf,STRING(m_iszSpeakAs));
-			strcat(szBuf,"_KILL");
-			PlaySentence( szBuf, 4, VOL_NORM, ATTN_NORM );
-		} else {
-			PlaySentence( "BA_KILL", 4, VOL_NORM, ATTN_NORM );
+			strcpy(szBuf, STRING(m_iszSpeakAs));
+			strcat(szBuf, "_KILL");
+			PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
+		}
+		else {
+			PlaySentence("BA_KILL", 4, VOL_NORM, ATTN_NORM);
 		}
 	}
 
-	switch( m_MonsterState ) {
-		case MONSTERSTATE_COMBAT: 
-			if ( HasConditions( bits_COND_ENEMY_DEAD ) ) {
-				return CBaseMonster :: GetSchedule();
-			}
+	switch (m_MonsterState) {
+	case MONSTERSTATE_COMBAT:
+		if (HasConditions(bits_COND_ENEMY_DEAD)) {
+			return CBaseMonster::GetSchedule();
+		}
 
-			if ( HasConditions( bits_COND_NEW_ENEMY ) && HasConditions( bits_COND_LIGHT_DAMAGE) )
-				return GetScheduleOfType( SCHED_SMALL_FLINCH );
-				
-			if (!m_fGunDrawn )
-				return GetScheduleOfType( SCHED_ARM_WEAPON );
+		if (HasConditions(bits_COND_NEW_ENEMY) && HasConditions(bits_COND_LIGHT_DAMAGE))
+			return GetScheduleOfType(SCHED_SMALL_FLINCH);
 
-			if ( HasConditions( bits_COND_HEAVY_DAMAGE ) )
-				return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ENEMY );
+		if (!m_fGunDrawn)
+			return GetScheduleOfType(SCHED_ARM_WEAPON);
+
+		if (HasConditions(bits_COND_HEAVY_DAMAGE))
+			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 		break;
-		case MONSTERSTATE_ALERT:	
-		case MONSTERSTATE_IDLE:
-			if ( HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)) {
-				return GetScheduleOfType( SCHED_SMALL_FLINCH );
+	case MONSTERSTATE_ALERT:
+	case MONSTERSTATE_IDLE:
+		if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE)) {
+			return GetScheduleOfType(SCHED_SMALL_FLINCH);
+		}
+
+		if (m_hEnemy == NULL && IsFollowing()) {
+			if (!m_hTargetEnt->IsAlive()) {
+				StopFollowing(FALSE);
+				break;
 			}
-
-			if ( m_hEnemy == NULL && IsFollowing() ) {
-				if ( !m_hTargetEnt->IsAlive() ) {
-					StopFollowing( FALSE );
-					break;
-				} else {
-					if ( HasConditions( bits_COND_CLIENT_PUSH ) ) {
-						return GetScheduleOfType( SCHED_MOVE_AWAY_FOLLOW );
-					}
-
-					return GetScheduleOfType( SCHED_TARGET_FACE );
+			else {
+				if (HasConditions(bits_COND_CLIENT_PUSH)) {
+					return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
 				}
-			}
 
-			if ( HasConditions( bits_COND_CLIENT_PUSH ) ) {
-				return GetScheduleOfType( SCHED_MOVE_AWAY );
+				return GetScheduleOfType(SCHED_TARGET_FACE);
 			}
+		}
 
-			TrySmellTalk();
+		if (HasConditions(bits_COND_CLIENT_PUSH)) {
+			return GetScheduleOfType(SCHED_MOVE_AWAY);
+		}
+
+		TrySmellTalk();
 		break;
 	}
-	
+
 	return CTalkMonster::GetSchedule();
 }
 
 //=========================================================
 // Get IdealState for Monster
 //=========================================================
-MONSTERSTATE CBarney :: GetIdealState ( void ) {
+MONSTERSTATE CBarney::GetIdealState(void) {
 	return CTalkMonster::GetIdealState();
 }
 
 //=========================================================
 // Decline Following from Monster
 //=========================================================
-void CBarney::DeclineFollowing( void ) {
-	PlaySentence( m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM ); //LRC
+void CBarney::DeclineFollowing(void) {
+	PlaySentence(m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM); //LRC
 }

@@ -66,7 +66,7 @@
 //=========================================================
 // monster-specific tasks
 //=========================================================
-enum  {
+enum {
 	TASK_TORCH_FACE_TOSS_DIR = LAST_TALKMONSTER_TASK + 1,
 	TASK_TORCH_CHECK_FIRE,
 	TASK_TORCH_ALLY_FIND_MEDIC
@@ -111,26 +111,26 @@ enum {
 //=========================================================
 // Monster's link to Class & Saverestore Begins
 //=========================================================
-LINK_ENTITY_TO_CLASS( monster_human_torch_ally, CTorch );
+LINK_ENTITY_TO_CLASS(monster_human_torch_ally, CTorch);
 
-TYPEDESCRIPTION	CTorch::m_SaveData[] = 
+TYPEDESCRIPTION	CTorch::m_SaveData[] =
 {
-	DEFINE_FIELD( CTorch, m_pBeam, FIELD_CLASSPTR ),
-	DEFINE_FIELD( CTorch, m_flNextGrenadeCheck, FIELD_TIME ),
-	DEFINE_FIELD( CTorch, m_flNextPainTime, FIELD_TIME ),
-	DEFINE_FIELD( CTorch, m_vecTossVelocity, FIELD_VECTOR ),
-	DEFINE_FIELD( CTorch, m_fThrowGrenade, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CTorch, m_fStanding, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CTorch, m_fFirstEncounter, FIELD_BOOLEAN ),
-	DEFINE_FIELD( CTorch, m_cClipSize, FIELD_INTEGER ),
+	DEFINE_FIELD(CTorch, m_pBeam, FIELD_CLASSPTR),
+	DEFINE_FIELD(CTorch, m_flNextGrenadeCheck, FIELD_TIME),
+	DEFINE_FIELD(CTorch, m_flNextPainTime, FIELD_TIME),
+	DEFINE_FIELD(CTorch, m_vecTossVelocity, FIELD_VECTOR),
+	DEFINE_FIELD(CTorch, m_fThrowGrenade, FIELD_BOOLEAN),
+	DEFINE_FIELD(CTorch, m_fStanding, FIELD_BOOLEAN),
+	DEFINE_FIELD(CTorch, m_fFirstEncounter, FIELD_BOOLEAN),
+	DEFINE_FIELD(CTorch, m_cClipSize, FIELD_INTEGER),
 };
 
-IMPLEMENT_SAVERESTORE( CTorch, CRCAllyMonster );
+IMPLEMENT_SAVERESTORE(CTorch, CRCAllyMonster);
 
 //=========================================================
 // Monster's Sentences
 //=========================================================
-const char *CTorch::pGruntSentences[] = 
+const char *CTorch::pGruntSentences[] =
 {
 	"FG_GREN", // grenade scared grunt
 	"FG_ALERT", // sees player
@@ -161,7 +161,8 @@ void CTorch::KeyValue(KeyValueData *pkvd) {
 	if (FStrEq(pkvd->szKeyName, "immortal")) {
 		m_fImmortal = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else {
+	}
+	else {
 		CRCAllyMonster::KeyValue(pkvd);
 	}
 }
@@ -179,10 +180,10 @@ Schedule_t	slTorchFollow[] =
 {
 	{
 		tlTorchFollow,
-		HL_ARRAYSIZE ( tlTorchFollow ),
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		HL_ARRAYSIZE(tlTorchFollow),
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND |
 		bits_COND_PROVOKED,
 		bits_SOUND_DANGER,
@@ -201,11 +202,11 @@ Schedule_t	slTorchFaceTarget[] =
 {
 	{
 		tlTorchFaceTarget,
-		HL_ARRAYSIZE ( tlTorchFaceTarget ),
-		bits_COND_CLIENT_PUSH	|
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
+		HL_ARRAYSIZE(tlTorchFaceTarget),
+		bits_COND_CLIENT_PUSH |
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND |
 		bits_COND_PROVOKED,
 		bits_SOUND_DANGER,
@@ -224,23 +225,23 @@ Task_t	tlTorchIdleStand[] =
 
 Schedule_t	slTorchIdleStand[] =
 {
-	{ 
+	{
 		tlTorchIdleStand,
-		HL_ARRAYSIZE ( tlTorchIdleStand ), 
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
-		bits_COND_HEAR_SOUND	|
-		bits_COND_SMELL			|
+		HL_ARRAYSIZE(tlTorchIdleStand),
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_HEAR_SOUND |
+		bits_COND_SMELL |
 		bits_COND_PROVOKED,
 
-		bits_SOUND_COMBAT		|// sound flags - change these, and you'll break the talking code.
+		bits_SOUND_COMBAT |// sound flags - change these, and you'll break the talking code.
 		//bits_SOUND_PLAYER		|
 		//bits_SOUND_WORLD		|
-		
-		bits_SOUND_DANGER		|
-		bits_SOUND_MEAT			|// scents
-		bits_SOUND_CARCASS		|
+
+		bits_SOUND_DANGER |
+		bits_SOUND_MEAT |// scents
+		bits_SOUND_CARCASS |
 		bits_SOUND_GARBAGE,
 		"IdleStand"
 	},
@@ -260,7 +261,7 @@ Schedule_t	slTorchFail[] =
 {
 	{
 		tlTorchFail,
-		HL_ARRAYSIZE ( tlTorchFail ),
+		HL_ARRAYSIZE(tlTorchFail),
 		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2 |
 		bits_COND_CAN_MELEE_ATTACK1 |
@@ -285,8 +286,8 @@ Schedule_t	slTorchCombatFail[] =
 {
 	{
 		tlTorchCombatFail,
-		HL_ARRAYSIZE ( tlTorchCombatFail ),
-		bits_COND_CAN_RANGE_ATTACK1	|
+		HL_ARRAYSIZE(tlTorchCombatFail),
+		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2,
 		0,
 		"Grunt Combat Fail"
@@ -311,11 +312,11 @@ Task_t	tlTorchVictoryDance[] =
 
 Schedule_t	slTorchVictoryDance[] =
 {
-	{ 
+	{
 		tlTorchVictoryDance,
-		HL_ARRAYSIZE ( tlTorchVictoryDance ), 
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
+		HL_ARRAYSIZE(tlTorchVictoryDance),
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
 		bits_COND_HEAVY_DAMAGE,
 		0,
 		"GruntVictoryDance"
@@ -326,7 +327,7 @@ Schedule_t	slTorchVictoryDance[] =
 // Establish line of fire - move to a position that allows
 // the grunt to attack.
 //=========================================================
-Task_t tlTorchEstablishLineOfFire[] = 
+Task_t tlTorchEstablishLineOfFire[] =
 {
 	{ TASK_SET_FAIL_SCHEDULE,	(float)SCHED_TORCH_ELOF_FAIL	},
 	{ TASK_GET_PATH_TO_ENEMY,	(float)0						},
@@ -336,17 +337,17 @@ Task_t tlTorchEstablishLineOfFire[] =
 
 Schedule_t slTorchEstablishLineOfFire[] =
 {
-	{ 
+	{
 		tlTorchEstablishLineOfFire,
-		HL_ARRAYSIZE ( tlTorchEstablishLineOfFire ),
-		bits_COND_NEW_ENEMY			|
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_CAN_RANGE_ATTACK1	|
-		bits_COND_CAN_MELEE_ATTACK1	|
-		bits_COND_CAN_RANGE_ATTACK2	|
-		bits_COND_CAN_MELEE_ATTACK2	|
+		HL_ARRAYSIZE(tlTorchEstablishLineOfFire),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_CAN_RANGE_ATTACK1 |
+		bits_COND_CAN_MELEE_ATTACK1 |
+		bits_COND_CAN_RANGE_ATTACK2 |
+		bits_COND_CAN_MELEE_ATTACK2 |
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"GruntEstablishLineOfFire"
 	},
@@ -365,11 +366,11 @@ Task_t	tlTorchFoundEnemy[] =
 
 Schedule_t	slTorchFoundEnemy[] =
 {
-	{ 
+	{
 		tlTorchFoundEnemy,
-		HL_ARRAYSIZE ( tlTorchFoundEnemy ), 
+		HL_ARRAYSIZE(tlTorchFoundEnemy),
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"GruntFoundEnemy"
 	},
@@ -389,12 +390,12 @@ Task_t	tlTorchCombatFace1[] =
 
 Schedule_t	slTorchCombatFace[] =
 {
-	{ 
+	{
 		tlTorchCombatFace1,
-		HL_ARRAYSIZE ( tlTorchCombatFace1 ), 
-		bits_COND_NEW_ENEMY				|
-		bits_COND_ENEMY_DEAD			|
-		bits_COND_CAN_RANGE_ATTACK1		|
+		HL_ARRAYSIZE(tlTorchCombatFace1),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_CAN_RANGE_ATTACK1 |
 		bits_COND_CAN_RANGE_ATTACK2,
 		0,
 		"Combat Face"
@@ -429,14 +430,14 @@ Task_t	tlTorchSignalSuppress[] =
 
 Schedule_t	slTorchSignalSuppress[] =
 {
-	{ 
+	{
 		tlTorchSignalSuppress,
-		HL_ARRAYSIZE ( tlTorchSignalSuppress ), 
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_LIGHT_DAMAGE		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_HEAR_SOUND		|
-		bits_COND_TORCH_NOFIRE		|
+		HL_ARRAYSIZE(tlTorchSignalSuppress),
+		bits_COND_ENEMY_DEAD |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_HEAR_SOUND |
+		bits_COND_TORCH_NOFIRE |
 		bits_COND_NO_AMMO_LOADED,
 
 		bits_SOUND_DANGER,
@@ -466,14 +467,14 @@ Task_t	tlTorchSuppress[] =
 
 Schedule_t	slTorchSuppress[] =
 {
-	{ 
+	{
 		tlTorchSuppress,
-		HL_ARRAYSIZE ( tlTorchSuppress ), 
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_LIGHT_DAMAGE		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_HEAR_SOUND		|
-		bits_COND_TORCH_NOFIRE		|
+		HL_ARRAYSIZE(tlTorchSuppress),
+		bits_COND_ENEMY_DEAD |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_HEAR_SOUND |
+		bits_COND_TORCH_NOFIRE |
 		bits_COND_NO_AMMO_LOADED,
 
 		bits_SOUND_DANGER,
@@ -496,14 +497,14 @@ Task_t	tlTorchWaitInCover[] =
 
 Schedule_t	slTorchWaitInCover[] =
 {
-	{ 
+	{
 		tlTorchWaitInCover,
-		HL_ARRAYSIZE ( tlTorchWaitInCover ), 
-		bits_COND_NEW_ENEMY			|
-		bits_COND_HEAR_SOUND		|
-		bits_COND_CAN_RANGE_ATTACK1	|
-		bits_COND_CAN_RANGE_ATTACK2	|
-		bits_COND_CAN_MELEE_ATTACK1	|
+		HL_ARRAYSIZE(tlTorchWaitInCover),
+		bits_COND_NEW_ENEMY |
+		bits_COND_HEAR_SOUND |
+		bits_COND_CAN_RANGE_ATTACK1 |
+		bits_COND_CAN_RANGE_ATTACK2 |
+		bits_COND_CAN_MELEE_ATTACK1 |
 		bits_COND_CAN_MELEE_ATTACK2,
 
 		bits_SOUND_DANGER,
@@ -529,9 +530,9 @@ Task_t	tlTorchTakeCover1[] =
 
 Schedule_t	slTorchTakeCover[] =
 {
-	{ 
+	{
 		tlTorchTakeCover1,
-		HL_ARRAYSIZE ( tlTorchTakeCover1 ), 
+		HL_ARRAYSIZE(tlTorchTakeCover1),
 		0,
 		0,
 		"TakeCover"
@@ -555,9 +556,9 @@ Task_t	tlTorchGrenadeCover1[] =
 
 Schedule_t	slTorchGrenadeCover[] =
 {
-	{ 
+	{
 		tlTorchGrenadeCover1,
-		HL_ARRAYSIZE ( tlTorchGrenadeCover1 ), 
+		HL_ARRAYSIZE(tlTorchGrenadeCover1),
 		0,
 		0,
 		"GrenadeCover"
@@ -577,9 +578,9 @@ Task_t	tlTorchTossGrenadeCover1[] =
 
 Schedule_t	slTorchTossGrenadeCover[] =
 {
-	{ 
+	{
 		tlTorchTossGrenadeCover1,
-		HL_ARRAYSIZE ( tlTorchTossGrenadeCover1 ), 
+		HL_ARRAYSIZE(tlTorchTossGrenadeCover1),
 		0,
 		0,
 		"TossGrenadeCover"
@@ -602,9 +603,9 @@ Task_t	tlTorchTakeCoverFromBestSound[] =
 
 Schedule_t	slTorchTakeCoverFromBestSound[] =
 {
-	{ 
+	{
 		tlTorchTakeCoverFromBestSound,
-		HL_ARRAYSIZE ( tlTorchTakeCoverFromBestSound ), 
+		HL_ARRAYSIZE(tlTorchTakeCoverFromBestSound),
 		0,
 		0,
 		"GruntTakeCoverFromBestSound"
@@ -626,12 +627,12 @@ Task_t	tlTorchHideReload[] =
 	{ TASK_PLAY_SEQUENCE,			(float)ACT_RELOAD			},
 };
 
-Schedule_t slTorchHideReload[] = 
+Schedule_t slTorchHideReload[] =
 {
 	{
 		tlTorchHideReload,
-		HL_ARRAYSIZE ( tlTorchHideReload ),
-		bits_COND_HEAVY_DAMAGE	|
+		HL_ARRAYSIZE(tlTorchHideReload),
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND,
 
 		bits_SOUND_DANGER,
@@ -652,19 +653,19 @@ Task_t	tlTorchSweep[] =
 
 Schedule_t	slTorchSweep[] =
 {
-	{ 
+	{
 		tlTorchSweep,
-		HL_ARRAYSIZE ( tlTorchSweep ), 
-		
-		bits_COND_NEW_ENEMY		|
-		bits_COND_LIGHT_DAMAGE	|
-		bits_COND_HEAVY_DAMAGE	|
-		bits_COND_CAN_RANGE_ATTACK1	|
-		bits_COND_CAN_RANGE_ATTACK2	|
+		HL_ARRAYSIZE(tlTorchSweep),
+
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_CAN_RANGE_ATTACK1 |
+		bits_COND_CAN_RANGE_ATTACK2 |
 		bits_COND_HEAR_SOUND,
 
-		bits_SOUND_WORLD		|// sound flags
-		bits_SOUND_DANGER		|
+		bits_SOUND_WORLD |// sound flags
+		bits_SOUND_DANGER |
 		bits_SOUND_PLAYER,
 
 		"Grunt Sweep"
@@ -694,17 +695,17 @@ Task_t	tlTorchRangeAttack1A[] =
 
 Schedule_t	slTorchRangeAttack1A[] =
 {
-	{ 
+	{
 		tlTorchRangeAttack1A,
-		HL_ARRAYSIZE ( tlTorchRangeAttack1A ), 
-		bits_COND_NEW_ENEMY			|
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_ENEMY_OCCLUDED	|
-		bits_COND_HEAR_SOUND		|
-		bits_COND_TORCH_NOFIRE		|
+		HL_ARRAYSIZE(tlTorchRangeAttack1A),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_ENEMY_OCCLUDED |
+		bits_COND_HEAR_SOUND |
+		bits_COND_TORCH_NOFIRE |
 		bits_COND_NO_AMMO_LOADED,
-		
+
 		bits_SOUND_DANGER,
 		"Range Attack1A"
 	},
@@ -734,17 +735,17 @@ Task_t	tlTorchRangeAttack1B[] =
 
 Schedule_t	slTorchRangeAttack1B[] =
 {
-	{ 
+	{
 		tlTorchRangeAttack1B,
-		HL_ARRAYSIZE ( tlTorchRangeAttack1B ), 
-		bits_COND_NEW_ENEMY			|
-		bits_COND_ENEMY_DEAD		|
-		bits_COND_HEAVY_DAMAGE		|
-		bits_COND_ENEMY_OCCLUDED	|
-		bits_COND_NO_AMMO_LOADED	|
-		bits_COND_TORCH_NOFIRE		|
+		HL_ARRAYSIZE(tlTorchRangeAttack1B),
+		bits_COND_NEW_ENEMY |
+		bits_COND_ENEMY_DEAD |
+		bits_COND_HEAVY_DAMAGE |
+		bits_COND_ENEMY_OCCLUDED |
+		bits_COND_NO_AMMO_LOADED |
+		bits_COND_TORCH_NOFIRE |
 		bits_COND_HEAR_SOUND,
-		
+
 		bits_SOUND_DANGER,
 		"Range Attack1B"
 	},
@@ -764,9 +765,9 @@ Task_t	tlTorchRangeAttack2[] =
 
 Schedule_t	slTorchRangeAttack2[] =
 {
-	{ 
+	{
 		tlTorchRangeAttack2,
-		HL_ARRAYSIZE ( tlTorchRangeAttack2 ), 
+		HL_ARRAYSIZE(tlTorchRangeAttack2),
 		0,
 		0,
 		"RangeAttack2"
@@ -786,18 +787,18 @@ Task_t	tlTorchRepel[] =
 
 Schedule_t	slTorchRepel[] =
 {
-	{ 
+	{
 		tlTorchRepel,
-		HL_ARRAYSIZE ( tlTorchRepel ), 
-		bits_COND_SEE_ENEMY			|
-		bits_COND_NEW_ENEMY			|
-		bits_COND_LIGHT_DAMAGE		|
-		bits_COND_HEAVY_DAMAGE		|
+		HL_ARRAYSIZE(tlTorchRepel),
+		bits_COND_SEE_ENEMY |
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND,
-		
-		bits_SOUND_DANGER			|
-		bits_SOUND_COMBAT			|
-		bits_SOUND_PLAYER, 
+
+		bits_SOUND_DANGER |
+		bits_SOUND_COMBAT |
+		bits_SOUND_PLAYER,
 		"Repel"
 	},
 };
@@ -815,9 +816,9 @@ Task_t	tlTorchRepelAttack[] =
 
 Schedule_t	slTorchRepelAttack[] =
 {
-	{ 
+	{
 		tlTorchRepelAttack,
-		HL_ARRAYSIZE ( tlTorchRepelAttack ), 
+		HL_ARRAYSIZE(tlTorchRepelAttack),
 		bits_COND_ENEMY_OCCLUDED,
 		0,
 		"Repel Attack"
@@ -839,51 +840,51 @@ Task_t	tlTorchRepelLand[] =
 
 Schedule_t	slTorchRepelLand[] =
 {
-	{ 
+	{
 		tlTorchRepelLand,
-		HL_ARRAYSIZE ( tlTorchRepelLand ), 
-		bits_COND_SEE_ENEMY			|
-		bits_COND_NEW_ENEMY			|
-		bits_COND_LIGHT_DAMAGE		|
-		bits_COND_HEAVY_DAMAGE		|
+		HL_ARRAYSIZE(tlTorchRepelLand),
+		bits_COND_SEE_ENEMY |
+		bits_COND_NEW_ENEMY |
+		bits_COND_LIGHT_DAMAGE |
+		bits_COND_HEAVY_DAMAGE |
 		bits_COND_HEAR_SOUND,
-		
-		bits_SOUND_DANGER			|
-		bits_SOUND_COMBAT			|
-		bits_SOUND_PLAYER, 
+
+		bits_SOUND_DANGER |
+		bits_SOUND_COMBAT |
+		bits_SOUND_PLAYER,
 		"Repel Land"
 	},
 };
-DEFINE_CUSTOM_SCHEDULES( CTorch )
+DEFINE_CUSTOM_SCHEDULES(CTorch)
 {
 	slTorchFollow,
-	slTorchFaceTarget,
-	slTorchIdleStand,
-	slTorchFail,
-	slTorchCombatFail,
-	slTorchVictoryDance,
-	slTorchEstablishLineOfFire,
-	slTorchFoundEnemy,
-	slTorchCombatFace,
-	slTorchSignalSuppress,
-	slTorchSuppress,
-	slTorchWaitInCover,
-	slTorchTakeCover,
-	slTorchGrenadeCover,
-	slTorchTossGrenadeCover,
-	slTorchTakeCoverFromBestSound,
-	slTorchHideReload,
-	slTorchSweep,
-	slTorchRangeAttack1A,
-	slTorchRangeAttack1B,
-	slTorchRangeAttack2,
-	slTorchRepel,
-	slTorchRepelAttack,
-	slTorchRepelLand,
+		slTorchFaceTarget,
+		slTorchIdleStand,
+		slTorchFail,
+		slTorchCombatFail,
+		slTorchVictoryDance,
+		slTorchEstablishLineOfFire,
+		slTorchFoundEnemy,
+		slTorchCombatFace,
+		slTorchSignalSuppress,
+		slTorchSuppress,
+		slTorchWaitInCover,
+		slTorchTakeCover,
+		slTorchGrenadeCover,
+		slTorchTossGrenadeCover,
+		slTorchTakeCoverFromBestSound,
+		slTorchHideReload,
+		slTorchSweep,
+		slTorchRangeAttack1A,
+		slTorchRangeAttack1B,
+		slTorchRangeAttack2,
+		slTorchRepel,
+		slTorchRepelAttack,
+		slTorchRepelLand,
 };
 
 
-IMPLEMENT_CUSTOM_SCHEDULES( CTorch, CRCAllyMonster );
+IMPLEMENT_CUSTOM_SCHEDULES(CTorch, CRCAllyMonster);
 
 //=========================================================
 // StartTask
@@ -891,75 +892,75 @@ IMPLEMENT_CUSTOM_SCHEDULES( CTorch, CRCAllyMonster );
 void CTorch::StartTask(Task_t *pTask) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 	switch (pTask->iTask) {
-		case TASK_TORCH_CHECK_FIRE:
-			if (!NoFriendlyFire()) {
-				SetConditions(bits_COND_TORCH_NOFIRE);
-			}
-			TaskComplete();
+	case TASK_TORCH_CHECK_FIRE:
+		if (!NoFriendlyFire()) {
+			SetConditions(bits_COND_TORCH_NOFIRE);
+		}
+		TaskComplete();
 		break;
-		case TASK_TORCH_ALLY_FIND_MEDIC:
-			// First try looking for a medic in my squad
-			if (InSquad()) {
-				CRCAllyMonster *pSquadLeader = MySquadLeader();
-				if (pSquadLeader) for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++) {
-					CRCAllyMonster *pMember = pSquadLeader->MySquadMember(i);
-					if (pMember && pMember != this) {
-						CRCAllyMonster *pMedic = pMember->MyTalkSquadMonsterPointer();
-						if (pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs(pMedic->pev, "monster_human_medic_ally")) {
-							if (!pMedic->IsFollowing()) {
-								ALERT(at_console, "I've found my medic!\n");
-								EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
-								pMedic->GruntHealerCall(this);
-								TaskComplete();
-							}
+	case TASK_TORCH_ALLY_FIND_MEDIC:
+		// First try looking for a medic in my squad
+		if (InSquad()) {
+			CRCAllyMonster *pSquadLeader = MySquadLeader();
+			if (pSquadLeader) for (int i = 0; i < MAXRC_SQUAD_MEMBERS; i++) {
+				CRCAllyMonster *pMember = pSquadLeader->MySquadMember(i);
+				if (pMember && pMember != this) {
+					CRCAllyMonster *pMedic = pMember->MyTalkSquadMonsterPointer();
+					if (pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs(pMedic->pev, "monster_human_medic_ally")) {
+						if (!pMedic->IsFollowing()) {
+							ALERT(at_console, "I've found my medic!\n");
+							EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
+							pMedic->GruntHealerCall(this);
+							TaskComplete();
 						}
 					}
 				}
 			}
+		}
 
-			// If not, search bsp.
-			if (!TaskIsComplete()) {
-				CBaseEntity *pFriend = NULL;
-				int i;
+		// If not, search bsp.
+		if (!TaskIsComplete()) {
+			CBaseEntity *pFriend = NULL;
+			int i;
 
-				// for each friend in this bsp...
-				for (i = 0; i < TLK_CFRIENDS; i++) {
-					while (pFriend = EnumFriends(pFriend, i, TRUE)) {
-						CRCAllyMonster *pMedic = pFriend->MyTalkSquadMonsterPointer();
-						if (pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs(pMedic->pev, "monster_human_medic_ally")) {
-							if (!pMedic->IsFollowing()) {
-								EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
-								pMedic->GruntHealerCall(this);
-								TaskComplete();
-							}
+			// for each friend in this bsp...
+			for (i = 0; i < TLK_CFRIENDS; i++) {
+				while (pFriend = EnumFriends(pFriend, i, TRUE)) {
+					CRCAllyMonster *pMedic = pFriend->MyTalkSquadMonsterPointer();
+					if (pMedic && pMedic->pev->deadflag == DEAD_NO && FClassnameIs(pMedic->pev, "monster_human_medic_ally")) {
+						if (!pMedic->IsFollowing()) {
+							EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "fgrunt/medic.wav", VOL_NORM, ATTN_NORM, 0, GetVoicePitch());
+							pMedic->GruntHealerCall(this);
+							TaskComplete();
 						}
 					}
 				}
 			}
+		}
 
-			if (!TaskIsComplete()) {
-				TaskFail();
-			}
-			m_flMedicWaitTime = FGRUNT_MEDIC_WAIT + UTIL_GlobalTimeBase(); // Call again in ten seconds anyway.
+		if (!TaskIsComplete()) {
+			TaskFail();
+		}
+		m_flMedicWaitTime = FGRUNT_MEDIC_WAIT + UTIL_GlobalTimeBase(); // Call again in ten seconds anyway.
 		break;
-		case TASK_WALK_PATH:
-		case TASK_RUN_PATH:
-			// grunt no longer assumes he is covered if he moves
-			Forget(bits_MEMORY_INCOVER);
-			CRCAllyMonster::StartTask(pTask);
+	case TASK_WALK_PATH:
+	case TASK_RUN_PATH:
+		// grunt no longer assumes he is covered if he moves
+		Forget(bits_MEMORY_INCOVER);
+		CRCAllyMonster::StartTask(pTask);
 		break;
-		case TASK_RELOAD:
-			m_IdealActivity = ACT_RELOAD;
+	case TASK_RELOAD:
+		m_IdealActivity = ACT_RELOAD;
 		break;
-		case TASK_FACE_IDEAL:
-		case TASK_FACE_ENEMY:
-			CRCAllyMonster::StartTask(pTask);
-			if (pev->movetype == MOVETYPE_FLY) {
-				m_IdealActivity = ACT_GLIDE;
-			}
+	case TASK_FACE_IDEAL:
+	case TASK_FACE_ENEMY:
+		CRCAllyMonster::StartTask(pTask);
+		if (pev->movetype == MOVETYPE_FLY) {
+			m_IdealActivity = ACT_GLIDE;
+		}
 		break;
-		default:
-			CRCAllyMonster::StartTask(pTask);
+	default:
+		CRCAllyMonster::StartTask(pTask);
 		break;
 	}
 }
@@ -967,28 +968,28 @@ void CTorch::StartTask(Task_t *pTask) {
 //=========================================================
 // RunTask
 //=========================================================
-void CTorch :: RunTask( Task_t *pTask ) {
-	switch ( pTask->iTask ) {
-		case TASK_TORCH_FACE_TOSS_DIR: {
-			// project a point along the toss vector and turn to face that point.
-			MakeIdealYaw( pev->origin + m_vecTossVelocity * 64 );
-			ChangeYaw( pev->yaw_speed );
-			if ( FacingIdeal() ){
-				m_iTaskStatus = TASKSTATUS_COMPLETE;
-			}
+void CTorch::RunTask(Task_t *pTask) {
+	switch (pTask->iTask) {
+	case TASK_TORCH_FACE_TOSS_DIR: {
+		// project a point along the toss vector and turn to face that point.
+		MakeIdealYaw(pev->origin + m_vecTossVelocity * 64);
+		ChangeYaw(pev->yaw_speed);
+		if (FacingIdeal()) {
+			m_iTaskStatus = TASKSTATUS_COMPLETE;
 		}
-		break;
-		default: {
-			CRCAllyMonster :: RunTask( pTask );
-		}
-		break;
+	}
+								   break;
+	default: {
+		CRCAllyMonster::RunTask(pTask);
+	}
+			 break;
 	}
 }
 
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CTorch :: GibMonster ( void ) {
+void CTorch::GibMonster(void) {
 	if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) && GetBodygroup(2) != 2) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
@@ -1003,36 +1004,36 @@ void CTorch :: GibMonster ( void ) {
 		}
 	}
 
-	CBaseMonster :: GibMonster();
+	CBaseMonster::GibMonster();
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CTorch :: SetYawSpeed ( void ) {
+void CTorch::SetYawSpeed(void) {
 	switch (m_Activity) {
-		case ACT_WALK:
-		case ACT_TURN_LEFT:
-		case ACT_TURN_RIGHT:
-			pev->yaw_speed = 180;
+	case ACT_WALK:
+	case ACT_TURN_LEFT:
+	case ACT_TURN_RIGHT:
+		pev->yaw_speed = 180;
 		break;
-		case ACT_IDLE:
-		case ACT_RUN:
-			pev->yaw_speed = 150;
+	case ACT_IDLE:
+	case ACT_RUN:
+		pev->yaw_speed = 150;
 		break;
-		case ACT_RANGE_ATTACK1:
-		case ACT_RANGE_ATTACK2:
-		case ACT_MELEE_ATTACK1:
-		case ACT_MELEE_ATTACK2:
-			pev->yaw_speed = 120;
+	case ACT_RANGE_ATTACK1:
+	case ACT_RANGE_ATTACK2:
+	case ACT_MELEE_ATTACK1:
+	case ACT_MELEE_ATTACK2:
+		pev->yaw_speed = 120;
 		break;
-		case ACT_GLIDE:
-		case ACT_FLY:
-			pev->yaw_speed = 30;
+	case ACT_GLIDE:
+	case ACT_FLY:
+		pev->yaw_speed = 30;
 		break;
-		default:
-			pev->yaw_speed = 90;
+	default:
+		pev->yaw_speed = 90;
 		break;
 	}
 }
@@ -1057,8 +1058,8 @@ void CTorch::PrescheduleThink(void) {
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CTorch :: CheckRangeAttack1 ( float flDot, float flDist ) {
-	if(GetBodygroup( GUN_GROUP ) != GUN_TORCH) {
+BOOL CTorch::CheckRangeAttack1(float flDot, float flDist) {
+	if (GetBodygroup(GUN_GROUP) != GUN_TORCH) {
 		return CRCAllyMonster::CheckRangeAttack1(flDot, flDist);
 	}
 
@@ -1068,62 +1069,62 @@ BOOL CTorch :: CheckRangeAttack1 ( float flDot, float flDist ) {
 //=========================================================
 // UpdateGas 
 //=========================================================
-void CTorch::UpdateGas( void ) {
+void CTorch::UpdateGas(void) {
 	TraceResult tr;
 	Vector posGun, angleGun;
 	Vector vecEndPos;
 
-	if ( m_pBeam ) {
-		UTIL_MakeVectors( pev->angles );
-		GetAttachment( 2, posGun, angleGun );
-			
+	if (m_pBeam) {
+		UTIL_MakeVectors(pev->angles);
+		GetAttachment(2, posGun, angleGun);
+
 		Vector vecEnd = (gpGlobals->v_forward * 5) + posGun;
-		UTIL_TraceLine( posGun, vecEnd, dont_ignore_monsters, edict(), &tr );
+		UTIL_TraceLine(posGun, vecEnd, dont_ignore_monsters, edict(), &tr);
 
-		if ( tr.flFraction != 1.0 ) {
-			m_pBeam->DoSparks( tr.vecEndPos, posGun );
-			UTIL_DecalTrace(&tr, DECAL_BIGSHOT1 + RANDOM_LONG(0,4));
+		if (tr.flFraction != 1.0) {
+			m_pBeam->DoSparks(tr.vecEndPos, posGun);
+			UTIL_DecalTrace(&tr, DECAL_BIGSHOT1 + RANDOM_LONG(0, 4));
 
-			MESSAGE_BEGIN( MSG_PVS, SVC_TEMPENTITY, tr.vecEndPos );
-				WRITE_BYTE( TE_STREAK_SPLASH );
-				WRITE_COORD( tr.vecEndPos.x );		// origin
-				WRITE_COORD( tr.vecEndPos.y );
-				WRITE_COORD( tr.vecEndPos.z );
-				WRITE_COORD( tr.vecPlaneNormal.x );	// direction
-				WRITE_COORD( tr.vecPlaneNormal.y );
-				WRITE_COORD( tr.vecPlaneNormal.z );
-				WRITE_BYTE( 10 );	// Streak color 6
-				WRITE_SHORT( 60 );	// count
-				WRITE_SHORT( 25 );
-				WRITE_SHORT( 50 );	// Random velocity modifier
+			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, tr.vecEndPos);
+			WRITE_BYTE(TE_STREAK_SPLASH);
+			WRITE_COORD(tr.vecEndPos.x);		// origin
+			WRITE_COORD(tr.vecEndPos.y);
+			WRITE_COORD(tr.vecEndPos.z);
+			WRITE_COORD(tr.vecPlaneNormal.x);	// direction
+			WRITE_COORD(tr.vecPlaneNormal.y);
+			WRITE_COORD(tr.vecPlaneNormal.z);
+			WRITE_BYTE(10);	// Streak color 6
+			WRITE_SHORT(60);	// count
+			WRITE_SHORT(25);
+			WRITE_SHORT(50);	// Random velocity modifier
 			MESSAGE_END();
 		}
-		
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_DLIGHT );
-			WRITE_COORD( posGun.x );		// origin
-			WRITE_COORD( posGun.y );
-			WRITE_COORD( posGun.z );
-			WRITE_BYTE( RANDOM_LONG(4, 16) );	// radius
-			WRITE_BYTE( 251 );	// R
-			WRITE_BYTE( 68 );	// G
-			WRITE_BYTE( 36 );	// B
-			WRITE_BYTE( 1 );	// life * 10
-			WRITE_BYTE( 0 ); // decay
+
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(posGun.x);		// origin
+		WRITE_COORD(posGun.y);
+		WRITE_COORD(posGun.z);
+		WRITE_BYTE(RANDOM_LONG(4, 16));	// radius
+		WRITE_BYTE(251);	// R
+		WRITE_BYTE(68);	// G
+		WRITE_BYTE(36);	// B
+		WRITE_BYTE(1);	// life * 10
+		WRITE_BYTE(0); // decay
 		MESSAGE_END();
 
-		MESSAGE_BEGIN( MSG_BROADCAST, SVC_TEMPENTITY );
-			WRITE_BYTE( TE_ELIGHT );
-			WRITE_SHORT( entindex( ) + 0x1000 * 3 );		// entity, attachment
-			WRITE_COORD( posGun.x );		// origin
-			WRITE_COORD( posGun.y );
-			WRITE_COORD( posGun.z );
-			WRITE_COORD( RANDOM_LONG(8, 12) );	// radius
-			WRITE_BYTE( 251 );	// R
-			WRITE_BYTE( 68 );	// G
-			WRITE_BYTE( 36 );	// B
-			WRITE_BYTE( 1 );	// life * 10
-			WRITE_COORD( 0 ); // decay 
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_ELIGHT);
+		WRITE_SHORT(entindex() + 0x1000 * 3);		// entity, attachment
+		WRITE_COORD(posGun.x);		// origin
+		WRITE_COORD(posGun.y);
+		WRITE_COORD(posGun.z);
+		WRITE_COORD(RANDOM_LONG(8, 12));	// radius
+		WRITE_BYTE(251);	// R
+		WRITE_BYTE(68);	// G
+		WRITE_BYTE(36);	// B
+		WRITE_BYTE(1);	// life * 10
+		WRITE_COORD(0); // decay 
 		MESSAGE_END();
 	}
 }
@@ -1131,42 +1132,42 @@ void CTorch::UpdateGas( void ) {
 //=========================================================
 // MakeGas 
 //=========================================================
-void CTorch::MakeGas( void ) {
+void CTorch::MakeGas(void) {
 	Vector posGun, angleGun;
 	TraceResult tr;
 	Vector vecEndPos;
 
-	UTIL_MakeVectors( pev->angles );
-	m_pBeam = CBeam::BeamCreate( g_pModelNameLaser, 7 );
+	UTIL_MakeVectors(pev->angles);
+	m_pBeam = CBeam::BeamCreate(g_pModelNameLaser, 7);
 
-	if ( m_pBeam ) {
-		GetAttachment( 4, posGun, angleGun );
-		GetAttachment( 3, posGun, angleGun );
-		UTIL_Sparks( posGun );
+	if (m_pBeam) {
+		GetAttachment(4, posGun, angleGun);
+		GetAttachment(3, posGun, angleGun);
+		UTIL_Sparks(posGun);
 		Vector vecEnd = (gpGlobals->v_forward * 5) + posGun;
-		UTIL_TraceLine( posGun, vecEnd, dont_ignore_monsters, edict(), &tr );
-		
-		m_pBeam->EntsInit( entindex(), entindex() );
-		m_pBeam->SetColor( 24, 121, 239 );
-		m_pBeam->SetBrightness( 190 );
-		m_pBeam->SetScrollRate( 20 );
-		m_pBeam->SetStartAttachment( 4 );
-		m_pBeam->SetEndAttachment( 3 );
-		m_pBeam->DoSparks( tr.vecEndPos, posGun );
-		m_pBeam->SetFlags( BEAM_FSHADEIN );
+		UTIL_TraceLine(posGun, vecEnd, dont_ignore_monsters, edict(), &tr);
+
+		m_pBeam->EntsInit(entindex(), entindex());
+		m_pBeam->SetColor(24, 121, 239);
+		m_pBeam->SetBrightness(190);
+		m_pBeam->SetScrollRate(20);
+		m_pBeam->SetStartAttachment(4);
+		m_pBeam->SetEndAttachment(3);
+		m_pBeam->DoSparks(tr.vecEndPos, posGun);
+		m_pBeam->SetFlags(BEAM_FSHADEIN);
 		m_pBeam->pev->spawnflags = SF_BEAM_SPARKSTART | SF_BEAM_TEMPORARY;
-		UTIL_Sparks( tr.vecEndPos );
+		UTIL_Sparks(tr.vecEndPos);
 	}
-	
+
 	return;
 }
 
 //=========================================================
 // KillGas 
 //=========================================================
-void CTorch :: KillGas( void ) {
-	if ( m_pBeam ) {
-		UTIL_Remove( m_pBeam );
+void CTorch::KillGas(void) {
+	if (m_pBeam) {
+		UTIL_Remove(m_pBeam);
 		m_pBeam = NULL;
 	}
 
@@ -1177,102 +1178,103 @@ void CTorch :: KillGas( void ) {
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CTorch :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
+void CTorch::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	Vector	vecShootDir;
 	Vector	vecShootOrigin;
 
-	switch( pEvent->event ) {
-		case TORCH_AE_SHOWTORCH:
-			pev->body = GUN_NONE;
-			pev->body = GUN_TORCH;
+	switch (pEvent->event) {
+	case TORCH_AE_SHOWTORCH:
+		pev->body = GUN_NONE;
+		pev->body = GUN_TORCH;
 		break;
-		case TORCH_AE_SHOWGUN:
-			pev->body = GUN_NONE;
-			pev->body = GUN_EAGLE;
+	case TORCH_AE_SHOWGUN:
+		pev->body = GUN_NONE;
+		pev->body = GUN_EAGLE;
 		break;
-		case TORCH_AE_HIDETORCH:
-			pev->body = GUN_NONE;
+	case TORCH_AE_HIDETORCH:
+		pev->body = GUN_NONE;
 		break;
-		case TORCH_AE_ONGAS:
-			MakeGas ();
-			UpdateGas ();
+	case TORCH_AE_ONGAS:
+		MakeGas();
+		UpdateGas();
 		break;
-		case TORCH_AE_OFFGAS:
-			KillGas ();
+	case TORCH_AE_OFFGAS:
+		KillGas();
 		break;
-		case TORCH_AE_DROP_GUN: {
-			if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) break; //LRC
+	case TORCH_AE_DROP_GUN: {
+		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) break; //LRC
 
-			Vector	vecGunPos;
-			Vector	vecGunAngles;
+		Vector	vecGunPos;
+		Vector	vecGunAngles;
 
-			GetAttachment( 0, vecGunPos, vecGunAngles );
+		GetAttachment(0, vecGunPos, vecGunAngles);
 
-			// switch to body group with no gun.
-			SetBodygroup( GUN_GROUP, GUN_NONE );
+		// switch to body group with no gun.
+		SetBodygroup(GUN_GROUP, GUN_NONE);
 
-			// now spawn a gun.
-			if (FBitSet( pev->weapons, TORCH_EAGLE )) {
-				DropItem( "weapon_eagle", vecGunPos, vecGunAngles );
-			}
+		// now spawn a gun.
+		if (FBitSet(pev->weapons, TORCH_EAGLE)) {
+			DropItem("weapon_eagle", vecGunPos, vecGunAngles);
 		}
+	}
+							break;
+	case TORCH_AE_RELOAD:
+		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM);
+		m_cAmmoLoaded = m_cClipSize;
+		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
-		case TORCH_AE_RELOAD:
-			EMIT_SOUND( ENT(pev), CHAN_WEAPON, "hgrunt/gr_reload1.wav", VOL_NORM, ATTN_NORM );
-			m_cAmmoLoaded = m_cClipSize;
-			ClearConditions(bits_COND_NO_AMMO_LOADED);
-		break;
-		case TORCH_AE_GREN_TOSS: {
-			UTIL_MakeVectors( pev->angles );
-			CGrenade::ShootTimed( pev, GetGunPosition(), m_vecTossVelocity, RANDOM_FLOAT(1.5, 3));
+	case TORCH_AE_GREN_TOSS: {
+		UTIL_MakeVectors(pev->angles);
+		CGrenade::ShootTimed(pev, GetGunPosition(), m_vecTossVelocity, RANDOM_FLOAT(1.5, 3));
 
-			m_fThrowGrenade = FALSE;
-			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
-			// !!!LATER - when in a group, only try to throw grenade if ordered.
-		}
-		break;
-		case TORCH_AE_GREN_DROP: {
-			Vector	vecGunPos, vecGunAngles;
-			GetAttachment(0, vecGunPos, vecGunAngles);
+		m_fThrowGrenade = FALSE;
+		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 6;// wait six seconds before even looking again to see if a grenade can be thrown.
+		// !!!LATER - when in a group, only try to throw grenade if ordered.
+	}
+							 break;
+	case TORCH_AE_GREN_DROP: {
+		Vector	vecGunPos, vecGunAngles;
+		GetAttachment(0, vecGunPos, vecGunAngles);
 
-			// switch to body group with no gun.
-			SetBodygroup(GUN_GROUP, GUN_NONE);
+		// switch to body group with no gun.
+		SetBodygroup(GUN_GROUP, GUN_NONE);
 
-			// now spawn a gun.
-			if (pev->weapons == TORCH_PISTOL) {
-				DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
-			} else if (pev->weapons == TORCH_EAGLE) {
-				DropItem("weapon_eagle", vecGunPos, vecGunAngles);
-			}
+		// now spawn a gun.
+		if (pev->weapons == TORCH_PISTOL) {
+			DropItem("weapon_9mmhandgun", vecGunPos, vecGunAngles);
 		}
-		break;
-		case TORCH_AE_BURST1:
-		case TORCH_AE_BURST2:
-		case TORCH_AE_BURST3: {
-			if (pev->weapons == TORCH_EAGLE)
-				ShootDesertEagle();
-			else
-				ShootGlock();
+		else if (pev->weapons == TORCH_EAGLE) {
+			DropItem("weapon_eagle", vecGunPos, vecGunAngles);
 		}
-		case TORCH_AE_KICK: {
-			CBaseEntity *pHurt = Kick();
-			if ( pHurt ) {
-				// SOUND HERE!
-				UTIL_MakeVectors( pev->angles );
-				pHurt->pev->punchangle.x = 20;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 150 + gpGlobals->v_up * 80;
-				pHurt->TakeDamage( pev, pev, gSkillData.torchDmgKick, DMG_CLUB );
-			}
+	}
+							 break;
+	case TORCH_AE_BURST1:
+	case TORCH_AE_BURST2:
+	case TORCH_AE_BURST3: {
+		if (pev->weapons == TORCH_EAGLE)
+			ShootDesertEagle();
+		else
+			ShootGlock();
+	}
+	case TORCH_AE_KICK: {
+		CBaseEntity *pHurt = Kick();
+		if (pHurt) {
+			// SOUND HERE!
+			UTIL_MakeVectors(pev->angles);
+			pHurt->pev->punchangle.x = 20;
+			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_forward * 150 + gpGlobals->v_up * 80;
+			pHurt->TakeDamage(pev, pev, gSkillData.torchDmgKick, DMG_CLUB);
 		}
-		break;
-		case TORCH_AE_CAUGHT_ENEMY: {
-			if ( FOkToSpeak() ) {
-				SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
-				JustSpoke();
-			}
+	}
+						break;
+	case TORCH_AE_CAUGHT_ENEMY: {
+		if (FOkToSpeak()) {
+			SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
+			JustSpoke();
 		}
-		default:
-			CRCAllyMonster::HandleAnimEvent( pEvent );
+	}
+	default:
+		CRCAllyMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -1280,8 +1282,8 @@ void CTorch :: HandleAnimEvent( MonsterEvent_t *pEvent ) {
 //=========================================================
 // Spawn
 //=========================================================
-void CTorch :: Spawn() {
-	Precache( );
+void CTorch::Spawn() {
+	Precache();
 
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
@@ -1290,19 +1292,19 @@ void CTorch :: Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_RED;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->health == 0) //LRC
 		pev->health = gSkillData.torchHealth;
 
-	pev->view_ofs		= Vector ( 0, 0, 50 );// position of the eyes relative to monster's origin.
-	m_flFieldOfView		= VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
-	m_MonsterState		= MONSTERSTATE_NONE;
+	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
+	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
+	m_MonsterState = MONSTERSTATE_NONE;
 
 	m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1;
-	m_flNextPainTime	= UTIL_GlobalTimeBase();
+	m_flNextPainTime = UTIL_GlobalTimeBase();
 
 	m_flDebug = false; //Debug Massages
 
@@ -1312,14 +1314,14 @@ void CTorch :: Spawn() {
 	m_flHitgroupArm = gSkillData.fgruntArm;
 	m_flHitgroupLeg = gSkillData.fgruntLeg;
 
-	m_afCapability		= bits_CAP_HEAR | bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
+	m_afCapability = bits_CAP_HEAR | bits_CAP_SQUAD | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
 
-	m_fEnemyEluded		= FALSE;
-	m_fFirstEncounter	= TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
+	m_fEnemyEluded = FALSE;
+	m_fFirstEncounter = TRUE;// this is true when the grunt spawns, because he hasn't encountered an enemy yet.
 
 	m_flLinkToggle = 0;
 	m_cClipSize = TORCH_CLIP_SIZE_DEAGLE;
-	m_HackedGunPos = Vector ( 0, 0, 55 );
+	m_HackedGunPos = Vector(0, 0, 55);
 
 	if (!pev->weapons) {
 		pev->weapons = TORCH_EAGLE;
@@ -1328,9 +1330,11 @@ void CTorch :: Spawn() {
 	if (pev->weapons == TORCH_PISTOL) {
 		SetBodygroup(GUN_GROUP, GUN_EAGLE);
 		m_cClipSize = TORCH_CLIP_SIZE_9MM;
-	} else if (pev->weapons == TORCH_EAGLE) {
+	}
+	else if (pev->weapons == TORCH_EAGLE) {
 		SetBodygroup(GUN_GROUP, GUN_EAGLE);
-	} else if (pev->weapons == TORCH_BLOWTORCH) {
+	}
+	else if (pev->weapons == TORCH_BLOWTORCH) {
 		SetBodygroup(GUN_GROUP, GUN_TORCH);
 	}
 
@@ -1338,13 +1342,13 @@ void CTorch :: Spawn() {
 
 	MonsterInit();
 	StartMonster();
-	SetUse( &CTorch :: FollowerUse );
+	SetUse(&CTorch::FollowerUse);
 }
 
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CTorch :: Precache() {
+void CTorch::Precache() {
 	CRCAllyMonster::Precache();
 
 	if (pev->model)
@@ -1367,7 +1371,7 @@ void CTorch::JustSpoke(void) {
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
+void CTorch::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) {
 	if (!IsAlive()) {
 		CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 		return;
@@ -1388,70 +1392,72 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 		}
 
 		switch (ptr->iHitgroup) {
-			case HITGROUP_HEAD_HELMET_GT:
-			case HITGROUP_HEAD:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+		case HITGROUP_HEAD_HELMET_GT:
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
-					flDamage -= 20;
-					if (flDamage <= 0) {
-						UTIL_Ricochet(ptr->vecEndPos, 1.0);
-						flDamage = 0.01;
-					}
-				} else {
-					flDamage = m_flHitgroupHead*flDamage;
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
+				flDamage -= 20;
+				if (flDamage <= 0) {
+					UTIL_Ricochet(ptr->vecEndPos, 1.0);
+					flDamage = 0.01;
 				}
+			}
+			else {
+				flDamage = m_flHitgroupHead * flDamage;
+			}
 			break;
-			case HITGROUP_CHEST:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupChest*flDamage) / 2;
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupChest*flDamage) / 2;
+			}
+			break;
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupStomach*flDamage) / 2;
+			}
+			break;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm * flDamage;
+			break;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg * flDamage;
+			break;
+		case HITGROUP_TANK:
+			TraceResult tr;
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
+				if (UTIL_PointContents(pev->origin) == CONTENTS_WATER) {
+					UTIL_Bubbles(pev->origin - Vector(64, 64, 64), pev->origin + Vector(64, 64, 64), 100);
 				}
-			break;
-			case HITGROUP_STOMACH:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupStomach*flDamage) / 2;
+				else {
+					Vector position = pev->origin;
+					SpawnExplosion(position, 70, 0.3, 80);
+					UTIL_ScreenShake(tr.vecEndPos, 25.0, 150.0, 1.0, 750);
 				}
-			break;
-			case HITGROUP_LEFTARM:
-			case HITGROUP_RIGHTARM:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
-				flDamage = m_flHitgroupArm*flDamage;
-			break;
-			case HITGROUP_LEFTLEG:
-			case HITGROUP_RIGHTLEG:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
-				flDamage = m_flHitgroupLeg*flDamage;
-			break;
-			case HITGROUP_TANK:
-				TraceResult tr;
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
-					if (UTIL_PointContents(pev->origin) == CONTENTS_WATER) {
-						UTIL_Bubbles(pev->origin - Vector(64, 64, 64), pev->origin + Vector(64, 64, 64), 100);
-					} else {
-						Vector position = pev->origin;
-						SpawnExplosion(position, 70, 0.3, 80);
-						UTIL_ScreenShake(tr.vecEndPos, 25.0, 150.0, 1.0, 750);
-					}
 
-					if (UTIL_PointContents(pev->origin) != CONTENTS_WATER) {
-						int sparkCount = RANDOM_LONG(1, 5);
-						Vector mirpos = UTIL_MirrorPos(pev->origin);
+				if (UTIL_PointContents(pev->origin) != CONTENTS_WATER) {
+					int sparkCount = RANDOM_LONG(1, 5);
+					Vector mirpos = UTIL_MirrorPos(pev->origin);
 
+					for (int i = 0; i < sparkCount; i++)
+						Create("spark_shower", pev->origin, tr.vecPlaneNormal, NULL);
+
+					if (mirpos != Vector(0, 0, 0))
 						for (int i = 0; i < sparkCount; i++)
-							Create("spark_shower", pev->origin, tr.vecPlaneNormal, NULL);
-
-						if (mirpos != Vector(0, 0, 0))
-							for (int i = 0; i < sparkCount; i++)
-								Create("spark_shower", mirpos, tr.vecPlaneNormal, NULL);
-					}
+							Create("spark_shower", mirpos, tr.vecPlaneNormal, NULL);
 				}
+			}
 			break;
 		}
 	}
@@ -1464,7 +1470,7 @@ void CTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDi
 //=========================================================
 // SpawnExplosion
 //=========================================================
-void CTorch :: SpawnExplosion(Vector center, float randomRange, float time, int magnitude) {
+void CTorch::SpawnExplosion(Vector center, float randomRange, float time, int magnitude) {
 	KeyValueData	kvd; char buf[128];
 	CBaseEntity *pExplosion = CBaseEntity::Create("env_explosion", center, g_vecZero, NULL);
 	kvd.szKeyName = "iMagnitude";
@@ -1480,206 +1486,214 @@ void CTorch :: SpawnExplosion(Vector center, float randomRange, float time, int 
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-Schedule_t* CTorch :: GetScheduleOfType ( int Type ) {
+Schedule_t* CTorch::GetScheduleOfType(int Type) {
 	Schedule_t *psched;
-	switch( Type ) {
+	switch (Type) {
 		// Hook these to make a looping schedule
-		case SCHED_TARGET_FACE: {
-			// call base class default so that barney will talk
-			// when 'used' 
-			psched = CRCAllyMonster::GetScheduleOfType(Type);
+	case SCHED_TARGET_FACE: {
+		// call base class default so that barney will talk
+		// when 'used' 
+		psched = CRCAllyMonster::GetScheduleOfType(Type);
 
-			if (psched == slIdleStand)
-				return slTorchFaceTarget;	// override this for different target face behavior
-			else
-				return psched;
-		}
-		case SCHED_TARGET_CHASE: {
-			return slTorchFollow;
-		}
-		case SCHED_IDLE_STAND: {
-			psched = CRCAllyMonster::GetScheduleOfType(Type);
+		if (psched == slIdleStand)
+			return slTorchFaceTarget;	// override this for different target face behavior
+		else
+			return psched;
+	}
+	case SCHED_TARGET_CHASE: {
+		return slTorchFollow;
+	}
+	case SCHED_IDLE_STAND: {
+		psched = CRCAllyMonster::GetScheduleOfType(Type);
 
-			if (psched == slIdleStand) {
-				// just look straight ahead.
-				return slTorchIdleStand;
-			}
-			else
-				return psched;	
+		if (psched == slIdleStand) {
+			// just look straight ahead.
+			return slTorchIdleStand;
 		}
-		case SCHED_TAKE_COVER_FROM_ENEMY: {
-			if ( InSquad() ) {
-				return &slTorchTakeCover[ 0 ];
-			} else {
-				if ( RANDOM_LONG(0,1) ) {
-					return &slTorchTakeCover[ 0 ];
-				} else {
-					return &slTorchGrenadeCover[ 0 ];
-				}
+		else
+			return psched;
+	}
+	case SCHED_TAKE_COVER_FROM_ENEMY: {
+		if (InSquad()) {
+			return &slTorchTakeCover[0];
+		}
+		else {
+			if (RANDOM_LONG(0, 1)) {
+				return &slTorchTakeCover[0];
+			}
+			else {
+				return &slTorchGrenadeCover[0];
 			}
 		}
-		case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
-			return &slTorchTakeCoverFromBestSound[ 0 ];
+	}
+	case SCHED_TAKE_COVER_FROM_BEST_SOUND: {
+		return &slTorchTakeCoverFromBestSound[0];
+	}
+	case SCHED_TORCH_TAKECOVER_FAILED: {
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_FGRUNT_ENGAGE)) {
+			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
 		}
-		case SCHED_TORCH_TAKECOVER_FAILED: {
-			if ( HasConditions( bits_COND_CAN_RANGE_ATTACK1 ) && OccupySlot( bits_SLOTS_FGRUNT_ENGAGE ) ) {
-				return GetScheduleOfType( SCHED_RANGE_ATTACK1 );
-			}
 
-			return GetScheduleOfType ( SCHED_FAIL );
+		return GetScheduleOfType(SCHED_FAIL);
+	}
+									   break;
+	case SCHED_TORCH_ELOF_FAIL: {
+		// assassin is unable to move to a position that allows him to attack the enemy.
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1) && OccupySlot(bits_SLOTS_FGRUNT_ENGAGE)) {
+			return GetScheduleOfType(SCHED_RANGE_ATTACK1);
 		}
-		break;
-		case SCHED_TORCH_ELOF_FAIL: {
-			// assassin is unable to move to a position that allows him to attack the enemy.
-			if ( HasConditions( bits_COND_CAN_RANGE_ATTACK1 ) && OccupySlot( bits_SLOTS_FGRUNT_ENGAGE ) ) {
-				return GetScheduleOfType( SCHED_RANGE_ATTACK1 );
-			} else {
-				return GetScheduleOfType ( SCHED_FAIL );
-			}
+		else {
+			return GetScheduleOfType(SCHED_FAIL);
 		}
-		break;
-		case SCHED_TORCH_ESTABLISH_LINE_OF_FIRE: {
-			return &slTorchEstablishLineOfFire[ 0 ];
-		}
-		break;
-		case SCHED_RANGE_ATTACK1: {
-			// randomly stand or crouch
-			if (RANDOM_LONG(0,9) == 0)
-				m_fStanding = RANDOM_LONG(0,1);
-		 
-			if (m_fStanding)
-				return &slTorchRangeAttack1B[ 0 ];
-			else
-				return &slTorchRangeAttack1A[ 0 ];
-		}
-		case SCHED_RANGE_ATTACK2: {
-			return &slTorchRangeAttack2[ 0 ];
-		}
-		case SCHED_COMBAT_FACE: {
-			return &slTorchCombatFace[ 0 ];
-		}
-		case SCHED_TORCH_WAIT_FACE_ENEMY: {
-			return &slTorchWaitInCover[ 0 ];
-		}
-		case SCHED_TORCH_SWEEP: {
-			return &slTorchSweep[ 0 ];
-		}
-		case SCHED_TORCH_COVER_AND_RELOAD: {
-			return &slTorchHideReload[ 0 ];
-		}
-		case SCHED_TORCH_FOUND_ENEMY: {
-			return &slTorchFoundEnemy[ 0 ];
-		}
-		case SCHED_VICTORY_DANCE: {
-			if ( InSquad() ) {
-				if ( !IsLeader() ) {
-					return &slTorchFail[ 0 ];
-				}
-			}
+	}
+								break;
+	case SCHED_TORCH_ESTABLISH_LINE_OF_FIRE: {
+		return &slTorchEstablishLineOfFire[0];
+	}
+											 break;
+	case SCHED_RANGE_ATTACK1: {
+		// randomly stand or crouch
+		if (RANDOM_LONG(0, 9) == 0)
+			m_fStanding = RANDOM_LONG(0, 1);
 
-			if ( IsFollowing() ) {
-				return &slTorchFail[ 0 ];
+		if (m_fStanding)
+			return &slTorchRangeAttack1B[0];
+		else
+			return &slTorchRangeAttack1A[0];
+	}
+	case SCHED_RANGE_ATTACK2: {
+		return &slTorchRangeAttack2[0];
+	}
+	case SCHED_COMBAT_FACE: {
+		return &slTorchCombatFace[0];
+	}
+	case SCHED_TORCH_WAIT_FACE_ENEMY: {
+		return &slTorchWaitInCover[0];
+	}
+	case SCHED_TORCH_SWEEP: {
+		return &slTorchSweep[0];
+	}
+	case SCHED_TORCH_COVER_AND_RELOAD: {
+		return &slTorchHideReload[0];
+	}
+	case SCHED_TORCH_FOUND_ENEMY: {
+		return &slTorchFoundEnemy[0];
+	}
+	case SCHED_VICTORY_DANCE: {
+		if (InSquad()) {
+			if (!IsLeader()) {
+				return &slTorchFail[0];
 			}
+		}
 
-			return &slTorchVictoryDance[ 0 ];
+		if (IsFollowing()) {
+			return &slTorchFail[0];
 		}
-		case SCHED_TORCH_SUPPRESS: {
-			if ( m_fFirstEncounter ) {
-				m_fFirstEncounter = FALSE;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
-				return &slTorchSignalSuppress[ 0 ];
-			} else {
-				return &slTorchSuppress[ 0 ];
-			}
-		}
-		case SCHED_FAIL: {
-			if ( m_hEnemy != NULL ) {
-				// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
-				return &slTorchCombatFail[ 0 ];
-			}
 
-			return &slTorchFail[ 0 ];
+		return &slTorchVictoryDance[0];
+	}
+	case SCHED_TORCH_SUPPRESS: {
+		if (m_fFirstEncounter) {
+			m_fFirstEncounter = FALSE;// after first encounter, leader won't issue handsigns anymore when he has a new enemy
+			return &slTorchSignalSuppress[0];
 		}
-		case SCHED_TORCH_REPEL: {
-			if (pev->velocity.z > -128)
-				pev->velocity.z -= 32;
-			return &slTorchRepel[ 0 ];
+		else {
+			return &slTorchSuppress[0];
 		}
-		case SCHED_TORCH_REPEL_ATTACK: {
-			if (pev->velocity.z > -128)
-				pev->velocity.z -= 32;
-			return &slTorchRepelAttack[ 0 ];
+	}
+	case SCHED_FAIL: {
+		if (m_hEnemy != NULL) {
+			// grunt has an enemy, so pick a different default fail schedule most likely to help recover.
+			return &slTorchCombatFail[0];
 		}
-		case SCHED_TORCH_REPEL_LAND: {
-			return &slTorchRepelLand[ 0 ];
-		}
-		default: {
-			return CRCAllyMonster :: GetScheduleOfType ( Type );
-		}
+
+		return &slTorchFail[0];
+	}
+	case SCHED_TORCH_REPEL: {
+		if (pev->velocity.z > -128)
+			pev->velocity.z -= 32;
+		return &slTorchRepel[0];
+	}
+	case SCHED_TORCH_REPEL_ATTACK: {
+		if (pev->velocity.z > -128)
+			pev->velocity.z -= 32;
+		return &slTorchRepelAttack[0];
+	}
+	case SCHED_TORCH_REPEL_LAND: {
+		return &slTorchRepelLand[0];
+	}
+	default: {
+		return CRCAllyMonster::GetScheduleOfType(Type);
+	}
 	}
 }
 //=========================================================
 // SetActivity 
 //=========================================================
-void CTorch :: SetActivity ( Activity NewActivity ) {
+void CTorch::SetActivity(Activity NewActivity) {
 	int	iSequence = ACTIVITY_NOT_AVAILABLE;
-	void *pmodel = GET_MODEL_PTR( ENT(pev) );
-	switch ( NewActivity) {
-		case ACT_RANGE_ATTACK1:
-			if ( m_fStanding ) {
-				// get aimable sequence
-				iSequence = LookupSequence( "standing_mp5" );
-			} else {
-				// get crouching shoot
-				iSequence = LookupSequence( "crouching_mp5" );
-			}
+	void *pmodel = GET_MODEL_PTR(ENT(pev));
+	switch (NewActivity) {
+	case ACT_RANGE_ATTACK1:
+		if (m_fStanding) {
+			// get aimable sequence
+			iSequence = LookupSequence("standing_mp5");
+		}
+		else {
+			// get crouching shoot
+			iSequence = LookupSequence("crouching_mp5");
+		}
 		break;
-		case ACT_RANGE_ATTACK2:
-			// grunt is going to a secondary long range attack. This may be a thrown 
-			// grenade or fired grenade, we must determine which and pick proper sequence
-			// get toss anim
-			iSequence = LookupSequence( "throwgrenade" );
+	case ACT_RANGE_ATTACK2:
+		// grunt is going to a secondary long range attack. This may be a thrown 
+		// grenade or fired grenade, we must determine which and pick proper sequence
+		// get toss anim
+		iSequence = LookupSequence("throwgrenade");
 		break;
-		case ACT_RUN:
-			if ( pev->health <= FGRUNT_LIMP_HEALTH ) {
-				// limp!
-				iSequence = LookupActivity ( ACT_RUN_HURT );
-			} else {
-				iSequence = LookupActivity ( NewActivity );
-			}
+	case ACT_RUN:
+		if (pev->health <= FGRUNT_LIMP_HEALTH) {
+			// limp!
+			iSequence = LookupActivity(ACT_RUN_HURT);
+		}
+		else {
+			iSequence = LookupActivity(NewActivity);
+		}
 		break;
-		case ACT_WALK:
-			if ( pev->health <= FGRUNT_LIMP_HEALTH ) {
-				// limp!
-				iSequence = LookupActivity ( ACT_WALK_HURT );
-			} else {
-				iSequence = LookupActivity ( NewActivity );
-			}
+	case ACT_WALK:
+		if (pev->health <= FGRUNT_LIMP_HEALTH) {
+			// limp!
+			iSequence = LookupActivity(ACT_WALK_HURT);
+		}
+		else {
+			iSequence = LookupActivity(NewActivity);
+		}
 		break;
-		case ACT_IDLE:
-			if ( m_MonsterState == MONSTERSTATE_COMBAT ) {
-				NewActivity = ACT_IDLE_ANGRY;
-			}
-			iSequence = LookupActivity ( NewActivity );
+	case ACT_IDLE:
+		if (m_MonsterState == MONSTERSTATE_COMBAT) {
+			NewActivity = ACT_IDLE_ANGRY;
+		}
+		iSequence = LookupActivity(NewActivity);
 		break;
-		default:
-			iSequence = LookupActivity ( NewActivity );
+	default:
+		iSequence = LookupActivity(NewActivity);
 		break;
 	}
-	
+
 	m_Activity = NewActivity; // Go ahead and set this so it doesn't keep trying when the anim is not present
 
 	// Set to the desired anim, or default anim if the desired is not present
-	if ( iSequence > ACTIVITY_NOT_AVAILABLE ) {
-		if ( pev->sequence != iSequence || !m_fSequenceLoops ) {
+	if (iSequence > ACTIVITY_NOT_AVAILABLE) {
+		if (pev->sequence != iSequence || !m_fSequenceLoops) {
 			pev->frame = 0;
 		}
 
 		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
-		ResetSequenceInfo( );
+		ResetSequenceInfo();
 		SetYawSpeed();
-	} else {
+	}
+	else {
 		// Not available try to get default anim
-		ALERT ( at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity );
+		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
@@ -1689,7 +1703,7 @@ void CTorch :: SetActivity ( Activity NewActivity ) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CTorch :: GetSchedule ( void ) {
+Schedule_t *CTorch::GetSchedule(void) {
 	// clear old sentence
 	m_iSentence = -1;
 
@@ -1739,199 +1753,213 @@ Schedule_t *CTorch :: GetSchedule ( void ) {
 		}
 	}
 
-	switch( m_MonsterState ) {
-		case MONSTERSTATE_COMBAT: {
-			// dead enemy
-			if ( HasConditions( bits_COND_ENEMY_DEAD ) ) {
-				// call base class, all code to handle dead enemies is centralized there.
-				return CBaseMonster :: GetSchedule();
-			}
+	switch (m_MonsterState) {
+	case MONSTERSTATE_COMBAT: {
+		// dead enemy
+		if (HasConditions(bits_COND_ENEMY_DEAD)) {
+			// call base class, all code to handle dead enemies is centralized there.
+			return CBaseMonster::GetSchedule();
+		}
 
-			// new enemy
-			if ( HasConditions(bits_COND_NEW_ENEMY) ) {
-				if ( InSquad() ) {
-					MySquadLeader()->m_fEnemyEluded = FALSE;
-					if ( !IsLeader() ) {
-						if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) ) {
-							return GetScheduleOfType ( SCHED_TORCH_SUPPRESS );
-						} else {
-							return GetScheduleOfType ( SCHED_TORCH_ESTABLISH_LINE_OF_FIRE );
-						}
-					} else {
-						//!!!KELLY - the leader of a squad of grunts has just seen the player or a 
-						// monster and has made it the squad's enemy. You
-						// can check pev->flags for FL_CLIENT to determine whether this is the player
-						// or a monster. He's going to immediately start
-						// firing, though. If you'd like, we can make an alternate "first sight" 
-						// schedule where the leader plays a handsign anim
-						// that gives us enough time to hear a short sentence or spoken command
-						// before he starts pluggin away.
-						if (FOkToSpeak()) {
-							if ((m_hEnemy != NULL) &&
-									(m_hEnemy->Classify() != CLASS_PLAYER_ALLY) && 
-									(m_hEnemy->Classify() != CLASS_HUMAN_MILITARY) && 
-									(m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) && 
-									(m_hEnemy->Classify() != CLASS_MACHINE))
-								// monster
-								SENTENCEG_PlayRndSz( ENT(pev), "FG_ALERT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
-							else
-								// player
-								SENTENCEG_PlayRndSz( ENT(pev), "FG_ATTACK", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
-
-							JustSpoke();
-						}
-						
-						if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) ) {
-							return GetScheduleOfType ( SCHED_TORCH_SUPPRESS );
-						} else {
-							return GetScheduleOfType ( SCHED_TORCH_ESTABLISH_LINE_OF_FIRE );
-						}
+		// new enemy
+		if (HasConditions(bits_COND_NEW_ENEMY)) {
+			if (InSquad()) {
+				MySquadLeader()->m_fEnemyEluded = FALSE;
+				if (!IsLeader()) {
+					if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+						return GetScheduleOfType(SCHED_TORCH_SUPPRESS);
+					}
+					else {
+						return GetScheduleOfType(SCHED_TORCH_ESTABLISH_LINE_OF_FIRE);
 					}
 				}
-			} else if ( HasConditions ( bits_COND_NO_AMMO_LOADED ) ) {
-				//!!!KELLY - this individual just realized he's out of bullet ammo. 
-				// He's going to try to find cover to run to and reload, but rarely, if 
-				// none is available, he'll drop and reload in the open here. 
-				return GetScheduleOfType ( SCHED_TORCH_COVER_AND_RELOAD );
-			} else if ( HasConditions( bits_COND_LIGHT_DAMAGE ) ) {
-				// if hurt:
-				// 90% chance of taking cover
-				// 10% chance of flinch.
-				int iPercent = RANDOM_LONG(0,99);
-
-				if ( iPercent <= 90 && m_hEnemy != NULL ) {
+				else {
+					//!!!KELLY - the leader of a squad of grunts has just seen the player or a 
+					// monster and has made it the squad's enemy. You
+					// can check pev->flags for FL_CLIENT to determine whether this is the player
+					// or a monster. He's going to immediately start
+					// firing, though. If you'd like, we can make an alternate "first sight" 
+					// schedule where the leader plays a handsign anim
+					// that gives us enough time to hear a short sentence or spoken command
+					// before he starts pluggin away.
 					if (FOkToSpeak()) {
-						//SENTENCEG_PlayRndSz( ENT(pev), "HG_COVER", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
-						m_iSentence = TORCH_SENT_COVER;
-						//JustSpoke();
-					}
-					// only try to take cover if we actually have an enemy!
-					return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ENEMY );
-				} else {
-					return GetScheduleOfType( SCHED_SMALL_FLINCH );
-				}
-			} else if ( HasConditions ( bits_COND_CAN_MELEE_ATTACK1 ) ) {
-				return GetScheduleOfType ( SCHED_MELEE_ATTACK1 );
-			} else if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) ) {
-				if ( InSquad() ) {
-					// if the enemy has eluded the squad and a squad member has just located the enemy
-					// and the enemy does not see the squad member, issue a call to the squad to waste a 
-					// little time and give the player a chance to turn.
-					if ( MySquadLeader()->m_fEnemyEluded && !HasConditions ( bits_COND_ENEMY_FACING_ME ) ) {
-						MySquadLeader()->m_fEnemyEluded = FALSE;
-						return GetScheduleOfType ( SCHED_TORCH_FOUND_ENEMY );
-					}
-				}
+						if ((m_hEnemy != NULL) &&
+							(m_hEnemy->Classify() != CLASS_PLAYER_ALLY) &&
+							(m_hEnemy->Classify() != CLASS_HUMAN_MILITARY) &&
+							(m_hEnemy->Classify() != CLASS_HUMAN_PASSIVE) &&
+							(m_hEnemy->Classify() != CLASS_MACHINE))
+							// monster
+							SENTENCEG_PlayRndSz(ENT(pev), "FG_ALERT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
+						else
+							// player
+							SENTENCEG_PlayRndSz(ENT(pev), "FG_ATTACK", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
 
-				if ( OccupySlot ( bits_SLOTS_FGRUNT_ENGAGE ) ) {
-					// try to take an available ENGAGE slot
-					return GetScheduleOfType( SCHED_RANGE_ATTACK1 );
-				} else if ( HasConditions ( bits_COND_CAN_RANGE_ATTACK2 ) && OccupySlot( bits_SLOTS_FGRUNT_GRENADE ) ) {
-					// throw a grenade if can and no engage slots are available
-					return GetScheduleOfType( SCHED_RANGE_ATTACK2 );
-				} else {
-					// hide!
-					return GetScheduleOfType( SCHED_TAKE_COVER_FROM_ENEMY );
-				}
-			} else if ( HasConditions( bits_COND_ENEMY_OCCLUDED ) ) {
-				if ( HasConditions( bits_COND_CAN_RANGE_ATTACK2 ) && OccupySlot( bits_SLOTS_FGRUNT_GRENADE ) ) {
-					//!!!KELLY - this grunt is about to throw or fire a grenade at the player. Great place for "fire in the hole"  "frag out" etc
-					if (FOkToSpeak()) {
-						SENTENCEG_PlayRndSz( ENT(pev), "FG_THROW", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
 						JustSpoke();
 					}
-					return GetScheduleOfType( SCHED_RANGE_ATTACK2 );
-				} else if ( OccupySlot( bits_SLOTS_FGRUNT_ENGAGE ) ) {
-					return GetScheduleOfType( SCHED_TORCH_ESTABLISH_LINE_OF_FIRE );
-				} else {
-					//!!!KELLY - grunt is going to stay put for a couple seconds to see if
-					// the enemy wanders back out into the open, or approaches the
-					// grunt's covered position. Good place for a taunt, I guess?
-					if (FOkToSpeak() && RANDOM_LONG(0,1))
-					{
-						SENTENCEG_PlayRndSz( ENT(pev), "FG_TAUNT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
+
+					if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+						return GetScheduleOfType(SCHED_TORCH_SUPPRESS);
 					}
-					return GetScheduleOfType( SCHED_STANDOFF );
+					else {
+						return GetScheduleOfType(SCHED_TORCH_ESTABLISH_LINE_OF_FIRE);
+					}
 				}
-			}
-			
-			if ( HasConditions( bits_COND_SEE_ENEMY ) && !HasConditions ( bits_COND_CAN_RANGE_ATTACK1 ) ) {
-				return GetScheduleOfType ( SCHED_TORCH_ESTABLISH_LINE_OF_FIRE );
 			}
 		}
-		break;
-		case MONSTERSTATE_ALERT:	
-		case MONSTERSTATE_IDLE:
-			if ( HasConditions ( bits_COND_NO_AMMO_LOADED ) ) {
-				return GetScheduleOfType ( SCHED_RELOAD );
+		else if (HasConditions(bits_COND_NO_AMMO_LOADED)) {
+			//!!!KELLY - this individual just realized he's out of bullet ammo. 
+			// He's going to try to find cover to run to and reload, but rarely, if 
+			// none is available, he'll drop and reload in the open here. 
+			return GetScheduleOfType(SCHED_TORCH_COVER_AND_RELOAD);
+		}
+		else if (HasConditions(bits_COND_LIGHT_DAMAGE)) {
+			// if hurt:
+			// 90% chance of taking cover
+			// 10% chance of flinch.
+			int iPercent = RANDOM_LONG(0, 99);
+
+			if (iPercent <= 90 && m_hEnemy != NULL) {
+				if (FOkToSpeak()) {
+					//SENTENCEG_PlayRndSz( ENT(pev), "HG_COVER", HGRUNT_SENTENCE_VOLUME, GRUNT_ATTN, 0, m_voicePitch);
+					m_iSentence = TORCH_SENT_COVER;
+					//JustSpoke();
+				}
+				// only try to take cover if we actually have an enemy!
+				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
 			}
-
-			if ( m_hEnemy == NULL && IsFollowing() ) {
-				if ( !m_hTargetEnt->IsAlive() ) {
-					// UNDONE: Comment about the recently dead player here?
-					StopFollowing( FALSE );
-					break;
-				} else {
-					if ( HasConditions( bits_COND_CLIENT_PUSH ) ) {
-						return GetScheduleOfType( SCHED_MOVE_AWAY_FOLLOW );
-					}
-
-					return GetScheduleOfType( SCHED_TARGET_FACE );
+			else {
+				return GetScheduleOfType(SCHED_SMALL_FLINCH);
+			}
+		}
+		else if (HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
+			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
+		}
+		else if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+			if (InSquad()) {
+				// if the enemy has eluded the squad and a squad member has just located the enemy
+				// and the enemy does not see the squad member, issue a call to the squad to waste a 
+				// little time and give the player a chance to turn.
+				if (MySquadLeader()->m_fEnemyEluded && !HasConditions(bits_COND_ENEMY_FACING_ME)) {
+					MySquadLeader()->m_fEnemyEluded = FALSE;
+					return GetScheduleOfType(SCHED_TORCH_FOUND_ENEMY);
 				}
 			}
 
-			if ( HasConditions( bits_COND_CLIENT_PUSH ) ) {
-				return GetScheduleOfType( SCHED_MOVE_AWAY );
+			if (OccupySlot(bits_SLOTS_FGRUNT_ENGAGE)) {
+				// try to take an available ENGAGE slot
+				return GetScheduleOfType(SCHED_RANGE_ATTACK1);
 			}
+			else if (HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_FGRUNT_GRENADE)) {
+				// throw a grenade if can and no engage slots are available
+				return GetScheduleOfType(SCHED_RANGE_ATTACK2);
+			}
+			else {
+				// hide!
+				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
+			}
+		}
+		else if (HasConditions(bits_COND_ENEMY_OCCLUDED)) {
+			if (HasConditions(bits_COND_CAN_RANGE_ATTACK2) && OccupySlot(bits_SLOTS_FGRUNT_GRENADE)) {
+				//!!!KELLY - this grunt is about to throw or fire a grenade at the player. Great place for "fire in the hole"  "frag out" etc
+				if (FOkToSpeak()) {
+					SENTENCEG_PlayRndSz(ENT(pev), "FG_THROW", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
+					JustSpoke();
+				}
+				return GetScheduleOfType(SCHED_RANGE_ATTACK2);
+			}
+			else if (OccupySlot(bits_SLOTS_FGRUNT_ENGAGE)) {
+				return GetScheduleOfType(SCHED_TORCH_ESTABLISH_LINE_OF_FIRE);
+			}
+			else {
+				//!!!KELLY - grunt is going to stay put for a couple seconds to see if
+				// the enemy wanders back out into the open, or approaches the
+				// grunt's covered position. Good place for a taunt, I guess?
+				if (FOkToSpeak() && RANDOM_LONG(0, 1))
+				{
+					SENTENCEG_PlayRndSz(ENT(pev), "FG_TAUNT", VOL_NORM, ATTN_NORM, 0, m_voicePitch);
+				}
+				return GetScheduleOfType(SCHED_STANDOFF);
+			}
+		}
 
-			// try to say something about smells
-			TrySmellTalk();
+		if (HasConditions(bits_COND_SEE_ENEMY) && !HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+			return GetScheduleOfType(SCHED_TORCH_ESTABLISH_LINE_OF_FIRE);
+		}
+	}
+							  break;
+	case MONSTERSTATE_ALERT:
+	case MONSTERSTATE_IDLE:
+		if (HasConditions(bits_COND_NO_AMMO_LOADED)) {
+			return GetScheduleOfType(SCHED_RELOAD);
+		}
+
+		if (m_hEnemy == NULL && IsFollowing()) {
+			if (!m_hTargetEnt->IsAlive()) {
+				// UNDONE: Comment about the recently dead player here?
+				StopFollowing(FALSE);
+				break;
+			}
+			else {
+				if (HasConditions(bits_COND_CLIENT_PUSH)) {
+					return GetScheduleOfType(SCHED_MOVE_AWAY_FOLLOW);
+				}
+
+				return GetScheduleOfType(SCHED_TARGET_FACE);
+			}
+		}
+
+		if (HasConditions(bits_COND_CLIENT_PUSH)) {
+			return GetScheduleOfType(SCHED_MOVE_AWAY);
+		}
+
+		// try to say something about smells
+		TrySmellTalk();
 		break;
 	}
-	
-	return CRCAllyMonster :: GetSchedule();
+
+	return CRCAllyMonster::GetSchedule();
 }
 
 //=========================================================
 // CTorchRepel - when triggered, spawns a
 // repelling down a line.
 //=========================================================
-LINK_ENTITY_TO_CLASS( monster_human_torch_ally_repel, CTorchRepel );
+LINK_ENTITY_TO_CLASS(monster_human_torch_ally_repel, CTorchRepel);
 
-void CTorchRepel::Spawn( void )
+void CTorchRepel::Spawn(void)
 {
-	Precache( );
+	Precache();
 	pev->solid = SOLID_NOT;
 
-	SetUse( &CTorchRepel :: RepelUse );
+	SetUse(&CTorchRepel::RepelUse);
 }
 
-void CTorchRepel::Precache( void )
+void CTorchRepel::Precache(void)
 {
-	UTIL_PrecacheOther( "monster_human_torch_ally" );
-	m_iSpriteTexture = PRECACHE_MODEL( "sprites/rope.spr" );
+	UTIL_PrecacheOther("monster_human_torch_ally");
+	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
 }
 
-void CTorchRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+void CTorchRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	TraceResult tr;
-	UTIL_TraceLine( pev->origin, pev->origin + Vector( 0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
+	UTIL_TraceLine(pev->origin, pev->origin + Vector(0, 0, -4096.0), dont_ignore_monsters, ENT(pev), &tr);
 
-	CBaseEntity *pEntity = Create( "monster_human_torch_ally", pev->origin, pev->angles );
-	CBaseMonster *pGrunt = pEntity->MyMonsterPointer( );
+	CBaseEntity *pEntity = Create("monster_human_torch_ally", pev->origin, pev->angles);
+	CBaseMonster *pGrunt = pEntity->MyMonsterPointer();
 	pGrunt->pev->movetype = MOVETYPE_FLY;
-	pGrunt->pev->velocity = Vector( 0, 0, RANDOM_FLOAT( -196, -128 ) );
-	pGrunt->SetActivity( ACT_GLIDE );
+	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
+	pGrunt->SetActivity(ACT_GLIDE);
 	pGrunt->m_vecLastPosition = tr.vecEndPos;
 
-	CBeam *pBeam = CBeam::BeamCreate( "sprites/rope.spr", 10 );
-	pBeam->PointEntInit( pev->origin + Vector(0,0,112), pGrunt->entindex() );
-	pBeam->SetFlags( BEAM_FSOLID );
-	pBeam->SetColor( 255, 255, 255 );
-	pBeam->SetThink( &CBeam :: SUB_Remove );
+	CBeam *pBeam = CBeam::BeamCreate("sprites/rope.spr", 10);
+	pBeam->PointEntInit(pev->origin + Vector(0, 0, 112), pGrunt->entindex());
+	pBeam->SetFlags(BEAM_FSOLID);
+	pBeam->SetColor(255, 255, 255);
+	pBeam->SetThink(&CBeam::SUB_Remove);
 	pBeam->pev->nextthink = UTIL_GlobalTimeBase() + -4096.0 * tr.flFraction / pGrunt->pev->velocity.z + 0.5;
 
-	UTIL_Remove( this );
+	UTIL_Remove(this);
 }
 
 //=========================================================
@@ -1946,46 +1974,46 @@ void CTorchRepel::RepelUse ( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 //=========================================================
 char *CDeadTorch::m_szPoses[] = { "dead_on_stomach", "deadstomach", "deadside", "deadsitting" };
 
-void CDeadTorch::KeyValue( KeyValueData *pkvd )
+void CDeadTorch::KeyValue(KeyValueData *pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "pose"))
 	{
 		m_iPose = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
-	else 
-		CBaseMonster::KeyValue( pkvd );
+	else
+		CBaseMonster::KeyValue(pkvd);
 }
 
-LINK_ENTITY_TO_CLASS( monster_human_torch_ally_dead, CDeadTorch );
+LINK_ENTITY_TO_CLASS(monster_human_torch_ally_dead, CDeadTorch);
 
 //=========================================================
 // ********** DeadBGrunt SPAWN **********
 //=========================================================
-void CDeadTorch :: Spawn( )
+void CDeadTorch::Spawn()
 {
 	PRECACHE_MODEL("models/hgrunt_torch.mdl");
 	SET_MODEL(ENT(pev), "models/hgrunt_torch.mdl");
 
-	pev->effects		= 0;
-	pev->yaw_speed		= 8;
-	pev->sequence		= 0;
-	m_bloodColor		= BLOOD_COLOR_RED;
+	pev->effects = 0;
+	pev->yaw_speed = 8;
+	pev->sequence = 0;
+	m_bloodColor = BLOOD_COLOR_RED;
 
-	pev->sequence = LookupSequence( m_szPoses[m_iPose] );
+	pev->sequence = LookupSequence(m_szPoses[m_iPose]);
 	if (pev->sequence == -1)
 	{
-		ALERT ( at_console, "Dead fgrunt with bad pose\n" );
+		ALERT(at_console, "Dead fgrunt with bad pose\n");
 	}
 	// Corpses have less health
-	pev->health			= 8;
+	pev->health = 8;
 
 	MonsterInitDead();
 }
 //=========================================================
 // TraceAttack - make sure we're not taking it in the helmet
 //=========================================================
-void CDeadTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
+void CDeadTorch::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
 {
 	TraceResult tr;
 	// check for helmet shot
@@ -1994,20 +2022,20 @@ void CDeadTorch :: TraceAttack( entvars_t *pevAttacker, float flDamage, Vector v
 		// make sure we're wearing one
 		if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB))
 		{
-			UTIL_Ricochet( ptr->vecEndPos, 1.0 );
-			MESSAGE_BEGIN( MSG_PAS, SVC_TEMPENTITY, pev->origin );
-				WRITE_BYTE( TE_EXPLOSION );		// This makes a dynamic light and the explosion sprites/sound
-				WRITE_COORD( ptr->vecEndPos.x );	// Send to PAS because of the sound
-				WRITE_COORD( ptr->vecEndPos.y );
-				WRITE_COORD( ptr->vecEndPos.z );
-				WRITE_SHORT( g_sModelIndexFireball );
-				WRITE_BYTE( 15  ); // scale * 10
-				WRITE_BYTE( 15  ); // framerate
-				WRITE_BYTE( TE_EXPLFLAG_NONE );
+			UTIL_Ricochet(ptr->vecEndPos, 1.0);
+			MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
+			WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+			WRITE_COORD(ptr->vecEndPos.x);	// Send to PAS because of the sound
+			WRITE_COORD(ptr->vecEndPos.y);
+			WRITE_COORD(ptr->vecEndPos.z);
+			WRITE_SHORT(g_sModelIndexFireball);
+			WRITE_BYTE(15); // scale * 10
+			WRITE_BYTE(15); // framerate
+			WRITE_BYTE(TE_EXPLFLAG_NONE);
 			MESSAGE_END();
-			RadiusDamage ( pev, pev, 100, CLASS_NONE, DMG_BLAST );
-			Create( "spark_shower", pev->origin, tr.vecPlaneNormal, NULL );
+			RadiusDamage(pev, pev, 100, CLASS_NONE, DMG_BLAST);
+			Create("spark_shower", pev->origin, tr.vecPlaneNormal, NULL);
 		}
 	}
-	CBaseMonster::TraceAttack( pevAttacker, flDamage, vecDir, ptr, bitsDamageType );
+	CBaseMonster::TraceAttack(pevAttacker, flDamage, vecDir, ptr, bitsDamageType);
 }

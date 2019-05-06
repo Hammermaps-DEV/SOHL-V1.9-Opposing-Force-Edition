@@ -18,21 +18,21 @@
 
 class CFlockingFlyerFlock : public CBaseMonster
 {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void KeyValue(KeyValueData *pkvd);
-		void SpawnFlock(void);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void KeyValue(KeyValueData *pkvd);
+	void SpawnFlock(void);
 
-		virtual int		Save(CSave &save);
-		virtual int		Restore(CRestore &restore);
-		static	TYPEDESCRIPTION m_SaveData[];
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
+	static	TYPEDESCRIPTION m_SaveData[];
 
-		// Sounds are shared by the flock
-		static  void PrecacheFlockSounds(void);
+	// Sounds are shared by the flock
+	static  void PrecacheFlockSounds(void);
 
-		int		m_cFlockSize;
-		float	m_flFlockRadius;
+	int		m_cFlockSize;
+	float	m_flFlockRadius;
 };
 
 class CFlockingFlyer : public CBaseMonster

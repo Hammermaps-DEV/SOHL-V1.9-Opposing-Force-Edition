@@ -51,7 +51,8 @@ class CRpgAmmo : public CBasePlayerAmmo {
 		if (IsMultiplayer()) {
 			// hand out more ammo per rocket in multiplayer.
 			iGive = AMMO_RPGCLIP_GIVE * 2;
-		} else {
+		}
+		else {
 			iGive = AMMO_RPGCLIP_GIVE;
 		}
 

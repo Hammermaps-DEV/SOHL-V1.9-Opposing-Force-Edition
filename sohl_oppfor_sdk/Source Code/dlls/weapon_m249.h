@@ -21,38 +21,38 @@
 #define WEAPON_M249_H
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class SAW_SLOWIDLE		{ sequence = 0, frames = 101, fps = 20 };
-enum class SAW_IDLE			{ sequence = 1, frames = 155, fps = 25 };
-enum class SAW_RELOAD_START	{ sequence = 2, frames = 61,  fps = 40 };
-enum class SAW_RELOAD_END	{ sequence = 3, frames = 111, fps = 45 };
-enum class SAW_HOLSTER		{ sequence = 4, frames = 29,  fps = 30 };
-enum class SAW_DRAW			{ sequence = 5, frames = 31,  fps = 30 };
-enum class SAW_SHOOT1		{ sequence = 6, frames = 7,   fps = 30 };
-enum class SAW_SHOOT2		{ sequence = 7, frames = 7,   fps = 30 };
-enum class SAW_SHOOT3		{ sequence = 8, frames = 7,   fps = 30 };
+enum class SAW_SLOWIDLE { sequence = 0, frames = 101, fps = 20 };
+enum class SAW_IDLE { sequence = 1, frames = 155, fps = 25 };
+enum class SAW_RELOAD_START { sequence = 2, frames = 61, fps = 40 };
+enum class SAW_RELOAD_END { sequence = 3, frames = 111, fps = 45 };
+enum class SAW_HOLSTER { sequence = 4, frames = 29, fps = 30 };
+enum class SAW_DRAW { sequence = 5, frames = 31, fps = 30 };
+enum class SAW_SHOOT1 { sequence = 6, frames = 7, fps = 30 };
+enum class SAW_SHOOT2 { sequence = 7, frames = 7, fps = 30 };
+enum class SAW_SHOOT3 { sequence = 8, frames = 7, fps = 30 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //M249 Base-Class | Base | Attack | Animations | Vars | Events
 class CM249 : public CBasePlayerWeapon {
-	public:
-		//Base
-		void Spawn(void);
-		void Precache(void);
-		int GetItemInfo(ItemInfo *p);
+public:
+	//Base
+	void Spawn(void);
+	void Precache(void);
+	int GetItemInfo(ItemInfo *p);
 
-		//Attack
-		void PrimaryAttack(void);
+	//Attack
+	void PrimaryAttack(void);
 
-		//Animations
-		BOOL Deploy(void);
-		void Holster(void);
-		void Reload(void);
-		void WeaponIdle(void);
-		void UpdateClip(void);
+	//Animations
+	BOOL Deploy(void);
+	void Holster(void);
+	void Reload(void);
+	void WeaponIdle(void);
+	void UpdateClip(void);
 
-	private:
-		BOOL m_iReloadStep = 0;
-		unsigned short m_usM249;
+private:
+	BOOL m_iReloadStep = 0;
+	unsigned short m_usM249;
 };
 #endif
 

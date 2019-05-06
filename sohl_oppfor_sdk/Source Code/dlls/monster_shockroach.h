@@ -24,41 +24,41 @@
 
 // class definition
 class CShockRoach : public CHeadCrab {
-	public:
-		// void
-		void Spawn(void);
-		void Precache(void);
-		void EXPORT LeapTouch(CBaseEntity *pOther);
-		void PainSound(void);
-		void DeathSound(void);
-		void IdleSound(void);
-		void AlertSound(void);
-		void AttackSound(void);
-		void PrescheduleThink(void);
-		void StartTask(Task_t* pTask);
-		void KeyValue(KeyValueData *pkvd);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
+public:
+	// void
+	void Spawn(void);
+	void Precache(void);
+	void EXPORT LeapTouch(CBaseEntity *pOther);
+	void PainSound(void);
+	void DeathSound(void);
+	void IdleSound(void);
+	void AlertSound(void);
+	void AttackSound(void);
+	void PrescheduleThink(void);
+	void StartTask(Task_t* pTask);
+	void KeyValue(KeyValueData *pkvd);
+	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-		// int void
-		int Classify(void);
+	// int void
+	int Classify(void);
 
-		// virtual int
-		virtual int	Save(CSave &save);
-		virtual int	Restore(CRestore &restore);
-		virtual int GetVoicePitch(long random) { return m_flPitch + random; }
+	// virtual int
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
+	virtual int GetVoicePitch(long random) { return m_flPitch + random; }
 
-		// static
-		static TYPEDESCRIPTION m_SaveData[];
+	// static
+	static TYPEDESCRIPTION m_SaveData[];
 
-	protected:
-		static const char *pIdleSounds[];
-		static const char *pAttackSounds[];
+protected:
+	static const char *pIdleSounds[];
+	static const char *pAttackSounds[];
 
-		// vars
-		float m_flDie;
-		int m_flPitch = 100;
-		bool m_iDies = true;
-		bool m_iWeapon = true;
+	// vars
+	float m_flDie;
+	int m_flPitch = 100;
+	bool m_iDies = true;
+	bool m_iWeapon = true;
 };
 
 #endif // MONSTER_SHOCKROACH_H

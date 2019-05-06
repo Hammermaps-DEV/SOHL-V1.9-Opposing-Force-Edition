@@ -81,7 +81,7 @@ void CGenericModel::Spawn(void)
 	SetTouch(NULL);
 	SetUse(NULL);
 
-	pev->nextthink = gpGlobals->time + 0.1;
+	SetNextThink(0.1);
 }
 
 void CGenericModel::Precache(void)

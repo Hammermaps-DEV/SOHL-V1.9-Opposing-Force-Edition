@@ -14,18 +14,18 @@
 ****/
 
 class CItemGeneric : public CBaseAnimating {
-	public:
-		int		Save(CSave &save);
-		int		Restore(CRestore &restore);
+public:
+	int		Save(CSave &save);
+	int		Restore(CRestore &restore);
 
-		static	TYPEDESCRIPTION m_SaveData[];
+	static	TYPEDESCRIPTION m_SaveData[];
 
-		void Spawn(void);
-		void Precache(void);
-		void KeyValue(KeyValueData* pkvd);
+	void Spawn(void);
+	void Precache(void);
+	void KeyValue(KeyValueData* pkvd);
 
-		void EXPORT StartupThink(void);
-		void EXPORT SequenceThink(void);
+	void EXPORT StartupThink(void);
+	void EXPORT SequenceThink(void);
 
-		string_t m_iszSequenceName;
+	string_t m_iszSequenceName;
 };

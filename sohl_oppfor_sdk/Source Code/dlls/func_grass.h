@@ -34,15 +34,15 @@ version.
 #include "particle_defs.h"
 
 class CGrass : public CBaseEntity {
-	public:
-		bool bIsOn;
-		void Spawn(void);
-		void KeyValue(KeyValueData* pKeyValueData);
-		void MakeAware(CBaseEntity* pEnt);
-		void EXPORT	GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	private:
-		char sParticleDefintionFile[MAX_PARTICLE_PATH];
-		unsigned int iID;
+public:
+	bool bIsOn;
+	void Spawn(void);
+	void KeyValue(KeyValueData* pKeyValueData);
+	void MakeAware(CBaseEntity* pEnt);
+	void EXPORT	GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+private:
+	char sParticleDefintionFile[MAX_PARTICLE_PATH];
+	unsigned int iID;
 };
 
 #endif

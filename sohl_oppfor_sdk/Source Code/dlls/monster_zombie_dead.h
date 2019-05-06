@@ -21,20 +21,20 @@
 
 // class definition
 class CDeadZombie : public CBaseMonster {
-	public:
-		// void
-		virtual void Spawn(void);
-		virtual void Precache(void);
-		virtual void KeyValue(KeyValueData *pkvd);
+public:
+	// void
+	virtual void Spawn(void);
+	virtual void Precache(void);
+	virtual void KeyValue(KeyValueData *pkvd);
 
-		// int void
-		virtual int	Classify(void);
+	// int void
+	virtual int	Classify(void);
 
-		// static
-		static char *m_szPoses[2];
+	// static
+	static char *m_szPoses[2];
 
-		// vars
-		int	m_iPose;// which sequence to display
+	// vars
+	int	m_iPose;// which sequence to display
 };
 
 #endif // MONSTER_ZOMBIE_DEAD_H

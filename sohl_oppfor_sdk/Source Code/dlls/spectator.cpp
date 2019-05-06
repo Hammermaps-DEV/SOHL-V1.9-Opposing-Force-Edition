@@ -43,7 +43,7 @@ void CBaseSpectator::SpectatorConnect(void)
 	pev->flags = FL_SPECTATOR;
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NOCLIP;
-	
+
 	m_pGoalEnt = NULL;
 }
 
@@ -67,18 +67,18 @@ Called by SpectatorThink if the spectator entered an impulse
 */
 void CBaseSpectator::SpectatorImpulseCommand(void)
 {
-	static edict_t	*pGoal		= NULL;
+	static edict_t	*pGoal = NULL;
 	CBaseEntity		*pPreviousGoal;
 	CBaseEntity		*pCurrentGoal;
 	BOOL			bFound;
-	
+
 	switch (pev->impulse)
 	{
 	case 1:
 		// teleport the spectator to the next spawn point; note that if the spectator is
 		// tracking, this doesn't do much
 		pPreviousGoal = (CBaseEntity*)GET_PRIVATE(pGoal);
-		pCurrentGoal  = (CBaseEntity*)GET_PRIVATE(pGoal);
+		pCurrentGoal = (CBaseEntity*)GET_PRIVATE(pGoal);
 		// Start at the current goal, skip the world, and stop if we looped back around
 
 		bFound = FALSE;
@@ -92,7 +92,7 @@ void CBaseSpectator::SpectatorImpulseCommand(void)
 				break;
 			}
 			// Found a non-world entity, set success, otherwise, look for the next one.
-			if ( pCurrentGoal )
+			if (pCurrentGoal)
 			{
 				bFound = TRUE;
 				break;
@@ -101,9 +101,9 @@ void CBaseSpectator::SpectatorImpulseCommand(void)
 
 		if (!bFound)  // Didn't find a good spot.
 			break;
-		
+
 		pGoal = ENT(pCurrentGoal->pev);
-		UTIL_SetOrigin( this, pGoal->v.origin );
+		UTIL_SetOrigin(this, pGoal->v.origin);
 		pev->angles = pGoal->v.angles;
 		pev->fixangle = FALSE;
 		break;
@@ -129,8 +129,8 @@ void  CBaseSpectator::SpectatorThink(void)
 		pev->flags = FL_SPECTATOR;
 	}
 
-	pev->solid	   = SOLID_NOT;
-	pev->movetype  = MOVETYPE_NOCLIP;
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NOCLIP;
 
 	if (pev->impulse)
 		SpectatorImpulseCommand();
@@ -149,6 +149,6 @@ void CBaseSpectator::Spawn()
 	pev->flags = FL_SPECTATOR;
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NOCLIP;
-	
+
 	m_pGoalEnt = NULL;
 }

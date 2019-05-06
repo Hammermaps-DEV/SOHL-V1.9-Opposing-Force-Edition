@@ -34,8 +34,8 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_glock, CGlock );
-LINK_ENTITY_TO_CLASS( weapon_9mmhandgun, CGlock );
+LINK_ENTITY_TO_CLASS(weapon_glock, CGlock);
+LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
 
 //=========================================================
 // Spawn Glock 17
@@ -63,7 +63,7 @@ void CGlock::Precache(void) {
 	PRECACHE_SOUND("items/9mmclip2.wav"); //by model
 	PRECACHE_SOUND("weapons/pl_gun3.wav");
 
-	m_usFireGlock = PRECACHE_EVENT( 1, "events/glock.sc" );
+	m_usFireGlock = PRECACHE_EVENT(1, "events/glock.sc");
 }
 
 //=========================================================
@@ -117,13 +117,14 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim) {
 	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 	m_iClip--;
-	
+
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 	Vector vecAiming;
-	
+
 	if (fUseAutoAim) {
 		vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
-	} else {
+	}
+	else {
 		vecAiming = gpGlobals->v_forward;
 	}
 
@@ -170,12 +171,13 @@ void CGlock::Reload(void) {
 	if (m_iClip == 0) {
 		DefaultReload(GLOCK_MAX_CLIP, (int)GLOCK_RELOAD::sequence,
 			CalculateWeaponTime((int)GLOCK_RELOAD::frames, (int)GLOCK_RELOAD::fps));
-	} else {
+	}
+	else {
 		DefaultReload(GLOCK_MAX_CLIP, (int)GLOCK_RELOAD_NOT_EMPTY::sequence,
 			CalculateWeaponTime((int)GLOCK_RELOAD_NOT_EMPTY::frames, (int)GLOCK_RELOAD_NOT_EMPTY::fps));
 	}
 
-	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT ( 10, 15 );
+	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 }
 
 //=========================================================
@@ -184,7 +186,7 @@ void CGlock::Reload(void) {
 void CGlock::WeaponIdle(void) {
 	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
-			m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -197,17 +199,20 @@ void CGlock::WeaponIdle(void) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)GLOCK_IDLE1::frames, (int)GLOCK_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.7) {
+		}
+		else if (flRand <= 0.7) {
 			iAnim = (int)GLOCK_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)GLOCK_IDLE2::frames, (int)GLOCK_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.9) {
+		}
+		else if (flRand <= 0.9) {
 			iAnim = (int)GLOCK_IDLE3::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)GLOCK_IDLE3::frames, (int)GLOCK_IDLE3::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

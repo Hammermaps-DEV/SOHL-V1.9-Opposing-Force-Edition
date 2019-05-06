@@ -126,7 +126,8 @@ void CM249::PrimaryAttack(void) {
 		}
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 7.0 / 30.0;
-	} else {
+	}
+	else {
 		PlayEmptySound();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
@@ -164,8 +165,8 @@ void CM249::Reload(void) {
 	DefaultReload(GLOCK_MAX_CLIP, (int)SAW_RELOAD_START::sequence,
 		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps));
 
-	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
-		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps) + 
+	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
+		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps) +
 		CalculateWeaponTime((int)SAW_RELOAD_END::frames, (int)SAW_RELOAD_END::fps);
 	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps);
 }
@@ -177,10 +178,11 @@ void CM249::WeaponIdle(void) {
 	if (m_iReloadStep) {
 		m_iReloadStep = false;
 		SendWeaponAnim((int)SAW_RELOAD_END::sequence);
-		m_flTimeWeaponIdle = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
+		m_flTimeWeaponIdle = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)SAW_RELOAD_END::frames, (int)SAW_RELOAD_END::fps);
 		UpdateClip();
-	} else {
+	}
+	else {
 		UpdateClip();
 
 		if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
@@ -197,12 +199,14 @@ void CM249::WeaponIdle(void) {
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)SAW_SLOWIDLE::frames, (int)SAW_SLOWIDLE::fps);
 				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-			} else if (flRand <= 0.7) {
+			}
+			else if (flRand <= 0.7) {
 				iAnim = (int)SAW_IDLE::sequence;
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)SAW_IDLE::frames, (int)SAW_IDLE::fps);
 				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-			} else {
+			}
+			else {
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 				m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 			}

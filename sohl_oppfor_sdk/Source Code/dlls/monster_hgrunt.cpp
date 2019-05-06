@@ -835,65 +835,71 @@ void CHGrunt::SetActivity(Activity NewActivity) {
 	void *pmodel = GET_MODEL_PTR(ENT(pev));
 
 	switch (NewActivity) {
-		case ACT_RANGE_ATTACK1:
-			// grunt is either shooting standing or shooting crouched
-			if (FBitSet(pev->weapons, HGRUNT_9MMAR)) {
-				if (m_fStanding) {
-					// get aimable sequence
-					iSequence = LookupSequence("standing_mp5");
-				} else {
-					// get crouching shoot
-					iSequence = LookupSequence("crouching_mp5");
-				}
-			} else {
-				if (m_fStanding) {
-					// get aimable sequence
-					iSequence = LookupSequence("standing_shotgun");
-				} else {
-					// get crouching shoot
-					iSequence = LookupSequence("crouching_shotgun");
-				}
+	case ACT_RANGE_ATTACK1:
+		// grunt is either shooting standing or shooting crouched
+		if (FBitSet(pev->weapons, HGRUNT_9MMAR)) {
+			if (m_fStanding) {
+				// get aimable sequence
+				iSequence = LookupSequence("standing_mp5");
 			}
+			else {
+				// get crouching shoot
+				iSequence = LookupSequence("crouching_mp5");
+			}
+		}
+		else {
+			if (m_fStanding) {
+				// get aimable sequence
+				iSequence = LookupSequence("standing_shotgun");
+			}
+			else {
+				// get crouching shoot
+				iSequence = LookupSequence("crouching_shotgun");
+			}
+		}
 		break;
-		case ACT_RANGE_ATTACK2:
-			// grunt is going to a secondary long range attack. This may be a thrown 
-			// grenade or fired grenade, we must determine which and pick proper sequence
-			if (pev->weapons & HGRUNT_HANDGRENADE) {
-				// get toss anim
-				iSequence = LookupSequence("throwgrenade");
-			}
-			// LRC: added a test to stop a marine without a launcher from firing.
-			else if (pev->weapons & HGRUNT_GRENADELAUNCHER) {
-				// get launch anim
-				iSequence = LookupSequence("launchgrenade");
-			} else {
-				ALERT(at_debug, "No grenades available. "); // flow into the error message we get at the end...
-			}
+	case ACT_RANGE_ATTACK2:
+		// grunt is going to a secondary long range attack. This may be a thrown 
+		// grenade or fired grenade, we must determine which and pick proper sequence
+		if (pev->weapons & HGRUNT_HANDGRENADE) {
+			// get toss anim
+			iSequence = LookupSequence("throwgrenade");
+		}
+		// LRC: added a test to stop a marine without a launcher from firing.
+		else if (pev->weapons & HGRUNT_GRENADELAUNCHER) {
+			// get launch anim
+			iSequence = LookupSequence("launchgrenade");
+		}
+		else {
+			ALERT(at_debug, "No grenades available. "); // flow into the error message we get at the end...
+		}
 		break;
-		case ACT_RUN:
-			if (pev->health <= HGRUNT_LIMP_HEALTH) {
-				// limp!
-				iSequence = LookupActivity(ACT_RUN_HURT);
-			} else {
-				iSequence = LookupActivity(NewActivity);
-			}
-		break;
-		case ACT_WALK:
-			if (pev->health <= HGRUNT_LIMP_HEALTH) {
-				// limp!
-				iSequence = LookupActivity(ACT_WALK_HURT);
-			} else {
-				iSequence = LookupActivity(NewActivity);
-			}
-		break;
-		case ACT_IDLE:
-			if (m_MonsterState == MONSTERSTATE_COMBAT) {
-				NewActivity = ACT_IDLE_ANGRY;
-			}
+	case ACT_RUN:
+		if (pev->health <= HGRUNT_LIMP_HEALTH) {
+			// limp!
+			iSequence = LookupActivity(ACT_RUN_HURT);
+		}
+		else {
 			iSequence = LookupActivity(NewActivity);
+		}
 		break;
-		default:
+	case ACT_WALK:
+		if (pev->health <= HGRUNT_LIMP_HEALTH) {
+			// limp!
+			iSequence = LookupActivity(ACT_WALK_HURT);
+		}
+		else {
 			iSequence = LookupActivity(NewActivity);
+		}
+		break;
+	case ACT_IDLE:
+		if (m_MonsterState == MONSTERSTATE_COMBAT) {
+			NewActivity = ACT_IDLE_ANGRY;
+		}
+		iSequence = LookupActivity(NewActivity);
+		break;
+	default:
+		iSequence = LookupActivity(NewActivity);
 		break;
 	}
 
@@ -908,7 +914,8 @@ void CHGrunt::SetActivity(Activity NewActivity) {
 		pev->sequence = iSequence;	// Set to the reset anim (if it's there)
 		ResetSequenceInfo();
 		SetYawSpeed();
-	} else {
+	}
+	else {
 		// Not available try to get default anim
 		ALERT(at_debug, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
@@ -969,7 +976,8 @@ void CHGrunt::GibMonster(void) {
 		CBaseEntity *pGun;
 		if (FBitSet(pev->weapons, HGRUNT_SHOTGUN)) {
 			pGun = DropItem("weapon_shotgun", vecGunPos, vecGunAngles);
-		} else {
+		}
+		else {
 			pGun = DropItem("weapon_9mmAR", vecGunPos, vecGunAngles);
 		}
 
@@ -1005,11 +1013,11 @@ void CHGrunt::GibMonster(void) {
 //=========================================================
 int CHGrunt::ISoundMask(void) {
 	return	bits_SOUND_WORLD |
-			bits_SOUND_COMBAT |
-			bits_SOUND_MEAT |
-			bits_SOUND_GARBAGE |
-			bits_SOUND_DANGER |
-			bits_SOUND_PLAYER;
+		bits_SOUND_COMBAT |
+		bits_SOUND_MEAT |
+		bits_SOUND_GARBAGE |
+		bits_SOUND_DANGER |
+		bits_SOUND_PLAYER;
 }
 
 //=========================================================
@@ -1046,7 +1054,8 @@ void CHGrunt::PrescheduleThink(void) {
 		if (HasConditions(bits_COND_SEE_ENEMY)) {
 			// update the squad's last enemy sighting time.
 			MySquadLeader()->m_flLastEnemySightTime = UTIL_GlobalTimeBase();
-		} else {
+		}
+		else {
 			if (UTIL_GlobalTimeBase() - MySquadLeader()->m_flLastEnemySightTime > 5) {
 				// been a while since we've seen the enemy
 				MySquadLeader()->m_fEnemyEluded = TRUE;
@@ -1204,13 +1213,15 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist) {
 			m_fThrowGrenade = TRUE;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = UTIL_GlobalTimeBase(); // 1/3 second.
-		} else {
+		}
+		else {
 			// don't throw
 			m_fThrowGrenade = FALSE;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		}
-	} else {
+	}
+	else {
 		Vector vecToss = VecCheckThrow(pev, GetGunPosition(), vecTarget, gSkillData.hgruntGrenadeSpeed, 0.5);
 		if (vecToss != g_vecZero) {
 			m_vecTossVelocity = vecToss;
@@ -1219,7 +1230,8 @@ BOOL CHGrunt::CheckRangeAttack2(float flDot, float flDist) {
 			m_fThrowGrenade = TRUE;
 			// don't check again for a while.
 			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 0.3; // 1/3 second.
-		} else {
+		}
+		else {
 			// don't throw
 			m_fThrowGrenade = FALSE;
 			// don't check again for a while.
@@ -1271,29 +1283,29 @@ int CHGrunt::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 //=========================================================
 void CHGrunt::SetYawSpeed(void) {
 	switch (m_Activity) {
-		case ACT_IDLE:
-		case ACT_RUN:
-			pev->yaw_speed = 150;
+	case ACT_IDLE:
+	case ACT_RUN:
+		pev->yaw_speed = 150;
 		break;
-		case ACT_WALK:
-			pev->yaw_speed = 180;
+	case ACT_WALK:
+		pev->yaw_speed = 180;
 		break;
-		case ACT_RANGE_ATTACK1:
-		case ACT_RANGE_ATTACK2:
-		case ACT_MELEE_ATTACK1:
-		case ACT_MELEE_ATTACK2:
-			pev->yaw_speed = 120;
+	case ACT_RANGE_ATTACK1:
+	case ACT_RANGE_ATTACK2:
+	case ACT_MELEE_ATTACK1:
+	case ACT_MELEE_ATTACK2:
+		pev->yaw_speed = 120;
 		break;
-		case ACT_TURN_LEFT:
-		case ACT_TURN_RIGHT:
-			pev->yaw_speed = 180;
+	case ACT_TURN_LEFT:
+	case ACT_TURN_RIGHT:
+		pev->yaw_speed = 180;
 		break;
-		case ACT_GLIDE:
-		case ACT_FLY:
-			pev->yaw_speed = 30;
+	case ACT_GLIDE:
+	case ACT_FLY:
+		pev->yaw_speed = 30;
 		break;
-		default:
-			pev->yaw_speed = 90;
+	default:
+		pev->yaw_speed = 90;
 		break;
 	}
 }
@@ -1323,7 +1335,8 @@ void CHGrunt::IdleSound(void) {
 					SENTENCEG_PlayRndSz(ENT(pev), STRING(ALLOC_STRING(szBuf)), HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 					break;
 				}
-			} else {
+			}
+			else {
 				switch (g_fGruntQuestion) {
 				case 1: // check in
 					strcpy(szAssign, "CLEAR");
@@ -1336,7 +1349,8 @@ void CHGrunt::IdleSound(void) {
 				}
 				g_fGruntQuestion = 0;
 			}
-		} else {
+		}
+		else {
 			if (!g_fGruntQuestion) {
 				// ask question or make statement
 				switch (RANDOM_LONG(0, 2))
@@ -1353,7 +1367,8 @@ void CHGrunt::IdleSound(void) {
 					SENTENCEG_PlayRndSz(ENT(pev), "HG_IDLE", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
 					break;
 				}
-			} else {
+			}
+			else {
 				switch (g_fGruntQuestion) {
 				case 1: // check in
 					SENTENCEG_PlayRndSz(ENT(pev), "HG_CLEAR", HGRUNT_SENTENCE_VOLUME, ATTN_NORM, 0, m_voicePitch);
@@ -1679,7 +1694,8 @@ void CHGrunt::KeyValue(KeyValueData *pkvd) {
 	if (FStrEq(pkvd->szKeyName, "SpeakAs")) { //LRC
 		m_iszSpeakAs = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CSquadMonster::KeyValue(pkvd);
 }
 
@@ -1723,14 +1739,16 @@ void CHGrunt::Spawn() {
 	if (FBitSet(pev->weapons, HGRUNT_SHOTGUN)) {
 		SetBodygroup(GUN_GROUP, GUN_SHOTGUN);
 		m_cClipSize = 8;
-	} else {
+	}
+	else {
 		m_cClipSize = GRUNT_CLIP_SIZE;
 	}
 	m_cAmmoLoaded = m_cClipSize;
 
 	if (FBitSet(pev->weapons, HGRUNT_SHOTGUN)) {
 		SetBodygroup(HEAD_GROUP, HEAD_SHOTGUN);
-	} else if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER)) {
+	}
+	else if (FBitSet(pev->weapons, HGRUNT_GRENADELAUNCHER)) {
 		SetBodygroup(HEAD_GROUP, HEAD_M203);
 	}
 

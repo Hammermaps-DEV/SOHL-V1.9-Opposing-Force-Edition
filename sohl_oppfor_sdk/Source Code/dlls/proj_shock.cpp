@@ -126,16 +126,16 @@ void CShock::Touch(CBaseEntity *pOther) {
 
 	// lighting on impact
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(10);		// radius * 0.1
-		WRITE_BYTE(0);		// r
-		WRITE_BYTE(255);	// g
-		WRITE_BYTE(255);	// b
-		WRITE_BYTE(10);		// time * 10
-		WRITE_BYTE(10);		// decay * 0.1
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(10);		// radius * 0.1
+	WRITE_BYTE(0);		// r
+	WRITE_BYTE(255);	// g
+	WRITE_BYTE(255);	// b
+	WRITE_BYTE(10);		// time * 10
+	WRITE_BYTE(10);		// decay * 0.1
 	MESSAGE_END();
 
 	if (!pOther->pev->takedamage) {
@@ -169,7 +169,8 @@ void CShock::Touch(CBaseEntity *pOther) {
 
 		SetThink(&CShock::FadeShock);
 		SetNextThink(1.0);
-	} else {
+	}
+	else {
 		pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_ALWAYSGIB);
 	}
 
@@ -232,23 +233,24 @@ void CShock::UpdateBeam(const Vector& start, const Vector& end) {
 	if (!m_pBeam) {
 		// Create the beam if not already created.
 		CreateBeam(start, end, SHOCK_BEAM_WIDTH);
-	} else {
+	}
+	else {
 		m_pBeam->SetStartPos(start);
 		m_pBeam->SetEndPos(end);
 		m_pBeam->RelinkBeam();
 	}
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(10);     // radius
-		WRITE_BYTE(0);		// r
-		WRITE_BYTE(255);	// g
-		WRITE_BYTE(255);	// b
-		WRITE_BYTE(1);     // life * 10
-		WRITE_BYTE(0); // decay
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(10);     // radius
+	WRITE_BYTE(0);		// r
+	WRITE_BYTE(255);	// g
+	WRITE_BYTE(255);	// b
+	WRITE_BYTE(1);     // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
 }
 

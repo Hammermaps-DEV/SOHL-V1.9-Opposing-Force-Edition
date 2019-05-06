@@ -207,12 +207,14 @@ void CRpgRocket::FollowThink(void)
 				pev->velocity = pev->velocity.Normalize() * 300;
 			}
 			UTIL_BubbleTrail(pev->origin - pev->velocity * 0.1, pev->origin, 4);
-		} else {
+		}
+		else {
 			if (pev->velocity.Length() > 2000) {
 				pev->velocity = pev->velocity.Normalize() * 2000;
 			}
 		}
-	} else {
+	}
+	else {
 		if (pev->effects & EF_LIGHT) {
 			pev->effects = 0;
 			STOP_SOUND(ENT(pev), CHAN_VOICE, "weapons/rocket1.wav");

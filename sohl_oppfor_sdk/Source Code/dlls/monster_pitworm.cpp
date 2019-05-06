@@ -387,53 +387,53 @@ void CPitWorm::HandleAnimEvent(MonsterEvent_t *pEvent)
 {
 	switch (pEvent->event)
 	{
-		case PITWORM_AE_SWIPE:	// bang 
-		{
-			Vector vecSrc, vecAngles;
-			GetAttachment(1, vecSrc, vecAngles);
+	case PITWORM_AE_SWIPE:	// bang 
+	{
+		Vector vecSrc, vecAngles;
+		GetAttachment(1, vecSrc, vecAngles);
 
-			if (m_hEnemy) {
-				vecSrc = m_hEnemy->pev->origin;
-			}
-
-			// Trace a hull around to see if we hit an enemy. (Buggy CODE)
-			TraceResult tr;
-			UTIL_TraceHull(vecSrc, vecSrc + Vector(0, -64, 0), dont_ignore_monsters, head_hull, ENT(pev), &tr);
-
-			CBaseEntity *pHurt = CBaseEntity::Instance(tr.pHit);
-			if (pHurt)
-				pHurt->TakeDamage(VARS(pev), VARS(pev), gSkillData.pwormDmgSwipe, DMG_CLUB | DMG_SLASH);
-
-			// Shake the screen.
-			UTIL_EmitAmbientSound(ENT(pev), vecSrc, RANDOM_SOUND_ARRAY(pHitSilo), 1.0, ATTN_NORM, 0, 100);
-			UTIL_ScreenShake(vecSrc, 6.0, 3.0, 1.0, 128);
-			gpGlobals->force_retouch++;
+		if (m_hEnemy) {
+			vecSrc = m_hEnemy->pev->origin;
 		}
-		break;
-		case PITWORM_AE_EYEBLAST_START: // start killing swing
-		{
-			ALERT(at_console, "PITWORM_AE_EYEBLAST_START\n");
 
-			// Remove the beam if not NULL.
-			DestroyBeam();
+		// Trace a hull around to see if we hit an enemy. (Buggy CODE)
+		TraceResult tr;
+		UTIL_TraceHull(vecSrc, vecSrc + Vector(0, -64, 0), dont_ignore_monsters, head_hull, ENT(pev), &tr);
 
-			Vector src, angles;
-			GetAttachment(0, src, angles);
+		CBaseEntity *pHurt = CBaseEntity::Instance(tr.pHit);
+		if (pHurt)
+			pHurt->TakeDamage(VARS(pev), VARS(pev), gSkillData.pwormDmgSwipe, DMG_CLUB | DMG_SLASH);
 
-			// Create a new beam.
-			CreateBeam(src, src, 40);
+		// Shake the screen.
+		UTIL_EmitAmbientSound(ENT(pev), vecSrc, RANDOM_SOUND_ARRAY(pHitSilo), 1.0, ATTN_NORM, 0, 100);
+		UTIL_ScreenShake(vecSrc, 6.0, 3.0, 1.0, 128);
+		gpGlobals->force_retouch++;
+	}
+	break;
+	case PITWORM_AE_EYEBLAST_START: // start killing swing
+	{
+		ALERT(at_console, "PITWORM_AE_EYEBLAST_START\n");
 
-			// Turn eye glow on.
-			EyeOn(255);
+		// Remove the beam if not NULL.
+		DestroyBeam();
 
-			// Reset beam yaw.
-			m_flBeamYaw = 0.0f;
-			m_flBeamTime = UTIL_GlobalTimeBase() + PITWORM_EYEBLAST_DURATION;
-		}
-		break;
-		case PITWORM_AE_EYEBLAST_END: // end killing swing
-		{}
-		break;
+		Vector src, angles;
+		GetAttachment(0, src, angles);
+
+		// Create a new beam.
+		CreateBeam(src, src, 40);
+
+		// Turn eye glow on.
+		EyeOn(255);
+
+		// Reset beam yaw.
+		m_flBeamYaw = 0.0f;
+		m_flBeamTime = UTIL_GlobalTimeBase() + PITWORM_EYEBLAST_DURATION;
+	}
+	break;
+	case PITWORM_AE_EYEBLAST_END: // end killing swing
+	{}
+	break;
 	default:
 		CBaseMonster::HandleAnimEvent(pEvent);
 	}

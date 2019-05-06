@@ -17,20 +17,20 @@
 #define XEN_LIGHT_H
 
 class CXenPLight : public CActAnimating {
-	public:
-		void		Spawn(void);
-		void		Precache(void);
-		void		Touch(CBaseEntity *pOther);
-		void		Think(void);
+public:
+	void		Spawn(void);
+	void		Precache(void);
+	void		Touch(CBaseEntity *pOther);
+	void		Think(void);
 
-		void		LightOn(void);
-		void		LightOff(void);
+	void		LightOn(void);
+	void		LightOff(void);
 
-		virtual int	Save(CSave &save);
-		virtual int	Restore(CRestore &restore);
-		static	TYPEDESCRIPTION m_SaveData[];
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
+	static	TYPEDESCRIPTION m_SaveData[];
 
-	private:
-		CSprite		*m_pGlow;
+private:
+	CSprite		*m_pGlow;
 };
 #endif // XEN_LIGHT_H

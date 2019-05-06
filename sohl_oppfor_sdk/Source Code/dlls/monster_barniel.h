@@ -24,24 +24,24 @@
 
 // class definition
 class CBarniel : public CBarney {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void DeathSound(void);
-		void PainSound(void);
-		void AlertSound(void);
-		void Fire9mmPistol(void);
-		void TalkInit(void);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void DeathSound(void);
+	void PainSound(void);
+	void AlertSound(void);
+	void Fire9mmPistol(void);
+	void TalkInit(void);
 
-		void Killed(entvars_t *pevAttacker, int iGib);
-		Schedule_t *GetSchedule(void);
+	void Killed(entvars_t *pevAttacker, int iGib);
+	Schedule_t *GetSchedule(void);
 
-		static const char *pPainSounds[];
-		static const char *pDeathSounds[];
-		static const char *pAttackSounds[];
+	static const char *pPainSounds[];
+	static const char *pDeathSounds[];
+	static const char *pAttackSounds[];
 
-		int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 };
 
 #endif // MONSTER_BARNIEL_H

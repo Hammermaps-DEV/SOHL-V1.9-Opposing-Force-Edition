@@ -77,7 +77,7 @@ void CGonomeSpit::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity
 	CGonomeSpit *pGSpit = GetClassPtr((CGonomeSpit *)NULL);
 	pGSpit->Spawn();
 
-	UTIL_SetOrigin( pGSpit, vecStart);
+	UTIL_SetOrigin(pGSpit, vecStart);
 	pGSpit->pev->velocity = vecVelocity;
 	pGSpit->pev->owner = ENT(pevOwner);
 
@@ -95,12 +95,12 @@ void CGonomeSpit::Touch(CBaseEntity *pOther)
 
 	switch (RANDOM_LONG(0, 1))
 	{
-		case 0:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
-			break;
-		case 1:
-			EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit2.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
-			break;
+	case 0:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit1.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
+		break;
+	case 1:
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_spithit2.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
+		break;
 	}
 
 	if (!pOther->pev->takedamage) {
@@ -122,7 +122,8 @@ void CGonomeSpit::Touch(CBaseEntity *pOther)
 		WRITE_BYTE(30);			// speed
 		WRITE_BYTE(80);			// noise ( client will divide by 100 )
 		MESSAGE_END();
-	} else {
+	}
+	else {
 		pOther->TakeDamage(pev, pev, gSkillData.gonomeDmgGuts, DMG_POISON);
 	}
 

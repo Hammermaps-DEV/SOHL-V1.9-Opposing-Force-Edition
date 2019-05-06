@@ -15,7 +15,7 @@
 *
 *   All Rights Reserved.
 *
-*	Base Source-Code written by Half-Life Update MOD (https://github.com/Fograin/hl-subsmod-ex) 
+*	Base Source-Code written by Half-Life Update MOD (https://github.com/Fograin/hl-subsmod-ex)
 *   and Marc-Antoine Lortie (https://github.com/malortie).
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
@@ -108,7 +108,7 @@ void CGrapple::PrimaryAttack() {
 
 	SendWeaponAnim((int)GRAPPLE_FIRE::sequence);
 	SetThink(&CGrapple::FlyThink);
-	pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
+	pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)GRAPPLE_FIRE::frames, (int)GRAPPLE_FIRE::fps);
 	//0.58;
 
@@ -133,14 +133,16 @@ void CGrapple::FlyThink(void) {
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", VOL_NORM, ATTN_NORM);
 		SendWeaponAnim((int)GRAPPLE_FIRETRAVEL::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.6;
-	} else if (!m_pPlayer->m_pGrappleExists && !PrimaryAttackEnd) {
+	}
+	else if (!m_pPlayer->m_pGrappleExists && !PrimaryAttackEnd) {
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_release.wav", VOL_NORM, ATTN_NORM);
 
 		SendWeaponAnim((int)GRAPPLE_FIRERELEASE::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.98;
 
 		PrimaryAttackEnd = true; StartIdle = true;
-	} else if (!m_pPlayer->m_pGrappleExists && PrimaryAttackEnd && StartIdle) {
+	}
+	else if (!m_pPlayer->m_pGrappleExists && PrimaryAttackEnd && StartIdle) {
 		SendWeaponAnim((int)GRAPPLE_BREATHE::sequence);
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)GRAPPLE_BREATHE::frames, (int)GRAPPLE_BREATHE::fps);
@@ -149,10 +151,12 @@ void CGrapple::FlyThink(void) {
 		m_flNextPrimaryAttack = m_flNextPrimaryAttack + 0.5;
 		if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase())
 			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.25;
-	} else if(m_pPlayer->m_pGrapplePullBack && !PrimaryAttackEnd) {
+	}
+	else if (m_pPlayer->m_pGrapplePullBack && !PrimaryAttackEnd) {
 		SendWeaponAnim((int)GRAPPLE_FIREREACHED::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.1;
-	} else if(!m_pPlayer->m_pGrapplePullBack && !PrimaryAttackEnd) {
+	}
+	else if (!m_pPlayer->m_pGrapplePullBack && !PrimaryAttackEnd) {
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", VOL_NORM, ATTN_NORM);
 		SendWeaponAnim((int)GRAPPLE_FIREWAITING::sequence);
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.56;
@@ -198,24 +202,28 @@ void CGrapple::WeaponIdle(void) {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)GRAPPLE_BREATHE::frames, (int)GRAPPLE_BREATHE::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.5) {
+	}
+	else if (flRand <= 0.5) {
 		iAnim = (int)GRAPPLE_LONGIDLE::sequence;
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)GRAPPLE_LONGIDLE::frames, (int)GRAPPLE_LONGIDLE::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.7) {
+	}
+	else if (flRand <= 0.7) {
 		iAnim = (int)GRAPPLE_SHORTIDLE::sequence;
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_wait.wav", VOL_NORM, ATTN_NORM);
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)GRAPPLE_SHORTIDLE::frames, (int)GRAPPLE_SHORTIDLE::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.9) {
+	}
+	else if (flRand <= 0.9) {
 		iAnim = (int)GRAPPLE_COUGH::sequence;
 		SetThink(&CGrapple::PukeGibs); // Fograin92: Second part of "cough" animation
 		pev->nextthink = m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)100, (int)GRAPPLE_COUGH::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else {
+	}
+	else {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}
@@ -241,7 +249,7 @@ void CGrapple::PukeGibs(void) {
 	GunPosition = GunPosition + gpGlobals->v_up * -15 + gpGlobals->v_right * 10 + gpGlobals->v_forward * 15;
 
 	CGib *pGib = GetClassPtr((CGib *)NULL);
-	pGib->Spawn( "models/hgibs.mdl" );
+	pGib->Spawn("models/hgibs.mdl");
 	pGib->pev->body = RANDOM_LONG(0, 10);
 	pGib->m_bloodColor = BLOOD_COLOR_RED;
 	pGib->pev->body = 0;
@@ -259,15 +267,15 @@ void CGrapple::PukeGibs(void) {
 	// Fograin92: Cough some blood
 	if (CVAR_GET_FLOAT("r_particles") != 0) {
 		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
-			WRITE_SHORT(0);
-			WRITE_BYTE(0);
-			WRITE_COORD(pGib->pev->origin.x);
-			WRITE_COORD(pGib->pev->origin.y);
-			WRITE_COORD(pGib->pev->origin.z);
-			WRITE_COORD(pGib->pev->avelocity.x);
-			WRITE_COORD(pGib->pev->avelocity.y);
-			WRITE_COORD(pGib->pev->avelocity.z);
-			WRITE_SHORT(iImpactBloodRed);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(pGib->pev->origin.x);
+		WRITE_COORD(pGib->pev->origin.y);
+		WRITE_COORD(pGib->pev->origin.z);
+		WRITE_COORD(pGib->pev->avelocity.x);
+		WRITE_COORD(pGib->pev->avelocity.y);
+		WRITE_COORD(pGib->pev->avelocity.z);
+		WRITE_SHORT(iImpactBloodRed);
 		MESSAGE_END();
 	}
 }

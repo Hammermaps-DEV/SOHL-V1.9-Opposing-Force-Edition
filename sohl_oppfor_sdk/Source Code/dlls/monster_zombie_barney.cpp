@@ -48,13 +48,13 @@ void CZombieBarney::Spawn() {
 	if (pev->health == 0)
 		pev->health = gSkillData.zombieBarneyHealth;
 
-	m_flHitgroupHead    = gSkillData.zombieBarneyHead;
-	m_flHitgroupChest   = gSkillData.zombieBarneyChest;
+	m_flHitgroupHead = gSkillData.zombieBarneyHead;
+	m_flHitgroupChest = gSkillData.zombieBarneyChest;
 	m_flHitgroupStomach = gSkillData.zombieBarneyStomach;
-	m_flHitgroupArm     = gSkillData.zombieBarneyArm;
-	m_flHitgroupLeg     = gSkillData.zombieBarneyLeg;
-	m_flDmgOneSlash     = gSkillData.zombieBarneyDmgOneSlash;
-	m_flDmgBothSlash    = gSkillData.zombieBarneyDmgBothSlash;
+	m_flHitgroupArm = gSkillData.zombieBarneyArm;
+	m_flHitgroupLeg = gSkillData.zombieBarneyLeg;
+	m_flDmgOneSlash = gSkillData.zombieBarneyDmgOneSlash;
+	m_flDmgBothSlash = gSkillData.zombieBarneyDmgBothSlash;
 
 	m_flDebug = false; //Debug Massages
 

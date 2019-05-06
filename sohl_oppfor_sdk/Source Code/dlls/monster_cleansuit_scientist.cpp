@@ -52,16 +52,16 @@ extern Schedule_t *slFollow, *slFaceTarget, *slIdleSciStand, *slFear, *slScienti
 *slScientistStartle, *slStopFollowing, *slSciPanic, *slFollowScared, *slFaceTargetScared;
 DEFINE_CUSTOM_SCHEDULES(CCleansuitScientist) {
 	slFollow,
-	slFaceTarget,
-	slIdleSciStand,
-	slFear,
-	slScientistCover,
-	slScientistHide,
-	slScientistStartle,
-	slStopFollowing,
-	slSciPanic,
-	slFollowScared,
-	slFaceTargetScared,
+		slFaceTarget,
+		slIdleSciStand,
+		slFear,
+		slScientistCover,
+		slScientistHide,
+		slScientistStartle,
+		slStopFollowing,
+		slSciPanic,
+		slFollowScared,
+		slFaceTargetScared,
 };
 
 IMPLEMENT_CUSTOM_SCHEDULES(CCleansuitScientist, CTalkMonster);
@@ -124,86 +124,86 @@ void CCleansuitScientist::Precache(void) {
 
 void CCleansuitScientist::StartTask(Task_t *pTask) {
 	switch (pTask->iTask) {
-		case TASK_SCREAM:
+	case TASK_SCREAM:
+		Scream();
+		TaskComplete();
+		break;
+	case TASK_RANDOM_SCREAM:
+		if (RANDOM_FLOAT(0, 1) < pTask->flData)
 			Scream();
-			TaskComplete();
-		break;
-		case TASK_RANDOM_SCREAM:
-			if (RANDOM_FLOAT(0, 1) < pTask->flData)
-				Scream();
 
+		TaskComplete();
+		break;
+	case TASK_SAY_FEAR:
+		if (FOkToSpeak()) {
+			Talk(2);
+			m_hTalkTarget = m_hEnemy;
+			if (m_hEnemy->IsPlayer())
+				PlaySentence("SC_PLFEAR", 5, VOL_NORM, ATTN_NORM);
+			else
+				PlaySentence("SC_FEAR", 5, VOL_NORM, ATTN_NORM);
+		}
+		TaskComplete();
+		break;
+	case TASK_RUN_PATH_SCARED:
+		m_movementActivity = ACT_RUN_SCARED;
+		break;
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
+		if ((m_hTargetEnt->pev->origin - pev->origin).Length() < 1)
 			TaskComplete();
+		else {
+			m_vecMoveGoal = m_hTargetEnt->pev->origin;
+			if (!MoveToTarget(ACT_WALK_SCARED, 0.5))
+				TaskFail();
+		}
 		break;
-		case TASK_SAY_FEAR:
-			if (FOkToSpeak()) {
-				Talk(2);
-				m_hTalkTarget = m_hEnemy;
-				if (m_hEnemy->IsPlayer())
-					PlaySentence("SC_PLFEAR", 5, VOL_NORM, ATTN_NORM);
-				else
-					PlaySentence("SC_FEAR", 5, VOL_NORM, ATTN_NORM);
-			}
-			TaskComplete();
-		break;
-		case TASK_RUN_PATH_SCARED:
-			m_movementActivity = ACT_RUN_SCARED;
-		break;
-		case TASK_MOVE_TO_TARGET_RANGE_SCARED:
-			if ((m_hTargetEnt->pev->origin - pev->origin).Length() < 1)
-				TaskComplete();
-			else {
-				m_vecMoveGoal = m_hTargetEnt->pev->origin;
-				if (!MoveToTarget(ACT_WALK_SCARED, 0.5))
-					TaskFail();
-			}
-		break;
-		default:
-			CTalkMonster::StartTask(pTask);
+	default:
+		CTalkMonster::StartTask(pTask);
 		break;
 	}
 }
 
 void CCleansuitScientist::RunTask(Task_t *pTask) {
 	switch (pTask->iTask) {
-		case TASK_RUN_PATH_SCARED:
-			if (MovementIsComplete())
-				TaskComplete();
+	case TASK_RUN_PATH_SCARED:
+		if (MovementIsComplete())
+			TaskComplete();
 
-			if (RANDOM_LONG(0, 31) < 8)
-				Scream();
+		if (RANDOM_LONG(0, 31) < 8)
+			Scream();
 		break;
-		case TASK_MOVE_TO_TARGET_RANGE_SCARED:
-			if (RANDOM_LONG(0, 63)< 8)
-				Scream();
+	case TASK_MOVE_TO_TARGET_RANGE_SCARED:
+		if (RANDOM_LONG(0, 63) < 8)
+			Scream();
 
-			if (m_hEnemy == NULL) {
-				TaskFail();
-			}
-			else {
-				float distance;
+		if (m_hEnemy == NULL) {
+			TaskFail();
+		}
+		else {
+			float distance;
 
+			distance = (m_vecMoveGoal - pev->origin).Length2D();
+			// Re-evaluate when you think your finished, or the target has moved too far
+			if ((distance < pTask->flData) || (m_vecMoveGoal - m_hTargetEnt->pev->origin).Length() > pTask->flData * 0.5) {
+				m_vecMoveGoal = m_hTargetEnt->pev->origin;
 				distance = (m_vecMoveGoal - pev->origin).Length2D();
-				// Re-evaluate when you think your finished, or the target has moved too far
-				if ((distance < pTask->flData) || (m_vecMoveGoal - m_hTargetEnt->pev->origin).Length() > pTask->flData * 0.5) {
-					m_vecMoveGoal = m_hTargetEnt->pev->origin;
-					distance = (m_vecMoveGoal - pev->origin).Length2D();
-					FRefreshRoute();
-				}
-
-				// Set the appropriate activity based on an overlapping range
-				// overlap the range to prevent oscillation
-				if (distance < pTask->flData) {
-					TaskComplete();
-					RouteClear();		// Stop moving
-				}
-				else if (distance < 190 && m_movementActivity != ACT_WALK_SCARED)
-					m_movementActivity = ACT_WALK_SCARED;
-				else if (distance >= 270 && m_movementActivity != ACT_RUN_SCARED)
-					m_movementActivity = ACT_RUN_SCARED;
+				FRefreshRoute();
 			}
+
+			// Set the appropriate activity based on an overlapping range
+			// overlap the range to prevent oscillation
+			if (distance < pTask->flData) {
+				TaskComplete();
+				RouteClear();		// Stop moving
+			}
+			else if (distance < 190 && m_movementActivity != ACT_WALK_SCARED)
+				m_movementActivity = ACT_WALK_SCARED;
+			else if (distance >= 270 && m_movementActivity != ACT_RUN_SCARED)
+				m_movementActivity = ACT_RUN_SCARED;
+		}
 		break;
-		default:
-			CTalkMonster::RunTask(pTask);
+	default:
+		CTalkMonster::RunTask(pTask);
 		break;
 	}
 }
@@ -213,10 +213,10 @@ void CCleansuitScientist::RunTask(Task_t *pTask) {
 //=========================================================
 class CDeadCleansuitScientist : public CDeadScientist
 {
-	public:
-		virtual void Spawn(void);
+public:
+	virtual void Spawn(void);
 
-		static char *m_szPoses[9];
+	static char *m_szPoses[9];
 };
 
 LINK_ENTITY_TO_CLASS(monster_cleansuit_scientist_dead, CDeadCleansuitScientist);

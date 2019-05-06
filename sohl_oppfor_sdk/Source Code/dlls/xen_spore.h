@@ -17,14 +17,14 @@
 #define XEN_SPORE_H
 
 class CXenSpore : public CActAnimating {
-	public:
-		void		Spawn(void);
-		void		Precache(void);
-		void		Think(void);
-		int			TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) { Attack(); return 0; }
-		void		Attack(void) {}
+public:
+	void		Spawn(void);
+	void		Precache(void);
+	void		Think(void);
+	int			TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) { Attack(); return 0; }
+	void		Attack(void) {}
 
-		static const char *pModelNames[];
+	static const char *pModelNames[];
 };
 
 class CXenSporeSmall : public CXenSpore {

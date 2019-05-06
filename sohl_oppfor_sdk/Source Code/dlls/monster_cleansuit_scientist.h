@@ -21,13 +21,13 @@
 #define MONSTER_CLEANSUIT_SCIENTIST_H
 
 class CCleansuitScientist : public CScientist {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void RunTask(Task_t *pTask);
-		void StartTask(Task_t *pTask);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void RunTask(Task_t *pTask);
+	void StartTask(Task_t *pTask);
 
-		CUSTOM_SCHEDULES;
+	CUSTOM_SCHEDULES;
 };
 
 #endif // MONSTER_CLEANSUIT_SCIENTIST_H

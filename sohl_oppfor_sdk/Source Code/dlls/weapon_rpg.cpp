@@ -38,7 +38,7 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_rpg, CRpg );
+LINK_ENTITY_TO_CLASS(weapon_rpg, CRpg);
 
 //m_iOverloadLevel is LTD trigger like m_fSpotActive in original HL
 //m_iChargeLevel is indicator what indicates how many missiles in air
@@ -47,16 +47,16 @@ LINK_ENTITY_TO_CLASS( weapon_rpg, CRpg );
 //=========================================================
 // Spawn RPG
 //=========================================================
-void CRpg::Spawn( ) {
-	Precache( );
+void CRpg::Spawn() {
+	Precache();
 	m_iId = WEAPON_RPG;
 
 	SET_MODEL(ENT(pev), "models/w_rpg.mdl");
 	m_iOverloadLevel = TRUE;//turn on LTD
 
-	if ( IsMultiplayer() )
+	if (IsMultiplayer())
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE * 2; //MP give 2 RPGs
-	else	
+	else
 		m_iDefaultAmmo = RPG_DEFAULT_GIVE;
 
 	FallInit();// get ready to fall down.
@@ -65,15 +65,15 @@ void CRpg::Spawn( ) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CRpg::Precache( void ) {
+void CRpg::Precache(void) {
 	PRECACHE_MODEL("models/w_rpg.mdl");
 	PRECACHE_MODEL("models/v_rpg.mdl");
 	PRECACHE_MODEL("models/p_rpg.mdl");
 
 	PRECACHE_SOUND("items/9mmclip1.wav");
 
-	UTIL_PrecacheOther( "laser_spot" );
-	UTIL_PrecacheOther( "rpg_rocket" );
+	UTIL_PrecacheOther("laser_spot");
+	UTIL_PrecacheOther("rpg_rocket");
 
 	PRECACHE_SOUND("weapons/rocketfire1.wav");
 	PRECACHE_SOUND("weapons/glauncher.wav"); // alternative fire sound
@@ -122,10 +122,11 @@ void CRpg::PrimaryAttack() {
 		pRocket->pev->velocity = pRocket->pev->velocity + gpGlobals->v_forward * DotProduct(m_pPlayer->pev->velocity, gpGlobals->v_forward);
 
 		m_iClip--;
-		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
+		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)RPG_FIRE::frames, (int)RPG_FIRE::fps);
 		m_flTimeWeaponIdle = m_flNextPrimaryAttack;
-	} else {
+	}
+	else {
 		PlayEmptySound();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.7;//no longer indicate fps :)
 	}
@@ -152,7 +153,7 @@ void CRpg::SecondaryAttack() {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CRpg::Deploy( ) {
+BOOL CRpg::Deploy() {
 	return DefaultDeploy("models/v_rpg.mdl", "models/p_rpg.mdl", (int)RPG_DRAW::sequence,
 		"rpg", CalculateWeaponTime((int)RPG_DRAW::frames, (int)RPG_DRAW::fps));
 }
@@ -160,7 +161,7 @@ BOOL CRpg::Deploy( ) {
 //=========================================================
 // Holster
 //=========================================================
-void CRpg::Holster( ) {
+void CRpg::Holster() {
 	pev->body = (m_iClip ? 0 : 1);
 	ShutdownScreen();//set skin to 0 manually
 	m_fInReload = FALSE;// cancel any reload in progress.
@@ -172,32 +173,32 @@ void CRpg::Holster( ) {
 //=========================================================
 // Reload
 //=========================================================
-void CRpg::Reload( void ) {
-	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) || 
-		(m_iClip == 1) || 
+void CRpg::Reload(void) {
+	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) ||
+		(m_iClip == 1) ||
 		(m_iChargeLevel && m_iOverloadLevel)) {
 		return;
 	}
 
-	if ( m_iClip == 0 ) {
-		if ( m_pSpot && m_iOverloadLevel ) 
-			m_pSpot->Suspend( 2.1 );
+	if (m_iClip == 0) {
+		if (m_pSpot && m_iOverloadLevel)
+			m_pSpot->Suspend(2.1);
 
-		if ( m_pMirSpot && m_iOverloadLevel ) 
-			m_pMirSpot->Suspend( 2.1 );
+		if (m_pMirSpot && m_iOverloadLevel)
+			m_pMirSpot->Suspend(2.1);
 
 		pev->body = 0;//show rocket
 		DefaultReload(RPG_MAX_CLIP, (int)RPG_RELOAD::sequence,
 			CalculateWeaponTime((int)RPG_RELOAD::frames, (int)RPG_RELOAD::fps));
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
-	}	
+	}
 }
 
 //=========================================================
 // UpdateSpot
 //=========================================================
-void CRpg::UpdateSpot( void ) {
+void CRpg::UpdateSpot(void) {
 	if (m_iOverloadLevel) {
 		if (!m_pSpot) {
 			m_pSpot = CLaserSpot::CreateSpot();
@@ -205,26 +206,26 @@ void CRpg::UpdateSpot( void ) {
 			m_pPlayer->m_fSpotActive = true;
 		}
 
-		UTIL_MakeVectors( m_pPlayer->pev->v_angle );
-		Vector vecSrc = m_pPlayer->GetGunPosition( );;
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
+		Vector vecSrc = m_pPlayer->GetGunPosition();;
 		Vector vecAiming = gpGlobals->v_forward;
 
 		TraceResult tr;
-		UTIL_TraceLine ( vecSrc, vecSrc + vecAiming * 8192, dont_ignore_monsters, ignore_glass, ENT(m_pPlayer->pev), &tr );
+		UTIL_TraceLine(vecSrc, vecSrc + vecAiming * 8192, dont_ignore_monsters, ignore_glass, ENT(m_pPlayer->pev), &tr);
 		float flLength = (tr.vecEndPos - vecSrc).Length();
 
-		int m_iSpotBright = (1 / log(flLength / 0.3))*1700;
-		if (m_iSpotBright > 255 ) m_iSpotBright = 255;
+		int m_iSpotBright = (1 / log(flLength / 0.3)) * 1700;
+		if (m_iSpotBright > 255) m_iSpotBright = 255;
 
-		m_iSpotBright = m_iSpotBright + RANDOM_LONG (1, flLength / 200);
-		m_pSpot->pev->renderamt = m_iSpotBright;	
+		m_iSpotBright = m_iSpotBright + RANDOM_LONG(1, flLength / 200);
+		m_pSpot->pev->renderamt = m_iSpotBright;
 
-		UTIL_SetOrigin( m_pSpot, tr.vecEndPos + tr.vecPlaneNormal * 0.1);
+		UTIL_SetOrigin(m_pSpot, tr.vecEndPos + tr.vecPlaneNormal * 0.1);
 
-	    Vector mirpos = UTIL_MirrorPos(tr.vecEndPos + tr.vecPlaneNormal * 0.1); 
-		if(mirpos != Vector(0,0,0)) {
-			if(!m_pMirSpot)m_pMirSpot = CLaserSpot::CreateSpot();
-			UTIL_SetOrigin( m_pMirSpot, mirpos);
+		Vector mirpos = UTIL_MirrorPos(tr.vecEndPos + tr.vecPlaneNormal * 0.1);
+		if (mirpos != Vector(0, 0, 0)) {
+			if (!m_pMirSpot)m_pMirSpot = CLaserSpot::CreateSpot();
+			UTIL_SetOrigin(m_pMirSpot, mirpos);
 			m_pMirSpot->pev->renderamt = m_iSpotBright;
 		}
 	}
@@ -235,17 +236,18 @@ void CRpg::UpdateSpot( void ) {
 //=========================================================
 // UpdateScreen
 //=========================================================
-void CRpg::UpdateScreen ( void ) {
-	if ( m_flTimeUpdate > UTIL_GlobalTimeBase() ) return;
+void CRpg::UpdateScreen(void) {
+	if (m_flTimeUpdate > UTIL_GlobalTimeBase()) return;
 
 	if (m_pSpot) {
-		if ( m_iChargeLevel) {
-			if( pev->skin >= 4 ) 
+		if (m_iChargeLevel) {
+			if (pev->skin >= 4)
 				pev->skin = 1;
 
 			pev->skin++;
 			EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/beep.wav", VOL_LOW, ATTN_NORM);
-		} else {
+		}
+		else {
 			pev->skin = 5;
 			if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && !m_iClip) {
 				m_iOverloadLevel = false;
@@ -255,7 +257,7 @@ void CRpg::UpdateScreen ( void ) {
 			}
 		}
 	}
-	else 
+	else
 		pev->skin = 0;
 
 	m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.3;
@@ -264,17 +266,17 @@ void CRpg::UpdateScreen ( void ) {
 //=========================================================
 // ShutdownScreen
 //=========================================================
-void CRpg::ShutdownScreen ( void ) {
+void CRpg::ShutdownScreen(void) {
 	pev->skin = 0;
 	if (m_pSpot) {
-		m_pSpot->Killed( NULL, GIB_NEVER );
+		m_pSpot->Killed(NULL, GIB_NEVER);
 		m_pSpot = NULL;
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/spot_off.wav", VOL_LOW, ATTN_NORM);
 		m_pPlayer->m_fSpotActive = false;
 	}
 
-	if(m_pMirSpot) {
-		m_pMirSpot->Killed( NULL, GIB_NEVER );
+	if (m_pMirSpot) {
+		m_pMirSpot->Killed(NULL, GIB_NEVER);
 		m_pMirSpot = NULL;
 	}
 }
@@ -282,9 +284,9 @@ void CRpg::ShutdownScreen ( void ) {
 //=========================================================
 // WeaponIdle
 //=========================================================
-void CRpg::WeaponIdle( void ) {
-	UpdateSpot( ); //m_iSkin;
-	if ( m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ) return;
+void CRpg::WeaponIdle(void) {
+	UpdateSpot(); //m_iSkin;
+	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) return;
 
 	if (m_iClip && !m_iOverloadLevel) {
 		int iAnim;
@@ -294,17 +296,20 @@ void CRpg::WeaponIdle( void ) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)RPG_IDLE1::frames, (int)RPG_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.7) {
+		}
+		else if (flRand <= 0.7) {
 			iAnim = (int)RPG_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)RPG_IDLE2::frames, (int)RPG_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.9) {
+		}
+		else if (flRand <= 0.9) {
 			iAnim = (int)RPG_FIDGET::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)RPG_FIDGET::frames, (int)RPG_FIDGET::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

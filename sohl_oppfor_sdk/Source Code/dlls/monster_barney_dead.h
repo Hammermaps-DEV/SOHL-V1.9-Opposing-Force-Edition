@@ -18,14 +18,14 @@
 
 class CDeadBarney : public CBaseMonster
 {
-	public:
-		void Spawn(void);
-		int	Classify(void) { return	CLASS_PLAYER_ALLY; }
-		void KeyValue(KeyValueData *pkvd);
-		static char *m_szPoses[3];
+public:
+	void Spawn(void);
+	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+	void KeyValue(KeyValueData *pkvd);
+	static char *m_szPoses[3];
 
-	protected:
-		int	m_iPose;// which sequence to display	-- temporary, don't need to save
+protected:
+	int	m_iPose;// which sequence to display	-- temporary, don't need to save
 };
 
 #endif // MONSTER_BARNEY_DEAD_H

@@ -37,7 +37,8 @@ void CPropBushs::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "bush")) {
 		m_isBush = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CGenericModel::KeyValue(pkvd);
 }
 
@@ -46,7 +47,8 @@ void CPropBushs::Spawn(void) {
 		int m_iBush = RANDOM_LONG(2, PROP_BUSH_MODELS);
 		if (m_iBush < 10) {
 			snprintf(RandomMDL, 128, "%models/bush/bush_0%d.mdl", m_iBush);
-		} else {
+		}
+		else {
 			snprintf(RandomMDL, 128, "%models/bush/bush_%d.mdl", m_iBush);
 		}
 	}
@@ -61,7 +63,7 @@ void CPropBushs::Spawn(void) {
 		SET_MODEL(ENT(pev), RandomMDL);
 	else if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
-	else 
+	else
 		SET_MODEL(ENT(pev), "models/error.mdl");
 
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));

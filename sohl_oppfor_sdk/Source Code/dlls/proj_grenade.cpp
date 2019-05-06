@@ -130,11 +130,11 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 
 		if (iContents != CONTENTS_WATER) {
 			switch (RANDOM_LONG(0, 4)) {
-				case 0:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode1.wav", VOL_NORM, ATTN_NORM);	break;
-				case 1:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode2.wav", VOL_NORM, ATTN_NORM);	break;
-				case 2:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode3.wav", VOL_NORM, ATTN_NORM);	break;
-				case 3:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode4.wav", VOL_NORM, ATTN_NORM);	break;
-				case 4:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode5.wav", VOL_NORM, ATTN_NORM);	break;
+			case 0:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode1.wav", VOL_NORM, ATTN_NORM);	break;
+			case 1:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode2.wav", VOL_NORM, ATTN_NORM);	break;
+			case 2:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode3.wav", VOL_NORM, ATTN_NORM);	break;
+			case 3:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode4.wav", VOL_NORM, ATTN_NORM);	break;
+			case 4:	EMIT_SOUND(ENT(pev), CHAN_ITEM, "explosions/explode5.wav", VOL_NORM, ATTN_NORM);	break;
 			}
 		}
 
@@ -196,9 +196,9 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 	flRndSound = RANDOM_FLOAT(0, 1);
 
 	switch (RANDOM_LONG(0, 2)) {
-		case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", VOL_LOWER, ATTN_NORM);	break;
-		case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", VOL_LOWER, ATTN_NORM);	break;
-		case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", VOL_LOWER, ATTN_NORM);	break;
+	case 0:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris1.wav", VOL_LOWER, ATTN_NORM);	break;
+	case 1:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris2.wav", VOL_LOWER, ATTN_NORM);	break;
+	case 2:	EMIT_SOUND(ENT(pev), CHAN_VOICE, "weapons/debris3.wav", VOL_LOWER, ATTN_NORM);	break;
 	}
 
 	pev->effects |= EF_NODRAW;

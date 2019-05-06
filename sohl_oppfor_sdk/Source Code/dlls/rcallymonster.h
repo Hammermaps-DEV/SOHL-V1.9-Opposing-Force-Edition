@@ -1,9 +1,9 @@
 /***
 *
 *	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
+*
+*	This product contains software technology licensed from Id
+*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *	All Rights Reserved.
 *
 *   This source code contains proprietary and confidential information of
@@ -123,21 +123,21 @@ enum
 class CRCAllyMonster : public CBaseMonster
 {
 public:
-	void			TalkInit( void );				
+	void			TalkInit(void);
 	CBaseEntity		*FindNearestFriend(BOOL fPlayer);
-	float			TargetDistance( void );
-	void			StopTalking( void ) { SentenceStop(); }
-	
+	float			TargetDistance(void);
+	void			StopTalking(void) { SentenceStop(); }
+
 	// Base Monster functions
-	void			Precache( void );
-	int				TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	void			Touch(	CBaseEntity *pOther );
-	void			Killed( entvars_t *pevAttacker, int iGib );
-	int				IRelationship ( CBaseEntity *pTarget );
-	virtual int		CanPlaySentence( BOOL fDisregardState );
-	virtual void	PlaySentence( const char *pszSentence, float duration, float volume, float attenuation );
-	void			PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener );
-	void			KeyValue( KeyValueData *pkvd );
+	void			Precache(void);
+	int				TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+	void			Touch(CBaseEntity *pOther);
+	void			Killed(entvars_t *pevAttacker, int iGib);
+	int				IRelationship(CBaseEntity *pTarget);
+	virtual int		CanPlaySentence(BOOL fDisregardState);
+	virtual void	PlaySentence(const char *pszSentence, float duration, float volume, float attenuation);
+	void			PlayScriptedSentence(const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener);
+	void			KeyValue(KeyValueData *pkvd);
 	int				Classify(void);
 	CBaseEntity		*Kick(void);
 	void			CheckAmmo(void);
@@ -161,49 +161,49 @@ public:
 	void			PainSound(void);
 
 	// AI functions
-	void			SetActivity ( Activity newActivity );
-	Schedule_t		*GetScheduleOfType ( int Type );
-	void			StartTask( Task_t *pTask );
-	void			RunTask( Task_t *pTask );
-	void			HandleAnimEvent( MonsterEvent_t *pEvent );
-	void			PrescheduleThink( void );
+	void			SetActivity(Activity newActivity);
+	Schedule_t		*GetScheduleOfType(int Type);
+	void			StartTask(Task_t *pTask);
+	void			RunTask(Task_t *pTask);
+	void			HandleAnimEvent(MonsterEvent_t *pEvent);
+	void			PrescheduleThink(void);
 
 	// Conversations / communication
-	int				GetVoicePitch( void );
-	void			IdleRespond( void );
-	int				FIdleSpeak( void );
-	int				FIdleStare( void );
-	int				FIdleHello( void );
-	void			IdleHeadTurn( Vector &vecFriend );
-	int				FOkToSpeak( void );
-	void			TrySmellTalk( void );
-	CBaseEntity		*EnumFriends( CBaseEntity *pentPrevious, int listNumber, BOOL bTrace );
-	void			AlertFriends( void );
-	void			ShutUpFriends( void );
-	BOOL			IsTalking( void );
-	void			Talk( float flDuration );	
+	int				GetVoicePitch(void);
+	void			IdleRespond(void);
+	int				FIdleSpeak(void);
+	int				FIdleStare(void);
+	int				FIdleHello(void);
+	void			IdleHeadTurn(Vector &vecFriend);
+	int				FOkToSpeak(void);
+	void			TrySmellTalk(void);
+	CBaseEntity		*EnumFriends(CBaseEntity *pentPrevious, int listNumber, BOOL bTrace);
+	void			AlertFriends(void);
+	void			ShutUpFriends(void);
+	BOOL			IsTalking(void);
+	void			Talk(float flDuration);
 
 	// For following
-	BOOL			CanFollow( void );
-	BOOL			IsFollowing( void ) { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
-	void			StopFollowing( BOOL clearSchedule );
-	void			StartFollowing( CBaseEntity *pLeader );
+	BOOL			CanFollow(void);
+	BOOL			IsFollowing(void) { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
+	void			StopFollowing(BOOL clearSchedule);
+	void			StartFollowing(CBaseEntity *pLeader);
 	void			DeclineFollowing(void);
 
-	void			GruntHealerCall( CBaseEntity *pGrunt );
+	void			GruntHealerCall(CBaseEntity *pGrunt);
 
-	void EXPORT		FollowerUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	
-	virtual void	SetAnswerQuestion( CRCAllyMonster *pSpeaker );
-	virtual int		FriendNumber( int arrayNumber )	{ return arrayNumber; }
+	void EXPORT		FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	virtual int	Save( CSave &save );
-	virtual int	Restore( CRestore &restore );
+	virtual void	SetAnswerQuestion(CRCAllyMonster *pSpeaker);
+	virtual int		FriendNumber(int arrayNumber) { return arrayNumber; }
+
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	static char *m_szFriends[TLK_CFRIENDS];		// array of friend names
 	static float g_talkWaitTime;
-	
+
 	int			m_bitsSaid;						// set bits for sentences we don't want repeated
 	int			m_nSpeak;						// number of times initiated talking
 	int			m_voicePitch;					// pitch of voice for this head
@@ -232,7 +232,7 @@ public:
 
 	// squad leader info
 	EHANDLE	m_hSquadLeader;		// who is my leader
-	EHANDLE	m_hSquadMember[MAXRC_SQUAD_MEMBERS-1];	// valid only for leader
+	EHANDLE	m_hSquadMember[MAXRC_SQUAD_MEMBERS - 1];	// valid only for leader
 	int		m_afSquadSlots;
 	float	m_flLastEnemySightTime; // last time anyone in the squad saw the enemy
 	BOOL	m_fEnemyEluded;
@@ -241,48 +241,48 @@ public:
 	// squad member info
 	int	m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
 
-	int  CheckEnemy ( CBaseEntity *pEnemy );
-	void StartMonster ( void );
-	void VacateSlot( void );
-	void ScheduleChange( void );
-	BOOL OccupySlot( int iDesiredSlot );
+	int  CheckEnemy(CBaseEntity *pEnemy);
+	void StartMonster(void);
+	void VacateSlot(void);
+	void ScheduleChange(void);
+	BOOL OccupySlot(int iDesiredSlot);
 	BOOL NoFriendlyFire(void);
 	BOOL NoFriendlyFire(BOOL playerAlly);
 
 	// squad functions still left in base class
-	CRCAllyMonster *MySquadLeader( ) 
-	{ 
-		CRCAllyMonster *pSquadLeader = (CRCAllyMonster *)((CBaseEntity *)m_hSquadLeader); 
+	CRCAllyMonster *MySquadLeader()
+	{
+		CRCAllyMonster *pSquadLeader = (CRCAllyMonster *)((CBaseEntity *)m_hSquadLeader);
 		if (pSquadLeader != NULL)
 			return pSquadLeader;
 		return this;
 	}
 
-	CRCAllyMonster *MySquadMember( int i ) 
-	{ 
-		if (i >= MAXRC_SQUAD_MEMBERS-1)
+	CRCAllyMonster *MySquadMember(int i)
+	{
+		if (i >= MAXRC_SQUAD_MEMBERS - 1)
 			return this;
 		else
-			return (CRCAllyMonster *)((CBaseEntity *)m_hSquadMember[i]); 
+			return (CRCAllyMonster *)((CBaseEntity *)m_hSquadMember[i]);
 	}
 
-	int	InSquad ( void ) { return m_hSquadLeader != NULL; }
-	int IsLeader ( void ) { return m_hSquadLeader == this; }
-	int SquadRecruit ( int searchRadius, int maxMembers );
-	int	SquadCount( void );
-	void SquadRemove( CRCAllyMonster *pRemove );
-	BOOL SquadAdd( CRCAllyMonster *pAdd );
-	void SquadMakeEnemy ( CBaseEntity *pEnemy );
-	void SquadPasteEnemyInfo ( void );
-	void SquadCopyEnemyInfo ( void );
-	BOOL SquadEnemySplit ( void );
-	BOOL SquadMemberInRange( const Vector &vecLocation, float flDist );
+	int	InSquad(void) { return m_hSquadLeader != NULL; }
+	int IsLeader(void) { return m_hSquadLeader == this; }
+	int SquadRecruit(int searchRadius, int maxMembers);
+	int	SquadCount(void);
+	void SquadRemove(CRCAllyMonster *pRemove);
+	BOOL SquadAdd(CRCAllyMonster *pAdd);
+	void SquadMakeEnemy(CBaseEntity *pEnemy);
+	void SquadPasteEnemyInfo(void);
+	void SquadCopyEnemyInfo(void);
+	BOOL SquadEnemySplit(void);
+	BOOL SquadMemberInRange(const Vector &vecLocation, float flDist);
 
-	virtual CRCAllyMonster *MyTalkSquadMonsterPointer( void ) { return this; }
+	virtual CRCAllyMonster *MyTalkSquadMonsterPointer(void) { return this; }
 
-	BOOL FValidateCover ( const Vector &vecCoverLocation );
+	BOOL FValidateCover(const Vector &vecCoverLocation);
 
-	MONSTERSTATE GetIdealState ( void );
+	MONSTERSTATE GetIdealState(void);
 
 	//BrassShell
 	int	m_iBrassShell;

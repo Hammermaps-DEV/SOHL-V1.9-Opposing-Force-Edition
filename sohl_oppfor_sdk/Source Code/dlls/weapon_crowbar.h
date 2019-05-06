@@ -27,42 +27,42 @@
 #define	CROWBAR_ATTACK_BOOST   60
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class CROWBAR_IDLE1	   { sequence = 0,  frames = 36, fps = 13 };
-enum class CROWBAR_IDLE2	   { sequence = 1,  frames = 81, fps = 15 };
-enum class CROWBAR_IDLE3	   { sequence = 2,  frames = 81, fps = 15 };
-enum class CROWBAR_DRAW		   { sequence = 3,  frames = 13, fps = 24 };
-enum class CROWBAR_HOLSTER	   { sequence = 4,  frames = 13, fps = 24 };
-enum class CROWBAR_ATTACK1     { sequence = 5,  frames = 11, fps = 22 };
-enum class CROWBAR_ATTACK1MISS { sequence = 6,  frames = 11, fps = 22 };
-enum class CROWBAR_ATTACK2	   { sequence = 7,  frames = 14, fps = 22 };
-enum class CROWBAR_ATTACK2MISS { sequence = 8,  frames = 14, fps = 22 };
-enum class CROWBAR_ATTACK3	   { sequence = 9,  frames = 19, fps = 22 };
+enum class CROWBAR_IDLE1 { sequence = 0, frames = 36, fps = 13 };
+enum class CROWBAR_IDLE2 { sequence = 1, frames = 81, fps = 15 };
+enum class CROWBAR_IDLE3 { sequence = 2, frames = 81, fps = 15 };
+enum class CROWBAR_DRAW { sequence = 3, frames = 13, fps = 24 };
+enum class CROWBAR_HOLSTER { sequence = 4, frames = 13, fps = 24 };
+enum class CROWBAR_ATTACK1 { sequence = 5, frames = 11, fps = 22 };
+enum class CROWBAR_ATTACK1MISS { sequence = 6, frames = 11, fps = 22 };
+enum class CROWBAR_ATTACK2 { sequence = 7, frames = 14, fps = 22 };
+enum class CROWBAR_ATTACK2MISS { sequence = 8, frames = 14, fps = 22 };
+enum class CROWBAR_ATTACK3 { sequence = 9, frames = 19, fps = 22 };
 enum class CROWBAR_ATTACK3MISS { sequence = 10, frames = 19, fps = 22 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //Crowbar Base-Class | Base | Attack | Animations | Vars | Events
 class CCrowbar : public CBasePlayerWeapon {
-	public:
-		//Base
-		void Spawn(void);
-		void Precache(void);
-		int GetItemInfo(ItemInfo *p);
+public:
+	//Base
+	void Spawn(void);
+	void Precache(void);
+	int GetItemInfo(ItemInfo *p);
 
-		//Attack
-		void PrimaryAttack(void);
-		void SecondaryAttack(void);
-		int Swing(int fFirst);
+	//Attack
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
+	int Swing(int fFirst);
 
-		//Animations
-		BOOL Deploy(void);
-		void Holster(void);
-		void WeaponIdle(void);
+	//Animations
+	BOOL Deploy(void);
+	void Holster(void);
+	void WeaponIdle(void);
 
-		//Vars
-		BOOL bHit;
-	private:
-		//Events
-		unsigned int m_usCrowbar;
+	//Vars
+	BOOL bHit;
+private:
+	//Events
+	unsigned int m_usCrowbar;
 };
 #endif
 

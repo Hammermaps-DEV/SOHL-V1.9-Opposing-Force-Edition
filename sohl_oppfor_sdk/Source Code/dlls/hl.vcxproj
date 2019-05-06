@@ -247,7 +247,6 @@
     <ClInclude Include="doors.h" />
     <ClInclude Include="effects.h" />
     <ClInclude Include="enginecallback.h" />
-    <ClInclude Include="env_lensflare.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
     <ClInclude Include="func_break.h" />

@@ -20,14 +20,14 @@
 
 class CDeadOtis : public CDeadBarney
 {
-	public:
-		void Spawn(void);
-		int	Classify(void) { return	CLASS_PLAYER_ALLY; }
-		void KeyValue(KeyValueData *pkvd);
-		static char *m_szPoses[5];
+public:
+	void Spawn(void);
+	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+	void KeyValue(KeyValueData *pkvd);
+	static char *m_szPoses[5];
 
-		int	head;
-		int	m_iBaseBody;
+	int	head;
+	int	m_iBaseBody;
 };
 
 #endif // MONSTER_OTIS_H

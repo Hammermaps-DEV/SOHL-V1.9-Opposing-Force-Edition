@@ -34,32 +34,32 @@
 #include "gamerules.h"
 
 
-float AmmoDamage( const char *pName )
+float AmmoDamage(const char *pName)
 {
-	if ( !pName )
+	if (!pName)
 		return 0;
 
-	if ( !strcmp( pName, "9mm" ) )
+	if (!strcmp(pName, "9mm"))
 		return gSkillData.plrDmg9MM;
-	if ( !strcmp( pName, "357" ) )
+	if (!strcmp(pName, "357"))
 		return gSkillData.plrDmg357;
 	if (!strcmp(pName, "762"))
 		return gSkillData.plrDmg762;
-	if ( !strcmp( pName, "ARgrenades" ) )
+	if (!strcmp(pName, "ARgrenades"))
 		return gSkillData.plrDmgM203Grenade;
-	if ( !strcmp( pName, "buckshot" ) )
+	if (!strcmp(pName, "buckshot"))
 		return gSkillData.plrDmgBuckshot;
-	if ( !strcmp( pName, "bolts") )
+	if (!strcmp(pName, "bolts"))
 		return gSkillData.plrDmgCrossbowMonster;
-	if ( !strcmp( pName, "rockets") )
+	if (!strcmp(pName, "rockets"))
 		return gSkillData.plrDmgRPG;
-	if ( !strcmp( pName, "uranium") )
+	if (!strcmp(pName, "uranium"))
 		return gSkillData.plrDmgGauss;
-	if ( !strcmp( pName, "Hand Grenade") )
+	if (!strcmp(pName, "Hand Grenade"))
 		return gSkillData.plrDmgHandGrenade;
-	if ( !strcmp( pName, "Satchel Charge") )
+	if (!strcmp(pName, "Satchel Charge"))
 		return gSkillData.plrDmgSatchel;
-	if ( !strcmp( pName, "Trip Mine") )
+	if (!strcmp(pName, "Trip Mine"))
 		return gSkillData.plrDmgTripmine;
 	if (!strcmp(pName, "shocks"))
 		return gSkillData.plrDmgShock;
@@ -70,15 +70,15 @@ float AmmoDamage( const char *pName )
 }
 
 
-void UpdateStatsFile( float dataTime, char *pMapname, float health, float ammo, int skillLevel )
+void UpdateStatsFile(float dataTime, char *pMapname, float health, float ammo, int skillLevel)
 {
 	FILE *fp;
 
-	fp = fopen( "stats.txt", "a" );
-	if ( !fp )
+	fp = fopen("stats.txt", "a");
+	if (!fp)
 		return;
-	fprintf( fp, "%6.2f, %6.2f, %6.2f, %s, %2d\n", dataTime, health, ammo, pMapname, skillLevel );
-	fclose( fp );
+	fprintf(fp, "%6.2f, %6.2f, %6.2f, %s, %2d\n", dataTime, health, ammo, pMapname, skillLevel);
+	fclose(fp);
 }
 
 
@@ -97,18 +97,18 @@ typedef struct
 	float	lastGameTime;
 } TESTSTATS;
 
-TESTSTATS gStats = {0,0,0,0,0,0,0};
+TESTSTATS gStats = { 0,0,0,0,0,0,0 };
 
-void UpdateStats( CBasePlayer *pPlayer )
+void UpdateStats(CBasePlayer *pPlayer)
 {
 	int i;
 
-	int ammoCount[ MAX_AMMO_SLOTS ];
-	memcpy( ammoCount, pPlayer->m_rgAmmo, MAX_AMMO_SLOTS * sizeof(int) );
+	int ammoCount[MAX_AMMO_SLOTS];
+	memcpy(ammoCount, pPlayer->m_rgAmmo, MAX_AMMO_SLOTS * sizeof(int));
 
 	// Keep a running time, so the graph doesn't overlap
-	
-	if ( UTIL_GlobalTimeBase() < gStats.lastGameTime )	// Changed level or died, don't b0rk
+
+	if (UTIL_GlobalTimeBase() < gStats.lastGameTime)	// Changed level or died, don't b0rk
 	{
 		gStats.lastGameTime = UTIL_GlobalTimeBase();
 		gStats.dataTime = gStats.gameTime;
@@ -123,14 +123,14 @@ void UpdateStats( CBasePlayer *pPlayer )
 		while (p)
 		{
 			ItemInfo II;
-			
+
 			memset(&II, 0, sizeof(II));
 			p->GetItemInfo(&II);
 
 			int index = pPlayer->GetAmmoIndex(II.pszAmmo1);
-			if ( index >= 0 )
-				ammoCount[ index ] += ((CBasePlayerWeapon *)p)->m_iClip;
-			
+			if (index >= 0)
+				ammoCount[index] += ((CBasePlayerWeapon *)p)->m_iClip;
+
 			p = p->m_pNext;
 		}
 	}
@@ -138,19 +138,19 @@ void UpdateStats( CBasePlayer *pPlayer )
 	float ammo = 0;
 	for (i = 1; i < MAX_AMMO_SLOTS; i++)
 	{
-		ammo += ammoCount[i] * AmmoDamage( CBasePlayerItem::AmmoInfoArray[i].pszName );
+		ammo += ammoCount[i] * AmmoDamage(CBasePlayerItem::AmmoInfoArray[i].pszName);
 	}
 
 	float health = pPlayer->pev->health + pPlayer->pev->armorvalue * 2;	// Armor is 2X health
-	float ammoDelta = V_fabs( ammo - gStats.lastAmmo );
-	float healthDelta = V_fabs( health - gStats.lastHealth );
+	float ammoDelta = V_fabs(ammo - gStats.lastAmmo);
+	float healthDelta = V_fabs(health - gStats.lastHealth);
 	int forceWrite = 0;
-	if ( health <= 0 && gStats.lastHealth > 0 )
+	if (health <= 0 && gStats.lastHealth > 0)
 		forceWrite = 1;
 
-	if ( (ammoDelta > AMMO_THRESHOLD || healthDelta > HEALTH_THRESHOLD) && !forceWrite )
+	if ((ammoDelta > AMMO_THRESHOLD || healthDelta > HEALTH_THRESHOLD) && !forceWrite)
 	{
-		if ( gStats.nextOutputTime == 0 )
+		if (gStats.nextOutputTime == 0)
 			gStats.dataTime = gStats.gameTime;
 
 		gStats.lastAmmo = ammo;
@@ -158,9 +158,9 @@ void UpdateStats( CBasePlayer *pPlayer )
 
 		gStats.nextOutputTime = gStats.gameTime + OUTPUT_LATENCY;
 	}
-	else if ( (gStats.nextOutputTime != 0 && gStats.nextOutputTime < gStats.gameTime) || forceWrite )
+	else if ((gStats.nextOutputTime != 0 && gStats.nextOutputTime < gStats.gameTime) || forceWrite)
 	{
-		UpdateStatsFile( gStats.dataTime, (char *)STRING(gpGlobals->mapname), health, ammo, (int)CVAR_GET_FLOAT("skill") );
+		UpdateStatsFile(gStats.dataTime, (char *)STRING(gpGlobals->mapname), health, ammo, (int)CVAR_GET_FLOAT("skill"));
 
 		gStats.lastAmmo = ammo;
 		gStats.lastHealth = health;
@@ -169,7 +169,7 @@ void UpdateStats( CBasePlayer *pPlayer )
 	}
 }
 
-void InitStats( CBasePlayer *pPlayer )
+void InitStats(CBasePlayer *pPlayer)
 {
 	gStats.lastGameTime = UTIL_GlobalTimeBase();	// Fixup stats time
 }

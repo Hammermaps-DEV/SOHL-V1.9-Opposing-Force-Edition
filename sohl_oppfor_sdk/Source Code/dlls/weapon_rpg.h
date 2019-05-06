@@ -22,42 +22,42 @@
 #define WEAPON_RPG_H
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class RPG_IDLE1	{ sequence = 0, frames = 91, fps = 30 };
-enum class RPG_IDLE2	{ sequence = 1, frames = 91, fps = 30 };
-enum class RPG_FIDGET	{ sequence = 2, frames = 91, fps = 15 };
-enum class RPG_DRAW		{ sequence = 3, frames = 16, fps = 30 };
-enum class RPG_HOLSTER	{ sequence = 4, frames = 16, fps = 30 };
-enum class RPG_FIRE		{ sequence = 5, frames = 25, fps = 30 };
-enum class RPG_RELOAD	{ sequence = 6, frames = 61, fps = 30 };
+enum class RPG_IDLE1 { sequence = 0, frames = 91, fps = 30 };
+enum class RPG_IDLE2 { sequence = 1, frames = 91, fps = 30 };
+enum class RPG_FIDGET { sequence = 2, frames = 91, fps = 15 };
+enum class RPG_DRAW { sequence = 3, frames = 16, fps = 30 };
+enum class RPG_HOLSTER { sequence = 4, frames = 16, fps = 30 };
+enum class RPG_FIRE { sequence = 5, frames = 25, fps = 30 };
+enum class RPG_RELOAD { sequence = 6, frames = 61, fps = 30 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //RPG Base-Class | Base | Attack | Animations | Vars | Events
 class CRpg : public CBasePlayerWeapon {
-	public:
-		//Base
-		void Spawn(void);
-		void Precache(void);
-		int GetItemInfo(ItemInfo *p);
+public:
+	//Base
+	void Spawn(void);
+	void Precache(void);
+	int GetItemInfo(ItemInfo *p);
 
-		//Attack
-		void PrimaryAttack(void);
-		void SecondaryAttack(void);
+	//Attack
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
 
-		//Animations
-		BOOL Deploy(void);
-		void Holster();
-		void Reload(void);
-		void UpdateScreen(void);
-		void ShutdownScreen(void);
-		void UpdateSpot(void);
-		void WeaponIdle(void);
+	//Animations
+	BOOL Deploy(void);
+	void Holster();
+	void Reload(void);
+	void UpdateScreen(void);
+	void ShutdownScreen(void);
+	void UpdateSpot(void);
+	void WeaponIdle(void);
 
-		int AddDuplicate(CBasePlayerItem *pOriginal) { return FALSE; };//don't give second launcher!
-		BOOL ShouldWeaponIdle(void) { return TRUE; };
+	int AddDuplicate(CBasePlayerItem *pOriginal) { return FALSE; };//don't give second launcher!
+	BOOL ShouldWeaponIdle(void) { return TRUE; };
 
-		CLaserSpot *m_pSpot;
-		CLaserSpot *m_pMirSpot;
-		bool m_pActiveRocket;
+	CLaserSpot *m_pSpot;
+	CLaserSpot *m_pMirSpot;
+	bool m_pActiveRocket;
 };
 #endif
 

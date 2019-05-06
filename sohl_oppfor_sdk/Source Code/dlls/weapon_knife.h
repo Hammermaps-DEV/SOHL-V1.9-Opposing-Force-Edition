@@ -27,19 +27,19 @@
 #define	KNIFE_ATTACK_BOOST   60
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class KNIFE_IDLE1		 { sequence = 0,  frames = 36, fps = 13 };
-enum class KNIFE_IDLE2		 { sequence = 1,  frames = 81, fps = 15 };
-enum class KNIFE_IDLE3		 { sequence = 2,  frames = 81, fps = 15 };
-enum class KNIFE_DRAW		 { sequence = 3,  frames = 13, fps = 24 };
-enum class KNIFE_HOLSTER	 { sequence = 4,  frames = 13, fps = 24 };
-enum class KNIFE_ATTACK1	 { sequence = 5,  frames = 11, fps = 22 };
-enum class KNIFE_ATTACK1MISS { sequence = 6,  frames = 11, fps = 22 };
-enum class KNIFE_ATTACK2	 { sequence = 7,  frames = 14, fps = 22 };
-enum class KNIFE_ATTACK2MISS { sequence = 8,  frames = 14, fps = 22 };
-enum class KNIFE_ATTACK3	 { sequence = 9,  frames = 19, fps = 24 };
+enum class KNIFE_IDLE1 { sequence = 0, frames = 36, fps = 13 };
+enum class KNIFE_IDLE2 { sequence = 1, frames = 81, fps = 15 };
+enum class KNIFE_IDLE3 { sequence = 2, frames = 81, fps = 15 };
+enum class KNIFE_DRAW { sequence = 3, frames = 13, fps = 24 };
+enum class KNIFE_HOLSTER { sequence = 4, frames = 13, fps = 24 };
+enum class KNIFE_ATTACK1 { sequence = 5, frames = 11, fps = 22 };
+enum class KNIFE_ATTACK1MISS { sequence = 6, frames = 11, fps = 22 };
+enum class KNIFE_ATTACK2 { sequence = 7, frames = 14, fps = 22 };
+enum class KNIFE_ATTACK2MISS { sequence = 8, frames = 14, fps = 22 };
+enum class KNIFE_ATTACK3 { sequence = 9, frames = 19, fps = 24 };
 enum class KNIFE_ATTACK3MISS { sequence = 10, frames = 19, fps = 24 };
-enum class KNIFE_CHARGE      { sequence = 11, frames = 21, fps = 30 };
-enum class KNIFE_STAB        { sequence = 12, frames = 21, fps = 30 };
+enum class KNIFE_CHARGE { sequence = 11, frames = 21, fps = 30 };
+enum class KNIFE_STAB { sequence = 12, frames = 21, fps = 30 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //Knife Base-Class | Base | Attack | Animations | Vars | Events

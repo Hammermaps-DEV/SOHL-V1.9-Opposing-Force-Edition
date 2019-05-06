@@ -17,10 +17,10 @@
 #define XEN_HAIR_H
 
 class CXenHair : public CActAnimating {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void Think(void);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void Think(void);
 };
 
 #endif // XEN_HAIR_H

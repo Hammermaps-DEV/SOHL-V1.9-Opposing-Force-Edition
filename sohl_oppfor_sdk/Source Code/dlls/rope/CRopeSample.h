@@ -42,8 +42,8 @@ public:
 
 	void Spawn() override;
 
-	int Save( CSave &save );
-	int Restore( CRestore &restore );
+	int Save(CSave &save);
+	int Restore(CRestore &restore);
 
 	static TYPEDESCRIPTION m_SaveData[];
 
@@ -55,7 +55,7 @@ public:
 
 	CRope* GetMasterRope() { return m_pMasterRope; }
 
-	void SetMasterRope( CRope* pRope )
+	void SetMasterRope(CRope* pRope)
 	{
 		m_pMasterRope = pRope;
 	}
