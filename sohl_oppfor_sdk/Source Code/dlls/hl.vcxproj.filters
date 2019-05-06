@@ -692,6 +692,18 @@
     <ClCompile Include="rope\CRopeSegment.cpp">
       <Filter>Source Files\dlls\rope</Filter>
     </ClCompile>
+    <ClCompile Include="item_medicalkit.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_antirad.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_flare.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_camera.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">

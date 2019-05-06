@@ -91,13 +91,18 @@ enum sbar_data
 };
 
 #define CHAT_INTERVAL 1.0f
-
+class CItemCamera;//AJH
 class CParticleEmitter;
 class CRope;
 
 class CBasePlayer : public CBaseMonster
 {
 public:
+
+	entvars_t*			m_pevInflictor; //AJH used for time based damage to remember inflictor
+										//m_hActivator remembers activator
+	CItemCamera*		m_pItemCamera;//AJH Remember that we have a camera
+
 	int					random_seed;    // See that is shared between client & server for shared weapons code
 
 	int					m_iPlayerSound;// the index of the sound list slot reserved for this player
@@ -208,6 +213,29 @@ public:
 	float	m_flNextDecalTime;// next time this player can spray a decal
 
 	char m_szTeamName[TEAM_NAME_LENGTH];
+
+	virtual float	CalcRatio(CBaseEntity *pLocus, int mode)//AJH added 'mode' = ratio to return
+	{
+		//ALERT(at_debug,"CBasePlayer CalcRatio called, mode is %i\n",mode);
+		switch (mode) {
+		case 0: {
+			return pev->health / pev->max_health;
+		}break;
+		case 1: {
+			//pev->speed=pev->velocity.Length();
+			//ALERT(at_debug,"Ratio is %f over %f, result %f.\n",pev->speed,pev->maxspeed,pev->speed/pev->maxspeed);
+			//return pev->speed/pev->maxspeed;
+			return pev->velocity.Length();
+		}break;
+		case 2: {
+			return (int)IsSneaking();
+		}break;
+		case 3: {
+			return (int)HasWeapons();
+		}break;
+		}
+		return 0;
+	}
 
 	virtual void Spawn(void);
 	void Pain(void);
@@ -393,6 +421,7 @@ private:
 
 extern int	gmsgHudText;
 extern int	gmsgParticle; // LRC
+extern int	gmsgInventory;	//AJH
 extern int	gmsgSetBody;
 extern int	gmsgSetSkin;
 extern int	gmsgSetMirror;

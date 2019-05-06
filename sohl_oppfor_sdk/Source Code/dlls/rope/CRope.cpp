@@ -426,7 +426,7 @@ void CRope::RunSimOnSamples()
 	if (m_bInitialDeltaTime)
 	{
 		m_bInitialDeltaTime = false;
-		m_flLastTime = gpGlobals->time;
+		m_flLastTime = UTIL_GlobalTimeBase();
 		flDeltaTime = 0;
 	}
 
@@ -444,7 +444,7 @@ void CRope::RunSimOnSamples()
 
 		m_flLastTime += 0.007;
 
-		if (gpGlobals->time <= m_flLastTime)
+		if (UTIL_GlobalTimeBase() <= m_flLastTime)
 		{
 			if ((uiIndex % 2) != 0)
 				break;
@@ -453,7 +453,7 @@ void CRope::RunSimOnSamples()
 		std::swap(ppSampleSource, ppSampleTarget);
 	}
 
-	m_flLastTime = gpGlobals->time;
+	m_flLastTime = UTIL_GlobalTimeBase();
 }
 
 void CRope::ComputeForces(RopeSampleData* pSystem)
@@ -1003,12 +1003,12 @@ void CRope::AttachObjectToSegment(CRopeSegment* pSegment)
 void CRope::DetachObject()
 {
 	m_bObjectAttached = false;
-	m_flDetachTime = gpGlobals->time;
+	m_flDetachTime = UTIL_GlobalTimeBase();
 }
 
 bool CRope::IsAcceptingAttachment() const
 {
-	if (gpGlobals->time - m_flDetachTime > 2.0 && !m_bObjectAttached)
+	if (UTIL_GlobalTimeBase() - m_flDetachTime > 2.0 && !m_bObjectAttached)
 	{
 		return !m_bDisallowPlayerAttachment;
 	}

@@ -162,20 +162,23 @@ TYPEDESCRIPTION CBreakable::m_SaveData[] =
 	DEFINE_FIELD(CBreakable, m_Material, FIELD_INTEGER),
 	DEFINE_FIELD(CBreakable, m_Explosion, FIELD_INTEGER),
 
-	DEFINE_FIELD(CBreakable, m_angle, FIELD_FLOAT),
-	DEFINE_FIELD(CBreakable, m_iszGibModel, FIELD_STRING),
-	DEFINE_FIELD(CBreakable, m_iszSpawnObject, FIELD_STRING),
+	// Don't need to save/restore these because we precache after restore
+	//	DEFINE_FIELD( CBreakable, m_idShard, FIELD_INTEGER ),
 
-	// Explosion magnitude is stored in pev->impulse
+		DEFINE_FIELD(CBreakable, m_angle, FIELD_FLOAT),
+		DEFINE_FIELD(CBreakable, m_iszGibModel, FIELD_STRING),
+		DEFINE_FIELD(CBreakable, m_iszSpawnObject, FIELD_STRING),
 
-	//LRC- time until respawn
-	DEFINE_FIELD(CBreakable, m_iRespawnTime, FIELD_INTEGER),
-	//LRC- health to set on respawn
-	DEFINE_FIELD(CBreakable, m_iInitialHealth, FIELD_INTEGER),
-	DEFINE_FIELD(CBreakable, m_iInitialRenderAmt, FIELD_INTEGER),
-	DEFINE_FIELD(CBreakable, m_iInitialRenderMode, FIELD_INTEGER),
-	DEFINE_FIELD(CBreakable, m_iszWhenHit, FIELD_STRING),
-	DEFINE_FIELD(CBreakable, m_pHitProxy, FIELD_CLASSPTR),
+		// Explosion magnitude is stored in pev->impulse
+
+		//LRC- time until respawn
+		DEFINE_FIELD(CBreakable, m_iRespawnTime, FIELD_INTEGER),
+		//LRC- health to set on respawn
+		DEFINE_FIELD(CBreakable, m_iInitialHealth, FIELD_INTEGER),
+		DEFINE_FIELD(CBreakable, m_iInitialRenderAmt, FIELD_INTEGER),
+		DEFINE_FIELD(CBreakable, m_iInitialRenderMode, FIELD_INTEGER),
+		DEFINE_FIELD(CBreakable, m_iszWhenHit, FIELD_STRING),
+		DEFINE_FIELD(CBreakable, m_pHitProxy, FIELD_CLASSPTR),
 };
 
 IMPLEMENT_SAVERESTORE(CBreakable, CBaseEntity);
@@ -425,6 +428,12 @@ void CBreakable::Precache(void)
 // play shard sound when func_breakable takes damage.
 // the more damage, the louder the shard sound.
 
+float CBreakable::CalcRatio(CBaseEntity* plocus, int mode)//AJH added 'mode' = ratio to return
+{
+	return pev->health / m_iInitialHealth;
+}
+
+
 void CBreakable::DamageSound(void)
 {
 	int pitch;
@@ -432,6 +441,9 @@ void CBreakable::DamageSound(void)
 	char *rgpsz[6];
 	int i;
 	int material = m_Material;
+
+	//	if (RANDOM_LONG(0,1))
+	//		return;
 
 	if (RANDOM_LONG(0, 2))
 		pitch = PITCH_NORM;
@@ -609,10 +621,19 @@ void CBreakable::RespawnThink(void)
 			}
 		}
 		//		ALERT(at_debug,"Respawn OK\n");
-		DoRespawn();
+			/*	if (FStrEq("func_pushable",STRING(pev->classname))){	//AJH Fix for respawnable breakable pushables
+					pev->solid = SOLID_BBOX;							//For some reason this code must be executed outside of
+					pev->origin.z+=1;									//the RespawnThink function. Uses DoRespawn()
+					UTIL_SetOrigin(this,pev->origin);
+				}else{
+					pev->solid = SOLID_BSP;
+				}
+				*/
+		DoRespawn();	//AJH Fix for respawnable breakable pushables (BY HAWK777)
+		SetUse(&CBreakable::BreakUse);
 		pev->effects &= ~EF_NODRAW;
 		pev->health = m_iInitialHealth;
-		SetUse(&CBreakable::BreakUse);
+
 		if (!FBitSet(pev->spawnflags, SF_BREAK_TRIGGER_ONLY))
 			pev->takedamage = DAMAGE_YES;
 
@@ -621,7 +642,7 @@ void CBreakable::RespawnThink(void)
 	}
 }
 
-void CBreakable::DoRespawn(void)
+void CBreakable::DoRespawn(void)	//AJH Fix for respawnable breakable pushables (BY HAWK777)
 {
 	pev->solid = SOLID_BSP;
 }
@@ -670,8 +691,21 @@ void CBreakable::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 	//LRC
 	if (m_iszWhenHit)
 	{
+		if (m_pHitProxy == NULL) {		//AJH may need to reset this as it's null after save/load
+			m_pHitProxy = GetClassPtr((CPointEntity*)NULL);
+		}
+
 		m_pHitProxy->pev->origin = ptr->vecEndPos;
+		if (pev->spawnflags&SF_BREAKABLE_INVERT) {	//AJH 
+			vecDir.y = -vecDir.y;
+			//vecDir.z=-vecDir.z;
+			vecDir.x = -vecDir.x;
+			//ALERT(at_debug,"INVERTING Breakables 'hit' vector (x&y components only) \n");
+		}
 		m_pHitProxy->pev->velocity = vecDir;
+		m_pHitProxy->pev->angles = UTIL_VecToAngles(vecDir);	//AJH
+
+	  //ALERT(at_debug,"Func_breakable fires %s \n",STRING(m_iszWhenHit));
 		FireTargets(STRING(m_iszWhenHit), m_pHitProxy, this, USE_TOGGLE, 0);
 	}
 
@@ -757,7 +791,7 @@ void CBreakable::Die(void)
 	// The more negative pev->health, the louder
 	// the sound should be.
 
-	fvol = RANDOM_FLOAT(0.85f, 1.0f) + (V_fabs(pev->health) / 100.0f);
+	fvol = RANDOM_FLOAT(0.85f, 1.0f) + (fabs(pev->health) / 100.0f);
 
 	if (fvol > 1.0)
 		fvol = 1.0;
@@ -980,10 +1014,9 @@ public:
 	void	Move(CBaseEntity *pMover, int push);
 	void	KeyValue(KeyValueData *pkvd);
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	DoRespawn(void);	//AJH Fix for respawnable breakable pushables (BY HAWK777)
 	void	EXPORT StopSound(void);
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) { m_pPusher = pActivator; }
-
-	void	DoRespawn(void);
 
 	virtual int	ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_CONTINUOUS_USE; }
 	virtual int		Save(CSave &save);
@@ -1161,7 +1194,8 @@ void CPushable::Move(CBaseEntity *pOther, int push)
 	else
 		factor = 0.25;
 
-	if (!push) factor = factor * 0.5;
+	if (!push)
+		factor = factor * 0.5;
 
 	pev->velocity.x += pevToucher->velocity.x * factor;
 	pev->velocity.y += pevToucher->velocity.y * factor;
@@ -1198,8 +1232,7 @@ int CPushable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 	return 1;
 }
 
-void CPushable::DoRespawn(void)
-{
+void CPushable::DoRespawn(void) {	//AJH Fix for respawnable breakable pushables (BY HAWK777)
 	pev->solid = SOLID_BBOX;
 	pev->origin.z += 1;
 	UTIL_SetOrigin(this, pev->origin);

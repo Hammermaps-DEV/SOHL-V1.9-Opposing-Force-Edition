@@ -364,7 +364,7 @@ void CBaseDoor::PostSpawn(void)
 		m_vecPosition1 = pev->origin;
 
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions
-	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (V_fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
+	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
 
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 	if (FBitSet(pev->spawnflags, SF_DOOR_START_OPEN))
@@ -1144,7 +1144,7 @@ void CMomentaryDoor::Spawn(void)
 
 	m_vecPosition1 = pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (V_fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
+	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 
 	//LRC: FIXME, move to PostSpawn
@@ -1701,7 +1701,7 @@ void CBaseTrainDoor::DoorGoUp(void)
 	STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving));
 	EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseArrived), VOL_NORM, ATTN_NORM);
 
-	float	depth = (V_fabs(gpGlobals->v_right.x * (pev->size.x - 2)) + fabs(gpGlobals->v_right.y * (pev->size.y - 2)) + fabs(gpGlobals->v_right.z * (pev->size.z - 2)) - m_flLip);
+	float	depth = (fabs(gpGlobals->v_right.x * (pev->size.x - 2)) + fabs(gpGlobals->v_right.y * (pev->size.y - 2)) + fabs(gpGlobals->v_right.z * (pev->size.z - 2)) - m_flLip);
 
 	if (pev->spawnflags & SF_TRAINDOOR_INVERSE)
 		depth = -depth;
@@ -1724,7 +1724,7 @@ void CBaseTrainDoor::DoorSlideUp(void)
 
 	UTIL_MakeVectors(m_vecOldAngles);
 
-	float	width = (V_fabs(gpGlobals->v_forward.x * (pev->size.x - 2)) + fabs(gpGlobals->v_forward.y * (pev->size.y - 2)) + fabs(gpGlobals->v_forward.z * (pev->size.z - 2)));
+	float	width = (fabs(gpGlobals->v_forward.x * (pev->size.x - 2)) + fabs(gpGlobals->v_forward.y * (pev->size.y - 2)) + fabs(gpGlobals->v_forward.z * (pev->size.z - 2)));
 
 	door_state = TD_SLIDING_UP;
 

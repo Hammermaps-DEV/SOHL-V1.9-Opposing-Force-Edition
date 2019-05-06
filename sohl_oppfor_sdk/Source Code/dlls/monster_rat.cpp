@@ -191,7 +191,7 @@ void CRat::MonsterThink(void)
 				{
 					CSound *pSound;
 					pSound = CSoundEnt::SoundPointerForIndex(m_iAudibleList);
-					if (pSound && V_fabs(pSound->m_vecOrigin.z - pev->origin.z) <= 3) {
+					if (pSound && fabs(pSound->m_vecOrigin.z - pev->origin.z) <= 3) {
 						PickNewDest(RAT_SMELL_FOOD);
 						SetActivity(ACT_WALK);
 					}

@@ -26,29 +26,27 @@
 #include "player.h"
 #include "items.h"
 
-void CItemAntidote::Spawn(void)
+void CItemAntiRad::Spawn(void)
 {
 	Precache();
-	SET_MODEL(ENT(pev), "models/w_antidote.mdl");
+	SET_MODEL(ENT(pev), "models/w_rad.mdl");
 	CItem::Spawn();
 }
 
-void CItemAntidote::Precache(void)
+void CItemAntiRad::Precache(void)
 {
-	PRECACHE_MODEL("models/w_antidote.mdl");
+	PRECACHE_MODEL("models/w_rad.mdl");
 }
 
-BOOL CItemAntidote::MyTouch(CBasePlayer *pPlayer)
+BOOL CItemAntiRad::MyTouch(CBasePlayer *pPlayer)
 {
-	pPlayer->SetSuitUpdate("!HEV_DET4", FALSE, SUIT_NEXT_IN_1MIN);
+	pPlayer->SetSuitUpdate("!HEV_DET5", FALSE, SUIT_NEXT_IN_1MIN); //TODO: find right suit notifcation
 
-	pPlayer->m_rgItems[ITEM_ANTIDOTE] += 1;
-
+	pPlayer->m_rgItems[ITEM_ANTIRAD] += 1;
 	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);//AJH msg change inventory
-	WRITE_SHORT((ITEM_ANTIDOTE));						//which item to change
-	WRITE_SHORT(pPlayer->m_rgItems[ITEM_ANTIDOTE]);		//set counter to this ammount
+	WRITE_SHORT((ITEM_ANTIRAD));						//which item to change
+	WRITE_SHORT(pPlayer->m_rgItems[ITEM_ANTIRAD]);		//set counter to this ammount
 	MESSAGE_END();
-
 	if (pev->noise)	//AJH
 		EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, STRING(pev->noise), 1, ATTN_NORM);
 	else
@@ -57,16 +55,15 @@ BOOL CItemAntidote::MyTouch(CBasePlayer *pPlayer)
 	return TRUE;
 }
 
-void CItemAntidote::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+void CItemAntiRad::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 
 	if (!(pActivator->IsPlayer())) {
-		ALERT(at_debug, "DEBUG: Antidote kit used by non-player\n");
+		ALERT(at_debug, "DEBUG: AntiRad syringe used by non-player\n");
 		return;
 	}
 
 	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
-	ALERT(at_console, "HazardSuit: Antitoxin shots remaining: %i\n", m_hActivator->m_rgItems[ITEM_ANTIDOTE]);
+	ALERT(at_console, "HazardSuit: AntiRad shots remaining: %i\n", m_hActivator->m_rgItems[ITEM_ANTIRAD]);
 }
-
-LINK_ENTITY_TO_CLASS(item_antidote, CItemAntidote);
+LINK_ENTITY_TO_CLASS(item_antirad, CItemAntiRad);

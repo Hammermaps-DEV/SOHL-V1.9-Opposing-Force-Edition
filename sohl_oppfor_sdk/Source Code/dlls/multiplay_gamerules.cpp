@@ -98,6 +98,16 @@ CHalfLifeMultiplay::CHalfLifeMultiplay()
 	if (IS_DEDICATED_SERVER())
 	{
 		// this code has been moved into engine, to only run server.cfg once
+		char *servercfgfile = (char *)CVAR_GET_STRING("servercfgfile");
+
+		if (servercfgfile && servercfgfile[0])
+		{
+			char szCommand[256];
+
+			ALERT(at_debug, "Executing dedicated server config file\n");
+			snprintf(szCommand, 256, "exec %s\n", servercfgfile);
+			SERVER_COMMAND(szCommand);
+		}
 	}
 	else
 	{
@@ -697,6 +707,7 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, e
 	CBaseEntity *Killer = CBaseEntity::Instance(pKiller);
 
 	const char *killer_weapon_name = "world";		// by default, the player is killed by the world
+	const char* kill_technique = "killed %";	//AJH default is 'killed' (% = victim's name)
 	int killer_index = 0;
 
 	// Hack to fix name change
@@ -738,10 +749,28 @@ void CHalfLifeMultiplay::DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, e
 	else if (strncmp(killer_weapon_name, "func_", 5) == 0)
 		killer_weapon_name += 5;
 
+
+	if (pevInflictor) {
+		CBaseEntity *Inflictor = CBaseEntity::Instance(pevInflictor);
+		if (Inflictor->killname) {
+			killer_weapon_name = STRING(Inflictor->killname);//AJH Custom 'kill' names for entities
+
+		}
+		if (Inflictor->killmethod) {
+			kill_technique = STRING(Inflictor->killmethod);//AJH Custom 'kill' techniques for entities
+		}
+	}
+
+
+	//	if(CBaseEntity* game_deathnotice = UTIL_FindEntityByClassname(NULL,"game_deathnotice")){ //AJH fully custom/random kill strings
+			//Figure out how to implement
+	//	}
+
 	MESSAGE_BEGIN(MSG_ALL, gmsgDeathMsg);
 	WRITE_BYTE(killer_index);						// the killer
 	WRITE_BYTE(ENTINDEX(pVictim->edict()));		// the victim
 	WRITE_STRING(killer_weapon_name);		// what they were killed by (should this be a string?)
+	WRITE_STRING(kill_technique); //AJH How the victim was killed.
 	MESSAGE_END();
 
 	// replace the code names with the 'real' names

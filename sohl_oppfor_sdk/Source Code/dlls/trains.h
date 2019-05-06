@@ -146,6 +146,7 @@ public:
 	// pev->speed records the current speed (as set by the player). --LRC
 	// m_speed is also stored, as an int, in pev->impulse.
 	float		m_speed;
+	float		m_dir;
 	float		m_startSpeed;
 	Vector		m_controlMins;
 	Vector		m_controlMaxs;
@@ -157,7 +158,7 @@ public:
 	Vector		m_vecMasterAvel; //LRC - masterAvel is to avelocity as m_speed is to speed.
 	Vector		m_vecBaseAvel; // LRC - the underlying avelocity, superceded by normal turning behaviour where applicable
 
-	EHANDLE		m_hActivator;
+	EHANDLE m_hActivator;	//AJH (give frags to this entity)
 public:
 	void SetTrainDoor(CBaseTrainDoor *pDoor);
 private:

@@ -191,6 +191,11 @@ public:
 	BOOL		m_activated; // LRC- moved here from func_train. Signifies that an entity has already been
 										// activated. (and hence doesn't need reactivating.)
 
+	//AJH Entities can now have custom names and kill techniques for deathnotices
+	//E.g instead of "Player1 killed Player2 with train" you can have "Player1 decapitated Player2 with a large table saw!)
+	string_t			killname;	//AJH custom 'deathnotice' name
+	string_t			killmethod;	//AJH custom kill techniques
+
 	//LRC - decent mechanisms for setting think times!
 	// this should have been done a long time ago, but MoveWith finally forced me.
 	virtual void	SetNextThink(float delay) { SetNextThink(delay, FALSE); }
@@ -206,7 +211,7 @@ public:
 	//LRC - loci
 	virtual Vector	CalcPosition(CBaseEntity *pLocus) { return pev->origin; }
 	virtual Vector	CalcVelocity(CBaseEntity *pLocus) { return pev->velocity; }
-	virtual float	CalcRatio(CBaseEntity *pLocus) { return 0; }
+	virtual float	CalcRatio(CBaseEntity *pLocus, int mode) { return 0; }	//AJH added 'mode' = ratio to return
 
 	//LRC - aliases
 	virtual BOOL IsAlias(void) { return FALSE; }
@@ -225,6 +230,16 @@ public:
 		else if (FStrEq(pkvd->szKeyName, "skill"))
 		{
 			m_iLFlags = atoi(pkvd->szValue);
+			pkvd->fHandled = TRUE;
+		}
+		else if (FStrEq(pkvd->szKeyName, "killname"))//AJH Custom 'kill' names for entities
+		{
+			killname = ALLOC_STRING(pkvd->szValue);
+			pkvd->fHandled = TRUE;
+		}
+		else if (FStrEq(pkvd->szKeyName, "killmethod"))//AJH Custom 'kill' techniques for entities
+		{
+			killmethod = ALLOC_STRING(pkvd->szValue);
 			pkvd->fHandled = TRUE;
 		}
 		else if (FStrEq(pkvd->szKeyName, "style"))
@@ -270,6 +285,7 @@ public:
 	// on the same side won't attack each other, even if they have different classnames.
 	virtual int Classify(void) { return CLASS_NONE; };
 	virtual void DeathNotice(entvars_t *pevChild) {}// monster maker children use this to tell the monster maker that they have died.
+
 
 // LRC- this supports a global concept of "entities with states", so that state_watchers and
 // mastership (mastery? masterhood?) can work universally.
@@ -317,6 +333,7 @@ public:
 	virtual BOOL	IsNetClient(void) { return FALSE; }
 	virtual const char *TeamID(void) { return ""; }
 
+
 	//	virtual void	SetActivator( CBaseEntity *pActivator ) {}
 	virtual CBaseEntity *GetNextTarget(void);
 
@@ -341,10 +358,13 @@ public:
 		return (void *)ALLOC_PRIVATE(ENT(pev), stAllocateBlock);
 	};
 
+	// don't use this.
+#if _MSC_VER >= 1200 // only build this code if MSVC++ 6.0 or higher
 	void operator delete(void *pMem, entvars_t *pev)
 	{
 		pev->flags |= FL_KILLME;
 	};
+#endif
 
 	void UpdateOnRemove(void);
 
@@ -668,6 +688,13 @@ public:
 	float				m_flLinearMoveSpeed;	// LRC- allows a LinearMove to be delayed until a think.
 	float				m_flAngularMoveSpeed;	// LRC
 
+	float				m_flLinearAccel;		//AJH - For acceleration, used in subs.cpp
+	float				m_flLinearDecel;		//AJH
+	float				m_flCurrentTime;		//AJH
+	float				m_flAccelTime;			//AJH
+	float				m_flDecelTime;			//AJH
+	bool				m_bDecelerate;			//AJH
+
 	Vector				m_vecFinalAngle;
 
 	int					m_bitsDamageInflict;	// DMG_ damage type that the door or tigger does
@@ -686,6 +713,7 @@ public:
 
 	// common member functions
 	void LinearMove(Vector	vecInput, float flSpeed);
+	void LinearMove(Vector vecInput, float flSpeed, float flAccel, float flDecel); //AJH-Accelerated linear movement
 	void EXPORT LinearMoveNow(void); //LRC- think function that lets us guarantee a LinearMove gets done as a think.
 	void EXPORT LinearMoveDone(void);
 	void EXPORT LinearMoveDoneNow(void); //LRC
@@ -785,7 +813,7 @@ public:
 #define POISON_DURATION		5
 #define POISON_DAMAGE		2.0
 
-#define RADIATION_DURATION	2
+#define RADIATION_DURATION	10
 #define RADIATION_DAMAGE	1.0
 
 #define ACID_DURATION		2

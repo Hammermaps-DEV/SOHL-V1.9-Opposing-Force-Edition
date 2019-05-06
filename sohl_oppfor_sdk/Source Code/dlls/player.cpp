@@ -47,6 +47,7 @@
 #include "movewith.h" //LRC
 #include "particle_emitter.h"
 #include "rope/CRope.h"
+#include "items.h" //AJH Inventory system
 
 // #define DUCKFIX
 
@@ -140,6 +141,10 @@ TYPEDESCRIPTION	CBasePlayer::m_playerSaveData[] =
 	DEFINE_FIELD(CBasePlayer, viewFlags, FIELD_INTEGER),
 	DEFINE_FIELD(CBasePlayer, viewNeedsUpdate, FIELD_INTEGER),
 
+	//AJH
+	DEFINE_FIELD(CBasePlayer, m_pItemCamera, FIELD_CLASSPTR),			// Pointer to the first item_camera a player has
+	DEFINE_ARRAY(CBasePlayer, m_rgItems, FIELD_INTEGER, MAX_ITEMS),	// The inventory status array
+
 	DEFINE_FIELD(CBasePlayer, Rain_dripsPerSecond, FIELD_INTEGER),
 	DEFINE_FIELD(CBasePlayer, Rain_windX, FIELD_FLOAT),
 	DEFINE_FIELD(CBasePlayer, Rain_windY, FIELD_FLOAT),
@@ -212,6 +217,7 @@ int gmsgResetMirror = 0;
 int gmsgParticles = 0; // particle system
 int gmsgConcuss = 0;
 int gmsgGrassParticles = 0;
+int gmsgInventory = 0; //AJH Inventory system
 
 void LinkUserMessages(void)
 {
@@ -260,7 +266,7 @@ void LinkUserMessages(void)
 	gmsgShowMenu = REG_USER_MSG("ShowMenu", -1);
 	gmsgShake = REG_USER_MSG("ScreenShake", sizeof(ScreenShake));
 	gmsgFade = REG_USER_MSG("ScreenFade", sizeof(ScreenFade));
-	gmsgAmmoX = REG_USER_MSG("AmmoX", -1);
+	gmsgAmmoX = REG_USER_MSG("AmmoX", 2);
 	gmsgTeamNames = REG_USER_MSG("TeamNames", -1);
 	gmsgStatusIcon = REG_USER_MSG("StatusIcon", -1);
 
@@ -276,6 +282,7 @@ void LinkUserMessages(void)
 	gmsgParticles = REG_USER_MSG("Particles", -1);
 	gmsgConcuss = REG_USER_MSG("Concuss", 1);
 	gmsgGrassParticles = REG_USER_MSG("Grass", -1);
+	gmsgInventory = REG_USER_MSG("Inventory", -1);	//AJH Inventory system
 }
 
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
@@ -552,6 +559,11 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 
 	while (fTookDamage && (!ftrivial || (bitsDamage & DMG_TIMEBASED)) && ffound && bitsDamage)
 	{
+		if (bitsDamage & DMG_TIMEBASED) {//AJH give timebased damage frags to activator
+			m_hActivator = pAttacker;
+			m_pevInflictor = pevInflictor;
+		}
+
 		ffound = FALSE;
 
 		if (bitsDamage & DMG_CLUB)
@@ -2328,7 +2340,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 		return;
 
 	// only check for time based damage approx. every 2 seconds
-	if (V_fabs(UTIL_GlobalTimeBase() - m_tbdPrev) < 2.0f)
+	if (fabs(UTIL_GlobalTimeBase() - m_tbdPrev) < 2.0f)
 		return;
 
 	m_tbdPrev = UTIL_GlobalTimeBase();
@@ -2345,14 +2357,19 @@ void CBasePlayer::CheckTimeBasedDamage()
 				bDuration = PARALYZE_DURATION;
 				break;
 			case itbd_NerveGas:
+				if (CVAR_GET_FLOAT("timed_damage") != 0) //AJH re enable time based Nervegas/radiation
+					TakeDamage(m_pevInflictor, m_hActivator->pev, NERVEGAS_DAMAGE, DMG_GENERIC);
 				//				TakeDamage(pev, pev, NERVEGAS_DAMAGE, DMG_GENERIC);
 				bDuration = NERVEGAS_DURATION;
 				break;
 			case itbd_Poison:
-				TakeDamage(pev, pev, POISON_DAMAGE, DMG_GENERIC);
+				TakeDamage(m_pevInflictor, m_hActivator->pev, POISON_DAMAGE, DMG_GENERIC);
+				//AJH Use the activator of the trigger_hurt as attacker, and the trigger_hurt as the inflictor
 				bDuration = POISON_DURATION;
 				break;
 			case itbd_Radiation:
+				if (CVAR_GET_FLOAT("timed_damage") != 0) //AJH re enable time based Nervegas/radiation
+					TakeDamage(m_pevInflictor, m_hActivator->pev, RADIATION_DAMAGE, DMG_GENERIC);
 				//				TakeDamage(pev, pev, RADIATION_DAMAGE, DMG_GENERIC);
 				bDuration = RADIATION_DURATION;
 				break;
@@ -2394,10 +2411,30 @@ void CBasePlayer::CheckTimeBasedDamage()
 					{
 						m_rgbTimeBasedDamage[i] = 0;
 						m_rgItems[ITEM_ANTIDOTE]--;
+
+						MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pev);//AJH msg change inventory
+						WRITE_SHORT((ITEM_ANTIDOTE));						//which item to change
+						WRITE_SHORT(m_rgItems[ITEM_ANTIDOTE]);		//set counter to this ammount
+						MESSAGE_END();
+
 						SetSuitUpdate("!HEV_HEAL4", FALSE, SUIT_REPEAT_OK);
 					}
 				}
+				else if ((i == itbd_Radiation) && (m_rgbTimeBasedDamage[i] < RADIATION_DURATION)) //AJH added anti radiation syringe
+				{
+					if (m_rgItems[ITEM_ANTIRAD])
+					{
+						m_rgbTimeBasedDamage[i] = 0;
+						m_rgItems[ITEM_ANTIRAD]--;
 
+						MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pev);//AJH msg change inventory
+						WRITE_SHORT((ITEM_ANTIRAD));						//which item to change
+						WRITE_SHORT(m_rgItems[ITEM_ANTIRAD]);		//set counter to this ammount
+						MESSAGE_END();
+
+						SetSuitUpdate("!HEV_HEAL5", FALSE, SUIT_REPEAT_OK);
+					}
+				}
 
 				// decrement damage duration, detect when done.
 				if (!m_rgbTimeBasedDamage[i] || --m_rgbTimeBasedDamage[i] == 0)
@@ -3167,6 +3204,19 @@ void CBasePlayer::Spawn(void)
 	m_bIsClimbing = false;
 	m_flNextChatTime = UTIL_GlobalTimeBase();
 
+	for (int j = 0; j < MAX_ITEMS; j++) {	//AJH remove all inventory items
+		m_rgItems[j] = 0;
+	}
+
+	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pev); //AJH let client know he's lost items
+	WRITE_SHORT(0); //delete all items			//For some reason this doesn't work after a map change??!
+	MESSAGE_END();
+
+	if (m_pItemCamera) {	//AJH If we have any cameras in our inventory, reset them all.
+		m_pItemCamera->StripFromPlayer();
+		m_pItemCamera = NULL;
+	}
+
 	g_pGameRules->PlayerSpawn(this);
 }
 
@@ -3551,7 +3601,7 @@ void CBloodSplat::Spray(void)
 
 	CBaseEntity *pHit = CBaseEntity::Instance(tr.pHit);
 	PLAYBACK_EVENT_FULL(FEV_RELIABLE | FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&tr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), 1, 0, 0);
-	//UTIL_BloodDecalTrace( &tr, BLOOD_COLOR_RED );
+	UTIL_BloodDecalTrace( &tr, BLOOD_COLOR_RED );
 
 	SetThink(&CBloodSplat::SUB_Remove);
 	SetNextThink(0.1);
@@ -3847,6 +3897,42 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 			FireTargets(impulsetarget, this, this, USE_OFF, 0);
 		break;
 	}
+	case 93: //AJH - send USE_TOGGLE
+	{
+		pEntity = FindEntityForward(this);
+		if (pEntity)
+			pEntity->Use(this, this, USE_TOGGLE, 0);
+		break;
+	}
+	case 94: //AJH - send USE_ON
+	{
+		pEntity = FindEntityForward(this);
+		if (pEntity)
+			pEntity->Use(this, this, USE_ON, 0);
+		break;
+	}
+	case 95: //AJH - send USE_OFF
+	{
+		pEntity = FindEntityForward(this);
+		if (pEntity)
+			pEntity->Use(this, this, USE_OFF, 0);
+		break;
+	}
+	/*	case 96: //AJH - send USE_KILL				//AJH this doesn't work due to directly calling
+		{											//the target entities use function instead of
+			pEntity = FindEntityForward( this );	//calling FireTargets.
+			if (pEntity)
+				pEntity->Use( this, this, USE_KILL, 0);
+			break;
+		}
+	*/	case 97: //AJH - send USE_SPAWN
+	{
+		pEntity = FindEntityForward(this);
+		if (pEntity)
+			pEntity->Use(this, this, USE_SPAWN, 0);
+		break;
+	}
+
 	case 101:
 		gEvilImpulse101 = TRUE;
 		GiveNamedItem("item_suit");
@@ -3977,7 +4063,7 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 	break;
 	case	196:// show shortest paths for entire level to nearest node
 	{
-		Create("node_viewer_fly", pev->origin, pev->angles);
+		Create("node_viewer_large", pev->origin, pev->angles);
 	}
 	break;
 	case	197:// show shortest paths for entire level to nearest node
@@ -4005,7 +4091,8 @@ void CBasePlayer::CheatImpulseCommands(int iImpulse)
 		pEntity = FindEntityForward(this);
 		if (pEntity)
 		{
-			UTIL_Remove(pEntity);
+			if (pEntity->pev->takedamage)
+				UTIL_Remove(pEntity);
 		}
 		break;
 	}
@@ -4254,8 +4341,8 @@ void CBasePlayer::SendAmmoUpdate(void)
 
 			// send "Ammo" update message
 			MESSAGE_BEGIN(MSG_ONE, gmsgAmmoX, NULL, pev);
-			WRITE_SHORT(i);
-			WRITE_SHORT(V_max(V_min(m_rgAmmo[i], 999), 0));  // clamp the value to one byte
+			WRITE_BYTE(i);
+			WRITE_BYTE(V_max(V_min(m_rgAmmo[i], 999), 0));  // clamp the value to one byte
 			MESSAGE_END();
 		}
 	}
@@ -4272,12 +4359,29 @@ ForceClientDllUpdate to ensure the demo gets messages
 reflecting all of the HUD state info.
 =========================================================
 */
+// camera flags
+#define	MONSTER_VIEW	8
+
 void CBasePlayer::UpdateClientData(void)
 {
-	if (m_fInitHUD)
+	if (m_fInitHUD) //AJH The HUD needs (re)initialising
 	{
 		m_fInitHUD = FALSE;
-		gInitHUD = FALSE;
+
+		if (gInitHUD) //AJH This is the first initialisation this level.
+		{
+			gInitHUD = FALSE;
+
+			//AJH Reset the FOG
+			MESSAGE_BEGIN(MSG_ONE, gmsgSetFog, NULL, pev);
+			WRITE_BYTE(0.0);
+			WRITE_BYTE(0.0);
+			WRITE_BYTE(0.0);
+			WRITE_SHORT(0);
+			WRITE_SHORT(0);
+			WRITE_SHORT(0);
+			MESSAGE_END();
+		}
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgResetHUD, NULL, pev);
 		WRITE_BYTE(0);
@@ -4338,6 +4442,14 @@ void CBasePlayer::UpdateClientData(void)
 				numMirrors++;
 			}
 			pFind = FIND_ENTITY_BY_CLASSNAME(pFind, "env_mirror");
+		}
+
+		for (int i = 0; i < MAX_ITEMS; i++) //AJH 
+		{
+			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pev); // let client know which items he has
+			WRITE_SHORT(i); //which item we have
+			WRITE_SHORT(m_rgItems[i]);
+			MESSAGE_END();
 		}
 
 		FireTargets("game_playerspawn", this, this, USE_TOGGLE, 0);
@@ -4413,8 +4525,7 @@ void CBasePlayer::UpdateClientData(void)
 
 	if (pev->health != m_iClientHealth)
 	{
-#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
-		int iHealth = clamp(pev->health, 0, 255);  // make sure that no negative health values are sent
+		int iHealth = max(pev->health, 0);  // make sure that no negative health values are sent
 		if (pev->health > 0.0f && pev->health <= 1.0f)
 			iHealth = 1;
 
@@ -4948,8 +5059,8 @@ Vector CBasePlayer::AutoaimDeflection(Vector &vecSrc, float flDist, float flDelt
 		if (DotProduct(dir, gpGlobals->v_forward) < 0)
 			continue;
 
-		dot = V_fabs(DotProduct(dir, gpGlobals->v_right))
-			+ V_fabs(DotProduct(dir, gpGlobals->v_up)) * 0.5;
+		dot = fabs(DotProduct(dir, gpGlobals->v_right))
+			+ fabs(DotProduct(dir, gpGlobals->v_up)) * 0.5;
 
 		// tweek for distance
 		dot *= 1.0 + 0.2 * ((center - vecSrc).Length() / flDist);

@@ -93,7 +93,6 @@ void CWorldItem::Spawn(void)
 	REMOVE_ENTITY(edict());
 }
 
-
 void CItem::Spawn(void)
 {
 	pev->movetype = MOVETYPE_TOSS;
@@ -109,6 +108,8 @@ void CItem::Spawn(void)
 		return;
 	}
 }
+
+extern int gEvilImpulse101;
 
 void CItem::ItemTouch(CBaseEntity *pOther)
 {
@@ -166,7 +167,7 @@ void CItem::Materialize(void)
 	if (pev->effects & EF_NODRAW)
 	{
 		// changing from invisible state to visible.
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", VOL_NORM, ATTN_NORM, 0, 150);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
 		pev->effects &= ~EF_NODRAW;
 		pev->effects |= EF_MUZZLEFLASH;
 	}

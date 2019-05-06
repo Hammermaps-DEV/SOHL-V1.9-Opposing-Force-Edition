@@ -426,6 +426,10 @@ void W_Precache(void)
 	UTIL_PrecacheOther("item_security");
 	UTIL_PrecacheOther("item_longjump");
 	UTIL_PrecacheOther("item_healthkit");
+	UTIL_PrecacheOther("item_camera");
+	UTIL_PrecacheOther("item_flare");
+	UTIL_PrecacheOther("item_antirad");
+	UTIL_PrecacheOther("item_medicalkit");
 
 	// shotgun
 	UTIL_PrecacheOtherWeapon("weapon_shotgun");
@@ -819,14 +823,6 @@ BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
 
 void CBasePlayerWeapon::ItemPostFrame(void)
 {
-	RestoreBody();//restore body, skin and last animation
-
-	// catch all
-	if (ShouldWeaponIdle())
-	{
-		WeaponIdle();
-	}
-
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_GlobalTimeBase()))
 	{
 		// complete the reload. 
@@ -895,6 +891,12 @@ void CBasePlayerWeapon::ItemPostFrame(void)
 		WeaponIdle();
 		return;
 	}
+
+	// catch all
+	if (ShouldWeaponIdle())
+	{
+		WeaponIdle();
+	}
 }
 
 void CBasePlayerItem::DestroyItem(void)
@@ -959,8 +961,8 @@ void CBasePlayerWeapon::SetNextThink(float delay)
 /// CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
 int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem *pOriginal)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, m_pPlayer))
-		return FALSE;
+	if (!UTIL_IsMasterTriggered(m_sMaster, m_pPlayer))		//
+		return FALSE;										// AJH allows for locked weapons 
 
 	if (m_iDefaultAmmo)
 	{
@@ -976,8 +978,8 @@ int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem *pOriginal)
 
 int CBasePlayerWeapon::AddToPlayer(CBasePlayer *pPlayer)
 {
-	if (!UTIL_IsMasterTriggered(m_sMaster, pPlayer))
-		return FALSE;
+	if (!UTIL_IsMasterTriggered(m_sMaster, pPlayer))		//
+		return FALSE;										// AJH allows for locked weapons
 
 	int bResult = CBasePlayerItem::AddToPlayer(pPlayer);
 
@@ -1009,7 +1011,8 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer *pPlayer)
 	{
 		if (pPlayer->m_fOnTarget)
 			state = WEAPON_IS_ONTARGET;
-		else	state = 1;
+		else
+			state = 1;
 	}
 
 	// Forcing send of all data!
@@ -1329,8 +1332,8 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity *pOther)
 		return;
 	}
 
-	if (!UTIL_IsMasterTriggered(m_sMaster, m_pPlayer))
-		return;
+	if (!UTIL_IsMasterTriggered(m_sMaster, m_pPlayer))	//
+		return;										// AJH allows for locked weapons
 
 	if (AddAmmo(pOther))
 	{
@@ -1344,7 +1347,7 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity *pOther)
 			SetThink(&CBasePlayerAmmo::SUB_Remove);
 			SetNextThink(0.1);
 		}
-		SUB_UseTargets(pOther, USE_TOGGLE, 0);
+		SUB_UseTargets(pOther, USE_TOGGLE, 0);	//AJH now ammo can trigger stuff too
 	}
 	else if (gEvilImpulse101)
 	{

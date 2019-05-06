@@ -15,6 +15,7 @@
 *
 *   All Rights Reserved.
 *
+*	Modified by Andrew J Hamilton (AJH) 2/04/04
 *   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
 *
 ***/

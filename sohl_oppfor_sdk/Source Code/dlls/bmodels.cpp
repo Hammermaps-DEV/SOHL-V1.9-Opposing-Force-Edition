@@ -83,7 +83,19 @@ void CFuncWall::Spawn(void)
 	if (!m_pMoveWith) //LRC
 		pev->flags |= FL_WORLDBRUSH;
 
-	pev->angles = g_vecZero;
+
+
+
+	//AJH This allows rotating of func_walls on spawn.
+	//It would be easier to just use pev->angles directly but some old maps might have 'angles' specified already
+	//and we don't want to stuff them up. Therefore we'll make people use the key 'message' in VHE to specify the angle.
+	//pev->angles		= g_vecZero;
+
+	UTIL_StringToVector((float*)pev->angles, STRING(pev->message));
+
+	if (pev->angles != g_vecZero)
+		ALERT(at_debug, "Rotating brush %s to %i,%i,%i\n", STRING(pev->model), pev->angles.x, pev->angles.y, pev->angles.z);
+
 	pev->movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
 	pev->solid = SOLID_BSP;
 	SET_MODEL(ENT(pev), STRING(pev->model));
@@ -219,7 +231,7 @@ void CFuncConveyor::Spawn(void)
 void CFuncConveyor::UpdateSpeed(float speed)
 {
 	// Encode it as an integer with 4 fractional bits
-	int speedCode = (int)(V_fabs(speed) * 16.0);
+	int speedCode = (int)(fabs(speed) * 16.0);
 
 	if (speed < 0)
 		pev->rendercolor.x = 1;
@@ -557,7 +569,9 @@ void CFuncRotating::Spawn()
 	//	if (pev->dmg == 0)
 	//		pev->dmg = 2;
 
-	if (FBitSet(pev->spawnflags, SF_BRUSH_ROTATE_INSTANT))
+	// instant-use brush?
+	//LRC - start immediately if unnamed, too.
+	if (FBitSet(pev->spawnflags, SF_BRUSH_ROTATE_INSTANT) || FStringNull(pev->targetname))
 	{
 		SetThink(&CFuncRotating::WaitForStart);
 		SetNextThink(1.5);	// leave a magic delay for client to start up
@@ -668,7 +682,7 @@ void CFuncRotating::HurtTouch(CBaseEntity *pOther)
 //	pev->dmg = pev->avelocity.Length() / 10;
 
 	if (m_hActivator)
-		pOther->TakeDamage(pev, m_hActivator->pev, pev->dmg, DMG_CRUSH);
+		pOther->TakeDamage(pev, m_hActivator->pev, pev->dmg, DMG_CRUSH);	//AJH Attribute damage to he who switched me.
 	else
 		pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
 
@@ -779,7 +793,7 @@ void CFuncRotating::Rotate(void)
 //=========================================================
 void CFuncRotating::RotatingUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
-	m_hActivator = pActivator;
+	m_hActivator = pActivator;	//AJH
 
 	if (!ShouldToggle(useType)) return;
 
@@ -857,8 +871,10 @@ void CFuncRotating::Blocked(CBaseEntity *pOther)
 		}
 	}
 
-	if (m_hActivator) pOther->TakeDamage(pev, m_hActivator->pev, pev->dmg, DMG_CRUSH);
-	else pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
+	if (m_hActivator)
+		pOther->TakeDamage(pev, m_hActivator->pev, pev->dmg, DMG_CRUSH);	//AJH Attribute damage to he who switched me.
+	else
+		pOther->TakeDamage(pev, pev, pev->dmg, DMG_CRUSH);
 }
 
 
@@ -896,7 +912,7 @@ public:
 	vec3_t	m_center;
 	vec3_t	m_start;
 
-	EHANDLE m_hActivator;
+	EHANDLE m_hActivator;	//AJH (give frags to this entity)
 };
 
 LINK_ENTITY_TO_CLASS(func_pendulum, CPendulum);
@@ -958,7 +974,7 @@ void CPendulum::Spawn(void)
 	if (pev->speed == 0)
 		pev->speed = 100;
 
-	m_accel = (pev->speed * pev->speed) / (2 * V_fabs(m_distance));	// Calculate constant acceleration from speed and distance
+	m_accel = (pev->speed * pev->speed) / (2 * fabs(m_distance));	// Calculate constant acceleration from speed and distance
 	m_maxSpeed = pev->speed;
 	m_start = pev->angles;
 	m_center = pev->angles + (m_distance * 0.5) * pev->movedir;
@@ -982,7 +998,7 @@ void CPendulum::PendulumUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 {
 	if (!ShouldToggle(useType)) return;
 
-	m_hActivator = pActivator;
+	m_hActivator = pActivator;	//AJH
 
 	if (pev->speed)		// Pendulum is moving, stop it and auto-return if necessary
 	{

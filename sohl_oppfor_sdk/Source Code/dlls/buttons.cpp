@@ -107,16 +107,14 @@ void CEnvGlobal::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	GLOBALESTATE oldState = gGlobalState.EntityGetState(m_globalstate);
 	GLOBALESTATE newState;
 
-	if (useType == USE_ON)//this support USE_TYPE global states. G-Cont.
-	{
-		newState = GLOBAL_ON;
+	if (useType == USE_ON) {		//
+		newState = GLOBAL_ON;	//AJH Allow env_global to use USE_TYPE
 	}
-	else if (useType == USE_OFF)
-	{
-		newState = GLOBAL_OFF;
+	else if (useType == USE_OFF) {	//
+		newState = GLOBAL_OFF;	//
 	}
-	else
-	{
+	else {						//
+
 		switch (m_triggermode)
 		{
 		case 0:
@@ -781,7 +779,7 @@ void CBaseButton::Spawn()
 	m_toggle_state = TS_AT_BOTTOM;
 	m_vecPosition1 = pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (V_fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
+	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
 
 
 	// Is this a non-moving button?
@@ -819,7 +817,7 @@ void CBaseButton::PostSpawn(void)
 	else
 		m_vecPosition1 = pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions
-	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (V_fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
+	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
 
 	// Is this a non-moving button?
 	if (((m_vecPosition2 - m_vecPosition1).Length() < 1) || (pev->spawnflags & SF_BUTTON_DONTMOVE))
@@ -874,7 +872,7 @@ void DoSpark(entvars_t *pev, const Vector &location)
 	Vector tmp = location + pev->size * 0.5;
 	UTIL_Sparks(tmp);
 
-	float flVolume = RANDOM_FLOAT(0.1, 0.25) * 0.4;//random volume range
+	float flVolume = RANDOM_FLOAT(0.25, 0.75) * 0.4;//random volume range
 	switch ((int)(RANDOM_FLOAT(0, 1) * 6))
 	{
 	case 0: EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/spark1.wav", flVolume, ATTN_NORM);	break;
@@ -1516,6 +1514,8 @@ public:
 	void	Spawn(void);
 	void	Precache(void);
 	void	EXPORT SparkThink(void);
+	void	EXPORT SparkWait(void);
+	void	EXPORT SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void	EXPORT SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void	EXPORT SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void	KeyValue(KeyValueData *pkvd);
@@ -1547,7 +1547,11 @@ void CEnvSpark::Spawn(void)
 	SetThink(NULL);
 	SetUse(NULL);
 
-	if (FBitSet(pev->spawnflags, 32)) // Use for on/off
+	if (FBitSet(pev->spawnflags, 16))
+	{
+		SetUse(&CEnvSpark::SparkCyclic);
+	}
+	else if (FBitSet(pev->spawnflags, 32)) // Use for on/off
 	{
 		if (FBitSet(pev->spawnflags, 64)) // Start on
 		{
@@ -1560,10 +1564,13 @@ void CEnvSpark::Spawn(void)
 	else
 		SetThink(&CEnvSpark::SparkThink);
 
-	SetNextThink(0.1 + RANDOM_FLOAT(0, 1.5));
+	if (this->m_pfnThink)
+	{
+		SetNextThink(0.1 + RANDOM_FLOAT(0, 1.5));
 
-	if (m_flDelay <= 0)
-		m_flDelay = 1.5;
+		if (m_flDelay <= 0)
+			m_flDelay = 1.5;
+	}
 
 	Precache();
 }
@@ -1597,10 +1604,36 @@ void CEnvSpark::KeyValue(KeyValueData *pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
+void EXPORT CEnvSpark::SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+{
+	if (m_pfnThink == NULL)
+	{
+		DoSpark(pev, pev->origin);
+		SetThink(&CEnvSpark::SparkWait);
+		SetNextThink(m_flDelay);
+	}
+	else
+	{
+		SetThink(&CEnvSpark::SparkThink); // if we're on SparkWait, change to actually spark at the specified time.
+	}
+}
+
+void EXPORT CEnvSpark::SparkWait(void)
+{
+	SetThink(NULL);
+}
+
 void EXPORT CEnvSpark::SparkThink(void)
 {
-	SetNextThink(0.1 + RANDOM_FLOAT(0, m_flDelay));
 	DoSpark(pev, pev->origin);
+	if (pev->spawnflags & 16)
+	{
+		SetThink(NULL);
+	}
+	else
+	{
+		SetNextThink(0.1 + RANDOM_FLOAT(0, m_flDelay));
+	}
 }
 
 void EXPORT CEnvSpark::SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
@@ -1617,30 +1650,62 @@ void EXPORT CEnvSpark::SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, 
 	SetThink(NULL);
 	m_iState = STATE_OFF; //LRC
 }
-
 //G-Cont. flag 16 is removed - we don't need this
+//AJH - Don't remove stuff just because YOU don't use it.
 
+
+
+//----------------------------------------------------------------
+// Button_target
+//G-Cont. flag 16 is removed - we don't need this
 #define SF_BTARGET_USE		0x0001
 #define SF_BTARGET_ON		0x0002
+#define SF_BTARGET_SOLIDNOT 0x0004	//AJH - Just testing this at the moment
+#define SF_BTARGET_NOSHOT	0x0008	//AJH - So you can't trigger by shooting
 
 class CButtonTarget : public CBaseEntity
 {
 public:
+	virtual void KeyValue(KeyValueData *pkvd);//AJH
 	void Spawn(void);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	int	ObjectCaps(void);
+	string_t m_sMaster;	//AJH for lockable button_targets
 
 };
 
 LINK_ENTITY_TO_CLASS(button_target, CButtonTarget);
 
+void CButtonTarget::KeyValue(KeyValueData *pkvd) //AJH
+{
+	if (FStrEq(pkvd->szKeyName, "master"))
+	{
+		m_sMaster = ALLOC_STRING(pkvd->szValue);
+		pkvd->fHandled = TRUE;
+	}
+	else
+		CBaseEntity::KeyValue(pkvd);
+}
+
 void CButtonTarget::Spawn(void)
 {
 	pev->movetype = MOVETYPE_PUSH;
-	pev->solid = SOLID_BSP;
+	if (pev->spawnflags&SF_BTARGET_SOLIDNOT) {	//AJH - non solid button targets
+		pev->solid = SOLID_NOT;					//note: setting non solid will stop 
+	}
+	else {										//'trigger on shot' as no collision occurs
+		pev->solid = SOLID_BSP;			//Default behaviour is SOLID
+	}											//
+
 	SET_MODEL(ENT(pev), STRING(pev->model));
-	pev->takedamage = DAMAGE_YES;
+
+	if (pev->spawnflags&SF_BTARGET_NOSHOT) {		//AJH - Don't allow triggering when shot
+		pev->takedamage = DAMAGE_NO;			//Default: allow triggering
+	}
+	else {										//
+		pev->takedamage = DAMAGE_YES;			//
+	}											//
 
 	if (FBitSet(pev->spawnflags, SF_BTARGET_ON))
 		pev->frame = 1;
@@ -1650,6 +1715,10 @@ void CButtonTarget::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 {
 	if (!ShouldToggle(useType, (int)pev->frame))
 		return;
+
+	if (!UTIL_IsMasterTriggered(m_sMaster, pActivator))		//
+		return;										// AJH allows for locked button_targets 
+
 	pev->frame = 1 - pev->frame;
 	if (pev->frame)
 		SUB_UseTargets(pActivator, USE_ON, 0);

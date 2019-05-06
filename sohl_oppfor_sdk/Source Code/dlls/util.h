@@ -207,6 +207,7 @@ typedef enum
 	USE_SET = 2,
 	USE_TOGGLE = 3,
 	USE_KILL = 4,
+	USE_SPAWN = 7,  //AJH
 	// special signals, never actually get sent:
 	USE_SAME = 5,
 	USE_NOT = 6,
@@ -449,7 +450,7 @@ extern DLL_GLOBAL ULONG g_ulFrameCount;
 #define LFO_RANDOM			3
 
 // func_rotating
-#define SF_BRUSH_ROTATE_Y_AXIS		0
+#define SF_BRUSH_ROTATE_Y_AXIS		0 //!?! (LRC)
 #define SF_BRUSH_ROTATE_INSTANT		1
 #define SF_BRUSH_ROTATE_BACKWARDS	2
 #define SF_BRUSH_ROTATE_Z_AXIS		4
@@ -485,12 +486,6 @@ extern DLL_GLOBAL ULONG g_ulFrameCount;
 #define SVC_WEAPONANIM		35
 #define SVC_ROOMTYPE		37
 #define	SVC_DIRECTOR		51
-
-// camera flags
-#define	CAMERA_ON		1
-#define	DRAW_HUD		2
-#define	INVERSE_X		4
-#define	MONSTER_VIEW	8
 
 // triggers
 #define	SF_TRIGGER_ALLOWMONSTERS	1// monsters allowed to fire this trigger

@@ -107,7 +107,9 @@ static DLL_FUNCTIONS gFunctionTable =
 
 static void SetObjectCollisionBox(entvars_t *pev);
 
+#ifndef _WIN32
 extern "C" {
+#endif
 	int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion)
 	{
 		if (!pFunctionTable || interfaceVersion != INTERFACE_VERSION)
@@ -131,7 +133,11 @@ extern "C" {
 		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
 		return TRUE;
 	}
+
+#ifndef _WIN32
 }
+#endif
+
 
 int DispatchSpawn(edict_t *pent)
 {
@@ -447,24 +453,6 @@ void SaveReadFields(SAVERESTOREDATA *pSaveData, const char *pname, void *pBaseDa
 {
 	CRestore restoreHelper(pSaveData);
 	restoreHelper.ReadFields(pname, pBaseData, pFields, fieldCount);
-}
-
-// give health
-int CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
-{
-	if (!pev->takedamage)
-		return 0;
-
-	// heal
-	if (pev->health >= pev->max_health)
-		return 0;
-
-	pev->health += flHealth;
-
-	if (pev->health > pev->max_health)
-		pev->health = pev->max_health;
-
-	return 1;
 }
 
 edict_t * EHANDLE::Get(void)
@@ -857,6 +845,19 @@ void CBaseEntity::ThinkCorrection(void)
 	}
 }
 
+// give health
+int CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
+{
+	if (!pev->takedamage)
+		return 0;
+	// heal
+
+		//AJH replaces all of below. This now returns the amount of health given. Should have exactly the same behaviour otherwise.
+	flHealth = (pev->max_health >= pev->health + flHealth) ? flHealth : (pev->max_health - pev->health);
+	pev->health += flHealth;
+	return int(flHealth);
+}
+
 int CBaseEntity::TakeArmor(float flArmor)
 {
 	if (!pev->takedamage) return 0;
@@ -865,7 +866,7 @@ int CBaseEntity::TakeArmor(float flArmor)
 	pev->armorvalue += flArmor;
 	pev->armorvalue = min(pev->armorvalue, MAX_NORMAL_BATTERY);
 
-	return 1;
+	return int(pev->armorvalue);
 }
 
 // inflict damage on this entity.  bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
@@ -1015,10 +1016,10 @@ void SetObjectCollisionBox(entvars_t *pev)
 		max = 0;
 		for (i = 0; i < 3; i++)
 		{
-			v = V_fabs(((float *)pev->mins)[i]);
+			v = fabs(((float *)pev->mins)[i]);
 			if (v > max)
 				max = v;
-			v = V_fabs(((float *)pev->maxs)[i]);
+			v = fabs(((float *)pev->maxs)[i]);
 			if (v > max)
 				max = v;
 		}
@@ -1132,6 +1133,7 @@ BOOL CBaseEntity::ShouldToggle(USE_TYPE useType)
 	return TRUE;
 }
 
+
 int	CBaseEntity::DamageDecal(int bitsDamageType)
 {
 	if (pev->rendermode == kRenderTransAlpha)
@@ -1142,6 +1144,8 @@ int	CBaseEntity::DamageDecal(int bitsDamageType)
 
 	return DECAL_GUNSHOT1 + RANDOM_LONG(0, 4);
 }
+
+
 
 // NOTE: szName must be a pointer to constant memory, e.g. "monster_class" because the entity
 // will keep a pointer to it after this call.

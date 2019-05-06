@@ -29,6 +29,8 @@
 
 */
 
+#include <ctype.h>
+
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
@@ -45,6 +47,7 @@
 #include "usercmd.h"
 #include "netadr.h"
 #include "movewith.h"
+#include "items.h" //AJH used for inventory system
 #include "pm_shared.h"
 #include "skill.h"
 
@@ -54,6 +57,7 @@
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
 extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL int		g_iSkillLevel;
 extern DLL_GLOBAL ULONG		g_ulFrameCount;
 
 extern void CopyToBodyQue(entvars_t* pev);
@@ -390,8 +394,16 @@ void Host_Say(edict_t *pEntity, int teamonly)
 	}
 
 	// make sure the text has content
-
-	if (!p || !p[0] || !Q_UnicodeValidate(p))
+	char *pc;
+	for (pc = p; pc != NULL && *pc != 0; pc++)
+	{
+		if (isprint(*pc) && !isspace(*pc))
+		{
+			pc = NULL;	// we've found an alphanumeric character,  so text is valid
+			break;
+		}
+	}
+	if (pc != NULL)
 		return;  // no character found, so say nothing
 
 // turn on color set 2  (color on,  no sound)
@@ -500,7 +512,11 @@ void ClientCommand(edict_t *pEntity)
 
 	entvars_t *pev = &pEntity->v;
 
-	if (FStrEq(pcmd, "hud_color")) //LRC
+	if (FStrEq(pcmd, "VModEnable")) //LRC - shut up about VModEnable...
+	{
+		return;
+	}
+	else if (FStrEq(pcmd, "hud_color")) //LRC
 	{
 		if (CMD_ARGC() == 4)
 		{
@@ -559,6 +575,77 @@ void ClientCommand(edict_t *pEntity)
 	{
 		GetClassPtr((CBasePlayer *)pev)->ForceClientDllUpdate();
 	}
+	else if (FStrEq(pcmd, "playaudio"))  //AJH - MP3/OGG player (based on killars MP3)
+	{
+		MESSAGE_BEGIN(MSG_ONE, gmsgFsound, NULL, ENT(pev));
+		WRITE_STRING((char *)CMD_ARGV(1));
+		MESSAGE_END();
+	}
+	else if (FStrEq(pcmd, "inventory"))  //AJH - Inventory system
+	{
+		CBasePlayer *pPlayer = (CBasePlayer*)CBaseEntity::Instance(pEntity);
+		if (CMD_ARGC() > 1)
+		{
+			if (FStrEq(CMD_ARGV(1), "1")) {
+				//	ALERT(at_debug,"DEBUG: calling medkit::use()\n");
+				GetClassPtr((CItemMedicalKit *)NULL)->Use(pPlayer, pPlayer, USE_TOGGLE, 0);
+			}
+			else if (FStrEq(CMD_ARGV(1), "2")) {
+				//	ALERT(at_debug,"DEBUG: calling antitox::use()\n");
+				GetClassPtr((CItemAntidote *)NULL)->Use(pPlayer, pPlayer, USE_TOGGLE, 0);
+			}
+			else if (FStrEq(CMD_ARGV(1), "3")) {
+				//	ALERT(at_debug,"DEBUG: calling antirad::use()\n");
+				GetClassPtr((CItemAntiRad *)NULL)->Use(pPlayer, pPlayer, USE_TOGGLE, 0);
+			}
+			else if (FStrEq(CMD_ARGV(1), "6")) {
+				//	ALERT(at_debug,"DEBUG: calling flare::use()\n");
+				GetClassPtr((CItemFlare *)NULL)->Use(pPlayer, pPlayer, USE_TOGGLE, 0);
+			}
+			else if (FStrEq(CMD_ARGV(1), "7")) {
+				if (pPlayer->m_pItemCamera != NULL) {
+
+					if (CMD_ARGC() > 2) // If we have a specific usetype command
+					{	// (possibly consider letting the player jump between active cameras using a third parameter)
+						if (FStrEq(CMD_ARGV(2), "2"))		//View from Camera
+						{
+							pPlayer->m_pItemCamera->Use(pPlayer, pPlayer, USE_SET, 2);
+						}
+						else if (FStrEq(CMD_ARGV(2), "3")) //Back to normal view (don't delete camera)
+						{
+							pPlayer->m_pItemCamera->Use(pPlayer, pPlayer, USE_SET, 3);
+						}
+						else if (FStrEq(CMD_ARGV(2), "0")) //Back to normal view (delete camera)
+						{
+							pPlayer->m_pItemCamera->Use(pPlayer, pPlayer, USE_SET, 0);
+						}
+						//	else if (FStrEq(CMD_ARGV(2),"1")) //Move camera to current position (uncomment if you want to use this)
+						//	{
+						//		pPlayer->m_pItemCamera->Use(pPlayer,pPlayer,USE_SET,1);
+						//	}
+					}
+					else pPlayer->m_pItemCamera->Use(pPlayer, pPlayer, USE_TOGGLE, 0);
+
+				}
+				else
+					ALERT(at_console, "You must have a camera in your inventory before you can use one!\n");
+			}
+			else if (FStrEq(CMD_ARGV(1), "8")) {
+				ALERT(at_console, "Note: This item (adrenaline syringe) is still to be implemented \n");
+			}
+			else if (FStrEq(CMD_ARGV(1), "9")) {
+				ALERT(at_console, "Note: This item (site to site transporter) is still to be implemented \n");
+			}
+			else if (FStrEq(CMD_ARGV(1), "10")) {
+				ALERT(at_console, "Note: This item (Lazarus stealth shield) is still to be implemented \n");
+			}
+			else {
+				ALERT(at_debug, "DEBUG: Inventory item %s cannot be manually used.\n", CMD_ARGV(1));
+			}
+		}
+		else
+			ALERT(at_console, "Usage: inventory <itemnumber>\nItems are:\n\t1: Portable Medkit (Manual)\n2: AntiTox syringe (Automatic)\n3: AntiRad syringe (Automatic)\n7: Remote camera\n");
+	}
 	else if (FStrEq(pcmd, "give"))
 	{
 		if (g_flWeaponCheat != 0.0)
@@ -606,12 +693,6 @@ void ClientCommand(edict_t *pEntity)
 	else if (g_pGameRules->ClientCommand(GetClassPtr((CBasePlayer *)pev), pcmd))
 	{
 		// MenuSelect returns true only if the command is properly handled,  so don't print a warning
-	}
-	else if (FStrEq(pcmd, "VModEnable")) //LRC - shut up about VModEnable...
-	{
-		// g-cont. VModEnable at top the cases broke VoiceMod system in multiplayer
-		// you don't know about it Laurie!
-		return;
 	}
 	//BP particle system reiniting
 	else if (FStrEq(pcmd, "reinit_particles"))
@@ -1147,7 +1228,19 @@ void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs
 	{
 		pView = pViewEntity;
 	}
-
+	// for trigger_viewset
+	CBasePlayer * pPlayer = (CBasePlayer *)CBaseEntity::Instance((struct edict_s *)pClient);
+	if (pPlayer->viewFlags & 1) // custom view active
+	{
+		CBaseEntity *pViewEnt = UTIL_FindEntityByTargetname(NULL, STRING(pPlayer->viewEntity));
+		if (!FNullEnt(pViewEnt))
+		{
+			//	ALERT(at_console, "setting PAS/PVS to entity %s\n", STRING(pPlayer->viewEntity));
+			pView = pViewEnt->edict();
+		}
+		else
+			pPlayer->viewFlags = 0;
+	}
 	if (pClient->v.flags & FL_PROXY)
 	{
 		*pvs = NULL;	// the spectator proxy sees
@@ -1697,7 +1790,6 @@ void UpdateClientData(const edict_t *ent, int sendweapons, struct clientdata_s *
 	entvars_t *		pev = (entvars_t *)&ent->v;
 	CBasePlayer *	pl = dynamic_cast<CBasePlayer *>(CBasePlayer::Instance(pev));
 	entvars_t *		pevOrg = NULL;
-
 	cd->flags = pev->flags;
 	cd->health = pev->health;
 
@@ -1752,7 +1844,7 @@ This is the time to examine the usercmd for anything extra.  This call happens e
 void CmdStart(const edict_t *player, const struct usercmd_s *cmd, unsigned int random_seed)
 {
 	entvars_t *pev = (entvars_t *)&player->v;
-	CBasePlayer *pl = dynamic_cast<CBasePlayer *>(CBasePlayer::Instance(pev));
+	CBasePlayer *pl = (CBasePlayer *)CBasePlayer::Instance(pev);
 
 	if (!pl)
 		return;
@@ -1775,7 +1867,7 @@ Each cmdstart is exactly matched with a cmd end, clean up any group trace flags,
 void CmdEnd(const edict_t *player)
 {
 	entvars_t *pev = (entvars_t *)&player->v;
-	CBasePlayer *pl = dynamic_cast<CBasePlayer *>(CBasePlayer::Instance(pev));
+	CBasePlayer *pl = (CBasePlayer *)CBasePlayer::Instance(pev);
 
 	if (!pl)
 		return;

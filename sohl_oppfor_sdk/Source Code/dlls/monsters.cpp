@@ -1318,7 +1318,7 @@ int CBaseMonster::CheckLocalMove(const Vector &vecStart, const Vector &vecEnd, C
 	{
 		// The monster can move to a spot UNDER the target, but not to it. Don't try to triangulate, go directly to the node graph.
 		// UNDONE: Magic # 64 -- this used to be pev->size.z but that won't work for small creatures like the headcrab
-		if (V_fabs(vecEnd.z - pev->origin.z) > 64)
+		if (fabs(vecEnd.z - pev->origin.z) > 64)
 		{
 			iReturn = LOCALMOVE_INVALID_DONT_TRIANGULATE;
 		}
@@ -3247,7 +3247,7 @@ Vector CBaseMonster::ShootAtEnemy(const Vector &shootOrigin)
 //=========================================================
 BOOL CBaseMonster::FacingIdeal(void)
 {
-	if (V_fabs(FlYawDiff()) <= 0.006f)//!!!BUGBUG - no magic numbers!!!
+	if (fabs(FlYawDiff()) <= 0.006f)//!!!BUGBUG - no magic numbers!!!
 	{
 		return TRUE;
 	}

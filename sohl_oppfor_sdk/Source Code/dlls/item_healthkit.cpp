@@ -279,8 +279,9 @@ STATE CWallHealth::GetState(void)
 {
 	if (m_iOn == 2)
 		return STATE_IN_USE;
-	else if (m_iJuice)
+
+	if (m_iJuice)
 		return STATE_ON;
-	else
-		return STATE_OFF;
+	
+	return STATE_OFF;
 }

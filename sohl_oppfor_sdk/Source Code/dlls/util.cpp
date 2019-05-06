@@ -1023,7 +1023,7 @@ CBaseEntity *UTIL_FindEntityGeneric(const char *szWhatever, Vector &vecSrc, floa
 	float flMaxDist2 = flRadius * flRadius;
 	while ((pSearch = UTIL_FindEntityByClassname(pSearch, szWhatever)) != NULL)
 	{
-		float flDist2 = (pSearch->pev->origin - vecSrc).Length();
+		float flDist2 = Vector(pSearch->pev->origin - vecSrc).Length();
 		flDist2 = flDist2 * flDist2;
 		if (flMaxDist2 > flDist2)
 		{

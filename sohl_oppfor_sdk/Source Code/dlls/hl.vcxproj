@@ -32,6 +32,10 @@
     <ClCompile Include="baseactanimating.cpp" />
     <ClCompile Include="func_grass.cpp" />
     <ClCompile Include="genericmodel.cpp" />
+    <ClCompile Include="item_antirad.cpp" />
+    <ClCompile Include="item_camera.cpp" />
+    <ClCompile Include="item_flare.cpp" />
+    <ClCompile Include="item_medicalkit.cpp" />
     <ClCompile Include="monster_blkop_apache.cpp" />
     <ClCompile Include="monster_blkop_osprey.cpp" />
     <ClCompile Include="monster_diablo.cpp" />

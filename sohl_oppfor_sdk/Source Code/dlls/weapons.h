@@ -37,12 +37,6 @@ public:
 	static CLaserSpot *CreateSpot(const char* spritename);
 };
 
-// constant items
-#define ITEM_HEALTHKIT			 1
-#define ITEM_ANTIDOTE			 2
-#define ITEM_SECURITY			 3
-#define ITEM_BATTERY			 4
-
 #define WEAPON_NONE				 0
 #define WEAPON_CROWBAR			 1
 #define WEAPON_PIPEWRENCH		 2
@@ -284,7 +278,7 @@ public:
 	static ItemInfo ItemInfoArray[MAX_WEAPONS];
 	static AmmoInfo AmmoInfoArray[MAX_AMMO_SLOTS];
 
-	string_t m_sMaster;
+	string_t m_sMaster;	//AJH for lockable weapons
 
 	CBasePlayer	*m_pPlayer;
 	CBasePlayerItem *m_pNext;
@@ -387,7 +381,7 @@ public:
 	int		m_iClientClip;										// the last version of m_iClip sent to hud dll
 	int		m_iClientWeaponState;								// the last version of the weapon state sent to hud dll (is current weapon, is on target)
 	int		m_fInReload;										// Are we in the middle of a reload;
-	int		m_iClipSize;
+	int		m_iClipSize;//This required weapon_generic, defintion in same class will crash'es compile
 	int 	m_iChargeLevel;//level of energy charge
 	int 	m_iOverloadLevel;//level of overload weapon
 	int 	m_fInAttack;//attack type

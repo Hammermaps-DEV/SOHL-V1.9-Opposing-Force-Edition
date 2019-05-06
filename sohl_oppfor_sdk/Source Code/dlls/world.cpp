@@ -767,11 +767,29 @@ void CWorld::KeyValue(KeyValueData *pkvd)
 		pkvd->fHandled = TRUE;
 	}
 	//LRC- ends
+
+		//AJH- Gauss Jump in single play
 	else if (FStrEq(pkvd->szKeyName, "allow_sp_gjump"))
 	{
 		g_allowGJump = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
+	else if (FStrEq(pkvd->szKeyName, "timed_damage"))
+	{
+		CVAR_SET_FLOAT("timed_damage", atof(pkvd->szValue));
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "max_medkit"))
+	{
+		CVAR_SET_FLOAT("max_medkit", atof(pkvd->szValue));
+		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq(pkvd->szKeyName, "max_cameras"))
+	{
+		CVAR_SET_FLOAT("max_cameras", atof(pkvd->szValue));
+		pkvd->fHandled = TRUE;
+	}
+
 	else
 		CBaseEntity::KeyValue(pkvd);
 }

@@ -31,23 +31,27 @@
 extern int gmsgItemPickup;
 extern int gEvilImpulse101;
 
-class CItemLongJump : public CItem {
-	void Spawn(void) {
+class CItemLongJump : public CItem
+{
+	void Spawn(void)
+	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
 		CItem::Spawn();
 	}
-
-	void Precache(void) {
+	void Precache(void)
+	{
 		PRECACHE_MODEL("models/w_longjump.mdl");
 	}
-
-	BOOL MyTouch(CBasePlayer *pPlayer) {
-		if (pPlayer->m_fLongJump) {
+	BOOL MyTouch(CBasePlayer *pPlayer)
+	{
+		if (pPlayer->m_fLongJump)
+		{
 			return FALSE;
 		}
 
-		if (pPlayer->m_iHideHUD & ITEM_SUIT) {
+		if ((pPlayer->pev->weapons & (1 << WEAPON_SUIT)))
+		{
 			pPlayer->m_fLongJump = TRUE;// player now has longjump module
 
 			g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "slj", "1");
@@ -56,9 +60,12 @@ class CItemLongJump : public CItem {
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
-			if (!gEvilImpulse101)  // Play the longjump sound UNDONE: Kelly? correct sound?
-				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1");
+			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);//AJH msg change inventory
+			WRITE_SHORT((ITEM_LONGJUMP));						//which item to change
+			WRITE_SHORT(1);										//set counter to this ammount
+			MESSAGE_END();
 
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1");	// Play the longjump sound UNDONE: Kelly? correct sound?
 			return TRUE;
 		}
 		return FALSE;

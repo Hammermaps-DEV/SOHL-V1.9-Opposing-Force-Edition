@@ -26,19 +26,32 @@
 #include "player.h"
 #include "items.h"
 
-class CItemSecurity : public CItem {
-	void Spawn(void) {
+class CItemSecurity : public CItem
+{
+	void Spawn(void)
+	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_security.mdl");
 		CItem::Spawn();
 	}
-
-	void Precache(void) {
+	void Precache(void)
+	{
 		PRECACHE_MODEL("models/w_security.mdl");
 	}
+	BOOL MyTouch(CBasePlayer *pPlayer)
+	{
+		pPlayer->m_rgItems[ITEM_SECURITY] += 1;		//AJH implement a new system with different cards instead of just MORE cards
 
-	BOOL MyTouch(CBasePlayer *pPlayer) {
-		pPlayer->m_rgItems[ITEM_SECURITY] += 1;
+		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);	//AJH msg change inventory
+		WRITE_SHORT((ITEM_SECURITY));						//which item to change
+		WRITE_SHORT(pPlayer->m_rgItems[ITEM_SECURITY]);		//set counter to this ammount
+		MESSAGE_END();
+
+		if (pev->noise)	//AJH
+			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, STRING(pev->noise), 1, ATTN_NORM);
+		else
+			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
+
 		return TRUE;
 	}
 };

@@ -136,16 +136,16 @@ void CElectrifiedWire::Spawn()
 		GetAltSegments()[GetNumSegments() - 1]->SetCauseDamageOnTouch(m_bIsActive);
 	}
 
-	m_flLastSparkTime = gpGlobals->time;
+	m_flLastSparkTime = UTIL_GlobalTimeBase();
 
 	SetSoundAllowed(false);
 }
 
 void CElectrifiedWire::Think()
 {
-	if (gpGlobals->time - m_flLastSparkTime > 0.1)
+	if (UTIL_GlobalTimeBase() - m_flLastSparkTime > 0.1)
 	{
-		m_flLastSparkTime = gpGlobals->time;
+		m_flLastSparkTime = UTIL_GlobalTimeBase();
 
 		if (m_uiNumUninsulatedSegments > 0)
 		{

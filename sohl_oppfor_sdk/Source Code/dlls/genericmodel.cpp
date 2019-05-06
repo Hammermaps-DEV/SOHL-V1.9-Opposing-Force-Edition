@@ -93,7 +93,7 @@ void CGenericModel::IdleThink(void)
 {
 	float flInterval = StudioFrameAdvance();
 
-	pev->nextthink = gpGlobals->time + 0.5;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
 
 	DispatchAnimEvents(flInterval);
 
