@@ -1230,7 +1230,7 @@ void SetupVisibility(edict_t *pViewEntity, edict_t *pClient, unsigned char **pvs
 	}
 	// for trigger_viewset
 	CBasePlayer * pPlayer = (CBasePlayer *)CBaseEntity::Instance((struct edict_s *)pClient);
-	if (pPlayer->viewFlags & 1) // custom view active
+	if (pPlayer && pPlayer->viewFlags & 1) // custom view active
 	{
 		CBaseEntity *pViewEnt = UTIL_FindEntityByTargetname(NULL, STRING(pPlayer->viewEntity));
 		if (!FNullEnt(pViewEnt))

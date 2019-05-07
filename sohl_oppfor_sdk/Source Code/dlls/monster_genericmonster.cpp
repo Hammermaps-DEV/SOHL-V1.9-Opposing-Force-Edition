@@ -296,7 +296,7 @@ void CGenericMonster::MakeGas(void)
 			m_pBeam->DoSparks(tr.vecEndPos, posGun);
 			m_pBeam->SetFlags(BEAM_FSHADEIN);
 			m_pBeam->pev->spawnflags |= pev->spawnflags &  SF_BEAM_SPARKSTART; //| SF_BEAM_DECALS | SF_BEAM_TOGGLE);
-			int EXPORT RelinkBeam();
+			m_pBeam->RelinkBeam();
 
 			UTIL_Sparks(tr.vecEndPos);
 			UTIL_DecalTrace(&tr, 28 + RANDOM_LONG(0, 4));

@@ -2002,7 +2002,7 @@ void CFuncTrackTrain::DesiredAction(void) // Next( void )
 	}
 	else	// end of path, stop
 	{
-		Vector vecTemp; //LRC
+		Vector vecTemp(0, 0, 0);; //LRC
 		StopSound();
 		vecTemp = (nextPos - pev->origin); //LRC
 

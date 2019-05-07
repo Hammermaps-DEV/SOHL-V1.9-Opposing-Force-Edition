@@ -1362,7 +1362,7 @@ int SENTENCEG_PlayRndI(edict_t *entity, int isentenceg,
 	name[0] = 0;
 
 	ipick = USENTENCEG_Pick(isentenceg, name);
-	if (ipick > 0 && name)
+	if (ipick > 0 && name[0])
 		EMIT_SOUND_DYN(entity, CHAN_VOICE, name, volume, attenuation, flags, pitch);
 	return ipick;
 }
@@ -1670,8 +1670,8 @@ void TEXTURETYPE_Init(char *filename)
 {
 	char buffer[512];
 	int i, j;
-	byte *pMemFile;
-	int fileSize, filePos;
+	int fileSize = 0;
+	int filePos = 0;
 
 	if (fTextureTypeInit)
 		return;
@@ -1682,7 +1682,7 @@ void TEXTURETYPE_Init(char *filename)
 	gcTextures = 0;
 	memset(buffer, 0, 512);
 
-	pMemFile = g_engfuncs.pfnLoadFileForMe(filename, &fileSize);
+	byte* pMemFile = g_engfuncs.pfnLoadFileForMe(filename, &fileSize);
 	if (!pMemFile)
 		return;
 

@@ -4907,7 +4907,7 @@ void CTriggerMotion::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 		}
 	}
 
-	Vector vecTemp;
+	Vector vecTemp(0, 0, 0);;
 	Vector vecVelAngles;
 	if (m_iszAngles)
 	{
@@ -5080,7 +5080,7 @@ void CMotionThread::Think(void)
 	if (pev->spawnflags & SF_MOTION_DEBUG)
 		ALERT(at_debug, "motion_thread affects %s \"%s\":\n", STRING(m_hTarget->pev->classname), STRING(m_hTarget->pev->targetname));
 
-	Vector vecTemp;
+	Vector vecTemp(0, 0, 0);;
 
 	if (m_iszPosition)
 	{

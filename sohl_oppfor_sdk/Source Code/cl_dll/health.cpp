@@ -18,9 +18,9 @@
 // implementation of CHudHealth class
 //
 
-#include "STDIO.H"
-#include "STDLIB.H"
-#include "MATH.H"
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
 
 #include "hud.h"
 #include "cl_util.h"
@@ -391,10 +391,9 @@ int CHudHealth::DrawDamage(float flTime)
 	// check for bits that should be expired
 	for ( i = 0; i < NUM_DMG_TYPES; i++ )
 	{
-		DAMAGE_IMAGE *pdmg = &m_dmg[i];
-
 		if ( m_bitsDamage & giDmgFlags[i] )
 		{
+			pdmg = &m_dmg[i];
 			pdmg->fExpire = V_min( flTime + DMG_IMAGE_LIFE, pdmg->fExpire );
 
 			if ( pdmg->fExpire <= flTime		// when the time has expired

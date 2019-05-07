@@ -409,7 +409,7 @@ void UTIL_AssignOrigin(CBaseEntity *pEntity, const Vector vecOrigin, BOOL bIniti
 	{
 		CBaseEntity* pChild = pEntity->m_pChildMoveWith;
 
-		Vector vecTemp;
+		Vector vecTemp(0, 0, 0);;
 		while (pChild)
 		{
 			if (pChild->pev->movetype != MOVETYPE_PUSH || pChild->pev->velocity == pEntity->pev->velocity) // if the child isn't moving under its own power
@@ -447,7 +447,7 @@ void UTIL_AssignAngles(CBaseEntity *pEntity, const Vector vecAngles, BOOL bIniti
 	if (pEntity->m_pChildMoveWith) // now I've moved pEntity, does anything else have to move with it?
 	{
 		CBaseEntity* pChild = pEntity->m_pChildMoveWith;
-		Vector vecTemp;
+		Vector vecTemp(0, 0, 0);;
 		while (pChild)
 		{
 			if (pChild->pev->avelocity == pEntity->pev->avelocity) // if the child isn't turning under its own power

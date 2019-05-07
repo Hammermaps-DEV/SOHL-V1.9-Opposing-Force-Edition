@@ -1473,6 +1473,9 @@ BOOL CRCAllyMonster::CanFollow(void)
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
+		if (!m_pCine)
+			return FALSE;
+
 		if (!m_pCine->CanInterrupt())
 			return FALSE;
 	}

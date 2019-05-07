@@ -1633,7 +1633,7 @@ void CFuncTankControls::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 			return;
 
 		//LRC- Now uses FindEntityByTargetname, so that aliases work.
-		while (tryTank = UTIL_FindEntityByTargetname(tryTank, STRING(pev->target)))
+		while ((tryTank = UTIL_FindEntityByTargetname(tryTank, STRING(pev->target))))
 		{
 			if (!strncmp(STRING(tryTank->pev->classname), "func_tank", 9))
 			{
@@ -1677,7 +1677,7 @@ void CFuncTankControls::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 		ALERT(at_console, "TANK controls deactivated\n");
 
 		//LRC- Now uses FindEntityByTargetname, so that aliases work.
-		while (tryTank = UTIL_FindEntityByTargetname(tryTank, STRING(pev->target)))
+		while ((tryTank = UTIL_FindEntityByTargetname(tryTank, STRING(pev->target))))
 		{
 			if (FClassnameIs(tryTank->pev, "func_tank") || FClassnameIs(tryTank->pev, "func_tanklaser") || FClassnameIs(tryTank->pev, "func_tankmortar") || FClassnameIs(tryTank->pev, "func_tankrocket"))
 			{

@@ -21,6 +21,7 @@
 #include "view.h"
 #include "windows.h"
 #include "dinput/dinput.h"
+#include <joystickapi.h>
 
 #ifdef USE_VGUI2
 #include <vgui/ISurface.h>

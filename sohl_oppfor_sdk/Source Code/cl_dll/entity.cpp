@@ -585,7 +585,7 @@ void CL_DLLEXPORT HUD_TempEntUpdate (
 
 			if ( pTemp->flags & (FTENT_COLLIDEALL | FTENT_COLLIDEWORLD) )
 			{
-				vec3_t	traceNormal;
+				vec3_t	traceNormal(0, 0, 0);
 				float	traceFraction = 1;
 
 				if ( pTemp->flags & FTENT_COLLIDEALL )
