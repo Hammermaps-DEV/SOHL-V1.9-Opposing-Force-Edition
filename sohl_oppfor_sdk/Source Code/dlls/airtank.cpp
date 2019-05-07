@@ -13,9 +13,13 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
-*
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
 *
 ***/
 

@@ -1,32 +1,30 @@
-/*
-Copyright 2001 to 2004. The Battle Grounds Team and Contributors
-
-This file is part of the Battle Grounds Modification for Half-Life.
-
-The Battle Grounds Modification for Half-Life is free software;
-you can redistribute it and/or modify it under the terms of the
-GNU Lesser General Public License as published by the Free
-Software Foundation; either version 2.1 of the License, or
-(at your option) any later version.
-
-The Battle Grounds Modification for Half-Life is distributed in
-the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-for more details.
-
-You should have received a copy of the GNU Lesser General Public
-License along with The Battle Grounds Modification for Half-Life;
-if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-Suite 330, Boston, MA  02111-1307  USA
-
-You must obey the GNU Lesser General Public License in all respects for
-all of the code used other than code distributed with the Half-Life
-SDK developed by Valve.  If you modify this file, you may extend this
-exception to your version of the file, but you are not obligated to do so.
-If you do not wish to do so, delete this exception statement from your
-version.
-*/
+/***
+*
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 
 #ifndef FUNC_GRASS
 #define FUNC_GRASS
