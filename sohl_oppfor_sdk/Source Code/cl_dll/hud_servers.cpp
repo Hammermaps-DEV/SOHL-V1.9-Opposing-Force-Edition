@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -318,7 +325,7 @@ int	CHudServers::CompareServers( server_t *p1, server_t *p2 )
 
 			if ( n1 && n2 )
 			{
-				if ( stricmp( n1, n2 ) < 0 )
+				if ( _stricmp( n1, n2 ) < 0 )
 					return 1;
 			}
 		}
@@ -609,7 +616,7 @@ int CompareField( CHudServers::server_t *p1, CHudServers::server_t *p2, const ch
 	}
 
 	// String compare
-	return stricmp( sz1, sz2 );
+	return _stricmp( sz1, sz2 );
 }
 
 int CALLBACK ServerListCompareFunc( CHudServers::server_t *p1, CHudServers::server_t *p2, const char *fieldname )
@@ -800,7 +807,7 @@ int CHudServers::LoadMasterAddresses( int maxservers, int *count, netadr_t *padr
 
 		bIgnore = true;
 
-		if ( !stricmp( m_szToken, "Master" ) )
+		if ( !_stricmp( m_szToken, "Master" ) )
 		{
 			nDefaultPort = PORT_MASTER;
 			bIgnore = FALSE;
@@ -835,7 +842,7 @@ int CHudServers::LoadMasterAddresses( int maxservers, int *count, netadr_t *padr
 			if (strlen(m_szToken) <= 0)
 				break;
 
-			if ( stricmp( m_szToken, ":" ) )
+			if ( _stricmp( m_szToken, ":" ) )
 				break;
 
 			pstart = gEngfuncs.COM_ParseFile( pstart, m_szToken );

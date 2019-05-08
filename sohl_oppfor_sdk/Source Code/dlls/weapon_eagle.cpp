@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Desert Eagle * http://half-life.wikia.com/wiki/Desert_Eagle
 //=========================================================
@@ -113,7 +121,8 @@ void CEagle::PrimaryAttack(void) {
 	if (!m_fSpotActive) {
 		vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_10DEGREES);
 		flCycleTime = 0.25f;
-	} else {
+	}
+	else {
 		vecAiming = gpGlobals->v_forward;
 		flCycleTime = 0.5f;
 	}
@@ -184,7 +193,8 @@ void CEagle::Reload(void) {
 	if (m_iClip == 0) {
 		DefaultReload(EAGLE_MAX_CLIP, (int)EAGLE_RELOAD::sequence,
 			CalculateWeaponTime((int)EAGLE_RELOAD::frames, (int)EAGLE_RELOAD::fps));
-	} else {
+	}
+	else {
 		DefaultReload(EAGLE_MAX_CLIP, (int)EAGLE_RELOAD_NOT_EMPTY::sequence,
 			CalculateWeaponTime((int)EAGLE_RELOAD_NOT_EMPTY::frames, (int)EAGLE_RELOAD_NOT_EMPTY::fps));
 	}
@@ -212,27 +222,32 @@ void CEagle::WeaponIdle(void) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE1::frames, (int)EAGLE_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.3) {
+		}
+		else if (flRand <= 0.3) {
 			iAnim = (int)EAGLE_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE2::frames, (int)EAGLE_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.5) {
+		}
+		else if (flRand <= 0.5) {
 			iAnim = (int)EAGLE_IDLE3::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE3::frames, (int)EAGLE_IDLE3::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.7) {
+		}
+		else if (flRand <= 0.7) {
 			iAnim = (int)EAGLE_IDLE4::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE4::frames, (int)EAGLE_IDLE4::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.9) {
+		}
+		else if (flRand <= 0.9) {
 			iAnim = (int)EAGLE_IDLE5::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)EAGLE_IDLE5::frames, (int)EAGLE_IDLE5::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

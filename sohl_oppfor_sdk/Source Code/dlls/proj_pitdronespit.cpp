@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Projectile: Pit Drone Spit * http://half-life.wikia.com/wiki/Pit_Drone
 //=========================================================
@@ -154,7 +162,8 @@ void CPitDroneSpit::TrackTarget(void) {
 
 	if (m_hEnemy != NULL && FVisible(m_hEnemy)) {
 		m_vecEnemyLKP = m_hEnemy->BodyTarget(pev->origin);
-	} else {
+	}
+	else {
 		m_vecEnemyLKP = m_vecEnemyLKP + pev->velocity * 700 * 0.1;
 	}
 
@@ -197,7 +206,7 @@ void CPitDroneSpit::TrackTouch(CBaseEntity *pOther) {
 }
 
 void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
-	if(pOther->pev->takedamage) {
+	if (pOther->pev->takedamage) {
 		TraceResult tr = UTIL_GetGlobalTrace();
 		entvars_t	*pevOwner;
 		pevOwner = VARS(pev->owner);
@@ -213,7 +222,8 @@ void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 		if (!IsMultiplayer()) {
 			Killed(pev, GIB_NEVER);
 		}
-	} else {
+	}
+	else {
 		EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pMissSounds);
 		SetThink(&CPitDroneSpit::SUB_Remove);
 		SetNextThink(0);

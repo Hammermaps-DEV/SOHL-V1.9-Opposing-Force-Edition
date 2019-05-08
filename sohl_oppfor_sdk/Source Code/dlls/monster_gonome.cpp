@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,13 +13,18 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-
 //=========================================================
 // NPC: Gonome
 //=========================================================
@@ -134,11 +139,11 @@ const char *CGonome::pDeathSounds[] = {
 //=========================================================
 int CGonome::ISoundMask(void) {
 	return	bits_SOUND_WORLD |
-			bits_SOUND_COMBAT |
-			bits_SOUND_CARCASS |
-			bits_SOUND_MEAT |
-			bits_SOUND_GARBAGE |
-			bits_SOUND_PLAYER;
+		bits_SOUND_COMBAT |
+		bits_SOUND_CARCASS |
+		bits_SOUND_MEAT |
+		bits_SOUND_GARBAGE |
+		bits_SOUND_PLAYER;
 }
 
 //=========================================================
@@ -336,7 +341,7 @@ void CGonome::AttackSound(void) {
 //=========================================================
 void CGonome::SetYawSpeed(void) {
 	switch (m_Activity) {
-		default: pev->yaw_speed = 120;   break;
+	default: pev->yaw_speed = 120;   break;
 	}
 }
 
@@ -346,110 +351,113 @@ void CGonome::SetYawSpeed(void) {
 //=========================================================
 void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case GONOME_AE_THROW: {
-			Vector	vecSpitOffset;
-			Vector	vecSpitDir;
+	case GONOME_AE_THROW: {
+		Vector	vecSpitOffset;
+		Vector	vecSpitDir;
 
-			UTIL_MakeVectors(pev->angles);
+		UTIL_MakeVectors(pev->angles);
 
-			Vector vecArmPos, vecArmAng;
-			GetAttachment(0, vecArmPos, vecArmAng);
+		Vector vecArmPos, vecArmAng;
+		GetAttachment(0, vecArmPos, vecArmAng);
 
-			vecSpitOffset = vecArmPos;
-			vecSpitDir = ((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
+		vecSpitOffset = vecArmPos;
+		vecSpitDir = ((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
 
-			vecSpitDir.x += RANDOM_FLOAT(-0.05, 0.05);
-			vecSpitDir.y += RANDOM_FLOAT(-0.05, 0.05);
-			vecSpitDir.z += RANDOM_FLOAT(-0.05, 0);
+		vecSpitDir.x += RANDOM_FLOAT(-0.05, 0.05);
+		vecSpitDir.y += RANDOM_FLOAT(-0.05, 0.05);
+		vecSpitDir.z += RANDOM_FLOAT(-0.05, 0);
 
-			// spew the spittle temporary ents.
-			MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpitOffset);
-				WRITE_BYTE(TE_SPRITE_SPRAY);
-				WRITE_COORD(vecSpitOffset.x);	// pos
-				WRITE_COORD(vecSpitOffset.y);
-				WRITE_COORD(vecSpitOffset.z);
-				WRITE_COORD(vecSpitDir.x);	// dir
-				WRITE_COORD(vecSpitDir.y);
-				WRITE_COORD(vecSpitDir.z);
-				WRITE_SHORT(iGonomeSpitSprite);	// model
-				WRITE_BYTE(15);			// count
-				WRITE_BYTE(210);			// speed
-				WRITE_BYTE(25);			// noise ( client will divide by 100 )
-			MESSAGE_END();
+		// spew the spittle temporary ents.
+		MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSpitOffset);
+		WRITE_BYTE(TE_SPRITE_SPRAY);
+		WRITE_COORD(vecSpitOffset.x);	// pos
+		WRITE_COORD(vecSpitOffset.y);
+		WRITE_COORD(vecSpitOffset.z);
+		WRITE_COORD(vecSpitDir.x);	// dir
+		WRITE_COORD(vecSpitDir.y);
+		WRITE_COORD(vecSpitDir.z);
+		WRITE_SHORT(iGonomeSpitSprite);	// model
+		WRITE_BYTE(15);			// count
+		WRITE_BYTE(210);			// speed
+		WRITE_BYTE(25);			// noise ( client will divide by 100 )
+		MESSAGE_END();
 
+		switch (RANDOM_LONG(0, 1)) {
+		case 0:
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack2.wav", VOL_NORM, ATTN_NORM);
+			break;
+		case 1:
+			EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack3.wav", VOL_NORM, ATTN_NORM);
+			break;
+		}
+
+		CGonomeSpit::Shoot(pev, vecSpitOffset, vecSpitDir * 1200);
+	}
+						  break;
+	case GONOME_AE_SLASH_LEFT: {
+		CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH | DMG_NEVERGIB);
+		if (pHurt) {
+			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+				pHurt->pev->punchangle.z = 22;
+				pHurt->pev->punchangle.x = 9;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
+			}
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+		}
+		else {
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+		}
+	}
+							   break;
+	case GONOME_AE_SLASH_RIGHT: {
+		CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH | DMG_NEVERGIB);
+		if (pHurt) {
+			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+				pHurt->pev->punchangle.z = -22;
+				pHurt->pev->punchangle.x = 9;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
+			}
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+		}
+		else {
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+		}
+	}
+								break;
+
+	case GONOME_AE_BITE1:
+	case GONOME_AE_BITE2:
+	case GONOME_AE_BITE3:
+	case GONOME_AE_BITE4: {
+		// SOUND HERE!
+		CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_TOLERANCE_MELEE2_RANGE, gSkillData.gonomeDmgOneBite, DMG_SLASH | DMG_NEVERGIB);
+		if (pHurt) {
+			// croonchy bite sound
+			int iPitch = RANDOM_FLOAT(90, 110);
 			switch (RANDOM_LONG(0, 1)) {
-				case 0:
-					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack2.wav", VOL_NORM, ATTN_NORM);
+			case 0:
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 				break;
-				case 1:
-					EMIT_SOUND(ENT(pev), CHAN_WEAPON, "bullchicken/bc_attack3.wav", VOL_NORM, ATTN_NORM);
+			case 1:
+				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
 				break;
 			}
 
-			CGonomeSpit::Shoot(pev, vecSpitOffset, vecSpitDir * 1200);
+			pHurt->pev->punchangle.z = RANDOM_LONG(-10, 10);
+			pHurt->pev->punchangle.x = RANDOM_LONG(-35, -45);
+			pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * -100;
+			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 50;
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 		}
-		break;
-		case GONOME_AE_SLASH_LEFT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH | DMG_NEVERGIB);
-			if (pHurt) {
-				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-					pHurt->pev->punchangle.z = 22;
-					pHurt->pev->punchangle.x = 9;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
-				}
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
-			} else {
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
-			}
+		else {
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 		}
-		break;
-		case GONOME_AE_SLASH_RIGHT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_MELEE_ATTACK_RADIUS, gSkillData.gonomeDmgOneSlash, DMG_SLASH | DMG_NEVERGIB);
-			if (pHurt) {
-				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-					pHurt->pev->punchangle.z = -22;
-					pHurt->pev->punchangle.x = 9;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
-				}
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
-			} else {
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
-			}
-		}
-		break;
-
-		case GONOME_AE_BITE1:
-		case GONOME_AE_BITE2:
-		case GONOME_AE_BITE3:
-		case GONOME_AE_BITE4: {
-			// SOUND HERE!
-			CBaseEntity *pHurt = CheckTraceHullAttack(GONOME_TOLERANCE_MELEE2_RANGE, gSkillData.gonomeDmgOneBite, DMG_SLASH | DMG_NEVERGIB);
-			if (pHurt) {
-				// croonchy bite sound
-				int iPitch = RANDOM_FLOAT(90, 110);
-				switch (RANDOM_LONG(0, 1)) {
-					case 0:
-						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite2.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
-					break;
-					case 1:
-						EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "bullchicken/bc_bite3.wav", VOL_NORM, ATTN_NORM, 0, iPitch);
-					break;
-				}
-
-				pHurt->pev->punchangle.z = RANDOM_LONG(-10, 10);
-				pHurt->pev->punchangle.x = RANDOM_LONG(-35, -45);
-				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * -100;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 50;
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
-			} else {
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
-			}
-		}
-		break;
-		default:
-			CBaseMonster::HandleAnimEvent(pEvent);
+	}
+						  break;
+	default:
+		CBaseMonster::HandleAnimEvent(pEvent);
 	}
 }
 
@@ -852,33 +860,33 @@ void CGonome::StartTask(Task_t *pTask)
 
 	switch (pTask->iTask)
 	{
-		case TASK_MELEE_ATTACK1:
+	case TASK_MELEE_ATTACK1:
+	{
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee1.wav", VOL_NORM, ATTN_NORM);
+		CBaseMonster::StartTask(pTask);
+	}
+	break;
+	case TASK_MELEE_ATTACK2:
+	{
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee2.wav", VOL_NORM, ATTN_NORM);
+		CBaseMonster::StartTask(pTask);
+	}
+	break;
+	case TASK_GET_PATH_TO_ENEMY:
+	{
+		if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy))
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee1.wav", VOL_NORM, ATTN_NORM);
-			CBaseMonster::StartTask(pTask);
+			m_iTaskStatus = TASKSTATUS_COMPLETE;
 		}
-		break;
-		case TASK_MELEE_ATTACK2:
+		else
 		{
-			EMIT_SOUND(ENT(pev), CHAN_VOICE, "gonome/gonome_melee2.wav", VOL_NORM, ATTN_NORM);
-			CBaseMonster::StartTask(pTask);
+			ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
+			TaskFail();
 		}
-		break;
-		case TASK_GET_PATH_TO_ENEMY:
-		{
-			if (BuildRoute(m_hEnemy->pev->origin, bits_MF_TO_ENEMY, m_hEnemy))
-			{
-				m_iTaskStatus = TASKSTATUS_COMPLETE;
-			}
-			else
-			{
-				ALERT(at_aiconsole, "GetPathToEnemy failed!!\n");
-				TaskFail();
-			}
-		}
-		break;
-		default:
-			CBullsquid::StartTask(pTask);
+	}
+	break;
+	default:
+		CBullsquid::StartTask(pTask);
 		break;
 
 	}

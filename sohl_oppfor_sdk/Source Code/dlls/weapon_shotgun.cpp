@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Shotgun * http://half-life.wikia.com/wiki/HECU_SPAS-12
 //=========================================================
@@ -35,13 +43,13 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_shotgun, CShotgun );
+LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
 
 //=========================================================
 // Spawn Shotgun
 //=========================================================
 void CShotgun::Spawn(void) {
-	Precache( );
+	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_shotgun.mdl");
 	m_iDefaultAmmo = SHOTGUN_DEFAULT_GIVE;
@@ -57,7 +65,7 @@ void CShotgun::Precache(void) {
 	PRECACHE_MODEL("models/w_shotgun.mdl");
 	PRECACHE_MODEL("models/p_shotgun.mdl");
 
-	PRECACHE_MODEL ("models/shotgunshell.mdl"); // brass shell
+	PRECACHE_MODEL("models/shotgunshell.mdl"); // brass shell
 
 	PRECACHE_SOUND("weapons/scock1.wav"); //by model
 	PRECACHE_SOUND("weapons/dbarrel1.wav");
@@ -65,7 +73,7 @@ void CShotgun::Precache(void) {
 	PRECACHE_SOUND("weapons/reload1.wav");
 	PRECACHE_SOUND("weapons/reload3.wav");
 
-	m_usShotgunFire = PRECACHE_EVENT( 1, "events/shotgun.sc" );
+	m_usShotgunFire = PRECACHE_EVENT(1, "events/shotgun.sc");
 }
 
 //=========================================================
@@ -105,7 +113,8 @@ void CShotgun::PrimaryAttack(void) {
 
 	if (m_iChargeLevel >= 1) {
 		Charge(true);
-	} else {
+	}
+	else {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
@@ -130,7 +139,7 @@ void CShotgun::PrimaryAttack(void) {
 			// HEV suit - indicate out of ammo condition
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)SHOTGUN_SHOOT::frames, (int)SHOTGUN_SHOOT::fps);
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
@@ -162,7 +171,8 @@ void CShotgun::SecondaryAttack(void) {
 
 	if (m_iChargeLevel >= 1) {
 		Charge(true);
-	} else {
+	}
+	else {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
@@ -189,7 +199,7 @@ void CShotgun::SecondaryAttack(void) {
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
 
-		m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
+		m_flNextSecondaryAttack = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)SHOTGUN_SHOOT_BIG::frames, (int)SHOTGUN_SHOOT_BIG::fps);
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
@@ -221,18 +231,19 @@ void CShotgun::Holster(void) {
 // Reload
 //=========================================================
 void CShotgun::Reload(void) {
-	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SHOTGUN_MAX_CLIP) || 
-			m_flNextPrimaryAttack > UTIL_GlobalTimeBase() || m_flNextSecondaryAttack > UTIL_GlobalTimeBase()) {
+	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SHOTGUN_MAX_CLIP) ||
+		m_flNextPrimaryAttack > UTIL_GlobalTimeBase() || m_flNextSecondaryAttack > UTIL_GlobalTimeBase()) {
 		return;
-	} else { Charge(false); }
+	}
+	else { Charge(false); }
 }
 
 //=========================================================
 // Reload Charge
 //=========================================================
 void CShotgun::Charge(bool m_BeginAttack) {
-	if((m_iClip != SHOTGUN_MAX_CLIP && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]) && !m_BeginAttack) {
-		if(m_iChargeLevel == 0) {
+	if ((m_iClip != SHOTGUN_MAX_CLIP && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]) && !m_BeginAttack) {
+		if (m_iChargeLevel == 0) {
 			SendWeaponAnim((int)SHOTGUN_START_RELOAD::sequence);
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOTGUN_START_RELOAD::frames, (int)SHOTGUN_START_RELOAD::fps);
@@ -240,23 +251,26 @@ void CShotgun::Charge(bool m_BeginAttack) {
 			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + m_flTimeWeaponIdle;
 			m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + m_flTimeWeaponIdle;
 			m_iChargeLevel = 1;
-		} else if (m_iChargeLevel == 1) {
+		}
+		else if (m_iChargeLevel == 1) {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iChargeLevel = 2;
 
 				if (RANDOM_LONG(0, 1)) {
 					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/reload1.wav", VOL_NORM, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
-				} else {
+				}
+				else {
 					EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/reload3.wav", VOL_NORM, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
 				}
 
 				SendWeaponAnim((int)SHOTGUN_RELOAD::sequence);
-				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
+				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)SHOTGUN_RELOAD::frames, (int)SHOTGUN_RELOAD::fps);
 				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle;
 				m_pPlayer->m_flNextAttack = m_flTimeWeaponIdle;
 			}
-		} else {
+		}
+		else {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iClip += 1;
 				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 1;
@@ -266,7 +280,8 @@ void CShotgun::Charge(bool m_BeginAttack) {
 				}
 			}
 		}
-	} else {
+	}
+	else {
 		// reload debounce has timed out
 		SendWeaponAnim((int)SHOTGUN_PUMP::sequence);
 		m_iChargeLevel = 0;
@@ -288,7 +303,8 @@ void CShotgun::WeaponIdle(void) {
 
 	if (m_iChargeLevel != 0) {
 		Charge(false);
-	} else {
+	}
+	else {
 		int iAnim;
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {

@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -32,34 +39,35 @@ extern int gEvilImpulse101;
 
 #define SF_SUIT_SHORTLOGON		0x0001
 
-class CItemSuit : public CItem {
-	void Spawn(void) {
+class CItemSuit : public CItem
+{
+	void Spawn(void)
+	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_suit.mdl");
 		CItem::Spawn();
 	}
-
-	void Precache(void) {
+	void Precache(void)
+	{
 		PRECACHE_MODEL("models/w_suit.mdl");
 	}
-
-	BOOL MyTouch(CBasePlayer *pPlayer) {
-		if (pPlayer->pev->deadflag != DEAD_NO) {
-			return FALSE;
-		}
-
-		if (pPlayer->m_iHideHUD & ITEM_SUIT)
-			return FALSE;
-
-		if (!gEvilImpulse101)//g-cont. do not play logon sentence at evil impulse
+	BOOL MyTouch(CBasePlayer *pPlayer)
+	{
+		if (pPlayer->pev->deadflag != DEAD_NO)
 		{
-			if (pev->spawnflags & SF_SUIT_SHORTLOGON)
-				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0"); // short version of suit logon,
-			else 
-				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx"); // long version of suit logon
+			return FALSE;
 		}
 
-		pPlayer->m_iHideHUD |= ITEM_SUIT;
+		if (pPlayer->pev->weapons & (1 << WEAPON_SUIT))
+			return FALSE;
+
+		if (pev->spawnflags & SF_SUIT_SHORTLOGON)
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A0");		// short version of suit logon,
+		else
+			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_AAx");	// long version of suit logon
+
+		pPlayer->pev->weapons |= (1 << WEAPON_SUIT);
+
 		return TRUE;
 	}
 };

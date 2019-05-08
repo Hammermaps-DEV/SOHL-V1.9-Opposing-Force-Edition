@@ -1,21 +1,35 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 #ifndef PLAYER_H
 #define PLAYER_H
 
 #include "pm_materials.h"
+#include "rope/CRope.h"
 
 #define PLAYER_FATAL_FALL_SPEED		1024// approx 60 feet
 #define PLAYER_MAX_SAFE_FALL_SPEED	580// approx 20 feet
@@ -37,6 +51,7 @@
 #define		PFLAG_LATCHING		( 1<<6 )		// Player is latching to a target
 #define		PFLAG_ATTACHED		( 1<<7 )		// Player is attached by a barnacle tongue tip
 #define		PFLAG_ON_GRAPPLE 	( 1<<8 ) 		// Added Physics flag for grapple
+#define		PFLAG_ONROPE		( 1<<9 )
 
 //
 // generic player
@@ -89,12 +104,18 @@ enum sbar_data
 };
 
 #define CHAT_INTERVAL 1.0f
-
+class CItemCamera;//AJH
 class CParticleEmitter;
+class CRope;
 
 class CBasePlayer : public CBaseMonster
 {
 public:
+
+	entvars_t*			m_pevInflictor; //AJH used for time based damage to remember inflictor
+										//m_hActivator remembers activator
+	CItemCamera*		m_pItemCamera;//AJH Remember that we have a camera
+
 	int					random_seed;    // See that is shared between client & server for shared weapons code
 
 	int					m_iPlayerSound;// the index of the sound list slot reserved for this player
@@ -103,20 +124,20 @@ public:
 	int					m_iExtraSoundTypes;// additional classification for this weapon's sound
 	int					m_iWeaponFlash;// brightness of the weapon flash
 	float				m_flStopExtraSoundTime;
-	
+
 	float				m_flFlashLightTime;	// Time until next battery draw/Recharge
 	int					m_iFlashBattery;		// Flashlight Battery Draw
 
 	int					m_afButtonLast;
 	int					m_afButtonPressed;
 	int					m_afButtonReleased;
-	
+
 	edict_t			   *m_pentSndLast;			// last sound entity to modify player room type
 	float				m_flSndRoomtype;		// last roomtype set by sound entity
 	float				m_flSndRange;			// dist from player to sound entity
 
 	float				m_flFallVelocity;
-	
+
 	int					m_rgItems[MAX_ITEMS];
 	int					m_fKnownItem;		// True when a new item needs to be added
 	int					m_fNewAmmo;			// True when a new item has been added
@@ -206,130 +227,154 @@ public:
 
 	char m_szTeamName[TEAM_NAME_LENGTH];
 
-	virtual void Spawn( void );
-	void Pain( void );
+	virtual float	CalcRatio(CBaseEntity *pLocus, int mode)//AJH added 'mode' = ratio to return
+	{
+		//ALERT(at_debug,"CBasePlayer CalcRatio called, mode is %i\n",mode);
+		switch (mode) {
+		case 0: {
+			return pev->health / pev->max_health;
+		}break;
+		case 1: {
+			//pev->speed=pev->velocity.Length();
+			//ALERT(at_debug,"Ratio is %f over %f, result %f.\n",pev->speed,pev->maxspeed,pev->speed/pev->maxspeed);
+			//return pev->speed/pev->maxspeed;
+			return pev->velocity.Length();
+		}break;
+		case 2: {
+			return (int)IsSneaking();
+		}break;
+		case 3: {
+			return (int)HasWeapons();
+		}break;
+		}
+		return 0;
+	}
 
-//	virtual void Think( void );
-	virtual void Jump( void );
-	virtual void Duck( void );
-	virtual void PreThink( void );
-	virtual void PostThink( void );
-	virtual Vector GetGunPosition( void );
-	virtual int TakeHealth( float flHealth, int bitsDamageType );
-	virtual int TakeArmor( float flArmor );
-	virtual void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	virtual int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	virtual void	Killed( entvars_t *pevAttacker, int iGib );
-	virtual Vector BodyTarget( const Vector &posSrc ) { return Center( ) + pev->view_ofs * RANDOM_FLOAT( 0.5, 1.1 ); };		// position to shoot at
-	virtual void StartSneaking( void ) { m_tSneaking = UTIL_GlobalTimeBase() - 1; }
-	virtual void StopSneaking( void ) { m_tSneaking = UTIL_GlobalTimeBase() + 30; }
-	virtual BOOL IsSneaking( void ) { return m_tSneaking <= UTIL_GlobalTimeBase(); }
-	virtual BOOL IsAlive( void ) { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
-	virtual BOOL ShouldFadeOnDeath( void ) { return FALSE; }
-	virtual	BOOL IsPlayer( void ) { return TRUE; }			// Spectators should return FALSE for this, they aren't "players" as far as game logic is concerned
+	virtual void Spawn(void);
+	void Pain(void);
 
-	virtual BOOL IsNetClient( void ) { return TRUE; }		// Bots should return FALSE for this, they can't receive NET messages
+	//	virtual void Think( void );
+	virtual void Jump(void);
+	virtual void Duck(void);
+	virtual void PreThink(void);
+	virtual void PostThink(void);
+	virtual Vector GetGunPosition(void);
+	virtual int TakeHealth(float flHealth, int bitsDamageType);
+	virtual int TakeArmor(float flArmor);
+	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	virtual void	Killed(entvars_t *pevAttacker, int iGib);
+	virtual Vector BodyTarget(const Vector &posSrc) { return Center() + pev->view_ofs * RANDOM_FLOAT(0.5, 1.1); };		// position to shoot at
+	virtual void StartSneaking(void) { m_tSneaking = UTIL_GlobalTimeBase() - 1; }
+	virtual void StopSneaking(void) { m_tSneaking = UTIL_GlobalTimeBase() + 30; }
+	virtual BOOL IsSneaking(void) { return m_tSneaking <= UTIL_GlobalTimeBase(); }
+	virtual BOOL IsAlive(void) { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
+	virtual BOOL ShouldFadeOnDeath(void) { return FALSE; }
+	virtual	BOOL IsPlayer(void) { return TRUE; }			// Spectators should return FALSE for this, they aren't "players" as far as game logic is concerned
+
+	virtual BOOL IsNetClient(void) { return TRUE; }		// Bots should return FALSE for this, they can't receive NET messages
 															// Spectators should return TRUE for this
-	virtual const char *TeamID( void );
+	virtual const char *TeamID(void);
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
 	void RenewItems(void);
-	void PackDeadPlayerItems( void );
-	void RemoveAllItems( BOOL removeSuit );
-	void RemoveItems( int iWeaponMask, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iEgon, int iSatchel, int iSnark, int iTrip, int iGren, int iHornet, int iCycler, int iShock, int iSpore);
-	void RemoveAmmo( const char* szName, int iAmount );
-	BOOL SwitchWeapon( CBasePlayerItem *pWeapon );
+	void PackDeadPlayerItems(void);
+	void RemoveAllItems(BOOL removeSuit);
+	void RemoveItems(int iWeaponMask, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iEgon, int iSatchel, int iSnark, int iTrip, int iGren, int iHornet, int iCycler, int iShock, int iSpore);
+	void RemoveAmmo(const char* szName, int iAmount);
+	BOOL SwitchWeapon(CBasePlayerItem *pWeapon);
 
 	// JOHN:  sends custom messages if player HUD data has changed  (eg health, ammo)
-	virtual void UpdateClientData( void );
-	
+	virtual void UpdateClientData(void);
+
 	static	TYPEDESCRIPTION m_playerSaveData[];
 
 	// Player is moved across the transition by other means
-	virtual int		ObjectCaps( void ) { return CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	virtual void	Precache( void );
-	BOOL			IsOnLadder( void );
+	virtual int		ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	virtual void	Precache(void);
+	BOOL			IsOnLadder(void);
 
 	BOOL			m_flFlashlightIsOn;
-	BOOL			FlashlightIsOn( void );
-	void			FlashlightTurnOn( void );
-	void			FlashlightTurnOff( void );
+	BOOL			FlashlightIsOn(void);
+	void			FlashlightTurnOn(void);
+	void			FlashlightTurnOff(void);
 	void			NvgUpdate();
-	
-	void UpdatePlayerSound ( void );
-	void DeathSound ( void );
 
-	int Classify ( void );
-	void SetAnimation( PLAYER_ANIM playerAnim );
-	void SetWeaponAnimType( const char *szExtention );
+	void UpdatePlayerSound(void);
+	void DeathSound(void);
+
+	int Classify(void);
+	void SetAnimation(PLAYER_ANIM playerAnim);
+	void SetWeaponAnimType(const char *szExtention);
 	char m_szAnimExtention[32];
 
 	// custom player functions
-	virtual void ImpulseCommands( void );
-	void CheatImpulseCommands( int iImpulse );
+	virtual void ImpulseCommands(void);
+	void CheatImpulseCommands(int iImpulse);
 
-	void StartDeathCam( void );
-	void StartObserver( Vector vecPosition, Vector vecViewAngle );
+	void StartDeathCam(void);
+	void StartObserver(Vector vecPosition, Vector vecViewAngle);
 
-	void AddPoints( int score, BOOL bAllowNegativeScore );
-	void AddPointsToTeam( int score, BOOL bAllowNegativeScore );
-	BOOL AddPlayerItem( CBasePlayerItem *pItem );
-	BOOL RemovePlayerItem( CBasePlayerItem *pItem );
-	void DropPlayerItem ( char *pszItemName );
-	BOOL HasPlayerItem( CBasePlayerItem *pCheckItem );
-	BOOL HasNamedPlayerItem( const char *pszItemName );
-	BOOL HasWeapons( void );// do I have ANY weapons?
-	void SelectPrevItem( int iItem );
-	void SelectNextItem( int iItem );
+	void AddPoints(int score, BOOL bAllowNegativeScore);
+	void AddPointsToTeam(int score, BOOL bAllowNegativeScore);
+	BOOL AddPlayerItem(CBasePlayerItem *pItem);
+	BOOL RemovePlayerItem(CBasePlayerItem *pItem);
+	void DropPlayerItem(char *pszItemName);
+	BOOL HasPlayerItem(CBasePlayerItem *pCheckItem);
+	BOOL HasNamedPlayerItem(const char *pszItemName);
+	BOOL HasWeapons(void);// do I have ANY weapons?
+	void SelectPrevItem(int iItem);
+	void SelectNextItem(int iItem);
 	void SelectLastItem(void);
 	void SelectItem(const char *pstr);
 	void QueueItem(CBasePlayerItem *pItem);
-	void ItemPreFrame( void );
-	void ItemPostFrame( void );
-	void GiveNamedItem( const char *szName );
+	void ItemPreFrame(void);
+	void ItemPostFrame(void);
+	void GiveNamedItem(const char *szName);
 	void EnableControl(BOOL fControl);
 
-	int  GiveAmmo( int iAmount, char *szName, int iMax );
+	int  GiveAmmo(int iAmount, char *szName, int iMax);
 	void SendAmmoUpdate(void);
 
-	void WaterMove( void );
-	void EXPORT PlayerDeathThink( void );
-	void PlayerUse( void );
+	void WaterMove(void);
+	void EXPORT PlayerDeathThink(void);
+	void PlayerUse(void);
 
 	void CheckSuitUpdate();
 	void SetSuitUpdate(char *name, int fgroup, int iNoRepeat);
-	void UpdateGeigerCounter( void );
-	void CheckTimeBasedDamage( void );
+	void UpdateGeigerCounter(void);
+	void CheckTimeBasedDamage(void);
 
-	BOOL FBecomeProne ( void );
-	void BarnacleVictimBitten ( entvars_t *pevBarnacle );
-	void BarnacleVictimReleased ( void );
+	BOOL FBecomeProne(void);
+	void BarnacleVictimBitten(entvars_t *pevBarnacle);
+	void BarnacleVictimReleased(void);
 	static int GetAmmoIndex(const char *psz);
-	int AmmoInventory( int iAmmoIndex );
-	int Illumination( void );
+	int AmmoInventory(int iAmmoIndex);
+	int Illumination(void);
 
-	void ResetAutoaim( void );
-	Vector GetAutoaimVector( float flDelta  );
-	Vector AutoaimDeflection( Vector &vecSrc, float flDist, float flDelta  );
+	void ResetAutoaim(void);
+	Vector GetAutoaimVector(float flDelta);
+	Vector AutoaimDeflection(Vector &vecSrc, float flDist, float flDelta);
 
-	void ForceClientDllUpdate( void );  // Forces all client .dll specific data to be resent to client.
+	void ForceClientDllUpdate(void);  // Forces all client .dll specific data to be resent to client.
 
-	void DeathMessage( entvars_t *pevKiller );
+	void DeathMessage(entvars_t *pevKiller);
 
-	void SetCustomDecalFrames( int nFrames );
-	int GetCustomDecalFrames( void );
+	void SetCustomDecalFrames(int nFrames);
+	int GetCustomDecalFrames(void);
 
-	void TabulateAmmo( void );
-	
+	void TabulateAmmo(void);
+
 	//Player ID
-	void InitStatusBar( void );
-	void UpdateStatusBar( void );
-	int m_izSBarState[ SBAR_END ];
+	void InitStatusBar(void);
+	void UpdateStatusBar(void);
+	int m_izSBarState[SBAR_END];
 	float m_flNextSBarUpdateTime;
 	float m_flStatusBarDisappearDelay;
-	char m_SbarString0[ SBAR_STRING_SIZE ];
-	char m_SbarString1[ SBAR_STRING_SIZE ];
+	char m_SbarString0[SBAR_STRING_SIZE];
+	char m_SbarString1[SBAR_STRING_SIZE];
+
 	// for trigger_viewset
 	int		viewEntity; // string
 	int		viewFlags;	// 1-active, 2-draw hud
@@ -352,6 +397,33 @@ public:
 	friend class CDisplacer;
 
 	int	Rain_needsUpdate;
+
+	bool IsOnRope() const { return (m_afPhysicsFlags & PFLAG_ONROPE) != 0; }
+
+	void SetOnRopeState(bool bOnRope)
+	{
+		if (bOnRope)
+			m_afPhysicsFlags |= PFLAG_ONROPE;
+		else
+			m_afPhysicsFlags &= ~PFLAG_ONROPE;
+	}
+
+	CRope* GetRope() { return m_pRope; }
+
+	void SetRope(CRope* pRope)
+	{
+		m_pRope = pRope;
+	}
+
+	void SetIsClimbing(const bool bIsClimbing)
+	{
+		m_bIsClimbing = bIsClimbing;
+	}
+
+private:
+	CRope* m_pRope;
+	float m_flLastClimbTime = 0;
+	bool m_bIsClimbing = false;
 };
 
 #define AUTOAIM_2DEGREES  0.0348994967025
@@ -362,6 +434,7 @@ public:
 
 extern int	gmsgHudText;
 extern int	gmsgParticle; // LRC
+extern int	gmsgInventory;	//AJH
 extern int	gmsgSetBody;
 extern int	gmsgSetSkin;
 extern int	gmsgSetMirror;

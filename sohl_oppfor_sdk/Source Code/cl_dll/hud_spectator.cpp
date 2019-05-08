@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -905,9 +912,9 @@ bool CHudSpectator::IsActivePlayer(cl_entity_t * ent)
 
 bool CHudSpectator::ParseOverviewFile( )
 {
-	char filename[255];
-	char levelname[255];
-	char token[1024];
+	char filename[255] = { 0 };
+	char levelname[255] = { 0 };
+	char token[1024] = { 0 };
 	float height;
 	
 	char *pfile  = NULL;
@@ -951,11 +958,11 @@ bool CHudSpectator::ParseOverviewFile( )
 		if (!pfile)
 			break;
 
-		if ( !stricmp( token, "global" ) )
+		if ( !_stricmp( token, "global" ) )
 		{
 			// parse the global data
 			pfile = gEngfuncs.COM_ParseFile(pfile, token);
-			if ( stricmp( token, "{" ) ) 
+			if ( _stricmp( token, "{" ) ) 
 			{
 				//CONPRINT("Error parsing overview file %s. (expected { )\n", filename );
 				return false;
@@ -963,14 +970,14 @@ bool CHudSpectator::ParseOverviewFile( )
 
 			pfile = gEngfuncs.COM_ParseFile(pfile,token);
 
-			while (stricmp( token, "}") )
+			while (_stricmp( token, "}") )
 			{
-				if ( !stricmp( token, "zoom" ) )
+				if ( !_stricmp( token, "zoom" ) )
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile,token);
 					m_OverviewData.zoom = atof( token );
 				} 
-				else if ( !stricmp( token, "origin" ) )
+				else if ( !_stricmp( token, "origin" ) )
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile, token); 
 					m_OverviewData.origin[0] = atof( token );
@@ -979,12 +986,12 @@ bool CHudSpectator::ParseOverviewFile( )
 					pfile = gEngfuncs.COM_ParseFile(pfile, token); 
 					m_OverviewData.origin[2] = atof( token );
 				}
-				else if ( !stricmp( token, "rotated" ) )
+				else if ( !_stricmp( token, "rotated" ) )
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile,token); 
 					m_OverviewData.rotated = atoi( token );
 				}
-				else if ( !stricmp( token, "inset" ) )
+				else if ( !_stricmp( token, "inset" ) )
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile,token); 
 					m_OverviewData.insetWindowX = atof( token );
@@ -1006,7 +1013,7 @@ bool CHudSpectator::ParseOverviewFile( )
 
 			}
 		}
-		else if ( !stricmp( token, "layer" ) )
+		else if ( !_stricmp( token, "layer" ) )
 		{
 			// parse a layer data
 
@@ -1019,7 +1026,7 @@ bool CHudSpectator::ParseOverviewFile( )
 			pfile = gEngfuncs.COM_ParseFile(pfile,token);
 
 				
-			if ( stricmp( token, "{" ) ) 
+			if ( _stricmp( token, "{" ) ) 
 			{
 				CONPRINT("Error parsing overview file %s. (expected { )\n", filename );
 				return false;
@@ -1027,16 +1034,16 @@ bool CHudSpectator::ParseOverviewFile( )
 
 			pfile = gEngfuncs.COM_ParseFile(pfile,token);
 
-			while (stricmp( token, "}") )
+			while (_stricmp( token, "}") )
 			{
-				if ( !stricmp( token, "image" ) )
+				if ( !_stricmp( token, "image" ) )
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile,token);
 					strcpy(m_OverviewData.layersImages[ m_OverviewData.layers ], token);
 					
 					
 				} 
-				else if ( !stricmp( token, "height" ) )
+				else if ( !_stricmp( token, "height" ) )
 				{
 					pfile = gEngfuncs.COM_ParseFile(pfile,token); 
 					height = atof(token);

@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -213,7 +220,7 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 
 		// get the '=' character
 		pFile = gEngfuncs.COM_ParseFile( pFile, token );
-		if ( stricmp( token, "=" ) )
+		if ( _stricmp( token, "=" ) )
 		{
 			if ( currentScheme < 0 )
 			{
@@ -232,7 +239,7 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 		paramValue[tokenSize-1] = 0; // ensure null termination
 		
 		// is this a new scheme?
-		if ( !stricmp(paramName, "SchemeName") )
+		if ( !_stricmp(paramName, "SchemeName") )
 		{
 			// setup the defaults for the current scheme
 			if ( pScheme )
@@ -292,50 +299,50 @@ CSchemeManager::CSchemeManager( int xRes, int yRes )
 		}
 
 		// pull the data out into the scheme
-		if ( !stricmp(paramName, "FontName") )
+		if ( !_stricmp(paramName, "FontName") )
 		{
 			strncpy( pScheme->fontName, paramValue, CScheme::FONT_NAME_LENGTH );
 			pScheme->fontName[CScheme::FONT_NAME_LENGTH-1] = 0;
 		}
-		else if ( !stricmp(paramName, "FontSize") )
+		else if ( !_stricmp(paramName, "FontSize") )
 		{
 			pScheme->fontSize = atoi( paramValue );
 		}
-		else if ( !stricmp(paramName, "FontWeight") )
+		else if ( !_stricmp(paramName, "FontWeight") )
 		{
 			pScheme->fontWeight = atoi( paramValue );
 		}
-		else if ( !stricmp(paramName, "FgColor") )
+		else if ( !_stricmp(paramName, "FgColor") )
 		{
 			ParseRGBAFromString( pScheme->fgColor, paramValue );
 			hasFgColor = true;
 		}
-		else if ( !stricmp(paramName, "BgColor") )
+		else if ( !_stricmp(paramName, "BgColor") )
 		{
 			ParseRGBAFromString( pScheme->bgColor, paramValue );
 			hasBgColor = true;
 		}
-		else if ( !stricmp(paramName, "FgColorArmed") )
+		else if ( !_stricmp(paramName, "FgColorArmed") )
 		{
 			ParseRGBAFromString( pScheme->armedFgColor, paramValue );
 			hasArmedFgColor = true;
 		}	
-		else if ( !stricmp(paramName, "BgColorArmed") )
+		else if ( !_stricmp(paramName, "BgColorArmed") )
 		{
 			ParseRGBAFromString( pScheme->armedBgColor, paramValue );
 			hasArmedBgColor = true;
 		}
-		else if ( !stricmp(paramName, "FgColorMousedown") )
+		else if ( !_stricmp(paramName, "FgColorMousedown") )
 		{
 			ParseRGBAFromString( pScheme->mousedownFgColor, paramValue );
 			hasMouseDownFgColor = true;
 		}
-		else if ( !stricmp(paramName, "BgColorMousedown") )
+		else if ( !_stricmp(paramName, "BgColorMousedown") )
 		{
 			ParseRGBAFromString( pScheme->mousedownBgColor, paramValue );
 			hasMouseDownBgColor = true;
 		}
-		else if ( !stricmp(paramName, "BorderColor") )
+		else if ( !_stricmp(paramName, "BorderColor") )
 		{
 			ParseRGBAFromString( pScheme->borderColor, paramValue );
 			hasMouseDownBgColor = true;
@@ -380,7 +387,7 @@ buildDefaultFont:
 		for ( int j = 0; j < i; j++ )
 		{
 			// check if the font name, size, and weight are the same
-			if ( !stricmp(m_pSchemeList[i].fontName, m_pSchemeList[j].fontName)  
+			if ( !_stricmp(m_pSchemeList[i].fontName, m_pSchemeList[j].fontName)  
 				&& m_pSchemeList[i].fontSize == m_pSchemeList[j].fontSize
 				&& m_pSchemeList[i].fontWeight == m_pSchemeList[j].fontWeight )
 			{
@@ -449,7 +456,7 @@ SchemeHandle_t CSchemeManager::getSchemeHandle( const char *schemeName )
 	// iterate through the list
 	for ( int i = 0; i < m_iNumSchemes; i++ )
 	{
-		if ( !stricmp(schemeName, m_pSchemeList[i].schemeName) )
+		if ( !_stricmp(schemeName, m_pSchemeList[i].schemeName) )
 			return i;
 	}
 

@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -541,7 +548,7 @@ void CRCAllyMonster::RunTask(Task_t *pTask)
 		edict_t *pPlayer;
 
 		// track head to the client for a while.
-		if (m_MonsterState == MONSTERSTATE_IDLE		&&
+		if (m_MonsterState == MONSTERSTATE_IDLE &&
 			!IsMoving() &&
 			!IsTalking())
 		{
@@ -974,7 +981,7 @@ void CRCAllyMonster::Touch(CBaseEntity *pOther) {
 			return;
 
 		// Heuristic for determining if the player is pushing me away
-		float speed = V_fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
+		float speed = fabs(pOther->pev->velocity.x) + fabs(pOther->pev->velocity.y);
 		if (speed > 50) {
 			SetConditions(bits_COND_CLIENT_PUSH);
 			MakeIdealYaw(pOther->pev->origin);
@@ -1473,6 +1480,9 @@ BOOL CRCAllyMonster::CanFollow(void)
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
+		if (!m_pCine)
+			return FALSE;
+
 		if (!m_pCine->CanInterrupt())
 			return FALSE;
 	}

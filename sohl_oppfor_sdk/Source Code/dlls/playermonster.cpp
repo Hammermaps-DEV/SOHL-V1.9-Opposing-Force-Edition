@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -38,20 +45,20 @@
 class CPlayerMonster : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	void SetYawSpeed( void );
-	int  Classify ( void );
-	void HandleAnimEvent( MonsterEvent_t *pEvent );
-	int ISoundMask ( void );
+	void Spawn(void);
+	void Precache(void);
+	void SetYawSpeed(void);
+	int  Classify(void);
+	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	int ISoundMask(void);
 };
-LINK_ENTITY_TO_CLASS( monster_player, CPlayerMonster );
+LINK_ENTITY_TO_CLASS(monster_player, CPlayerMonster);
 
 //=========================================================
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CPlayerMonster :: Classify ( void )
+int	CPlayerMonster::Classify(void)
 {
 	return	CLASS_PLAYER_ALLY;
 }
@@ -60,11 +67,11 @@ int	CPlayerMonster :: Classify ( void )
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CPlayerMonster :: SetYawSpeed ( void )
+void CPlayerMonster::SetYawSpeed(void)
 {
 	int ys;
 
-	switch ( m_Activity )
+	switch (m_Activity)
 	{
 	case ACT_IDLE:
 	default:
@@ -78,13 +85,13 @@ void CPlayerMonster :: SetYawSpeed ( void )
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CPlayerMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
+void CPlayerMonster::HandleAnimEvent(MonsterEvent_t *pEvent)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
 	case 0:
 	default:
-		CBaseMonster::HandleAnimEvent( pEvent );
+		CBaseMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -92,7 +99,7 @@ void CPlayerMonster :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 // ISoundMask - player monster can't hear.
 //=========================================================
-int CPlayerMonster :: ISoundMask ( void )
+int CPlayerMonster::ISoundMask(void)
 {
 	return	NULL;
 }
@@ -100,23 +107,23 @@ int CPlayerMonster :: ISoundMask ( void )
 //=========================================================
 // Spawn
 //=========================================================
-void CPlayerMonster :: Spawn()
+void CPlayerMonster::Spawn()
 {
-	Precache( );
+	Precache();
 
 	SET_MODEL(ENT(pev), "models/player.mdl");
 	UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= BLOOD_COLOR_RED;
-	pev->health			= 8;
-	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = BLOOD_COLOR_RED;
+	pev->health = 8;
+	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
 
 
 	MonsterInit();
-	if ( pev->spawnflags & SF_MONSTERPLAYER_NOTSOLID )
+	if (pev->spawnflags & SF_MONSTERPLAYER_NOTSOLID)
 	{
 		pev->solid = SOLID_NOT;
 		pev->takedamage = DAMAGE_NO;
@@ -126,10 +133,10 @@ void CPlayerMonster :: Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CPlayerMonster :: Precache()
+void CPlayerMonster::Precache()
 {
 	PRECACHE_MODEL("models/player.mdl");
-}	
+}
 
 //=========================================================
 // AI Schedules Specific to this monster

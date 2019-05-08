@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -165,6 +172,76 @@ int CHud :: Redraw( float flTime, int intermission )
 	}
 
 	m_iIntermission = intermission;
+
+	// trigger_viewset stuff
+	if ((viewFlags & 1) && (viewFlags & 4))	//AJH Draw the camera hud
+	{
+		int r, g, b, x, y, a;
+		//wrect_t rc;
+		HL_HSPRITE m_hCam1;
+		int HUD_camera_active;
+		int HUD_camera_rect;
+
+		a = 225;
+
+		UnpackRGB(r, g, b, gHUD.m_iHUDColor);
+		ScaleColors(r, g, b, a);
+
+		//Draw the flashing camera active logo
+		HUD_camera_active = gHUD.GetSpriteIndex("camera_active");
+		m_hCam1 = gHUD.GetSprite(HUD_camera_active);
+		SPR_Set(m_hCam1, r, g, b);
+		x = SPR_Width(m_hCam1, 0);
+		x = ScreenWidth - x;
+		y = SPR_Height(m_hCam1, 0) / 2;
+
+		// Draw the camera sprite at 1 fps
+		int i = (int)(flTime) % 2;
+		i = grgLogoFrame[i] - 1;
+
+		SPR_DrawAdditive(i, x, y, NULL);
+
+		//Draw the camera reticle (top left)
+		HUD_camera_rect = gHUD.GetSpriteIndex("camera_rect_tl");
+		m_hCam1 = gHUD.GetSprite(HUD_camera_rect);
+		SPR_Set(m_hCam1, r, g, b);
+		x = ScreenWidth / 4;
+		y = ScreenHeight / 4;
+
+		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(HUD_camera_rect));
+
+		//Draw the camera reticle (top right)
+		HUD_camera_rect = gHUD.GetSpriteIndex("camera_rect_tr");
+		m_hCam1 = gHUD.GetSprite(HUD_camera_rect);
+		SPR_Set(m_hCam1, r, g, b);
+
+		int w, h;
+		w = SPR_Width(m_hCam1, 0) / 2;
+		h = SPR_Height(m_hCam1, 0) / 2;
+
+		x = ScreenWidth - ScreenWidth / 4 - w;
+		y = ScreenHeight / 4;
+
+		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(HUD_camera_rect));
+
+		//Draw the camera reticle (bottom left)
+		HUD_camera_rect = gHUD.GetSpriteIndex("camera_rect_bl");
+		m_hCam1 = gHUD.GetSprite(HUD_camera_rect);
+		SPR_Set(m_hCam1, r, g, b);
+		x = ScreenWidth / 4;
+		y = ScreenHeight - ScreenHeight / 4 - h;
+
+		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(HUD_camera_rect));
+
+		//Draw the camera reticle (bottom right)
+		HUD_camera_rect = gHUD.GetSpriteIndex("camera_rect_br");
+		m_hCam1 = gHUD.GetSprite(HUD_camera_rect);
+		SPR_Set(m_hCam1, r, g, b);
+		x = ScreenWidth - ScreenWidth / 4 - w;
+		y = ScreenHeight - ScreenHeight / 4 - h;
+
+		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(HUD_camera_rect));
+	}
 
 	// trigger_viewset stuff
 	if ((viewFlags & 1) && !(viewFlags & 2)) // custom view active, and flag "draw hud" isnt set

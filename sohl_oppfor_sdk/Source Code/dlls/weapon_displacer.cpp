@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,12 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Displacer * http://half-life.wikia.com/wiki/Displacer_Cannon
 //=========================================================
@@ -59,8 +66,9 @@ void CDisplacer::Spawn(void) {
 
 	if (pEnt) {
 		m_hTargetEarth = GetClassPtr((CBaseEntity *)VARS(pEnt));
-	} else {
-		ALERT(at_console,"ERROR: Couldn't find entity with classname %s\n","info_displacer_earth_target");
+	}
+	else {
+		ALERT(at_console, "ERROR: Couldn't find entity with classname %s\n", "info_displacer_earth_target");
 	}
 
 	//info_displacer_xen_target
@@ -69,8 +77,9 @@ void CDisplacer::Spawn(void) {
 
 	if (pEnt) {
 		m_hTargetXen = GetClassPtr((CBaseEntity *)VARS(pEnt));
-	} else {
-		ALERT(at_console,"ERROR: Couldn't find entity with classname %s\n","info_displacer_xen_target");
+	}
+	else {
+		ALERT(at_console, "ERROR: Couldn't find entity with classname %s\n", "info_displacer_xen_target");
 	}
 
 	FallInit();// get ready to fall down.
@@ -138,6 +147,15 @@ void CDisplacer::Holster(void) {
 // SecondaryAttack
 //=========================================================
 void CDisplacer::SecondaryAttack(void) {
+	if (m_pPlayer->IsOnRope())
+	{
+		m_pPlayer->pev->movetype = MOVETYPE_WALK;
+		m_pPlayer->pev->solid = SOLID_SLIDEBOX;
+		m_pPlayer->SetOnRopeState(false);
+		m_pPlayer->GetRope()->DetachObject();
+		m_pPlayer->SetRope(nullptr);
+	}
+
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(2);
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3f;
@@ -193,19 +211,19 @@ void CDisplacer::WeaponIdle(void) {
 
 	if (m_iFireState != FIRESTATE_NONE) {
 		switch (m_iFireState) {
-			case FIRESTATE_SPINUP: {
-				// Launch spinup sequence.
-				SpinUp(m_iFireMode);
-			}
-			break;
-			case FIRESTATE_SPIN: {
-				Spin();
-			}
-			break;
-			case FIRESTATE_FIRE: {
-				Fire(m_iFireMode == FIREMODE_FORWARD ? TRUE : FALSE);
-			}
-			break;
+		case FIRESTATE_SPINUP: {
+			// Launch spinup sequence.
+			SpinUp(m_iFireMode);
+		}
+							   break;
+		case FIRESTATE_SPIN: {
+			Spin();
+		}
+							 break;
+		case FIRESTATE_FIRE: {
+			Fire(m_iFireMode == FIREMODE_FORWARD ? TRUE : FALSE);
+		}
+							 break;
 		}
 
 		return;
@@ -222,12 +240,14 @@ void CDisplacer::WeaponIdle(void) {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)DISPLACER_IDLE1::frames, (int)DISPLACER_IDLE1::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.7) {
+	}
+	else if (flRand <= 0.7) {
 		iAnim = (int)DISPLACER_IDLE2::sequence;
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)DISPLACER_IDLE2::frames, (int)DISPLACER_IDLE2::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else {
+	}
+	else {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}
@@ -241,11 +261,11 @@ void CDisplacer::WeaponIdle(void) {
 void CDisplacer::ClearSpin(void) {
 
 	switch (m_iFireMode) {
-		case FIREMODE_FORWARD:
-			STOP_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_spin.wav");
+	case FIREMODE_FORWARD:
+		STOP_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_spin.wav");
 		break;
-		case FIREMODE_BACKWARD:
-			STOP_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_spin2.wav");
+	case FIREMODE_BACKWARD:
+		STOP_SOUND(ENT(pev), CHAN_WEAPON, "weapons/displacer_spin2.wav");
 		break;
 	}
 
@@ -257,7 +277,7 @@ void CDisplacer::ClearSpin(void) {
 // SpinUp
 //=========================================================
 void CDisplacer::SpinUp(int iFireMode) {
-	PLAYBACK_EVENT_FULL(0,m_pPlayer->edict(),m_usDisplacer,0.0,(float *)&g_vecZero,(float *)&g_vecZero,0.0,0.0,(int)DISPLACER_SPINUP::sequence,iFireMode,0,0);
+	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_SPINUP::sequence, iFireMode, 0, 0);
 
 	/*
 	//Not FINAL Buggy
@@ -281,7 +301,7 @@ void CDisplacer::SpinUp(int iFireMode) {
 // Spin
 //=========================================================
 void CDisplacer::Spin(void) {
-	PLAYBACK_EVENT_FULL(0,m_pPlayer->edict(),m_usDisplacer,0.0,(float *)&g_vecZero,(float *)&g_vecZero,0.0,0.0,(int)DISPLACER_SPIN::sequence,0,0,0);
+	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_SPIN::sequence, 0, 0, 0);
 
 	m_iFireState = FIRESTATE_FIRE;
 	m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.7f;
@@ -297,13 +317,14 @@ void CDisplacer::Fire(BOOL fIsPrimary)
 	if (fIsPrimary) {
 		// Use the firemode 1, which launches a portal forward.
 		Displace();
-	} else {
+	}
+	else {
 		// Use firemode 2, which teleports the current owner.
 		Teleport();
 	}
 
 	ClearSpin();
-	if(m_pBeam != NULL) {
+	if (m_pBeam != NULL) {
 		UTIL_Remove(m_pBeam);
 		m_pBeam = NULL;
 	}
@@ -317,7 +338,7 @@ void CDisplacer::Fire(BOOL fIsPrimary)
 // Purpose:
 //=========================================================
 void CDisplacer::Displace(void) {
-	PLAYBACK_EVENT_FULL(0,m_pPlayer->edict(),m_usDisplacer,0.0,(float *)&g_vecZero,(float *)&g_vecZero,0.0,0.0,(int)DISPLACER_FIRE::sequence,FIREMODE_FORWARD,0,0);
+	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_FIRE::sequence, FIREMODE_FORWARD, 0, 0);
 
 	Vector vecSrc;
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle);
@@ -372,23 +393,24 @@ void CDisplacer::Teleport(void)
 
 	vecSrc = pTarget->pev->origin;
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(vecSrc.x);	// X
-		WRITE_COORD(vecSrc.y);	// Y
-		WRITE_COORD(vecSrc.z);	// Z
-		WRITE_BYTE(24);		// radius * 0.1
-		WRITE_BYTE(255);		// r
-		WRITE_BYTE(180);		// g
-		WRITE_BYTE(96);		// b
-		WRITE_BYTE(31.66);		// time * 10
-		WRITE_BYTE(1);		// decay * 0.1
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(vecSrc.x);	// X
+	WRITE_COORD(vecSrc.y);	// Y
+	WRITE_COORD(vecSrc.z);	// Z
+	WRITE_BYTE(24);		// radius * 0.1
+	WRITE_BYTE(255);		// r
+	WRITE_BYTE(180);		// g
+	WRITE_BYTE(96);		// b
+	WRITE_BYTE(31.66);		// time * 10
+	WRITE_BYTE(1);		// decay * 0.1
 	MESSAGE_END();
 
 	m_pPlayer->m_fInXen = !m_pPlayer->m_fInXen;
 
 	if (m_pPlayer->m_fInXen) {
 		m_pPlayer->pev->gravity = 0.5;
-	} else {
+	}
+	else {
 		m_pPlayer->pev->gravity = 1.0;
 	}
 
@@ -396,7 +418,7 @@ void CDisplacer::Teleport(void)
 	UseAmmo((EGON_DEFAULT_GIVE * 3));
 
 	// Used to play teleport sound.
-	PLAYBACK_EVENT_FULL(0,m_pPlayer->edict(),m_usDisplacer,0.0,(float *)&g_vecZero,(float *)&g_vecZero,0.0,0.0,(int)DISPLACER_FIRE::sequence,FIREMODE_BACKWARD,0,0);
+	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_FIRE::sequence, FIREMODE_BACKWARD, 0, 0);
 }
 
 //=========================================================

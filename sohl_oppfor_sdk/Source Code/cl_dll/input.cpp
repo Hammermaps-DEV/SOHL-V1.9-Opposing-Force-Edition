@@ -1,9 +1,30 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+ï»¿/***
+*
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 
 // cl.input.c  -- builds an intended movement command to send to the server
 
@@ -39,6 +60,9 @@ extern cl_enginefunc_t gEngfuncs;
 // Defined in pm_math.c
 extern "C" float anglemod( float a );
 
+extern "C" int g_iOnGround;
+extern "C" int g_iWaterlevel;
+
 void IN_Init (void);
 void IN_Move ( float frametime, usercmd_t *cmd);
 void IN_Shutdown( void );
@@ -48,6 +72,13 @@ int CL_ButtonBits( int );
 
 // xxx need client dll function to get and clear impuse
 extern cvar_t *in_joystick;
+
+bool g_bDecentJumped = false;
+bool g_bLongJumped = false;
+bool g_bBunnyhopJumped = false;
+
+int g_iOnGround = 0;
+int g_iWaterlevel = 0;
 
 int	in_impulse	= 0;
 int	in_cancel	= 0;
@@ -70,6 +101,8 @@ cvar_t	*cl_yawspeed;
 cvar_t	*cl_pitchspeed;
 cvar_t	*cl_anglespeedkey;
 cvar_t	*cl_vsmoothing;
+cvar_t	*cl_jumptype;
+
 /*
 ===============================================================================
 
@@ -107,6 +140,8 @@ kbutton_t	in_strafe;
 kbutton_t	in_speed;
 kbutton_t	in_use;
 kbutton_t	in_jump;
+kbutton_t	in_longjump;
+kbutton_t	in_bunnyhop;
 kbutton_t	in_attack;
 kbutton_t	in_attack2;
 kbutton_t	in_up;
@@ -117,6 +152,8 @@ kbutton_t	in_alt1;
 kbutton_t	in_score;
 kbutton_t	in_break;
 kbutton_t	in_graph;  // Display the netgraph
+kbutton_t	in_customhud;	//AJH custom hud
+kbutton_t	in_briefing;	//AJH show map briefing
 
 typedef struct kblist_s
 {
@@ -218,7 +255,7 @@ struct kbutton_s CL_DLLEXPORT *KB_Find( const char *name )
 	p = g_kbkeys;
 	while ( p )
 	{
-		if ( !stricmp( name, p->name ) )
+		if ( !_stricmp( name, p->name ) )
 			return p->pkey;
 
 		p = p->next;
@@ -527,6 +564,44 @@ void IN_ScoreUp(void)
 	}
 }
 
+void IN_HUDDown(void)	//AJH
+{
+	KeyDown(&in_customhud);
+	if (gViewPort)
+	{
+		//gViewPort->ShowVGUIMenu(MENU_CUSTOM);
+		gViewPort->ShowCommandMenu(gViewPort->m_StandardMenu);
+	}
+}
+
+void IN_HUDUp(void)	//AJH
+{
+	KeyUp(&in_customhud);
+	if (gViewPort)
+	{
+		//gViewPort->HideVGUIMenu();
+		gViewPort->HideCommandMenu();
+	}
+}
+
+void IN_BriefingDown(void)	//AJH
+{
+	KeyDown(&in_briefing);
+	if (gViewPort)
+	{
+		gViewPort->ShowVGUIMenu(MENU_MAPBRIEFING);
+	}
+}
+
+void IN_BriefingUp(void)	//AJH
+{
+	KeyUp(&in_briefing);
+	if (gViewPort)
+	{
+		gViewPort->HideVGUIMenu();
+	}
+}
+
 void IN_MLookUp (void)
 {
 	KeyUp( &in_mlook );
@@ -694,8 +769,9 @@ void CL_DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int ac
 		cmd->sidemove += cl_sidespeed->value * CL_KeyState (&in_moveright);
 		cmd->sidemove -= cl_sidespeed->value * CL_KeyState (&in_moveleft);
 
-		cmd->upmove += cl_upspeed->value * CL_KeyState (&in_up);
-		cmd->upmove -= cl_upspeed->value * CL_KeyState (&in_down);
+		// simulate moveup underwater for +bhop, +ljump and +jump actions
+		cmd->upmove += cl_upspeed->value * max(CL_KeyState(&in_up), g_iWaterlevel >= 2 ? max(max(CL_KeyState(&in_bunnyhop), CL_KeyState(&in_jump)), CL_KeyState(&in_longjump)) : 0);
+		cmd->upmove -= cl_upspeed->value * CL_KeyState(&in_down);
 
 		if ( !(in_klook.state & 1 ) )
 		{	
@@ -793,6 +869,100 @@ int CL_ButtonBits( int bResetState )
 	if (in_duck.state & 3)
 	{
 		bits |= IN_DUCK;
+	}
+
+	if (in_jump.state & 3)
+	{
+		if (cl_jumptype->value == 0.0 || g_iUser1)	// Simple jump in spectator
+		{
+			bits |= IN_JUMP;
+		}
+		else
+		{
+			if (g_iOnGround)
+			{
+				if (!g_bDecentJumped)
+				{
+					bits |= IN_JUMP;
+				}
+				if (bResetState)
+				{
+					g_bDecentJumped = true;
+				}
+			}
+			else
+			{
+				if (g_iWaterlevel == 2)
+				{
+					// Over the water, glide on the surface, but only if we are over deep water
+					bits |= IN_JUMP;
+				}
+			}
+		}
+	}
+	else
+	{
+		g_bDecentJumped = false;
+	}
+
+	if (in_longjump.state & 3)
+	{
+		if (g_iOnGround && !g_bLongJumped)
+		{
+			bits |= IN_DUCK | IN_JUMP;
+			if (bResetState)
+			{
+				g_bLongJumped = true;
+			}
+		}
+		else
+		{
+			if (g_iWaterlevel == 2)
+			{
+				// Over the water, glide on the surface, but only if we are over deep water
+				bits |= IN_JUMP;
+			}
+			else if (g_iWaterlevel < 2)
+			{
+				bits |= IN_DUCK;
+			}
+		}
+	}
+	else
+	{
+		if (bResetState)
+		{
+			g_bLongJumped = false;
+		}
+	}
+
+	if (in_bunnyhop.state & 3)
+	{
+		if (g_iUser1)	// Simple jump in spectator
+		{
+			bits |= IN_JUMP;
+		}
+		else if (g_iOnGround)
+		{
+			if (!g_bBunnyhopJumped)
+			{
+				bits |= IN_JUMP;
+			}
+			if (bResetState)
+			{
+				g_bBunnyhopJumped = !g_bBunnyhopJumped;
+			}
+		}
+		else
+		{
+			g_bBunnyhopJumped = false;
+
+			if (g_iWaterlevel == 2)
+			{
+				// Over the water, glide on the surface, but only if we are over deep water
+				bits |= IN_JUMP;
+			}
+		}
 	}
  
 	if (in_jump.state & 3)
@@ -969,10 +1139,14 @@ void InitInput (void)
 	gEngfuncs.pfnAddCommand ("-score", IN_ScoreUp);
 	gEngfuncs.pfnAddCommand ("+showscores", IN_ScoreDown);
 	gEngfuncs.pfnAddCommand ("-showscores", IN_ScoreUp);
-	gEngfuncs.pfnAddCommand ("+graph", IN_GraphDown);
-	gEngfuncs.pfnAddCommand ("-graph", IN_GraphUp);
-	gEngfuncs.pfnAddCommand ("+break",IN_BreakDown);
-	gEngfuncs.pfnAddCommand ("-break",IN_BreakUp);
+	gEngfuncs.pfnAddCommand("-hud", IN_HUDUp);		//AJH
+	gEngfuncs.pfnAddCommand("+hud", IN_HUDDown);	//AJH
+	gEngfuncs.pfnAddCommand("-briefing", IN_BriefingUp);		//AJH
+	gEngfuncs.pfnAddCommand("+briefing", IN_BriefingDown);		//AJH
+	gEngfuncs.pfnAddCommand("+graph", IN_GraphDown);
+	gEngfuncs.pfnAddCommand("-graph", IN_GraphUp);
+	gEngfuncs.pfnAddCommand("+break", IN_BreakDown);
+	gEngfuncs.pfnAddCommand("-break", IN_BreakUp);
 
 	lookstrafe			= gEngfuncs.pfnRegisterVariable ( "lookstrafe", "0", FCVAR_ARCHIVE );
 	lookspring			= gEngfuncs.pfnRegisterVariable ( "lookspring", "0", FCVAR_ARCHIVE );
@@ -987,7 +1161,8 @@ void InitInput (void)
 	cl_pitchup			= gEngfuncs.pfnRegisterVariable ( "cl_pitchup", "89", 0 );
 	cl_pitchdown		= gEngfuncs.pfnRegisterVariable ( "cl_pitchdown", "89", 0 );
 
-	cl_vsmoothing		= gEngfuncs.pfnRegisterVariable ( "cl_vsmoothing", "0.05", FCVAR_ARCHIVE );
+	cl_vsmoothing = gEngfuncs.pfnRegisterVariable("cl_vsmoothing", "0.05", FCVAR_ARCHIVE);
+	cl_jumptype = gEngfuncs.pfnRegisterVariable("cl_jumptype", "1", FCVAR_ARCHIVE);
 
 	m_pitch			    = gEngfuncs.pfnRegisterVariable ( "m_pitch","0.022", FCVAR_ARCHIVE );
 	m_yaw				= gEngfuncs.pfnRegisterVariable ( "m_yaw","0.022", FCVAR_ARCHIVE );

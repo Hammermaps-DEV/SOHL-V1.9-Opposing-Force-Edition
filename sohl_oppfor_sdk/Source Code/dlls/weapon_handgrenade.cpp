@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Mk 2 Grenade * http://half-life.wikia.com/wiki/Mk_2_Grenade
 //=========================================================
@@ -35,13 +43,13 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_handgrenade, CHandGrenade );
+LINK_ENTITY_TO_CLASS(weapon_handgrenade, CHandGrenade);
 
 //=========================================================
 // Spawn Mk 2 Grenade
 //=========================================================
 void CHandGrenade::Spawn(void) {
-	Precache( );
+	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_grenade.mdl");
 	m_iDefaultAmmo = HANDGRENADE_DEFAULT_GIVE;
@@ -81,7 +89,7 @@ int CHandGrenade::GetItemInfo(ItemInfo *p) {
 // PrimaryAttack
 //=========================================================
 void CHandGrenade::PrimaryAttack(void) {
-	if ( !m_flStartThrow && m_pPlayer->m_rgAmmo[ m_iPrimaryAmmoType ] > 0 ) {
+	if (!m_flStartThrow && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0) {
 		m_flStartThrow = UTIL_GlobalTimeBase();
 		m_flReleaseThrow = 0;
 
@@ -109,7 +117,8 @@ void CHandGrenade::Holster(void) {
 		SendWeaponAnim((int)HANDGRENADE_HOLSTER::sequence);
 		m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)HANDGRENADE_HOLSTER::frames, (int)HANDGRENADE_HOLSTER::fps);
-	} else {
+	}
+	else {
 		// no more grenades!
 		m_pPlayer->pev->weapons &= ~(1 << WEAPON_HANDGRENADE);
 		SetThink(&CHandGrenade::DestroyItem);
@@ -145,7 +154,7 @@ void CHandGrenade::WeaponIdle(void) {
 
 		if (angThrow.x < 0)
 			angThrow.x = -10 + angThrow.x * ((90 - 10) / 90.0);
-		else	
+		else
 			angThrow.x = -10 + angThrow.x * ((90 + 10) / 90.0);
 
 		float flVel = (90 - angThrow.x) * 4;
@@ -165,7 +174,7 @@ void CHandGrenade::WeaponIdle(void) {
 			SendWeaponAnim((int)HANDGRENADE_THROW1::sequence);
 		else if (time <= 2)
 			SendWeaponAnim((int)HANDGRENADE_THROW2::sequence);
-		else	
+		else
 			SendWeaponAnim((int)HANDGRENADE_THROW3::sequence);
 
 		// player "shoot" animation
@@ -204,12 +213,14 @@ void CHandGrenade::WeaponIdle(void) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)HANDGRENADE_IDLE::frames, (int)HANDGRENADE_IDLE::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.7) {
+		}
+		else if (flRand <= 0.7) {
 			iAnim = (int)HANDGRENADE_FIDGET::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)HANDGRENADE_FIDGET::frames, (int)HANDGRENADE_FIDGET::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

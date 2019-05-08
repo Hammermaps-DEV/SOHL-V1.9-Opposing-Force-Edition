@@ -1,32 +1,30 @@
-/*
-    Copyright 2001 to 2004. The Battle Grounds Team and Contributors
-
-    This file is part of the Battle Grounds Modification for Half-Life.
-
-    The Battle Grounds Modification for Half-Life is free software;
-    you can redistribute it and/or modify it under the terms of the
-    GNU Lesser General Public License as published by the Free
-    Software Foundation; either version 2.1 of the License, or
-    (at your option) any later version.
-
-    The Battle Grounds Modification for Half-Life is distributed in
-    the hope that it will be useful, but WITHOUT ANY WARRANTY; without
-    even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-    PARTICULAR PURPOSE.  See the GNU Lesser General Public License
-    for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with The Battle Grounds Modification for Half-Life;
-    if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-    Suite 330, Boston, MA  02111-1307  USA
-
-    You must obey the GNU Lesser General Public License in all respects for
-    all of the code used other than code distributed with the Half-Life
-    SDK developed by Valve.  If you modify this file, you may extend this
-    exception to your version of the file, but you are not obligated to do so.
-    If you do not wish to do so, delete this exception statement from your
-    version.
-*/
+/***
+*
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 
 #include "extdll.h"
 #include "util.h"
@@ -34,22 +32,22 @@
 #include "particle_emitter.h"
 #include <ctype.h>
 
-extern char *UTIL_memfgets( byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize );
+extern char *UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize);
 
 // create ourselves a particle emitter
-void CParticleEmitter::Spawn( void )
+void CParticleEmitter::Spawn(void)
 {
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;
-	SET_MODEL (ENT(pev), STRING(pev->model));
+	SET_MODEL(ENT(pev), STRING(pev->model));
 	pev->effects |= EF_NODRAW;
-	
-	UTIL_SetOrigin( this, pev->origin ); 		
-	UTIL_SetSize( pev, pev->absmin, pev->absmax );
 
-    SetUse ( &CParticleEmitter::Use );
+	UTIL_SetOrigin(this, pev->origin);
+	UTIL_SetSize(pev, pev->absmin, pev->absmax);
 
-	if(pev->spawnflags & SF_START_ON)
+	SetUse(&CParticleEmitter::Use);
+
+	if (pev->spawnflags & SF_START_ON)
 		bIsOn = true;
 	else
 		bIsOn = false;
@@ -60,28 +58,29 @@ void CParticleEmitter::Spawn( void )
 }
 
 //Load values from the bsp
-void CParticleEmitter::KeyValue( KeyValueData* pkvd )
+void CParticleEmitter::KeyValue(KeyValueData* pkvd)
 {
-	if ( FStrEq(pkvd->szKeyName, "definition_file") )
+	if (FStrEq(pkvd->szKeyName, "definition_file"))
 	{
 		strncat(sParticleDefintionFile, pkvd->szValue, strlen(pkvd->szValue));
 		pkvd->fHandled = true;
-	} else {
-		CBaseEntity::KeyValue( pkvd );
+	}
+	else {
+		CBaseEntity::KeyValue(pkvd);
 	}
 }
 
 extern int gmsgParticles;
 
 // Let the player know there is a particleemitter
-void CParticleEmitter::MakeAware( CBaseEntity *pEnt )
+void CParticleEmitter::MakeAware(CBaseEntity *pEnt)
 {
 	// don't want to send a to tree again
-	if(pEnt->IsPlayer() == false)
+	if (pEnt->IsPlayer() == false)
 		return;
 
 	// particle system has been triggered off or starts off
-	if(bIsOn == false)
+	if (bIsOn == false)
 		return;
 
 	// lets give them everything
@@ -101,26 +100,29 @@ void CParticleEmitter::MakeAware( CBaseEntity *pEnt )
 	}
 }
 // add or remove a particle emitter from the client
-void CParticleEmitter::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
+void CParticleEmitter::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	// not allowed to trigger
-	if(!FBitSet(pev->spawnflags, SF_TRIGGERABLE))
+	if (!FBitSet(pev->spawnflags, SF_TRIGGERABLE))
 		return;
 
 	bool bTurnOn = true;
 
 	// determine whether we are turning on or off
-	if(useType == USE_OFF) {
+	if (useType == USE_OFF) {
 		bTurnOn = false;
-	}else if(useType == USE_ON) {
+	}
+	else if (useType == USE_ON) {
 		bTurnOn = true;
-	} else if(useType == USE_SET) {
-		if(value != 0)
+	}
+	else if (useType == USE_SET) {
+		if (value != 0)
 			bTurnOn = true;
 		else
 			bTurnOn = false;
-	} else {
-		if(bIsOn == true)
+	}
+	else {
+		if (bIsOn == true)
 			bTurnOn = false;
 		else
 			bTurnOn = true;
@@ -161,14 +163,14 @@ void CParticleEmitter::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 }
 
 // is the particle system on.
-bool CParticleEmitter::IsTriggered( CBaseEntity* ) {
+bool CParticleEmitter::IsTriggered(CBaseEntity*) {
 	// not on so it isn't triggered
-	if(bIsOn == false)
+	if (bIsOn == false)
 		return false;
 
 	int iFileSize = 0; int iPos = 0;
 	byte *pFile = g_engfuncs.pfnLoadFileForMe(sParticleDefintionFile, &iFileSize);
-	if(!pFile) {
+	if (!pFile) {
 		ALERT(at_console, "Bad Mapped Particle definition file specified %s\n", sParticleDefintionFile);
 		return false;
 	}
@@ -178,32 +180,32 @@ bool CParticleEmitter::IsTriggered( CBaseEntity* ) {
 
 	// loop through each line
 	int i = 0; int j = 0;
-	while(UTIL_memfgets(pFile, iFileSize, iPos, sBuffer, sizeof(sBuffer) - 1) != NULL) {
+	while (UTIL_memfgets(pFile, iFileSize, iPos, sBuffer, sizeof(sBuffer) - 1) != NULL) {
 		i = 0; j = 0;
 		// trim leading white spaces
-		while(sBuffer[i] && isspace(sBuffer[i]))
+		while (sBuffer[i] && isspace(sBuffer[i]))
 			i++;
 
 		// comment so next line
-		if(sBuffer[i] == '/' && sBuffer[i+1] == '/')
+		if (sBuffer[i] == '/' && sBuffer[i + 1] == '/')
 			continue;
 
 		// read the setting
-		while(i < 63 && sBuffer[i] && !isspace(sBuffer[i])) {
+		while (i < 63 && sBuffer[i] && !isspace(sBuffer[i])) {
 			sSetting[i] = sBuffer[i++];
 		}
 		sSetting[i] = '\0';
 
 		// if the setting isn't the system_life move onto the next line
-		if(strcmp(sSetting, "system_life"))
+		if (strcmp(sSetting, "system_life"))
 			continue;
 
 		// remove the spaces between setting and value
-		while(sBuffer[i] && isspace(sBuffer[i]))
+		while (sBuffer[i] && isspace(sBuffer[i]))
 			i++;
 
 		// read the value
-		while(j < 63 && sBuffer[i] && !isspace(sBuffer[i])) {
+		while (j < 63 && sBuffer[i] && !isspace(sBuffer[i])) {
 			sValue[j++] = sBuffer[i++];
 		}
 		sValue[j] = '\0';
@@ -216,19 +218,19 @@ bool CParticleEmitter::IsTriggered( CBaseEntity* ) {
 	g_engfuncs.pfnFreeFile(pFile);
 
 	// defaults to -1
-	if(bFound == false)
+	if (bFound == false)
 		return true;
 
 	// infinite so it must be on
-	if(atof(sValue) == -1.0)
+	if (atof(sValue) == -1.0)
 		return true;
 
 	// the time the system life + the time it was turned on is in the future
-	if(atof(sValue) + flTimeTurnedOn + 0.1 > UTIL_GlobalTimeBase())
+	if (atof(sValue) + flTimeTurnedOn + 0.1 > UTIL_GlobalTimeBase())
 		return true;
 
 	// not in the future so its dead
 	return false;
 }
 
-LINK_ENTITY_TO_CLASS( env_particleemitter, CParticleEmitter );
+LINK_ENTITY_TO_CLASS(env_particleemitter, CParticleEmitter);

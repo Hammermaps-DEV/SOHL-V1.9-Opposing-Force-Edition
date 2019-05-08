@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,10 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -27,54 +33,54 @@
 #define MONSTER_DIABLO_H
 
 class CDiablo : public CBaseMonster {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void SetYawSpeed(void);
-		int  Classify(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
-		int IgnoreConditions(void);
-		int  ISoundMask(void);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void SetYawSpeed(void);
+	int  Classify(void);
+	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	int IgnoreConditions(void);
+	int  ISoundMask(void);
 
-		float m_flNextFlinch;
+	float m_flNextFlinch;
 
-		void PainSound(void);
-		void AlertSound(void);
-		void IdleSound(void);
-		void AttackSound(void);
+	void PainSound(void);
+	void AlertSound(void);
+	void IdleSound(void);
+	void AttackSound(void);
 
-		BOOL CheckRangeAttack1(float flDot, float flDist);
-		BOOL CheckRangeAttack2(float flDot, float flDist);
-		BOOL CheckMeleeAttack1(float flDot, float flDist);
-		BOOL CheckMeleeAttack2(float flDot, float flDist);
+	BOOL CheckRangeAttack1(float flDot, float flDist);
+	BOOL CheckRangeAttack2(float flDot, float flDist);
+	BOOL CheckMeleeAttack1(float flDot, float flDist);
+	BOOL CheckMeleeAttack2(float flDot, float flDist);
 
-		static const char *pAttackSounds[];
-		static const char *pStepSounds[];
-		static const char *pIdleSounds[];
-		static const char *pAlertSounds[];
-		static const char *pPainSounds[];
-		static const char *pAttackHitSounds[];
-		static const char *pAttackMissSounds[];
-		static const char *pAttackHitSoundsEXT[];
-		static const char *pAttackMissSoundsEXT[];
+	static const char *pAttackSounds[];
+	static const char *pStepSounds[];
+	static const char *pIdleSounds[];
+	static const char *pAlertSounds[];
+	static const char *pPainSounds[];
+	static const char *pAttackHitSounds[];
+	static const char *pAttackMissSounds[];
+	static const char *pAttackHitSoundsEXT[];
+	static const char *pAttackMissSoundsEXT[];
 
-		int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-		void SetActivity(Activity NewActivity);
+	void SetActivity(Activity NewActivity);
 
-		Schedule_t	*GetSchedule(void);
-		Schedule_t  *GetScheduleOfType(int Type);
+	Schedule_t	*GetSchedule(void);
+	Schedule_t  *GetScheduleOfType(int Type);
 
-		CUSTOM_SCHEDULES;
+	CUSTOM_SCHEDULES;
 
-	protected:
-		BOOL m_flDebug = false;
-		float m_flBulletDR = 0.0;
-		float m_flHitgroupHead;
-		float m_flHitgroupChest;
-		float m_flHitgroupStomach;
-		float m_flHitgroupLeg;
+protected:
+	BOOL m_flDebug = false;
+	float m_flBulletDR = 0.0;
+	float m_flHitgroupHead;
+	float m_flHitgroupChest;
+	float m_flHitgroupStomach;
+	float m_flHitgroupLeg;
 };
 
 #endif // MONSTER_DIABLO_H

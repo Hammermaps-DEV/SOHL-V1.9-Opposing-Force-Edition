@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -26,12 +33,12 @@
 #define WEAPON_HGUN_H
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class HGUN_IDLE1		{ sequence = 0, frames = 31, fps = 16 };
-enum class HGUN_FIDGETSWAY  { sequence = 1, frames = 41, fps = 16 };
+enum class HGUN_IDLE1 { sequence = 0, frames = 31, fps = 16 };
+enum class HGUN_FIDGETSWAY { sequence = 1, frames = 41, fps = 16 };
 enum class HGUN_FIDGETSHAKE { sequence = 2, frames = 36, fps = 16 };
-enum class HGUN_DOWN		{ sequence = 3, frames = 19, fps = 16 };
-enum class HGUN_UP			{ sequence = 4, frames = 31, fps = 30 };
-enum class HGUN_SHOOT		{ sequence = 5, frames = 11, fps = 24 };
+enum class HGUN_DOWN { sequence = 3, frames = 19, fps = 16 };
+enum class HGUN_UP { sequence = 4, frames = 31, fps = 30 };
+enum class HGUN_SHOOT { sequence = 5, frames = 11, fps = 24 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //Hivehand Base-Class | Base | Attack | Animations | Vars | Events

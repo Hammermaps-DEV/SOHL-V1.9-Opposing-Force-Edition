@@ -1,17 +1,30 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 #ifndef TRAINS_H
 #define TRAINS_H
 
@@ -58,28 +71,28 @@
 class CPathTrack : public CPointEntity
 {
 public:
-	void		Spawn( void );
-	void		Activate( void );
-	void		KeyValue( KeyValueData* pkvd);
-	
-	void		SetPrevious( CPathTrack *pprevious );
-	void		Link( void );
-	void		Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	void		Spawn(void);
+	void		Activate(void);
+	void		KeyValue(KeyValueData* pkvd);
 
-	CPathTrack	*ValidPath( CPathTrack *ppath, int testFlag );		// Returns ppath if enabled, NULL otherwise
-	void		Project( CPathTrack *pstart, CPathTrack *pend, Vector *origin, float dist );
+	void		SetPrevious(CPathTrack *pprevious);
+	void		Link(void);
+	void		Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	static CPathTrack *Instance( edict_t *pent );
+	CPathTrack	*ValidPath(CPathTrack *ppath, int testFlag);		// Returns ppath if enabled, NULL otherwise
+	void		Project(CPathTrack *pstart, CPathTrack *pend, Vector *origin, float dist);
 
-	CPathTrack	*LookAhead( Vector *origin, float dist, int move );
-	CPathTrack	*Nearest( Vector origin );
+	static CPathTrack *Instance(edict_t *pent);
 
-	CPathTrack	*GetNext( void );
-	CPathTrack	*GetPrevious( void );
+	CPathTrack	*LookAhead(Vector *origin, float dist, int move);
+	CPathTrack	*Nearest(Vector origin);
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	
+	CPathTrack	*GetNext(void);
+	CPathTrack	*GetPrevious(void);
+
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
+
 	static	TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
 	void EXPORT Sparkle(void);
@@ -98,46 +111,46 @@ class CBaseTrainDoor;
 class CFuncTrackTrain : public CBaseEntity
 {
 public:
-	void Spawn( void );
-	void Precache( void );
+	void Spawn(void);
+	void Precache(void);
 
-	void Blocked( CBaseEntity *pOther );
-	void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	void KeyValue( KeyValueData* pkvd );
+	void Blocked(CBaseEntity *pOther);
+	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void KeyValue(KeyValueData* pkvd);
 
 	//LRC
 	void StartSequence(CTrainSequence *pSequence);
-	void StopSequence( );
+	void StopSequence();
 	CTrainSequence *m_pSequence;
 
-	void DesiredAction( void ); //LRC - used to be called Next!
+	void DesiredAction(void); //LRC - used to be called Next!
 
 //	void EXPORT Next( void );
-	void EXPORT PostponeNext( void );
-	void EXPORT Find( void );
-	void EXPORT NearestPath( void );
-	void EXPORT DeadEnd( void );
+	void EXPORT PostponeNext(void);
+	void EXPORT Find(void);
+	void EXPORT NearestPath(void);
+	void EXPORT DeadEnd(void);
 
-	void		NextThink( float thinkTime, BOOL alwaysThink );
+	void		NextThink(float thinkTime, BOOL alwaysThink);
 
-	void SetTrack( CPathTrack *track ) { m_ppath = track->Nearest(pev->origin); }
-	void SetControls( entvars_t *pevControls );
-	BOOL OnControls( entvars_t *pev );
+	void SetTrack(CPathTrack *track) { m_ppath = track->Nearest(pev->origin); }
+	void SetControls(entvars_t *pevControls);
+	BOOL OnControls(entvars_t *pev);
 
-	void StopSound ( void );
-	void UpdateSound ( void );
-	
-	static CFuncTrackTrain *Instance( edict_t *pent );
+	void StopSound(void);
+	void UpdateSound(void);
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	
+	static CFuncTrackTrain *Instance(edict_t *pent);
+
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
+
 	static	TYPEDESCRIPTION m_SaveData[];
-	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
+	virtual int	ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
 
-	virtual void	OverrideReset( void );
-          virtual void	ClearPointers( void );
-	
+	virtual void	OverrideReset(void);
+	virtual void	ClearPointers(void);
+
 	CPathTrack	*m_ppath;
 	CBaseTrainDoor	*m_pDoor;
 	float		m_length;
@@ -146,6 +159,7 @@ public:
 	// pev->speed records the current speed (as set by the player). --LRC
 	// m_speed is also stored, as an int, in pev->impulse.
 	float		m_speed;
+	float		m_dir;
 	float		m_startSpeed;
 	Vector		m_controlMins;
 	Vector		m_controlMaxs;
@@ -157,9 +171,9 @@ public:
 	Vector		m_vecMasterAvel; //LRC - masterAvel is to avelocity as m_speed is to speed.
 	Vector		m_vecBaseAvel; // LRC - the underlying avelocity, superceded by normal turning behaviour where applicable
 
-	EHANDLE		m_hActivator;
+	EHANDLE m_hActivator;	//AJH (give frags to this entity)
 public:
-	void SetTrainDoor( CBaseTrainDoor *pDoor );
+	void SetTrainDoor(CBaseTrainDoor *pDoor);
 private:
 	unsigned short m_usAdjustPitch;
 };
@@ -173,39 +187,39 @@ typedef enum
 	TD_SLIDING_DOWN,
 	TD_SHIFT_DOWN
 } TRAINDOOR_STATE;
-	
+
 class CBaseTrainDoor : public CBaseToggle
 {
 public:
-	void Spawn( void );
-	void Precache( void );
-	virtual void KeyValue( KeyValueData *pkvd );
-	virtual void Blocked( CBaseEntity *pOther );
+	void Spawn(void);
+	void Precache(void);
+	virtual void KeyValue(KeyValueData *pkvd);
+	virtual void Blocked(CBaseEntity *pOther);
 
-	virtual int	ObjectCaps( void ) 
-	{ 
+	virtual int	ObjectCaps(void)
+	{
 		return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
 	};
-	virtual int	Save( CSave &save );
-	virtual int	Restore( CRestore &restore );
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// local functions
-	void EXPORT FindTrain( void );
-	void EXPORT DoorGoUp( void );
-	void EXPORT DoorGoDown( void );
-	void EXPORT DoorHitTop( void );
-	void EXPORT DoorSlideUp( void );
-	void EXPORT DoorSlideDown( void );
-	void EXPORT DoorSlideWait( void );		// wait before sliding
-	void EXPORT DoorHitBottom( void );
-	void EXPORT ActivateTrain( void );
-	
+	void EXPORT FindTrain(void);
+	void EXPORT DoorGoUp(void);
+	void EXPORT DoorGoDown(void);
+	void EXPORT DoorHitTop(void);
+	void EXPORT DoorSlideUp(void);
+	void EXPORT DoorSlideDown(void);
+	void EXPORT DoorSlideWait(void);		// wait before sliding
+	void EXPORT DoorHitBottom(void);
+	void EXPORT ActivateTrain(void);
+
 	BYTE	m_bMoveSnd;			// sound a door makes while moving
 	BYTE	m_bStopSnd;			// sound a door makes when it stops
 
-	Vector	ConvertAngles( void );	// same as in plats.cpp
+	Vector	ConvertAngles(void);	// same as in plats.cpp
 
 	CFuncTrackTrain	*m_pTrain;	// my train pointer
 
@@ -214,12 +228,12 @@ public:
 	Vector	m_vecPosition3;		// moving forward
 
 	TRAINDOOR_STATE	door_state;
-	virtual void	OverrideReset( void );
-	virtual void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	virtual STATE	GetState ( void );
-	void		DoorSetup( void );
-	void		Evaluate( void );
-	void		Stop( void );
+	virtual void	OverrideReset(void);
+	virtual void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	virtual STATE	GetState(void);
+	void		DoorSetup(void);
+	void		Evaluate(void);
+	void		Stop(void);
 };
 
 #endif

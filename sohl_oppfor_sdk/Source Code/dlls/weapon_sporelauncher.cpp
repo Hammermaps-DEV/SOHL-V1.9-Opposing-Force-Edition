@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,12 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Spore Launcher * http://half-life.wikia.com/wiki/Spore_Launcher
 //=========================================================
@@ -107,7 +114,8 @@ void CSporelauncher::PrimaryAttack(void) {
 
 	if (m_iChargeLevel >= 1) {
 		Charge(true);
-	} else {
+	}
+	else {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
@@ -158,7 +166,8 @@ void CSporelauncher::SecondaryAttack(void) {
 
 	if (m_iChargeLevel >= 1) {
 		Charge(true);
-	} else {
+	}
+	else {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
@@ -223,7 +232,8 @@ void CSporelauncher::Reload(void) {
 	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SPORELAUNCHER_MAX_CLIP) ||
 		m_flNextPrimaryAttack > UTIL_GlobalTimeBase() || m_flNextSecondaryAttack > UTIL_GlobalTimeBase()) {
 		return;
-	} else { Charge(false); }
+	}
+	else { Charge(false); }
 }
 
 //=========================================================
@@ -239,19 +249,21 @@ void CSporelauncher::Charge(bool m_BeginAttack) {
 			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + m_flTimeWeaponIdle;
 			m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + m_flTimeWeaponIdle;
 			m_iChargeLevel = 1;
-		} else if (m_iChargeLevel == 1) {
+		}
+		else if (m_iChargeLevel == 1) {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iChargeLevel = 2;
 
 				EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_ITEM, "weapons/splauncher_reload.wav", VOL_NORM, ATTN_NORM, 0, 85 + RANDOM_LONG(0, 0x1f));
-				
+
 				SendWeaponAnim((int)SPLAUNCHER_RELOAD_LOAD::sequence);
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)SPLAUNCHER_RELOAD_LOAD::frames, (int)SPLAUNCHER_RELOAD_LOAD::fps);
 				m_flNextPrimaryAttack = m_flNextSecondaryAttack = m_flTimeWeaponIdle;
 				m_pPlayer->m_flNextAttack = m_flTimeWeaponIdle;
 			}
-		} else {
+		}
+		else {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_iClip += 1;
 				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 1;
@@ -261,7 +273,8 @@ void CSporelauncher::Charge(bool m_BeginAttack) {
 				}
 			}
 		}
-	} else {
+	}
+	else {
 		// reload debounce has timed out
 		SendWeaponAnim((int)SPLAUNCHER_RELOAD_AIM::sequence);
 		m_iChargeLevel = 0;
@@ -283,7 +296,8 @@ void CSporelauncher::WeaponIdle(void) {
 
 	if (m_iChargeLevel != 0) {
 		Charge(false);
-	} else {
+	}
+	else {
 		int iAnim;
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
@@ -291,17 +305,20 @@ void CSporelauncher::WeaponIdle(void) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SPLAUNCHER_IDLE1::frames, (int)SPLAUNCHER_IDLE1::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.7) {
+		}
+		else if (flRand <= 0.7) {
 			iAnim = (int)SPLAUNCHER_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SPLAUNCHER_IDLE2::frames, (int)SPLAUNCHER_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else if (flRand <= 0.9) {
+		}
+		else if (flRand <= 0.9) {
 			iAnim = (int)SPLAUNCHER_FIDGET::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SPLAUNCHER_FIDGET::frames, (int)SPLAUNCHER_FIDGET::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

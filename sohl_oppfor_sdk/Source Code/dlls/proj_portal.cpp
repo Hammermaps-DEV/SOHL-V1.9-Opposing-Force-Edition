@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -115,7 +122,7 @@ void CPortal::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) {
 	pSpit->pev->owner = ENT(pevOwner);
 
 	pSpit->SetThink(&CPortal::Animate);
-	pSpit->pev->nextthink = gpGlobals->time + 0.1;
+	pSpit->SetNextThink(0.1);
 }
 
 void CPortal::Touch(CBaseEntity *pOther)
@@ -151,7 +158,8 @@ void CPortal::Touch(CBaseEntity *pOther)
 		UTIL_DecalTrace(&tr, DECAL_SCORCH1 + RANDOM_LONG(0, 2));
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_impact.wav", VOL_NORM, ATTN_NORM, 0, 100);
 		UTIL_Sparks(pev->origin);
-	} else {
+	}
+	else {
 		if (g_pGameRules->IsMultiplayer()) {
 			if (pOther->IsPlayer()) {
 				for (int i = RANDOM_LONG(1, 5); i > 0; i--)
@@ -177,30 +185,33 @@ void CPortal::Touch(CBaseEntity *pOther)
 					vecSrc = pTarget->pev->origin;
 					MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, vecSrc);
 					WRITE_BYTE(TE_DLIGHT);
-						WRITE_COORD(vecSrc.x);	// X
-						WRITE_COORD(vecSrc.y);	// Y
-						WRITE_COORD(vecSrc.z);	// Z
-						WRITE_BYTE(24);		// radius * 0.1
-						WRITE_BYTE(255);		// r
-						WRITE_BYTE(180);		// g
-						WRITE_BYTE(96);		// b
-						WRITE_BYTE(20);		// time * 10
-						WRITE_BYTE(0);		// decay * 0.1
+					WRITE_COORD(vecSrc.x);	// X
+					WRITE_COORD(vecSrc.y);	// Y
+					WRITE_COORD(vecSrc.z);	// Z
+					WRITE_BYTE(24);		// radius * 0.1
+					WRITE_BYTE(255);		// r
+					WRITE_BYTE(180);		// g
+					WRITE_BYTE(96);		// b
+					WRITE_BYTE(20);		// time * 10
+					WRITE_BYTE(0);		// decay * 0.1
 					MESSAGE_END();
 				}
 			}
-		} else if (pOther->pev->flags & FL_MONSTER) {
+		}
+		else if (pOther->pev->flags & FL_MONSTER) {
 			if (pOther->pev->health <= 200 && !FClassnameIs(pOther->pev, "monster_nihilanth")
 				&& !FClassnameIs(pOther->pev, "monster_apache") && !FClassnameIs(pOther->pev, "monster_osprey")
-			    && !FClassnameIs(pOther->pev, "monster_gargantua") && !FClassnameIs(pOther->pev, "monster_bigmomma")) {
+				&& !FClassnameIs(pOther->pev, "monster_gargantua") && !FClassnameIs(pOther->pev, "monster_bigmomma")) {
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport_player.wav", VOL_NORM, ATTN_NORM, 0, 100);
 				pOther->Killed(pev, GIB_NEVER);
 				pOther->SUB_Remove();
-			} else {
+			}
+			else {
 				EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/displacer_teleport.wav", VOL_NORM, ATTN_NORM, 0, 100);
 				pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_SHOCK);
 			}
-		} else {
+		}
+		else {
 			pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_ALWAYSGIB);
 		}
 
@@ -209,37 +220,37 @@ void CPortal::Touch(CBaseEntity *pOther)
 
 	// portal circle
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_BEAMCYLINDER);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z);
-		WRITE_COORD(pev->origin.x);
-		WRITE_COORD(pev->origin.y);
-		WRITE_COORD(pev->origin.z + 840);
-		WRITE_SHORT(iRingSprite);
-		WRITE_BYTE(0);
-		WRITE_BYTE(10);
-		WRITE_BYTE(3);
-		WRITE_BYTE(20);
-		WRITE_BYTE(0);
-		WRITE_BYTE(255);
-		WRITE_BYTE(255);
-		WRITE_BYTE(255);
-		WRITE_BYTE(255);
-		WRITE_BYTE(0);
+	WRITE_BYTE(TE_BEAMCYLINDER);
+	WRITE_COORD(pev->origin.x);
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z);
+	WRITE_COORD(pev->origin.x);
+	WRITE_COORD(pev->origin.y);
+	WRITE_COORD(pev->origin.z + 840);
+	WRITE_SHORT(iRingSprite);
+	WRITE_BYTE(0);
+	WRITE_BYTE(10);
+	WRITE_BYTE(3);
+	WRITE_BYTE(20);
+	WRITE_BYTE(0);
+	WRITE_BYTE(255);
+	WRITE_BYTE(255);
+	WRITE_BYTE(255);
+	WRITE_BYTE(255);
+	WRITE_BYTE(0);
 	MESSAGE_END();
 
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(32);		// radius * 0.1
-		WRITE_BYTE(255);		// r
-		WRITE_BYTE(180);		// g
-		WRITE_BYTE(96);		// b
-		WRITE_BYTE(60);		// time * 10
-		WRITE_BYTE(20);		// decay * 0.1
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(32);		// radius * 0.1
+	WRITE_BYTE(255);		// r
+	WRITE_BYTE(180);		// g
+	WRITE_BYTE(96);		// b
+	WRITE_BYTE(60);		// time * 10
+	WRITE_BYTE(20);		// decay * 0.1
 	MESSAGE_END();
 
 	ClearBeams();
@@ -274,20 +285,20 @@ void CPortal::UpdateBeams() {
 	int i, j;
 	float flDist = 1.0;
 
-	Vector vecSrc , vecAim;
+	Vector vecSrc, vecAim;
 	vecSrc = pev->origin;
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(25);     // radius
-		WRITE_BYTE(255);		// r
-		WRITE_BYTE(180);		// g
-		WRITE_BYTE(96);		// b
-		WRITE_BYTE(1);     // life * 10
-		WRITE_BYTE(0); // decay
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(25);     // radius
+	WRITE_BYTE(255);		// r
+	WRITE_BYTE(180);		// g
+	WRITE_BYTE(96);		// b
+	WRITE_BYTE(1);     // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
 
 	for (i = 0; i < MAX_PORTAL_BEAMS; i++) {

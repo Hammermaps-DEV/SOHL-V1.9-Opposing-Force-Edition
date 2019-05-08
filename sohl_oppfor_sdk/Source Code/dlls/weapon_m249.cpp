@@ -1,17 +1,31 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
+
 //=========================================================
 // Weapon: M249 Squad Automatic Weapon
 // http://half-life.wikia.com/wiki/M249_Squad_Automatic_Weapon
@@ -126,7 +140,8 @@ void CM249::PrimaryAttack(void) {
 		}
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 7.0 / 30.0;
-	} else {
+	}
+	else {
 		PlayEmptySound();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
@@ -164,8 +179,8 @@ void CM249::Reload(void) {
 	DefaultReload(GLOCK_MAX_CLIP, (int)SAW_RELOAD_START::sequence,
 		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps));
 
-	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
-		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps) + 
+	m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
+		CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps) +
 		CalculateWeaponTime((int)SAW_RELOAD_END::frames, (int)SAW_RELOAD_END::fps);
 	m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)SAW_RELOAD_START::frames, (int)SAW_RELOAD_START::fps);
 }
@@ -177,10 +192,11 @@ void CM249::WeaponIdle(void) {
 	if (m_iReloadStep) {
 		m_iReloadStep = false;
 		SendWeaponAnim((int)SAW_RELOAD_END::sequence);
-		m_flTimeWeaponIdle = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 
+		m_flTimeWeaponIdle = m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)SAW_RELOAD_END::frames, (int)SAW_RELOAD_END::fps);
 		UpdateClip();
-	} else {
+	}
+	else {
 		UpdateClip();
 
 		if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
@@ -197,12 +213,14 @@ void CM249::WeaponIdle(void) {
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)SAW_SLOWIDLE::frames, (int)SAW_SLOWIDLE::fps);
 				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-			} else if (flRand <= 0.7) {
+			}
+			else if (flRand <= 0.7) {
 				iAnim = (int)SAW_IDLE::sequence;
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 					CalculateWeaponTime((int)SAW_IDLE::frames, (int)SAW_IDLE::fps);
 				m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-			} else {
+			}
+			else {
 				m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 				m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 			}

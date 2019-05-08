@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,12 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	This product contains software technology licensed from:
-*	The Battle Grounds Team and Contributors.
-*
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -176,7 +180,7 @@ bool CGrassParticleSystem::LoadParticleDefinition( particle_system_management *p
 		}
 
 		// we're finished with this particle, create a new particle and parse
-		if((!stricmp(sSetting, "new_particle"))) {
+		if((!_stricmp(sSetting, "new_particle"))) {
 			pSystem = CreateDefaultParticleSystem();
 			pSystem->vDirection = pSysDetails->vDirection;
 			pSystem->vAbsMax = pSysDetails->vAbsMax;
@@ -220,31 +224,31 @@ bool CGrassParticleSystem::LoadParticleDefinition( particle_system_management *p
 		int iTemp = 0;
 
 		// particle texture path
-		if(!stricmp(sSetting, "texture")) {
+		if(!_stricmp(sSetting, "texture")) {
 			_snprintf(pSystem->sParticleTexture, MAX_PARTICLE_PATH, "%s", sValue);
 		}
 		// size of texture * this value 
-		else if(!stricmp(sSetting, "scale")) {
+		else if(!_stricmp(sSetting, "scale")) {
 			pSystem->flSize = atof(sValue);
 		}
 		// the maximum amount this grass can lean
-		else if(!stricmp(sSetting, "leaning_max")) {
+		else if(!_stricmp(sSetting, "leaning_max")) {
 			pSystem->flLeaningMax = atof(sValue);
 		}
 		// the maximum amount this grass can lean
-		else if(!stricmp(sSetting, "leaning_min")) {
+		else if(!_stricmp(sSetting, "leaning_min")) {
 			pSystem->flLeaningMin = atof(sValue);
 		}
 		// how fast the wind is going
-		else if(!stricmp(sSetting, "wave_speed")) {
+		else if(!_stricmp(sSetting, "wave_speed")) {
 			pSystem->flWaveSpeed = atof(sValue);
 		}
 		// the number of particles in this system
-		else if(!stricmp(sSetting, "particles")) {
+		else if(!_stricmp(sSetting, "particles")) {
 			pSystem->iCount = atoi(sValue);
 		}
 		// how transparent the particles are
-		else if(!stricmp(sSetting, "transparency")) {
+		else if(!_stricmp(sSetting, "transparency")) {
 			iTemp = atoi(sValue);
 		
 			// make sure it isn't out of range
@@ -254,23 +258,23 @@ bool CGrassParticleSystem::LoadParticleDefinition( particle_system_management *p
 				pSystem->iTransparency = iTemp;
 		}
 		// level of detail
-		else if(!stricmp(sSetting, "lod")) {
+		else if(!_stricmp(sSetting, "lod")) {
 			pSystem->bLOD = (!!(atoi(sValue)));
 		}
 		// drop on ground ??
-		else if(!stricmp(sSetting, "drop_on_ground")) {
+		else if(!_stricmp(sSetting, "drop_on_ground")) {
 			pSystem->bDropOnGround = (!!(atoi(sValue)));
 		}
 		// ignore_sort - Do not sort these particles with the rest ( saves cpu time )
-		else if(!stricmp(sSetting, "ignore_sort")) {
+		else if(!_stricmp(sSetting, "ignore_sort")) {
 			pSystem->bIgnoreSort = (!!(atoi(sValue)));
 		}
 		// randomize - set different scales based on iRandomVal's value
-		else if(!stricmp(sSetting, "randomize")) {
+		else if(!_stricmp(sSetting, "randomize")) {
 			pSystem->bUseRandom = (!!(atoi(sValue)));
 		}
 		// different scales values
-		else if(!stricmp(sSetting, "random_modifier")) {
+		else if(!_stricmp(sSetting, "random_modifier")) {
 			pSystem->fRandomVal = atof(sValue);
 		}
 		// catch all to accomodate for my spelling at first and then mapper's spelling later on

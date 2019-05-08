@@ -84,6 +84,9 @@
     <Filter Include="Header Files\dlls\rope">
       <UniqueIdentifier>{10c4c228-4192-4241-a3c6-a418193a07bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\rope">
+      <UniqueIdentifier>{cff2d3b7-f5a2-4ea3-880e-6b694c7131fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ammo_9mmbox.cpp">
@@ -677,6 +680,30 @@
     <ClCompile Include="proj_hvr_rocket.cpp">
       <Filter>Source Files\dlls\projectile</Filter>
     </ClCompile>
+    <ClCompile Include="rope\CElectrifiedWire.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="rope\CRope.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="rope\CRopeSample.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="rope\CRopeSegment.cpp">
+      <Filter>Source Files\dlls\rope</Filter>
+    </ClCompile>
+    <ClCompile Include="item_medicalkit.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_antirad.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_flare.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="item_camera.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1165,9 +1192,6 @@
     <ClInclude Include="proj_portal.h">
       <Filter>Header Files\dlls\projectile</Filter>
     </ClInclude>
-    <ClInclude Include="env_lensflare.h">
-      <Filter>Header Files\dlls\env</Filter>
-    </ClInclude>
     <ClInclude Include="genericmodel.h">
       <Filter>Header Files\dlls</Filter>
     </ClInclude>
@@ -1201,13 +1225,16 @@
     <ClInclude Include="proj_hvr_rocket.h">
       <Filter>Header Files\dlls\projectile</Filter>
     </ClInclude>
-    <ClInclude Include="rope_segment.h">
+    <ClInclude Include="rope\CElectrifiedWire.h">
       <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
-    <ClInclude Include="env_rope.h">
-      <Filter>Header Files\dlls\env</Filter>
+    <ClInclude Include="rope\CRope.h">
+      <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
-    <ClInclude Include="rope_sample.h">
+    <ClInclude Include="rope\CRopeSample.h">
+      <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="rope\CRopeSegment.h">
       <Filter>Header Files\dlls\rope</Filter>
     </ClInclude>
   </ItemGroup>

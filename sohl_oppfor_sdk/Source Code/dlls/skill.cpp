@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -34,19 +41,19 @@ skilldata_t	gSkillData;
 // take the name of a cvar, tack a digit for the skill level
 // on, and return the value.of that Cvar 
 //=========================================================
-float GetSkillCvar( char *pName )
+float GetSkillCvar(char *pName)
 {
 	int		iCount;
 	float	flValue;
-	char	szBuffer[ 64 ];
-	
-	iCount = snprintf( szBuffer, 64, "%s%d",pName, gSkillData.iSkillLevel );
+	char	szBuffer[64];
 
-	flValue = CVAR_GET_FLOAT ( szBuffer );
+	iCount = snprintf(szBuffer, 64, "%s%d", pName, gSkillData.iSkillLevel);
 
-	if ( flValue <= 0 )
+	flValue = CVAR_GET_FLOAT(szBuffer);
+
+	if (flValue <= 0)
 	{
-		ALERT ( at_debug, "\n\n** GetSkillCVar Got a zero for %s **\n\n", szBuffer );
+		ALERT(at_debug, "\n\n** GetSkillCVar Got a zero for %s **\n\n", szBuffer);
 	}
 
 	return flValue;

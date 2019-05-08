@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,10 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -27,53 +33,53 @@
 #define WEAPON_DISPLACER_H
 
 //Model Animations | Sequence-ID | Frames | FPS
-enum class DISPLACER_IDLE1   { sequence = 0, frames = 91, fps = 30 };
-enum class DISPLACER_IDLE2   { sequence = 1, frames = 91, fps = 30 };
-enum class DISPLACER_SPINUP  { sequence = 2, frames = 31, fps = 30 };
-enum class DISPLACER_SPIN    { sequence = 3, frames = 31, fps = 30 };
-enum class DISPLACER_FIRE    { sequence = 4, frames = 31, fps = 30 };
-enum class DISPLACER_DRAW    { sequence = 5, frames = 16, fps = 15 };
+enum class DISPLACER_IDLE1 { sequence = 0, frames = 91, fps = 30 };
+enum class DISPLACER_IDLE2 { sequence = 1, frames = 91, fps = 30 };
+enum class DISPLACER_SPINUP { sequence = 2, frames = 31, fps = 30 };
+enum class DISPLACER_SPIN { sequence = 3, frames = 31, fps = 30 };
+enum class DISPLACER_FIRE { sequence = 4, frames = 31, fps = 30 };
+enum class DISPLACER_DRAW { sequence = 5, frames = 16, fps = 15 };
 enum class DISPLACER_HOLSTER { sequence = 6, frames = 16, fps = 15 };
 
 #ifndef CLIENT_DLL //Only in Server-DLL
 //Displacer Base-Class | Base | Attack | Animations | Vars | Events
 class CDisplacer : public CBasePlayerWeapon {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		int GetItemInfo(ItemInfo *p);
-		void PrimaryAttack(void);
-		void SecondaryAttack(void);
-		BOOL Deploy(void);
-		void Holster(void);
-		void WeaponIdle(void);
-		void AttachBeamCreate(const Vector &vecEndPos);
+public:
+	void Spawn(void);
+	void Precache(void);
+	int GetItemInfo(ItemInfo *p);
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
+	BOOL Deploy(void);
+	void Holster(void);
+	void WeaponIdle(void);
+	void AttachBeamCreate(const Vector &vecEndPos);
 
-		int		m_iFireState;
-		int		m_iFireMode;
-		CBaseEntity* m_hTargetEarth;
-		CBaseEntity* m_hTargetXen;
+	int		m_iFireState;
+	int		m_iFireMode;
+	CBaseEntity* m_hTargetEarth;
+	CBaseEntity* m_hTargetXen;
 
-		BOOL HasAmmo(void);
-		void UseAmmo(int count);
-		BOOL CanFireDisplacer() const;
+	BOOL HasAmmo(void);
+	void UseAmmo(int count);
+	BOOL CanFireDisplacer() const;
 
-		enum DISPLACER_FIRESTATE { FIRESTATE_NONE = 0, FIRESTATE_SPINUP, FIRESTATE_SPIN, FIRESTATE_FIRE };
-		enum DISPLACER_FIREMODE { FIREMODE_NONE = 0, FIREMODE_FORWARD, FIREMODE_BACKWARD };
-		enum DISPLACER_EFFECT { EFFECT_NONE = 0, EFFECT_CORE };
+	enum DISPLACER_FIRESTATE { FIRESTATE_NONE = 0, FIRESTATE_SPINUP, FIRESTATE_SPIN, FIRESTATE_FIRE };
+	enum DISPLACER_FIREMODE { FIREMODE_NONE = 0, FIREMODE_FORWARD, FIREMODE_BACKWARD };
+	enum DISPLACER_EFFECT { EFFECT_NONE = 0, EFFECT_CORE };
 
-	private:
-		void ClearSpin(void);
-		void SpinUp(int iFireMode);
-		void Spin(void);
-		void Fire(BOOL fIsPrimary);
-		void Teleport(void);
-		void Displace(void);
+private:
+	void ClearSpin(void);
+	void SpinUp(int iFireMode);
+	void Spin(void);
+	void Fire(BOOL fIsPrimary);
+	void Teleport(void);
+	void Displace(void);
 
-		CBeam *m_pBeam;
+	CBeam *m_pBeam;
 
-		BOOL ShouldUpdateEffects(void) const;
-		unsigned short m_usDisplacer;
+	BOOL ShouldUpdateEffects(void) const;
+	unsigned short m_usDisplacer;
 };
 #endif
 

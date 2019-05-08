@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Hivehand * http://half-life.wikia.com/wiki/Hivehand
 //=========================================================
@@ -36,13 +44,13 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_hornetgun, CHgun );
+LINK_ENTITY_TO_CLASS(weapon_hornetgun, CHgun);
 
 //=========================================================
 // Spawn Glock 17
 //=========================================================
 void CHgun::Spawn(void) {
-	Precache( );
+	Precache();
 	SET_MODEL(ENT(pev), "models/w_hgun.mdl");
 
 	m_iDefaultAmmo = HIVEHAND_DEFAULT_GIVE;
@@ -126,34 +134,34 @@ void CHgun::SecondaryAttack(void) {
 
 	m_iFirePhase++;
 	switch (m_iFirePhase) {
-		case 1:
-			vecSrc = vecSrc + gpGlobals->v_up * 8;
+	case 1:
+		vecSrc = vecSrc + gpGlobals->v_up * 8;
 		break;
-		case 2:
-			vecSrc = vecSrc + gpGlobals->v_up * 8;
-			vecSrc = vecSrc + gpGlobals->v_right * 8;
+	case 2:
+		vecSrc = vecSrc + gpGlobals->v_up * 8;
+		vecSrc = vecSrc + gpGlobals->v_right * 8;
 		break;
-		case 3:
-			vecSrc = vecSrc + gpGlobals->v_right * 8;
+	case 3:
+		vecSrc = vecSrc + gpGlobals->v_right * 8;
 		break;
-		case 4:
-			vecSrc = vecSrc + gpGlobals->v_up * -8;
-			vecSrc = vecSrc + gpGlobals->v_right * 8;
+	case 4:
+		vecSrc = vecSrc + gpGlobals->v_up * -8;
+		vecSrc = vecSrc + gpGlobals->v_right * 8;
 		break;
-		case 5:
-			vecSrc = vecSrc + gpGlobals->v_up * -8;
+	case 5:
+		vecSrc = vecSrc + gpGlobals->v_up * -8;
 		break;
-		case 6:
-			vecSrc = vecSrc + gpGlobals->v_up * -8;
-			vecSrc = vecSrc + gpGlobals->v_right * -8;
+	case 6:
+		vecSrc = vecSrc + gpGlobals->v_up * -8;
+		vecSrc = vecSrc + gpGlobals->v_right * -8;
 		break;
-		case 7:
-			vecSrc = vecSrc + gpGlobals->v_right * -8;
+	case 7:
+		vecSrc = vecSrc + gpGlobals->v_right * -8;
 		break;
-		case 8:
-			vecSrc = vecSrc + gpGlobals->v_up * 8;
-			vecSrc = vecSrc + gpGlobals->v_right * -8;
-			m_iFirePhase = 0;
+	case 8:
+		vecSrc = vecSrc + gpGlobals->v_up * 8;
+		vecSrc = vecSrc + gpGlobals->v_right * -8;
+		m_iFirePhase = 0;
 		break;
 	}
 
@@ -195,8 +203,8 @@ void CHgun::Holster(void) {
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)HGUN_DOWN::frames, (int)HGUN_DOWN::fps);
 
-	if ( !m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] )
-		m_pPlayer->m_rgAmmo[ PrimaryAmmoIndex() ] = 1;
+	if (!m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()])
+		m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] = 1;
 }
 
 //=========================================================
@@ -217,7 +225,7 @@ void CHgun::Reload(void) {
 // WeaponIdle Animation
 //=========================================================
 void CHgun::WeaponIdle(void) {
-	Reload( );
+	Reload();
 	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
@@ -232,17 +240,20 @@ void CHgun::WeaponIdle(void) {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)HGUN_IDLE1::frames, (int)HGUN_IDLE1::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.7) {
+	}
+	else if (flRand <= 0.7) {
 		iAnim = (int)HGUN_FIDGETSWAY::sequence;
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)HGUN_FIDGETSWAY::frames, (int)HGUN_FIDGETSWAY::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.9) {
+	}
+	else if (flRand <= 0.9) {
 		iAnim = (int)HGUN_FIDGETSHAKE::sequence;
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)HGUN_FIDGETSHAKE::frames, (int)HGUN_FIDGETSHAKE::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else {
+	}
+	else {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}

@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -84,7 +91,8 @@ void COtis::KeyValue(KeyValueData *pkvd) {
 	if (FStrEq(pkvd->szKeyName, "head")) {
 		head = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CBarney::KeyValue(pkvd);
 }
 
@@ -122,7 +130,8 @@ void COtis::Spawn() {
 	// Make sure hands are white.
 	if (m_iBaseBody) {
 		SetBodygroup(HEAD_GROUP, m_iBaseBody);
-	} else {
+	}
+	else {
 		SetBodygroup(HEAD_GROUP, RANDOM_LONG(0, NUM_OTIS_HEADS - 1));
 	}
 
@@ -132,11 +141,11 @@ void COtis::Spawn() {
 
 	m_flDebug = false; //Debug Massages
 
-	m_flHitgroupHead    = gSkillData.otisHead;
-	m_flHitgroupChest   = gSkillData.otisChest;
+	m_flHitgroupHead = gSkillData.otisHead;
+	m_flHitgroupChest = gSkillData.otisChest;
 	m_flHitgroupStomach = gSkillData.otisStomach;
-	m_flHitgroupArm     = gSkillData.otisArm;
-	m_flHitgroupLeg     = gSkillData.otisLeg;
+	m_flHitgroupArm = gSkillData.otisArm;
+	m_flHitgroupLeg = gSkillData.otisLeg;
 
 	MonsterInit();
 	SetUse(&COtis::FollowerUse);
@@ -205,19 +214,22 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat(szBuf, "_MAD");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				} else {
+				}
+				else {
 					PlaySentence("OT_MAD", 4, VOL_NORM, ATTN_NORM);
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
 				StopFollowing(TRUE);
-			} else {
+			}
+			else {
 				if (m_iszSpeakAs) {
 					char szBuf[32];
 					strcpy(szBuf, STRING(m_iszSpeakAs));
 					strcat(szBuf, "_SHOT");
 					PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-				} else {
+				}
+				else {
 					PlaySentence("OT_SHOT", 4, VOL_NORM, ATTN_NORM);
 				}
 				Remember(bits_MEMORY_SUSPICIOUS);
@@ -229,7 +241,8 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_SHOT");
 				PlaySentence(szBuf, 4, VOL_NORM, ATTN_NORM);
-			} else {
+			}
+			else {
 				PlaySentence("OT_SHOT", 4, VOL_NORM, ATTN_NORM);
 			}
 		}
@@ -259,46 +272,47 @@ void COtis::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, T
 		}
 
 		switch (ptr->iHitgroup) {
-			case HITGROUP_HEAD_HELMET_BN:
-			case HITGROUP_HEAD:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-				if ((GetBodygroup(HEAD_GROUP) == HEAD_HELMET) && bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
-					flDamage -= 20;
-					if (flDamage <= 0) {
-						UTIL_Ricochet(ptr->vecEndPos, 1.0);
-						flDamage = 0.01;
-					}
-				} else {
-					flDamage = m_flHitgroupHead*flDamage;
+		case HITGROUP_HEAD_HELMET_BN:
+		case HITGROUP_HEAD:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+			if ((GetBodygroup(HEAD_GROUP) == HEAD_HELMET) && bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_CLUB)) {
+				flDamage -= 20;
+				if (flDamage <= 0) {
+					UTIL_Ricochet(ptr->vecEndPos, 1.0);
+					flDamage = 0.01;
 				}
-				ptr->iHitgroup = HITGROUP_HEAD;
+			}
+			else {
+				flDamage = m_flHitgroupHead * flDamage;
+			}
+			ptr->iHitgroup = HITGROUP_HEAD;
 			break;
-			case HITGROUP_CHEST:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupChest*flDamage) / 2;
-				}
+		case HITGROUP_CHEST:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupChest*flDamage) / 2;
+			}
 			break;
-			case HITGROUP_STOMACH:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
-				if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
-					flDamage = (m_flHitgroupStomach*flDamage) / 2;
-				}
+		case HITGROUP_STOMACH:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
+				flDamage = (m_flHitgroupStomach*flDamage) / 2;
+			}
 			break;
-			case HITGROUP_LEFTARM:
-			case HITGROUP_RIGHTARM:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
-				flDamage = m_flHitgroupArm*flDamage;
+		case HITGROUP_LEFTARM:
+		case HITGROUP_RIGHTARM:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+			flDamage = m_flHitgroupArm * flDamage;
 			break;
-			case HITGROUP_LEFTLEG:
-			case HITGROUP_RIGHTLEG:
-				if (m_flDebug)
-					ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
-				flDamage = m_flHitgroupLeg*flDamage;
+		case HITGROUP_LEFTLEG:
+		case HITGROUP_RIGHTLEG:
+			if (m_flDebug)
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
 	}
@@ -319,7 +333,8 @@ void COtis::AlertSound(void) {
 				strcpy(szBuf, STRING(m_iszSpeakAs));
 				strcat(szBuf, "_ATTACK");
 				PlaySentence(szBuf, RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
-			} else {
+			}
+			else {
 				PlaySentence("OT_ATTACK", RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 			}
 		}
@@ -332,19 +347,19 @@ void COtis::AlertSound(void) {
 //=========================================================
 void COtis::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case OTIS_AE_SHOOT:
-			FirePistol();
+	case OTIS_AE_SHOOT:
+		FirePistol();
 		break;
-		case OTIS_AE_DRAW:
-			SetBodygroup(GUN_GROUP, GUN_EAGLE);
-			m_fGunDrawn = TRUE;
+	case OTIS_AE_DRAW:
+		SetBodygroup(GUN_GROUP, GUN_EAGLE);
+		m_fGunDrawn = TRUE;
 		break;
-		case OTIS_AE_HOLSTER:
-			SetBodygroup(GUN_GROUP, GUN_NONE);
-			m_fGunDrawn = FALSE;
+	case OTIS_AE_HOLSTER:
+		SetBodygroup(GUN_GROUP, GUN_NONE);
+		m_fGunDrawn = FALSE;
 		break;
-		default:
-			CTalkMonster::HandleAnimEvent(pEvent);
+	default:
+		CTalkMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -371,7 +386,8 @@ void COtis::FirePistol(void) {
 	if (pev->frags) {
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_9MM);
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "barney/ba_attack2.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift);
-	} else {
+	}
+	else {
 		FireBullets(1, vecShootOrigin, vecShootDir, VECTOR_CONE_2DEGREES, 1024, BULLET_MONSTER_357);
 		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "weapons/desert_eagle_fire.wav", VOL_NORM, ATTN_NORM, 0, 100 + pitchShift);
 	}

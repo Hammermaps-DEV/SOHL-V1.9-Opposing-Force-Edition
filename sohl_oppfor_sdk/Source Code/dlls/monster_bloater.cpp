@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -34,22 +41,22 @@
 //=========================================================
 #define	BLOATER_AE_ATTACK_MELEE1		0x01
 
-LINK_ENTITY_TO_CLASS( monster_bloater, CBloater );
+LINK_ENTITY_TO_CLASS(monster_bloater, CBloater);
 
 //=========================================================
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBloater :: Classify ( void )
+int	CBloater::Classify(void)
 {
-	return m_iClass?m_iClass:CLASS_ALIEN_MONSTER;
+	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBloater :: SetYawSpeed ( void )
+void CBloater::SetYawSpeed(void)
 {
 	int ys;
 
@@ -58,28 +65,28 @@ void CBloater :: SetYawSpeed ( void )
 	pev->yaw_speed = ys;
 }
 
-int CBloater :: TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType )
+int CBloater::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType)
 {
 	PainSound();
-	return CBaseMonster::TakeDamage( pevInflictor, pevAttacker, flDamage, bitsDamageType );
+	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
-void CBloater :: PainSound( void )
+void CBloater::PainSound(void)
 {
 
 }
 
-void CBloater :: AlertSound( void )
+void CBloater::AlertSound(void)
 {
 
 }
 
-void CBloater :: IdleSound( void )
+void CBloater::IdleSound(void)
 {
 
 }
 
-void CBloater :: AttackSnd( void )
+void CBloater::AttackSnd(void)
 {
 
 }
@@ -89,44 +96,44 @@ void CBloater :: AttackSnd( void )
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CBloater :: HandleAnimEvent( MonsterEvent_t *pEvent )
+void CBloater::HandleAnimEvent(MonsterEvent_t *pEvent)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
-		case BLOATER_AE_ATTACK_MELEE1:
-		{
-			// do stuff for this event.
-			AttackSnd();
-		}
-		break;
+	case BLOATER_AE_ATTACK_MELEE1:
+	{
+		// do stuff for this event.
+		AttackSnd();
+	}
+	break;
 
-		default:
-			CBaseMonster::HandleAnimEvent( pEvent );
-			break;
+	default:
+		CBaseMonster::HandleAnimEvent(pEvent);
+		break;
 	}
 }
 
 //=========================================================
 // Spawn
 //=========================================================
-void CBloater :: Spawn()
+void CBloater::Spawn()
 {
-	Precache( );
+	Precache();
 
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
 		SET_MODEL(ENT(pev), "models/floater.mdl");
-	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
+	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_FLY;
-	pev->spawnflags		|= FL_FLY;
-	m_bloodColor		= BLOOD_COLOR_GREEN;
-	pev->health			= 40;
-	pev->view_ofs		= VEC_VIEW;// position of the eyes relative to monster's origin.
-	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_FLY;
+	pev->spawnflags |= FL_FLY;
+	m_bloodColor = BLOOD_COLOR_GREEN;
+	pev->health = 40;
+	pev->view_ofs = VEC_VIEW;// position of the eyes relative to monster's origin.
+	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
 }
@@ -134,13 +141,13 @@ void CBloater :: Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CBloater :: Precache()
+void CBloater::Precache()
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
 		PRECACHE_MODEL("models/floater.mdl");
-}	
+}
 
 //=========================================================
 // AI Schedules Specific to this monster

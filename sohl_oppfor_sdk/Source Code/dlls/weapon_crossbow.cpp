@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Crossbow * http://half-life.wikia.com/wiki/Black_Mesa_Crossbow
 //=========================================================
@@ -36,13 +44,13 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_crossbow, CCrossbow );
+LINK_ENTITY_TO_CLASS(weapon_crossbow, CCrossbow);
 
 //=========================================================
 // Spawn Crossbow
 //=========================================================
-void CCrossbow::Spawn( ) {
-	Precache( );
+void CCrossbow::Spawn() {
+	Precache();
 	m_iId = WEAPON_CROSSBOW;
 
 	SET_MODEL(ENT(pev), "models/w_crossbow.mdl");
@@ -54,7 +62,7 @@ void CCrossbow::Spawn( ) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CCrossbow::Precache( void ) {
+void CCrossbow::Precache(void) {
 	PRECACHE_MODEL("models/w_crossbow.mdl");
 	PRECACHE_MODEL("models/v_crossbow.mdl");
 	PRECACHE_MODEL("models/p_crossbow.mdl");
@@ -64,7 +72,7 @@ void CCrossbow::Precache( void ) {
 	PRECACHE_SOUND("weapons/reload2.wav");
 	PRECACHE_SOUND("weapons/reload3.wav");
 
-	UTIL_PrecacheOther( "crossbow_bolt" );
+	UTIL_PrecacheOther("crossbow_bolt");
 }
 
 //=========================================================
@@ -89,9 +97,10 @@ int CCrossbow::GetItemInfo(ItemInfo *p) {
 // PrimaryAttack
 //=========================================================
 void CCrossbow::PrimaryAttack(void) {
-	if(m_iChargeLevel && IsMultiplayer()) {
+	if (m_iChargeLevel && IsMultiplayer()) {
 		FireSniperBolt(); //MP
-	} else {
+	}
+	else {
 		FireBolt(); //SP
 	}
 }
@@ -124,7 +133,7 @@ void CCrossbow::FireSniperBolt() {
 		SendWeaponAnim((int)CROSSBOW_FIRE::sequence);
 		m_iBody++;
 	}
-	else 
+	else
 		SendWeaponAnim((int)CROSSBOW_FIRE_LAST::sequence);
 
 	// player "shoot" animation
@@ -148,7 +157,8 @@ void CCrossbow::FireSniperBolt() {
 		ClearMultiDamage();
 		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, m_pPlayer->pev);
-	} else {
+	}
+	else {
 		// create a bolt
 		CBolt *pBolt = CBolt::BoltCreate();
 		pBolt->pev->origin = tr.vecEndPos - vecDir * 10;
@@ -166,7 +176,8 @@ void CCrossbow::FireSniperBolt() {
 		if (FClassnameIs(tr.pHit, "worldspawn")) {
 			// let the bolt sit around for a while if it hit static architecture
 			pBolt->pev->nextthink = UTIL_GlobalTimeBase() + 5.0;
-		} else {
+		}
+		else {
 			pBolt->pev->nextthink = UTIL_GlobalTimeBase();
 		}
 	}
@@ -191,7 +202,8 @@ void CCrossbow::FireBolt() {
 	if (m_iClip) {
 		SendWeaponAnim((int)CROSSBOW_FIRE::sequence);
 		m_iBody++;
-	} else 
+	}
+	else
 		SendWeaponAnim((int)CROSSBOW_FIRE_LAST::sequence);
 
 	// player "shoot" animation
@@ -212,7 +224,8 @@ void CCrossbow::FireBolt() {
 	if (m_pPlayer->pev->waterlevel == 3 && m_pPlayer->pev->watertype > CONTENT_FLYFIELD) {
 		pBolt->pev->velocity = vecDir * BOLT_WATER_VELOCITY;
 		pBolt->pev->speed = BOLT_WATER_VELOCITY;
-	} else {
+	}
+	else {
 		pBolt->pev->velocity = vecDir * BOLT_AIR_VELOCITY;
 		pBolt->pev->speed = BOLT_AIR_VELOCITY;
 	}
@@ -224,10 +237,11 @@ void CCrossbow::FireBolt() {
 	}
 
 	if (m_iClip >= 2) {
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_FIRE::frames, (int)CROSSBOW_FIRE::fps);
-	} else {
-		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 
+	}
+	else {
+		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_FIRE_LAST::frames, (int)CROSSBOW_FIRE_LAST::fps);
 	}
 
@@ -238,11 +252,12 @@ void CCrossbow::FireBolt() {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CCrossbow::Deploy( ) {
+BOOL CCrossbow::Deploy() {
 	if (m_iClip) {
 		return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", (int)CROSSBOW_DRAW::sequence,
 			"bow", CalculateWeaponTime((int)CROSSBOW_DRAW::frames, (int)CROSSBOW_DRAW::fps));
-	}else {
+	}
+	else {
 		return DefaultDeploy("models/v_crossbow.mdl", "models/p_crossbow.mdl", (int)CROSSBOW_DRAW_EMPTY::sequence,
 			"bow", CalculateWeaponTime((int)CROSSBOW_DRAW_EMPTY::frames, (int)CROSSBOW_DRAW_EMPTY::fps));
 	}
@@ -251,7 +266,7 @@ BOOL CCrossbow::Deploy( ) {
 //=========================================================
 // Holster
 //=========================================================
-void CCrossbow::Holster( ) {
+void CCrossbow::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	ZoomReset();
 
@@ -259,7 +274,8 @@ void CCrossbow::Holster( ) {
 		SendWeaponAnim((int)CROSSBOW_HOLSTER::sequence);
 		m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_HOLSTER::frames, (int)CROSSBOW_HOLSTER::fps);
-	} else {
+	}
+	else {
 		SendWeaponAnim((int)CROSSBOW_HOLSTER_EMPTY::sequence);
 		m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_HOLSTER_EMPTY::frames, (int)CROSSBOW_HOLSTER_EMPTY::fps);
@@ -269,7 +285,7 @@ void CCrossbow::Holster( ) {
 //=========================================================
 // Reload
 //=========================================================
-void CCrossbow::Reload( void ) {
+void CCrossbow::Reload(void) {
 	if (m_iChargeLevel) {
 		ZoomReset();
 	}
@@ -283,15 +299,15 @@ void CCrossbow::Reload( void ) {
 //=========================================================
 // ZoomUpdate
 //=========================================================
-void CCrossbow :: ZoomUpdate( void ) {
+void CCrossbow::ZoomUpdate(void) {
 	if (m_pPlayer->pev->button & IN_ATTACK2) {
-		if(m_iChargeLevel == 0) {
+		if (m_iChargeLevel == 0) {
 			if (m_flShockTime > UTIL_GlobalTimeBase()) return;
 			m_iChargeLevel = 1;
 			m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.5;
 		}
 
-		if(m_iChargeLevel == 1) {
+		if (m_iChargeLevel == 1) {
 			m_pPlayer->m_iFOV = 50;
 			m_iChargeLevel = 2;//ready to zooming, wait for 0.5 secs
 		}
@@ -308,7 +324,8 @@ void CCrossbow :: ZoomUpdate( void ) {
 		if (m_iChargeLevel == 3) {
 			ZoomReset();
 		}
-	} else if (m_iChargeLevel > 1) {
+	}
+	else if (m_iChargeLevel > 1) {
 		m_iChargeLevel = 3;
 	}
 }
@@ -316,7 +333,7 @@ void CCrossbow :: ZoomUpdate( void ) {
 //=========================================================
 // ZoomReset
 //=========================================================
-void CCrossbow::ZoomReset( void ) {
+void CCrossbow::ZoomReset(void) {
 	m_flShockTime = UTIL_GlobalTimeBase() + 0.5;
 	m_pPlayer->m_iFOV = 90;
 	m_iChargeLevel = 0;//clear zoom
@@ -325,17 +342,17 @@ void CCrossbow::ZoomReset( void ) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CCrossbow::WeaponIdle( void ) {
+void CCrossbow::WeaponIdle(void) {
 	ZoomUpdate();
 	ResetEmptySound();
 
 	//Update Bodys
 	switch (m_iClip) {
-		case 1: pev->body = 4; break;
-		case 2: pev->body = 3; break;
-		case 3: pev->body = 2; break;
-		case 4: pev->body = 1; break;
-		case 5: pev->body = 0; break;
+	case 1: pev->body = 4; break;
+	case 2: pev->body = 3; break;
+	case 3: pev->body = 2; break;
+	case 4: pev->body = 1; break;
+	case 5: pev->body = 0; break;
 	}
 
 	if (m_iChargeLevel != 0) {
@@ -354,18 +371,21 @@ void CCrossbow::WeaponIdle( void ) {
 			iAnim = (int)CROSSBOW_IDLE::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)CROSSBOW_IDLE::frames, (int)CROSSBOW_IDLE::fps);
-		} else {
+		}
+		else {
 			iAnim = (int)CROSSBOW_IDLE_EMPTY::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)CROSSBOW_IDLE_EMPTY::frames, (int)CROSSBOW_IDLE_EMPTY::fps);
 		}
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else if (flRand <= 0.7 && m_iClip) {
+	}
+	else if (flRand <= 0.7 && m_iClip) {
 		iAnim = (int)CROSSBOW_FIDGET::sequence;
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)CROSSBOW_FIDGET::frames, (int)CROSSBOW_FIDGET::fps);
 		m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-	} else {
+	}
+	else {
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 		m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 	}

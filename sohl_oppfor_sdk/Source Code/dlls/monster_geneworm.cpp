@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,13 +13,18 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-
 //=========================================================
 // Generic Monster - purely for scripted sequence work.
 //=========================================================
@@ -322,7 +327,7 @@ void CGeneWorm::Spawn()
 	InitBoneControllers();
 
 	SetThink(&CGeneWorm::StartupThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 
 	m_vecDesired = Vector(1, 0, 0);
 	m_posDesired = Vector(pev->origin.x, pev->origin.y, 512);
@@ -349,7 +354,7 @@ void CGeneWorm::Precache()
 void CGeneWorm::NullThink(void)
 {
 	StudioFrameAdvance();
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
+	SetNextThink(0.5);
 }
 
 //=========================================================
@@ -358,7 +363,7 @@ void CGeneWorm::NullThink(void)
 void CGeneWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetThink(&CGeneWorm::HuntThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	SetUse(&CGeneWorm::CommandUse);
 }
 
@@ -379,7 +384,7 @@ void CGeneWorm::StartupThink(void)
 
 	SetThink(&CGeneWorm::HuntThink);
 	SetUse(&CGeneWorm::CommandUse);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 }
 
 
@@ -390,7 +395,7 @@ void CGeneWorm::Killed(entvars_t *pevAttacker, int iGib)
 
 void CGeneWorm::DyingThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -485,7 +490,7 @@ void CGeneWorm::NextActivity(void)
 
 void CGeneWorm::HuntThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 

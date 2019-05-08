@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,13 +13,18 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-
 //=========================================================
 // Generic Monster - purely for scripted sequence work.
 //=========================================================
@@ -245,7 +250,7 @@ void CPitWorm::Spawn()
 	InitBoneControllers();
 
 	SetThink(&CPitWorm::StartupThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 
 	m_spawnAngles = pev->angles;
 	m_flInitialYaw = m_spawnAngles.y;
@@ -387,53 +392,53 @@ void CPitWorm::HandleAnimEvent(MonsterEvent_t *pEvent)
 {
 	switch (pEvent->event)
 	{
-		case PITWORM_AE_SWIPE:	// bang 
-		{
-			Vector vecSrc, vecAngles;
-			GetAttachment(1, vecSrc, vecAngles);
+	case PITWORM_AE_SWIPE:	// bang 
+	{
+		Vector vecSrc, vecAngles;
+		GetAttachment(1, vecSrc, vecAngles);
 
-			if (m_hEnemy) {
-				vecSrc = m_hEnemy->pev->origin;
-			}
-
-			// Trace a hull around to see if we hit an enemy. (Buggy CODE)
-			TraceResult tr;
-			UTIL_TraceHull(vecSrc, vecSrc + Vector(0, -64, 0), dont_ignore_monsters, head_hull, ENT(pev), &tr);
-
-			CBaseEntity *pHurt = CBaseEntity::Instance(tr.pHit);
-			if (pHurt)
-				pHurt->TakeDamage(VARS(pev), VARS(pev), gSkillData.pwormDmgSwipe, DMG_CLUB | DMG_SLASH);
-
-			// Shake the screen.
-			UTIL_EmitAmbientSound(ENT(pev), vecSrc, RANDOM_SOUND_ARRAY(pHitSilo), 1.0, ATTN_NORM, 0, 100);
-			UTIL_ScreenShake(vecSrc, 6.0, 3.0, 1.0, 128);
-			gpGlobals->force_retouch++;
+		if (m_hEnemy) {
+			vecSrc = m_hEnemy->pev->origin;
 		}
-		break;
-		case PITWORM_AE_EYEBLAST_START: // start killing swing
-		{
-			ALERT(at_console, "PITWORM_AE_EYEBLAST_START\n");
 
-			// Remove the beam if not NULL.
-			DestroyBeam();
+		// Trace a hull around to see if we hit an enemy. (Buggy CODE)
+		TraceResult tr;
+		UTIL_TraceHull(vecSrc, vecSrc + Vector(0, -64, 0), dont_ignore_monsters, head_hull, ENT(pev), &tr);
 
-			Vector src, angles;
-			GetAttachment(0, src, angles);
+		CBaseEntity *pHurt = CBaseEntity::Instance(tr.pHit);
+		if (pHurt)
+			pHurt->TakeDamage(VARS(pev), VARS(pev), gSkillData.pwormDmgSwipe, DMG_CLUB | DMG_SLASH);
 
-			// Create a new beam.
-			CreateBeam(src, src, 40);
+		// Shake the screen.
+		UTIL_EmitAmbientSound(ENT(pev), vecSrc, RANDOM_SOUND_ARRAY(pHitSilo), 1.0, ATTN_NORM, 0, 100);
+		UTIL_ScreenShake(vecSrc, 6.0, 3.0, 1.0, 128);
+		gpGlobals->force_retouch++;
+	}
+	break;
+	case PITWORM_AE_EYEBLAST_START: // start killing swing
+	{
+		ALERT(at_console, "PITWORM_AE_EYEBLAST_START\n");
 
-			// Turn eye glow on.
-			EyeOn(255);
+		// Remove the beam if not NULL.
+		DestroyBeam();
 
-			// Reset beam yaw.
-			m_flBeamYaw = 0.0f;
-			m_flBeamTime = UTIL_GlobalTimeBase() + PITWORM_EYEBLAST_DURATION;
-		}
-		break;
-		case PITWORM_AE_EYEBLAST_END: // end killing swing
-		{}
-		break;
+		Vector src, angles;
+		GetAttachment(0, src, angles);
+
+		// Create a new beam.
+		CreateBeam(src, src, 40);
+
+		// Turn eye glow on.
+		EyeOn(255);
+
+		// Reset beam yaw.
+		m_flBeamYaw = 0.0f;
+		m_flBeamTime = UTIL_GlobalTimeBase() + PITWORM_EYEBLAST_DURATION;
+	}
+	break;
+	case PITWORM_AE_EYEBLAST_END: // end killing swing
+	{}
+	break;
 	default:
 		CBaseMonster::HandleAnimEvent(pEvent);
 	}
@@ -458,7 +463,7 @@ void CPitWorm::CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 		pev->health = 0;
 
 		SetThink(&CPitWorm::DyingThink);
-		pev->nextthink = UTIL_GlobalTimeBase();
+		SetNextThink(0);
 	}
 	// ALERT(at_console, "USE_TOGGLE\n");
 	break;
@@ -526,7 +531,7 @@ void CPitWorm::StartupThink(void)
 	SetThink(&CPitWorm::HuntThink);
 	SetTouch(&CPitWorm::WormTouch);
 	SetUse(&CPitWorm::CommandUse);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 }
 
 //=========================================================
@@ -535,7 +540,7 @@ void CPitWorm::StartupThink(void)
 void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetThink(&CPitWorm::HuntThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	SetUse(&CPitWorm::CommandUse);
 }
 
@@ -545,7 +550,7 @@ void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 void CPitWorm::NullThink(void)
 {
 	StudioFrameAdvance();
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.5;
+	SetNextThink(0.5);
 }
 
 //=========================================================
@@ -553,7 +558,7 @@ void CPitWorm::NullThink(void)
 //=========================================================
 void CPitWorm::DyingThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -593,7 +598,7 @@ void CPitWorm::DyingThink(void)
 //=========================================================
 void CPitWorm::HuntThink(void)
 {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 	DispatchAnimEvents();
 	StudioFrameAdvance();
 
@@ -642,7 +647,7 @@ void CPitWorm::HuntThink(void)
 				m_flBeamTime = 0.0f;
 			}
 
-			pev->nextthink = UTIL_GlobalTimeBase() + 0.01f;
+			SetNextThink(0.01);
 			return;
 		}
 	}

@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -48,13 +55,13 @@ void CZombieBarney::Spawn() {
 	if (pev->health == 0)
 		pev->health = gSkillData.zombieBarneyHealth;
 
-	m_flHitgroupHead    = gSkillData.zombieBarneyHead;
-	m_flHitgroupChest   = gSkillData.zombieBarneyChest;
+	m_flHitgroupHead = gSkillData.zombieBarneyHead;
+	m_flHitgroupChest = gSkillData.zombieBarneyChest;
 	m_flHitgroupStomach = gSkillData.zombieBarneyStomach;
-	m_flHitgroupArm     = gSkillData.zombieBarneyArm;
-	m_flHitgroupLeg     = gSkillData.zombieBarneyLeg;
-	m_flDmgOneSlash     = gSkillData.zombieBarneyDmgOneSlash;
-	m_flDmgBothSlash    = gSkillData.zombieBarneyDmgBothSlash;
+	m_flHitgroupArm = gSkillData.zombieBarneyArm;
+	m_flHitgroupLeg = gSkillData.zombieBarneyLeg;
+	m_flDmgOneSlash = gSkillData.zombieBarneyDmgOneSlash;
+	m_flDmgBothSlash = gSkillData.zombieBarneyDmgBothSlash;
 
 	m_flDebug = false; //Debug Massages
 

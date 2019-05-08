@@ -1,17 +1,30 @@
 /***
 *
-*	Copyright (c) 1999, 2000 Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-****/
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 #ifndef SCRIPTED_H
 #define SCRIPTED_H
 
@@ -47,55 +60,55 @@
 class CCineMonster : public CBaseMonster
 {
 public:
-	void Spawn( void );
-	virtual void KeyValue( KeyValueData *pkvd );
-	virtual void Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
-	virtual void Blocked( CBaseEntity *pOther );
-	virtual void Touch( CBaseEntity *pOther );
-	virtual int	 ObjectCaps( void ) { return (CBaseMonster :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
-	virtual void Activate( void );
+	void Spawn(void);
+	virtual void KeyValue(KeyValueData *pkvd);
+	virtual void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	virtual void Blocked(CBaseEntity *pOther);
+	virtual void Touch(CBaseEntity *pOther);
+	virtual int	 ObjectCaps(void) { return (CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
+	virtual void Activate(void);
 
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
-	
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
+
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	//LRC: states for script entities
-	virtual STATE	GetState( void ) { return m_iState; };
+	virtual STATE	GetState(void) { return m_iState; };
 	STATE	m_iState;
 
 	// void EXPORT CineSpawnThink( void );
-	void EXPORT CineThink( void );
-	void EXPORT InitIdleThink( void ); //LRC
-	void Pain( void );
-	void Die( void );
-	void DelayStart( int state );
-	CBaseMonster* FindEntity( const char* sName, CBaseEntity *pActivator );
-	virtual void PossessEntity( void );
+	void EXPORT CineThink(void);
+	void EXPORT InitIdleThink(void); //LRC
+	void Pain(void);
+	void Die(void);
+	void DelayStart(int state);
+	CBaseMonster* FindEntity(const char* sName, CBaseEntity *pActivator);
+	virtual void PossessEntity(void);
 
-	inline BOOL IsAction( void ) { return FClassnameIs(pev,"scripted_action"); }; //LRC
+	inline BOOL IsAction(void) { return FClassnameIs(pev, "scripted_action"); }; //LRC
 
 	//LRC: Should the monster do a precise attack for this scripted_action?
 	// (Do a precise attack if we'll be turning to face the target, but we haven't just walked to the target.)
-	BOOL PreciseAttack( void )
+	BOOL PreciseAttack(void)
 	{
-	//	if (m_fTurnType != 1) { ALERT(at_console,"preciseattack fails check 1\n"); return FALSE; }
-	//	if (m_fMoveTo == 0) { ALERT(at_console,"preciseattack fails check 2\n"); return FALSE; }
-	//	if (m_fMoveTo != 5 && m_iszAttack == 0) { ALERT(at_console,"preciseattack fails check 3\n"); return FALSE; }
-	//	ALERT(at_console,"preciseattack passes!\n");
-	//	return TRUE;
-		return m_fTurnType == 1 && ( m_fMoveTo == 5 || (m_fMoveTo != 0 && !FStrEq(STRING(m_iszAttack), STRING(m_iszMoveTarget)) ));
+		//	if (m_fTurnType != 1) { ALERT(at_console,"preciseattack fails check 1\n"); return FALSE; }
+		//	if (m_fMoveTo == 0) { ALERT(at_console,"preciseattack fails check 2\n"); return FALSE; }
+		//	if (m_fMoveTo != 5 && m_iszAttack == 0) { ALERT(at_console,"preciseattack fails check 3\n"); return FALSE; }
+		//	ALERT(at_console,"preciseattack passes!\n");
+		//	return TRUE;
+		return m_fTurnType == 1 && (m_fMoveTo == 5 || (m_fMoveTo != 0 && !FStrEq(STRING(m_iszAttack), STRING(m_iszMoveTarget))));
 
 	};
 
-	void ReleaseEntity( CBaseMonster *pEntity );
-	void CancelScript( void );
-	virtual BOOL StartSequence( CBaseMonster *pTarget, int iszSeq, BOOL completeOnEmpty );
-	void SequenceDone ( CBaseMonster *pMonster );
-	virtual void FixScriptMonsterSchedule( CBaseMonster *pMonster );
-	BOOL	CanInterrupt( void );
-	void	AllowInterrupt( BOOL fAllow );
-	int		IgnoreConditions( void );
+	void ReleaseEntity(CBaseMonster *pEntity);
+	void CancelScript(void);
+	virtual BOOL StartSequence(CBaseMonster *pTarget, int iszSeq, BOOL completeOnEmpty);
+	void SequenceDone(CBaseMonster *pMonster);
+	virtual void FixScriptMonsterSchedule(CBaseMonster *pMonster);
+	BOOL	CanInterrupt(void);
+	void	AllowInterrupt(BOOL fAllow);
+	int		IgnoreConditions(void);
 
 	int	m_iszIdle;		// string index for idle animation
 	int	m_iszPlay;		// string index for scripted animation
@@ -120,7 +133,7 @@ public:
 	int	m_saved_movetype;
 	int	m_saved_solid;
 	int m_saved_effects;
-//	Vector m_vecOrigOrigin;
+	//	Vector m_vecOrigOrigin;
 	BOOL m_interruptable;
 };
 

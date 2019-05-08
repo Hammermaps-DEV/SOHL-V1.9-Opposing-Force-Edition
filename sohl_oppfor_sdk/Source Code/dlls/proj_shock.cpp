@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -71,7 +78,7 @@ void CShock::Spawn(void) {
 	ComputeBeamPositions(vDir, &m_vecBeamStart, &m_vecBeamEnd);
 
 	SetThink(&CShock::ShockThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1f;
+	SetNextThink(0.1);
 }
 
 void CShock::Precache() {
@@ -84,7 +91,7 @@ void CShock::Precache() {
 }
 
 void CShock::ShockThink(void) {
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.01f;
+	SetNextThink(0.01);
 
 	Vector vDir = pev->velocity.Normalize();
 	ComputeBeamPositions(vDir, &m_vecBeamStart, &m_vecBeamEnd);
@@ -102,7 +109,7 @@ void CShock::Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) {
 	pShock->pev->owner = ENT(pevOwner);
 
 	pShock->SetThink(&CShock::ShockThink);
-	pShock->pev->nextthink = UTIL_GlobalTimeBase();
+	pShock->SetNextThink(0);
 }
 
 void CShock::Touch(CBaseEntity *pOther) {
@@ -126,16 +133,16 @@ void CShock::Touch(CBaseEntity *pOther) {
 
 	// lighting on impact
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(10);		// radius * 0.1
-		WRITE_BYTE(0);		// r
-		WRITE_BYTE(255);	// g
-		WRITE_BYTE(255);	// b
-		WRITE_BYTE(10);		// time * 10
-		WRITE_BYTE(10);		// decay * 0.1
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(10);		// radius * 0.1
+	WRITE_BYTE(0);		// r
+	WRITE_BYTE(255);	// g
+	WRITE_BYTE(255);	// b
+	WRITE_BYTE(10);		// time * 10
+	WRITE_BYTE(10);		// decay * 0.1
 	MESSAGE_END();
 
 	if (!pOther->pev->takedamage) {
@@ -168,8 +175,9 @@ void CShock::Touch(CBaseEntity *pOther) {
 		}
 
 		SetThink(&CShock::FadeShock);
-		pev->nextthink = UTIL_GlobalTimeBase() + 1.0;
-	} else {
+		SetNextThink(1.0);
+	}
+	else {
 		pOther->TakeDamage(pev, pev, pev->dmg, DMG_ENERGYBEAM | DMG_ALWAYSGIB);
 	}
 
@@ -181,7 +189,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 	m_pSprite = NULL;
 
 	SetThink(&CShock::SUB_Remove);
-	pev->nextthink = UTIL_GlobalTimeBase();
+	SetNextThink(0);
 	UTIL_Sparks(tr.vecEndPos);
 }
 
@@ -232,23 +240,24 @@ void CShock::UpdateBeam(const Vector& start, const Vector& end) {
 	if (!m_pBeam) {
 		// Create the beam if not already created.
 		CreateBeam(start, end, SHOCK_BEAM_WIDTH);
-	} else {
+	}
+	else {
 		m_pBeam->SetStartPos(start);
 		m_pBeam->SetEndPos(end);
 		m_pBeam->RelinkBeam();
 	}
 
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-		WRITE_BYTE(TE_DLIGHT);
-		WRITE_COORD(pev->origin.x);	// X
-		WRITE_COORD(pev->origin.y);	// Y
-		WRITE_COORD(pev->origin.z);	// Z
-		WRITE_BYTE(10);     // radius
-		WRITE_BYTE(0);		// r
-		WRITE_BYTE(255);	// g
-		WRITE_BYTE(255);	// b
-		WRITE_BYTE(1);     // life * 10
-		WRITE_BYTE(0); // decay
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(pev->origin.x);	// X
+	WRITE_COORD(pev->origin.y);	// Y
+	WRITE_COORD(pev->origin.z);	// Z
+	WRITE_BYTE(10);     // radius
+	WRITE_BYTE(0);		// r
+	WRITE_BYTE(255);	// g
+	WRITE_BYTE(255);	// b
+	WRITE_BYTE(1);     // life * 10
+	WRITE_BYTE(0); // decay
 	MESSAGE_END();
 }
 

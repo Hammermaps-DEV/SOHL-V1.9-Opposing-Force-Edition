@@ -1,17 +1,30 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 //
 // death notice
 //
@@ -171,6 +184,21 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 	strcpy( killedwith, "d_" );
 	strncat(killedwith, READ_STRING(), sizeof(killedwith) - strlen(killedwith) - 1);
 
+	//AJH Begin:Custom death 'techniques'
+	char technique_A[32];
+	char technique_B[32];
+	char technique[32];
+	strcpy(technique_A, " ");
+	strncpy(technique, READ_STRING(), 31);
+	for (int j = 0; j < 32; j++) {
+		if (technique[j] == '%') {
+			strncat(technique_A, technique, j < 31 ? j : 30);
+			strncpy(technique_B, technique + (j + 1), 31 - j);
+			break;
+		}
+	}
+	//AJH End:Custom death 'techniques'
+
 	if (gViewPort)
 		gViewPort->DeathMsg( killer, victim );
 
@@ -272,18 +300,23 @@ int CHudDeathNotice :: MsgFunc_DeathMsg( const char *pszName, int iSize, void *p
 		}
 		else if ( rgDeathNoticeList[i].iTeamKill )
 		{
-			ConsolePrint( rgDeathNoticeList[i].szKiller );
-			ConsolePrint( " killed his teammate " );
-			ConsolePrint( rgDeathNoticeList[i].szVictim );
+			ConsolePrint(rgDeathNoticeList[i].szKiller);
+			//ConsolePrint( " killed his teammate " ); //AJH
+			ConsolePrint(technique_A);		//AJH Custom death methods
+			ConsolePrint("his teammate ");	//AJH
+			ConsolePrint(rgDeathNoticeList[i].szVictim);
+			ConsolePrint(technique_B);
 		}
 		else
 		{
-			ConsolePrint( rgDeathNoticeList[i].szKiller );
-			ConsolePrint( " killed " );
-			ConsolePrint( rgDeathNoticeList[i].szVictim );
+			ConsolePrint(rgDeathNoticeList[i].szKiller);
+			//ConsolePrint( " killed " ); //AJH
+			ConsolePrint(technique_A);//AJH Custom death methods
+			ConsolePrint(rgDeathNoticeList[i].szVictim);
+			ConsolePrint(technique_B);//AJH Custom death methods
 		}
 
-		if ( killedwith && *killedwith && (*killedwith > 13 ) && strcmp( killedwith, "d_world" ) && !rgDeathNoticeList[i].iTeamKill )
+		if (*killedwith && (*killedwith > 13) && strcmp(killedwith, "d_world") && !rgDeathNoticeList[i].iTeamKill)
 		{
 			ConsolePrint( " with " );
 

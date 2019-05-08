@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,10 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -163,7 +169,8 @@ void CShockrifle::PrimaryAttack() {
 		}
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + UTIL_SharedRandomFloat(m_pPlayer->random_seed, 10, 15);
-	} else {
+	}
+	else {
 		PlayEmptySound(5);
 		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 0.30;
 	}
@@ -210,7 +217,7 @@ void CShockrifle::Reload(void) {
 void CShockrifle::WeaponIdle(void) {
 	Reload(); //Auto recharge
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
-			m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
+		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
 	}
 
@@ -228,17 +235,19 @@ void CShockrifle::WeaponIdle(void) {
 				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_LOW, ATTN_IDLE, 0, 90 + (RANDOM_LONG(-5, 5)));
 
 			SendWeaponAnim(iAnim);
-		} else if (flRand >= 0.7) {
+		}
+		else if (flRand >= 0.7) {
 			iAnim = (int)SHOCKRIFLE_IDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)SHOCKRIFLE_IDLE2::frames, (int)SHOCKRIFLE_IDLE2::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
 
-			if(RANDOM_FLOAT(0, 10) >= 5)
-				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_LOW, ATTN_IDLE, 0, 90+(RANDOM_LONG(-5, 5)));
+			if (RANDOM_FLOAT(0, 10) >= 5)
+				EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_LOW, ATTN_IDLE, 0, 90 + (RANDOM_LONG(-5, 5)));
 
 			SendWeaponAnim(iAnim);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
@@ -249,7 +258,7 @@ void CShockrifle::WeaponIdle(void) {
 // Update Effects
 //=========================================================
 void CShockrifle::UpdateEffects() {
-	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usShockFire, 0.0, (float *)&g_vecZero,(float *)&g_vecZero, 0.0, 0.0, TRUE, 0, 0, 0);
+	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usShockFire, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, TRUE, 0, 0, 0);
 }
 
 //=========================================================
@@ -261,7 +270,8 @@ void CShockrifle::ItemPostFrame(void) {
 		if (m_fShouldUpdateEffects) {
 			if (UTIL_GlobalTimeBase() <= m_flBeamLifeTime) {
 				UpdateEffects();
-			} else {
+			}
+			else {
 				m_fShouldUpdateEffects = FALSE;
 				m_flBeamLifeTime = 0.0f;
 			}

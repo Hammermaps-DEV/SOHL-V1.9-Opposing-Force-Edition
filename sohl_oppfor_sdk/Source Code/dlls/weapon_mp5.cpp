@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -39,13 +46,13 @@
 //=========================================================
 // Link ENTITY
 //=========================================================
-LINK_ENTITY_TO_CLASS( weapon_mp5, CMP5 );
-LINK_ENTITY_TO_CLASS( weapon_9mmAR, CMP5 );
+LINK_ENTITY_TO_CLASS(weapon_mp5, CMP5);
+LINK_ENTITY_TO_CLASS(weapon_9mmAR, CMP5);
 
 //=========================================================
 // Spawn The Heckler & Koch MP5
 //=========================================================
-void CMP5::Spawn( ) {
+void CMP5::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_9mmAR.mdl");
@@ -57,7 +64,7 @@ void CMP5::Spawn( ) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CMP5::Precache( void ) {
+void CMP5::Precache(void) {
 	PRECACHE_MODEL("models/v_9mmAR.mdl");
 	PRECACHE_MODEL("models/w_9mmAR.mdl");
 	PRECACHE_MODEL("models/p_9mmAR.mdl");
@@ -71,7 +78,7 @@ void CMP5::Precache( void ) {
 	PRECACHE_SOUND("items/cliprelease1.wav"); //by model
 	PRECACHE_SOUND("items/clipinsert1.wav"); //by model
 
-	m_usMP5 = PRECACHE_EVENT( 1, "events/mp5.sc" );
+	m_usMP5 = PRECACHE_EVENT(1, "events/mp5.sc");
 }
 
 //=========================================================
@@ -97,29 +104,30 @@ int CMP5::GetItemInfo(ItemInfo *p) {
 //=========================================================
 void CMP5::PrimaryAttack() {
 	// don't fire underwater
-	if ( m_iClip && m_pPlayer->pev->waterlevel != 3) {
+	if (m_iClip && m_pPlayer->pev->waterlevel != 3) {
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
 		m_iClip--;
 
 		// player "shoot" animation
-		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
 
-		Vector vecSrc	 = m_pPlayer->GetGunPosition( );
-		Vector vecAiming = m_pPlayer->GetAutoaimVector( AUTOAIM_5DEGREES );
+		Vector vecSrc = m_pPlayer->GetGunPosition();
+		Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
 		Vector vecDir;
 
 		if (!IsMultiplayer()) {
 			vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_6DEGREES, 8192, BULLET_PLAYER_MP5, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
-		} else {
+		}
+		else {
 			vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, VECTOR_CONE_3DEGREES, 8192, BULLET_PLAYER_MP5, 2, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 		}
 
-		PLAYBACK_EVENT_FULL( 0, m_pPlayer->edict(), m_usMP5, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0 );
+		PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usMP5, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, pev->body, 0, 0, 0);
 
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.1;
-		if ( m_flNextPrimaryAttack < UTIL_GlobalTimeBase() )
+		if (m_flNextPrimaryAttack < UTIL_GlobalTimeBase())
 			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.2;
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
@@ -128,8 +136,9 @@ void CMP5::PrimaryAttack() {
 			// HEV suit - indicate out of ammo condition
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
-	} else {
-		PlayEmptySound( );
+	}
+	else {
+		PlayEmptySound();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
@@ -137,29 +146,29 @@ void CMP5::PrimaryAttack() {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CMP5::SecondaryAttack( void ) {
+void CMP5::SecondaryAttack(void) {
 	// don't fire underwater
-	if ( m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0 && m_pPlayer->pev->waterlevel != 3) {
+	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0 && m_pPlayer->pev->waterlevel != 3) {
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 		m_pPlayer->m_iExtraSoundTypes = bits_SOUND_DANGER;
 		m_pPlayer->m_flStopExtraSoundTime = UTIL_GlobalTimeBase() + 0.2;
-			
+
 		m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
 
 		// player "shoot" animation
-		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
-		
- 		UTIL_MakeVectors( m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle );
+		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
+
+		UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
 		// we don't add in player velocity anymore.
-		CGrenade::ShootContact( m_pPlayer->pev, m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16, gpGlobals->v_forward * 800 );
+		CGrenade::ShootContact(m_pPlayer->pev, m_pPlayer->pev->origin + m_pPlayer->pev->view_ofs + gpGlobals->v_forward * 16, gpGlobals->v_forward * 800);
 
 		SendWeaponAnim((int)MP5_GRENADE::sequence);
 		m_pPlayer->pev->punchangle.x -= 10;
-	
-		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 
+
+		m_flNextPrimaryAttack = m_flNextSecondaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)MP5_GRENADE::frames, (int)MP5_GRENADE::fps);
 
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
@@ -168,8 +177,9 @@ void CMP5::SecondaryAttack( void ) {
 			// HEV suit - indicate out of ammo condition
 			m_pPlayer->SetSuitUpdate("!HEV_AMO0", FALSE, 0);
 		}
-	} else {
-		PlayEmptySound( );
+	}
+	else {
+		PlayEmptySound();
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 	}
 }
@@ -185,7 +195,7 @@ BOOL CMP5::Deploy() {
 //=========================================================
 // Holster
 //=========================================================
-void CMP5::Holster( void ) {
+void CMP5::Holster(void) {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)MP5_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -195,7 +205,7 @@ void CMP5::Holster( void ) {
 //=========================================================
 // Reload
 //=========================================================
-void CMP5::Reload( void ) {
+void CMP5::Reload(void) {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
 		return;
 	}
@@ -209,7 +219,7 @@ void CMP5::Reload( void ) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CMP5::WeaponIdle( void ) {
+void CMP5::WeaponIdle(void) {
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;
@@ -224,7 +234,8 @@ void CMP5::WeaponIdle( void ) {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
 				CalculateWeaponTime((int)MP5_IDLE::frames, (int)MP5_IDLE::fps);
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(2, 10);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}

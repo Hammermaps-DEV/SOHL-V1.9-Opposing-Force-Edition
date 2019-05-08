@@ -1,26 +1,39 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
 *   Use, distribution, and modification of this source code and/or resulting
 *   object code is restricted to non-commercial enhancements to products from
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-****/
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 //
 // Health.cpp
 //
 // implementation of CHudHealth class
 //
 
-#include "STDIO.H"
-#include "STDLIB.H"
-#include "MATH.H"
+#include "stdio.h"
+#include "stdlib.h"
+#include "math.h"
 
 #include "hud.h"
 #include "cl_util.h"
@@ -268,7 +281,7 @@ void CHudHealth::CalcDamageDirection(vec3_t vecFrom)
 		}
 		else
 		{
-			float f = V_fabs(side);
+			float f = fabs(side);
 			if (f > 0.3)
 				m_fAttackRear = V_max(m_fAttackRear, f);
 		}
@@ -280,7 +293,7 @@ void CHudHealth::CalcDamageDirection(vec3_t vecFrom)
 		}
 		else
 		{
-			float f = V_fabs(front);
+			float f = fabs(front);
 			if (f > 0.3)
 				m_fAttackLeft = V_max(m_fAttackLeft, f);
 		}
@@ -372,7 +385,7 @@ int CHudHealth::DrawDamage(float flTime)
 
 	UnpackRGB(r,g,b, gHUD.m_iHUDColor);
 	
-	a = (int)(V_fabs(sin(flTime*2)) * 256.0f);
+	a = (int)(fabs(sin(flTime*2)) * 256.0f);
 
 	ScaleColors(r, g, b, a);
 
@@ -391,10 +404,9 @@ int CHudHealth::DrawDamage(float flTime)
 	// check for bits that should be expired
 	for ( i = 0; i < NUM_DMG_TYPES; i++ )
 	{
-		DAMAGE_IMAGE *pdmg = &m_dmg[i];
-
 		if ( m_bitsDamage & giDmgFlags[i] )
 		{
+			pdmg = &m_dmg[i];
 			pdmg->fExpire = V_min( flTime + DMG_IMAGE_LIFE, pdmg->fExpire );
 
 			if ( pdmg->fExpire <= flTime		// when the time has expired

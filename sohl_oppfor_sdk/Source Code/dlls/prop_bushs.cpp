@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -37,7 +44,8 @@ void CPropBushs::KeyValue(KeyValueData* pkvd)
 	if (FStrEq(pkvd->szKeyName, "bush")) {
 		m_isBush = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CGenericModel::KeyValue(pkvd);
 }
 
@@ -46,7 +54,8 @@ void CPropBushs::Spawn(void) {
 		int m_iBush = RANDOM_LONG(2, PROP_BUSH_MODELS);
 		if (m_iBush < 10) {
 			snprintf(RandomMDL, 128, "%models/bush/bush_0%d.mdl", m_iBush);
-		} else {
+		}
+		else {
 			snprintf(RandomMDL, 128, "%models/bush/bush_%d.mdl", m_iBush);
 		}
 	}
@@ -61,7 +70,7 @@ void CPropBushs::Spawn(void) {
 		SET_MODEL(ENT(pev), RandomMDL);
 	else if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
-	else 
+	else
 		SET_MODEL(ENT(pev), "models/error.mdl");
 
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));

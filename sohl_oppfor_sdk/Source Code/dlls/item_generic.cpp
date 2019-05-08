@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -59,7 +66,8 @@ void CItemGeneric::Spawn(void) {
 
 	// Call startup sequence to look for a sequence to play.
 	SetThink(&CItemGeneric::StartupThink);
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1f;
+
+	SetNextThink(0.1);
 }
 
 //=========================================================
@@ -76,7 +84,8 @@ void CItemGeneric::KeyValue(KeyValueData* pkvd) {
 	if (FStrEq(pkvd->szKeyName, "sequencename")) {
 		m_iszSequenceName = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else
+	}
+	else
 		CBaseAnimating::KeyValue(pkvd);
 }
 
@@ -92,9 +101,9 @@ void CItemGeneric::StartupThink(void) {
 	if (iSequence != -1) {
 		pev->sequence = iSequence;
 		SetThink(&CItemGeneric::SequenceThink);
-		
-		pev->nextthink = UTIL_GlobalTimeBase() + 0.01;
-	} else {
+		SetNextThink(0.01);
+	}
+	else {
 		// Cancel play sequence.
 		SetThink(NULL);
 	}
@@ -105,7 +114,7 @@ void CItemGeneric::StartupThink(void) {
 //=========================================================
 void CItemGeneric::SequenceThink(void) {
 	// Set next think time.
-	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
+	SetNextThink(0.1);
 
 	// Advance frames and dispatch events.
 	StudioFrameAdvance();
@@ -121,7 +130,8 @@ void CItemGeneric::SequenceThink(void) {
 			SetThink(NULL);
 			m_fSequenceFinished = TRUE;
 			return;
-		} else {
+		}
+		else {
 			pev->frame = 0;
 			ResetSequenceInfo();
 		}

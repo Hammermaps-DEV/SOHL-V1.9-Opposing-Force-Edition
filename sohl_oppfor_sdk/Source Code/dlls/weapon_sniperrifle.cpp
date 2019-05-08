@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,12 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: M40A1 Sniper Rifle * 
 // http://half-life.wikia.com/wiki/M40A1_Sniper_Rifle
@@ -244,7 +251,8 @@ void CSniperrifle::ZoomUpdate(void) {
 		if (m_iChargeLevel == 3) {
 			ZoomReset();
 		}
-	} else if (m_iChargeLevel > 1) {
+	}
+	else if (m_iChargeLevel > 1) {
 		m_iChargeLevel = 3;
 	}
 }
@@ -287,11 +295,12 @@ void CSniperrifle::WeaponIdle(void) {
 		if (flRand <= 0.5) {
 			iAnim = (m_iClip >= 1) ? (int)M40A1_SLOWIDLE::sequence : (int)M40A1_SLOWIDLE2::sequence;
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() +
-				((m_iClip >= 1) ? CalculateWeaponTime((int)M40A1_SLOWIDLE::frames, (int)M40A1_SLOWIDLE::fps) 
+				((m_iClip >= 1) ? CalculateWeaponTime((int)M40A1_SLOWIDLE::frames, (int)M40A1_SLOWIDLE::fps)
 					: CalculateWeaponTime((int)M40A1_SLOWIDLE2::frames, (int)M40A1_SLOWIDLE2::fps));
 			m_flTimeWeaponIdleLock = m_flTimeWeaponIdle + RANDOM_FLOAT(5, 10);
 			SendWeaponAnim(iAnim);
-		} else {
+		}
+		else {
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
 			m_flTimeWeaponIdleLock = UTIL_GlobalTimeBase();
 		}
@@ -305,26 +314,27 @@ void CSniperrifle::ItemPostFrame(void) {
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_GlobalTimeBase())) {
 		if (m_fNeedAjustBolt) {
 			switch (m_iBoltState) {
-				case BOLTSTATE_ADJUST: {
-					ALERT(at_aiconsole, "BOLTSTATE_ADJUST!\n");
-					m_iBoltState = BOLTSTATE_ADJUSTING;
-					SendWeaponAnim((int)M40A1_RELOAD_END::sequence);
-					m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)M40A1_RELOAD_END::frames, (int)M40A1_RELOAD_END::fps);
-				}
-				break;
-				case BOLTSTATE_ADJUSTING: {
-					ALERT(at_aiconsole, "BOLTSTATE_ADJUSTING!\n");
-					m_fNeedAjustBolt = FALSE;
-					m_iBoltState = BOLTSTATE_FINE;
-				}
-				break;
-				default: 
-					ALERT(at_aiconsole, "Warning: Unknown bolt state!\n"); 
+			case BOLTSTATE_ADJUST: {
+				ALERT(at_aiconsole, "BOLTSTATE_ADJUST!\n");
+				m_iBoltState = BOLTSTATE_ADJUSTING;
+				SendWeaponAnim((int)M40A1_RELOAD_END::sequence);
+				m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)M40A1_RELOAD_END::frames, (int)M40A1_RELOAD_END::fps);
+			}
+								   break;
+			case BOLTSTATE_ADJUSTING: {
+				ALERT(at_aiconsole, "BOLTSTATE_ADJUSTING!\n");
+				m_fNeedAjustBolt = FALSE;
+				m_iBoltState = BOLTSTATE_FINE;
+			}
+									  break;
+			default:
+				ALERT(at_aiconsole, "Warning: Unknown bolt state!\n");
 				break;
 			}
 
 			return;
-		} else {
+		}
+		else {
 			int j = V_min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 			m_iClip += j;
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= j;

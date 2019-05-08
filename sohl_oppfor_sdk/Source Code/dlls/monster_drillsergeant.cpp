@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -34,34 +41,34 @@
 //=========================================================
 // Monster's Anim Events Go Here
 //=========================================================
-LINK_ENTITY_TO_CLASS( monster_drillsergeant, CDrillsergeant );
+LINK_ENTITY_TO_CLASS(monster_drillsergeant, CDrillsergeant);
 
-TYPEDESCRIPTION	CDrillsergeant::m_SaveData[] = 
+TYPEDESCRIPTION	CDrillsergeant::m_SaveData[] =
 {
-	DEFINE_FIELD( CDrillsergeant, m_hTalkTarget, FIELD_EHANDLE ),
-	DEFINE_FIELD( CDrillsergeant, m_flTalkTime, FIELD_TIME ),
+	DEFINE_FIELD(CDrillsergeant, m_hTalkTarget, FIELD_EHANDLE),
+	DEFINE_FIELD(CDrillsergeant, m_flTalkTime, FIELD_TIME),
 };
-IMPLEMENT_SAVERESTORE( CDrillsergeant, CTalkMonster);
+IMPLEMENT_SAVERESTORE(CDrillsergeant, CTalkMonster);
 
 
 //=========================================================
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CDrillsergeant :: Classify ( void )
+int	CDrillsergeant::Classify(void)
 {
-	return m_iClass?m_iClass:CLASS_NONE;
+	return m_iClass ? m_iClass : CLASS_NONE;
 }
 
 //=========================================================
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CDrillsergeant :: SetYawSpeed ( void )
+void CDrillsergeant::SetYawSpeed(void)
 {
 	int ys;
 
-	switch ( m_Activity )
+	switch (m_Activity)
 	{
 	case ACT_IDLE:
 	default:
@@ -75,13 +82,13 @@ void CDrillsergeant :: SetYawSpeed ( void )
 // HandleAnimEvent - catches the monster-specific messages
 // that occur when tagged animation frames are played.
 //=========================================================
-void CDrillsergeant :: HandleAnimEvent( MonsterEvent_t *pEvent )
+void CDrillsergeant::HandleAnimEvent(MonsterEvent_t *pEvent)
 {
-	switch( pEvent->event )
+	switch (pEvent->event)
 	{
 	case 0:
 	default:
-		CBaseMonster::HandleAnimEvent( pEvent );
+		CBaseMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -89,7 +96,7 @@ void CDrillsergeant :: HandleAnimEvent( MonsterEvent_t *pEvent )
 //=========================================================
 // ISoundMask - generic monster can't hear.
 //=========================================================
-int CDrillsergeant :: ISoundMask ( void )
+int CDrillsergeant::ISoundMask(void)
 {
 	return	NULL;
 }
@@ -97,23 +104,23 @@ int CDrillsergeant :: ISoundMask ( void )
 //=========================================================
 // Spawn
 //=========================================================
-void CDrillsergeant :: Spawn()
+void CDrillsergeant::Spawn()
 {
 	Precache();
 
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC
 	else
-		SET_MODEL( ENT(pev), "models/drill.mdl" );
+		SET_MODEL(ENT(pev), "models/drill.mdl");
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid			= SOLID_SLIDEBOX;
-	pev->movetype		= MOVETYPE_STEP;
-	m_bloodColor		= DONT_BLEED;
-	pev->health			= 100;
-	m_flFieldOfView		= 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
-	m_MonsterState		= MONSTERSTATE_NONE;
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
+	m_bloodColor = DONT_BLEED;
+	pev->health = 100;
+	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
+	m_MonsterState = MONSTERSTATE_NONE;
 
 	MonsterInit();
 	SetUse(&CDrillsergeant::DrillUse);
@@ -122,38 +129,38 @@ void CDrillsergeant :: Spawn()
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CDrillsergeant :: Precache()
+void CDrillsergeant::Precache()
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
-		PRECACHE_MODEL( "models/drill.mdl" );
+		PRECACHE_MODEL("models/drill.mdl");
 
 	TalkInit();
 	CTalkMonster::Precache();
-}	
+}
 
 
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-void CDrillsergeant :: StartTask( Task_t *pTask )
+void CDrillsergeant::StartTask(Task_t *pTask)
 {
-	switch( pTask->iTask )
+	switch (pTask->iTask)
 	{
 	case TASK_WAIT:
 		if (m_hPlayer == NULL)
 		{
-			m_hPlayer = UTIL_FindEntityByClassname( NULL, "player" );
+			m_hPlayer = UTIL_FindEntityByClassname(NULL, "player");
 		}
 		break;
 	}
-	CBaseMonster::StartTask( pTask );
+	CBaseMonster::StartTask(pTask);
 }
 
-void CDrillsergeant :: RunTask( Task_t *pTask )
+void CDrillsergeant::RunTask(Task_t *pTask)
 {
-	switch( pTask->iTask )
+	switch (pTask->iTask)
 	{
 	case TASK_WAIT:
 		// look at who I'm talking to
@@ -165,7 +172,7 @@ void CDrillsergeant :: RunTask( Task_t *pTask )
 			if (yaw < -180) yaw += 360;
 
 			// turn towards vector
-			SetBoneController( 0, yaw );
+			SetBoneController(0, yaw);
 		}
 		// look at player, but only if playing a "safe" idle animation
 		else if (m_hPlayer != NULL && pev->sequence == 0)
@@ -176,17 +183,17 @@ void CDrillsergeant :: RunTask( Task_t *pTask )
 			if (yaw < -180) yaw += 360;
 
 			// turn towards vector
-			SetBoneController( 0, yaw );
+			SetBoneController(0, yaw);
 		}
-		else 
+		else
 		{
-			SetBoneController( 0, 0 );
+			SetBoneController(0, 0);
 		}
-		CBaseMonster::RunTask( pTask );
+		CBaseMonster::RunTask(pTask);
 		break;
 	default:
-		SetBoneController( 0, 0 );
-		CBaseMonster::RunTask( pTask );
+		SetBoneController(0, 0);
+		CBaseMonster::RunTask(pTask);
 		break;
 	}
 }
@@ -195,16 +202,16 @@ void CDrillsergeant :: RunTask( Task_t *pTask )
 //=========================================================
 // Override all damage
 //=========================================================
-int CDrillsergeant :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType )
+int CDrillsergeant::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	pev->health = pev->max_health / 2; // always trigger the 50% damage aitrigger
 
-	if ( flDamage > 0 )
+	if (flDamage > 0)
 	{
 		SetConditions(bits_COND_LIGHT_DAMAGE);
 	}
 
-	if ( flDamage >= 20 )
+	if (flDamage >= 20)
 	{
 		SetConditions(bits_COND_HEAVY_DAMAGE);
 	}
@@ -212,16 +219,16 @@ int CDrillsergeant :: TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacke
 }
 
 
-void CDrillsergeant::TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
+void CDrillsergeant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
 {
-	UTIL_Ricochet( ptr->vecEndPos, 1.0 );
-	AddMultiDamage( pevAttacker, this, flDamage, bitsDamageType );
+	UTIL_Ricochet(ptr->vecEndPos, 1.0);
+	AddMultiDamage(pevAttacker, this, flDamage, bitsDamageType);
 }
 
 
-void CDrillsergeant::PlayScriptedSentence( const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener )
+void CDrillsergeant::PlayScriptedSentence(const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener)
 {
-	CBaseMonster::PlayScriptedSentence( pszSentence, duration, volume, attenuation, bConcurrent, pListener );
+	CBaseMonster::PlayScriptedSentence(pszSentence, duration, volume, attenuation, bConcurrent, pListener);
 
 	m_flTalkTime = UTIL_GlobalTimeBase() + duration;
 	m_hTalkTarget = pListener;

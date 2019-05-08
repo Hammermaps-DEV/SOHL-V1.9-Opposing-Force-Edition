@@ -1,9 +1,30 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
-//
-// Purpose: 
-//
-// $NoKeywords: $
-//=============================================================================
+/***
+*
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
+*
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 
 // view/refresh setup functions
 
@@ -101,6 +122,8 @@ cvar_t	*cl_bobup;
 cvar_t	*cl_waterdist;
 cvar_t	*cl_chasedist;
 
+// These cvars are not registered (so users can't cheat), so set the ->value field directly
+// Register these cvars in V_Init() if needed for easy tweaking
 cvar_t	*v_iyaw_cycle;
 cvar_t	*v_iroll_cycle;
 cvar_t	*v_ipitch_cycle;
@@ -172,7 +195,7 @@ float V_CalcRoll (vec3_t angles, vec3_t velocity, float rollangle, float rollspe
     
 	side = DotProduct (velocity, right);
     sign = side < 0 ? -1 : 1;
-    side = V_fabs( side );
+    side = fabs( side );
     
 	value = rollangle;
     if (side < rollspeed)
@@ -242,7 +265,7 @@ void V_DriftPitch ( struct ref_params_s *pparams )
 	// don't count small mouse motion
 	if (pd.nodrift)
 	{
-		if (V_fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
+		if (fabs( pparams->cmd->forwardmove ) < cl_forwardspeed->value )
 			pd.driftmove = 0;
 		else
 			pd.driftmove += pparams->frametime;
@@ -450,6 +473,7 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 	//LRC - if this is the second pass through, then we've just drawn the sky, and now we're setting up the normal view.
 	if (pparams->nextView == 1)
 	{
+		gHUD.m_iSkyMode = SKY_ON; //This means that an env_sky is in the level but we are drawing the normal view this time. 
 		view = gEngfuncs.GetViewModel();
 		view->model = savedviewmodel;
 		pparams->viewangles[0] = v_angles.x;
@@ -490,9 +514,22 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 				pparams->viewangles[1] = viewentity->angles[1];
 				pparams->viewangles[2] = viewentity->angles[2];
 				pparams->crosshairangle[PITCH] = 100; //FIXME: disable crosshair other methods
+
+				if (gHUD.viewFlags & 8)	//AJH Do we draw the player in the camera?
+				{
+					gHUD.m_iCameraMode = 2;
+				}
+				if (gHUD.viewFlags & 4)	//AJH Invert the x view angle again if we are using an item camera?
+				{
+					pparams->viewangles[0] = -viewentity->angles[0];
+				}
 			}
+			else
+				gEngfuncs.Con_DPrintf("Warning : invalid view ent index: %i\n", gHUD.viewEntityIndex);
 		}
-		else pparams->crosshairangle[PITCH] = 0;
+		else
+			pparams->crosshairangle[PITCH] = 0; // test
+
 		return;
 	}
 
@@ -788,6 +825,7 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 	}
 
 	lasttime = pparams->time;
+
 	v_origin = pparams->vieworg;
 
 	if (gHUD.viewFlags & 1 && gHUD.m_iSkyMode == SKY_OFF) // custom view active (trigger_viewset)
@@ -825,25 +863,35 @@ void V_CalcNormalRefdef(struct ref_params_s *pparams)
 	}
 	else	pparams->crosshairangle[PITCH] = 0; // test
 
-												// LRC - override the view position if we're drawing a sky, rather than the player's view
-	if (gHUD.m_iSkyMode == SKY_ON && pparams->nextView == 0)
+	// LRC - override the view position if we're drawing a sky, rather than the player's view
+	if (gHUD.m_iSkyMode >= SKY_ON && pparams->nextView == 0)
 	{
-		pparams->vieworg[0] = gHUD.m_vecSkyPos.x;
-		pparams->vieworg[1] = gHUD.m_vecSkyPos.y;
-		pparams->vieworg[2] = gHUD.m_vecSkyPos.z;
+		gHUD.m_iSkyMode = SKY_ON_DRAWING;
+		if (gHUD.m_iSkyScale == 0) //AJH No parallax (old behaviour)
+		{
+			pparams->vieworg[0] = gHUD.m_vecSkyPos.x;
+			pparams->vieworg[1] = gHUD.m_vecSkyPos.y;
+			pparams->vieworg[2] = gHUD.m_vecSkyPos.z;
+		}
+		else
+		{
+			VectorCopy(gHUD.m_vecSkyPos + v_origin / gHUD.m_iSkyScale, pparams->vieworg);
+		}
 
-		if (gHUD.viewFlags & 1)
+		if (gHUD.viewFlags & 1)//AJH (to allow skys and cameras to coexist)
 		{
 			cl_entity_t *viewentity;
 			viewentity = gEngfuncs.GetEntityByIndex(gHUD.viewEntityIndex);
 			if (viewentity)
 			{
-				if (gHUD.viewFlags & 4) pparams->viewangles[0] = -viewentity->angles[0];
-				else		    pparams->viewangles[0] = viewentity->angles[0];
+				pparams->viewangles[0] = viewentity->angles[0];
 				pparams->viewangles[1] = viewentity->angles[1];
 				pparams->viewangles[2] = viewentity->angles[2];
 			}
+			else
+				gEngfuncs.Con_Printf("Warning : invalid view ent index: %i\n", gHUD.viewEntityIndex);
 		}
+
 		pparams->nextView = 1;
 	}
 
@@ -870,7 +918,7 @@ void V_SmoothInterpolateAngles( float * startAngle, float * endAngle, float * fi
 			d += 360.0f;
 		}
 
-		absd = V_fabs(d);
+		absd = fabs(d);
 
 		if ( absd > 0.01f )
 		{
@@ -1050,7 +1098,7 @@ float MaxAngleBetweenAngles(  float * a1, float * a2 )
 			d += 360;
 		}
 
-		d = V_fabs(d);
+		d = fabs(d);
 
 		if ( d > maxd )
 			maxd=d;
@@ -1563,119 +1611,69 @@ void V_CalcSpectatorRefdef ( struct ref_params_s * pparams )
 
 void V_CalcThirdPersonRefdef( struct ref_params_s * pparams )
 {
-	static struct model_s *savedviewmodel;
-	cl_entity_t *view;
-
-	// refresh position
-	VectorCopy ( pparams->simorg, v_sim_org );
-	// get old values
-	VectorCopy ( pparams->cl_viewangles, v_cl_angles );
-	VectorCopy ( pparams->viewangles, v_angles );
-	VectorCopy ( pparams->vieworg, v_origin );
-
-	v_frametime = pparams->frametime;
-
-	V_GetChasePos(gEngfuncs.GetLocalPlayer(), v_cl_angles, v_origin, v_angles );
-	// write back new values into pparams
-	VectorCopy ( v_cl_angles, pparams->cl_viewangles );
-	VectorCopy ( v_angles, pparams->viewangles )
-	VectorCopy ( v_origin, pparams->vieworg );
-
-	if (pparams->nextView == 1)
+	//There is an env_sky in this level, and we are drawing the sky.this time
+	if (gHUD.m_iSkyMode == SKY_ON && pparams->nextView == 0)//AJH
 	{
-		view = gEngfuncs.GetViewModel();
-		view->model = savedviewmodel;
-		pparams->viewangles[0] = v_angles.x;
-		pparams->viewangles[1] = v_angles.y;
-		pparams->viewangles[2] = v_angles.z;
-		pparams->vieworg[0] = v_origin.x;
-		pparams->vieworg[1] = v_origin.y;
-		pparams->vieworg[2] = v_origin.z;
-		pparams->nextView = 0;
-	
-		if (gHUD.viewFlags & 1 )
-		{
-			cl_entity_t *viewentity;
-			viewentity = gEngfuncs.GetEntityByIndex( gHUD.viewEntityIndex );
-			if (viewentity)
-			{
-				if(gHUD.viewFlags & 8 )
-				{         //use monster eye position
-					studiohdr_t *viewmonster = (studiohdr_t *)IEngineStudio.Mod_Extradata (viewentity->model);
-					if( viewmonster )
-					{
-						pparams->vieworg[0] = viewmonster->eyeposition[0];
-						pparams->vieworg[1] = viewmonster->eyeposition[1];
-						pparams->vieworg[2] = viewmonster->eyeposition[2];
-                                        	}
-                                        }
-                                        else
-                                        {
-					pparams->vieworg[0] = viewentity->origin[0];
-					pparams->vieworg[1] = viewentity->origin[1];
-					pparams->vieworg[2] = viewentity->origin[2];
-				}
-				if (gHUD.viewFlags & 4) pparams->viewangles[0] = -viewentity->angles[0];
-				else			pparams->viewangles[0] = viewentity->angles[0];
-				pparams->viewangles[1] = viewentity->angles[1];
-				pparams->viewangles[2] = viewentity->angles[2];
-				pparams->crosshairangle[PITCH] = 100; //FIXME: disable crosshair other methods
-			}
-		}
-		else pparams->crosshairangle[PITCH] = 0;
-		return;
-	}
-	if (gHUD.viewFlags & 1 && gHUD.m_iSkyMode == SKY_OFF) // custom view active (trigger_viewset)
-	{
-		cl_entity_t *viewentity;
-		viewentity = gEngfuncs.GetEntityByIndex( gHUD.viewEntityIndex );
+		gHUD.m_iSkyMode = SKY_ON_DRAWING;
+		// This block of code needs to be here for some reason or the sky seems to lag.
+		//Comment Block Begin
+			// refresh position
+		VectorCopy(pparams->simorg, v_sim_org);
+		// get old values
+		VectorCopy(pparams->cl_viewangles, v_cl_angles);
+		VectorCopy(pparams->viewangles, v_angles);
+		VectorCopy(pparams->vieworg, v_origin);
 
-		if (viewentity)
-		{
-			if(gHUD.viewFlags & 8 )
-			{         //use monster eye position
-				studiohdr_t *viewmonster = (studiohdr_t *)IEngineStudio.Mod_Extradata (viewentity->model);
-				if( viewmonster )
-				{
-					pparams->vieworg[0] = viewentity->origin[0] + viewmonster->eyeposition[0];
-					pparams->vieworg[1] = viewentity->origin[1] + viewmonster->eyeposition[1];
-					pparams->vieworg[2] = viewentity->origin[2] + viewmonster->eyeposition[2];
-				}
-			}
-                              else
-                              {
-				pparams->vieworg[0] = viewentity->origin[0];
-				pparams->vieworg[1] = viewentity->origin[1];
-				pparams->vieworg[2] = viewentity->origin[2];
-			}
-			if (gHUD.viewFlags & 4) pparams->viewangles[0] = -viewentity->angles[0];
-			else			pparams->viewangles[0] = viewentity->angles[0];
-			pparams->viewangles[1] = viewentity->angles[1];
-			pparams->viewangles[2] = viewentity->angles[2];
-			pparams->crosshairangle[PITCH] = 100; //FIXME: disable crosshair other methods
-		}
-	}
-	else	pparams->crosshairangle[PITCH] = 0;
+		v_frametime = pparams->frametime;
 
-	if (gHUD.m_iSkyMode == SKY_ON && pparams->nextView == 0)
-	{
-		pparams->vieworg[0] = gHUD.m_vecSkyPos.x;
-		pparams->vieworg[1] = gHUD.m_vecSkyPos.y;
-		pparams->vieworg[2] = gHUD.m_vecSkyPos.z;
-		
-		if (gHUD.viewFlags & 1)
+		V_GetChasePos(gEngfuncs.GetLocalPlayer(), v_cl_angles, v_origin, v_angles);
+		// write back new angles into pparams
+
+		VectorCopy(v_cl_angles, pparams->cl_viewangles);
+		VectorCopy(v_angles, pparams->viewangles);
+		//Comment Block End
+
+		if (gHUD.m_iSkyScale == 0) //AJH No parallax (old behaviour)
 		{
-			cl_entity_t *viewentity;
-			viewentity = gEngfuncs.GetEntityByIndex( gHUD.viewEntityIndex );
-			if (viewentity)
-			{
-				if (gHUD.viewFlags & 4) pparams->viewangles[0] = -viewentity->angles[0];
-				else pparams->viewangles[0] = viewentity->angles[0];
-				pparams->viewangles[1] = viewentity->angles[1];
-				pparams->viewangles[2] = viewentity->angles[2];
-			}
+			//Draw the level from the postion of the sky entity
+			VectorCopy(gHUD.m_vecSkyPos, pparams->vieworg);
 		}
+		else
+		{
+			VectorCopy(gHUD.m_vecSkyPos + v_origin / gHUD.m_iSkyScale, pparams->vieworg);
+		}
+
+		//		gEngfuncs.pfnSetFatPVS ( (float *)&(pparams->vieworg) );
+		//		gEngfuncs.pfnSetFatPAS ( (float *)&(pparams->vieworg) );
+
+
+				//Draw the actual 'player' (thirdperson) view next iteration.
 		pparams->nextView = 1;
+	}
+
+	//Either there is no env_sky in the level or we have just drawn the sky. Either way, draw the thirdperson view now.
+	else if (gHUD.m_iSkyMode == SKY_OFF || pparams->nextView == 1)
+	{
+		if (gHUD.m_iSkyMode == SKY_ON_DRAWING)
+			gHUD.m_iSkyMode = SKY_ON;
+
+		// refresh position
+		VectorCopy(pparams->simorg, v_sim_org);
+		// get old values
+		VectorCopy(pparams->cl_viewangles, v_cl_angles);
+		VectorCopy(pparams->viewangles, v_angles);
+		VectorCopy(pparams->vieworg, v_origin);
+
+		v_frametime = pparams->frametime;
+
+		V_GetChasePos(gEngfuncs.GetLocalPlayer(), v_cl_angles, v_origin, v_angles);
+		// write back new values into pparams
+
+		VectorCopy(v_cl_angles, pparams->cl_viewangles);
+		VectorCopy(v_angles, pparams->viewangles);
+		VectorCopy(v_origin, pparams->vieworg);
+
+		pparams->nextView = 0; //We've finished drawing the level this frame.
 	}
 }
 

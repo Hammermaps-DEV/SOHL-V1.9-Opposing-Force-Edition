@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Marc-Antoine Lortie (https://github.com/malortie).
-*	New Schedule types by Julien * Half-Life : Invasion * (http://www.moddb.com/mods/half-life-invasion)
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -119,11 +124,11 @@ const char *CDiablo::pStepSounds[] = {
 //=========================================================
 int CDiablo::ISoundMask(void) {
 	return	bits_SOUND_WORLD |
-			bits_SOUND_COMBAT |
-			bits_SOUND_CARCASS |
-			bits_SOUND_MEAT |
-			bits_SOUND_GARBAGE |
-			bits_SOUND_PLAYER;
+		bits_SOUND_COMBAT |
+		bits_SOUND_CARCASS |
+		bits_SOUND_MEAT |
+		bits_SOUND_GARBAGE |
+		bits_SOUND_PLAYER;
 }
 
 //=========================================================
@@ -140,7 +145,7 @@ int	CDiablo::Classify(void) {
 //=========================================================
 void CDiablo::SetYawSpeed(void) {
 	switch (m_Activity) {
-		default: pev->yaw_speed = 140; break;
+	default: pev->yaw_speed = 140; break;
 	}
 }
 
@@ -218,17 +223,17 @@ void CDiablo::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 		case HITGROUP_HEAD:
 			if (m_flDebug)
 				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
-			flDamage = m_flHitgroupHead*flDamage;
+			flDamage = m_flHitgroupHead * flDamage;
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
 				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
-			flDamage = m_flHitgroupChest*flDamage;
+			flDamage = m_flHitgroupChest * flDamage;
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
 				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
-			flDamage = m_flHitgroupStomach*flDamage;
+			flDamage = m_flHitgroupStomach * flDamage;
 			break;
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
@@ -236,7 +241,7 @@ void CDiablo::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
 				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
-			flDamage = m_flHitgroupLeg*flDamage;
+			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
 	}
@@ -324,78 +329,81 @@ void CDiablo::AttackSound(void) {
 //=========================================================
 void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case DIABLO_AE_ATTACK_RIGHT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, gSkillData.diabloDmgOneSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
-			if (pHurt) {
-				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-					pHurt->pev->punchangle.z = -20;
-					pHurt->pev->punchangle.x = 15;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
-				}
-
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
-
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
-			} else {
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
-
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
+	case DIABLO_AE_ATTACK_RIGHT: {
+		CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, gSkillData.diabloDmgOneSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
+		if (pHurt) {
+			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+				pHurt->pev->punchangle.z = -20;
+				pHurt->pev->punchangle.x = 15;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * -200;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 			}
 
-			if (RANDOM_LONG(0, 1)) { AttackSound(); }
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
 		}
-		break;
-		case DIABLO_AE_ATTACK_LEFT: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, gSkillData.diabloDmgOneSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
-			if (pHurt) {
-				if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
-					pHurt->pev->punchangle.z = 20;
-					pHurt->pev->punchangle.x = 15;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
-					pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
-				}
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+		else {
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
 
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
-			} else {
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
+		}
 
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
+		if (RANDOM_LONG(0, 1)) { AttackSound(); }
+	}
+								 break;
+	case DIABLO_AE_ATTACK_LEFT: {
+		CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_MELEE_ATTACK_RADIUS, gSkillData.diabloDmgOneSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
+		if (pHurt) {
+			if (pHurt->pev->flags & (FL_MONSTER | FL_CLIENT)) {
+				pHurt->pev->punchangle.z = 20;
+				pHurt->pev->punchangle.x = 15;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_right * 200;
+				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 100;
 			}
-		}
-		break;
-		case DIABLO_AE_ATTACK_BOTH: {
-			CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_TOLERANCE_MELEE2_RANGE, gSkillData.diabloDmgBothSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
-			if (pHurt) {
-				pHurt->pev->punchangle.z = RANDOM_LONG(-10, 10);
-				pHurt->pev->punchangle.x = RANDOM_LONG(-20, -30);
-				pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * -100;
-				pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 70;
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
 
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
-			} else {
-				if (RANDOM_LONG(0, 1))
-					EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
-
-				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
-			}
-
-			if (RANDOM_LONG(0, 1)) { AttackSound(); }
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
 		}
-		break;
-		case DIABLO_AE_STEP: {
-			EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pStepSounds);
+		else {
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
 		}
-		break;
-		default:
-			CBaseMonster::HandleAnimEvent(pEvent);
+	}
+								break;
+	case DIABLO_AE_ATTACK_BOTH: {
+		CBaseEntity *pHurt = CheckTraceHullAttack(DIABLO_TOLERANCE_MELEE2_RANGE, gSkillData.diabloDmgBothSlash, DMG_SLASH | DMG_NEVERGIB | DMG_CLUB);
+		if (pHurt) {
+			pHurt->pev->punchangle.z = RANDOM_LONG(-10, 10);
+			pHurt->pev->punchangle.x = RANDOM_LONG(-20, -30);
+			pHurt->pev->velocity = pHurt->pev->velocity - gpGlobals->v_forward * -100;
+			pHurt->pev->velocity = pHurt->pev->velocity + gpGlobals->v_up * 70;
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSounds);
+
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackHitSoundsEXT);
+		}
+		else {
+			if (RANDOM_LONG(0, 1))
+				EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSounds);
+
+			EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackMissSoundsEXT);
+		}
+
+		if (RANDOM_LONG(0, 1)) { AttackSound(); }
+	}
+								break;
+	case DIABLO_AE_STEP: {
+		EMIT_SOUND_ARRAY_DYN(CHAN_BODY, pStepSounds);
+	}
+						 break;
+	default:
+		CBaseMonster::HandleAnimEvent(pEvent);
 		break;
 	}
 }
@@ -427,9 +435,9 @@ void CDiablo::Spawn(void) {
 	m_flFieldOfView = VIEW_FIELD_FULL;
 	m_MonsterState = MONSTERSTATE_NONE;
 	m_afCapability = bits_CAP_HEAR |
-					 bits_CAP_RANGE_ATTACK1 |
-					 bits_CAP_MELEE_ATTACK1 |
-					 bits_CAP_MELEE_ATTACK2;
+		bits_CAP_RANGE_ATTACK1 |
+		bits_CAP_MELEE_ATTACK1 |
+		bits_CAP_MELEE_ATTACK2;
 
 	m_flBulletDR = 0.3; //damage from bullets
 	m_flDebug = false; //Debug Massages
@@ -488,7 +496,7 @@ Task_t	tlDiabloRangeAttack1[] = {
 Schedule_t	slDiabloRangeAttack1[] = {
 	{
 		tlDiabloRangeAttack1,
-		ARRAYSIZE(tlDiabloRangeAttack1),
+		HL_ARRAYSIZE(tlDiabloRangeAttack1),
 		bits_COND_NEW_ENEMY |
 		bits_COND_ENEMY_DEAD |
 		bits_COND_LIGHT_DAMAGE |
@@ -509,7 +517,7 @@ Task_t	tlDiabloRangeAttack2[] = {
 Schedule_t	slDiabloRangeAttack2[] = {
 	{
 		tlDiabloRangeAttack2,
-		ARRAYSIZE(tlDiabloRangeAttack2),
+		HL_ARRAYSIZE(tlDiabloRangeAttack2),
 		bits_COND_NEW_ENEMY |
 		bits_COND_ENEMY_DEAD |
 		bits_COND_LIGHT_DAMAGE |
@@ -553,27 +561,27 @@ int CDiablo::IgnoreConditions(void) {
 //=========================================================
 Schedule_t *CDiablo::GetSchedule(void) {
 	switch (m_MonsterState) {
-		case MONSTERSTATE_COMBAT: {
-			if (HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
-				return GetScheduleOfType(SCHED_MELEE_ATTACK1);
-			}
-
-			if (HasConditions(bits_COND_CAN_MELEE_ATTACK2)) {
-				return GetScheduleOfType(SCHED_MELEE_ATTACK2);
-			}
-
-			if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
-				return GetScheduleOfType(SCHED_DIABLO_RANGE_ATTACK1);
-			}
-
-			if (HasConditions(bits_COND_CAN_RANGE_ATTACK2)) {
-				return GetScheduleOfType(SCHED_DIABLO_RANGE_ATTACK2);
-			}
-
-			if (pev->health <= 75) {
-				return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
-			}
+	case MONSTERSTATE_COMBAT: {
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
+			return GetScheduleOfType(SCHED_MELEE_ATTACK1);
 		}
+
+		if (HasConditions(bits_COND_CAN_MELEE_ATTACK2)) {
+			return GetScheduleOfType(SCHED_MELEE_ATTACK2);
+		}
+
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK1)) {
+			return GetScheduleOfType(SCHED_DIABLO_RANGE_ATTACK1);
+		}
+
+		if (HasConditions(bits_COND_CAN_RANGE_ATTACK2)) {
+			return GetScheduleOfType(SCHED_DIABLO_RANGE_ATTACK2);
+		}
+
+		if (pev->health <= 75) {
+			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
+		}
+	}
 	}
 
 	return CBaseMonster::GetSchedule();
@@ -584,15 +592,15 @@ Schedule_t *CDiablo::GetSchedule(void) {
 //=========================================================
 Schedule_t* CDiablo::GetScheduleOfType(int Type) {
 	switch (Type) {
-		case SCHED_DIABLO_RANGE_ATTACK1: {
-			return &slDiabloRangeAttack1[0];
-		}
-		case SCHED_DIABLO_RANGE_ATTACK2: {
-			return &slDiabloRangeAttack2[0];
-		}
-		default: {
-			return CBaseMonster::GetScheduleOfType(Type);
-		}
+	case SCHED_DIABLO_RANGE_ATTACK1: {
+		return &slDiabloRangeAttack1[0];
+	}
+	case SCHED_DIABLO_RANGE_ATTACK2: {
+		return &slDiabloRangeAttack2[0];
+	}
+	default: {
+		return CBaseMonster::GetScheduleOfType(Type);
+	}
 	}
 }
 

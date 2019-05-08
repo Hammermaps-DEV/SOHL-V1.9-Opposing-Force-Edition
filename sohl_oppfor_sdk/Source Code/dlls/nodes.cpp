@@ -1,17 +1,31 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
-****/
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
+
 //=========================================================
 // nodes.cpp - AI node tree stuff.
 //=========================================================
@@ -1510,12 +1524,12 @@ void CTestHull::Spawn(entvars_t *pevMasterNode)
 	{
 		// graph loaded from disk, so we don't need the test hull
 		SetThink(&CBaseEntity::SUB_Remove);
-		pev->nextthink = gpGlobals->time;
+		pev->nextthink = UTIL_GlobalTimeBase();
 	}
 	else
 	{
 		SetThink(&CTestHull::DropDelay);
-		pev->nextthink = gpGlobals->time + 1;
+		pev->nextthink = UTIL_GlobalTimeBase() + 1;
 	}
 
 	// Make this invisible
@@ -1536,7 +1550,7 @@ void CTestHull::DropDelay(void)
 
 	SetThink(&CTestHull::CallBuildNodeGraph);
 
-	pev->nextthink = gpGlobals->time + 1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 1;
 }
 
 //=========================================================
@@ -1622,7 +1636,7 @@ void CTestHull::ShowBadNode(void)
 	UTIL_ParticleEffect(pev->origin + gpGlobals->v_right * 64, g_vecZero, 255, 25);
 	UTIL_ParticleEffect(pev->origin - gpGlobals->v_right * 64, g_vecZero, 255, 25);
 
-	pev->nextthink = gpGlobals->time + 0.1;
+	pev->nextthink = UTIL_GlobalTimeBase() + 0.1;
 }
 
 extern BOOL gTouchDisabled;
@@ -1686,7 +1700,7 @@ void CTestHull::BuildNodeGraph(void)
 	int step;
 
 	SetThink(&CBaseEntity::SUB_Remove);// no matter what happens, the hull gets rid of itself.
-	pev->nextthink = gpGlobals->time;
+	pev->nextthink = UTIL_GlobalTimeBase();
 
 	//malloc a swollen temporary connection pool that we trim down after we know exactly how many connections there are.
 	pTempPool = (CLink *)calloc(sizeof(CLink), (WorldGraph.m_cNodes * MAX_NODE_INITIAL_LINKS));
@@ -3623,7 +3637,7 @@ void CNodeViewer::Spawn()
 
 	m_iDraw = 0;
 	SetThink(&CNodeViewer::DrawThink);
-	pev->nextthink = gpGlobals->time;
+	pev->nextthink = UTIL_GlobalTimeBase();
 }
 
 void CNodeViewer::FindNodeConnections(int iNode)
@@ -3662,7 +3676,7 @@ void CNodeViewer::AddNode(int iFrom, int iTo)
 
 void CNodeViewer::DrawThink(void)
 {
-	pev->nextthink = gpGlobals->time;
+	pev->nextthink = UTIL_GlobalTimeBase();
 
 	for (int i = 0; i < 10; i++)
 	{

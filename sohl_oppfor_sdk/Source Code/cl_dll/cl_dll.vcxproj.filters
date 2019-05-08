@@ -898,5 +898,11 @@
     <ClCompile Include="soundengine.cpp">
       <Filter>Source Files\cl_dll</Filter>
     </ClCompile>
+    <ClCompile Include="glow.cpp">
+      <Filter>Source Files\cl_dll</Filter>
+    </ClCompile>
+    <ClCompile Include="vgui_CustomMenu.cpp">
+      <Filter>Header Files\cl_dll\vgui</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

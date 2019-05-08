@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,10 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 //=========================================================
@@ -111,10 +117,12 @@ void CShockRoach::KeyValue(KeyValueData *pkvd) {
 	if (FStrEq(pkvd->szKeyName, "dies")) {
 		m_iDies = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else if (FStrEq(pkvd->szKeyName, "weapon")) {
+	}
+	else if (FStrEq(pkvd->szKeyName, "weapon")) {
 		m_iWeapon = atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
-	} else {
+	}
+	else {
 		CBaseMonster::KeyValue(pkvd);
 	}
 }
@@ -191,52 +199,52 @@ void CShockRoach::PrescheduleThink(void) {
 //=========================================================
 void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
-		case SR_AE_JUMPATTACK: {
-			ClearBits(pev->flags, FL_ONGROUND);
-			UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
-			UTIL_MakeVectors(pev->angles);
+	case SR_AE_JUMPATTACK: {
+		ClearBits(pev->flags, FL_ONGROUND);
+		UTIL_SetOrigin(this, pev->origin + Vector(0, 0, 1));// take him off ground so engine doesn't instantly reset onground 
+		UTIL_MakeVectors(pev->angles);
 
-			Vector vecJumpDir;
-			if (m_hEnemy != NULL) {
-				float gravity = g_psv_gravity->value;
-				if (gravity <= 1)
-					gravity = 1;
+		Vector vecJumpDir;
+		if (m_hEnemy != NULL) {
+			float gravity = g_psv_gravity->value;
+			if (gravity <= 1)
+				gravity = 1;
 
-				// How fast does the headcrab need to travel to reach that height given gravity?
-				float height = (m_hEnemy->pev->origin.z + m_hEnemy->pev->view_ofs.z - pev->origin.z);
-				if (height < 16) {
-					height = 16;
-				}
-
-				float speed = sqrt(2 * gravity * height);
-				float time = speed / gravity;
-
-				// Scale the sideways velocity to get there at the right time
-				vecJumpDir = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - pev->origin);
-				vecJumpDir = vecJumpDir * (1.0 / time);
-
-				// Speed to offset gravity at the desired height
-				vecJumpDir.z = speed;
-
-				// Don't jump too far/fast
-				float distance = vecJumpDir.Length();
-				if (distance > 650) {
-					vecJumpDir = vecJumpDir * (650.0 / distance);
-				}
-			}
-			else {
-				// jump hop, don't care where
-				vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
+			// How fast does the headcrab need to travel to reach that height given gravity?
+			float height = (m_hEnemy->pev->origin.z + m_hEnemy->pev->view_ofs.z - pev->origin.z);
+			if (height < 16) {
+				height = 16;
 			}
 
-			pev->velocity = vecJumpDir;
-			m_flNextAttack = UTIL_GlobalTimeBase() + 2;
+			float speed = sqrt(2 * gravity * height);
+			float time = speed / gravity;
+
+			// Scale the sideways velocity to get there at the right time
+			vecJumpDir = (m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs - pev->origin);
+			vecJumpDir = vecJumpDir * (1.0 / time);
+
+			// Speed to offset gravity at the desired height
+			vecJumpDir.z = speed;
+
+			// Don't jump too far/fast
+			float distance = vecJumpDir.Length();
+			if (distance > 650) {
+				vecJumpDir = vecJumpDir * (650.0 / distance);
+			}
 		}
-		break;
-		default: {
-			CBaseMonster::HandleAnimEvent(pEvent);
+		else {
+			// jump hop, don't care where
+			vecJumpDir = Vector(gpGlobals->v_forward.x, gpGlobals->v_forward.y, gpGlobals->v_up.z) * 350;
 		}
-		break;
+
+		pev->velocity = vecJumpDir;
+		m_flNextAttack = UTIL_GlobalTimeBase() + 2;
+	}
+						   break;
+	default: {
+		CBaseMonster::HandleAnimEvent(pEvent);
+	}
+			 break;
 	}
 }
 
@@ -281,14 +289,14 @@ void CShockRoach::AttackSound(void) {
 void CShockRoach::StartTask(Task_t *pTask) {
 	m_iTaskStatus = TASKSTATUS_RUNNING;
 	switch (pTask->iTask) {
-		case TASK_RANGE_ATTACK1: {
-			m_IdealActivity = ACT_RANGE_ATTACK1;
-			SetTouch(&CShockRoach::LeapTouch);
-		}
-		break;
-		default: {
-			CHeadCrab::StartTask(pTask);
-		}
-		break;
+	case TASK_RANGE_ATTACK1: {
+		m_IdealActivity = ACT_RANGE_ATTACK1;
+		SetTouch(&CShockRoach::LeapTouch);
+	}
+							 break;
+	default: {
+		CHeadCrab::StartTask(pTask);
+	}
+			 break;
 	}
 }

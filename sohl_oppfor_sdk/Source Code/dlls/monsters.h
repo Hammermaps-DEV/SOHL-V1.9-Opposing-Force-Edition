@@ -1,17 +1,30 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
-*	
-*	This product contains software technology licensed from Id 
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
-*	All Rights Reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-****/
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
+*
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 #ifndef MONSTERS_H
 #include "skill.h"
 #define MONSTERS_H
@@ -95,22 +108,22 @@
 #define		MOVE_STRAFE				1// moves in direction specified, no matter which way monster is facing
 
 // spawn flags 256 and above are already taken by the engine
-extern void UTIL_MoveToOrigin( edict_t* pent, const Vector &vecGoal, float flDist, int iMoveType ); 
+extern void UTIL_MoveToOrigin(edict_t* pent, const Vector &vecGoal, float flDist, int iMoveType);
 
-Vector VecCheckToss ( entvars_t *pev, const Vector &vecSpot1, Vector vecSpot2, float flGravityAdj = 1.0 );
-Vector VecCheckThrow ( entvars_t *pev, const Vector &vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj = 1.0 );
+Vector VecCheckToss(entvars_t *pev, const Vector &vecSpot1, Vector vecSpot2, float flGravityAdj = 1.0);
+Vector VecCheckThrow(entvars_t *pev, const Vector &vecSpot1, Vector vecSpot2, float flSpeed, float flGravityAdj = 1.0);
 extern DLL_GLOBAL Vector		g_vecAttackDir;
 extern DLL_GLOBAL CONSTANT float g_flMeleeRange;
 extern DLL_GLOBAL CONSTANT float g_flMediumRange;
 extern DLL_GLOBAL CONSTANT float g_flLongRange;
-extern void EjectBrass (const Vector &vecOrigin, const Vector &vecVelocity, float rotation, int model, int soundtype );
-extern void ExplodeModel( const Vector &vecOrigin, float speed, int model, int count );
-extern void WeaponFlash (const Vector &vecOrigin );
+extern void EjectBrass(const Vector &vecOrigin, const Vector &vecVelocity, float rotation, int model, int soundtype);
+extern void ExplodeModel(const Vector &vecOrigin, float speed, int model, int count);
+extern void WeaponFlash(const Vector &vecOrigin);
 
 extern int gmsgParticles;//define external message
 
-BOOL FBoxVisible ( entvars_t *pevLooker, entvars_t *pevTarget );
-BOOL FBoxVisible ( entvars_t *pevLooker, entvars_t *pevTarget, Vector &vecTargetOrigin, float flSize = 0.0 );
+BOOL FBoxVisible(entvars_t *pevLooker, entvars_t *pevTarget);
+BOOL FBoxVisible(entvars_t *pevLooker, entvars_t *pevTarget, Vector &vecTargetOrigin, float flSize = 0.0);
 
 // monster to monster relationship types
 #define R_AL	-2 // (ALLY) pals. Good alternative to R_NO when applicable.
@@ -138,7 +151,7 @@ BOOL FBoxVisible ( entvars_t *pevLooker, entvars_t *pevTarget, Vector &vecTarget
 
 // trigger conditions for scripted AI
 // these MUST match the CHOICES interface in halflife.fgd for the base monster
-enum 
+enum
 {
 	AITRIGGER_NONE = 0,
 	AITRIGGER_SEEPLAYER_ANGRY_AT_PLAYER,
@@ -172,18 +185,18 @@ enum
 class CGib : public CBaseEntity
 {
 public:
-	void Spawn( const char *szGibModel );
-	void EXPORT BounceGibTouch ( CBaseEntity *pOther );
-	void EXPORT StickyGibTouch ( CBaseEntity *pOther );
-	void EXPORT WaitTillLand( void );
-	void		LimitVelocity( void );
+	void Spawn(const char *szGibModel);
+	void EXPORT BounceGibTouch(CBaseEntity *pOther);
+	void EXPORT StickyGibTouch(CBaseEntity *pOther);
+	void EXPORT WaitTillLand(void);
+	void		LimitVelocity(void);
 
-	virtual int	ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
-	static	void SpawnHeadGib( entvars_t *pevVictim );
-	static	void SpawnHeadGib( entvars_t *pevVictim, const char *szGibModel );
-	static	void SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int human );
-	static	void SpawnRandomGibs( entvars_t *pevVictim, int cGibs, int notfirst, const char *szGibModel ); //LRC
-	static  void SpawnStickyGibs( entvars_t *pevVictim, Vector vecOrigin, int cGibs );
+	virtual int	ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DONT_SAVE; }
+	static	void SpawnHeadGib(entvars_t *pevVictim);
+	static	void SpawnHeadGib(entvars_t *pevVictim, const char *szGibModel);
+	static	void SpawnRandomGibs(entvars_t *pevVictim, int cGibs, int human);
+	static	void SpawnRandomGibs(entvars_t *pevVictim, int cGibs, int notfirst, const char *szGibModel); //LRC
+	static  void SpawnStickyGibs(entvars_t *pevVictim, Vector vecOrigin, int cGibs);
 
 	int		m_bloodColor;
 	int		m_cBloodDecals;

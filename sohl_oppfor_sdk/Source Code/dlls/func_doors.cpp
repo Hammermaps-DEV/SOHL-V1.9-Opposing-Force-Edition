@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,9 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 /*
@@ -364,7 +371,7 @@ void CBaseDoor::PostSpawn(void)
 		m_vecPosition1 = pev->origin;
 
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions
-	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (V_fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
+	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
 
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 	if (FBitSet(pev->spawnflags, SF_DOOR_START_OPEN))
@@ -683,7 +690,8 @@ void CBaseDoor::DoorGoUp(void)
 
 	// emit door moving and stop sounds on CHAN_STATIC so that the multicast doesn't
 	// filter them out and leave a client stuck with looping door sounds!
-	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT) && m_toggle_state != TS_GOING_UP && m_toggle_state != TS_GOING_DOWN)
+	if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
+		if (m_toggle_state != TS_GOING_UP && m_toggle_state != TS_GOING_DOWN)
 		EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving), VOL_NORM, ATTN_NORM);
 
 	//	ALERT(at_debug, "%s go up (was %d)\n", STRING(pev->targetname), m_toggle_state);
@@ -911,7 +919,9 @@ void CBaseDoor::Blocked(CBaseEntity *pOther)
 	if (m_flWait >= 0)
 	{
 		if (!FBitSet(pev->spawnflags, SF_DOOR_SILENT))
+			if (m_toggle_state != TS_GOING_UP && m_toggle_state != TS_GOING_DOWN)
 			STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving));
+
 		if (m_toggle_state == TS_GOING_DOWN) DoorGoUp();
 		else DoorGoDown();
 	}
@@ -1144,7 +1154,7 @@ void CMomentaryDoor::Spawn(void)
 
 	m_vecPosition1 = pev->origin;
 	// Subtract 2 from size because the engine expands bboxes by 1 in all directions making the size too big
-	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (V_fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
+	m_vecPosition2 = m_vecPosition1 + (pev->movedir * (fabs(pev->movedir.x * (pev->size.x - 2)) + fabs(pev->movedir.y * (pev->size.y - 2)) + fabs(pev->movedir.z * (pev->size.z - 2)) - m_flLip));
 	ASSERTSZ(m_vecPosition1 != m_vecPosition2, "door start/end positions are equal");
 
 	//LRC: FIXME, move to PostSpawn
@@ -1701,7 +1711,7 @@ void CBaseTrainDoor::DoorGoUp(void)
 	STOP_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseMoving));
 	EMIT_SOUND(ENT(pev), CHAN_STATIC, (char*)STRING(pev->noiseArrived), VOL_NORM, ATTN_NORM);
 
-	float	depth = (V_fabs(gpGlobals->v_right.x * (pev->size.x - 2)) + fabs(gpGlobals->v_right.y * (pev->size.y - 2)) + fabs(gpGlobals->v_right.z * (pev->size.z - 2)) - m_flLip);
+	float	depth = (fabs(gpGlobals->v_right.x * (pev->size.x - 2)) + fabs(gpGlobals->v_right.y * (pev->size.y - 2)) + fabs(gpGlobals->v_right.z * (pev->size.z - 2)) - m_flLip);
 
 	if (pev->spawnflags & SF_TRAINDOOR_INVERSE)
 		depth = -depth;
@@ -1724,7 +1734,7 @@ void CBaseTrainDoor::DoorSlideUp(void)
 
 	UTIL_MakeVectors(m_vecOldAngles);
 
-	float	width = (V_fabs(gpGlobals->v_forward.x * (pev->size.x - 2)) + fabs(gpGlobals->v_forward.y * (pev->size.y - 2)) + fabs(gpGlobals->v_forward.z * (pev->size.z - 2)));
+	float	width = (fabs(gpGlobals->v_forward.x * (pev->size.x - 2)) + fabs(gpGlobals->v_forward.y * (pev->size.y - 2)) + fabs(gpGlobals->v_forward.z * (pev->size.z - 2)));
 
 	door_state = TD_SLIDING_UP;
 

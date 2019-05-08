@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,10 +13,16 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*	Base Source-Code written by Raven City and Marc-Antoine Lortie (https://github.com/malortie).
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
 
@@ -118,27 +124,27 @@ void CSporeAmmoPlant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector
 		Vector vecSrc = pev->origin + gpGlobals->v_forward * -20;
 
 		MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
-			WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
-			WRITE_COORD(vecSrc.x);	// Send to PAS because of the sound
-			WRITE_COORD(vecSrc.y);
-			WRITE_COORD(vecSrc.z);
-			WRITE_SHORT(m_iExplode);
-			WRITE_BYTE(25); // scale * 10
-			WRITE_BYTE(12); // framerate
-			WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
+		WRITE_BYTE(TE_EXPLOSION);		// This makes a dynamic light and the explosion sprites/sound
+		WRITE_COORD(vecSrc.x);	// Send to PAS because of the sound
+		WRITE_COORD(vecSrc.y);
+		WRITE_COORD(vecSrc.z);
+		WRITE_SHORT(m_iExplode);
+		WRITE_BYTE(25); // scale * 10
+		WRITE_BYTE(12); // framerate
+		WRITE_BYTE(TE_EXPLFLAG_NOSOUND);
 		MESSAGE_END();
 
 
 		ALERT(at_aiconsole, "angles %f %f %f\n", pev->angles.x, pev->angles.y, pev->angles.z);
 		Vector angles = pev->angles + gpGlobals->v_forward * 17 - gpGlobals->v_right * 27 + gpGlobals->v_up * 6;
 
-		if (V_fabs(angles.x) != 0)
+		if (fabs(angles.x) != 0)
 			angles.x = angles.x + 90;
-		if (V_fabs(angles.y) != 0)
+		if (fabs(angles.y) != 0)
 			angles.y = angles.y + 90;
-		if (V_fabs(angles.z) != 0)
+		if (fabs(angles.z) != 0)
 			angles.y = angles.y + 90;
-		
+
 		ALERT(at_aiconsole, "angles %f %f %f\n", angles.x, angles.y, angles.z);
 		CSporeGrenade::ShootTimed(this->pev, vecSrc, angles, RANDOM_FLOAT(3, 5));
 
@@ -184,7 +190,8 @@ void CSporeAmmoPlant::IdleThink(void)
 		m_flTimeSporeIdle = UTIL_GlobalTimeBase() + 18;
 		SetThink(&CSporeAmmoPlant::BornThink);
 		return;
-	} else {
+	}
+	else {
 		pev->sequence = SPOREAMMO_IDLE1;
 	}
 }

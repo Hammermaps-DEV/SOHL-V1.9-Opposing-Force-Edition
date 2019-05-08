@@ -1,17 +1,30 @@
 /***
 *
-*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
+*   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*	This product contains software technology licensed from Id
-*	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
-*	All Rights Reserved.
+*   Half-Life and their logos are the property of their respective owners.
+*   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
-*   This source code contains proprietary and confidential information of
-*   Valve LLC and its suppliers.  Access to this code is restricted to
-*   persons who have executed a written SDK license with Valve.  Any access,
-*   use or distribution of this code by or to any unlicensed person is illegal.
+*   This product contains software technology licensed from Id
+*   Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc.
 *
-****/
+*   Use, distribution, and modification of this source code and/or resulting
+*   object code is restricted to non-commercial enhancements to products from
+*   Valve LLC.  All other use, distribution, or modification is prohibited
+*   without written permission from Valve LLC.
+*
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
+*
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
+*
+***/
 //=========================================================
 // NPC: Pit Drone * http://half-life.wikia.com/wiki/Pit_Drone
 // For Spirit of Half-Life v1.9: Opposing-Force Edition
@@ -21,65 +34,65 @@
 
 // class definition
 class CPitDrone : public CBaseMonster {
-	public:
-		void Spawn(void);
-		void Precache(void);
-		void HandleAnimEvent(MonsterEvent_t *pEvent);
-		void IdleSound(void);
-		void PainSound(void);
-		void AlertSound(void);
-		void DeathSound(void);
-		void AttackSound(void);
-		void AttackSoundSpike(void);
-		void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-		void UpdateHorns(void);
-		void SetYawSpeed(void);
-		void KeyValue(KeyValueData *pkvd);
-		void StopTalking(void);
-		void StartTask(Task_t *pTask);
-		void RunTask(Task_t *pTask);
-		void RunAI(void);
+public:
+	void Spawn(void);
+	void Precache(void);
+	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	void IdleSound(void);
+	void PainSound(void);
+	void AlertSound(void);
+	void DeathSound(void);
+	void AttackSound(void);
+	void AttackSoundSpike(void);
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	void UpdateHorns(void);
+	void SetYawSpeed(void);
+	void KeyValue(KeyValueData *pkvd);
+	void StopTalking(void);
+	void StartTask(Task_t *pTask);
+	void RunTask(Task_t *pTask);
+	void RunAI(void);
 
-		BOOL CheckRangeAttack1(float flDot, float flDist);
-		BOOL ShouldSpeak(void);
+	BOOL CheckRangeAttack1(float flDot, float flDist);
+	BOOL ShouldSpeak(void);
 
-		int Classify(void);
-		int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-		int IRelationship(CBaseEntity *pTarget);
-		int IgnoreConditions(void);
+	int Classify(void);
+	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
+	int IRelationship(CBaseEntity *pTarget);
+	int IgnoreConditions(void);
 
-		virtual int	Save(CSave &save);
-		virtual int	Restore(CRestore &restore);
+	virtual int	Save(CSave &save);
+	virtual int	Restore(CRestore &restore);
 
-		static	TYPEDESCRIPTION m_SaveData[];
+	static	TYPEDESCRIPTION m_SaveData[];
 
-		static const char *pIdleSounds[];
-		static const char *pAlertSounds[];
-		static const char *pPainSounds[];
-		static const char *pDieSounds[];
-		static const char *pAttackHitSounds[];
-		static const char *pAttackHitStrikeSounds[];
-		static const char *pAttackMissSounds[];
-		static const char *pAttackSoundsSpike[];
+	static const char *pIdleSounds[];
+	static const char *pAlertSounds[];
+	static const char *pPainSounds[];
+	static const char *pDieSounds[];
+	static const char *pAttackHitSounds[];
+	static const char *pAttackHitStrikeSounds[];
+	static const char *pAttackMissSounds[];
+	static const char *pAttackSoundsSpike[];
 
-		Schedule_t* GetSchedule(void);
-		Schedule_t* GetScheduleOfType(int Type);
-		MONSTERSTATE GetIdealState(void);
+	Schedule_t* GetSchedule(void);
+	Schedule_t* GetScheduleOfType(int Type);
+	MONSTERSTATE GetIdealState(void);
 
-		CUSTOM_SCHEDULES;
+	CUSTOM_SCHEDULES;
 
-	protected:
-		BOOL    m_fCanThreatDisplay;
-		BOOL    m_flDebug = false;
-		int		m_iLastWord;
-		int		m_iSpitSprite;
-		float	m_flNextSpitTime;
-		float	m_flLastHurtTime;
-		float	m_flNextSpeakTime;
-		float	m_flNextWordTime;
-		float	m_flNextFlinch;
-		float	m_flammo = 6;
-		float	m_flhorns;
+protected:
+	BOOL    m_fCanThreatDisplay;
+	BOOL    m_flDebug = false;
+	int		m_iLastWord;
+	int		m_iSpitSprite;
+	float	m_flNextSpitTime;
+	float	m_flLastHurtTime;
+	float	m_flNextSpeakTime;
+	float	m_flNextWordTime;
+	float	m_flNextFlinch;
+	float	m_flammo = 6;
+	float	m_flhorns;
 };
 
 #endif // MONSTER_PITDRONE_H

@@ -2,7 +2,7 @@
 *
 *   SPIRIT OF HALF-LIFE 1.9: OPPOSING-FORCE EDITION
 *
-*   Spirit of Half-Life and their logos are the property of their respective owners.
+*   Half-Life and their logos are the property of their respective owners.
 *   Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *
 *   This product contains software technology licensed from Id
@@ -13,11 +13,19 @@
 *   Valve LLC.  All other use, distribution, or modification is prohibited
 *   without written permission from Valve LLC.
 *
-*   All Rights Reserved.
+*	Spirit of Half-Life, by Laurie R. Cheers. (LRC)
+*   Modified by Lucas Brucksch (Code merge & Effects)
+*   Modified by Andrew J Hamilton (AJH)
+*   Modified by XashXT Group (g-cont...)
 *
-*   Modifications by Hammermaps.de DEV Team (support@hammermaps.de).
+*   Code used from Battle Grounds Team and Contributors.
+*   Code used from SamVanheer (Opposing Force code)
+*   Code used from FWGS Team (Fixes for SOHL)
+*   Code used from LevShisterov (Bugfixed and improved HLSDK)
+*	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+
 //=========================================================
 // Weapon: Knife * http://half-life.wikia.com/wiki/Combat_Knife
 //=========================================================
@@ -110,18 +118,20 @@ void CKnife::SecondaryAttack() {
 // Charge - This used by PrimaryAttack
 //=========================================================
 void CKnife::Charge(bool Swing) {
-	if(!Swing) {
+	if (!Swing) {
 		if (m_fInAttack == 0) {
 			PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usKnife, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 1, 0, pev->body, 0, 0, 0);
 			m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + CalculateWeaponTime((int)KNIFE_CHARGE::frames, (int)KNIFE_CHARGE::fps);
 			m_fInAttack = 1;
-		} else if (m_fInAttack == 1) {
+		}
+		else if (m_fInAttack == 1) {
 			if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 				m_fInAttack = 2;
 			}
-		} 
-	} else {
-		if(m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
+		}
+	}
+	else {
+		if (m_flTimeWeaponIdle < UTIL_GlobalTimeBase()) {
 			TraceResult tr;
 			UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 			Vector vecSrc = m_pPlayer->GetGunPosition();
@@ -297,7 +307,8 @@ void CKnife::WeaponIdle(void) {
 
 	if (m_fInAttack != 0) {
 		Charge(true);
-	} else {
+	}
+	else {
 		int iAnim;
 		float flRand = RANDOM_FLOAT(0, 1);
 		if (flRand <= 0.5) {
