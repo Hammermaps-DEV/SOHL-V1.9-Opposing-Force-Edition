@@ -38,16 +38,12 @@
 #include "player.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
-#include "soundent.h"
 #include "decals.h"
 #include "gamerules.h"
 
 //extern CGraph	WorldGraph;
 extern bool gEvilImpulse101;
 extern bool gInfinitelyAmmo;
-
-#define NOT_USED 255
 
 DLL_GLOBAL	short		g_sModelIndexLaser;// holds the index for the laser beam
 DLL_GLOBAL  const char 	*g_pModelNameLaser = "sprites/laserbeam.spr";
@@ -88,9 +84,6 @@ extern int gmsgCurWeapon;
 
 MULTIDAMAGE gMultiDamage;
 
-#define TRACER_FREQ		4			// Tracers fire every fourth bullet
-
-
 //=========================================================
 // MaxAmmoCarry - pass in a name and this function will tell
 // you the maximum amount of that type of ammunition that a 
@@ -102,6 +95,7 @@ int MaxAmmoCarry(int iszName)
 	{
 		if (CBasePlayerItem::ItemInfoArray[i].pszAmmo1 && !strcmp(STRING(iszName), CBasePlayerItem::ItemInfoArray[i].pszAmmo1))
 			return CBasePlayerItem::ItemInfoArray[i].iMaxAmmo1;
+
 		if (CBasePlayerItem::ItemInfoArray[i].pszAmmo2 && !strcmp(STRING(iszName), CBasePlayerItem::ItemInfoArray[i].pszAmmo2))
 			return CBasePlayerItem::ItemInfoArray[i].iMaxAmmo2;
 	}
@@ -114,7 +108,7 @@ LINK_ENTITY_TO_CLASS(laser_spot, CLaserSpot);
 
 //=========================================================
 //=========================================================
-CLaserSpot *CLaserSpot::CreateSpot(void)
+CLaserSpot *CLaserSpot::CreateSpot()
 {
 	CLaserSpot *pSpot = GetClassPtr((CLaserSpot *)NULL);
 	pSpot->Spawn();
@@ -135,7 +129,7 @@ CLaserSpot *CLaserSpot::CreateSpot(const char* spritename)
 
 //=========================================================
 //=========================================================
-void CLaserSpot::Spawn(void)
+void CLaserSpot::Spawn()
 {
 	Precache();
 	pev->movetype = MOVETYPE_NONE;
@@ -171,20 +165,16 @@ void CLaserSpot::Suspend(float flSuspendTime)
 //=========================================================
 // Revive - bring a suspended laser sight back.
 //=========================================================
-void CLaserSpot::Revive(void)
+void CLaserSpot::Revive()
 {
 	pev->effects &= ~EF_NODRAW;
 	SetThink(NULL);
 }
 
-void CLaserSpot::Precache(void)
+void CLaserSpot::Precache()
 {
 	PRECACHE_MODEL("sprites/laserdot.spr");
 };
-
-//=========================================================
-//=========================================================
-
 
 /*
 ==============================================================================
@@ -199,20 +189,18 @@ Collects multiple small damages into a single damage
 //
 // ClearMultiDamage - resets the global multi damage accumulator
 //
-void ClearMultiDamage(void)
+void ClearMultiDamage()
 {
 	gMultiDamage.pEntity = NULL;
 	gMultiDamage.amount = 0;
 	gMultiDamage.type = 0;
 }
 
-
 //
 // ApplyMultiDamage - inflicts contents of global multi damage register on gMultiDamage.pEntity
 //
 // GLOBALS USED:
-//		gMultiDamage
-
+//	gMultiDamage
 void ApplyMultiDamage(entvars_t *pevInflictor, entvars_t *pevAttacker)
 {
 	Vector		vecSpot1;//where blood comes from
@@ -225,10 +213,8 @@ void ApplyMultiDamage(entvars_t *pevInflictor, entvars_t *pevAttacker)
 	gMultiDamage.pEntity->TakeDamage(pevInflictor, pevAttacker, gMultiDamage.amount, gMultiDamage.type);
 }
 
-
 // GLOBALS USED:
-//		gMultiDamage
-
+//	gMultiDamage
 void AddMultiDamage(entvars_t *pevInflictor, CBaseEntity *pEntity, float flDamage, int bitsDamageType)
 {
 	if (!pEntity)
@@ -255,7 +241,6 @@ void SpawnBlood(Vector vecSpot, int bloodColor, float flDamage)
 {
 	UTIL_BloodDrips(vecSpot, g_vecAttackDir, bloodColor, (int)flDamage);
 }
-
 
 int DamageDecal(CBaseEntity *pEntity, int bitsDamageType)
 {
@@ -373,9 +358,7 @@ void AddAmmoNameToAmmoRegistry(const char *szAmmoname)
 // Precaches the weapon and queues the weapon info for sending to clients
 void UTIL_PrecacheOtherWeapon(const char *szClassname)
 {
-	edict_t	*pent;
-
-	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szClassname));
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING(szClassname));
 	if (FNullEnt(pent))
 	{
 		ALERT(at_debug, "NULL Ent in UTIL_PrecacheOtherWeapon\n");
@@ -389,7 +372,7 @@ void UTIL_PrecacheOtherWeapon(const char *szClassname)
 		ItemInfo II;
 		pEntity->Precache();
 		memset(&II, 0, sizeof II);
-		if (((CBasePlayerItem*)pEntity)->GetItemInfo(&II))
+		if (static_cast<CBasePlayerItem*>(pEntity)->GetItemInfo(&II))
 		{
 			CBasePlayerItem::ItemInfoArray[II.iId] = II;
 
@@ -411,10 +394,11 @@ void UTIL_PrecacheOtherWeapon(const char *szClassname)
 }
 
 // called by worldspawn FIXME. Move this to client.cpp
-void W_Precache(void)
+void WeaponsPrecache()
 {
 	memset(CBasePlayerItem::ItemInfoArray, 0, sizeof(CBasePlayerItem::ItemInfoArray));
 	memset(CBasePlayerItem::AmmoInfoArray, 0, sizeof(CBasePlayerItem::AmmoInfoArray));
+
 	giAmmoIndex = 0;
 
 	//g-cont. init safe precaching system
@@ -623,13 +607,11 @@ TYPEDESCRIPTION	CBasePlayerWeapon::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBasePlayerWeapon, CBasePlayerItem);
 
-
 void CBasePlayerItem::SetObjectCollisionBox(void)
 {
 	pev->absmin = pev->origin + Vector(-24, -24, 0);
 	pev->absmax = pev->origin + Vector(24, 24, 16);
 }
-
 
 //=========================================================
 // Sets up movetype, size, solidtype for a new weapon. 
@@ -768,7 +750,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 	if (!pOther->IsPlayer())
 		return;
 
-	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
+	CBasePlayer *pPlayer = static_cast<CBasePlayer *>(pOther);
 
 	// can I have this?
 	if (!g_pGameRules->CanHavePlayerItem(pPlayer, this))
@@ -818,14 +800,10 @@ void CBasePlayerItem::Spawn(void)
 
 BOOL CanAttack(float attack_time, float curtime, BOOL isPredicted)
 {
-	if (1)
-	{
+	if (curtime != 0.0)
 		return (attack_time <= curtime) ? TRUE : FALSE;
-	}
-	else
-	{
-		return (attack_time <= 0.0) ? TRUE : FALSE;
-	}
+
+	return (attack_time <= 0.0) ? TRUE : FALSE;
 }
 
 void CBasePlayerWeapon::ItemPostFrame(void)
@@ -920,7 +898,6 @@ void CBasePlayerItem::DestroyItem(void)
 int CBasePlayerItem::AddToPlayer(CBasePlayer *pPlayer)
 {
 	m_pPlayer = pPlayer;
-
 	return TRUE;
 }
 
@@ -966,20 +943,16 @@ void CBasePlayerWeapon::SetNextThink(float delay)
 }
 
 /// CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
-int CBasePlayerWeapon::AddDuplicate(CBasePlayerItem *pOriginal)
+bool CBasePlayerWeapon::AddDuplicate(CBasePlayerItem *pOriginal)
 {
 	if (!UTIL_IsMasterTriggered(m_sMaster, m_pPlayer))		//
-		return FALSE;										// AJH allows for locked weapons 
+		return false;										// AJH allows for locked weapons 
 
 	if (m_iDefaultAmmo)
-	{
 		return ExtractAmmo((CBasePlayerWeapon *)pOriginal);
-	}
-	else
-	{
-		// a dead player dropped this.
-		return ExtractClipAmmo((CBasePlayerWeapon *)pOriginal);
-	}
+
+	// a dead player dropped this.
+	return (bool)ExtractClipAmmo((CBasePlayerWeapon *)pOriginal);
 }
 
 
@@ -1057,7 +1030,8 @@ int CBasePlayerWeapon::UpdateClientData(CBasePlayer *pPlayer)
 		pPlayer->m_fWeapon = TRUE;
 	}
 
-	if (m_pNext) m_pNext->UpdateClientData(pPlayer);
+	if (m_pNext)
+		m_pNext->UpdateClientData(pPlayer);
 
 	return 1;
 }
@@ -1073,7 +1047,7 @@ void CBasePlayerWeapon::SendWeaponAnim(const int &iAnim)
 	MESSAGE_END();
 }
 
-BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, int iMaxCarry)
+bool CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, int iMaxCarry)
 {
 	int iIdAmmo;
 	if (iMaxClip < 1)
@@ -1110,11 +1084,9 @@ BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, i
 }
 
 
-BOOL CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char *szName, int iMax)
+bool CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char *szName, int iMax)
 {
-	int iIdAmmo;
-
-	iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName, iMax);
+	int iIdAmmo = m_pPlayer->GiveAmmo(iCount, szName, iMax);
 
 	//m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] = iMax; // hack for testing
 
@@ -1123,7 +1095,8 @@ BOOL CBasePlayerWeapon::AddSecondaryAmmo(int iCount, char *szName, int iMax)
 		m_iSecondaryAmmoType = iIdAmmo;
 		EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", VOL_NORM, ATTN_NORM);
 	}
-	return iIdAmmo > 0 ? TRUE : FALSE;
+
+	return iIdAmmo > 0 ? true : false;
 }
 
 //=========================================================
@@ -1373,9 +1346,9 @@ void CBasePlayerAmmo::DefaultTouch(CBaseEntity *pOther)
 // if  this is a weapon dropped by a dying player, has 0 m_iDefaultAmmo, which means only the ammo in 
 // the weapon clip comes along. 
 //=========================================================
-int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon *pWeapon)
+bool CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon *pWeapon)
 {
-	int iReturn = 0;
+	bool iReturn = false;
 
 	if (pszAmmo1() != NULL)
 	{
@@ -1386,9 +1359,7 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon *pWeapon)
 	}
 
 	if (pszAmmo2() != NULL)
-	{
 		iReturn = pWeapon->AddSecondaryAmmo(0, (char *)pszAmmo2(), iMaxAmmo2());
-	}
 
 	return iReturn;
 }
@@ -1398,7 +1369,7 @@ int CBasePlayerWeapon::ExtractAmmo(CBasePlayerWeapon *pWeapon)
 //=========================================================
 int CBasePlayerWeapon::ExtractClipAmmo(CBasePlayerWeapon *pWeapon)
 {
-	int			iAmmo;
+	int	iAmmo;
 
 	if (m_iClip == WEAPON_NOCLIP)
 	{
@@ -1527,13 +1498,10 @@ void CWeaponBox::Spawn(void)
 //=========================================================
 void CWeaponBox::Kill(void)
 {
-	CBasePlayerItem *pWeapon;
-	int i;
-
 	// destroy the weapons
-	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	for (int i = 0; i < MAX_ITEM_TYPES; i++)
 	{
-		pWeapon = m_rgpPlayerItems[i];
+		CBasePlayerItem* pWeapon = m_rgpPlayerItems[i];
 
 		while (pWeapon)
 		{

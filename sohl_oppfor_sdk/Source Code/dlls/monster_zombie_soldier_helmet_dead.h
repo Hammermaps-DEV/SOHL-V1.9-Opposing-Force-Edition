@@ -38,8 +38,8 @@
 class CDeadZombieSoldierHelmet : public CDeadZombieSoldier {
 public:
 	// void
-	void Spawn(void);
-	void Precache(void);
+	void Spawn() override;
+	void Precache() override;
 };
 
 #endif // MONSTER_ZOMBIE_SOLDIER_HELMET_DEAD_H

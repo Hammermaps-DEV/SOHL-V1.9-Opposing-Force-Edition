@@ -39,8 +39,8 @@
 class CZombieBarney : public CZombie {
 public:
 	// void
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 };
 
 #endif // MONSTER_ZOMBIE_BARNEY_H

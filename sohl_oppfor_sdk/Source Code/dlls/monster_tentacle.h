@@ -34,16 +34,16 @@ class CTentacle : public CBaseMonster
 public:
 	CTentacle(void);
 
-	void Spawn();
-	void Precache();
-	void KeyValue(KeyValueData *pkvd);
+	void Spawn() override;
+	void Precache() override;
+	void KeyValue(KeyValueData *pkvd) override;
 
-	int		Save(CSave &save);
-	int		Restore(CRestore &restore);
+	int		Save(CSave &save) override;
+	int		Restore(CRestore &restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// Don't allow the tentacle to go across transitions!!!
-	virtual int	ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int	ObjectCaps() override { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	void SetObjectCollisionBox(void)
 	{
@@ -105,8 +105,8 @@ public:
 class CTentacleMaw : public CBaseMonster
 {
 public:
-	void Spawn();
-	void Precache();
+	void Spawn() override;
+	void Precache() override;
 };
 
 #endif // MONSTER_TENTACLE_H

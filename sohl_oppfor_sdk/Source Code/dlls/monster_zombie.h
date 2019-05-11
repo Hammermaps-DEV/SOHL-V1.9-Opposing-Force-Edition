@@ -45,8 +45,8 @@ public:
 	void AttackSound(void) override;
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 
-	bool CheckRangeAttack1(float flDot, float flDist) override { return FALSE; }
-	bool CheckRangeAttack2(float flDot, float flDist) override { return FALSE; }
+	bool CheckRangeAttack1(float flDot, float flDist) override { return false; }
+	bool CheckRangeAttack2(float flDot, float flDist) override { return false; }
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
 	int IgnoreConditions(void) override;

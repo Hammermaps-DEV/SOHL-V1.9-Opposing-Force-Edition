@@ -1280,7 +1280,7 @@ int AddToFullPack(struct entity_state_s *state, int e, edict_t *ent, edict_t *ho
 	int					i;
 
 	// don't send if flagged for NODRAW and it's not the host getting the message
-	if ((ent->v.effects & EF_NODRAW) &&
+	if ((ent->v.effects == EF_NODRAW) &&
 		(ent != host))
 		return 0;
 
@@ -1300,7 +1300,7 @@ int AddToFullPack(struct entity_state_s *state, int e, edict_t *ent, edict_t *ho
 	{
 		if (!ENGINE_CHECK_VISIBILITY((const struct edict_s *)ent, pSet))
 		{
-			if (!(ent->v.flags & FL_IMMUNE_WATER))//hack
+			if (ent->v.renderfx != kRenderFxEntInPVS)
 				return 0;
 		}
 	}

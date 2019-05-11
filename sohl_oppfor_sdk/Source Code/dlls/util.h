@@ -352,9 +352,9 @@ extern float		UTIL_AngleDistance(float next, float cur);
 
 extern char			*UTIL_VarArgs(char *format, ...);
 extern void			UTIL_Remove(CBaseEntity *pEntity);
-extern BOOL			UTIL_IsValidEntity(edict_t *pent);
-extern BOOL			UTIL_TeamsMatch(const char *pTeamName1, const char *pTeamName2);
-extern BOOL			UTIL_IsFacing(entvars_t *pevTest, const Vector &reference); //LRC
+extern bool			UTIL_IsValidEntity(edict_t *pent);
+extern bool			UTIL_TeamsMatch(const char *pTeamName1, const char *pTeamName2);
+extern bool			UTIL_IsFacing(entvars_t *pevTest, const Vector &reference); //LRC
 extern char			*UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize);
 
 // Use for ease-in, ease-out style interpolation (accel/decel)
@@ -377,7 +377,6 @@ inline void			UTIL_CenterPrintAll(const char *msg_name, const char *param1 = NUL
 
 class CBasePlayerItem;
 class CBasePlayer;
-extern BOOL UTIL_GetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon);
 
 // prints messages through the HUD
 extern void ClientPrint(entvars_t *client, int msg_dest, const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL);

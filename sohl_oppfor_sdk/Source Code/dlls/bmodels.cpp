@@ -417,7 +417,7 @@ public:
 	float m_pitch;
 	int	  m_sounds;
 
-	EHANDLE	m_hActivator;
+	EHANDLE m_hActivator; //AJH
 
 	float	m_fCurSpeed; //LRC - during spin-up and spin-down, this is
 		// the current speed factor (between 0 and 1).

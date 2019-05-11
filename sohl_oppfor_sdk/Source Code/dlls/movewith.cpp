@@ -285,7 +285,8 @@ void CheckAssistList(void)
 		if (pListMember->m_iLFlags & LF_DOASSIST)
 			count++;
 	}
-
+	//	if (count)
+	//		ALERT(at_console, "CheckAssistList begins, length is %d\n", count);
 	count = 0;
 	pListMember = g_pWorld;
 
@@ -294,21 +295,29 @@ void CheckAssistList(void)
 		TryAssistEntity(pListMember->m_pAssistLink);
 		if (!(pListMember->m_pAssistLink->m_iLFlags & LF_ASSISTLIST))
 		{
+			//			ALERT(at_console, "Removing %s \"%s\" from assistList\n", STRING(pListMember->m_pAssistLink->pev->classname), STRING(pListMember->m_pAssistLink->pev->targetname));
 			CBaseEntity *pTemp = pListMember->m_pAssistLink;
 			pListMember->m_pAssistLink = pListMember->m_pAssistLink->m_pAssistLink;
 			pTemp->m_pAssistLink = NULL;
 		}
-		else pListMember = pListMember->m_pAssistLink;
+		else
+		{
+			pListMember = pListMember->m_pAssistLink;
+		}
 	}
+
+	//	if (count)
+	//		ALERT(at_console, "CheckAssistList complete, %d ents checked\n", count);
 }
 
 // called every frame, by PostThink
 void CheckDesiredList(void)
 {
 	CBaseEntity *pListMember;
-	int loopbreaker = 1024; //max edicts
-
-	if (g_doingDesired) ALERT(at_debug, "CheckDesiredList: doingDesired is already set!?\n");
+	int loopbreaker = 1000; //assume this is the max. number of entities which will use DesiredList in any one frame
+//	BOOL liststart = FALSE;
+	if (g_doingDesired)
+		ALERT(at_debug, "CheckDesiredList: doingDesired is already set!?\n");
 	g_doingDesired = TRUE;
 
 	if (!g_pWorld)
@@ -316,9 +325,20 @@ void CheckDesiredList(void)
 		ALERT(at_console, "CheckDesiredList has no AssistList!\n");
 		return;
 	}
-
 	pListMember = g_pWorld;
 	CBaseEntity *pNext;
+
+	//	int count = 0;
+	//	int all = 0;
+	//	for (pListMember = g_pWorld->m_pAssistLink; pListMember; pListMember = pListMember->m_pAssistLink)
+	//	{
+	//		all++;
+	//		if (pListMember->m_iLFlags & LF_DODESIRED)
+	//			count++;
+	//	}
+	//	if (count)
+	//		ALERT(at_console, "CheckDesiredList begins, length is %d, total %d\n", count, all);
+	//	count = 0;
 	pListMember = g_pWorld->m_pAssistLink;
 
 	while (pListMember)
@@ -334,7 +354,10 @@ void CheckDesiredList(void)
 			break;
 		}
 	}
+	//	if (count)
+	//		ALERT(at_console, "CheckDesiredList complete, %d ents checked\n", count);
 
+	//	if (liststart) ALERT(at_console, "-- DesiredList ends\n");
 	g_doingDesired = FALSE;
 }
 
@@ -403,10 +426,19 @@ void UTIL_AssignOrigin(CBaseEntity *pEntity, const Vector vecOrigin)
 // LRC- bInitiator is true if this is being called directly, rather than because pEntity is moving with something else.
 void UTIL_AssignOrigin(CBaseEntity *pEntity, const Vector vecOrigin, BOOL bInitiator)
 {
+	//	ALERT(at_console, "AssignOrigin before %f, after %f\n", pEntity->pev->origin.x, vecOrigin.x);
 	Vector vecDiff = vecOrigin - pEntity->pev->origin;
+	if (vecDiff.Length() > 0.01 && CVAR_GET_FLOAT("sohl_mwdebug"))
+		ALERT(at_debug, "AssignOrigin %s %s: (%f %f %f) goes to (%f %f %f)\n", STRING(pEntity->pev->classname), STRING(pEntity->pev->targetname), pEntity->pev->origin.x, pEntity->pev->origin.y, pEntity->pev->origin.z, vecOrigin.x, vecOrigin.y, vecOrigin.z);
 
+	//	UTIL_SetDesiredPos(pEntity, vecOrigin);
+	//	pEntity->pev->origin = vecOrigin;
 	UTIL_SetOrigin(pEntity, vecOrigin);
 
+	//	if (pEntity->m_vecDesiredVel != g_vecZero)
+	//	{
+	//		pEntity->pev->velocity = pEntity->m_vecDesiredVel;
+	//	}
 	if (bInitiator && pEntity->m_pMoveWith)
 	{
 		pEntity->m_vecOffsetOrigin = pEntity->pev->origin - pEntity->m_pMoveWith->pev->origin;

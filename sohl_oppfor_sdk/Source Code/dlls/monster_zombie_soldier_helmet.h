@@ -39,8 +39,8 @@
 class CZombieSoldierHelmet : public CZombieSoldier {
 public:
 	// void
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 };
 
 #endif // MONSTER_ZOMBIE_SOLDIER_HELMET_H

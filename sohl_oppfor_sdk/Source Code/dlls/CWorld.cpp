@@ -52,7 +52,7 @@ DLL_GLOBAL edict_t				*g_pBodyQueueHead;
 CGlobalState					gGlobalState;
 extern DLL_GLOBAL	int			gDisplayTitle;
 
-extern void W_Precache();
+extern void WeaponsPrecache();
 
 //
 // This must match the list in util.h
@@ -522,8 +522,10 @@ void CWorld::Precache(void)
 
 	// the area based ambient sounds MUST be the first precache_sounds
 
-	// player precaches     
-	W_Precache();									// get weapon precaches
+    // get weapon precaches
+	WeaponsPrecache();
+
+	// player precaches  
 	ClientPrecache();
 
 	// sounds used from C physics code

@@ -48,6 +48,7 @@
 #include "rope/CRope.h"
 #include "items.h" //AJH Inventory system
 #include "gamerules.h"
+#include "locus.h" //LRC 1.8
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
 extern DLL_GLOBAL bool		g_fGameOver;

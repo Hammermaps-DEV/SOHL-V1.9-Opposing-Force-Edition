@@ -4008,10 +4008,10 @@ void CEnvDLight::Think(void)
 class CEnvELight : public CEnvDLight
 {
 public:
-	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	MakeLight(int iTime);
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
+	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
+	void	MakeLight(int iTime) override;
+	int		Save(CSave &save) override;
+	int		Restore(CRestore &restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	EHANDLE m_hAttach;

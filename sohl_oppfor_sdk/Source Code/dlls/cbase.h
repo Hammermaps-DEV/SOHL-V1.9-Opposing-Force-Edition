@@ -969,8 +969,6 @@ env_sound_data
 push_trigger_data
 */
 
-#define TRACER_FREQ		4			// Tracers fire every 4 bullets
-
 typedef struct _SelAmmo
 {
 	BYTE	Ammo1Type;

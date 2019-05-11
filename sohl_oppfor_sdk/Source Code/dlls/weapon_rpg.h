@@ -65,7 +65,7 @@ public:
 	void UpdateSpot(void);
 	void WeaponIdle(void);
 
-	int AddDuplicate(CBasePlayerItem *pOriginal) { return FALSE; };//don't give second launcher!
+	bool AddDuplicate(CBasePlayerItem *pOriginal) override { return false; };//don't give second launcher!
 	BOOL ShouldWeaponIdle(void) { return TRUE; };
 
 	CLaserSpot *m_pSpot;

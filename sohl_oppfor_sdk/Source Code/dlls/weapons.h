@@ -37,16 +37,16 @@ void DeactivateSatchels(CBasePlayer *pOwner);
 
 class CLaserSpot : public CBaseEntity
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn() override;
+	void Precache() override;
 
-	int	ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	int	ObjectCaps() override { return FCAP_DONT_SAVE; }
 
 public:
 	void Suspend(float flSuspendTime);
-	void EXPORT Revive(void);
+	void EXPORT Revive();
 
-	static CLaserSpot *CreateSpot(void);
+	static CLaserSpot *CreateSpot();
 	static CLaserSpot *CreateSpot(const char* spritename);
 };
 
@@ -254,7 +254,7 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	virtual int AddToPlayer(CBasePlayer *pPlayer);	// return TRUE if the item you want the item added to the player inventory
-	virtual int AddDuplicate(CBasePlayerItem *pItem) { return FALSE; }	// return TRUE if you want your duplicate removed from world
+	virtual bool AddDuplicate(CBasePlayerItem *pItem) { return false; }	// return TRUE if you want your duplicate removed from world
 	void EXPORT DestroyItem(void);
 	void EXPORT DefaultTouch(CBaseEntity *pOther);	// default weapon touch
 	void EXPORT FallThink(void);// when an item is first spawned, this think is run to determine when the object has hit the ground.
@@ -333,16 +333,16 @@ public:
 
 	// generic weapon versions of CBasePlayerItem calls
 	virtual int AddToPlayer(CBasePlayer *pPlayer);
-	virtual int AddDuplicate(CBasePlayerItem *pItem);
+	virtual bool AddDuplicate(CBasePlayerItem *pItem);
 
-	virtual int ExtractAmmo(CBasePlayerWeapon *pWeapon); //{ return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
-	virtual int ExtractClipAmmo(CBasePlayerWeapon *pWeapon);// { return TRUE; };			// Return TRUE if you can add ammo to yourself when picked up
+	virtual bool ExtractAmmo(CBasePlayerWeapon *pWeapon);				// Return TRUE if you can add ammo to yourself when picked up
+	virtual int ExtractClipAmmo(CBasePlayerWeapon *pWeapon);			// Return TRUE if you can add ammo to yourself when picked up
 
-	virtual int AddWeapon(void) { ExtractAmmo(this); return TRUE; };	// Return TRUE if you want to add yourself to the player
+	virtual bool AddWeapon(void) { ExtractAmmo(this); return true; };	// Return TRUE if you want to add yourself to the player
 
 	// generic "shared" ammo handlers
-	BOOL AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, int iMaxCarry);
-	BOOL AddSecondaryAmmo(int iCount, char *szName, int iMaxCarry);
+	bool AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, int iMaxCarry);
+	bool AddSecondaryAmmo(int iCount, char *szName, int iMaxCarry);
 
 	virtual void UpdateItemInfo(void) {};	// updates HUD state
 

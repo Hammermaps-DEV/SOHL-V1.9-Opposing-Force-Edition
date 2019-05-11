@@ -63,7 +63,7 @@ public:
 	int GetItemInfo(ItemInfo *p);
 	void PrimaryAttack(void);
 	void SecondaryAttack(void);
-	int AddDuplicate(CBasePlayerItem *pOriginal);
+	bool AddDuplicate(CBasePlayerItem *pOriginal) override;
 	int CSatchel::AddToPlayer(CBasePlayer *pPlayer);
 	BOOL CanDeploy(void);
 	BOOL Deploy(void);
@@ -196,15 +196,15 @@ LINK_ENTITY_TO_CLASS(weapon_satchel, CSatchel);
 //=========================================================
 // CALLED THROUGH the newly-touched weapon's instance. The existing player weapon is pOriginal
 //=========================================================
-int CSatchel::AddDuplicate(CBasePlayerItem *pOriginal)
+bool CSatchel::AddDuplicate(CBasePlayerItem *pOriginal)
 {
-	CSatchel *pSatchel;
-
 	if (IsMultiplayer())
 	{
-		pSatchel = (CSatchel *)pOriginal;
-		if (pSatchel->m_chargeReady != 0)return FALSE;
+		CSatchel* pSatchel = static_cast<CSatchel *>(pOriginal);
+		if (pSatchel->m_chargeReady != 0)
+			return false;
 	}
+
 	return CBasePlayerWeapon::AddDuplicate(pOriginal);
 }
 

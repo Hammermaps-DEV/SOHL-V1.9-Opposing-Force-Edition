@@ -898,7 +898,7 @@ bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (UTIL_GlobalTimeBase() < m_flNextHornetAttackCheck)
 	{
-		return m_fCanHornetAttack;
+		return (bool)m_fCanHornetAttack;
 	}
 
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist >= AGRUNT_MELEE_DIST && flDist <= 1024 && flDot >= 0.5 && NoFriendlyFire())
@@ -923,7 +923,7 @@ bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 
 	m_flNextHornetAttackCheck = UTIL_GlobalTimeBase() + 0.2;// don't check for half second if this check wasn't successful
 	m_fCanHornetAttack = FALSE;
-	return m_fCanHornetAttack;
+	return (bool)m_fCanHornetAttack;
 }
 
 //=========================================================
