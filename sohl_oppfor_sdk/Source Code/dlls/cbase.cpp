@@ -26,17 +26,18 @@
 *
 ***/
 
-#include	"extdll.h"
-#include	"util.h"
-#include	"cbase.h"
-#include	"saverestore.h"
-#include	"client.h"
-#include	"decals.h"
-#include	"gamerules.h"
-#include	"game.h"
-#include	"movewith.h"
-#include	"skill.h"
-#include	"weapons.h"
+#include "extdll.h"
+#include "util.h"
+#include "cbase.h"
+#include "saverestore.h"
+#include "client.h"
+#include "decals.h"
+#include "gamerules.h"
+#include "game.h"
+#include "movewith.h"
+#include "skill.h"
+#include "weapons.h"
+#include "CWorld.h"
 
 void EntvarsKeyvalue(entvars_t *pev, KeyValueData *pkvd);
 

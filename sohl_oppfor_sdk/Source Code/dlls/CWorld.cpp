@@ -27,7 +27,7 @@
 ***/
 
 /*
-===== world.cpp ========================================================
+===== CWorld.cpp ========================================================
   precaches and defs for entities and other data that must always be available.
 
 */
@@ -39,14 +39,10 @@
 #include "soundent.h"
 #include "client.h"
 #include "decals.h"
-#include "skill.h"
 #include "effects.h"
 #include "player.h"
-#include "weapons.h"
 #include "gamerules.h"
-#include "teamplay_gamerules.h"
-#include "pm_shared.h"
-#include "movewith.h" //LRC
+#include "CWorld.h"
 
 extern CGraph WorldGraph;
 extern CSoundEnt *pSoundEnt;
@@ -56,7 +52,7 @@ DLL_GLOBAL edict_t				*g_pBodyQueueHead;
 CGlobalState					gGlobalState;
 extern DLL_GLOBAL	int			gDisplayTitle;
 
-extern void W_Precache(void);
+extern void W_Precache();
 
 //
 // This must match the list in util.h
@@ -75,31 +71,18 @@ DLL_DECALLIST gDecals[] = {
 	{ "{lambda06", 0 },		// DECAL_LAMBDA6
 	{ "{scorch1", 0 },		// DECAL_SCORCH1
 	{ "{scorch2", 0 },		// DECAL_SCORCH2
-	{ "{scorch3", 0 },		// DECAL_SCORCH3
-	{ "{shock_scorch1", 0 },	// DECAL_SHOCKSCORCH1
-	{ "{shock_scorch2", 0 },	// DECAL_SHOCKSCORCH2
-	{ "{shock_scorch3", 0 },	// DECAL_SHOCKSCORCH3
-	{ "{spore_scorch1", 0 },	// DECAL_SPORESPLAT1
-	{ "{spore_scorch2", 0 },	// DECAL_SPORESPLAT2
-	{ "{spore_scorch3", 0 },	// DECAL_SPORESPLAT3
-	{ "{blood_red1", 0 },		// DECAL_BLOOD1
-	{ "{blood_red2", 0 },		// DECAL_BLOOD2
-	{ "{blood_red3", 0 },		// DECAL_BLOOD3
-	{ "{blood_red4", 0 },		// DECAL_BLOOD4
-	{ "{blood_red5", 0 },		// DECAL_BLOOD5
-	{ "{blood_red6", 0 },		// DECAL_BLOOD6
-	{ "{blood_red7", 0 },		// DECAL_BLOOD7
-	{ "{blood_red8", 0 },		// DECAL_BLOOD8
-	{ "{blood_green1", 0 },		// DECAL_GBLOOD1
-	{ "{blood_green2", 0 },		// DECAL_GBLOOD2
-	{ "{blood_blue1", 0 },		// DECAL_BBLOOD1
-	{ "{blood_blue2", 0 },		// DECAL_BBLOOD2
-	{ "{blood_yellow1", 0 },	// DECAL_YBLOOD1
-	{ "{blood_yellow2", 0 },	// DECAL_YBLOOD2
-	{ "{blood_yellow3", 0 },	// DECAL_YBLOOD3
-	{ "{blood_yellow4", 0 },	// DECAL_YBLOOD4
-	{ "{blood_yellow5", 0 },	// DECAL_YBLOOD5
-	{ "{blood_yellow6", 0 },	// DECAL_YBLOOD6
+	{ "{blood1", 0 },		// DECAL_BLOOD1
+	{ "{blood2", 0 },		// DECAL_BLOOD2
+	{ "{blood3", 0 },		// DECAL_BLOOD3
+	{ "{blood4", 0 },		// DECAL_BLOOD4
+	{ "{blood5", 0 },		// DECAL_BLOOD5
+	{ "{blood6", 0 },		// DECAL_BLOOD6
+	{ "{yblood1", 0 },		// DECAL_YBLOOD1
+	{ "{yblood2", 0 },		// DECAL_YBLOOD2
+	{ "{yblood3", 0 },		// DECAL_YBLOOD3
+	{ "{yblood4", 0 },		// DECAL_YBLOOD4
+	{ "{yblood5", 0 },		// DECAL_YBLOOD5
+	{ "{yblood6", 0 },		// DECAL_YBLOOD6
 	{ "{break1", 0 },		// DECAL_GLASSBREAK1
 	{ "{break2", 0 },		// DECAL_GLASSBREAK2
 	{ "{break3", 0 },		// DECAL_GLASSBREAK3
@@ -117,6 +100,15 @@ DLL_DECALLIST gDecals[] = {
 	{ "{smscorch3", 0 },	// DECAL_SMALLSCORCH3,	// Small scorch mark
 	{ "{mommablob", 0 },	// DECAL_MOMMABIRTH		// BM Birth spray
 	{ "{mommablob", 0 },	// DECAL_MOMMASPLAT		// BM Mortar spray?? need decal
+	{ "{spr_splt1", 0 },	// DECAL_SPR_SPLT1
+	{ "{spr_splt2", 0 },	// DECAL_SPR_SPLT2
+	{ "{spr_splt3", 0 },	// DECAL_SPR_SPLT3
+	{ "{ofscorch1", 0 },	// DECAL_OFSCORCH1
+	{ "{ofscorch2", 0 },	// DECAL_OFSCORCH2
+	{ "{ofscorch3", 0 },	// DECAL_OFSCORCH3
+	{ "{ofsmscorch1", 0 },	// DECAL_OFSMSCORCH1
+	{ "{ofsmscorch2", 0 },	// DECAL_OFSMSCORCH2
+	{ "{ofsmscorch3", 0 },	// DECAL_OFSMSCORCH3
 };
 
 /*
@@ -132,16 +124,16 @@ BODY QUE
 class CDecal : public CBaseEntity
 {
 public:
-	void	Spawn(void);
-	void	KeyValue(KeyValueData *pkvd);
-	void	EXPORT StaticDecal(void);
+	void	Spawn() override;
+	void	KeyValue(KeyValueData *pkvd) override;
+	void	EXPORT StaticDecal();
 	void	EXPORT TriggerDecal(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 };
 
 LINK_ENTITY_TO_CLASS(infodecal, CDecal);
 
 // UNDONE:  These won't get sent to joining players in multi-player
-void CDecal::Spawn(void)
+void CDecal::Spawn()
 {
 	if (pev->skin < 0 || (gpGlobals->deathmatch && FBitSet(pev->spawnflags, SF_DECAL_NOTINDEATHMATCH)))
 	{
@@ -168,7 +160,6 @@ void CDecal::TriggerDecal(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	// this is set up as a USE function for infodecals that have targetnames, so that the
 	// decal doesn't get applied until it is fired. (usually by a scripted sequence)
 	TraceResult trace;
-	int			entityIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
@@ -178,7 +169,7 @@ void CDecal::TriggerDecal(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	WRITE_COORD(pev->origin.y);
 	WRITE_COORD(pev->origin.z);
 	WRITE_SHORT((int)pev->skin);
-	entityIndex = (short)ENTINDEX(trace.pHit);
+	int entityIndex = (short)ENTINDEX(trace.pHit);
 	WRITE_SHORT(entityIndex);
 	if (entityIndex)
 		WRITE_SHORT((int)VARS(trace.pHit)->modelindex);
@@ -188,15 +179,14 @@ void CDecal::TriggerDecal(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 	SetNextThink(0.1);
 }
 
-
-void CDecal::StaticDecal(void)
+void CDecal::StaticDecal()
 {
 	TraceResult trace;
-	int			entityIndex, modelIndex;
+	int modelIndex;
 
 	UTIL_TraceLine(pev->origin - Vector(5, 5, 5), pev->origin + Vector(5, 5, 5), ignore_monsters, ENT(pev), &trace);
 
-	entityIndex = (short)ENTINDEX(trace.pHit);
+	int entityIndex = (short)ENTINDEX(trace.pHit);
 	if (entityIndex)
 		modelIndex = (int)VARS(trace.pHit)->modelindex;
 	else
@@ -207,7 +197,6 @@ void CDecal::StaticDecal(void)
 	SUB_Remove();
 }
 
-
 void CDecal::KeyValue(KeyValueData *pkvd)
 {
 	if (FStrEq(pkvd->szKeyName, "texture"))
@@ -217,24 +206,24 @@ void CDecal::KeyValue(KeyValueData *pkvd)
 		// Found
 		if (pev->skin >= 0)
 			return;
+
 		ALERT(at_debug, "Can't find decal %s\n", pkvd->szValue);
 	}
 	else
 		CBaseEntity::KeyValue(pkvd);
 }
 
-
 // Body queue class here.... It's really just CBaseEntity
 class CCorpse : public CBaseEntity
 {
-	virtual int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	int ObjectCaps() override { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(bodyque, CCorpse);
 
-static void InitBodyQue(void)
+static void InitBodyQue()
 {
-	string_t	istrClassname = MAKE_STRING("bodyque");
+	string_t istrClassname = MAKE_STRING("bodyque");
 
 	g_pBodyQueueHead = CREATE_NAMED_ENTITY(istrClassname);
 	entvars_t *pev = VARS(g_pBodyQueueHead);
@@ -287,7 +276,6 @@ void CopyToBodyQue(entvars_t *pev)
 	g_pBodyQueueHead = pevHead->owner;
 }
 
-
 CGlobalState::CGlobalState(void)
 {
 	Reset();
@@ -304,11 +292,9 @@ globalentity_t *CGlobalState::Find(string_t globalname)
 	if (!globalname)
 		return NULL;
 
-	globalentity_t *pTest;
 	const char *pEntityName = STRING(globalname);
 
-
-	pTest = m_pList;
+	globalentity_t* pTest = m_pList;
 	while (pTest)
 	{
 		if (FStrEq(pEntityName, pTest->name))
@@ -320,16 +306,14 @@ globalentity_t *CGlobalState::Find(string_t globalname)
 	return pTest;
 }
 
-
 // This is available all the time now on impulse 104, remove later
 //#ifdef _DEBUG
-void CGlobalState::DumpGlobals(void)
+void CGlobalState::DumpGlobals()
 {
 	static char *estates[] = { "Off", "On", "Dead" };
-	globalentity_t *pTest;
 
 	ALERT(at_debug, "-- Globals --\n");
-	pTest = m_pList;
+	globalentity_t* pTest = m_pList;
 	while (pTest)
 	{
 		ALERT(at_debug, "%s: %s (%s)\n", pTest->name, pTest->levelName, estates[pTest->state]);
@@ -337,7 +321,6 @@ void CGlobalState::DumpGlobals(void)
 	}
 }
 //#endif
-
 
 void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE state)
 {
@@ -353,7 +336,6 @@ void CGlobalState::EntityAdd(string_t globalname, string_t mapName, GLOBALESTATE
 	m_listCount++;
 }
 
-
 void CGlobalState::EntitySetState(string_t globalname, GLOBALESTATE state)
 {
 	globalentity_t *pEnt = Find(globalname);
@@ -362,14 +344,12 @@ void CGlobalState::EntitySetState(string_t globalname, GLOBALESTATE state)
 		pEnt->state = state;
 }
 
-
 const globalentity_t *CGlobalState::EntityFromTable(string_t globalname)
 {
 	globalentity_t *pEnt = Find(globalname);
 
 	return pEnt;
 }
-
 
 GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 {
@@ -379,7 +359,6 @@ GLOBALESTATE CGlobalState::EntityGetState(string_t globalname)
 
 	return GLOBAL_OFF;
 }
-
 
 // Global Savedata for Delay
 TYPEDESCRIPTION	CGlobalState::m_SaveData[] =
@@ -395,17 +374,13 @@ TYPEDESCRIPTION	gGlobalEntitySaveData[] =
 	DEFINE_FIELD(globalentity_t, state, FIELD_INTEGER),
 };
 
-
 int CGlobalState::Save(CSave &save)
 {
-	int i;
-	globalentity_t *pEntity;
-
 	if (!save.WriteFields("cGLOBAL", "GLOBAL", this, m_SaveData, HL_ARRAYSIZE(m_SaveData)))
 		return 0;
 
-	pEntity = m_pList;
-	for (i = 0; i < m_listCount && pEntity; i++)
+	globalentity_t* pEntity = m_pList;
+	for (int i = 0; i < m_listCount && pEntity; i++)
 	{
 		if (!save.WriteFields("cGENT", "GENT", pEntity, gGlobalEntitySaveData, HL_ARRAYSIZE(gGlobalEntitySaveData)))
 			return 0;
@@ -418,20 +393,20 @@ int CGlobalState::Save(CSave &save)
 
 int CGlobalState::Restore(CRestore &restore)
 {
-	int i, listCount;
 	globalentity_t tmpEntity;
 
 	ClearStates();
 	if (!restore.ReadFields("GLOBAL", this, m_SaveData, HL_ARRAYSIZE(m_SaveData)))
 		return 0;
 
-	listCount = m_listCount;	// Get new list count
+	int listCount = m_listCount;	// Get new list count
 	m_listCount = 0;				// Clear loaded data
 
-	for (i = 0; i < listCount; i++)
+	for (int i = 0; i < listCount; i++)
 	{
 		if (!restore.ReadFields("GENT", &tmpEntity, gGlobalEntitySaveData, HL_ARRAYSIZE(gGlobalEntitySaveData)))
 			return 0;
+
 		EntityAdd(MAKE_STRING(tmpEntity.name), MAKE_STRING(tmpEntity.levelName), tmpEntity.state);
 	}
 	return 1;
@@ -445,7 +420,6 @@ void CGlobalState::EntityUpdate(string_t globalname, string_t mapname)
 		strcpy(pEnt->levelName, STRING(mapname));
 }
 
-
 void CGlobalState::ClearStates(void)
 {
 	globalentity_t *pFree = m_pList;
@@ -457,7 +431,6 @@ void CGlobalState::ClearStates(void)
 	}
 	Reset();
 }
-
 
 void SaveGlobalState(SAVERESTOREDATA *pSaveData)
 {
@@ -473,10 +446,10 @@ void RestoreGlobalState(SAVERESTOREDATA *pSaveData)
 }
 
 
-void ResetGlobalState(void)
+void ResetGlobalState()
 {
 	gGlobalState.ClearStates();
-	gInitHUD = TRUE;	// Init the HUD on a new game / load game
+	gInitHUD = true;	// Init the HUD on a new game / load game
 }
 
 // moved CWorld class definition to cbase.h
@@ -492,15 +465,15 @@ LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 #define SF_WORLD_TITLE		0x0002		// Display game title at startup
 #define SF_WORLD_FORCETEAM	0x0004		// Force teams
 
-extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL bool g_fGameOver;
 extern bool g_flWeaponCheat;
 
-BOOL g_startSuit; //LRC
-BOOL g_allowGJump;
+bool g_startSuit; //LRC
+bool g_allowGJump;
 
 void CWorld::Spawn(void)
 {
-	g_fGameOver = FALSE;
+	g_fGameOver = false;
 	Precache();
 }
 
@@ -522,7 +495,7 @@ void CWorld::Precache(void)
 	// Set up game rules
 	if (g_pGameRules) {
 		delete g_pGameRules;
-		g_pGameRules = 0;
+		g_pGameRules = nullptr;
 	}
 
 	g_pGameRules = InstallGameRules();
@@ -692,7 +665,6 @@ void CWorld::Precache(void)
 	g_flWeaponCheat = static_cast<bool>(CVAR_GET_FLOAT("sv_cheats"));  // Is the impulse 101 command allowed?
 }
 
-
 //
 // Just to ignore the "wad" field.
 //
@@ -764,7 +736,7 @@ void CWorld::KeyValue(KeyValueData *pkvd)
 	//LRC- let map designers start the player with his suit already on
 	else if (FStrEq(pkvd->szKeyName, "startsuit"))
 	{
-		g_startSuit = atoi(pkvd->szValue);
+		g_startSuit = (bool)atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else if (FStrEq(pkvd->szKeyName, "allowmonsters"))
@@ -773,11 +745,10 @@ void CWorld::KeyValue(KeyValueData *pkvd)
 		pkvd->fHandled = TRUE;
 	}
 	//LRC- ends
-
-		//AJH- Gauss Jump in single play
+	//AJH- Gauss Jump in single play
 	else if (FStrEq(pkvd->szKeyName, "allow_sp_gjump"))
 	{
-		g_allowGJump = atoi(pkvd->szValue);
+		g_allowGJump = (bool)atoi(pkvd->szValue);
 		pkvd->fHandled = TRUE;
 	}
 	else if (FStrEq(pkvd->szKeyName, "timed_damage"))

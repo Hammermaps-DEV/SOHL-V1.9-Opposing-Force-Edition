@@ -208,7 +208,7 @@
     <ClCompile Include="turret.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="weapons.cpp" />
-    <ClCompile Include="world.cpp" />
+    <ClCompile Include="CWorld.cpp" />
     <ClCompile Include="monster_zombie.cpp" />
     <ClCompile Include="xen_hair.cpp" />
     <ClCompile Include="xen_hull.cpp" />
@@ -390,6 +390,7 @@
     <ClInclude Include="weapon_shotgun.h" />
     <ClInclude Include="weapon_sniperrifle.h" />
     <ClInclude Include="weapon_sporelauncher.h" />
+    <ClInclude Include="CWorld.h" />
     <ClInclude Include="xen_hair.h" />
     <ClInclude Include="xen_hull.h" />
     <ClInclude Include="xen_plantlight.h" />

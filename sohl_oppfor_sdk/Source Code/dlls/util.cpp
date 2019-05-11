@@ -42,7 +42,7 @@
 #include "weapons.h"
 #include "gamerules.h"
 #include "movewith.h"
-#include "locus.h"
+#include "CWorld.h"
 
 //=================================
 //	string operations

@@ -25,33 +25,21 @@
 *	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-/*
 
-===== globals.cpp ========================================================
+#ifndef SERVER_WORLD_H
+#define SERVER_WORLD_H
 
-  DLL-wide global variable definitions.
-  They're all defined here, for convenient centralization.
-  Source files that need them should "extern ..." declare each
-  variable, to better document what globals they care about.
+// This spawns first when each level begins.
+class CWorld : public CBaseEntity
+{
+public:
+	void Spawn() override;
+	void Precache() override;
+	void KeyValue(KeyValueData *pkvd) override;
 
-*/
+	CBaseAlias *m_pFirstAlias;
+};
 
-#include "extdll.h"
-#include "util.h"
-#include "cbase.h"
-#include "soundent.h"
+extern CWorld *g_pWorld;
 
-DLL_GLOBAL ULONG		g_ulFrameCount;
-DLL_GLOBAL ULONG		g_ulModelIndexEyes;
-DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
-DLL_GLOBAL Vector		g_vecAttackDir;
-DLL_GLOBAL int			g_iSkillLevel;
-DLL_GLOBAL int			gDisplayTitle;
-DLL_GLOBAL bool			g_fGameOver;
-DLL_GLOBAL const Vector	g_vecZero = Vector(0, 0, 0);
-
-extern "C" int g_iOnGround;
-extern "C" int g_iWaterlevel;
-
-int g_iOnGround = 0;
-int g_iWaterlevel = 0;
+#endif // SERVER_WORLD_H

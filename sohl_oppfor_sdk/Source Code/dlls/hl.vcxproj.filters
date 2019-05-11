@@ -527,9 +527,6 @@
     <ClCompile Include="monsters.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="world.cpp">
-      <Filter>Source Files\dlls</Filter>
-    </ClCompile>
     <ClCompile Include="weapons.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
@@ -703,6 +700,9 @@
     </ClCompile>
     <ClCompile Include="item_camera.cpp">
       <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="CWorld.cpp">
+      <Filter>Source Files\dlls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1236,6 +1236,9 @@
     </ClInclude>
     <ClInclude Include="rope\CRopeSegment.h">
       <Filter>Header Files\dlls\rope</Filter>
+    </ClInclude>
+    <ClInclude Include="CWorld.h">
+      <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

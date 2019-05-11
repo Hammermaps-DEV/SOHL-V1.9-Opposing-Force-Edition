@@ -48,7 +48,7 @@
 #endif
 
 extern DLL_GLOBAL CGameRules	*g_pGameRules;
-extern DLL_GLOBAL BOOL	g_fGameOver;
+extern DLL_GLOBAL bool	g_fGameOver;
 extern int gmsgDeathMsg;	// client dll messages
 extern int gmsgScoreInfo;
 extern int gmsgMOTD;
@@ -1207,7 +1207,7 @@ void CHalfLifeMultiplay::GoToIntermission(void)
 	m_flIntermissionEndTime = UTIL_GlobalTimeBase() + ((int)mp_chattime.value);
 	g_flIntermissionStartTime = UTIL_GlobalTimeBase();
 
-	g_fGameOver = TRUE;
+	g_fGameOver = true;
 	m_iEndIntermissionButtonHit = FALSE;
 }
 
@@ -1681,7 +1681,7 @@ void CHalfLifeMultiplay::ChangeLevel(void)
 		strcpy(szNextMap, szFirstMapInList);
 	}
 
-	g_fGameOver = TRUE;
+	g_fGameOver = true;
 
 	ALERT(at_console, "CHANGE LEVEL: %s\n", szNextMap);
 	if (minplayers || maxplayers)

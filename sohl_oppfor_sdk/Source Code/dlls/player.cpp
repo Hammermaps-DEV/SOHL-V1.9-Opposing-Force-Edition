@@ -50,7 +50,7 @@
 #include "gamerules.h"
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
-extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL bool		g_fGameOver;
 extern DLL_GLOBAL BOOL		g_fDrawLines;
 extern DLL_GLOBAL int		g_iSkillLevel, gDisplayTitle;
 
@@ -59,7 +59,7 @@ bool gEvilImpulse101 = false;
 bool gInfinitelyAmmo = false;
 bool giPrecacheGrunt = false;
 BOOL g_markFrameBounds = 0; //LRC
-BOOL gInitHUD = TRUE;
+bool gInitHUD = true;
 
 extern void CopyToBodyQue(entvars_t* pev);
 extern void respawn(entvars_t *pev, BOOL fCopyCorpse);
@@ -4363,7 +4363,7 @@ void CBasePlayer::UpdateClientData(void)
 
 		if (gInitHUD) //AJH This is the first initialisation this level.
 		{
-			gInitHUD = FALSE;
+			gInitHUD = false;
 
 			//AJH Reset the FOG
 			MESSAGE_BEGIN(MSG_ONE, gmsgSetFog, NULL, pev);

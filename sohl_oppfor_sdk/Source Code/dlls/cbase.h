@@ -980,8 +980,8 @@ typedef struct _SelAmmo
 } SelAmmo;
 
 //LRC- much as I hate to add new globals, I can't see how to read data from the World entity.
-extern BOOL g_startSuit;
-extern BOOL g_allowGJump;
+extern bool g_startSuit;
+extern bool g_allowGJump;
 
 //LRC- moved here from alias.cpp so that util functions can use these defs.
 class CBaseAlias : public CPointEntity
@@ -1036,23 +1036,3 @@ public:
 	int		m_iValues[MAX_MULTI_TARGETS];
 	int		m_iMode;
 };
-
-
-// this moved here from world.cpp, to allow classes to be derived from it
-//=======================
-// CWorld
-//
-// This spawns first when each level begins.
-//=======================
-class CWorld : public CBaseEntity
-{
-public:
-	void Spawn(void);
-	void Precache(void);
-	void KeyValue(KeyValueData *pkvd);
-	BOOL LoadMAPSentences(void);
-
-	CBaseAlias *m_pFirstAlias;
-};
-
-extern CWorld *g_pWorld;

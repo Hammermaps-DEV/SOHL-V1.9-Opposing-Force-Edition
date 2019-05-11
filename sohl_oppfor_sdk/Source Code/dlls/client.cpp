@@ -36,12 +36,10 @@
 
 */
 
-#include <ctype.h>
-
+#include <cctype>
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "saverestore.h"
 #include "player.h"
 #include "spectator.h"
 #include "client.h"
@@ -49,22 +47,20 @@
 #include "gamerules.h"
 #include "game.h"
 #include "customentity.h"
-#include "weapons.h"
 #include "weaponinfo.h"
 #include "usercmd.h"
 #include "netadr.h"
 #include "movewith.h"
 #include "items.h" //AJH used for inventory system
-#include "pm_shared.h"
-#include "skill.h"
 #include <cstring>
+#include "CWorld.h"
 
 #if !defined ( _WIN32 )
 #include <ctype.h>
 #endif
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
-extern DLL_GLOBAL BOOL		g_fGameOver;
+extern DLL_GLOBAL bool		g_fGameOver;
 extern DLL_GLOBAL int		g_iSkillLevel;
 extern DLL_GLOBAL ULONG		g_ulFrameCount;
 

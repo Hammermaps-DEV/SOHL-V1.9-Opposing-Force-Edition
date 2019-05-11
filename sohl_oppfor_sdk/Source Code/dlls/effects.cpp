@@ -39,6 +39,7 @@
 #include "player.h" //LRC - footstep stuff
 #include "locus.h" //LRC - locus utilities
 #include "movewith.h" //LRC - the DesiredThink system
+#include "CWorld.h"
 
 #define	SF_GIBSHOOTER_REPEATABLE	1 // allows a gibshooter to be refired
 
