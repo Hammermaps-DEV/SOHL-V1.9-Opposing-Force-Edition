@@ -29,14 +29,11 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "weapons.h"
 #include "player.h"
-#include "skill.h"
 #include "items.h"
-#include "gamerules.h"
 
 extern int gmsgItemPickup;
-extern int gEvilImpulse101;
+extern bool gEvilImpulse101;
 
 class CItemLongJump : public CItem
 {
@@ -57,7 +54,7 @@ class CItemLongJump : public CItem
 			return FALSE;
 		}
 
-		if ((pPlayer->pev->weapons & (1 << WEAPON_SUIT)))
+		if (pPlayer->m_iHideHUD & ITEM_SUIT)
 		{
 			pPlayer->m_fLongJump = TRUE;// player now has longjump module
 
@@ -72,9 +69,12 @@ class CItemLongJump : public CItem
 			WRITE_SHORT(1);										//set counter to this ammount
 			MESSAGE_END();
 
-			EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1");	// Play the longjump sound UNDONE: Kelly? correct sound?
+			if (!gEvilImpulse101)  // Play the longjump sound UNDONE: Kelly? correct sound?
+				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1");
+
 			return TRUE;
 		}
+
 		return FALSE;
 	}
 };

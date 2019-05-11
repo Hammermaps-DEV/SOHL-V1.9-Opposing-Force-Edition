@@ -36,7 +36,7 @@
 #include "gamerules.h"
 
 extern int gmsgItemPickup;
-extern int gEvilImpulse101;
+extern bool gEvilImpulse101;
 
 #define CHARGE_IN_MEDKIT 50	//Possibly implement skill system
 #define MAX_MEDKIT 200 //possibly allow mapper to change, say in worldspawn

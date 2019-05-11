@@ -37,8 +37,9 @@
 #include "weapons.h"
 #include "monsters.h"
 #include "player.h"
-#include "gamerules.h"
 #include "weapon_sniperrifle.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -134,7 +135,8 @@ void CSniperrifle::PrimaryAttack(void) {
 	m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
-	m_iClip--;
+	if(!gInfinitelyAmmo)
+		m_iClip--;
 
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 
@@ -149,8 +151,7 @@ void CSniperrifle::PrimaryAttack(void) {
 		m_iBoltState = BOLTSTATE_ADJUST;
 	}
 
-	Vector vecDir;
-	vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, Vector(0, 0, 0), 8192, BULLET_PLAYER_762, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
+	Vector vecDir = m_pPlayer->FireBulletsPlayer(1, vecSrc, vecAiming, Vector(0, 0, 0), 8192, BULLET_PLAYER_762, 0, 0, m_pPlayer->pev, m_pPlayer->random_seed);
 
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usSniper, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, vecDir.x, vecDir.y, m_fNeedAjustBolt, 0, 0, 0);
 
@@ -335,7 +336,7 @@ void CSniperrifle::ItemPostFrame(void) {
 			return;
 		}
 		else {
-			int j = V_min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
+			int j = min (iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 			m_iClip += j;
 			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= j;
 			m_fInReload = FALSE;

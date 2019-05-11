@@ -33,13 +33,12 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
-#include "gamerules.h"
 #include "proj_sporegrenade.h"
 #include "weapon_sporelauncher.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -119,7 +118,8 @@ void CSporelauncher::PrimaryAttack(void) {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
 
 		Vector vecSrc = m_pPlayer->GetGunPosition();
 		Vector vecAiming = m_pPlayer->GetAutoaimVector(AUTOAIM_5DEGREES);
@@ -171,7 +171,8 @@ void CSporelauncher::SecondaryAttack(void) {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);

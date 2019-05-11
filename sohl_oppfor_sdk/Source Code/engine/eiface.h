@@ -44,19 +44,15 @@
 #endif
 */
 
-typedef enum
-	{
+typedef enum {
 	at_notice,
 	at_console,		// same as at_notice, but forces a ConPrintf, not a message box
+	at_debug = 1,	//LRC- identifies the ALERT statements which don't need removing before release
 	at_aiconsole,	// same as at_console, but only shown if developer level is 2!
 	at_warning,
 	at_error,
 	at_logged		// Server print to console ( only in multiplayer games ).
-	} ALERT_TYPE;
-
-//LRC- identifies the ALERT statements which don't need removing before release
-#define at_debug at_console
-//#define at_aiconsole at_console
+} ALERT_TYPE;
 
 // 4-22-98  JOHN: added for use in pfnClientPrintf
 typedef enum

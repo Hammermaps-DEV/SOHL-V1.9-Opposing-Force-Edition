@@ -3051,7 +3051,7 @@ void PM_DropPunchAngle(vec3_t punchangle)
 
 	len = VectorNormalize(punchangle);
 	len -= (10.0 + len * 0.5) * pmove->frametime;
-	len = V_max(len, 0.0);
+	len = max(len, 0.0);
 	VectorScale(punchangle, len, punchangle);
 }
 
@@ -3075,7 +3075,7 @@ void PM_CheckParamters(void)
 	maxspeed = pmove->clientmaxspeed; //atof( pmove->PM_Info_ValueForKey( pmove->physinfo, "maxspd" ) );
 	if (maxspeed != 0.0)
 	{
-		pmove->maxspeed = V_min(maxspeed, pmove->maxspeed);
+		pmove->maxspeed = min(maxspeed, pmove->maxspeed);
 	}
 
 	if ((spd != 0.0) &&

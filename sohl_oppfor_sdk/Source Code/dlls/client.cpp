@@ -69,14 +69,17 @@ extern DLL_GLOBAL int		g_iSkillLevel;
 extern DLL_GLOBAL ULONG		g_ulFrameCount;
 
 extern void CopyToBodyQue(entvars_t* pev);
-extern int giPrecacheGrunt;
+extern bool giPrecacheGrunt;
 extern int gmsgSayText;
 extern int gmsgHUDColor;
 extern int gmsgCamData; // for trigger_viewset
 extern int gmsgParticles;
 
+extern bool g_flWeaponCheat;
 extern int g_teamplay;
+
 DLL_GLOBAL int g_serveractive = 0;
+
 void LinkUserMessages(void);
 
 /*
@@ -502,7 +505,6 @@ ClientCommand
 called each time a player uses a "cmd" command
 ============
 */
-extern bool g_flWeaponCheat;
 
 // Use CMD_ARGV,  CMD_ARGV, and CMD_ARGC to get pointers the character string command.
 void ClientCommand(edict_t *pEntity)

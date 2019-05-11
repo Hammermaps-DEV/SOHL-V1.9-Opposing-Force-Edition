@@ -34,13 +34,13 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "gamerules.h"
 #include "weapon_hornetgun.h"
 #include "weapon_shockrifle.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -137,8 +137,7 @@ void CShockrifle::PrimaryAttack() {
 
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 
-		Vector vecSrc;
-		vecSrc = m_pPlayer->GetGunPosition();
+		Vector vecSrc = m_pPlayer->GetGunPosition();
 		vecSrc = vecSrc + gpGlobals->v_forward * 8;
 		vecSrc = vecSrc + gpGlobals->v_right * 8;
 		vecSrc = vecSrc + gpGlobals->v_up * -12;
@@ -147,7 +146,9 @@ void CShockrifle::PrimaryAttack() {
 		pShock->pev->velocity = gpGlobals->v_forward * 1500;
 
 		m_flRechargeTime = UTIL_GlobalTimeBase() + 0.45;
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
+		if(!gInfinitelyAmmo)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 
 		m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;

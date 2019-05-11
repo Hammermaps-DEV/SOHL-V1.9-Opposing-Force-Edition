@@ -37,8 +37,9 @@
 #include "weapons.h"
 #include "monsters.h"
 #include "player.h"
-#include "gamerules.h"
 #include "weapon_python.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -105,7 +106,8 @@ void CPython::PrimaryAttack() {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);

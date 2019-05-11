@@ -33,13 +33,12 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "proj_hornet.h"
-#include "gamerules.h"
 #include "weapon_hornetgun.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -102,7 +101,10 @@ void CHgun::PrimaryAttack(void) {
 	pHornet->pev->velocity = gpGlobals->v_forward * 300;
 
 	m_flRechargeTime = UTIL_GlobalTimeBase() + 0.5;
-	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
+	if(!gInfinitelyAmmo)
+		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
 
@@ -165,15 +167,16 @@ void CHgun::SecondaryAttack(void) {
 		break;
 	}
 
-	CBaseEntity *pHornet;
-	pHornet = CBaseEntity::Create("hornet", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
+	CBaseEntity* pHornet = Create("hornet", vecSrc, m_pPlayer->pev->v_angle, m_pPlayer->edict());
 	pHornet->pev->velocity = gpGlobals->v_forward * 1200;
 	pHornet->pev->angles = UTIL_VecToAngles(pHornet->pev->velocity);
 
 	pHornet->SetThink(&CHornet::StartDart);
 	m_flRechargeTime = UTIL_GlobalTimeBase() + 0.5;
 
-	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+	if(!gInfinitelyAmmo)
+		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
 	m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 	m_pPlayer->m_iWeaponFlash = DIM_GUN_FLASH;
 

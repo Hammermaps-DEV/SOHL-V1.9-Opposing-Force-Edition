@@ -35,7 +35,8 @@ class CMP5Chainammo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn(void) {
+	void Spawn(void) 
+	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
 		CBasePlayerAmmo::Spawn();
@@ -44,7 +45,8 @@ class CMP5Chainammo : public CBasePlayerAmmo {
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache(void) {
+	void Precache(void) 
+	{
 		PRECACHE_MODEL("models/w_chainammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
@@ -52,7 +54,8 @@ class CMP5Chainammo : public CBasePlayerAmmo {
 	//=========================================================
 	// AddAmmo
 	//=========================================================
-	BOOL AddAmmo(CBaseEntity *pOther) {
+	BOOL AddAmmo(CBaseEntity *pOther) 
+	{
 		int bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
 		if (bResult) {
 			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);

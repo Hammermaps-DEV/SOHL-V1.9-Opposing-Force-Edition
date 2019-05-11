@@ -31,11 +31,11 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "effects.h"
-#include "gamerules.h"
 #include "proj_grenade.h"
+
+extern bool gInfinitelyAmmo;
 
 #define	TRIPMINE_PRIMARY_VOLUME		450
 
@@ -455,7 +455,8 @@ void CTripmine::PrimaryAttack(void)
 		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
 		if (pEntity && !(pEntity->pev->flags & FL_CONVEYOR))
 		{
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+			if(!gInfinitelyAmmo)
+				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 
 			// player "shoot" animation
 			m_pPlayer->SetAnimation(PLAYER_ATTACK1);

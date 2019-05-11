@@ -31,11 +31,11 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "soundent.h"
-#include "gamerules.h"
 #include "proj_grenade.h"
+
+extern bool gInfinitelyAmmo;
 
 enum w_squeak_e {
 	WSQUEAK_IDLE1 = 0,
@@ -302,7 +302,7 @@ void CSqueakGrenade::HuntThink(void)
 		}
 	}
 
-	if ((pev->origin - m_posPrev).Length() < 1.0)
+	if (Vector(pev->origin - m_posPrev).Length() < 1.0)
 	{
 		pev->velocity.x = RANDOM_FLOAT(-100, 100);
 		pev->velocity.y = RANDOM_FLOAT(-100, 100);
@@ -317,8 +317,6 @@ void CSqueakGrenade::HuntThink(void)
 
 void CSqueakGrenade::SuperBounceTouch(CBaseEntity *pOther)
 {
-	float	flpitch;
-
 	TraceResult tr = UTIL_GetGlobalTrace();
 
 	// don't hit the guy that launched this grenade
@@ -333,7 +331,7 @@ void CSqueakGrenade::SuperBounceTouch(CBaseEntity *pOther)
 	if (m_flNextHit > UTIL_GlobalTimeBase()) return;
 
 	// higher pitch as squeeker gets closer to detonation time
-	flpitch = 155.0 - 60.0 * ((m_flDie - UTIL_GlobalTimeBase()) / SQUEEK_DETONATE_DELAY);
+	float flpitch = 155.0 - 60.0 * ((m_flDie - UTIL_GlobalTimeBase()) / SQUEEK_DETONATE_DELAY);
 
 	if (pOther->pev->takedamage && m_flNextAttack < UTIL_GlobalTimeBase())
 	{
@@ -457,7 +455,6 @@ void CSqueak::Holster()
 		m_pPlayer->pev->weapons &= ~(1 << WEAPON_SNARK);
 		SetThink(&CSqueak::DestroyItem);
 		SetNextThink(0.1);
-		return;
 	}
 }
 
@@ -468,11 +465,10 @@ void CSqueak::PrimaryAttack()
 	{
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);
 		TraceResult tr;
-		Vector trace_origin;
 
 		// HACK HACK:  Ugly hacks to handle change in origin based on new physics code for players
 		// Move origin up if crouched and start trace a bit outside of body ( 20 units instead of 16 )
-		trace_origin = m_pPlayer->pev->origin;
+		Vector trace_origin = m_pPlayer->pev->origin;
 		if (m_pPlayer->pev->flags & FL_DUCKING)
 			trace_origin = trace_origin - (VEC_HULL_MIN - VEC_DUCK_HULL_MIN);
 
@@ -493,10 +489,14 @@ void CSqueak::PrimaryAttack()
 
 			if (flRndSound <= 0.5)
 				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt2.wav", VOL_NORM, ATTN_NORM, 0, 105);
-			else 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM, 0, 105);
+			else 	
+				EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, "squeek/sqk_hunt3.wav", VOL_NORM, ATTN_NORM, 0, 105);
 
 			m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
-			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
+			if(!gInfinitelyAmmo)
+				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
 			m_fJustThrown = 1;
 
 			m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.3;

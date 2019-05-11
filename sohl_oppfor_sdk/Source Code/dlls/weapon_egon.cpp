@@ -32,11 +32,11 @@
 #include "player.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "effects.h"
 #include "customentity.h"
-#include "gamerules.h"
 #include "weapon_egon.h"
+
+extern bool gInfinitelyAmmo;
 
 #define EGON_PRIMARY_VOLUME		450
 #define EGON_BEAM_SPRITE		"sprites/xbeam1.spr"
@@ -75,7 +75,6 @@ void CEgon::Spawn()
 	FallInit();// get ready to fall down.
 }
 
-
 void CEgon::Precache(void)
 {
 	PRECACHE_MODEL("models/w_egon.mdl");
@@ -87,7 +86,6 @@ void CEgon::Precache(void)
 	m_usEgonFire = PRECACHE_EVENT(1, "events/egon_fire.sc");
 	m_usEgonStop = PRECACHE_EVENT(1, "events/egon_stop.sc");
 }
-
 
 BOOL CEgon::Deploy(void)
 {
@@ -128,15 +126,21 @@ int CEgon::GetItemInfo(ItemInfo *p)
 
 BOOL CEgon::HasAmmo(void)
 {
+	if (gInfinitelyAmmo)
+		return TRUE;
+
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) return FALSE;
 	return TRUE;
 }
 
 void CEgon::UseAmmo(int count)
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
-	else	m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
+	if (!gInfinitelyAmmo) {
+		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
+		else	
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
+	}
 }
 
 void CEgon::PrimaryAttack(void)

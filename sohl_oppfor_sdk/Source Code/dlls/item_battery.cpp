@@ -35,7 +35,7 @@
 #include "items.h"
 
 extern int gmsgItemPickup;
-extern int gEvilImpulse101;
+extern bool gEvilImpulse101;
 
 class CItemBattery : public CItem
 {
@@ -48,6 +48,7 @@ class CItemBattery : public CItem
 			SET_MODEL(ENT(pev), "models/w_battery.mdl");
 		CItem::Spawn();
 	}
+
 	void Precache(void)
 	{
 		if (pev->model)
@@ -60,6 +61,7 @@ class CItemBattery : public CItem
 		else
 			PRECACHE_SOUND("items/gunpickup2.wav");
 	}
+
 	BOOL MyTouch(CBasePlayer *pPlayer)
 	{
 		if (pPlayer->pev->deadflag != DEAD_NO)
@@ -67,17 +69,15 @@ class CItemBattery : public CItem
 			return FALSE;
 		}
 
-		if ((pPlayer->pev->armorvalue < MAX_NORMAL_BATTERY) &&
-			(pPlayer->pev->weapons & (1 << WEAPON_SUIT)))
-		{
-			int pct;
-			char szcharge[64];
+		float armor = 0;
+		if (pev->armorvalue) 
+			armor = pev->armorvalue;
+		else 
+			armor = gSkillData.batteryCapacity;
 
-			if (pev->armorvalue)
-				pPlayer->pev->armorvalue += pev->armorvalue;
-			else
-				pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+		if (pPlayer->TakeArmor(armor))
+		{
+			char szcharge[64];
 
 			if (pev->noise)
 				EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, STRING(pev->noise), 1, ATTN_NORM); //LRC
@@ -88,20 +88,23 @@ class CItemBattery : public CItem
 			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
+			if (!gEvilImpulse101)
+			{
+				// Suit reports new power level
+				// For some reason this wasn't working in release build -- round it.
+				int pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
+				pct = (pct / 5);
+				if (pct > 0) pct--;
 
-			// Suit reports new power level
-			// For some reason this wasn't working in release build -- round it.
-			pct = (int)((float)(pPlayer->pev->armorvalue * 100.0) * (1.0 / MAX_NORMAL_BATTERY) + 0.5);
-			pct = (pct / 5);
-			if (pct > 0)
-				pct--;
+				snprintf(szcharge, 64, "!HEV_%1dP", pct);
 
-			sprintf(szcharge, "!HEV_%1dP", pct);
+				//EMIT_SOUND_SUIT(ENT(pev), szcharge);
+				pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
+			}
 
-			//EMIT_SOUND_SUIT(ENT(pev), szcharge);
-			pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
 			return TRUE;
 		}
+
 		return FALSE;
 	}
 };

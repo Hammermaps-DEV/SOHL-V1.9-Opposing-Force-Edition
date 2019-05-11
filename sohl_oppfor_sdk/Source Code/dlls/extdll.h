@@ -65,13 +65,6 @@ typedef int BOOL;
 #include <limits.h>
 #include <stdarg.h>
 #include <string.h> // memset 
-#ifndef min
-#define min(a,b)  (((a) < (b)) ? (a) : (b))
-#endif
-#ifndef max
-#define max(a,b)  (((a) > (b)) ? (a) : (b))
-#define _vsnprintf(a,b,c,d) vsnprintf(a,b,c,d)
-#endif
 #endif //_WIN32
 
 // Misc C-runtime library headers

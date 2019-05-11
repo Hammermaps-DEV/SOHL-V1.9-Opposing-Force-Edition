@@ -34,13 +34,11 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
-#include "soundent.h"
-#include "gamerules.h"
 #include "weapon_m249.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -111,7 +109,9 @@ void CM249::PrimaryAttack(void) {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
+
 		UpdateClip();
 
 		// player "shoot" animation
@@ -169,7 +169,7 @@ void CM249::Holster(void) {
 // Reload
 //=========================================================
 void CM249::Reload(void) {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0 || m_iClip == M249_MAX_CLIP) {
+	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0 || m_iClip == M249_MAX_CLIP) && !gInfinitelyAmmo) {
 		return;
 	}
 

@@ -33,11 +33,11 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "weapon_glock.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -124,7 +124,8 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim) {
 	m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
-	m_iClip--;
+	if(!gInfinitelyAmmo)
+		m_iClip--;
 
 	Vector vecSrc = m_pPlayer->GetGunPosition();
 	Vector vecAiming;

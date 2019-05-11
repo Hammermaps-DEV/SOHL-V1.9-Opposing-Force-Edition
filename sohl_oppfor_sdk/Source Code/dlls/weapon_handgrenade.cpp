@@ -35,10 +35,11 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "proj_grenade.h"
 #include "weapon_handgrenade.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -185,7 +186,8 @@ void CHandGrenade::WeaponIdle(void) {
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() + 0.5;
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + 0.5;
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+		if(!gInfinitelyAmmo)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 
 		if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]) {
 			// just threw last grenade

@@ -35,12 +35,12 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "soundent.h"
 #include "shake.h"
-#include "gamerules.h"
 #include "weapon_gauss.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -109,7 +109,8 @@ void CGauss::PrimaryAttack(void) {
 		m_pPlayer->m_iWeaponVolume = PRIMARY_FIRE_VOLUME;
 		pev->frags = TRUE;//set primary fire
 
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 2;
+		if(!gInfinitelyAmmo)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= 2;
 
 		StartFire();
 		m_flTimeWeaponIdle = UTIL_GlobalTimeBase() + RANDOM_FLOAT(10, 15);
@@ -149,7 +150,10 @@ void CGauss::SecondaryAttack(void) {
 		}
 
 		pev->frags = FALSE;//set secondary attack
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;// take one ammo just to start the spin
+
+		if(!gInfinitelyAmmo)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;// take one ammo just to start the spin
+
 		m_iChargeLevel++;
 
 		// spin up
@@ -180,7 +184,10 @@ void CGauss::SecondaryAttack(void) {
 		if (m_flTimeUpdate < UTIL_GlobalTimeBase()) {
 			if (m_iChargeLevel != 16) {
 				m_iChargeLevel++;
-				m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
+				if(!gInfinitelyAmmo)
+					m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
 				if (IsMultiplayer()) m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.05;
 				else		       m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.15;
 				int pitch = 95 + 10 * m_iChargeLevel;

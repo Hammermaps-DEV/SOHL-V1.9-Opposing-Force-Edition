@@ -33,13 +33,13 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "shake.h"
 #include "proj_portal.h"
 #include "weapon_displacer.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -393,16 +393,16 @@ void CDisplacer::Teleport(void)
 
 	vecSrc = pTarget->pev->origin;
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, pev->origin);
-	WRITE_BYTE(TE_DLIGHT);
-	WRITE_COORD(vecSrc.x);	// X
-	WRITE_COORD(vecSrc.y);	// Y
-	WRITE_COORD(vecSrc.z);	// Z
-	WRITE_BYTE(24);		// radius * 0.1
-	WRITE_BYTE(255);		// r
-	WRITE_BYTE(180);		// g
-	WRITE_BYTE(96);		// b
-	WRITE_BYTE(31.66);		// time * 10
-	WRITE_BYTE(1);		// decay * 0.1
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(vecSrc.x);	// X
+		WRITE_COORD(vecSrc.y);	// Y
+		WRITE_COORD(vecSrc.z);	// Z
+		WRITE_BYTE(24);		// radius * 0.1
+		WRITE_BYTE(255);		// r
+		WRITE_BYTE(180);		// g
+		WRITE_BYTE(96);		// b
+		WRITE_BYTE(31.66);		// time * 10
+		WRITE_BYTE(1);		// decay * 0.1
 	MESSAGE_END();
 
 	m_pPlayer->m_fInXen = !m_pPlayer->m_fInXen;
@@ -442,10 +442,12 @@ BOOL CDisplacer::HasAmmo(void) {
 // UseAmmo
 //=========================================================
 void CDisplacer::UseAmmo(int count) {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
-	else
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
+	if (!gInfinitelyAmmo) {
+		if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= count)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] -= count;
+		else
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] = 0;
+	}
 }
 
 //=========================================================

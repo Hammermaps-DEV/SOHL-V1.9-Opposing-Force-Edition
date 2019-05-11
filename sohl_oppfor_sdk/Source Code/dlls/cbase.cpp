@@ -857,11 +857,18 @@ int CBaseEntity::TakeHealth(float flHealth, int bitsDamageType)
 {
 	if (!pev->takedamage)
 		return 0;
-	// heal
 
-		//AJH replaces all of below. This now returns the amount of health given. Should have exactly the same behaviour otherwise.
+	// heal
+	if (pev->health >= pev->max_health)
+		return 0;
+
+	//AJH replaces all of below. This now returns the amount of health given. Should have exactly the same behaviour otherwise.
 	flHealth = (pev->max_health >= pev->health + flHealth) ? flHealth : (pev->max_health - pev->health);
 	pev->health += flHealth;
+
+	if (pev->health > pev->max_health)
+		pev->health = pev->max_health;
+
 	return int(flHealth);
 }
 
@@ -871,7 +878,7 @@ int CBaseEntity::TakeArmor(float flArmor)
 	if (pev->armorvalue >= MAX_NORMAL_BATTERY) return 0;
 
 	pev->armorvalue += flArmor;
-	pev->armorvalue = min(pev->armorvalue, MAX_NORMAL_BATTERY);
+	pev->armorvalue = min (pev->armorvalue, MAX_NORMAL_BATTERY);
 
 	return int(pev->armorvalue);
 }

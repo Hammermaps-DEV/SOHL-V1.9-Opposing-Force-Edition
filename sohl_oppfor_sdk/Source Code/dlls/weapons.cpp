@@ -44,8 +44,8 @@
 #include "gamerules.h"
 
 //extern CGraph	WorldGraph;
-extern int gEvilImpulse101;
-
+extern bool gEvilImpulse101;
+extern bool gInfinitelyAmmo;
 
 #define NOT_USED 255
 
@@ -777,6 +777,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 		{
 			UTIL_Remove(this);
 		}
+
 		return;
 	}
 
@@ -832,7 +833,7 @@ void CBasePlayerWeapon::ItemPostFrame(void)
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_GlobalTimeBase()))
 	{
 		// complete the reload. 
-		int j = V_min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
+		int j = min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 		// Add them to the clip
 		m_iClip += j;
@@ -1083,7 +1084,7 @@ BOOL CBasePlayerWeapon::AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, i
 	else if (m_iClip == 0)
 	{
 		int i;
-		i = V_min(m_iClip + iCount, iMaxClip) - m_iClip;
+		i = min(m_iClip + iCount, iMaxClip) - m_iClip;
 		m_iClip += i;
 		iIdAmmo = m_pPlayer->GiveAmmo(iCount - i, szName, iMaxCarry);
 	}
@@ -1202,12 +1203,12 @@ BOOL CBasePlayerWeapon::DefaultDeploy(string_t iViewModel, string_t iWeaponModel
 
 BOOL CBasePlayerWeapon::DefaultReload(int iClipSize, int iAnim, float fDelay)
 {
-	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
+	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 && !gInfinitelyAmmo)
 		return FALSE;
 
-	int j = V_min(iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
+	int j = min (iClipSize - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
-	if (j == 0) return FALSE;
+	if (j == 0 && !gInfinitelyAmmo) return FALSE;
 
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + fDelay;
 
@@ -1709,7 +1710,7 @@ int CWeaponBox::GiveAmmo(int iCount, char *szName, int iMax, int *pIndex/* = NUL
 			if (pIndex)
 				*pIndex = i;
 
-			int iAdd = V_min(iCount, iMax - m_rgAmmo[i]);
+			int iAdd = min(iCount, iMax - m_rgAmmo[i]);
 			if (iCount == 0 || iAdd > 0)
 			{
 				m_rgAmmo[i] += iAdd;

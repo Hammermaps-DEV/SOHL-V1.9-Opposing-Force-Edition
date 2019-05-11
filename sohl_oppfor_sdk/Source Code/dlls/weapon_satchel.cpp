@@ -31,10 +31,10 @@
 #include "cbase.h"
 #include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
-#include "gamerules.h"
 #include "proj_grenade.h"
+
+extern bool gInfinitelyAmmo;
 
 enum satchel_e {
 	SATCHEL_IDLE1 = 0,
@@ -359,7 +359,9 @@ void CSatchel::Throw(void)
 		m_chargeReady = 1;
 		m_pPlayer->pev->viewmodel = MAKE_STRING("models/v_satchel_radio.mdl");
 		m_pPlayer->pev->weaponmodel = MAKE_STRING("models/p_satchel_radio.mdl");
-		m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
+
+		if(!gInfinitelyAmmo)
+			m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]--;
 
 		SendWeaponAnim(SATCHEL_RADIO_DRAW);
 

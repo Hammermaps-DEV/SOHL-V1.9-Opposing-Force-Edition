@@ -2804,7 +2804,7 @@ void CFuncTrackChange::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 	if (FStringNull(m_trainName))
 	{
 		// train not specified - search train in radius of trackchange
-		float	radius = (V_max(pev->size.x, V_max(pev->size.y, pev->size.z))) / 2.0f;
+		float	radius = (max(pev->size.x, max(pev->size.y, pev->size.z))) / 2.0f;
 		CBaseEntity	*pFind = NULL;
 
 		while ((pFind = UTIL_FindEntityInSphere(pFind, pev->origin, radius)) != NULL)

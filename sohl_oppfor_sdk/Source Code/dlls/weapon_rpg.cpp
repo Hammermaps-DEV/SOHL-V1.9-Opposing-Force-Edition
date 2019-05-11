@@ -34,14 +34,13 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
-#include "gamerules.h"
 #include "weapon_rpg.h"
 #include "proj_grenade.h"
 #include "proj_plrocket.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -129,7 +128,9 @@ void CRpg::PrimaryAttack() {
 		UTIL_MakeVectors(m_pPlayer->pev->v_angle);// RpgRocket::Create stomps on globals, so remake.
 		pRocket->pev->velocity = pRocket->pev->velocity + gpGlobals->v_forward * DotProduct(m_pPlayer->pev->velocity, gpGlobals->v_forward);
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
+
 		m_flNextPrimaryAttack = UTIL_GlobalTimeBase() +
 			CalculateWeaponTime((int)RPG_FIRE::frames, (int)RPG_FIRE::fps);
 		m_flTimeWeaponIdle = m_flNextPrimaryAttack;

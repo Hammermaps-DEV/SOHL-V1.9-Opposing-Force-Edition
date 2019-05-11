@@ -33,13 +33,12 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
-#include "gamerules.h"
 #include "proj_bolt.h"
 #include "weapon_crossbow.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -123,7 +122,9 @@ void CCrossbow::FireSniperBolt() {
 	TraceResult tr;
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
-	m_iClip--;
+
+	if(!gInfinitelyAmmo)
+		m_iClip--;
 
 	// make twang sound
 	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/xbow_fire1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 93 + RANDOM_LONG(0, 0xF));
@@ -155,7 +156,7 @@ void CCrossbow::FireSniperBolt() {
 		}
 
 		ClearMultiDamage();
-		CBaseEntity::Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
+		Instance(tr.pHit)->TraceAttack(m_pPlayer->pev, 120, vecDir, &tr, DMG_BULLET | DMG_NEVERGIB);
 		ApplyMultiDamage(pev, m_pPlayer->pev);
 	}
 	else {
@@ -187,14 +188,16 @@ void CCrossbow::FireSniperBolt() {
 // FireBolt * only in Singeplayer
 //=========================================================
 void CCrossbow::FireBolt() {
-	TraceResult tr;
+	
 	if (m_iClip == 0) {
 		PlayEmptySound();
 		return;
 	}
 
 	m_pPlayer->m_iWeaponVolume = QUIET_GUN_VOLUME;
-	m_iClip--;
+
+	if (!gInfinitelyAmmo)
+		m_iClip--;
 
 	// make twang sound
 	EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/xbow_fire1.wav", RANDOM_FLOAT(0.95, 1.0), ATTN_NORM, 0, 93 + RANDOM_LONG(0, 0xF));

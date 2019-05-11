@@ -12,7 +12,12 @@
 #pragma once
 #endif
 
-#define V_max(a, b)  (((a) > (b)) ? (a) : (b))
-#define V_min(a, b)  (((a) < (b)) ? (a) : (b))
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
 
 #endif // VMINMAX_H

@@ -493,7 +493,7 @@ LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 #define SF_WORLD_FORCETEAM	0x0004		// Force teams
 
 extern DLL_GLOBAL BOOL		g_fGameOver;
-bool g_flWeaponCheat = false;
+extern bool g_flWeaponCheat;
 
 BOOL g_startSuit; //LRC
 BOOL g_allowGJump;
@@ -657,7 +657,7 @@ void CWorld::Precache(void)
 	if (pev->netname)
 	{
 		ALERT(at_aiconsole, "Chapter title: %s\n", STRING(pev->netname));
-		CBaseEntity *pEntity = CBaseEntity::Create("env_message", g_vecZero, g_vecZero, NULL);
+		CBaseEntity *pEntity = Create("env_message", g_vecZero, g_vecZero, NULL);
 		if (pEntity)
 		{
 			pEntity->SetThink(&CWorld::SUB_CallUseToggle);
@@ -689,7 +689,7 @@ void CWorld::Precache(void)
 		CVAR_SET_FLOAT("mp_defaultteam", 0);
 	}
 
-	g_flWeaponCheat = CVAR_GET_FLOAT("sv_cheats") != 0.0;  // Is the impulse 101 command allowed?
+	g_flWeaponCheat = static_cast<bool>(CVAR_GET_FLOAT("sv_cheats"));  // Is the impulse 101 command allowed?
 }
 
 

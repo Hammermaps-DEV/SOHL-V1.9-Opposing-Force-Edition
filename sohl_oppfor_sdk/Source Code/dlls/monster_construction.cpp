@@ -351,7 +351,7 @@ void CConstruction::MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, f
 	float flStep;
 	while (flTotal > 0.001) {
 		// don't walk more than 16 units or stairs stop working
-		flStep = V_min(16.0, flTotal);
+		flStep = min(16.0, flTotal);
 		UTIL_MoveToOrigin(ENT(pev), m_Route[m_iRouteIndex].vecLocation, flStep, MOVE_NORMAL);
 		flTotal -= flStep;
 	}

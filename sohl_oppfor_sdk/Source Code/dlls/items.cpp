@@ -43,7 +43,7 @@
 #include "gamerules.h"
 
 extern int gmsgItemPickup;
-extern int gEvilImpulse101;
+extern bool gEvilImpulse101;
 
 class CWorldItem : public CBaseEntity
 {
@@ -116,8 +116,6 @@ void CItem::Spawn(void)
 	}
 }
 
-extern int gEvilImpulse101;
-
 void CItem::ItemTouch(CBaseEntity *pOther)
 {
 	// if it's not a player, ignore
@@ -174,7 +172,7 @@ void CItem::Materialize(void)
 	if (pev->effects & EF_NODRAW)
 	{
 		// changing from invisible state to visible.
-		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", 1, ATTN_NORM, 0, 150);
+		EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, "items/suitchargeok1.wav", VOL_NORM, ATTN_NORM, 0, 150);
 		pev->effects &= ~EF_NODRAW;
 		pev->effects |= EF_MUZZLEFLASH;
 	}

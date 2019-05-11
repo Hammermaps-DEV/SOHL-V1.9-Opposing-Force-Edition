@@ -33,12 +33,11 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
-#include "gamerules.h"
 #include "weapon_shotgun.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -118,7 +117,9 @@ void CShotgun::PrimaryAttack(void) {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
+
 		m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
 		Vector vecSrc = m_pPlayer->GetGunPosition();
@@ -176,7 +177,8 @@ void CShotgun::SecondaryAttack(void) {
 		m_pPlayer->m_iWeaponVolume = LOUD_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-		m_iClip -= 2;
+		if(!gInfinitelyAmmo)
+			m_iClip -= 2;
 
 		m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 

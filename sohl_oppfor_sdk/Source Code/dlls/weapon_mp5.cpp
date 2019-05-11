@@ -34,14 +34,13 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
 #include "weapons.h"
-#include "nodes.h"
 #include "player.h"
 #include "soundent.h"
-#include "gamerules.h"
 #include "proj_grenade.h"
 #include "weapon_mp5.h"
+
+extern bool gInfinitelyAmmo;
 
 //=========================================================
 // Link ENTITY
@@ -108,7 +107,8 @@ void CMP5::PrimaryAttack() {
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
 		m_pPlayer->m_iWeaponFlash = NORMAL_GUN_FLASH;
 
-		m_iClip--;
+		if(!gInfinitelyAmmo)
+			m_iClip--;
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
@@ -153,9 +153,10 @@ void CMP5::SecondaryAttack(void) {
 		m_pPlayer->m_iWeaponFlash = BRIGHT_GUN_FLASH;
 
 		m_pPlayer->m_iExtraSoundTypes = bits_SOUND_DANGER;
-		m_pPlayer->m_flStopExtraSoundTime = UTIL_GlobalTimeBase() + 0.2;
+		m_pPlayer->m_flStopExtraSoundTime = static_cast<float>(UTIL_GlobalTimeBase() + 0.2);
 
-		m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
+		if(!gInfinitelyAmmo)
+			m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType]--;
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation(PLAYER_ATTACK1);
