@@ -4304,12 +4304,10 @@ int CBasePlayer::AmmoInventory(int iAmmoIndex)
 
 int CBasePlayer::GetAmmoIndex(const char *psz)
 {
-	int i;
-
 	if (!psz)
 		return -1;
 
-	for (i = 1; i < MAX_AMMO_SLOTS; i++)
+	for (int i = 1; i < MAX_AMMO_SLOTS; i++)
 	{
 		if (!CBasePlayerItem::AmmoInfoArray[i].pszName)
 			continue;
@@ -4940,7 +4938,7 @@ Vector CBasePlayer::GetAutoaimVector(float flDelta)
 
 	// always use non-sticky autoaim
 	// UNDONE: use sever variable to chose!
-	if (0 || g_iSkillLevel == SKILL_EASY)
+	if (g_iSkillLevel == SKILL_EASY)
 	{
 		m_vecAutoAim = m_vecAutoAim * 0.67 + angles * 0.33;
 	}
@@ -5011,7 +5009,6 @@ Vector CBasePlayer::AutoaimDeflection(Vector &vecSrc, float flDist, float flDelt
 	{
 		Vector center;
 		Vector dir;
-		float dot;
 
 		if (pEdict->free)	// Not in use
 			continue;
@@ -5045,7 +5042,7 @@ Vector CBasePlayer::AutoaimDeflection(Vector &vecSrc, float flDist, float flDelt
 		if (DotProduct(dir, gpGlobals->v_forward) < 0)
 			continue;
 
-		dot = fabs(DotProduct(dir, gpGlobals->v_right))
+		float dot = fabs(DotProduct(dir, gpGlobals->v_right))
 			+ fabs(DotProduct(dir, gpGlobals->v_up)) * 0.5;
 
 		// tweek for distance
