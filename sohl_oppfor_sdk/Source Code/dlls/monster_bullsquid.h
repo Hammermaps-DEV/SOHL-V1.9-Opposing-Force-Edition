@@ -61,9 +61,9 @@ public:
 	void AttackSound(void);
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckMeleeAttack2(float flDot, float flDist);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+	bool CheckMeleeAttack1(float flDot, float flDist);
+	bool CheckMeleeAttack2(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
 	void RunAI(void);
 	BOOL FValidateHintType(short sHint);
 	Schedule_t *GetSchedule(void);

@@ -53,7 +53,7 @@ public:
 	void RunTask(Task_t *pTask);
 	void RunAI(void);
 
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
 	BOOL ShouldSpeak(void);
 
 	int Classify(void);

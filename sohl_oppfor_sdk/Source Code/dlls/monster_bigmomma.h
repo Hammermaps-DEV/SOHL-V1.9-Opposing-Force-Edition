@@ -183,9 +183,9 @@ public:
 		pev->absmax = pev->origin + Vector(95, 95, 190);
 	}
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist);	// Slash
-	BOOL CheckMeleeAttack2(float flDot, float flDist);	// Lay a crab
-	BOOL CheckRangeAttack1(float flDot, float flDist);	// Mortar launch
+	bool CheckMeleeAttack1(float flDot, float flDist);	// Slash
+	bool CheckMeleeAttack2(float flDot, float flDist) { return CanLayCrab(); };	// Lay a crab
+	bool CheckRangeAttack1(float flDot, float flDist);	// Mortar launch
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

@@ -254,45 +254,45 @@ void CDiablo::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CDiablo::CheckRangeAttack1(float flDot, float flDist) {
+bool CDiablo::CheckRangeAttack1(float flDot, float flDist) {
 	if (flDist >= 128) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckRangeAttack2
 //=========================================================
-BOOL CDiablo::CheckRangeAttack2(float flDot, float flDist) {
+bool CDiablo::CheckRangeAttack2(float flDot, float flDist) {
 	if (flDist < 128) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CDiablo::CheckMeleeAttack1(float flDot, float flDist) {
+bool CDiablo::CheckMeleeAttack1(float flDot, float flDist) {
 	if (flDist <= 64 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND)) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckMeleeAttack2
 //=========================================================
-BOOL CDiablo::CheckMeleeAttack2(float flDot, float flDist) {
+bool CDiablo::CheckMeleeAttack2(float flDot, float flDist) {
 	if (flDist <= 92 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND)) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================

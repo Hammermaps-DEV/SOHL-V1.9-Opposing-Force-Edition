@@ -56,8 +56,8 @@ public:
 	void  StartTask(Task_t *pTask);
 	void  RunTask(Task_t *pTask);
 
-	BOOL  CheckMeleeAttack1(float flDot, float flDist);
-	BOOL  CheckRangeAttack1(float flDot, float flDist);
+	bool  CheckMeleeAttack1(float flDot, float flDist);
+	bool  CheckRangeAttack1(float flDot, float flDist);
 
 	float ChangeYaw(int speed);
 	Activity GetStoppedActivity(void);

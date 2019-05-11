@@ -1142,12 +1142,14 @@ void CMedic::SetYawSpeed(void) {
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CMedic::CheckRangeAttack1(float flDot, float flDist) {
-	if ((GetBodygroup(3) != 2) && (GetBodygroup(3) != 3)) {
+bool CMedic::CheckRangeAttack1(float flDot, float flDist)
+{
+	if ((GetBodygroup(3) != 2) && (GetBodygroup(3) != 3)) 
+	{
 		return CRCAllyMonster::CheckRangeAttack1(flDot, flDist);
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================

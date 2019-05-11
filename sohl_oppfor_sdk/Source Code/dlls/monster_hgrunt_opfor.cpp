@@ -1239,20 +1239,20 @@ void CHFGrunt::SetYawSpeed(void) {
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CHFGrunt::CheckRangeAttack2(float flDot, float flDist) {
+bool CHFGrunt::CheckRangeAttack2(float flDot, float flDist) {
 	if (!FBitSet(pev->weapons, (FGRUNT_HANDGRENADE | FGRUNT_GRENADELAUNCHER)) || FBitSet(pev->weapons, (FGRUNT_M249))) {
-		return FALSE;
+		return false;
 	}
 
 	// if the grunt isn't moving, it's ok to check.
 	if (m_flGroundSpeed != 0) {
 		m_fThrowGrenade = FALSE;
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 	// assume things haven't changed too much since last time
 	if (UTIL_GlobalTimeBase() < m_flNextGrenadeCheck) {
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 	if (!FBitSet(m_hEnemy->pev->flags, FL_ONGROUND) && m_hEnemy->pev->waterlevel == 0 && m_vecEnemyLKP.z > pev->absmax.z) {
@@ -1260,7 +1260,7 @@ BOOL CHFGrunt::CheckRangeAttack2(float flDot, float flDist) {
 		// be grenaded.
 		// don't throw grenades at anything that isn't on the ground!
 		m_fThrowGrenade = FALSE;
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 	Vector vecTarget;
@@ -1290,7 +1290,7 @@ BOOL CHFGrunt::CheckRangeAttack2(float flDot, float flDist) {
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
 			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 			m_fThrowGrenade = FALSE;
-			return m_fThrowGrenade;	//AJH need this or it is overridden later.
+			return (bool)m_fThrowGrenade;	//AJH need this or it is overridden later.
 		}
 	}
 
@@ -1298,7 +1298,7 @@ BOOL CHFGrunt::CheckRangeAttack2(float flDot, float flDist) {
 		// crap, I don't want to blow myself up
 		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		m_fThrowGrenade = FALSE;
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 
@@ -1338,7 +1338,7 @@ BOOL CHFGrunt::CheckRangeAttack2(float flDot, float flDist) {
 		}
 	}
 
-	return m_fThrowGrenade;
+	return (bool)m_fThrowGrenade;
 }
 
 //=========================================================

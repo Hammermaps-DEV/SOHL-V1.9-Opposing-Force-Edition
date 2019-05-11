@@ -877,13 +877,14 @@ BOOL CAGrunt::FCanCheckAttacks(void)
 // CheckMeleeAttack1 - alien grunts zap the crap out of 
 // any enemy that gets too close. 
 //=========================================================
-BOOL CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
+bool CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist <= AGRUNT_MELEE_DIST && flDot >= 0.6 && m_hEnemy != NULL)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 //=========================================================
@@ -893,7 +894,7 @@ BOOL CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
 // tracelines are done, so we may not want to do this every
 // server frame. Definitely not while firing. 
 //=========================================================
-BOOL CAGrunt::CheckRangeAttack1(float flDot, float flDist)
+bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (UTIL_GlobalTimeBase() < m_flNextHornetAttackCheck)
 	{

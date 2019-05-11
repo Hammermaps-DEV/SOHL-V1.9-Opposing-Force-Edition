@@ -265,17 +265,15 @@ int	CIchthyosaur::Classify(void)
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
-
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CIchthyosaur::CheckMeleeAttack1(float flDot, float flDist)
+bool CIchthyosaur::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDot >= 0.7 && m_flEnemyTouched > UTIL_GlobalTimeBase() - 0.2)
-	{
-		return TRUE;
-	}
-	return FALSE;
+		return true;
+	
+	return false;
 }
 
 void CIchthyosaur::BiteTouch(CBaseEntity *pOther)
@@ -307,14 +305,12 @@ void CIchthyosaur::CombatUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 // CheckRangeAttack1  - swim in for a chomp
 //
 //=========================================================
-BOOL CIchthyosaur::CheckRangeAttack1(float flDot, float flDist)
+bool CIchthyosaur::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDot > -0.7 && (m_bOnAttack || (flDist <= 192 && m_idealDist <= 192)))
-	{
-		return TRUE;
-	}
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -325,8 +321,6 @@ void CIchthyosaur::SetYawSpeed(void)
 {
 	pev->yaw_speed = 100;
 }
-
-
 
 //=========================================================
 // Killed - overrides CFlyingMonster.
@@ -348,7 +342,6 @@ void CIchthyosaur::BecomeDead(void)
 
 #define ICHTHYOSAUR_AE_SHAKE_RIGHT 1
 #define ICHTHYOSAUR_AE_SHAKE_LEFT  2
-
 
 //=========================================================
 // HandleAnimEvent - catches the monster-specific messages
@@ -584,7 +577,7 @@ void CIchthyosaur::RunTask(Task_t *pTask)
 		{
 			Vector vecFrom = m_hEnemy->EyePosition();
 
-			Vector vecDelta = (pev->origin - vecFrom).Normalize();
+			Vector vecDelta = Vector(pev->origin - vecFrom).Normalize();
 			Vector vecSwim = CrossProduct(vecDelta, Vector(0, 0, 1)).Normalize();
 
 			if (DotProduct(vecSwim, m_SaveVelocity) < 0)

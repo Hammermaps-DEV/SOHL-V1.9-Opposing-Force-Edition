@@ -222,7 +222,7 @@ int CGonome::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3) {
 		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
 		if (flDist > GONOME_SPRINT_DIST) {
-			flDist = (pev->origin - m_Route[m_iRouteIndex].vecLocation).Length2D();
+			flDist = Vector(pev->origin - m_Route[m_iRouteIndex].vecLocation).Length2D();
 			if (FTriangulate(pev->origin, m_Route[m_iRouteIndex].vecLocation, flDist * 0.5, m_hEnemy, &vecApex)) {
 				InsertWaypoint(vecApex, bits_MF_TO_DETOUR | bits_MF_DONT_SIMPLIFY);
 			}
@@ -235,12 +235,12 @@ int CGonome::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CGonome::CheckRangeAttack1(float flDot, float flDist)
+bool CGonome::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (IsMoving() && flDist >= 512)
 	{
 		// squid will far too far behind if he stops running to spit at this distance from the enemy.
-		return FALSE;
+		return false;
 	}
 
 	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime)
@@ -250,7 +250,7 @@ BOOL CGonome::CheckRangeAttack1(float flDot, float flDist)
 			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256)
 			{
 				// don't try to spit at someone up really high or down really low.
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -265,23 +265,24 @@ BOOL CGonome::CheckRangeAttack1(float flDot, float flDist)
 			m_flNextSpitTime = UTIL_GlobalTimeBase() + 0.5;
 		}
 
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckMeleeAttack1 - bullsquid is a big guy, so has a longer
 // melee range than most monsters. This is the tailwhip attack
 //=========================================================
-BOOL CGonome::CheckMeleeAttack1(float flDot, float flDist) {
+bool CGonome::CheckMeleeAttack1(float flDot, float flDist) 
+{
 	if (flDist <= GONOME_TOLERANCE_MELEE1_RANGE &&
 		flDot >= GONOME_TOLERANCE_MELEE1_DOT) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -290,14 +291,15 @@ BOOL CGonome::CheckMeleeAttack1(float flDot, float flDist) {
 // this attack will not be performed if the tailwhip attack
 // is valid.
 //=========================================================
-BOOL CGonome::CheckMeleeAttack2(float flDot, float flDist) {
+bool CGonome::CheckMeleeAttack2(float flDot, float flDist) 
+{
 	if (flDist <= GONOME_TOLERANCE_MELEE2_RANGE &&
 		flDot >= GONOME_TOLERANCE_MELEE2_DOT &&
 		!HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -361,7 +363,7 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent) {
 		GetAttachment(0, vecArmPos, vecArmAng);
 
 		vecSpitOffset = vecArmPos;
-		vecSpitDir = ((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
+		vecSpitDir = Vector((m_hEnemy->pev->origin + m_hEnemy->pev->view_ofs) - vecSpitOffset).Normalize();
 
 		vecSpitDir.x += RANDOM_FLOAT(-0.05, 0.05);
 		vecSpitDir.y += RANDOM_FLOAT(-0.05, 0.05);

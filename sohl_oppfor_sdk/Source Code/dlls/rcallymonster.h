@@ -157,15 +157,15 @@ public:
 	BOOL			FCanCheckAttacks(void);
 
 	// Attack
-	BOOL			CheckRangeAttack2(float flDot, float flDist);
+	bool			CheckRangeAttack2(float flDot, float flDist);
 	void			ShootMP5(void);
 	void			ShootShotgun(void);
 	void			ShootShotgunDouble(void);
 	void			ShootDesertEagle(void);
 	void			ShootM249(void);
 	void			ShootGlock(void);
-	BOOL			CheckMeleeAttack1(float flDot, float flDist);
-	BOOL			CheckRangeAttack1(float flDot, float flDist);
+	bool			CheckMeleeAttack1(float flDot, float flDist);
+	bool			CheckRangeAttack1(float flDot, float flDist);
 	Vector			GetGunPosition();
 
 	// Base Monster Sounds

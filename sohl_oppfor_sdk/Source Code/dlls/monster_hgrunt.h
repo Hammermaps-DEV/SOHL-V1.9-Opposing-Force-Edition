@@ -39,9 +39,9 @@ public:
 	int ISoundMask(void);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	BOOL FCanCheckAttacks(void);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
+	bool CheckMeleeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack2(float flDot, float flDist);
 	void CheckAmmo(void);
 	void SetActivity(Activity NewActivity);
 	void StartTask(Task_t *pTask);

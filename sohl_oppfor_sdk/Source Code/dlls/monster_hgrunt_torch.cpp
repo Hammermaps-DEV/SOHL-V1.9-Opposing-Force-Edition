@@ -1065,12 +1065,12 @@ void CTorch::PrescheduleThink(void) {
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CTorch::CheckRangeAttack1(float flDot, float flDist) {
-	if (GetBodygroup(GUN_GROUP) != GUN_TORCH) {
+bool CTorch::CheckRangeAttack1(float flDot, float flDist) 
+{
+	if (GetBodygroup(GUN_GROUP) != GUN_TORCH) 
 		return CRCAllyMonster::CheckRangeAttack1(flDot, flDist);
-	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================

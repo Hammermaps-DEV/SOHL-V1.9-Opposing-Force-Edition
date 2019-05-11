@@ -61,9 +61,9 @@ public:
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist);		// Swipe
-	BOOL CheckMeleeAttack2(float flDot, float flDist);		// Flames
-	BOOL CheckRangeAttack1(float flDot, float flDist);		// Stomp attack
+	bool CheckMeleeAttack1(float flDot, float flDist);		// Swipe
+	bool CheckMeleeAttack2(float flDot, float flDist);		// Flames
+	bool CheckRangeAttack1(float flDot, float flDist);		// Stomp attack
 	void SetObjectCollisionBox(void)
 	{
 		pev->absmin = pev->origin + Vector(-80, -80, 0);

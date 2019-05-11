@@ -26,10 +26,6 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
-#include "weapons.h"
-#include "nodes.h"
-#include "player.h"
 #include "proj_grenade.h"
 
 class CAirtank : public CGrenade
@@ -58,7 +54,6 @@ TYPEDESCRIPTION	CAirtank::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CAirtank, CGrenade);
 
-
 void CAirtank::Spawn(void)
 {
 	Precache();
@@ -86,7 +81,6 @@ void CAirtank::Precache(void)
 	PRECACHE_SOUND("doors/aliendoor3.wav");
 }
 
-
 void CAirtank::Killed(entvars_t *pevAttacker, int iGib)
 {
 	pev->owner = ENT(pevAttacker);
@@ -96,14 +90,12 @@ void CAirtank::Killed(entvars_t *pevAttacker, int iGib)
 	Explode(pev->origin, Vector(0, 0, -1));
 }
 
-
 void CAirtank::TankThink(void)
 {
 	// Fire trigger
 	m_state = 1;
 	SUB_UseTargets(this, USE_TOGGLE, 0);
 }
-
 
 void CAirtank::TankTouch(CBaseEntity *pOther)
 {

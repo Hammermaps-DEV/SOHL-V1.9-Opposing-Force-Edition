@@ -244,10 +244,9 @@ int CPitDrone::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float
 	// if the gonome is running, has an enemy, was hurt by the enemy, hasn't been hurt in the last 3 seconds, and isn't too close to the enemy,
 	// it will swerve. (whew).
 	if (m_hEnemy != NULL && IsMoving() && pevAttacker == m_hEnemy->pev && UTIL_GlobalTimeBase() - m_flLastHurtTime > 3) {
-		float flDist;
-		flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
+		float flDist = (pev->origin - m_hEnemy->pev->origin).Length2D();
 		if (flDist > PITDRONE_SPRINT_DIST) {
-			flDist = (pev->origin - m_Route[m_iRouteIndex].vecLocation).Length2D();// reusing flDist. 
+			flDist = Vector(pev->origin - m_Route[m_iRouteIndex].vecLocation).Length2D();// reusing flDist. 
 
 			Vector vecApex;
 			if (FTriangulate(pev->origin, m_Route[m_iRouteIndex].vecLocation, flDist * 0.5, m_hEnemy, &vecApex)) {
@@ -562,12 +561,13 @@ int CPitDrone::IRelationship(CBaseEntity *pTarget) {
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CPitDrone::CheckRangeAttack1(float flDot, float flDist) {
+bool CPitDrone::CheckRangeAttack1(float flDot, float flDist) {
 	if (!m_flhorns || IsMoving() && flDist >= 512) {
 		return false;
 	}
 
-	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime) {
+	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime) 
+	{
 		if (IsMoving()) {
 			// don't spit again for a long time, resume chasing enemy.
 			m_flNextSpitTime = UTIL_GlobalTimeBase() + 5;

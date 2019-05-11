@@ -409,7 +409,7 @@ void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CBarney::CheckRangeAttack1(float flDot, float flDist) {
+bool CBarney::CheckRangeAttack1(float flDot, float flDist) {
 	if (flDist <= 1024 && flDot >= 0.5) {
 		if (UTIL_GlobalTimeBase() > m_checkAttackTime) {
 			TraceResult tr;
@@ -427,10 +427,10 @@ BOOL CBarney::CheckRangeAttack1(float flDot, float flDist) {
 			m_checkAttackTime = UTIL_GlobalTimeBase() + 1.5;
 		}
 
-		return m_lastAttackCheck;
+		return (bool)m_lastAttackCheck;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================

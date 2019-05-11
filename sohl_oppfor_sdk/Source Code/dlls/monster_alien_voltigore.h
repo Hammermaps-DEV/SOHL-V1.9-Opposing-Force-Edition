@@ -50,9 +50,9 @@ public:
 	virtual void AlertSound(void);
 	virtual void AttackSound(void);
 	virtual void StartTask(Task_t *pTask);
-	virtual BOOL CheckMeleeAttack1(float flDot, float flDist);
-	virtual BOOL CheckMeleeAttack2(float flDot, float flDist);
-	virtual BOOL CheckRangeAttack1(float flDot, float flDist);
+	virtual bool CheckMeleeAttack1(float flDot, float flDist);
+	virtual bool CheckMeleeAttack2(float flDot, float flDist);
+	virtual bool CheckRangeAttack1(float flDot, float flDist);
 	virtual void RunAI(void);
 	BOOL FValidateHintType(short sHint);
 	Schedule_t *GetSchedule(void);

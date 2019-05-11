@@ -829,21 +829,21 @@ void CGargantua::Killed(entvars_t *pevAttacker, int iGib)
 // Garg swipe attack
 // 
 //=========================================================
-BOOL CGargantua::CheckMeleeAttack1(float flDot, float flDist)
+bool CGargantua::CheckMeleeAttack1(float flDot, float flDist)
 {
 	//	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
 
 	if (flDot >= 0.7)
 	{
 		if (flDist <= GARG_ATTACKDIST)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
 
 
 // Flame thrower madness!
-BOOL CGargantua::CheckMeleeAttack2(float flDot, float flDist)
+bool CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 {
 	//	ALERT(at_aiconsole, "CheckMelee(%f, %f)\n", flDot, flDist);
 
@@ -852,10 +852,10 @@ BOOL CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 		if (flDot >= 0.8 && flDist > GARG_ATTACKDIST)
 		{
 			if (flDist <= GARG_FLAME_LENGTH)
-				return TRUE;
+				return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 
@@ -868,7 +868,7 @@ BOOL CGargantua::CheckMeleeAttack2(float flDot, float flDist)
 // Stomp attack
 //
 //=========================================================
-BOOL CGargantua::CheckRangeAttack1(float flDot, float flDist)
+bool CGargantua::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (UTIL_GlobalTimeBase() > m_seeTime)
 	{

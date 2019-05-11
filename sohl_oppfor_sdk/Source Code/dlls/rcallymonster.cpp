@@ -2184,23 +2184,23 @@ BOOL CRCAllyMonster::FCanCheckAttacks(void) {
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CRCAllyMonster::CheckMeleeAttack1(float flDot, float flDist) {
+bool CRCAllyMonster::CheckMeleeAttack1(float flDot, float flDist) {
 	CBaseMonster *pEnemy;
 	if (m_hEnemy != NULL) {
 		pEnemy = m_hEnemy->MyMonsterPointer();
 
 		if (!pEnemy) {
-			return FALSE;
+			return false;
 		}
 	}
 
 	if (flDist <= 64 && flDot >= 0.7	&&
 		pEnemy->Classify() != CLASS_ALIEN_BIOWEAPON &&
 		pEnemy->Classify() != CLASS_PLAYER_BIOWEAPON) {
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -2211,13 +2211,13 @@ BOOL CRCAllyMonster::CheckMeleeAttack1(float flDot, float flDist) {
 // occluded (throw grenade over wall, etc). We must 
 // disqualify the machine gun attack if the enemy is occluded.
 //=========================================================
-BOOL CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
+bool CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
 	if (!HasConditions(bits_COND_ENEMY_OCCLUDED) && flDist <= 2048
 		&& flDot >= 0.5 && NoFriendlyFire()
 		&& m_fLockShootTime < UTIL_GlobalTimeBase()) {
 		if (!m_hEnemy->IsPlayer() && flDist <= 64) {
 			// kick nonclients who are close enough, but don't shoot at them.
-			return FALSE;
+			return false;
 		}
 
 		Vector vecSrc = GetGunPosition();
@@ -2225,11 +2225,11 @@ BOOL CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
 		// verify that a bullet fired from the gun will hit the enemy before the world.
 		UTIL_TraceLine(vecSrc, m_hEnemy->BodyTarget(vecSrc), ignore_monsters, ignore_glass, ENT(pev), &tr);
 		if (tr.flFraction == 1.0) {
-			return TRUE;
+			return true;
 		}
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
@@ -2462,16 +2462,16 @@ void CRCAllyMonster::ShootGlock(void) {
 // CheckRangeAttack2 - this checks the Grunt's grenade
 // attack. 
 //=========================================================
-BOOL CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
+bool CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
 	// if the grunt isn't moving, it's ok to check.
 	if (m_flGroundSpeed != 0) {
 		m_fThrowGrenade = FALSE;
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 	// assume things haven't changed too much since last time
 	if (UTIL_GlobalTimeBase() < m_flNextGrenadeCheck) {
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 	if (!FBitSet(m_hEnemy->pev->flags, FL_ONGROUND) && m_hEnemy->pev->waterlevel == 0 && m_vecEnemyLKP.z > pev->absmax.z) {
@@ -2479,7 +2479,7 @@ BOOL CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
 		// be grenaded.
 		// don't throw grenades at anything that isn't on the ground!
 		m_fThrowGrenade = FALSE;
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 	Vector vecTarget;
@@ -2501,7 +2501,7 @@ BOOL CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
 			// crap, I might blow my own guy up. Don't throw a grenade and don't check again for a while.
 			m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 			m_fThrowGrenade = FALSE;
-			return m_fThrowGrenade;	//AJH need this or it is overridden later.
+			return (bool)m_fThrowGrenade;	//AJH need this or it is overridden later.
 		}
 	}
 
@@ -2509,7 +2509,7 @@ BOOL CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
 		// crap, I don't want to blow myself up
 		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 		m_fThrowGrenade = FALSE;
-		return m_fThrowGrenade;
+		return (bool)m_fThrowGrenade;
 	}
 
 
@@ -2529,7 +2529,7 @@ BOOL CRCAllyMonster::CheckRangeAttack2(float flDot, float flDist) {
 		m_flNextGrenadeCheck = UTIL_GlobalTimeBase() + 1; // one full second.
 	}
 
-	return m_fThrowGrenade;
+	return (bool)m_fThrowGrenade;
 }
 
 //=========================================================

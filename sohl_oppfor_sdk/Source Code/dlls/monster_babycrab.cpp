@@ -88,19 +88,19 @@ void CBabyCrab::SetYawSpeed(void)
 }
 
 
-BOOL CBabyCrab::CheckRangeAttack1(float flDot, float flDist)
+bool CBabyCrab::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (pev->flags & FL_ONGROUND)
 	{
 		if (pev->groundentity && (pev->groundentity->v.flags & (FL_CLIENT | FL_MONSTER)))
-			return TRUE;
+			return true;
 
 		// A little less accurate, but jump from closer
 		if (flDist <= 180 && flDot >= 0.55)
-			return TRUE;
+			return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 

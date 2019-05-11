@@ -41,8 +41,8 @@ public:
 	int  Classify(void);
 	int  IRelationship(CBaseEntity *pTarget);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack2(float flDot, float flDist);
 	void CallForHelp(char *szClassname, float flDist, EHANDLE hEnemy, Vector &vecLocation);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);

@@ -43,7 +43,7 @@ public:
 	void StartTask(Task_t *pTask);
 	void KeyValue(KeyValueData *pkvd);
 	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
 
 	void PrescheduleThink(void);
 

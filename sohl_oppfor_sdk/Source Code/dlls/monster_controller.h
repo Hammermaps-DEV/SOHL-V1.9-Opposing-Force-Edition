@@ -42,9 +42,9 @@ public:
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
 	void RunAI(void);
-	BOOL CheckRangeAttack1(float flDot, float flDist);	// balls
-	BOOL CheckRangeAttack2(float flDot, float flDist);	// head
-	BOOL CheckMeleeAttack1(float flDot, float flDist);	// block, throw
+	bool CheckRangeAttack1(float flDot, float flDist);	// balls
+	bool CheckRangeAttack2(float flDot, float flDist);	// head
+	bool CheckMeleeAttack1(float flDot, float flDist) { return false; };	// block, throw
 	Schedule_t* GetSchedule(void);
 	Schedule_t* GetScheduleOfType(int Type);
 	void StartTask(Task_t *pTask);

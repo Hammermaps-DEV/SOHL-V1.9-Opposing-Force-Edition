@@ -750,39 +750,27 @@ Schedule_t* CController::GetScheduleOfType(int Type)
 	return CBaseMonster::GetScheduleOfType(Type);
 }
 
-
-
-
-
 //=========================================================
 // CheckRangeAttack1  - shoot a bigass energy ball out of their head
 //
 //=========================================================
-BOOL CController::CheckRangeAttack1(float flDot, float flDist)
+bool CController::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDot > 0.5 && flDist > 256 && flDist <= 2048)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
 
-
-BOOL CController::CheckRangeAttack2(float flDot, float flDist)
+bool CController::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (flDot > 0.5 && flDist > 64 && flDist <= 2048)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+	return false;
 }
-
-
-BOOL CController::CheckMeleeAttack1(float flDot, float flDist)
-{
-	return FALSE;
-}
-
 
 void CController::SetActivity(Activity NewActivity)
 {

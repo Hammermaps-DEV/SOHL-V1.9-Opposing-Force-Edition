@@ -35,25 +35,25 @@
 // class definition
 class CZombie : public CBaseMonster {
 public:
-	virtual void Spawn(void);
-	virtual void Precache(void);
-	virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
-	virtual void PainSound(void);
-	virtual void DeathSound(void);
-	virtual void AlertSound(void);
-	virtual void IdleSound(void);
-	virtual void AttackSound(void);
-	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	void Spawn(void) override;
+	void Precache(void) override;
+	void HandleAnimEvent(MonsterEvent_t *pEvent) override;
+	void PainSound(void) override;
+	void DeathSound(void) override;
+	void AlertSound(void) override;
+	void IdleSound(void) override;
+	void AttackSound(void) override;
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 
-	virtual BOOL CheckRangeAttack1(float flDot, float flDist) { return FALSE; }
-	virtual BOOL CheckRangeAttack2(float flDot, float flDist) { return FALSE; }
+	bool CheckRangeAttack1(float flDot, float flDist) override { return FALSE; }
+	bool CheckRangeAttack2(float flDot, float flDist) override { return FALSE; }
 
-	virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	virtual int IgnoreConditions(void);
-	virtual int Classify(void);
+	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
+	int IgnoreConditions(void) override;
+	int Classify(void) override;
 
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
+	int	Save(CSave &save) override;
+	int	Restore(CRestore &restore) override;
 
 	static TYPEDESCRIPTION m_SaveData[];
 

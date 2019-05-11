@@ -41,10 +41,10 @@ public:
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	Schedule_t* GetSchedule(void);
 	Schedule_t* GetScheduleOfType(int Type);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);	// jump
+	bool CheckMeleeAttack1(float flDot, float flDist);	// jump
 														// BOOL CheckMeleeAttack2 ( float flDot, float flDist );
-	BOOL CheckRangeAttack1(float flDot, float flDist);	// shoot
-	BOOL CheckRangeAttack2(float flDot, float flDist);	// throw grenade
+	bool CheckRangeAttack1(float flDot, float flDist);	// shoot
+	bool CheckRangeAttack2(float flDot, float flDist);	// throw grenade
 	void StartTask(Task_t *pTask);
 	void RunAI(void);
 	void RunTask(Task_t *pTask);

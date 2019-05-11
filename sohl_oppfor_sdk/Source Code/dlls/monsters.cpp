@@ -896,50 +896,46 @@ BOOL CBaseMonster::FBecomeProne(void)
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CBaseMonster::CheckRangeAttack1(float flDot, float flDist)
+bool CBaseMonster::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist > 64 && flDist <= 784 && flDot >= 0.5)
-	{
-		return TRUE;
-	}
-	return FALSE;
+		return true;
+	
+	return false;
 }
 
 //=========================================================
 // CheckRangeAttack2
 //=========================================================
-BOOL CBaseMonster::CheckRangeAttack2(float flDot, float flDist)
+bool CBaseMonster::CheckRangeAttack2(float flDot, float flDist)
 {
 	if (flDist > 64 && flDist <= 512 && flDot >= 0.5)
-	{
-		return TRUE;
-	}
-	return FALSE;
+		return true;
+
+	return false;
 }
 
 //=========================================================
 // CheckMeleeAttack1
 //=========================================================
-BOOL CBaseMonster::CheckMeleeAttack1(float flDot, float flDist)
+bool CBaseMonster::CheckMeleeAttack1(float flDot, float flDist)
 {
 	// Decent fix to keep folks from kicking/punching hornets and snarks is to check the onground flag(sjb)
 	if (flDist <= 64 && flDot >= 0.7 && m_hEnemy != NULL && FBitSet(m_hEnemy->pev->flags, FL_ONGROUND))
-	{
-		return TRUE;
-	}
-	return FALSE;
+		return true;
+
+	return false;
 }
 
 //=========================================================
 // CheckMeleeAttack2
 //=========================================================
-BOOL CBaseMonster::CheckMeleeAttack2(float flDot, float flDist)
+bool CBaseMonster::CheckMeleeAttack2(float flDot, float flDist)
 {
 	if (flDist <= 64 && flDot >= 0.7)
-	{
-		return TRUE;
-	}
-	return FALSE;
+		return true;
+
+	return false;
 }
 
 //=========================================================
@@ -2174,7 +2170,7 @@ BOOL CBaseMonster::FindCover(Vector vecThreat, Vector vecViewOffset, float flMin
 		WorldGraph.m_iLastCoverSearch = nodeNumber + 1; // next monster that searches for cover node will start where we left off here.
 
 		// could use an optimization here!!
-		flDist = (pev->origin - node.m_vecOrigin).Length();
+		flDist = Vector(pev->origin - node.m_vecOrigin).Length();
 
 		// DON'T do the trace check on a node that is farther away than a node that we've already found to 
 		// provide cover! Also make sure the node is within the mins/maxs of the search.

@@ -44,8 +44,8 @@ public:
 	void PrescheduleThink(void);
 	int  Classify(void);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist) { return FALSE; };
+	bool CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack2(float flDot, float flDist) { return FALSE; };
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 
 	virtual float GetDamageAmount(void) { return gSkillData.headcrabDmgBite; }

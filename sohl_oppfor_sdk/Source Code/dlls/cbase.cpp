@@ -145,7 +145,6 @@ extern "C" {
 }
 #endif
 
-
 int DispatchSpawn(edict_t *pent)
 {
 	CBaseEntity *pEntity = (CBaseEntity *)GET_PRIVATE(pent);
@@ -227,7 +226,6 @@ void DispatchKeyValue(edict_t *pentKeyvalue, KeyValueData *pkvd)
 	pEntity->KeyValue(pkvd);
 }
 
-
 // HACKHACK -- this is a hack to keep the node graph entity from "touching" things (like triggers)
 // while it builds the graph
 BOOL gTouchDisabled = FALSE;
@@ -242,7 +240,6 @@ void DispatchTouch(edict_t *pentTouched, edict_t *pentOther)
 	if (pEntity && pOther && !((pEntity->pev->flags | pOther->pev->flags) & FL_KILLME))
 		pEntity->Touch(pOther);
 }
-
 
 void DispatchUse(edict_t *pentUsed, edict_t *pentOther)
 {
@@ -329,7 +326,6 @@ CBaseEntity *FindGlobalEntity(string_t classname, string_t globalname)
 	return pReturn;
 }
 
-
 int DispatchRestore(edict_t *pent, SAVERESTOREDATA *pSaveData, int globalEntity)
 {
 	CBaseEntity *pEntity = (CBaseEntity *)GET_PRIVATE(pent);
@@ -350,7 +346,6 @@ int DispatchRestore(edict_t *pent, SAVERESTOREDATA *pSaveData, int globalEntity)
 			pSaveData->size = pSaveData->pTable[pSaveData->currentIndex].location;
 			pSaveData->pCurrentData = pSaveData->pBaseData + pSaveData->size;
 			// -------------------
-
 
 			const globalentity_t *pGlobal = gGlobalState.EntityFromTable(tmpVars.globalname);
 
@@ -436,7 +431,6 @@ int DispatchRestore(edict_t *pent, SAVERESTOREDATA *pSaveData, int globalEntity)
 	return 0;
 }
 
-
 void DispatchObjectCollsionBox(edict_t *pent)
 {
 	CBaseEntity *pEntity = (CBaseEntity *)GET_PRIVATE(pent);
@@ -448,13 +442,11 @@ void DispatchObjectCollsionBox(edict_t *pent)
 		SetObjectCollisionBox(&pent->v);
 }
 
-
 void SaveWriteFields(SAVERESTOREDATA *pSaveData, const char *pname, void *pBaseData, TYPEDESCRIPTION *pFields, int fieldCount)
 {
 	CSave saveHelper(pSaveData);
 	saveHelper.WriteFields("SWF", pname, pBaseData, pFields, fieldCount);
 }
-
 
 void SaveReadFields(SAVERESTOREDATA *pSaveData, const char *pname, void *pBaseData, TYPEDESCRIPTION *pFields, int fieldCount)
 {
@@ -846,7 +838,7 @@ void CBaseEntity::ThinkCorrection(void)
 	{
 		// The engine has changed our nextthink, in its typical endearing way.
 		// Now we have to apply that change in the _right_ places.
-	//		ALERT(at_console, "StoredThink corrected for %s \"%s\": %f -> %f\n", STRING(pev->classname), STRING(pev->targetname), m_fNextThink, m_fNextThink + pev->nextthink - m_fPevNextThink);
+		// ALERT(at_console, "StoredThink corrected for %s \"%s\": %f -> %f\n", STRING(pev->classname), STRING(pev->targetname), m_fNextThink, m_fNextThink + pev->nextthink - m_fPevNextThink);
 		m_fNextThink += pev->nextthink - m_fPevNextThink;
 		m_fPevNextThink = pev->nextthink;
 	}
@@ -884,7 +876,6 @@ int CBaseEntity::TakeArmor(float flArmor)
 }
 
 // inflict damage on this entity.  bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
-
 int CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
 	Vector			vecTemp;
@@ -935,7 +926,6 @@ int CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 	return 1;
 }
 
-
 void CBaseEntity::Killed(entvars_t *pevAttacker, int iGib)
 {
 	pev->takedamage = DAMAGE_NO;
@@ -943,11 +933,11 @@ void CBaseEntity::Killed(entvars_t *pevAttacker, int iGib)
 	UTIL_Remove(this);
 }
 
-
 CBaseEntity *CBaseEntity::GetNextTarget(void)
 {
 	if (FStringNull(pev->target))
 		return NULL;
+
 	return UTIL_FindEntityByTargetname(NULL, STRING(pev->target));
 }
 
@@ -970,7 +960,6 @@ TYPEDESCRIPTION	CBaseEntity::m_SaveData[] =
 	DEFINE_FIELD(CBaseEntity, m_activated, FIELD_BOOLEAN), //LRC
 	DEFINE_FIELD(CBaseEntity, m_fNextThink, FIELD_TIME), //LRC
 	DEFINE_FIELD(CBaseEntity, m_fPevNextThink, FIELD_TIME), //LRC
-//	DEFINE_FIELD( CBaseEntity, m_pAssistLink, FIELD_CLASSPTR ), //LRC - don't save this, we'll just rebuild the list on restore
 	DEFINE_FIELD(CBaseEntity, m_vecPostAssistVel, FIELD_VECTOR), //LRC
 	DEFINE_FIELD(CBaseEntity, m_vecPostAssistAVel, FIELD_VECTOR), //LRC
 
@@ -980,7 +969,6 @@ TYPEDESCRIPTION	CBaseEntity::m_SaveData[] =
 	DEFINE_FIELD(CBaseEntity, m_pfnBlocked, FIELD_FUNCTION),
 };
 
-
 int CBaseEntity::Save(CSave &save)
 {
 	ThinkCorrection(); //LRC
@@ -989,8 +977,8 @@ int CBaseEntity::Save(CSave &save)
 	{
 		if (pev->targetname)
 			return save.WriteFields(STRING(pev->targetname), "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
-		else
-			return save.WriteFields(STRING(pev->classname), "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
+
+		return save.WriteFields(STRING(pev->classname), "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
 	}
 
 	return 0;
@@ -1004,10 +992,8 @@ int CBaseEntity::Restore(CRestore &restore)
 
 	if (pev->modelindex != 0 && !FStringNull(pev->model))
 	{
-		Vector mins, maxs;
-		mins = pev->mins;	// Set model is about to destroy these
-		maxs = pev->maxs;
-
+		Vector mins = pev->mins;	// Set model is about to destroy these
+		Vector maxs = pev->maxs;
 
 		PRECACHE_MODEL((char *)STRING(pev->model));
 		SET_MODEL(ENT(pev), STRING(pev->model));
@@ -1016,7 +1002,6 @@ int CBaseEntity::Restore(CRestore &restore)
 
 	return status;
 }
-
 
 // Initialize absmin & absmax to the appropriate box
 void SetObjectCollisionBox(entvars_t *pev)
@@ -1057,12 +1042,10 @@ void SetObjectCollisionBox(entvars_t *pev)
 	pev->absmax.z += 1;
 }
 
-
 void CBaseEntity::SetObjectCollisionBox(void)
 {
 	::SetObjectCollisionBox(pev);
 }
-
 
 int	CBaseEntity::Intersects(CBaseEntity *pOther)
 {
@@ -1147,7 +1130,6 @@ BOOL CBaseEntity::ShouldToggle(USE_TYPE useType)
 	return TRUE;
 }
 
-
 int	CBaseEntity::DamageDecal(int bitsDamageType)
 {
 	if (pev->rendermode == kRenderTransAlpha)
@@ -1159,27 +1141,21 @@ int	CBaseEntity::DamageDecal(int bitsDamageType)
 	return DECAL_GUNSHOT1 + RANDOM_LONG(0, 4);
 }
 
-
-
 // NOTE: szName must be a pointer to constant memory, e.g. "monster_class" because the entity
 // will keep a pointer to it after this call.
 CBaseEntity * CBaseEntity::Create(char *szName, const Vector &vecOrigin, const Vector &vecAngles, edict_t *pentOwner)
 {
-	edict_t	*pent;
-	CBaseEntity *pEntity;
-
-	pent = CREATE_NAMED_ENTITY(MAKE_STRING(szName));
+	edict_t* pent = CREATE_NAMED_ENTITY(MAKE_STRING(szName));
 	if (FNullEnt(pent))
 	{
 		ALERT(at_debug, "NULL Ent in Create!\n");
 		return NULL;
 	}
-	pEntity = Instance(pent);
+
+	CBaseEntity* pEntity = Instance(pent);
 	pEntity->pev->owner = pentOwner;
 	pEntity->pev->origin = vecOrigin;
 	pEntity->pev->angles = vecAngles;
 	DispatchSpawn(pEntity->edict());
 	return pEntity;
 }
-
-

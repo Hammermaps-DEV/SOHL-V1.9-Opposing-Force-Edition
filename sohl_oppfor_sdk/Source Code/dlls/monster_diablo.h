@@ -49,10 +49,10 @@ public:
 	void IdleSound(void);
 	void AttackSound(void);
 
-	BOOL CheckRangeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack2(float flDot, float flDist);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckMeleeAttack2(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack2(float flDot, float flDist);
+	bool CheckMeleeAttack1(float flDot, float flDist);
+	bool CheckMeleeAttack2(float flDot, float flDist);
 
 	static const char *pAttackSounds[];
 	static const char *pStepSounds[];

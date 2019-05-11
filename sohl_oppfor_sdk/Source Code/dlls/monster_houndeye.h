@@ -49,7 +49,7 @@ public:
 	void PrescheduleThink(void);
 	void SetActivity(Activity NewActivity);
 	void WriteBeamColor(void);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
 	BOOL FValidateHintType(short sHint);
 	BOOL FCanActiveIdle(void);
 	Schedule_t *GetScheduleOfType(int Type);

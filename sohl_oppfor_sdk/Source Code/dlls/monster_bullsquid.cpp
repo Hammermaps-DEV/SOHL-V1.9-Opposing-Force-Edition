@@ -282,12 +282,12 @@ int CBullsquid::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CBullsquid::CheckRangeAttack1(float flDot, float flDist)
+bool CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (IsMoving() && flDist >= 512)
 	{
 		// squid will far too far behind if he stops running to spit at this distance from the enemy.
-		return FALSE;
+		return false;
 	}
 
 	if (flDist > 64 && flDist <= 784 && flDot >= 0.5 && UTIL_GlobalTimeBase() >= m_flNextSpitTime)
@@ -297,7 +297,7 @@ BOOL CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 			if (fabs(pev->origin.z - m_hEnemy->pev->origin.z) > 256)
 			{
 				// don't try to spit at someone up really high or down really low.
-				return FALSE;
+				return false;
 			}
 		}
 
@@ -312,23 +312,24 @@ BOOL CBullsquid::CheckRangeAttack1(float flDot, float flDist)
 			m_flNextSpitTime = UTIL_GlobalTimeBase() + 0.5;
 		}
 
-		return TRUE;
+		return true;
 	}
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // CheckMeleeAttack1 - bullsquid is a big guy, so has a longer
 // melee range than most monsters. This is the tailwhip attack
 //=========================================================
-BOOL CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
+bool CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (m_hEnemy->pev->health <= gSkillData.bullsquidDmgWhip && flDist <= 85 && flDot >= 0.7)
 	{
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 //=========================================================
@@ -337,13 +338,14 @@ BOOL CBullsquid::CheckMeleeAttack1(float flDot, float flDist)
 // this attack will not be performed if the tailwhip attack
 // is valid.
 //=========================================================
-BOOL CBullsquid::CheckMeleeAttack2(float flDot, float flDist)
+bool CBullsquid::CheckMeleeAttack2(float flDot, float flDist)
 {
 	if (flDist <= 85 && flDot >= 0.7 && !HasConditions(bits_COND_CAN_MELEE_ATTACK1))		// The player & bullsquid can be as much as their bboxes 
 	{										// apart (48 * sqrt(3)) and he can still attack (85 is a little more than 48*sqrt(3))
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 //=========================================================
@@ -351,14 +353,12 @@ BOOL CBullsquid::CheckMeleeAttack2(float flDot, float flDist)
 //=========================================================
 BOOL CBullsquid::FValidateHintType(short sHint)
 {
-	int i;
-
 	static short sSquidHints[] =
 	{
 		HINT_WORLD_HUMAN_BLOOD,
 	};
 
-	for (i = 0; i < HL_ARRAYSIZE(sSquidHints); i++)
+	for (int i = 0; i < HL_ARRAYSIZE(sSquidHints); i++)
 	{
 		if (sSquidHints[i] == sHint)
 		{

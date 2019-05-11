@@ -617,26 +617,18 @@ void CBigMomma::NodeReach(void)
 
 
 // Slash
-BOOL CBigMomma::CheckMeleeAttack1(float flDot, float flDist)
+bool CBigMomma::CheckMeleeAttack1(float flDot, float flDist)
 {
 	if (flDot >= 0.7)
 	{
 		if (flDist <= BIG_ATTACKDIST)
-			return TRUE;
+			return true;
 	}
-	return FALSE;
+	return false;
 }
-
-
-// Lay a crab
-BOOL CBigMomma::CheckMeleeAttack2(float flDot, float flDist)
-{
-	return CanLayCrab();
-}
-
 
 // Mortar launch
-BOOL CBigMomma::CheckRangeAttack1(float flDot, float flDist)
+bool CBigMomma::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= BIG_MORTARDIST && m_mortarTime < UTIL_GlobalTimeBase())
 	{
@@ -648,10 +640,10 @@ BOOL CBigMomma::CheckRangeAttack1(float flDot, float flDist)
 			startPos.z += 180;
 			pev->movedir = VecCheckSplatToss(pev, startPos, pEnemy->BodyTarget(pev->origin), RANDOM_FLOAT(150, 500));
 			if (pev->movedir != g_vecZero)
-				return TRUE;
+				return true;
 		}
 	}
-	return FALSE;
+	return false;
 }
 
 //=========================================================

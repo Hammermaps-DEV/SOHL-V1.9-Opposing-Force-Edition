@@ -47,8 +47,8 @@ public:
 	Schedule_t* GetSchedule(void);
 	Schedule_t* GetScheduleOfType(int Type);
 	BOOL FCanCheckAttacks(void);
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+	bool CheckMeleeAttack1(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
 	void StartTask(Task_t *pTask);
 	void AlertSound(void);
 	void DeathSound(void);

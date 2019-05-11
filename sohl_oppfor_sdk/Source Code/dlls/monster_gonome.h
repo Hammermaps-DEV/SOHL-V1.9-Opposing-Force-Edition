@@ -65,9 +65,9 @@ public:
 	static const char *pAttackHitSounds[];
 	static const char *pAttackMissSounds[];
 
-	BOOL CheckMeleeAttack1(float flDot, float flDist);
-	BOOL CheckMeleeAttack2(float flDot, float flDist);
-	BOOL CheckRangeAttack1(float flDot, float flDist);
+	bool CheckMeleeAttack1(float flDot, float flDist);
+	bool CheckMeleeAttack2(float flDot, float flDist);
+	bool CheckRangeAttack1(float flDot, float flDist);
 	void RunAI(void);
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);

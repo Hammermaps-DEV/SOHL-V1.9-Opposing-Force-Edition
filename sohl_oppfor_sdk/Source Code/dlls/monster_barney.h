@@ -52,7 +52,7 @@ public:
 	virtual void StartTask(Task_t *pTask);
 	virtual int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	virtual BOOL CheckRangeAttack1(float flDot, float flDist);
+	virtual bool CheckRangeAttack1(float flDot, float flDist);
 
 	virtual void DeclineFollowing(void);
 

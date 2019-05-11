@@ -334,12 +334,12 @@ void CHeadCrab::StartTask(Task_t *pTask) {
 //=========================================================
 // CheckRangeAttack1
 //=========================================================
-BOOL CHeadCrab::CheckRangeAttack1(float flDot, float flDist) {
-	if (FBitSet(pev->flags, FL_ONGROUND) && flDist <= 256 && flDot >= 0.65) {
-		return TRUE;
-	}
+bool CHeadCrab::CheckRangeAttack1(float flDot, float flDist) 
+{
+	if (FBitSet(pev->flags, FL_ONGROUND) && flDist <= 256 && flDot >= 0.65)
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================

@@ -113,8 +113,6 @@ int	CHoundeye::Classify(void)
 //=========================================================
 BOOL CHoundeye::FValidateHintType(short sHint)
 {
-	int i;
-
 	static short sHoundHints[] =
 	{
 		HINT_WORLD_MACHINERY,
@@ -123,7 +121,7 @@ BOOL CHoundeye::FValidateHintType(short sHint)
 		HINT_WORLD_ALIEN_BLOOD,
 	};
 
-	for (i = 0; i < HL_ARRAYSIZE(sHoundHints); i++)
+	for (int i = 0; i < HL_ARRAYSIZE(sHoundHints); i++)
 	{
 		if (sHoundHints[i] == sHint)
 		{
@@ -134,7 +132,6 @@ BOOL CHoundeye::FValidateHintType(short sHint)
 	ALERT(at_aiconsole, "Couldn't validate hint type");
 	return FALSE;
 }
-
 
 //=========================================================
 // FCanActiveIdle
@@ -162,19 +159,17 @@ BOOL CHoundeye::FCanActiveIdle(void)
 	return TRUE;
 }
 
-
 //=========================================================
 // CheckRangeAttack1 - overridden for houndeyes so that they
 // try to get within half of their max attack radius before
 // attacking, so as to increase their chances of doing damage.
 //=========================================================
-BOOL CHoundeye::CheckRangeAttack1(float flDot, float flDist)
+bool CHoundeye::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (flDist <= (HOUNDEYE_MAX_ATTACK_RADIUS * 0.5) && flDot >= 0.3)
-	{
-		return TRUE;
-	}
-	return FALSE;
+		return true;
+
+	return false;
 }
 
 //=========================================================
