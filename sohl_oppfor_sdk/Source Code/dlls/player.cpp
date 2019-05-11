@@ -4336,8 +4336,8 @@ void CBasePlayer::SendAmmoUpdate(void)
 
 			// send "Ammo" update message
 			MESSAGE_BEGIN(MSG_ONE, gmsgAmmoX, NULL, pev);
-			WRITE_BYTE(i);
-			WRITE_BYTE(max(min(m_rgAmmo[i], 999), 0));  // clamp the value to one byte
+			WRITE_SHORT(i);
+			WRITE_SHORT(max(min(m_rgAmmo[i], 999), 0));  // clamp the value to one byte
 			MESSAGE_END();
 		}
 	}
