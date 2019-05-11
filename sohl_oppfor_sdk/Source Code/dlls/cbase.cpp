@@ -1152,7 +1152,7 @@ CBaseEntity * CBaseEntity::Create(char *szName, const Vector &vecOrigin, const V
 		return NULL;
 	}
 
-	CBaseEntity* pEntity = Instance(pent);
+	CBaseEntity* pEntity = CBaseEntity::Instance(pent);
 	pEntity->pev->owner = pentOwner;
 	pEntity->pev->origin = vecOrigin;
 	pEntity->pev->angles = vecAngles;

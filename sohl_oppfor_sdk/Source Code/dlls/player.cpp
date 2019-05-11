@@ -467,7 +467,7 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 		return 0;
 
 	// go take the damage first
-	CBaseEntity *pAttacker = Instance(pevAttacker);
+	CBaseEntity *pAttacker = CBaseEntity::Instance(pevAttacker);
 
 	if (!g_pGameRules->FPlayerCanTakeDamage(this, pAttacker))
 	{
@@ -4425,7 +4425,7 @@ void CBasePlayer::UpdateClientData(void)
 
 		while (!FNullEnt(pFind))
 		{
-			CBaseEntity *pMirror = Instance(pFind);
+			CBaseEntity *pMirror = CBaseEntity::Instance(pFind);
 
 			if (numMirrors > 32) break;
 			if (pMirror)
@@ -4549,7 +4549,7 @@ void CBasePlayer::UpdateClientData(void)
 		edict_t *other = pev->dmg_inflictor;
 		if (other)
 		{
-			CBaseEntity *pEntity = Instance(other);
+			CBaseEntity *pEntity = CBaseEntity::Instance(other);
 			if (pEntity)
 				damageOrigin = pEntity->Center();
 		}
@@ -4618,7 +4618,7 @@ void CBasePlayer::UpdateClientData(void)
 		if (!FNullEnt(pFind))
 		{
 			// rain allowed on this map
-			CBaseEntity *pEnt = Instance(pFind);
+			CBaseEntity *pEnt = CBaseEntity::Instance(pFind);
 			CRainSettings *pRainSettings = (CRainSettings *)pEnt;
 
 			float raindistance = pRainSettings->Rain_Distance;
@@ -5025,7 +5025,7 @@ Vector CBasePlayer::AutoaimDeflection(Vector &vecSrc, float flDist, float flDelt
 		if (!g_pGameRules->ShouldAutoAim(this, pEdict))
 			continue;
 
-		CBaseEntity* pEntity = Instance(pEdict);
+		CBaseEntity* pEntity = CBaseEntity::Instance(pEdict);
 		if (pEntity == NULL)
 			continue;
 

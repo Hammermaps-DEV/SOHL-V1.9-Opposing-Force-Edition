@@ -417,8 +417,8 @@ public:
 		return pEnt;
 	}
 
-	static CBaseEntity *Instance(entvars_t *pev) { return Instance(ENT(pev)); }
-	static CBaseEntity *Instance(int eoffset) { return Instance(ENT(eoffset)); }
+	static CBaseEntity *Instance(entvars_t *pev) { return CBaseEntity::Instance(ENT(pev)); }
+	static CBaseEntity *Instance(int eoffset) { return CBaseEntity::Instance(ENT(eoffset)); }
 
 	template<typename T>
 	static T* Instance(edict_t *pent)
@@ -434,14 +434,14 @@ public:
 
 	CBaseMonster *GetMonsterPointer(entvars_t *pevMonster)
 	{
-		CBaseEntity *pEntity = Instance(pevMonster);
+		CBaseEntity *pEntity = CBaseEntity::Instance(pevMonster);
 		if (pEntity)
 			return pEntity->MyMonsterPointer();
 		return NULL;
 	}
 	CBaseMonster *GetMonsterPointer(edict_t *pentMonster)
 	{
-		CBaseEntity *pEntity = Instance(pentMonster);
+		CBaseEntity *pEntity = CBaseEntity::Instance(pentMonster);
 		if (pEntity)
 			return pEntity->MyMonsterPointer();
 		return NULL;

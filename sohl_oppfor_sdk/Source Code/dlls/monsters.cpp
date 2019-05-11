@@ -1364,7 +1364,7 @@ float CBaseMonster::OpenDoorAndWait(entvars_t *pevDoor)
 
 					if (FClassnameIs(pentTarget, STRING(pcbeDoor->pev->classname)))
 					{
-						CBaseEntity *pDoor = Instance(pentTarget);
+						CBaseEntity *pDoor = CBaseEntity::Instance(pentTarget);
 						if (pDoor)
 							pDoor->Use(this, this, USE_ON, 0.0);
 					}

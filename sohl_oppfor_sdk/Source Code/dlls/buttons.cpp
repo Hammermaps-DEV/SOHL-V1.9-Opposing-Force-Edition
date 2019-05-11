@@ -1747,7 +1747,7 @@ int	CButtonTarget::ObjectCaps(void)
 
 int CButtonTarget::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	Use(Instance(pevAttacker), this, USE_TOGGLE, 0);
+	Use(CBaseEntity::Instance(pevAttacker), this, USE_TOGGLE, 0);
 
 	return 1;
 }

@@ -1273,7 +1273,7 @@ void CControllerZapBall::Spawn(void)
 	SetThink(&CControllerZapBall::AnimateThink);
 	SetTouch(&CControllerZapBall::ExplodeTouch);
 
-	m_hOwner = Instance(pev->owner);
+	m_hOwner = CBaseEntity::Instance(pev->owner);
 	pev->dmgtime = UTIL_GlobalTimeBase(); // keep track of when ball spawned
 	SetNextThink(0.1);
 }
