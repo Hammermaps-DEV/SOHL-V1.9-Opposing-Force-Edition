@@ -84,7 +84,7 @@ public:
 	virtual int StudioDrawReflection( int flags );
 
 	// Finalize rendering
-	virtual void StudioRenderFinal (void);
+	virtual void StudioRenderFinal ();
 	
 	// GL&D3D vs. Software renderer finishing functions
 	virtual void StudioRenderFinal_Software ( void );

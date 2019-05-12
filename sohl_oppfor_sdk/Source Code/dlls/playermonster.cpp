@@ -32,8 +32,6 @@
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
-#include	"monsters.h"
-#include	"schedule.h"
 
 // For holograms, make them not solid so the player can walk through them
 #define	SF_MONSTERPLAYER_NOTSOLID					4 
@@ -45,12 +43,12 @@
 class CPlayerMonster : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int ISoundMask(void);
+	int ISoundMask();
 };
 LINK_ENTITY_TO_CLASS(monster_player, CPlayerMonster);
 
@@ -58,7 +56,7 @@ LINK_ENTITY_TO_CLASS(monster_player, CPlayerMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CPlayerMonster::Classify(void)
+int	CPlayerMonster::Classify()
 {
 	return	CLASS_PLAYER_ALLY;
 }
@@ -67,7 +65,7 @@ int	CPlayerMonster::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CPlayerMonster::SetYawSpeed(void)
+void CPlayerMonster::SetYawSpeed()
 {
 	int ys;
 
@@ -99,7 +97,7 @@ void CPlayerMonster::HandleAnimEvent(MonsterEvent_t *pEvent)
 //=========================================================
 // ISoundMask - player monster can't hear.
 //=========================================================
-int CPlayerMonster::ISoundMask(void)
+int CPlayerMonster::ISoundMask()
 {
 	return	NULL;
 }

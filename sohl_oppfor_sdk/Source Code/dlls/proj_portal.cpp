@@ -56,7 +56,7 @@ TYPEDESCRIPTION	CPortal::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CPortal, CBaseEntity);
 
-void CPortal::Spawn(void) {
+void CPortal::Spawn() {
 	Precache();
 
 	pev->movetype = MOVETYPE_FLY;
@@ -85,13 +85,13 @@ void CPortal::Spawn(void) {
 	SetNextThink(0.1);
 }
 
-void CPortal::GlowThink(void) {
+void CPortal::GlowThink() {
 	Vector vDir = pev->velocity.Normalize();
 	ComputeBeamPositions(vDir, &m_vecBeamStart, &m_vecBeamEnd);
 	SetNextThink(0.01);
 }
 
-void CPortal::Precache(void)
+void CPortal::Precache()
 {
 	iRingSprite = PRECACHE_MODEL("sprites/disp_ring.spr");
 	PRECACHE_MODEL("sprites/blueflare2.spr");
@@ -103,7 +103,7 @@ void CPortal::Precache(void)
 	PRECACHE_SOUND("weapons/displacer_teleport_player.wav");
 }
 
-void CPortal::Animate(void) {
+void CPortal::Animate() {
 	pev->frame += 1; //animate teleball
 	if (pev->frame > 24)
 		pev->frame = fmod(pev->frame, 24);
@@ -326,7 +326,7 @@ void CPortal::ComputeBeamPositions(const Vector& vel, Vector* pos1, Vector* pos2
 	*pos2 = pev->origin + (vNormVelocity * -DISPLACER_BEAM_LENGTH_HALF);
 }
 
-void CPortal::FadeShock(void) {
+void CPortal::FadeShock() {
 	if (pShockedEnt) {
 		pShockedEnt->pev->renderfx = kRenderFxNone;
 		pShockedEnt->pev->rendercolor.x = 0; // R
@@ -338,7 +338,7 @@ void CPortal::FadeShock(void) {
 	UTIL_Remove(this);
 }
 
-void CPortal::Glow(void) {
+void CPortal::Glow() {
 	m_pSprite = CSprite::SpriteCreate("sprites/glow03.spr", m_vecBeamEnd, TRUE);
 	m_pSprite->SetTransparency(kRenderTransAdd, 255, 255, 255, 80, kRenderFxNoDissipation);
 	m_pSprite->SetAttachment(edict(), 1);

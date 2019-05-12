@@ -33,10 +33,10 @@
 class CIchthyosaur : public CFlyingMonster
 {
 public:
-	void  Spawn(void);
-	void  Precache(void);
-	void  SetYawSpeed(void);
-	int   Classify(void);
+	void  Spawn();
+	void  Precache();
+	void  SetYawSpeed();
+	int   Classify();
 	void  HandleAnimEvent(MonsterEvent_t *pEvent);
 	CUSTOM_SCHEDULES;
 
@@ -44,11 +44,11 @@ public:
 	int Restore(CRestore &restore);
 	static TYPEDESCRIPTION m_SaveData[];
 
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 	Schedule_t *GetScheduleOfType(int Type);
 
 	void Killed(entvars_t *pevAttacker, int iGib);
-	void BecomeDead(void);
+	void BecomeDead();
 
 	void EXPORT CombatUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void EXPORT BiteTouch(CBaseEntity *pOther);
@@ -60,17 +60,17 @@ public:
 	bool  CheckRangeAttack1(float flDot, float flDist);
 
 	float ChangeYaw(int speed);
-	Activity GetStoppedActivity(void);
+	Activity GetStoppedActivity();
 
 	void  Move(float flInterval);
 	void  MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval);
-	void  MonsterThink(void);
-	void  Stop(void);
-	void  Swim(void);
+	void  MonsterThink();
+	void  Stop();
+	void  Swim();
 	Vector DoProbe(const Vector &Probe);
 
 	float VectorToPitch(const Vector &vec);
-	float FlPitchDiff(void);
+	float FlPitchDiff();
 	float ChangePitch(int speed);
 
 	Vector m_SaveVelocity;
@@ -96,12 +96,12 @@ public:
 	static const char *pDieSounds[];
 	static const char *pPainSounds[];
 
-	void IdleSound(void);
-	void AlertSound(void);
-	void AttackSound(void);
-	void BiteSound(void);
-	void DeathSound(void);
-	void PainSound(void);
+	void IdleSound();
+	void AlertSound();
+	void AttackSound();
+	void BiteSound();
+	void DeathSound();
+	void PainSound();
 };
 
 

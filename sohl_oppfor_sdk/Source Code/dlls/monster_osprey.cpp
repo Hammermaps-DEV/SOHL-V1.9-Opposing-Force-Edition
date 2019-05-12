@@ -110,7 +110,7 @@ void COsprey::KeyValue(KeyValueData *pkvd) {
 //=========================================================
 // Spawn Osprey
 //=========================================================
-void COsprey::Spawn(void) {
+void COsprey::Spawn() {
 	if (!m_iMonster) {
 		m_iMonster = 0;
 	}
@@ -169,14 +169,14 @@ void COsprey::Spawn(void) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	COsprey::Classify(void) {
+int	COsprey::Classify() {
 	return m_iClass ? m_iClass : CLASS_MACHINE;
 }
 
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COsprey::Precache(void) {
+void COsprey::Precache() {
 	if (m_iMonster == 4) {
 		UTIL_PrecacheOther("monster_human_grunt_ally");
 		UTIL_PrecacheOther("monster_human_medic_ally");
@@ -218,7 +218,7 @@ void COsprey::CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 //=========================================================
 // FindAllThink
 //=========================================================
-void COsprey::FindAllThink(void) {
+void COsprey::FindAllThink() {
 	CBaseEntity *pEntity = NULL;
 
 	m_iUnits = 0;
@@ -256,7 +256,7 @@ void COsprey::FindAllThink(void) {
 //=========================================================
 // DeployThink
 //=========================================================
-void COsprey::DeployThink(void) {
+void COsprey::DeployThink() {
 	UTIL_MakeAimVectors(pev->angles);
 
 	Vector vecForward = gpGlobals->v_forward;
@@ -354,7 +354,7 @@ CBaseMonster *COsprey::MakeGrunt(Vector vecSrc) {
 //=========================================================
 // HoverThink
 //=========================================================
-void COsprey::HoverThink(void) {
+void COsprey::HoverThink() {
 	int i;
 	for (i = 0; i < 4; i++) {
 		if (m_hRepel[i] != NULL && m_hRepel[i]->pev->health > 0 && !(m_hRepel[i]->pev->flags & FL_ONGROUND)) {
@@ -417,7 +417,7 @@ void COsprey::UpdateGoal() {
 //=========================================================
 // FlyThink
 //=========================================================
-void COsprey::FlyThink(void)
+void COsprey::FlyThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
@@ -632,7 +632,7 @@ void COsprey::CrashTouch(CBaseEntity *pOther)
 //=========================================================
 // DyingThink
 //=========================================================
-void COsprey::DyingThink(void)
+void COsprey::DyingThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
@@ -909,7 +909,7 @@ void COsprey::DyingThink(void)
 //=========================================================
 // ShowDamage
 //=========================================================
-void COsprey::ShowDamage(void)
+void COsprey::ShowDamage()
 {
 	if (m_iDoLeftSmokePuff > 0 || RANDOM_LONG(0, 99) > m_flLeftHealth)
 	{

@@ -81,7 +81,7 @@ extern "C" {
  */
 extern DECLSPEC int SDLCALL SDL_RegisterApp(char *name, Uint32 style,
                                             void *hInst);
-extern DECLSPEC void SDLCALL SDL_UnregisterApp(void);
+extern DECLSPEC void SDLCALL SDL_UnregisterApp();
 
 #endif /* __WIN32__ */
 

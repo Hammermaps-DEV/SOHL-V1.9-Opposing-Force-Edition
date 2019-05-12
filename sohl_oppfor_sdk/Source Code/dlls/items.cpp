@@ -36,9 +36,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "weapons.h"
 #include "player.h"
-#include "skill.h"
 #include "items.h"
 #include "gamerules.h"
 
@@ -49,7 +47,7 @@ class CWorldItem : public CBaseEntity
 {
 public:
 	void	KeyValue(KeyValueData *pkvd);
-	void	Spawn(void);
+	void	Spawn();
 	int		m_iType;
 };
 
@@ -66,7 +64,7 @@ void CWorldItem::KeyValue(KeyValueData *pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void CWorldItem::Spawn(void)
+void CWorldItem::Spawn()
 {
 	CBaseEntity *pEntity = NULL;
 
@@ -100,7 +98,7 @@ void CWorldItem::Spawn(void)
 	REMOVE_ENTITY(edict());
 }
 
-void CItem::Spawn(void)
+void CItem::Spawn()
 {
 	pev->movetype = MOVETYPE_TOSS;
 	pev->solid = SOLID_TRIGGER;
@@ -120,9 +118,7 @@ void CItem::ItemTouch(CBaseEntity *pOther)
 {
 	// if it's not a player, ignore
 	if (!pOther->IsPlayer())
-	{
 		return;
-	}
 
 	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
 
@@ -155,7 +151,7 @@ void CItem::ItemTouch(CBaseEntity *pOther)
 	}
 }
 
-CBaseEntity* CItem::Respawn(void)
+CBaseEntity* CItem::Respawn()
 {
 	SetTouch(NULL);
 	pev->effects |= EF_NODRAW;
@@ -167,7 +163,7 @@ CBaseEntity* CItem::Respawn(void)
 	return this;
 }
 
-void CItem::Materialize(void)
+void CItem::Materialize()
 {
 	if (pev->effects & EF_NODRAW)
 	{

@@ -773,7 +773,7 @@ typedef union SDL_HapticEffect
  *  
  *  \return Number of haptic devices detected on the system.
  */
-extern DECLSPEC int SDLCALL SDL_NumHaptics(void);
+extern DECLSPEC int SDLCALL SDL_NumHaptics();
 
 /**
  *  \brief Get the implementation dependent name of a Haptic device.
@@ -841,7 +841,7 @@ extern DECLSPEC int SDLCALL SDL_HapticIndex(SDL_Haptic * haptic);
  *  
  *  \sa SDL_HapticOpenFromMouse
  */
-extern DECLSPEC int SDLCALL SDL_MouseIsHaptic(void);
+extern DECLSPEC int SDLCALL SDL_MouseIsHaptic();
 
 /**
  *  \brief Tries to open a haptic device from the current mouse.
@@ -851,7 +851,7 @@ extern DECLSPEC int SDLCALL SDL_MouseIsHaptic(void);
  *  \sa SDL_MouseIsHaptic
  *  \sa SDL_HapticOpen
  */
-extern DECLSPEC SDL_Haptic *SDLCALL SDL_HapticOpenFromMouse(void);
+extern DECLSPEC SDL_Haptic *SDLCALL SDL_HapticOpenFromMouse();
 
 /**
  *  \brief Checks to see if a joystick has haptic features.

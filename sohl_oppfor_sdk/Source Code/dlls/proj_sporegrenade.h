@@ -36,14 +36,14 @@
 // Contact/Timed spore grenade
 class CSporeGrenade : public CBaseMonster {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void Glow(void);
-	void Explode(void);
+	void Spawn();
+	void Precache();
+	void Glow();
+	void Explode();
 
 	void EXPORT ExplodeThink(CBaseEntity *pOther);
 	void EXPORT BounceThink(CBaseEntity *pOther);
-	void EXPORT FlyThink(void);
+	void EXPORT FlyThink();
 
 	static CSporeGrenade *ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time);
 	static CSporeGrenade *ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);

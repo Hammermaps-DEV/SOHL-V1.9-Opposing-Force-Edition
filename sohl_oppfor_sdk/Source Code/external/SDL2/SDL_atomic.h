@@ -127,7 +127,7 @@ extern DECLSPEC void SDLCALL SDL_AtomicUnlock(SDL_SpinLock *lock);
  * reads and writes to globally visible variables across the call.
  */
 #if defined(_MSC_VER) && (_MSC_VER > 1200)
-void _ReadWriteBarrier(void);
+void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
 #define SDL_CompilerBarrier()   _ReadWriteBarrier()
 #elif defined(__GNUC__)

@@ -63,7 +63,7 @@ void CPython::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CPython::Precache(void) {
+void CPython::Precache() {
 	PRECACHE_MODEL("models/v_357.mdl");
 	PRECACHE_MODEL("models/w_357.mdl");
 	PRECACHE_MODEL("models/p_357.mdl");
@@ -142,7 +142,7 @@ void CPython::PrimaryAttack() {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CPython::SecondaryAttack(void) {
+void CPython::SecondaryAttack() {
 	if (IsMultiplayer()) {
 		m_fSpotActive = !m_fSpotActive;
 		if (!m_fSpotActive && m_pSpot) {
@@ -185,7 +185,7 @@ void CPython::Holster() {
 //=========================================================
 // Reload
 //=========================================================
-void CPython::Reload(void) {
+void CPython::Reload() {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
 		return;
 	}
@@ -205,7 +205,7 @@ void CPython::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CPython::WeaponIdle(void) {
+void CPython::WeaponIdle() {
 	if (IsMultiplayer()) {
 		UpdateSpot(); //Spot Update
 	}
@@ -264,7 +264,7 @@ void CPython::WeaponIdle(void) {
 //=========================================================
 // UpdateSpot * Only in Multiplayer
 //=========================================================
-void CPython::UpdateSpot(void) {
+void CPython::UpdateSpot() {
 	if (m_fSpotActive) {
 		if (!m_pSpot) {
 			m_pSpot = CLaserSpot::CreateSpot();

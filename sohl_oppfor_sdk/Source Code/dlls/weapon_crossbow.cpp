@@ -61,7 +61,7 @@ void CCrossbow::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CCrossbow::Precache(void) {
+void CCrossbow::Precache() {
 	PRECACHE_MODEL("models/w_crossbow.mdl");
 	PRECACHE_MODEL("models/v_crossbow.mdl");
 	PRECACHE_MODEL("models/p_crossbow.mdl");
@@ -95,7 +95,7 @@ int CCrossbow::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CCrossbow::PrimaryAttack(void) {
+void CCrossbow::PrimaryAttack() {
 	if (m_iChargeLevel && IsMultiplayer()) {
 		FireSniperBolt(); //MP
 	}
@@ -288,7 +288,7 @@ void CCrossbow::Holster() {
 //=========================================================
 // Reload
 //=========================================================
-void CCrossbow::Reload(void) {
+void CCrossbow::Reload() {
 	if (m_iChargeLevel) {
 		ZoomReset();
 	}
@@ -302,7 +302,7 @@ void CCrossbow::Reload(void) {
 //=========================================================
 // ZoomUpdate
 //=========================================================
-void CCrossbow::ZoomUpdate(void) {
+void CCrossbow::ZoomUpdate() {
 	if (m_pPlayer->pev->button & IN_ATTACK2) {
 		if (m_iChargeLevel == 0) {
 			if (m_flShockTime > UTIL_GlobalTimeBase()) return;
@@ -336,7 +336,7 @@ void CCrossbow::ZoomUpdate(void) {
 //=========================================================
 // ZoomReset
 //=========================================================
-void CCrossbow::ZoomReset(void) {
+void CCrossbow::ZoomReset() {
 	m_flShockTime = UTIL_GlobalTimeBase() + 0.5;
 	m_pPlayer->m_iFOV = 90;
 	m_iChargeLevel = 0;//clear zoom
@@ -345,7 +345,7 @@ void CCrossbow::ZoomReset(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CCrossbow::WeaponIdle(void) {
+void CCrossbow::WeaponIdle() {
 	ZoomUpdate();
 	ResetEmptySound();
 

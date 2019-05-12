@@ -314,7 +314,7 @@ void CPitWorm::Precache()
 //=========================================================
 // Classify
 //=========================================================
-int CPitWorm::Classify(void)
+int CPitWorm::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -322,7 +322,7 @@ int CPitWorm::Classify(void)
 //=========================================================
 // IdleSound
 //=========================================================
-void CPitWorm::IdleSound(void)
+void CPitWorm::IdleSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_NORM, ATTN_NORM);
 }
@@ -330,7 +330,7 @@ void CPitWorm::IdleSound(void)
 //=========================================================
 // AlertSound
 //=========================================================
-void CPitWorm::AlertSound(void)
+void CPitWorm::AlertSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAlertSounds), VOL_NORM, ATTN_NORM);
 }
@@ -338,7 +338,7 @@ void CPitWorm::AlertSound(void)
 //=========================================================
 // DeathSound
 //=========================================================
-void CPitWorm::DeathSound(void)
+void CPitWorm::DeathSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), VOL_NORM, ATTN_NORM);
 }
@@ -346,7 +346,7 @@ void CPitWorm::DeathSound(void)
 //=========================================================
 // AngrySound
 //=========================================================
-void CPitWorm::AngrySound(void)
+void CPitWorm::AngrySound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAngrySounds), VOL_NORM, ATTN_NORM);
 }
@@ -354,7 +354,7 @@ void CPitWorm::AngrySound(void)
 //=========================================================
 // FlinchSound
 //=========================================================
-void CPitWorm::FlinchSound(void)
+void CPitWorm::FlinchSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pFlinchSounds), VOL_NORM, ATTN_NORM);
 }
@@ -362,7 +362,7 @@ void CPitWorm::FlinchSound(void)
 //=========================================================
 // SwipeSound
 //=========================================================
-void CPitWorm::SwipeSound(void)
+void CPitWorm::SwipeSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pSwipeSounds), VOL_NORM, ATTN_NORM);
 }
@@ -370,7 +370,7 @@ void CPitWorm::SwipeSound(void)
 //=========================================================
 // BeamSound
 //=========================================================
-void CPitWorm::BeamSound(void)
+void CPitWorm::BeamSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "pitworm/pit_worm_attack_eyeblast.wav", VOL_NORM, ATTN_NORM);
 }
@@ -379,7 +379,7 @@ void CPitWorm::BeamSound(void)
 //=========================================================
 // SetObjectCollisionBox
 //=========================================================
-void CPitWorm::SetObjectCollisionBox(void)
+void CPitWorm::SetObjectCollisionBox()
 {
 	pev->absmin = pev->origin + Vector(-96, -96, 0);
 	pev->absmax = pev->origin + Vector(96, 96, 512);
@@ -490,7 +490,7 @@ int CPitWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 //=========================================================
 // StartupThink
 //=========================================================
-void CPitWorm::StartupThink(void)
+void CPitWorm::StartupThink()
 {
 	m_flAdj = 350;
 	Vector src = pev->origin;
@@ -547,7 +547,7 @@ void CPitWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 //=========================================================
 // NullThink
 //=========================================================
-void CPitWorm::NullThink(void)
+void CPitWorm::NullThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.5);
@@ -556,7 +556,7 @@ void CPitWorm::NullThink(void)
 //=========================================================
 // DyingThink
 //=========================================================
-void CPitWorm::DyingThink(void)
+void CPitWorm::DyingThink()
 {
 	SetNextThink(0.1);
 	DispatchAnimEvents();
@@ -596,7 +596,7 @@ void CPitWorm::DyingThink(void)
 //=========================================================
 // HuntThink
 //=========================================================
-void CPitWorm::HuntThink(void)
+void CPitWorm::HuntThink()
 {
 	SetNextThink(0.1);
 	DispatchAnimEvents();
@@ -887,7 +887,7 @@ void CPitWorm::NextActivity()
 //=========================================================
 // FloatSequence
 //=========================================================
-void CPitWorm::FloatSequence(void)
+void CPitWorm::FloatSequence()
 {
 	switch (RANDOM_LONG(0, 1))
 	{
@@ -968,7 +968,7 @@ const Vector& CPitWorm::IdealPosition(CBaseEntity* pEnemy) const
 //=========================================================
 // UpdateBodyControllers
 //=========================================================
-void CPitWorm::UpdateBodyControllers(void)
+void CPitWorm::UpdateBodyControllers()
 {
 	if (!m_hEnemy)
 		return;
@@ -1040,7 +1040,7 @@ void CPitWorm::CreateBeam(const Vector& src, const Vector& target, int width)
 //=========================================================
 // DestroyBeam
 //=========================================================
-void CPitWorm::DestroyBeam(void)
+void CPitWorm::DestroyBeam()
 {
 	if (m_pBeam)
 	{
@@ -1123,7 +1123,7 @@ void CPitWorm::UpdateBeamPoints(CBaseEntity* pEnemy, Vector* target)
 //=========================================================
 // CreateGlow
 //=========================================================
-void CPitWorm::CreateGlow(void)
+void CPitWorm::CreateGlow()
 {
 	m_pEyeGlow = CSprite::SpriteCreate("sprites/glow_grn.spr", pev->origin, TRUE);
 	m_pEyeGlow->SetTransparency(kRenderGlow, 255, 255, 255, 0, kRenderFxNoDissipation);
@@ -1134,7 +1134,7 @@ void CPitWorm::CreateGlow(void)
 //=========================================================
 // DestroyGlow
 //=========================================================
-void CPitWorm::DestroyGlow(void)
+void CPitWorm::DestroyGlow()
 {
 	if (m_pEyeGlow)
 	{
@@ -1154,7 +1154,7 @@ void CPitWorm::EyeOn(int level)
 //=========================================================
 // EyeOff
 //=========================================================
-void CPitWorm::EyeOff(void)
+void CPitWorm::EyeOff()
 {
 	m_eyeBrightness = 0;
 }
@@ -1162,7 +1162,7 @@ void CPitWorm::EyeOff(void)
 //=========================================================
 // EyeUpdate
 //=========================================================
-void CPitWorm::EyeUpdate(void)
+void CPitWorm::EyeUpdate()
 {
 	if (m_pEyeGlow)
 	{

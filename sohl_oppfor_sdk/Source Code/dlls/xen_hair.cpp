@@ -42,7 +42,7 @@ LINK_ENTITY_TO_CLASS(xen_hair, CXenHair);
 //=========================================================
 // Spawn
 //=========================================================
-void CXenHair::Spawn(void) {
+void CXenHair::Spawn() {
 	Precache();
 	SET_MODEL(edict(), "models/hair.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 32));
@@ -63,7 +63,7 @@ void CXenHair::Spawn(void) {
 //=========================================================
 // Think
 //=========================================================
-void CXenHair::Think(void) {
+void CXenHair::Think() {
 	StudioFrameAdvance();
 	SetNextThink(0.5);
 }
@@ -71,6 +71,6 @@ void CXenHair::Think(void) {
 //=========================================================
 // Precache
 //=========================================================
-void CXenHair::Precache(void) {
+void CXenHair::Precache() {
 	PRECACHE_MODEL("models/hair.mdl");
 }

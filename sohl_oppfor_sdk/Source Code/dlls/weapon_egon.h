@@ -50,32 +50,32 @@ public:
 	int	Restore(CRestore &restore);
 	static TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
-	BOOL Deploy(void);
+	BOOL Deploy();
 	void Holster();
 
-	void CreateEffect(void);
+	void CreateEffect();
 	void UpdateEffect(const Vector &startPoint, const Vector &endPoint, float timeBlend);
-	void DestroyEffect(void);
+	void DestroyEffect();
 
-	void EndAttack(void);
-	void UpdateScreen(void);
-	void ShutdownScreen(void);
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	void WeaponIdle(void);
+	void EndAttack();
+	void UpdateScreen();
+	void ShutdownScreen();
+	void PrimaryAttack();
+	void SecondaryAttack();
+	void WeaponIdle();
 
 	float m_flAmmoUseTime;// since we use < 1 point of ammo per update, we subtract ammo on a timer.
 
 	void Fire(const Vector &vecOrigSrc, const Vector &vecDir);
 
-	BOOL HasAmmo(void);
+	BOOL HasAmmo();
 	void UseAmmo(int count);
 
-	int flags(void) { return ENGINE_CANSKIP(m_pPlayer->edict()) ? NULL : FEV_NOTHOST; };
+	int flags() { return ENGINE_CANSKIP(m_pPlayer->edict()) ? NULL : FEV_NOTHOST; };
 
 	enum EGON_FIRESTATE { FIRE_OFF = 0, FIRE_CHARGE };
 	enum EGON_FIREMODE { FIRE_NARROW = 0, FIRE_WIDE };

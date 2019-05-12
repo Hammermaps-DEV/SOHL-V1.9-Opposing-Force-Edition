@@ -71,12 +71,12 @@
 class CPathTrack : public CPointEntity
 {
 public:
-	void		Spawn(void);
-	void		Activate(void);
+	void		Spawn();
+	void		Activate();
 	void		KeyValue(KeyValueData* pkvd);
 
 	void		SetPrevious(CPathTrack *pprevious);
-	void		Link(void);
+	void		Link();
 	void		Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	CPathTrack	*ValidPath(CPathTrack *ppath, int testFlag);		// Returns ppath if enabled, NULL otherwise
@@ -87,15 +87,15 @@ public:
 	CPathTrack	*LookAhead(Vector *origin, float dist, int move);
 	CPathTrack	*Nearest(Vector origin);
 
-	CPathTrack	*GetNext(void);
-	CPathTrack	*GetPrevious(void);
+	CPathTrack	*GetNext();
+	CPathTrack	*GetPrevious();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 
 	static	TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
-	void EXPORT Sparkle(void);
+	void EXPORT Sparkle();
 #endif
 
 	float		m_length;
@@ -111,8 +111,8 @@ class CBaseTrainDoor;
 class CFuncTrackTrain : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
 	void Blocked(CBaseEntity *pOther);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
@@ -123,13 +123,13 @@ public:
 	void StopSequence();
 	CTrainSequence *m_pSequence;
 
-	void DesiredAction(void); //LRC - used to be called Next!
+	void DesiredAction(); //LRC - used to be called Next!
 
 //	void EXPORT Next( void );
-	void EXPORT PostponeNext(void);
-	void EXPORT Find(void);
-	void EXPORT NearestPath(void);
-	void EXPORT DeadEnd(void);
+	void EXPORT PostponeNext();
+	void EXPORT Find();
+	void EXPORT NearestPath();
+	void EXPORT DeadEnd();
 
 	void		NextThink(float thinkTime, BOOL alwaysThink);
 
@@ -137,8 +137,8 @@ public:
 	void SetControls(entvars_t *pevControls);
 	BOOL OnControls(entvars_t *pev);
 
-	void StopSound(void);
-	void UpdateSound(void);
+	void StopSound();
+	void UpdateSound();
 
 	static CFuncTrackTrain *Instance(edict_t *pent);
 
@@ -146,10 +146,10 @@ public:
 	virtual int		Restore(CRestore &restore);
 
 	static	TYPEDESCRIPTION m_SaveData[];
-	virtual int	ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
+	virtual int	ObjectCaps() { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
 
-	virtual void	OverrideReset(void);
-	virtual void	ClearPointers(void);
+	virtual void	OverrideReset();
+	virtual void	ClearPointers();
 
 	CPathTrack	*m_ppath;
 	CBaseTrainDoor	*m_pDoor;
@@ -191,12 +191,12 @@ typedef enum
 class CBaseTrainDoor : public CBaseToggle
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	virtual void KeyValue(KeyValueData *pkvd);
 	virtual void Blocked(CBaseEntity *pOther);
 
-	virtual int	ObjectCaps(void)
+	virtual int	ObjectCaps()
 	{
 		return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
 	};
@@ -206,20 +206,20 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// local functions
-	void EXPORT FindTrain(void);
-	void EXPORT DoorGoUp(void);
-	void EXPORT DoorGoDown(void);
-	void EXPORT DoorHitTop(void);
-	void EXPORT DoorSlideUp(void);
-	void EXPORT DoorSlideDown(void);
-	void EXPORT DoorSlideWait(void);		// wait before sliding
-	void EXPORT DoorHitBottom(void);
-	void EXPORT ActivateTrain(void);
+	void EXPORT FindTrain();
+	void EXPORT DoorGoUp();
+	void EXPORT DoorGoDown();
+	void EXPORT DoorHitTop();
+	void EXPORT DoorSlideUp();
+	void EXPORT DoorSlideDown();
+	void EXPORT DoorSlideWait();		// wait before sliding
+	void EXPORT DoorHitBottom();
+	void EXPORT ActivateTrain();
 
 	BYTE	m_bMoveSnd;			// sound a door makes while moving
 	BYTE	m_bStopSnd;			// sound a door makes when it stops
 
-	Vector	ConvertAngles(void);	// same as in plats.cpp
+	Vector	ConvertAngles();	// same as in plats.cpp
 
 	CFuncTrackTrain	*m_pTrain;	// my train pointer
 
@@ -228,12 +228,12 @@ public:
 	Vector	m_vecPosition3;		// moving forward
 
 	TRAINDOOR_STATE	door_state;
-	virtual void	OverrideReset(void);
+	virtual void	OverrideReset();
 	virtual void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	virtual STATE	GetState(void);
-	void		DoorSetup(void);
-	void		Evaluate(void);
-	void		Stop(void);
+	virtual STATE	GetState();
+	void		DoorSetup();
+	void		Evaluate();
+	void		Stop();
 };
 
 #endif

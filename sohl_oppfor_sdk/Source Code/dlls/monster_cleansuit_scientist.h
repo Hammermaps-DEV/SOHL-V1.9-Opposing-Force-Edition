@@ -35,8 +35,8 @@
 
 class CCleansuitScientist : public CScientist {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 

@@ -276,12 +276,12 @@ void CopyToBodyQue(entvars_t *pev)
 	g_pBodyQueueHead = pevHead->owner;
 }
 
-CGlobalState::CGlobalState(void)
+CGlobalState::CGlobalState()
 {
 	Reset();
 }
 
-void CGlobalState::Reset(void)
+void CGlobalState::Reset()
 {
 	m_pList = NULL;
 	m_listCount = 0;
@@ -420,7 +420,7 @@ void CGlobalState::EntityUpdate(string_t globalname, string_t mapname)
 		strcpy(pEnt->levelName, STRING(mapname));
 }
 
-void CGlobalState::ClearStates(void)
+void CGlobalState::ClearStates()
 {
 	globalentity_t *pFree = m_pList;
 	while (pFree)
@@ -468,16 +468,16 @@ LINK_ENTITY_TO_CLASS(worldspawn, CWorld);
 extern DLL_GLOBAL bool g_fGameOver;
 extern bool g_flWeaponCheat;
 
-bool g_startSuit; //LRC
-bool g_allowGJump;
+bool g_startSuit = false; //LRC
+bool g_allowGJump = false; //LRC
 
-void CWorld::Spawn(void)
+void CWorld::Spawn()
 {
 	g_fGameOver = false;
 	Precache();
 }
 
-void CWorld::Precache(void)
+void CWorld::Precache()
 {
 	//LRC - set up the world lists
 	g_pWorld = this;

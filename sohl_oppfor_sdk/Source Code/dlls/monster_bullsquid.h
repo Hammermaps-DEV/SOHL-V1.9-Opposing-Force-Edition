@@ -32,11 +32,11 @@
 class CSquidSpit : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn();
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void EXPORT Animate(void);
+	void EXPORT Animate();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
@@ -48,30 +48,30 @@ public:
 class CBullsquid : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  ISoundMask(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  ISoundMask();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void IdleSound(void);
-	void PainSound(void);
-	void DeathSound(void);
-	void AlertSound(void);
-	void AttackSound(void);
+	void IdleSound();
+	void PainSound();
+	void DeathSound();
+	void AlertSound();
+	void AttackSound();
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
 	bool CheckMeleeAttack1(float flDot, float flDist);
 	bool CheckMeleeAttack2(float flDot, float flDist);
 	bool CheckRangeAttack1(float flDot, float flDist);
-	void RunAI(void);
+	void RunAI();
 	BOOL FValidateHintType(short sHint);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 	Schedule_t *GetScheduleOfType(int Type);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	int IRelationship(CBaseEntity *pTarget);
-	int IgnoreConditions(void);
-	MONSTERSTATE GetIdealState(void);
+	int IgnoreConditions();
+	MONSTERSTATE GetIdealState();
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);

@@ -45,21 +45,21 @@ enum class SHOCKRIFLE_HOLSTER { sequence = 3, frames = 26, fps = 30 };
 class CShockrifle : public CHgun {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 	int AddToPlayer(CBasePlayer *pPlayer);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void) { PrimaryAttack(); };
+	void PrimaryAttack();
+	void SecondaryAttack() { PrimaryAttack(); };
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void Reload(void);
-	void WeaponIdle(void);
-	void ItemPostFrame(void);;
+	BOOL Deploy();
+	void Holster();
+	void Reload();
+	void WeaponIdle();
+	void ItemPostFrame();;
 	void UpdateEffects();
 private:
 	//Sounds

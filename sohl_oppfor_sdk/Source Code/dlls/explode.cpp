@@ -46,15 +46,15 @@ extern int gmsgParticles;//define external message
 // Spark Shower
 class CShower : public CBaseEntity
 {
-	void Spawn(void);
-	void Think(void);
+	void Spawn();
+	void Think();
 	void Touch(CBaseEntity *pOther);
-	int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	int ObjectCaps() { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(spark_shower, CShower);
 
-void CShower::Spawn(void)
+void CShower::Spawn()
 {
 	pev->velocity = RANDOM_FLOAT(200, 300) * pev->angles;
 	pev->velocity.x += RANDOM_FLOAT(-100.f, 100.f);
@@ -76,7 +76,7 @@ void CShower::Spawn(void)
 }
 
 
-void CShower::Think(void)
+void CShower::Think()
 {
 	UTIL_Sparks(pev->origin);
 
@@ -103,7 +103,7 @@ class CEnvExplosion : public CBaseMonster
 {
 public:
 	void Spawn();
-	void EXPORT Smoke(void);
+	void EXPORT Smoke();
 	void KeyValue(KeyValueData *pkvd);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
@@ -135,7 +135,7 @@ void CEnvExplosion::KeyValue(KeyValueData *pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void CEnvExplosion::Spawn(void)
+void CEnvExplosion::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
@@ -313,7 +313,7 @@ void CEnvExplosion::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	}
 }
 
-void CEnvExplosion::Smoke(void)
+void CEnvExplosion::Smoke()
 {
 	if (!(pev->spawnflags & SF_ENVEXPLOSION_NOSMOKE)) {
 		if (CVAR_GET_FLOAT("r_particles") != 0) {

@@ -104,7 +104,7 @@ void CShockRoach::Spawn() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CShockRoach::Classify(void) {
+int	CShockRoach::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_BIOWEAPON;
 }
 
@@ -182,7 +182,7 @@ void CShockRoach::LeapTouch(CBaseEntity *pOther) {
 //=========================================================
 // PrescheduleThink
 //=========================================================
-void CShockRoach::PrescheduleThink(void) {
+void CShockRoach::PrescheduleThink() {
 	// Kill Shock-Roach when in out a specific period
 	if (m_iDies && UTIL_GlobalTimeBase() >= m_flDie) {
 		pev->health = -1;
@@ -251,35 +251,35 @@ void CShockRoach::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // IdleSound
 //=========================================================
-void CShockRoach::IdleSound(void) {
+void CShockRoach::IdleSound() {
 	EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
-void CShockRoach::AlertSound(void) {
+void CShockRoach::AlertSound() {
 	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_angry.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 14)));
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CShockRoach::PainSound(void) {
+void CShockRoach::PainSound() {
 	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_flinch.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 14)));
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
-void CShockRoach::DeathSound(void) {
+void CShockRoach::DeathSound() {
 	EMIT_SOUND_DYN(edict(), CHAN_VOICE, "shockroach/shock_die.wav", GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(1));
 }
 
 //=========================================================
 // AttackSound 
 //=========================================================
-void CShockRoach::AttackSound(void) {
+void CShockRoach::AttackSound() {
 	EMIT_SOUND_DYN(edict(), CHAN_VOICE, RANDOM_SOUND_ARRAY(pAttackSounds), GetSoundVolue(), ATTN_IDLE, 0, GetVoicePitch(RANDOM_LONG(-5, 5)));
 }
 

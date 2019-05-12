@@ -200,7 +200,7 @@ void CVoltigore::Spawn() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CVoltigore::Classify(void) {
+int	CVoltigore::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
@@ -300,7 +300,7 @@ void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CVoltigore::IgnoreConditions(void) {
+int CVoltigore::IgnoreConditions() {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 	if (UTIL_GlobalTimeBase() - m_flLastHurtTime <= 20) {
 		// haven't been hurt in 20 seconds, so let the voltigore care about stink. 
@@ -373,7 +373,7 @@ bool CVoltigore::CheckRangeAttack1(float flDot, float flDist) {
 
 //=========================================================
 //=========================================================
-void CVoltigore::RunAI(void) {
+void CVoltigore::RunAI() {
 	CBaseMonster::RunAI();
 	if (m_fShouldUpdateBeam) {
 		UpdateBeams();
@@ -433,7 +433,7 @@ BOOL CVoltigore::FValidateHintType(short sHint) {
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CVoltigore::ISoundMask(void) {
+int CVoltigore::ISoundMask() {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
 		bits_SOUND_CARCASS |
@@ -445,21 +445,21 @@ int CVoltigore::ISoundMask(void) {
 //=========================================================
 // IdleSound 
 //=========================================================
-void CVoltigore::IdleSound(void) {
+void CVoltigore::IdleSound() {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CVoltigore::PainSound(void) {
+void CVoltigore::PainSound() {
 	EMIT_SOUND_DYN(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pPainSounds), VOL_NORM, ATTN_NORM, 0, RANDOM_LONG(85, 120));
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CVoltigore::AlertSound(void) {
+void CVoltigore::AlertSound() {
 	if (m_hEnemy != NULL) {
 		SENTENCEG_PlayRndSz(ENT(pev), "VLT_ALERT", 0.85, ATTN_NORM, 0, RANDOM_LONG(85, 120));
 		CallForHelp("monster_voltigore", 512, m_hEnemy, m_vecEnemyLKP);
@@ -490,7 +490,7 @@ void CVoltigore::CallForHelp(char *szClassname, float flDist, EHANDLE hEnemy, Ve
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CVoltigore::SetYawSpeed(void) {
+void CVoltigore::SetYawSpeed() {
 	int ys = 0;
 	switch (m_Activity) {
 	case	ACT_WALK:			ys = 90;	break;
@@ -586,14 +586,14 @@ void CVoltigore::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // DeathSound
 //=========================================================
-void CVoltigore::DeathSound(void) {
+void CVoltigore::DeathSound() {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), VOL_NORM, ATTN_NORM);
 }
 
 //=========================================================
 // AttackSound
 //=========================================================
-void CVoltigore::AttackSound(void) {
+void CVoltigore::AttackSound() {
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "voltigore/voltigore_attack_shock.wav", VOL_NORM, ATTN_NORM);
 }
 
@@ -732,7 +732,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CVoltigore, CBaseMonster);
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t *CVoltigore::GetSchedule(void) {
+Schedule_t *CVoltigore::GetSchedule() {
 	switch (m_MonsterState) {
 	case MONSTERSTATE_ALERT: {
 		if (HasConditions(bits_COND_SMELL_FOOD)) {
@@ -846,7 +846,7 @@ void CVoltigore::StartTask(Task_t *pTask) {
 // the feature that makes it lose interest in headcrabs for 
 // a while if something injures it. 
 //=========================================================
-MONSTERSTATE CVoltigore::GetIdealState(void) {
+MONSTERSTATE CVoltigore::GetIdealState() {
 	m_IdealMonsterState = CBaseMonster::GetIdealState();
 	return m_IdealMonsterState;
 }
@@ -988,7 +988,7 @@ void CVoltigore::GlowUpdate() {
 	}
 }
 
-void CVoltigore::GlowOff(void) {
+void CVoltigore::GlowOff() {
 	m_glowBrightness = 0;
 }
 

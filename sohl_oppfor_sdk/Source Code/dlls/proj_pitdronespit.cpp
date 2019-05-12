@@ -59,7 +59,7 @@ const char *CPitDroneSpit::pMissSounds[] = {
 //=========================================================
 // Spawn
 //=========================================================
-void CPitDroneSpit::Spawn(void) {
+void CPitDroneSpit::Spawn() {
 	Precache();
 
 	pev->classname = MAKE_STRING("pitdronespit");
@@ -105,7 +105,7 @@ int CPitDroneSpit::IRelationship(CBaseEntity *pTarget) {
 //=========================================================
 // ID's Spit as their owner
 //=========================================================
-int CPitDroneSpit::Classify(void) {
+int CPitDroneSpit::Classify() {
 	if (m_iClass) return m_iClass;
 	return CLASS_ALIEN_BIOWEAPON;
 }
@@ -113,7 +113,7 @@ int CPitDroneSpit::Classify(void) {
 //=========================================================
 // StartTrack - starts a spit out tracking its target
 //=========================================================
-void CPitDroneSpit::StartTrack(void) {
+void CPitDroneSpit::StartTrack() {
 	IgniteTrail();
 	SetTouch(&CPitDroneSpit::TrackTouch);
 	SetThink(&CPitDroneSpit::TrackTarget);
@@ -123,14 +123,14 @@ void CPitDroneSpit::StartTrack(void) {
 //=========================================================
 // StartDart - starts a spit out just flying straight.
 //=========================================================
-void CPitDroneSpit::StartDart(void) {
+void CPitDroneSpit::StartDart() {
 	IgniteTrail();
 	SetTouch(&CPitDroneSpit::DieTouch);
 	SetThink(&CPitDroneSpit::SUB_Remove);
 	SetNextThink(4);
 }
 
-void CPitDroneSpit::IgniteTrail(void) {
+void CPitDroneSpit::IgniteTrail() {
 	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
 	WRITE_BYTE(TE_BEAMFOLLOW);
 	WRITE_SHORT(entindex());	// entity
@@ -147,7 +147,7 @@ void CPitDroneSpit::IgniteTrail(void) {
 //=========================================================
 // Spit is flying, gently tracking target
 //=========================================================
-void CPitDroneSpit::TrackTarget(void) {
+void CPitDroneSpit::TrackTarget() {
 	Vector	vecFlightDir;
 	Vector	vecDirToEnemy;
 	float	flDelta;

@@ -30,21 +30,21 @@
 
 class CPortal : public CBaseEntity {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void EXPORT Animate(void);
-	void EXPORT GlowThink(void);
+	void EXPORT Animate();
+	void EXPORT GlowThink();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void ComputeBeamPositions(const Vector& vel, Vector* pos1, Vector* pos2);
-	void EXPORT FadeShock(void);
-	void Glow(void);
+	void EXPORT FadeShock();
+	void Glow();
 
 	int  m_iBeams;
 	int  m_maxFrame;
@@ -56,7 +56,7 @@ public:
 	int iPortalSprite;
 	int iRingSprite;
 
-	void CreateBeams(void);
-	void ClearBeams(void);
-	void UpdateBeams(void);
+	void CreateBeams();
+	void ClearBeams();
+	void UpdateBeams();
 };

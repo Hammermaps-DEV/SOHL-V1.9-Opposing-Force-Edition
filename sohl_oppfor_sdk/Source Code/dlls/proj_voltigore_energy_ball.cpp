@@ -53,7 +53,7 @@ IMPLEMENT_SAVERESTORE(CVoltigoreEnergyBall, CBaseEntity);
 //=========================================================
 // Purpose:
 //=========================================================
-void CVoltigoreEnergyBall::Spawn(void) {
+void CVoltigoreEnergyBall::Spawn() {
 	Precache();
 
 	pev->movetype = MOVETYPE_FLY;
@@ -78,14 +78,14 @@ void CVoltigoreEnergyBall::Spawn(void) {
 	SetTouch(&CVoltigoreEnergyBall::Touch);
 }
 
-void CVoltigoreEnergyBall::Precache(void) {
+void CVoltigoreEnergyBall::Precache() {
 	PRECACHE_MODEL("sprites/blueflare2.spr");
 	PRECACHE_MODEL("sprites/glow_prp.spr");
 	PRECACHE_MODEL("sprites/plasma.spr");
 	PRECACHE_SOUND("weapons/displacer_impact.wav");
 }
 
-void CVoltigoreEnergyBall::Animate(void) {
+void CVoltigoreEnergyBall::Animate() {
 	SetNextThink(0.1);
 	if (pev->frame++) {
 		if (pev->frame > m_maxFrame) {
@@ -154,7 +154,7 @@ void CVoltigoreEnergyBall::Touch(CBaseEntity *pOther) {
 	SetNextThink(0);
 }
 
-void CVoltigoreEnergyBall::Think(void) {
+void CVoltigoreEnergyBall::Think() {
 	CBeam *pBeam;
 	TraceResult tr;
 	float flDist = 1.0;
@@ -206,7 +206,7 @@ void CVoltigoreEnergyBall::Think(void) {
 	SetNextThink(0.05);
 }
 
-void CVoltigoreEnergyBall::Glow(void) {
+void CVoltigoreEnergyBall::Glow() {
 	if (m_pSprite) {
 		UTIL_Remove(m_pSprite);
 		m_pSprite = NULL;

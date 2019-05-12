@@ -32,7 +32,7 @@
 class CXenHull : public CPointEntity {
 public:
 	static CXenHull	*CreateHull(CBaseEntity *source, const Vector &mins, const Vector &maxs, const Vector &offset);
-	int	Classify(void) { return CLASS_BARNACLE; }
+	int	Classify() { return CLASS_BARNACLE; }
 };
 
 #endif // XEN_HULL_H

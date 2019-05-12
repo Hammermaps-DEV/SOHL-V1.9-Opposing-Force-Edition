@@ -453,7 +453,7 @@ DECLARE_SKILL_CVARS(player_leg);
 
 // Register your console variables here
 // This gets called one time when the game is initialied
-void GameDLLInit(void)
+void GameDLLInit()
 {
 	// Register cvars here:
 	g_psv_gravity = CVAR_GET_POINTER("sv_gravity");

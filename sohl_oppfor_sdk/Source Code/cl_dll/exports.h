@@ -55,8 +55,8 @@ extern "C"
 	void CL_DLLEXPORT IN_ActivateMouse( void );
 	void CL_DLLEXPORT IN_DeactivateMouse( void );
 	void CL_DLLEXPORT IN_MouseEvent (int mstate);
-	void CL_DLLEXPORT IN_Accumulate (void);
-	void CL_DLLEXPORT IN_ClearStates (void);
+	void CL_DLLEXPORT IN_Accumulate ();
+	void CL_DLLEXPORT IN_ClearStates ();
 
 	// From tri
 	void CL_DLLEXPORT HUD_DrawNormalTriangles( void );

@@ -996,7 +996,7 @@ void CTorch::RunTask(Task_t *pTask) {
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CTorch::GibMonster(void) {
+void CTorch::GibMonster() {
 	if (!(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024) && GetBodygroup(2) != 2) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
@@ -1018,7 +1018,7 @@ void CTorch::GibMonster(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CTorch::SetYawSpeed(void) {
+void CTorch::SetYawSpeed() {
 	switch (m_Activity) {
 	case ACT_WALK:
 	case ACT_TURN_LEFT:
@@ -1049,7 +1049,7 @@ void CTorch::SetYawSpeed(void) {
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CTorch::PrescheduleThink(void) {
+void CTorch::PrescheduleThink() {
 	if (m_pBeam) {
 		UpdateGas();
 	}
@@ -1076,7 +1076,7 @@ bool CTorch::CheckRangeAttack1(float flDot, float flDist)
 //=========================================================
 // UpdateGas 
 //=========================================================
-void CTorch::UpdateGas(void) {
+void CTorch::UpdateGas() {
 	TraceResult tr;
 	Vector posGun, angleGun;
 	Vector vecEndPos;
@@ -1139,7 +1139,7 @@ void CTorch::UpdateGas(void) {
 //=========================================================
 // MakeGas 
 //=========================================================
-void CTorch::MakeGas(void) {
+void CTorch::MakeGas() {
 	Vector posGun, angleGun;
 	TraceResult tr;
 	Vector vecEndPos;
@@ -1172,7 +1172,7 @@ void CTorch::MakeGas(void) {
 //=========================================================
 // KillGas 
 //=========================================================
-void CTorch::KillGas(void) {
+void CTorch::KillGas() {
 	if (m_pBeam) {
 		UTIL_Remove(m_pBeam);
 		m_pBeam = NULL;
@@ -1370,7 +1370,7 @@ void CTorch::Precache() {
 //=========================================================
 // JustSpoke
 //=========================================================
-void CTorch::JustSpoke(void) {
+void CTorch::JustSpoke() {
 	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = TORCH_SENT_NONE;
 }
@@ -1710,7 +1710,7 @@ void CTorch::SetActivity(Activity NewActivity) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CTorch::GetSchedule(void) {
+Schedule_t *CTorch::GetSchedule() {
 	// clear old sentence
 	m_iSentence = -1;
 
@@ -1903,7 +1903,7 @@ Schedule_t *CTorch::GetSchedule(void) {
 		if (m_hEnemy == NULL && IsFollowing()) {
 			if (!m_hTargetEnt->IsAlive()) {
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else {
@@ -1933,7 +1933,7 @@ Schedule_t *CTorch::GetSchedule(void) {
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_human_torch_ally_repel, CTorchRepel);
 
-void CTorchRepel::Spawn(void)
+void CTorchRepel::Spawn()
 {
 	Precache();
 	pev->solid = SOLID_NOT;
@@ -1941,7 +1941,7 @@ void CTorchRepel::Spawn(void)
 	SetUse(&CTorchRepel::RepelUse);
 }
 
-void CTorchRepel::Precache(void)
+void CTorchRepel::Precache()
 {
 	UTIL_PrecacheOther("monster_human_torch_ally");
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");

@@ -55,12 +55,12 @@ extern "C" {
  * - This invalidates all existing device information from previous queries!
  * - There is an implicit (re)detect upon SDL_Init().
  */
-extern DECLSPEC int SDLCALL SDL_RedetectInputDevices(void);
+extern DECLSPEC int SDLCALL SDL_RedetectInputDevices();
 
 /**
  *  \brief Get the number of mouse input devices available.
  */
-extern DECLSPEC int SDLCALL SDL_GetNumInputDevices(void);
+extern DECLSPEC int SDLCALL SDL_GetNumInputDevices();
 
 /**
  *  \brief Gets the name of a device with the given index.

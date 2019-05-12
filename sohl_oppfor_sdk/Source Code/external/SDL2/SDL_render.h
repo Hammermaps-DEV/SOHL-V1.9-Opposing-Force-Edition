@@ -140,7 +140,7 @@ typedef struct SDL_Texture SDL_Texture;
  *  \sa SDL_GetRenderDriverInfo()
  *  \sa SDL_CreateRenderer()
  */
-extern DECLSPEC int SDLCALL SDL_GetNumRenderDrivers(void);
+extern DECLSPEC int SDLCALL SDL_GetNumRenderDrivers();
 
 /**
  *  \brief Get information about a specific 2D rendering driver for the current 

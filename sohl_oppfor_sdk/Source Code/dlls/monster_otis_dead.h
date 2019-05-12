@@ -34,8 +34,8 @@
 class CDeadOtis : public CDeadBarney
 {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+	void Spawn();
+	int	Classify() { return	CLASS_PLAYER_ALLY; }
 	void KeyValue(KeyValueData *pkvd);
 	static char *m_szPoses[5];
 

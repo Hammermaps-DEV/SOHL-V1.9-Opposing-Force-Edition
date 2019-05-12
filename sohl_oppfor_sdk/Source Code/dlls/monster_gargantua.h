@@ -32,17 +32,17 @@
 class CSpiral : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Think(void);
-	int ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	void Spawn();
+	void Think();
+	int ObjectCaps() { return FCAP_DONT_SAVE; }
 	static CSpiral *Create(const Vector &origin, float height, float radius, float duration);
 };
 
 class CStomp : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Think(void);
+	void Spawn();
+	void Think();
 	static CStomp *StompCreate(const Vector &origin, const Vector &end, float speed);
 
 private:
@@ -53,10 +53,10 @@ private:
 class CGargantua : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
@@ -64,7 +64,7 @@ public:
 	bool CheckMeleeAttack1(float flDot, float flDist);		// Swipe
 	bool CheckMeleeAttack2(float flDot, float flDist);		// Flames
 	bool CheckRangeAttack1(float flDot, float flDist);		// Stomp attack
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox()
 	{
 		pev->absmin = pev->origin + Vector(-80, -80, 0);
 		pev->absmax = pev->origin + Vector(80, 80, 214);
@@ -74,21 +74,21 @@ public:
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
 
-	void PrescheduleThink(void);
+	void PrescheduleThink();
 
 	void Killed(entvars_t *pevAttacker, int iGib);
-	void DeathEffect(void);
+	void DeathEffect();
 
-	void EyeOff(void);
+	void EyeOff();
 	void EyeOn(int level);
-	void EyeUpdate(void);
-	void Leap(void);
-	void StompAttack(void);
-	void FlameCreate(void);
-	void FlameUpdate(void);
+	void EyeUpdate();
+	void Leap();
+	void StompAttack();
+	void FlameCreate();
+	void FlameUpdate();
 	void FlameControls(float angleX, float angleY);
-	void FlameDestroy(void);
-	inline BOOL FlameIsOn(void) { return m_pFlame[0] != NULL; }
+	void FlameDestroy();
+	inline BOOL FlameIsOn() { return m_pFlame[0] != NULL; }
 
 	void FlameDamage(Vector vecStart, Vector vecEnd, entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int iClassIgnore, int bitsDamageType);
 

@@ -38,7 +38,7 @@
 #include "rain.h"
 
 void WaterLandingEffect(cl_drip *drip);
-void ParseRainFile(void);
+void ParseRainFile();
 
 rain_properties     Rain;
 
@@ -61,7 +61,7 @@ ProcessRain
 Must think every frame.
 =================================
 */
-void ProcessRain(void)
+void ProcessRain()
 {
 	rain_oldtime = rain_curtime; // save old time
 	rain_curtime = gEngfuncs.GetClientTime();
@@ -319,7 +319,7 @@ Remove all fx objects with out time to live
 Call every frame before ProcessRain
 =================================
 */
-void ProcessFXObjects(void)
+void ProcessFXObjects()
 {
 	float curtime = gEngfuncs.GetClientTime();
 
@@ -349,7 +349,7 @@ ResetRain
 clear memory, delete all objects
 =================================
 */
-void ResetRain(void)
+void ResetRain()
 {
 	// delete all drips
 	cl_drip* delDrip = FirstChainDrip.p_Next;
@@ -385,7 +385,7 @@ InitRain
 initialze system
 =================================
 */
-void InitRain(void)
+void InitRain()
 {
 	Rain.dripsPerSecond = 0;
 	Rain.distFromPlayer = 0;
@@ -439,7 +439,7 @@ mode 		- rain = 0\snow =1
 height		- max height to create raindrips\snowflakes
 ===========================
 */
-void ParseRainFile(void)
+void ParseRainFile()
 {
 	if (Rain.distFromPlayer != 0 || Rain.dripsPerSecond != 0 || Rain.globalHeight != 0)
 		return;

@@ -51,22 +51,22 @@ enum class GRAPPLE_FIRERELEASE { sequence = 10, frames = 31, fps = 30 };
 class CGrapple : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void) { PrimaryAttack(); };
+	void PrimaryAttack();
+	void SecondaryAttack() { PrimaryAttack(); };
 
 	//Animations
 	BOOL Deploy();
-	void Holster(void);
-	void WeaponIdle(void);
-	BOOL ShouldWeaponIdle(void) { return TRUE; }; //Call WeaponIdle Loop
-	void StopSounds(void);
-	void EXPORT FlyThink(void);
-	void EXPORT PukeGibs(void);
+	void Holster();
+	void WeaponIdle();
+	BOOL ShouldWeaponIdle() { return TRUE; }; //Call WeaponIdle Loop
+	void StopSounds();
+	void EXPORT FlyThink();
+	void EXPORT PukeGibs();
 private:
 	//Vars
 	bool StartIdle;

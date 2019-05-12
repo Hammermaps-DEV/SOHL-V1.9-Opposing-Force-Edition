@@ -32,9 +32,9 @@
 class CGrappleHook : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT Move(void);
+	void Spawn();
+	void Precache();
+	void EXPORT Move();
 	void EXPORT Hit(CBaseEntity*);
 	void Killed(entvars_t *pev, int gib);
 

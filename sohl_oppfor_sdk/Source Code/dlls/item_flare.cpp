@@ -32,19 +32,19 @@
 #include "player.h"
 #include "items.h"
 
-void CItemFlare::Spawn(void)
+void CItemFlare::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_flare.mdl");
 	CItem::Spawn();
 }
 
-void CItemFlare::Precache(void)
+void CItemFlare::Precache()
 {
 	PRECACHE_MODEL("models/w_flare.mdl");
 }
 
-BOOL CItemFlare::MyTouch(CBasePlayer *pPlayer)
+bool CItemFlare::MyTouch(CBasePlayer *pPlayer)
 {
 	pPlayer->m_rgItems[ITEM_FLARE] += 1;
 	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);//AJH msg change inventory
@@ -57,12 +57,11 @@ BOOL CItemFlare::MyTouch(CBasePlayer *pPlayer)
 	else
 		EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-	return TRUE;
+	return true;
 }
 
 void CItemFlare::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
-
 	if (!(pActivator->IsPlayer())) {
 		ALERT(at_debug, "DEBUG: FLARE used by non-player\n");
 		return;

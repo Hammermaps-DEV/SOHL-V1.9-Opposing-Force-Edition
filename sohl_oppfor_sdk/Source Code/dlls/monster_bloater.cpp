@@ -47,7 +47,7 @@ LINK_ENTITY_TO_CLASS(monster_bloater, CBloater);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBloater::Classify(void)
+int	CBloater::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -56,7 +56,7 @@ int	CBloater::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBloater::SetYawSpeed(void)
+void CBloater::SetYawSpeed()
 {
 	int ys;
 
@@ -71,22 +71,22 @@ int CBloater::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float 
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
-void CBloater::PainSound(void)
+void CBloater::PainSound()
 {
 
 }
 
-void CBloater::AlertSound(void)
+void CBloater::AlertSound()
 {
 
 }
 
-void CBloater::IdleSound(void)
+void CBloater::IdleSound()
 {
 
 }
 
-void CBloater::AttackSnd(void)
+void CBloater::AttackSnd()
 {
 
 }

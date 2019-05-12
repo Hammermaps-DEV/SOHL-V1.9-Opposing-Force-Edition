@@ -268,7 +268,7 @@ int TryAssistEntity(CBaseEntity *pEnt)
 }
 
 // called every frame, by StartFrame
-void CheckAssistList(void)
+void CheckAssistList()
 {
 	CBaseEntity *pListMember;
 
@@ -311,7 +311,7 @@ void CheckAssistList(void)
 }
 
 // called every frame, by PostThink
-void CheckDesiredList(void)
+void CheckDesiredList()
 {
 	CBaseEntity *pListMember;
 	int loopbreaker = 1000; //assume this is the max. number of entities which will use DesiredList in any one frame

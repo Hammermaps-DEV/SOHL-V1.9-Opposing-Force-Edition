@@ -169,7 +169,7 @@ extern DECLSPEC SDL_RWops *SDLCALL SDL_RWFromConstMem(const void *mem,
 /*@}*//*RWFrom functions*/
 
 
-extern DECLSPEC SDL_RWops *SDLCALL SDL_AllocRW(void);
+extern DECLSPEC SDL_RWops *SDLCALL SDL_AllocRW();
 extern DECLSPEC void SDLCALL SDL_FreeRW(SDL_RWops * area);
 
 #define RW_SEEK_SET	0       /**< Seek from the beginning of data */

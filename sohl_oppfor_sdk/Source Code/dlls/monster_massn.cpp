@@ -87,7 +87,7 @@ LINK_ENTITY_TO_CLASS(monster_male_assassin, CMassn);
 //=========================================================
 // Purpose:
 //=========================================================
-BOOL CMassn::FOkToSpeak(void)
+BOOL CMassn::FOkToSpeak()
 {
 	return FALSE;
 }
@@ -96,20 +96,20 @@ BOOL CMassn::FOkToSpeak(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CMassn::Classify(void) {
+int	CMassn::Classify() {
 	return m_iClass ? m_iClass : CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 // Purpose:
 //=========================================================
-void CMassn::IdleSound(void)
+void CMassn::IdleSound()
 {}
 
 //=========================================================
 // Shoot
 //=========================================================
-void CMassn::Sniperrifle(void)
+void CMassn::Sniperrifle()
 {
 	if (m_hEnemy == NULL)
 	{
@@ -311,13 +311,13 @@ void CMassn::Precache()
 class CAssassinRepel : public CHGruntRepel
 {
 public:
-	void Precache(void);
+	void Precache();
 	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 };
 
 LINK_ENTITY_TO_CLASS(monster_assassin_repel, CAssassinRepel);
 
-void CAssassinRepel::Precache(void)
+void CAssassinRepel::Precache()
 {
 	UTIL_PrecacheOther("monster_male_assassin");
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");

@@ -80,13 +80,13 @@ public:
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
-	int  Classify(void) { return CLASS_ALIEN_MONSTER; };
-	int  BloodColor(void) { return BLOOD_COLOR_YELLOW; }
+	void Spawn();
+	void Precache();
+	int  Classify() { return CLASS_ALIEN_MONSTER; };
+	int  BloodColor() { return BLOOD_COLOR_YELLOW; }
 	void Killed(entvars_t *pevAttacker, int iGib);
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox()
 	{
 		pev->absmin = pev->origin + Vector(-95, -95, 0);
 		pev->absmax = pev->origin + Vector(95, 95, 0);
@@ -94,28 +94,28 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void EXPORT StartupThink(void);
-	void EXPORT HuntThink(void);
+	void EXPORT StartupThink();
+	void EXPORT HuntThink();
 	void EXPORT CrashTouch(CBaseEntity *pOther);
-	void EXPORT DyingThink(void);
+	void EXPORT DyingThink();
 	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink(void);
+	void EXPORT NullThink();
 	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	void FloatSequence(void);
-	void NextActivity(void);
+	void FloatSequence();
+	void NextActivity();
 
-	void Flight(void);
+	void Flight();
 
 	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 
-	void PainSound(void);
-	void DeathSound(void);
-	void IdleSound(void);
+	void PainSound();
+	void DeathSound();
+	void IdleSound();
 
 	int		Level(float dz);
-	int		MyEnemyLevel(void);
-	float	MyEnemyHeight(void);
+	int		MyEnemyLevel();
+	float	MyEnemyHeight();
 
 	Vector m_vecTarget;
 	Vector m_posTarget;
@@ -351,7 +351,7 @@ void CGeneWorm::Precache()
 //=========================================================
 // NullThink
 //=========================================================
-void CGeneWorm::NullThink(void)
+void CGeneWorm::NullThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.5);
@@ -370,7 +370,7 @@ void CGeneWorm::StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 //=========================================================
 //
 //=========================================================
-void CGeneWorm::StartupThink(void)
+void CGeneWorm::StartupThink()
 {
 	CBaseEntity *pEntity = NULL;
 
@@ -393,7 +393,7 @@ void CGeneWorm::Killed(entvars_t *pevAttacker, int iGib)
 	CBaseMonster::Killed(pevAttacker, iGib);
 }
 
-void CGeneWorm::DyingThink(void)
+void CGeneWorm::DyingThink()
 {
 	SetNextThink(0.1);
 	DispatchAnimEvents();
@@ -435,14 +435,14 @@ void CGeneWorm::DyingThink(void)
 
 //=========================================================
 //=========================================================
-void CGeneWorm::FloatSequence(void)
+void CGeneWorm::FloatSequence()
 {
 	pev->sequence = LookupSequence("idle");
 }
 
 //=========================================================
 //=========================================================
-void CGeneWorm::NextActivity(void)
+void CGeneWorm::NextActivity()
 {
 	UTIL_MakeAimVectors(pev->angles);
 
@@ -488,7 +488,7 @@ void CGeneWorm::NextActivity(void)
 	FloatSequence();
 }
 
-void CGeneWorm::HuntThink(void)
+void CGeneWorm::HuntThink()
 {
 	SetNextThink(0.1);
 	DispatchAnimEvents();
@@ -553,7 +553,7 @@ void CGeneWorm::HuntThink(void)
 
 //=========================================================
 //=========================================================
-void CGeneWorm::Flight(void)
+void CGeneWorm::Flight()
 {
 
 }
@@ -600,17 +600,17 @@ int CGeneWorm::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 	return 0;
 }
 
-void CGeneWorm::PainSound(void)
+void CGeneWorm::PainSound()
 {
 
 }
 
-void CGeneWorm::DeathSound(void)
+void CGeneWorm::DeathSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pDeathSounds), VOL_NORM, ATTN_NORM);
 }
 
-void CGeneWorm::IdleSound(void)
+void CGeneWorm::IdleSound()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, RANDOM_SOUND_ARRAY(pIdleSounds), VOL_NORM, ATTN_NORM);
 }
@@ -622,7 +622,7 @@ int CGeneWorm::Level(float dz)
 
 	return GENEWORM_LEVEL1;
 }
-int CGeneWorm::MyEnemyLevel(void)
+int CGeneWorm::MyEnemyLevel()
 {
 	if (!m_hEnemy)
 		return -1;
@@ -630,7 +630,7 @@ int CGeneWorm::MyEnemyLevel(void)
 	return Level(m_hEnemy->pev->origin.z);
 }
 
-float CGeneWorm::MyEnemyHeight(void)
+float CGeneWorm::MyEnemyHeight()
 {
 	switch (m_iLevel)
 	{

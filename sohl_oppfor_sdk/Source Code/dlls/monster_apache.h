@@ -35,27 +35,27 @@
 class CApache : public CBaseMonster
 {
 public:
-	virtual void Spawn(void);
-	virtual void Precache(void);
-	virtual int  Classify(void);
-	virtual int  BloodColor(void) { return DONT_BLEED; }
+	virtual void Spawn();
+	virtual void Precache();
+	virtual int  Classify();
+	virtual int  BloodColor() { return DONT_BLEED; }
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
-	virtual void GibMonster(void) { return; };
+	virtual void GibMonster() { return; };
 	virtual int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	virtual void SetObjectCollisionBox(void);
+	virtual void SetObjectCollisionBox();
 
-	void EXPORT HuntThink(void);
+	void EXPORT HuntThink();
 	void EXPORT FlyTouch(CBaseEntity *pOther);
 	void EXPORT CrashTouch(CBaseEntity *pOther);
-	void EXPORT DyingThink(void);
+	void EXPORT DyingThink();
 	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink(void);
+	void EXPORT NullThink();
 
-	virtual void ShowDamage(void);
-	virtual void Flight(void);
-	virtual void FireRocket(void);
-	virtual BOOL FireGun(void);
+	virtual void ShowDamage();
+	virtual void Flight();
+	virtual void FireRocket();
+	virtual BOOL FireGun();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

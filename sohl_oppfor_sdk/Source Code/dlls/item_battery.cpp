@@ -39,7 +39,7 @@ extern bool gEvilImpulse101;
 
 class CItemBattery : public CItem
 {
-	void Spawn(void)
+	void Spawn() override
 	{
 		Precache();
 		if (pev->model)
@@ -49,7 +49,7 @@ class CItemBattery : public CItem
 		CItem::Spawn();
 	}
 
-	void Precache(void)
+	void Precache() override
 	{
 		if (pev->model)
 			PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -62,12 +62,10 @@ class CItemBattery : public CItem
 			PRECACHE_SOUND("items/gunpickup2.wav");
 	}
 
-	BOOL MyTouch(CBasePlayer *pPlayer)
+	bool MyTouch(CBasePlayer *pPlayer) override
 	{
-		if (pPlayer->pev->deadflag != DEAD_NO)
-		{
-			return FALSE;
-		}
+		if (!pPlayer->IsPlayer() || pPlayer->pev->deadflag != DEAD_NO)
+			return false;
 
 		float armor = 0;
 		if (pev->armorvalue) 
@@ -102,10 +100,10 @@ class CItemBattery : public CItem
 				pPlayer->SetSuitUpdate(szcharge, FALSE, SUIT_NEXT_IN_30SEC);
 			}
 
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 };
 

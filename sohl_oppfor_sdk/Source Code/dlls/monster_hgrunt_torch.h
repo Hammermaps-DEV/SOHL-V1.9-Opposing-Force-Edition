@@ -34,31 +34,31 @@
 class CTorch : public CRCAllyMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	void SetActivity(Activity NewActivity);
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 	void KeyValue(KeyValueData *pkvd);
-	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	virtual int	ObjectCaps() { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool CheckRangeAttack1(float flDot, float flDist);
 
-	void PrescheduleThink(void);
+	void PrescheduleThink();
 
-	void MakeGas(void);
-	void UpdateGas(void);
-	void KillGas(void);
+	void MakeGas();
+	void UpdateGas();
+	void KillGas();
 
 	void SpawnExplosion(Vector center, float randomRange, float time, int magnitude);
 
 	// Override these to set behavior
 	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 
-	void GibMonster(void);
-	void JustSpoke(void);
+	void GibMonster();
+	void JustSpoke();
 
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
@@ -84,8 +84,8 @@ public:
 class CTorchRepel : public CHFGruntRepel
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture;	// Don't save, precache
 };
@@ -93,8 +93,8 @@ public:
 class CDeadTorch : public CDeadFGrunt
 {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+	void Spawn();
+	int	Classify() { return	CLASS_PLAYER_ALLY; }
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	void KeyValue(KeyValueData *pkvd);
 

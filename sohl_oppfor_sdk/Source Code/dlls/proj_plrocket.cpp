@@ -64,7 +64,7 @@ TYPEDESCRIPTION	CRpgRocket::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CRpgRocket, CGrenade);
 
-void CRpgRocket::Spawn(void)
+void CRpgRocket::Spawn()
 {
 	Precache();
 	// motor
@@ -106,7 +106,7 @@ void CRpgRocket::RocketTouch(CBaseEntity *pOther) {
 	ExplodeTouch(pOther);
 }
 
-void CRpgRocket::Detonate(void) {
+void CRpgRocket::Detonate() {
 	TraceResult tr;
 	Vector		vecSpot;// trace starts here!
 	CBaseEntity *pPlayer = CBaseEntity::Instance(pev->owner);
@@ -127,7 +127,7 @@ void CRpgRocket::Detonate(void) {
 	Explode(&tr, DMG_BLAST);
 }
 
-void CRpgRocket::Precache(void)
+void CRpgRocket::Precache()
 {
 	PRECACHE_MODEL("models/rpgrocket.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -135,7 +135,7 @@ void CRpgRocket::Precache(void)
 	PRECACHE_SOUND("weapons/beep2.wav");
 }
 
-void CRpgRocket::IgniteThink(void)
+void CRpgRocket::IgniteThink()
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->effects |= EF_LIGHT;
@@ -148,7 +148,7 @@ void CRpgRocket::IgniteThink(void)
 	SetNextThink(0.1);
 }
 
-void CRpgRocket::CreateTrail(void)
+void CRpgRocket::CreateTrail()
 {
 	if (!b_setup)
 	{
@@ -170,7 +170,7 @@ void CRpgRocket::CreateTrail(void)
 	}
 }
 
-void CRpgRocket::FollowThink(void)
+void CRpgRocket::FollowThink()
 {
 	CBaseEntity *pOther = NULL;
 	Vector vecTarget;

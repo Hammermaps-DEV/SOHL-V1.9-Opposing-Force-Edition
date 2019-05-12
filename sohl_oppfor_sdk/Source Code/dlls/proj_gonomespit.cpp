@@ -46,7 +46,7 @@ TYPEDESCRIPTION	CGonomeSpit::m_SaveData[] = {
 
 IMPLEMENT_SAVERESTORE(CGonomeSpit, CBaseEntity);
 
-void CGonomeSpit::Spawn(void) {
+void CGonomeSpit::Spawn() {
 	Precache();
 
 	pev->movetype = MOVETYPE_FLY;
@@ -72,7 +72,7 @@ void CGonomeSpit::Precache() {
 	iGonomeSpitSprite = PRECACHE_MODEL("sprites/blood_tinyspit.spr");// client side spittle.
 }
 
-void CGonomeSpit::Animate(void) {
+void CGonomeSpit::Animate() {
 	SetNextThink(0.1);
 	if (pev->frame++) {
 		if (pev->frame > m_maxFrame) {

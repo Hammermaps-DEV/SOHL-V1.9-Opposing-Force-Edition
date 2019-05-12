@@ -163,7 +163,7 @@ int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float 
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else {
 				if (m_iszSpeakAs) {
@@ -257,7 +257,7 @@ void CBarniel::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 //=========================================================
 // AlertSound
 //=========================================================
-void CBarniel::AlertSound(void) {
+void CBarniel::AlertSound() {
 	if (m_hEnemy != NULL) {
 		if (FOkToSpeak()) {
 			if (m_iszSpeakAs) {
@@ -276,7 +276,7 @@ void CBarniel::AlertSound(void) {
 //=========================================================
 // PainSound
 //=========================================================
-void CBarniel::PainSound(void) {
+void CBarniel::PainSound() {
 	if (UTIL_GlobalTimeBase() < m_painTime)
 		return;
 
@@ -287,14 +287,14 @@ void CBarniel::PainSound(void) {
 //=========================================================
 // DeathSound 
 //=========================================================
-void CBarniel::DeathSound(void) {
+void CBarniel::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
 //=========================================================
 // Barney shoots one round from the pistol at 9mm
 //=========================================================
-void CBarniel::Fire9mmPistol(void) {
+void CBarniel::Fire9mmPistol() {
 	UTIL_MakeVectors(pev->angles);
 	Vector vecShootOrigin = pev->origin + Vector(0, 0, 55);
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
@@ -394,7 +394,7 @@ void CBarniel::Killed(entvars_t *pevAttacker, int iGib) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CBarniel::GetSchedule(void) {
+Schedule_t *CBarniel::GetSchedule() {
 	if (HasConditions(bits_COND_HEAR_SOUND)) {
 		CSound *pSound;
 		pSound = PBestSound();
@@ -438,7 +438,7 @@ Schedule_t *CBarniel::GetSchedule(void) {
 
 		if (m_hEnemy == NULL && IsFollowing()) {
 			if (!m_hTargetEnt->IsAlive()) {
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else {

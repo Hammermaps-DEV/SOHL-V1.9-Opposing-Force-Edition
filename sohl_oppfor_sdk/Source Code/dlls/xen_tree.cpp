@@ -40,14 +40,14 @@
 class CXenTree : public CActAnimating
 {
 public:
-	void		Spawn(void);
-	void		Precache(void);
+	void		Spawn();
+	void		Precache();
 	void		Touch(CBaseEntity *pOther);
-	void		Think(void);
+	void		Think();
 	int			TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) { Attack(); return 0; }
 	void		HandleAnimEvent(MonsterEvent_t *pEvent);
-	void		Attack(void);
-	int			Classify(void) { return CLASS_BARNACLE; }
+	void		Attack();
+	int			Classify() { return CLASS_BARNACLE; }
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
@@ -69,7 +69,7 @@ TYPEDESCRIPTION	CXenTree::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CXenTree, CActAnimating);
 
-void CXenTree::Spawn(void)
+void CXenTree::Spawn()
 {
 	Precache();
 
@@ -107,7 +107,7 @@ const char *CXenTree::pAttackMissSounds[] =
 	"zombie/claw_miss2.wav",
 };
 
-void CXenTree::Precache(void)
+void CXenTree::Precache()
 {
 	PRECACHE_MODEL("models/tree.mdl");
 	PRECACHE_MODEL(XEN_TREE_GLOW_SPRITE);
@@ -125,7 +125,7 @@ void CXenTree::Touch(CBaseEntity *pOther)
 }
 
 
-void CXenTree::Attack(void)
+void CXenTree::Attack()
 {
 	if (GetActivity() == ACT_IDLE)
 	{
@@ -174,7 +174,7 @@ void CXenTree::HandleAnimEvent(MonsterEvent_t *pEvent)
 	CActAnimating::HandleAnimEvent(pEvent);
 }
 
-void CXenTree::Think(void)
+void CXenTree::Think()
 {
 	float flInterval = StudioFrameAdvance();
 	SetNextThink(0.1);

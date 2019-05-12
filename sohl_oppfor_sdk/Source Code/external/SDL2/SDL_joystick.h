@@ -74,7 +74,7 @@ typedef Sint32 SDL_JoystickID;
 /**
  *  Count the number of joysticks attached to the system right now
  */
-extern DECLSPEC int SDLCALL SDL_NumJoysticks(void);
+extern DECLSPEC int SDLCALL SDL_NumJoysticks();
 
 /**
  *  Get the implementation dependent name of a joystick.
@@ -159,7 +159,7 @@ extern DECLSPEC int SDLCALL SDL_JoystickNumButtons(SDL_Joystick * joystick);
  *  This is called automatically by the event loop if any joystick
  *  events are enabled.
  */
-extern DECLSPEC void SDLCALL SDL_JoystickUpdate(void);
+extern DECLSPEC void SDLCALL SDL_JoystickUpdate();
 
 /**
  *  Enable/disable joystick event polling.

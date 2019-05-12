@@ -39,7 +39,7 @@ extern ParticleSystemManager* g_pParticleSystems;
 
 DECLARE_MESSAGE(m_Particle, Particle)
 
-int CHudParticle::Init(void)
+int CHudParticle::Init()
 {
 	HOOK_MESSAGE(Particle);
 	gHUD.AddHudElem(this);
@@ -55,7 +55,7 @@ int CHudParticle::Init(void)
 	return 1;
 };
 
-int CHudParticle::VidInit(void)
+int CHudParticle::VidInit()
 {
 	g_pParticleSystems->ClearSystems();
 	return 1;

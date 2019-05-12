@@ -49,19 +49,19 @@ enum class SAW_SHOOT3 { sequence = 8, frames = 7, fps = 30 };
 class CM249 : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
+	void PrimaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void Reload(void);
-	void WeaponIdle(void);
-	void UpdateClip(void);
+	BOOL Deploy();
+	void Holster();
+	void Reload();
+	void WeaponIdle();
+	void UpdateClip();
 
 private:
 	BOOL m_iReloadStep = 0;

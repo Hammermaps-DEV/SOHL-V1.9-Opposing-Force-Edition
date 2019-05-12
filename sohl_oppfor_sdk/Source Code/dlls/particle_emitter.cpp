@@ -35,7 +35,7 @@
 extern char *UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize);
 
 // create ourselves a particle emitter
-void CParticleEmitter::Spawn(void)
+void CParticleEmitter::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;

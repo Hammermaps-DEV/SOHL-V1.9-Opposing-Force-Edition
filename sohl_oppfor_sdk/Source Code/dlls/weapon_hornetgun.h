@@ -46,20 +46,20 @@ class CHgun : public CBasePlayerWeapon
 {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
-	BOOL ShouldWeaponIdle(void) { return TRUE; }; //Call WeaponIdle Loop
+	BOOL Deploy();
+	BOOL ShouldWeaponIdle() { return TRUE; }; //Call WeaponIdle Loop
 	void Holster();
-	void Reload(void);
-	void WeaponIdle(void);
+	void Reload();
+	void WeaponIdle();
 
 	//VAR
 	float m_flNextAnimTime;

@@ -61,21 +61,21 @@ enum class PIPE_WRENCH_ATTACKBIGLOOP { sequence = 14, frames = 3, fps = 30 };
 class CPipeWrench : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	void StartLargeSwing(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
+	void StartLargeSwing();
 	int Swing(int fFirst);
 	int LargeSwing(float flDamage);
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void WeaponIdle(void);
+	BOOL Deploy();
+	void Holster();
+	void WeaponIdle();
 
 	//Vars
 	int m_flAmmoStartCharge;

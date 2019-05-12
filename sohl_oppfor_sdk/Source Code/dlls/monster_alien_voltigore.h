@@ -37,30 +37,30 @@
 
 class CVoltigore : public CSquadMonster {
 public:
-	virtual void Spawn(void);
-	virtual void Precache(void);
-	void SetYawSpeed(void);
-	void DieBlast(void);
-	int  ISoundMask(void);
-	virtual int  Classify(void);
+	virtual void Spawn();
+	virtual void Precache();
+	void SetYawSpeed();
+	void DieBlast();
+	int  ISoundMask();
+	virtual int  Classify();
 	virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
-	virtual void IdleSound(void);
-	virtual void PainSound(void);
-	virtual void DeathSound(void);
-	virtual void AlertSound(void);
-	virtual void AttackSound(void);
+	virtual void IdleSound();
+	virtual void PainSound();
+	virtual void DeathSound();
+	virtual void AlertSound();
+	virtual void AttackSound();
 	virtual void StartTask(Task_t *pTask);
 	virtual bool CheckMeleeAttack1(float flDot, float flDist);
 	virtual bool CheckMeleeAttack2(float flDot, float flDist);
 	virtual bool CheckRangeAttack1(float flDot, float flDist);
-	virtual void RunAI(void);
+	virtual void RunAI();
 	BOOL FValidateHintType(short sHint);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 	Schedule_t *GetScheduleOfType(int Type);
 	virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	virtual int IgnoreConditions(void);
-	MONSTERSTATE GetIdealState(void);
+	virtual int IgnoreConditions();
+	MONSTERSTATE GetIdealState();
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
 	void CallForHelp(char *szClassname, float flDist, EHANDLE hEnemy, Vector &vecLocation);
 
@@ -93,8 +93,8 @@ public:
 	static const char* pPainSounds[];
 	static const char* pGruntSounds[];
 
-	virtual BOOL	CanThrowEnergyBall(void)	const { return TRUE; }
-	virtual BOOL	CanGib(void)				const { return TRUE; }
+	virtual BOOL	CanThrowEnergyBall()	const { return TRUE; }
+	virtual BOOL	CanGib()				const { return TRUE; }
 	virtual void	PrintBloodDecal(CBaseEntity* pHurt, const Vector& vecOrigin, const Vector& vecVelocity, float maxDist, int bloodColor = DONT_BLEED);
 
 
@@ -105,7 +105,7 @@ public:
 	void CreateGlow();
 	void DestroyGlow();
 	void GlowUpdate();
-	void GlowOff(void);
+	void GlowOff();
 	void GlowOn(int level);
 
 protected:

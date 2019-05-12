@@ -30,8 +30,8 @@
 class CPropBushs : public CGenericModel
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void KeyValue(KeyValueData* pkvd);
 
 	string_t m_isBush;

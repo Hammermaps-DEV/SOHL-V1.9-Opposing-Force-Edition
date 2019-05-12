@@ -33,13 +33,13 @@
 
 class CM249AmmoClip : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn()
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_saw_clip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
-	void Precache(void)
+	void Precache()
 	{
 		PRECACHE_MODEL("models/w_saw_clip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");

@@ -53,24 +53,24 @@ enum class CROSSBOW_HOLSTER_EMPTY { sequence = 9, frames = 16, fps = 25 };
 class CCrossbow : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void) { m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 1E6; };
-	void FireBolt(void);
-	void FireSniperBolt(void);
+	void PrimaryAttack();
+	void SecondaryAttack() { m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 1E6; };
+	void FireBolt();
+	void FireSniperBolt();
 
 	//Animations
 	BOOL Deploy();
 	void Holster();
-	void Reload(void);
-	void ZoomUpdate(void);
-	void ZoomReset(void);
-	void WeaponIdle(void);
-	BOOL ShouldWeaponIdle(void) { return TRUE; };
+	void Reload();
+	void ZoomUpdate();
+	void ZoomReset();
+	void WeaponIdle();
+	BOOL ShouldWeaponIdle() { return TRUE; };
 
 	//Vars
 	BOOL b_setup;

@@ -36,12 +36,12 @@
 class CDeadZombie : public CBaseMonster {
 public:
 	// void
-	virtual void Spawn(void);
-	virtual void Precache(void);
+	virtual void Spawn();
+	virtual void Precache();
 	virtual void KeyValue(KeyValueData *pkvd);
 
 	// int void
-	virtual int	Classify(void);
+	virtual int	Classify();
 
 	// static
 	static char *m_szPoses[2];

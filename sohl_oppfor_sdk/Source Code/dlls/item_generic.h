@@ -33,12 +33,12 @@ public:
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void KeyValue(KeyValueData* pkvd);
 
-	void EXPORT StartupThink(void);
-	void EXPORT SequenceThink(void);
+	void EXPORT StartupThink();
+	void EXPORT SequenceThink();
 
 	string_t m_iszSequenceName;
 };

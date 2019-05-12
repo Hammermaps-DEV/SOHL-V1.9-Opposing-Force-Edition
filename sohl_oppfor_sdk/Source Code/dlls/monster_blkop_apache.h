@@ -35,9 +35,9 @@
 class CBlackOPApache : public CApache
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	int  Classify();
 };
 
 #endif // MONSTER_BLKOP_APACHE_H

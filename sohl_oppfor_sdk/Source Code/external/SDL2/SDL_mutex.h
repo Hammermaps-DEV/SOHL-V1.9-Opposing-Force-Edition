@@ -63,7 +63,7 @@ typedef struct SDL_mutex SDL_mutex;
 /**
  *  Create a mutex, initialized unlocked.
  */
-extern DECLSPEC SDL_mutex *SDLCALL SDL_CreateMutex(void);
+extern DECLSPEC SDL_mutex *SDLCALL SDL_CreateMutex();
 
 /**
  *  Lock the mutex.
@@ -196,7 +196,7 @@ typedef struct SDL_cond SDL_cond;
  *  In general it's safer to signal the condition variable while the
  *  mutex is locked.
  */
-extern DECLSPEC SDL_cond *SDLCALL SDL_CreateCond(void);
+extern DECLSPEC SDL_cond *SDLCALL SDL_CreateCond();
 
 /**
  *  Destroy a condition variable.

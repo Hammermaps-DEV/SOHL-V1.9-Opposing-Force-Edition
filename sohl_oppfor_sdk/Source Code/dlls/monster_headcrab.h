@@ -31,26 +31,26 @@
 
 class CHeadCrab : public CBaseMonster {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
-	void SetYawSpeed(void);
+	void SetYawSpeed();
 	void EXPORT LeapTouch(CBaseEntity *pOther);
-	void PainSound(void);
-	void DeathSound(void);
-	void IdleSound(void);
-	void AlertSound(void);
-	void PrescheduleThink(void);
-	int  Classify(void);
+	void PainSound();
+	void DeathSound();
+	void IdleSound();
+	void AlertSound();
+	void PrescheduleThink();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	bool CheckRangeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack2(float flDot, float flDist) { return FALSE; };
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 
-	virtual float GetDamageAmount(void) { return gSkillData.headcrabDmgBite; }
-	virtual int GetVoicePitch(void) { return 100; }
-	virtual float GetSoundVolue(void) { return 1.0; }
+	virtual float GetDamageAmount() { return gSkillData.headcrabDmgBite; }
+	virtual int GetVoicePitch() { return 100; }
+	virtual float GetSoundVolue() { return 1.0; }
 	Schedule_t* GetScheduleOfType(int Type);
 
 	CUSTOM_SCHEDULES;

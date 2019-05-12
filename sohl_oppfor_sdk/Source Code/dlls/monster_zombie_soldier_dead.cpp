@@ -42,7 +42,7 @@ LINK_ENTITY_TO_CLASS(monster_zombie_soldier_dead, CDeadZombieSoldier);
 //=========================================================
 // Spawn DEAD-Soldier Zombie
 //=========================================================
-void CDeadZombieSoldier::Spawn(void) {
+void CDeadZombieSoldier::Spawn() {
 	Precache();
 
 	if (pev->model)

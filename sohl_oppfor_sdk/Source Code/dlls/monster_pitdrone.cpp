@@ -199,7 +199,7 @@ void CPitDrone::Spawn() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CPitDrone::Classify(void) {
+int	CPitDrone::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
@@ -322,41 +322,41 @@ void CPitDrone::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDi
 //=========================================================
 // IdleSound
 //=========================================================
-void CPitDrone::IdleSound(void) {
+void CPitDrone::IdleSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // PainSound
 //=========================================================
-void CPitDrone::PainSound(void) {
+void CPitDrone::PainSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CPitDrone::AlertSound(void) {
+void CPitDrone::AlertSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAlertSounds);
 }
 //=========================================================
 // DeathSound
 //=========================================================
-void CPitDrone::DeathSound(void) {
+void CPitDrone::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDieSounds);
 }
 
 //=========================================================
 // AttackSound Hit
 //=========================================================
-void CPitDrone::AttackSound(void) {
+void CPitDrone::AttackSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSoundsSpike);
 }
 
 //=========================================================
 // AttackSound
 //=========================================================
-void CPitDrone::AttackSoundSpike(void) {
+void CPitDrone::AttackSoundSpike() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_WEAPON, pAttackSoundsSpike);
 }
 
@@ -502,7 +502,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CPitDrone::IgnoreConditions(void) {
+int CPitDrone::IgnoreConditions() {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 	if (UTIL_GlobalTimeBase() - m_flLastHurtTime <= 20) {
 		// haven't been hurt in 20 seconds, so let the squid care about stink. 
@@ -534,7 +534,7 @@ int CPitDrone::IgnoreConditions(void) {
 //=========================================================
 // StopTalking - won't speak again for 10-20 seconds.
 //=========================================================
-void CPitDrone::StopTalking(void) {
+void CPitDrone::StopTalking() {
 	m_flNextWordTime = m_flNextSpeakTime = UTIL_GlobalTimeBase() + 10 + RANDOM_LONG(0, 10);
 }
 
@@ -586,7 +586,7 @@ bool CPitDrone::CheckRangeAttack1(float flDot, float flDist) {
 //=========================================================
 // Change Bodygroup of horns when they are consumed
 //=========================================================
-void CPitDrone::UpdateHorns(void) {
+void CPitDrone::UpdateHorns() {
 	if (m_flDebug)
 		ALERT(at_console, "BodyChange %f horns\n", m_flhorns);
 
@@ -617,7 +617,7 @@ void CPitDrone::UpdateHorns(void) {
 //=========================================================
 // ShouldSpeak - Should this PDrone be talking?
 //=========================================================
-BOOL CPitDrone::ShouldSpeak(void) {
+BOOL CPitDrone::ShouldSpeak() {
 	if (m_flNextSpeakTime > UTIL_GlobalTimeBase()) {
 		// my time to talk is still in the future.
 		return false;
@@ -640,7 +640,7 @@ BOOL CPitDrone::ShouldSpeak(void) {
 //=========================================================
 // RunAI
 //=========================================================
-void CPitDrone::RunAI(void) {
+void CPitDrone::RunAI() {
 	// first, do base class stuff
 	CBaseMonster::RunAI();
 
@@ -816,7 +816,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CPitDrone, CBaseMonster);
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t *CPitDrone::GetSchedule(void) {
+Schedule_t *CPitDrone::GetSchedule() {
 	switch (m_MonsterState) {
 	case MONSTERSTATE_ALERT: {
 		if (HasConditions(bits_COND_SMELL_FOOD)) {
@@ -956,7 +956,7 @@ void CPitDrone::RunTask(Task_t *pTask) {
 // the feature that makes it lose interest in headcrabs for 
 // a while if something injures it. 
 //=========================================================
-MONSTERSTATE CPitDrone::GetIdealState(void) {
+MONSTERSTATE CPitDrone::GetIdealState() {
 	return CBaseMonster::GetIdealState();
 }
 
@@ -964,7 +964,7 @@ MONSTERSTATE CPitDrone::GetIdealState(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CPitDrone::SetYawSpeed(void) {
+void CPitDrone::SetYawSpeed() {
 	int ys;
 	switch (m_Activity) {
 	case	ACT_WALK:			ys = 120;	break;

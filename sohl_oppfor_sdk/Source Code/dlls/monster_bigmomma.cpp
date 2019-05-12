@@ -54,7 +54,7 @@ TYPEDESCRIPTION	CInfoBM::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CInfoBM, CPointEntity);
 
-void CInfoBM::Spawn(void)
+void CInfoBM::Spawn()
 {
 }
 
@@ -233,7 +233,7 @@ void CBigMomma::KeyValue(KeyValueData *pkvd)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBigMomma::Classify(void)
+int	CBigMomma::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -242,7 +242,7 @@ int	CBigMomma::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBigMomma::SetYawSpeed(void)
+void CBigMomma::SetYawSpeed()
 {
 	int ys;
 
@@ -428,7 +428,7 @@ int CBigMomma::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);
 }
 
-void CBigMomma::LayHeadcrab(void)
+void CBigMomma::LayHeadcrab()
 {
 	CBaseEntity *pChild = CBaseEntity::Create(BIG_CHILDCLASS, pev->origin, pev->angles, edict());
 
@@ -468,7 +468,7 @@ void CBigMomma::DeathNotice(entvars_t *pevChild)
 }
 
 
-void CBigMomma::LaunchMortar(void)
+void CBigMomma::LaunchMortar()
 {
 	m_mortarTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(2, 15);
 
@@ -556,7 +556,7 @@ void CBigMomma::Precache()
 }
 
 
-void CBigMomma::Activate(void)
+void CBigMomma::Activate()
 {
 	if (m_hTargetEnt == NULL)
 		Remember(bits_MEMORY_ADVANCE_NODE);	// Start 'er up
@@ -591,7 +591,7 @@ void CBigMomma::NodeStart(int iszNextNode)
 }
 
 
-void CBigMomma::NodeReach(void)
+void CBigMomma::NodeReach()
 {
 	CBaseEntity *pTarget = m_hTargetEnt;
 
@@ -742,7 +742,7 @@ Schedule_t *CBigMomma::GetScheduleOfType(int Type)
 }
 
 
-BOOL CBigMomma::ShouldGoToNode(void)
+BOOL CBigMomma::ShouldGoToNode()
 {
 	if (HasMemory(bits_MEMORY_ADVANCE_NODE))
 	{
@@ -793,7 +793,7 @@ void CBigMomma::SetActivity(Activity NewActivity)
 	m_IdealActivity = m_Activity;
 }
 
-Schedule_t *CBigMomma::GetSchedule(void)
+Schedule_t *CBigMomma::GetSchedule()
 {
 	if (ShouldGoToNode())
 	{
@@ -1038,7 +1038,7 @@ void MortarSpray(const Vector &position, const Vector &direction, int spriteMode
 
 
 // UNDONE: right now this is pretty much a copy of the squid spit with minor changes to the way it does damage
-void CBMortar::Spawn(void)
+void CBMortar::Spawn()
 {
 	pev->movetype = MOVETYPE_TOSS;
 	pev->classname = MAKE_STRING("bmortar");
@@ -1057,7 +1057,7 @@ void CBMortar::Spawn(void)
 	pev->dmgtime = UTIL_GlobalTimeBase() + 0.4;
 }
 
-void CBMortar::Animate(void)
+void CBMortar::Animate()
 {
 	SetNextThink(0.1);
 

@@ -49,25 +49,25 @@ enum class M40A1_HOLSTER { sequence = 8, frames = 24, fps = 20 };
 class CSniperrifle : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void) { m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 1E6; };
-	void ZoomUpdate(void);
-	void ZoomReset(void);
+	void PrimaryAttack();
+	void SecondaryAttack() { m_flNextSecondaryAttack = UTIL_GlobalTimeBase() + 1E6; };
+	void ZoomUpdate();
+	void ZoomReset();
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void Reload(void);
-	void WeaponIdle(void);
-	void ItemPostFrame(void);
+	BOOL Deploy();
+	void Holster();
+	void Reload();
+	void WeaponIdle();
+	void ItemPostFrame();
 
 	//Vars
-	BOOL ShouldWeaponIdle(void) { return TRUE; };
+	BOOL ShouldWeaponIdle() { return TRUE; };
 	BOOL m_fInZoom;
 	BOOL m_fNeedAjustBolt;
 	int	 m_flShellDelay;

@@ -340,7 +340,7 @@ void UTIL_SetGroupTrace(int groupmask, int op)
 	ENGINE_SETGROUPMASK(g_groupmask, g_groupop);
 }
 
-void UTIL_UnsetGroupTrace(void)
+void UTIL_UnsetGroupTrace()
 {
 	g_groupmask = 0;
 	g_groupop = 0;
@@ -360,7 +360,7 @@ UTIL_GroupTrace::UTIL_GroupTrace(int groupmask, int op)
 	ENGINE_SETGROUPMASK(g_groupmask, g_groupop);
 }
 
-UTIL_GroupTrace::~UTIL_GroupTrace(void)
+UTIL_GroupTrace::~UTIL_GroupTrace()
 {
 	g_groupmask = m_oldgroupmask;
 	g_groupop = m_oldgroupop;
@@ -750,7 +750,7 @@ CBaseEntity *UTIL_FindEntityByClassname(CBaseEntity *pStartEntity, const char *s
 //LRC - things get messed up if aliases change in the middle of an entity traversal.
 // so instead, they record what changes should be made, and wait until this function gets
 // called.
-void UTIL_FlushAliases(void)
+void UTIL_FlushAliases()
 {
 	//	ALERT(at_console, "Flushing alias list\n");
 	if (!g_pWorld)
@@ -1635,7 +1635,7 @@ void UTIL_BloodDrips(const Vector &origin, const Vector &direction, int color, i
 	MESSAGE_END();
 }
 
-Vector UTIL_RandomBloodVector(void)
+Vector UTIL_RandomBloodVector()
 {
 	Vector direction;
 
@@ -2196,7 +2196,7 @@ static int gSizes[FIELD_TYPECOUNT] =
 
 
 // Base class includes common SAVERESTOREDATA pointer, and manages the entity table
-CSaveRestoreBuffer::CSaveRestoreBuffer(void)
+CSaveRestoreBuffer::CSaveRestoreBuffer()
 {
 	m_pdata = NULL;
 }
@@ -2208,7 +2208,7 @@ CSaveRestoreBuffer::CSaveRestoreBuffer(SAVERESTOREDATA *pdata)
 }
 
 
-CSaveRestoreBuffer :: ~CSaveRestoreBuffer(void)
+CSaveRestoreBuffer :: ~CSaveRestoreBuffer()
 {
 }
 
@@ -2931,7 +2931,7 @@ void CRestore::BufferReadHeader(HEADER *pheader)
 	BufferSkipBytes(pheader->size);			// Advance to next field
 }
 
-short	CRestore::ReadShort(void)
+short	CRestore::ReadShort()
 {
 	short tmp = 0;
 
@@ -2940,7 +2940,7 @@ short	CRestore::ReadShort(void)
 	return tmp;
 }
 
-int	CRestore::ReadInt(void)
+int	CRestore::ReadInt()
 {
 	int tmp = 0;
 
@@ -2970,7 +2970,7 @@ char *CRestore::ReadNamedString(const char *pName)
 }
 
 
-char *CRestore::BufferPointer(void)
+char *CRestore::BufferPointer()
 {
 	if (!m_pdata)
 		return NULL;
@@ -3004,7 +3004,7 @@ void CRestore::BufferSkipBytes(int bytes)
 	BufferReadBytes(NULL, bytes);
 }
 
-int CRestore::BufferSkipZString(void)
+int CRestore::BufferSkipZString()
 {
 	char *pszSearch;
 	int	 len;

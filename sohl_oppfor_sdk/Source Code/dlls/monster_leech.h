@@ -32,11 +32,11 @@
 class CLeech : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
-	void EXPORT SwimThink(void);
-	void EXPORT DeadThink(void);
+	void EXPORT SwimThink();
+	void EXPORT DeadThink();
 	void Touch(CBaseEntity *pOther)
 	{
 		if (pOther->IsPlayer())
@@ -50,27 +50,27 @@ public:
 		}
 	}
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox()
 	{
 		pev->absmin = pev->origin + Vector(-8, -8, 0);
 		pev->absmax = pev->origin + Vector(8, 8, 2);
 	}
 
-	void AttackSound(void);
-	void AlertSound(void);
-	void UpdateMotion(void);
+	void AttackSound();
+	void AlertSound();
+	void UpdateMotion();
 	float ObstacleDistance(CBaseEntity *pTarget);
-	void MakeVectors(void);
-	void RecalculateWaterlevel(void);
-	void SwitchLeechState(void);
+	void MakeVectors();
+	void RecalculateWaterlevel();
+	void SwitchLeechState();
 
 	// Base entity functions
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int	BloodColor(void) { return DONT_BLEED; }
+	int	BloodColor() { return DONT_BLEED; }
 	void Killed(entvars_t *pevAttacker, int iGib);
-	void Activate(void);
+	void Activate();
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	int	Classify(void) { return CLASS_INSECT; }
+	int	Classify() { return CLASS_INSECT; }
 	int IRelationship(CBaseEntity *pTarget);
 
 	virtual int		Save(CSave &save);

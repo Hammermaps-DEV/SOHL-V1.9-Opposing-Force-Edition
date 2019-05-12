@@ -59,8 +59,8 @@ extern "C"
 	void DLLEXPORT IN_ActivateMouse( void );
 	void DLLEXPORT IN_DeactivateMouse( void );
 	void DLLEXPORT IN_MouseEvent (int mstate);
-	void DLLEXPORT IN_Accumulate (void);
-	void DLLEXPORT IN_ClearStates (void);
+	void DLLEXPORT IN_Accumulate ();
+	void DLLEXPORT IN_ClearStates ();
 }
 
 // Defined in pm_math.c
@@ -199,7 +199,7 @@ static JOYINFOEX	ji;
 Force_CenterView_f
 ===========
 */
-void Force_CenterView_f (void)
+void Force_CenterView_f ()
 {
 	vec3_t viewangles;
 
@@ -211,7 +211,7 @@ void Force_CenterView_f (void)
 	}
 }
 
-void SetDinputBufferSize(void)
+void SetDinputBufferSize()
 {
 	static DIPROPDWORD dipdw = { { sizeof(dipdw), sizeof(dipdw.diph), 0, DIPH_DEVICE }, 0 };
 
@@ -270,7 +270,7 @@ bool CheckIsMouseInGame()
 IN_ActivateMouse
 ===========
 */
-void DLLEXPORT IN_ActivateMouse (void)
+void DLLEXPORT IN_ActivateMouse ()
 {
 	if (!mouseinitialized)
 		return;
@@ -307,7 +307,7 @@ void DLLEXPORT IN_ActivateMouse (void)
 IN_DeactivateMouse
 ===========
 */
-void DLLEXPORT IN_DeactivateMouse (void)
+void DLLEXPORT IN_DeactivateMouse ()
 {
 	if (!mouseinitialized)
 		return;
@@ -332,7 +332,7 @@ void DLLEXPORT IN_DeactivateMouse (void)
 IN_StartupMouse
 ===========
 */
-void IN_StartupMouse (void)
+void IN_StartupMouse ()
 {
 	if ( gEngfuncs.CheckParm ("-nomouse", NULL ) )
 		return; 
@@ -392,7 +392,7 @@ void IN_StartupMouse (void)
 IN_Shutdown
 ===========
 */
-void IN_Shutdown (void)
+void IN_Shutdown ()
 {
 	IN_DeactivateMouse();
 
@@ -675,7 +675,7 @@ void IN_MouseMove ( float frametime, usercmd_t *cmd)
 IN_Accumulate
 ===========
 */
-void DLLEXPORT IN_Accumulate (void)
+void DLLEXPORT IN_Accumulate ()
 {
 	// Only accumulate mouse if we are not moving the camera with the mouse
 	if ( iMouseInUse || g_iVisibleMouse
@@ -718,7 +718,7 @@ void DLLEXPORT IN_Accumulate (void)
 IN_ClearStates
 ===================
 */
-void DLLEXPORT IN_ClearStates (void)
+void DLLEXPORT IN_ClearStates ()
 {
 	if ( !mouseactive )
 		return;
@@ -735,7 +735,7 @@ void DLLEXPORT IN_ClearStates (void)
 IN_StartupJoystick 
 =============== 
 */  
-void IN_StartupJoystick (void) 
+void IN_StartupJoystick () 
 { 
 	int			numdevs;
 	JOYCAPS		jc;
@@ -829,7 +829,7 @@ PDWORD RawValuePointer (int axis)
 Joy_AdvancedUpdate_f
 ===========
 */
-void Joy_AdvancedUpdate_f (void)
+void Joy_AdvancedUpdate_f ()
 {
 
 	// called once by IN_ReadJoystick and by user whenever an update is needed
@@ -901,7 +901,7 @@ void Joy_AdvancedUpdate_f (void)
 IN_Commands
 ===========
 */
-void IN_Commands (void)
+void IN_Commands ()
 {
 	int		i, key_index;
 	DWORD	buttonstate, povstate;
@@ -971,7 +971,7 @@ void IN_Commands (void)
 IN_ReadJoystick
 =============== 
 */  
-int IN_ReadJoystick (void)
+int IN_ReadJoystick ()
 {
 
 	memset (&ji, 0, sizeof(ji));
@@ -1211,7 +1211,7 @@ void IN_Move ( float frametime, usercmd_t *cmd)
 IN_Init
 ===========
 */
-void IN_Init (void)
+void IN_Init ()
 {
 	m_input					= gEngfuncs.pfnRegisterVariable ( "m_input","1", FCVAR_ARCHIVE );
 	m_filter				= gEngfuncs.pfnRegisterVariable ( "m_filter","0", FCVAR_ARCHIVE );

@@ -48,25 +48,25 @@ enum class RPG_RELOAD { sequence = 6, frames = 61, fps = 30 };
 class CRpg : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
+	BOOL Deploy();
 	void Holster();
-	void Reload(void);
-	void UpdateScreen(void);
-	void ShutdownScreen(void);
-	void UpdateSpot(void);
-	void WeaponIdle(void);
+	void Reload();
+	void UpdateScreen();
+	void ShutdownScreen();
+	void UpdateSpot();
+	void WeaponIdle();
 
 	bool AddDuplicate(CBasePlayerItem *pOriginal) override { return false; };//don't give second launcher!
-	BOOL ShouldWeaponIdle(void) { return TRUE; };
+	BOOL ShouldWeaponIdle() { return TRUE; };
 
 	CLaserSpot *m_pSpot;
 	CLaserSpot *m_pMirSpot;

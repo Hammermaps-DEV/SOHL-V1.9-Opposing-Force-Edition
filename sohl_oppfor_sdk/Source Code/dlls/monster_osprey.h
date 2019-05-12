@@ -45,31 +45,31 @@ public:
 	int		Save(CSave &save);
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
-	int		ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int		ObjectCaps() { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	virtual void Spawn(void);
-	virtual void Precache(void);
-	virtual int  Classify(void);
-	virtual int  BloodColor(void) { return DONT_BLEED; }
+	virtual void Spawn();
+	virtual void Precache();
+	virtual int  Classify();
+	virtual int  BloodColor() { return DONT_BLEED; }
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
 	virtual void KeyValue(KeyValueData *pkvd);
 
-	virtual void UpdateGoal(void);
-	virtual BOOL HasDead(void);
-	void EXPORT FlyThink(void);
-	void EXPORT DeployThink(void);
-	virtual void Flight(void);
+	virtual void UpdateGoal();
+	virtual BOOL HasDead();
+	void EXPORT FlyThink();
+	void EXPORT DeployThink();
+	virtual void Flight();
 	void EXPORT HitTouch(CBaseEntity *pOther);
-	void EXPORT FindAllThink(void);
-	void EXPORT HoverThink(void);
+	void EXPORT FindAllThink();
+	void EXPORT HoverThink();
 	CBaseMonster *MakeGrunt(Vector vecSrc);
 	void EXPORT CrashTouch(CBaseEntity *pOther);
-	void EXPORT DyingThink(void);
+	void EXPORT DyingThink();
 	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	virtual void ShowDamage(void);
+	virtual void ShowDamage();
 
 	CBaseEntity *m_pGoalEnt;
 	Vector m_vel1;

@@ -35,16 +35,16 @@
 // class definition
 class CMassn : public CHGrunt {
 public:
-	int  Classify(void);
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void Sniperrifle(void);
+	void Sniperrifle();
 
-	BOOL FOkToSpeak(void);
+	BOOL FOkToSpeak();
 
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
-	void IdleSound(void);
+	void IdleSound();
 };
 
 #endif // MONSTER_MASSN_H

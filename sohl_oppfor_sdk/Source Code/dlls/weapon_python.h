@@ -49,22 +49,22 @@ enum class PYTHON_RELOAD { sequence = 7, frames = 111, fps = 37 };
 class CPython : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
+	BOOL Deploy();
 	void Holster();
-	void Reload(void);
-	void WeaponIdle(void);
+	void Reload();
+	void WeaponIdle();
 
 	//Multiplayer
-	void UpdateSpot(void);
+	void UpdateSpot();
 
 	//Vars
 	int m_fSpotActive;

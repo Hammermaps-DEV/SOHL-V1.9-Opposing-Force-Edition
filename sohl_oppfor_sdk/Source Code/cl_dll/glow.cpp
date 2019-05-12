@@ -72,12 +72,12 @@ unsigned int g_uiScreenTex = 0;
 unsigned int g_uiGlowTex = 0;
 
 // FUNCTIONS
-void InitScreenGlow(void);
-void InitScreenGlowShader(void);
-void InitScreenGlowLowEnd(void);
-void RenderScreenGlow(void);
-void RenderScreenGlowShader(void);
-void RenderScreenGlowLowEnd(void);
+void InitScreenGlow();
+void InitScreenGlowShader();
+void InitScreenGlowLowEnd();
+void RenderScreenGlow();
+void RenderScreenGlowShader();
+void RenderScreenGlowLowEnd();
 bool LoadProgram(CGprogram* pDest, CGprofile profile, const char* szFile);
 
 
@@ -150,7 +150,7 @@ inline bool LoadProgram(CGprogram* pDest, CGprofile profile, const char* szFile)
 	return true;
 }
 
-void InitScreenGlowShader(void)
+void InitScreenGlowShader()
 {
 	bGlowShaderInitialised = false;
 	// OPENGL EXTENSION LOADING
@@ -263,7 +263,7 @@ void DoBlur(unsigned int uiSrcTex, unsigned int uiTargetTex, int srcTexWidth, in
 	glCopyTexImage2D(GL_TEXTURE_RECTANGLE_NV, 0, GL_RGB, 0, 0, destTexWidth, destTexHeight, 0);
 }
 
-void RenderScreenGlowShader(void)
+void RenderScreenGlowShader()
 {
 	// check to see if we can render it.
 	if (IEngineStudio.IsHardware() != 1) {
@@ -385,7 +385,7 @@ void RenderScreenGlowShader(void)
 //END shader glow effect --FragBait0
 
 //START lowend glow effect --FragBait0
-void InitScreenGlowLowEnd(void)
+void InitScreenGlowLowEnd()
 {
 	bGlowLowEndInitialised = false;
 
@@ -413,7 +413,7 @@ void InitScreenGlowLowEnd(void)
 	bGlowLowEndInitialised = true;
 }
 
-void RenderScreenGlowLowEnd(void)
+void RenderScreenGlowLowEnd()
 {
 
 	// check to see if we can render it.

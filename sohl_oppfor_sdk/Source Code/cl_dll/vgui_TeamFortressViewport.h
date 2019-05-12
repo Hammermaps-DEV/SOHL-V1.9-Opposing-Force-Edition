@@ -432,8 +432,8 @@ private:
 	void		 CreateClassMenu( void );
 	CMenuPanel*	 ShowClassMenu( void );
 	void		 CreateSpectatorMenu( void );
-	CMenuPanel*	 ShowCustomMenu(void);		//AJH new customizable menu system
-	void		 CreateCustomMenu(void);		//AJH new customizable menu system
+	CMenuPanel*	 ShowCustomMenu();		//AJH new customizable menu system
+	void		 CreateCustomMenu();		//AJH new customizable menu system
 	
 	// Scheme handler
 	CSchemeManager m_SchemeManager;
@@ -1650,12 +1650,12 @@ public:
 	CCustomMenu(int iTrans, int iRemoveMe, int x, int y, int wide, int tall);
 
 	virtual bool SlotInput(int iSlot);
-	virtual void Open(void);
-	virtual void Update(void);
+	virtual void Open();
+	virtual void Update();
 	virtual void SetActiveInfo(int iInput);
-	virtual void Initialize(void);
+	virtual void Initialize();
 
-	virtual void Reset(void)
+	virtual void Reset()
 	{
 		CMenuPanel::Reset();
 		m_iCurrentInfo = 0;

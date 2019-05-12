@@ -183,7 +183,7 @@ extern DECLSPEC int SDLCALL SDL_GameControllerEventState(int state);
  *  This is called automatically by the event loop if any game controller
  *  events are enabled.
  */
-extern DECLSPEC void SDLCALL SDL_GameControllerUpdate(void);
+extern DECLSPEC void SDLCALL SDL_GameControllerUpdate();
 
 
 /**

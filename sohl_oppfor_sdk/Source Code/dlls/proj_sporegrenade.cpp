@@ -90,7 +90,7 @@ CSporeGrenade *CSporeGrenade::ShootContact(entvars_t *pevOwner, Vector vecStart,
 //=========================================================
 // Spawn
 //=========================================================
-void CSporeGrenade::Spawn(void) {
+void CSporeGrenade::Spawn() {
 	Precache();
 
 	pev->solid = SOLID_BBOX;
@@ -122,7 +122,7 @@ void CSporeGrenade::Spawn(void) {
 //=========================================================
 // Precache
 //=========================================================
-void CSporeGrenade::Precache(void) {
+void CSporeGrenade::Precache() {
 	PRECACHE_MODEL("models/spore.mdl");
 
 	PRECACHE_MODEL("sprites/glow02.spr");
@@ -137,7 +137,7 @@ void CSporeGrenade::Precache(void) {
 //=========================================================
 // Glow
 //=========================================================
-void CSporeGrenade::Glow(void) {
+void CSporeGrenade::Glow() {
 	if (!m_pSprite) {
 		m_pSprite = CSprite::SpriteCreate("sprites/glow02.spr", pev->origin, FALSE);
 		m_pSprite->SetAttachment(edict(), 0);
@@ -151,7 +151,7 @@ void CSporeGrenade::Glow(void) {
 //=========================================================
 // FlyThink
 //=========================================================
-void CSporeGrenade::FlyThink(void) {
+void CSporeGrenade::FlyThink() {
 	TraceResult tr;
 	UTIL_TraceLine(pev->origin, pev->origin + pev->velocity * 10, dont_ignore_monsters, ENT(pev), &tr);
 	MESSAGE_BEGIN(MSG_PAS, SVC_TEMPENTITY, pev->origin);
@@ -262,7 +262,7 @@ void CSporeGrenade::ExplodeThink(CBaseEntity *pOther) {
 //=========================================================
 // Explode
 //=========================================================
-void CSporeGrenade::Explode(void) {
+void CSporeGrenade::Explode() {
 	SetTouch(NULL);
 	SetThink(NULL);
 	EMIT_SOUND(ENT(pev), CHAN_ITEM, "weapons/splauncher_impact.wav", VOL_NORM, ATTN_NORM);

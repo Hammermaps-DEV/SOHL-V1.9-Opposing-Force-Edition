@@ -142,7 +142,7 @@ void CISlave::Spawn() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CISlave::Classify(void) {
+int	CISlave::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MILITARY;
 }
 
@@ -209,7 +209,7 @@ void CISlave::CallForHelp(char *szClassname, float flDist, EHANDLE hEnemy, Vecto
 //=========================================================
 // ALertSound - scream
 //=========================================================
-void CISlave::AlertSound(void)
+void CISlave::AlertSound()
 {
 	if (m_hEnemy != NULL)
 	{
@@ -222,7 +222,7 @@ void CISlave::AlertSound(void)
 //=========================================================
 // IdleSound
 //=========================================================
-void CISlave::IdleSound(void)
+void CISlave::IdleSound()
 {
 	if (RANDOM_LONG(0, 2) == 0)
 	{
@@ -233,7 +233,7 @@ void CISlave::IdleSound(void)
 //=========================================================
 // PainSound
 //=========================================================
-void CISlave::PainSound(void)
+void CISlave::PainSound()
 {
 	if (RANDOM_LONG(0, 2) == 0)
 	{
@@ -245,7 +245,7 @@ void CISlave::PainSound(void)
 // DieSound
 //=========================================================
 
-void CISlave::DeathSound(void)
+void CISlave::DeathSound()
 {
 	EMIT_SOUND_DYN(ENT(pev), CHAN_WEAPON, pDeathSounds[RANDOM_LONG(0, HL_ARRAYSIZE(pDeathSounds) - 1)], 1.0, ATTN_NORM, 0, m_voicePitch);
 }
@@ -255,7 +255,7 @@ void CISlave::DeathSound(void)
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CISlave::ISoundMask(void)
+int CISlave::ISoundMask()
 {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
@@ -274,7 +274,7 @@ void CISlave::Killed(entvars_t *pevAttacker, int iGib)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CISlave::SetYawSpeed(void)
+void CISlave::SetYawSpeed()
 {
 	int ys;
 
@@ -573,7 +573,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CISlave, CSquadMonster);
 
 //=========================================================
 //=========================================================
-Schedule_t *CISlave::GetSchedule(void)
+Schedule_t *CISlave::GetSchedule()
 {
 	ClearBeams();
 

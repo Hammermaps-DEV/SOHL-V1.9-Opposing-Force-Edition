@@ -36,8 +36,6 @@
 #include "extdll.h"
 #include "util.h"
 
-#include "cbase.h"
-
 // Holds engine functionality callbacks
 enginefuncs_t g_engfuncs;
 globalvars_t  *gpGlobals;

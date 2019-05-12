@@ -41,8 +41,8 @@ extern "C" {
 /* Public functions */
 /* SDL_SetError() unconditionally returns -1. */
 extern DECLSPEC int SDLCALL SDL_SetError(const char *fmt, ...);
-extern DECLSPEC const char *SDLCALL SDL_GetError(void);
-extern DECLSPEC void SDLCALL SDL_ClearError(void);
+extern DECLSPEC const char *SDLCALL SDL_GetError();
+extern DECLSPEC void SDLCALL SDL_ClearError();
 
 /**
  *  \name Internal error functions

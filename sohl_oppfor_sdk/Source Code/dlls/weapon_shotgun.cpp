@@ -47,7 +47,7 @@ LINK_ENTITY_TO_CLASS(weapon_shotgun, CShotgun);
 //=========================================================
 // Spawn Shotgun
 //=========================================================
-void CShotgun::Spawn(void) {
+void CShotgun::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_shotgun.mdl");
@@ -59,7 +59,7 @@ void CShotgun::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CShotgun::Precache(void) {
+void CShotgun::Precache() {
 	PRECACHE_MODEL("models/v_shotgun.mdl");
 	PRECACHE_MODEL("models/w_shotgun.mdl");
 	PRECACHE_MODEL("models/p_shotgun.mdl");
@@ -96,7 +96,7 @@ int CShotgun::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CShotgun::PrimaryAttack(void) {
+void CShotgun::PrimaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(4);
@@ -151,7 +151,7 @@ void CShotgun::PrimaryAttack(void) {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CShotgun::SecondaryAttack(void) {
+void CShotgun::SecondaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(4);
@@ -214,7 +214,7 @@ void CShotgun::SecondaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CShotgun::Deploy(void) {
+BOOL CShotgun::Deploy() {
 	return DefaultDeploy("models/v_shotgun.mdl", "models/p_shotgun.mdl", (int)SHOTGUN_DRAW::sequence,
 		"shotgun", CalculateWeaponTime((int)SHOTGUN_DRAW::frames, (int)SHOTGUN_DRAW::fps));
 }
@@ -222,7 +222,7 @@ BOOL CShotgun::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CShotgun::Holster(void) {
+void CShotgun::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)SHOTGUN_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -232,7 +232,7 @@ void CShotgun::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CShotgun::Reload(void) {
+void CShotgun::Reload() {
 	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SHOTGUN_MAX_CLIP) ||
 		m_flNextPrimaryAttack > UTIL_GlobalTimeBase() || m_flNextSecondaryAttack > UTIL_GlobalTimeBase()) {
 		return;
@@ -297,7 +297,7 @@ void CShotgun::Charge(bool m_BeginAttack) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CShotgun::WeaponIdle(void) {
+void CShotgun::WeaponIdle() {
 	if ((m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) && !m_iChargeLevel) {
 		return;

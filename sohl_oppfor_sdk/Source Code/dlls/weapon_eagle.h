@@ -51,21 +51,21 @@ enum class EAGLE_HOLSTER { sequence = 10, frames = 16, fps = 22 };
 class CEagle : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void Reload(void);
-	void WeaponIdle(void);
-	void ShutdownSpot(void);
-	void UpdateSpot(void);
+	BOOL Deploy();
+	void Holster();
+	void Reload();
+	void WeaponIdle();
+	void ShutdownSpot();
+	void UpdateSpot();
 
 	CLaserSpot *m_pMirSpot;
 	CLaserSpot *m_pSpot;

@@ -75,7 +75,7 @@ void CEgon::Spawn()
 	FallInit();// get ready to fall down.
 }
 
-void CEgon::Precache(void)
+void CEgon::Precache()
 {
 	PRECACHE_MODEL("models/w_egon.mdl");
 	PRECACHE_MODEL("models/v_egon.mdl");
@@ -87,7 +87,7 @@ void CEgon::Precache(void)
 	m_usEgonStop = PRECACHE_EVENT(1, "events/egon_stop.sc");
 }
 
-BOOL CEgon::Deploy(void)
+BOOL CEgon::Deploy()
 {
 	m_fireState = FIRE_OFF;
 
@@ -124,7 +124,7 @@ int CEgon::GetItemInfo(ItemInfo *p)
 #define EGON_PULSE_INTERVAL			0.1
 #define EGON_DISCHARGE_INTERVAL		0.1
 
-BOOL CEgon::HasAmmo(void)
+BOOL CEgon::HasAmmo()
 {
 	if (gInfinitelyAmmo)
 		return TRUE;
@@ -143,7 +143,7 @@ void CEgon::UseAmmo(int count)
 	}
 }
 
-void CEgon::PrimaryAttack(void)
+void CEgon::PrimaryAttack()
 {
 	UpdateScreen();
 
@@ -217,7 +217,7 @@ void CEgon::PrimaryAttack(void)
 	}
 }
 
-void CEgon::SecondaryAttack(void)
+void CEgon::SecondaryAttack()
 {
 	UpdateScreen();
 	if (m_fireState != FIRE_OFF) EndAttack();
@@ -382,7 +382,7 @@ void CEgon::UpdateEffect(const Vector &startPoint, const Vector &endPoint, float
 	m_pNoise->SetStartPos(endPoint);
 }
 
-void CEgon::CreateEffect(void)
+void CEgon::CreateEffect()
 {
 	DestroyEffect();
 
@@ -428,7 +428,7 @@ void CEgon::CreateEffect(void)
 }
 
 
-void CEgon::DestroyEffect(void)
+void CEgon::DestroyEffect()
 {
 	if (m_pBeam)
 	{
@@ -450,7 +450,7 @@ void CEgon::DestroyEffect(void)
 	}
 }
 
-void CEgon::EndAttack(void)
+void CEgon::EndAttack()
 {
 	PLAYBACK_EVENT_FULL(FEV_GLOBAL | FEV_RELIABLE, m_pPlayer->edict(), m_usEgonStop, 0, (float *)&m_pPlayer->pev->origin, (float *)&m_pPlayer->pev->angles, 0.0, 0.0, m_fireState, pev->body, 0, 0);
 	m_fireState = FIRE_OFF;
@@ -461,7 +461,7 @@ void CEgon::EndAttack(void)
 	DestroyEffect();
 }
 
-void CEgon::UpdateScreen(void)
+void CEgon::UpdateScreen()
 {
 	if (m_flTimeUpdate > UTIL_GlobalTimeBase()) return;
 
@@ -498,7 +498,7 @@ void CEgon::UpdateScreen(void)
 	m_flTimeUpdate = UTIL_GlobalTimeBase() + 0.08;//refresh rate
 }
 
-void CEgon::ShutdownScreen(void)
+void CEgon::ShutdownScreen()
 {
 	//shutdown screen
 	if (m_fireMode == FIRE_NARROW) pev->skin = 6;
@@ -509,7 +509,7 @@ void CEgon::ShutdownScreen(void)
 	MESSAGE_END();
 }
 
-void CEgon::WeaponIdle(void)
+void CEgon::WeaponIdle()
 {
 	UpdateScreen();
 

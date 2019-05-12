@@ -53,7 +53,7 @@ LINK_ENTITY_TO_CLASS(monster_hevsuit_dead, CDeadHEV);
 //=========================================================
 // ********** DeadHEV SPAWN **********
 //=========================================================
-void CDeadHEV::Spawn(void)
+void CDeadHEV::Spawn()
 {
 	PRECACHE_MODEL("models/hev.mdl");
 	SET_MODEL(ENT(pev), "models/hev.mdl");

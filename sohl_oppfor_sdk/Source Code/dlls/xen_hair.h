@@ -31,9 +31,9 @@
 
 class CXenHair : public CActAnimating {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void Think(void);
+	void Spawn();
+	void Precache();
+	void Think();
 };
 
 #endif // XEN_HAIR_H

@@ -75,7 +75,7 @@ void CShockrifle::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CShockrifle::Precache(void) {
+void CShockrifle::Precache() {
 	PRECACHE_MODEL("models/v_shock.mdl");
 	PRECACHE_MODEL("models/w_shock.mdl");
 	PRECACHE_MODEL("models/p_shock.mdl");
@@ -201,7 +201,7 @@ void CShockrifle::Holster() {
 //=========================================================
 // Reload
 //=========================================================
-void CShockrifle::Reload(void) {
+void CShockrifle::Reload() {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] >= SHOCK_MAX_CARRY)
 		return;
 
@@ -215,7 +215,7 @@ void CShockrifle::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CShockrifle::WeaponIdle(void) {
+void CShockrifle::WeaponIdle() {
 	Reload(); //Auto recharge
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
@@ -265,7 +265,7 @@ void CShockrifle::UpdateEffects() {
 //=========================================================
 // ItemPostFrame
 //=========================================================
-void CShockrifle::ItemPostFrame(void) {
+void CShockrifle::ItemPostFrame() {
 	CBasePlayerWeapon::ItemPostFrame();
 	if (!m_pPlayer->pev->button & IN_ATTACK) {
 		if (m_fShouldUpdateEffects) {

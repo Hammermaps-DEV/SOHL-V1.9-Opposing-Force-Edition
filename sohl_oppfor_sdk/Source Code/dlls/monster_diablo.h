@@ -34,20 +34,20 @@
 
 class CDiablo : public CBaseMonster {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int IgnoreConditions(void);
-	int  ISoundMask(void);
+	int IgnoreConditions();
+	int  ISoundMask();
 
 	float m_flNextFlinch;
 
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
-	void AttackSound(void);
+	void PainSound();
+	void AlertSound();
+	void IdleSound();
+	void AttackSound();
 
 	bool CheckRangeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack2(float flDot, float flDist);
@@ -69,7 +69,7 @@ public:
 
 	void SetActivity(Activity NewActivity);
 
-	Schedule_t	*GetSchedule(void);
+	Schedule_t	*GetSchedule();
 	Schedule_t  *GetScheduleOfType(int Type);
 
 	CUSTOM_SCHEDULES;

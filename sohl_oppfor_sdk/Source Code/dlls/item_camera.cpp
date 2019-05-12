@@ -57,7 +57,7 @@ TYPEDESCRIPTION	CItemCamera::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CItemCamera, CItem);
 
-void CItemCamera::Spawn(void)
+void CItemCamera::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_camera.mdl");
@@ -84,7 +84,7 @@ void CItemCamera::Spawn(void)
 
 }
 
-void CItemCamera::Precache(void)
+void CItemCamera::Precache()
 {
 	PRECACHE_MODEL("models/w_camera.mdl");
 }
@@ -126,7 +126,7 @@ void CItemCamera::ItemTouch(CBaseEntity *pOther)
 	}
 }
 
-BOOL CItemCamera::MyTouch(CBasePlayer *pPlayer)
+bool CItemCamera::MyTouch(CBasePlayer *pPlayer)
 {
 	if (pPlayer->m_rgItems[ITEM_CAMERA] < (int)CVAR_GET_FLOAT("max_cameras")) {
 
@@ -139,7 +139,7 @@ BOOL CItemCamera::MyTouch(CBasePlayer *pPlayer)
 		{
 			if (pPlayer->m_pItemCamera->m_pLastCamera == NULL) {
 				ALERT(at_debug, "MYTOUCH: Null pointer in camera list!! (Impossible?!)\n"); //Shouldn't be here!
-				return FALSE;
+				return false;
 			}
 			pPlayer->m_pItemCamera->m_pLastCamera->m_pNextCamera = this; //Set the current last camera to point to us
 			pPlayer->m_pItemCamera->m_pLastCamera = this;	//then set us as the last camera in the list.
@@ -161,9 +161,10 @@ BOOL CItemCamera::MyTouch(CBasePlayer *pPlayer)
 		pev->aiment = pPlayer->edict();
 		pev->owner = pPlayer->edict();
 
-		return TRUE;
+		return true;
 	}
-	return FALSE;
+
+	return false;
 }
 
 void CItemCamera::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)

@@ -51,7 +51,7 @@ assert can have unique static variables associated with it.
 
 #if defined(_MSC_VER)
 /* Don't include intrin.h here because it contains C++ code */
-    extern void __cdecl __debugbreak(void);
+    extern void __cdecl __debugbreak();
     #define SDL_TriggerBreakpoint() __debugbreak()
 #elif (defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__)))
     #define SDL_TriggerBreakpoint() __asm__ __volatile__ ( "int $3\n\t" )
@@ -89,7 +89,7 @@ disable assertions.
 */
 
 #define SDL_disabled_assert(condition) \
-    do { (void) sizeof ((condition)); } while (0)
+    do { () sizeof ((condition)); } while (0)
 
 typedef enum
 {
@@ -217,7 +217,7 @@ extern DECLSPEC void SDLCALL SDL_SetAssertionHandler(
  *  \return List of all assertions.
  *  \sa SDL_ResetAssertionReport
  */
-extern DECLSPEC const SDL_assert_data * SDLCALL SDL_GetAssertionReport(void);
+extern DECLSPEC const SDL_assert_data * SDLCALL SDL_GetAssertionReport();
 
 /**
  *  \brief Reset the list of all assertion failures.
@@ -226,7 +226,7 @@ extern DECLSPEC const SDL_assert_data * SDLCALL SDL_GetAssertionReport(void);
  *
  *  \sa SDL_GetAssertionReport
  */
-extern DECLSPEC void SDLCALL SDL_ResetAssertionReport(void);
+extern DECLSPEC void SDLCALL SDL_ResetAssertionReport();
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

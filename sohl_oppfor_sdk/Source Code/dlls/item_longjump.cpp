@@ -37,22 +37,21 @@ extern bool gEvilImpulse101;
 
 class CItemLongJump : public CItem
 {
-	void Spawn(void)
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_longjump.mdl");
 		CItem::Spawn();
 	}
-	void Precache(void)
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_longjump.mdl");
 	}
-	BOOL MyTouch(CBasePlayer *pPlayer)
+
+	bool MyTouch(CBasePlayer *pPlayer) override
 	{
-		if (pPlayer->m_fLongJump)
-		{
-			return FALSE;
-		}
+		if (!pPlayer->IsPlayer() || pPlayer->m_fLongJump || pPlayer->pev->deadflag != DEAD_NO)
+			return false;
 
 		if (pPlayer->m_iHideHUD & ITEM_SUIT)
 		{
@@ -72,10 +71,10 @@ class CItemLongJump : public CItem
 			if (!gEvilImpulse101)  // Play the longjump sound UNDONE: Kelly? correct sound?
 				EMIT_SOUND_SUIT(pPlayer->edict(), "!HEV_A1");
 
-			return TRUE;
+			return true;
 		}
 
-		return FALSE;
+		return false;
 	}
 };
 

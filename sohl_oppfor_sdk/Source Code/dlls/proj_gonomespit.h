@@ -34,11 +34,11 @@
 
 class CGonomeSpit : public CBaseEntity {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void EXPORT Animate(void);
+	void EXPORT Animate();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

@@ -85,7 +85,7 @@ void CBabyVoltigore::Spawn()
 
 //=========================================================
 //=========================================================
-void CBabyVoltigore::Precache(void)
+void CBabyVoltigore::Precache()
 {
 	pev->model = ALLOC_STRING("models/baby_voltigore.mdl");
 	CVoltigore::Precache();

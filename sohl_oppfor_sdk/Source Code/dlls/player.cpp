@@ -48,7 +48,6 @@
 #include "rope/CRope.h"
 #include "items.h" //AJH Inventory system
 #include "gamerules.h"
-#include "locus.h" //LRC 1.8
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
 extern DLL_GLOBAL bool		g_fGameOver;
@@ -218,7 +217,7 @@ int gmsgConcuss = 0;
 int gmsgGrassParticles = 0;
 int gmsgInventory = 0; //AJH Inventory system
 
-void LinkUserMessages(void)
+void LinkUserMessages()
 {
 	// Already taken care of?
 	if (gmsgSelAmmo) {
@@ -285,7 +284,7 @@ void LinkUserMessages(void)
 
 LINK_ENTITY_TO_CLASS(player, CBasePlayer);
 
-void CBasePlayer::Pain(void)
+void CBasePlayer::Pain()
 {
 	float flRndSound = RANDOM_FLOAT(0, 1);
 
@@ -334,7 +333,7 @@ int TrainSpeed(int iSpeed, int iMax)
 	return iRet;
 }
 
-void CBasePlayer::DeathSound(void)
+void CBasePlayer::DeathSound()
 {
 	// water death sounds
 	if (pev->waterlevel == 3) {
@@ -701,7 +700,7 @@ int CBasePlayer::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, flo
 //
 // This is pretty brute force :(
 //=========================================================
-void CBasePlayer::PackDeadPlayerItems(void)
+void CBasePlayer::PackDeadPlayerItems()
 {
 	int iWeaponRules;
 	int iAmmoRules;
@@ -1416,12 +1415,12 @@ void CBasePlayer::WaterMove()
 
 
 // TRUE if the player is attached to a ladder
-BOOL CBasePlayer::IsOnLadder(void)
+BOOL CBasePlayer::IsOnLadder()
 {
 	return (pev->movetype == MOVETYPE_FLY);
 }
 
-void CBasePlayer::PlayerDeathThink(void)
+void CBasePlayer::PlayerDeathThink()
 {
 	float flForward;
 
@@ -1523,7 +1522,7 @@ void CBasePlayer::PlayerDeathThink(void)
 // StartDeathCam - find an intermission spot and send the
 // player off into observer mode
 //=========================================================
-void CBasePlayer::StartDeathCam(void)
+void CBasePlayer::StartDeathCam()
 {
 	CBaseEntity *pSpot, *pNewSpot;
 	int iRand;
@@ -1586,7 +1585,7 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 //
 #define	PLAYER_SEARCH_RADIUS	(float)64
 
-void CBasePlayer::PlayerUse(void)
+void CBasePlayer::PlayerUse()
 {
 	// Was use pressed or released?
 	if (!((pev->button | m_afButtonPressed | m_afButtonReleased) & IN_USE))
@@ -1796,7 +1795,7 @@ void CBasePlayer::Duck()
 //
 // ID's player as such.
 //
-int  CBasePlayer::Classify(void)
+int  CBasePlayer::Classify()
 {
 	return CLASS_PLAYER;
 }
@@ -1952,7 +1951,7 @@ void CBasePlayer::UpdateStatusBar()
 #define	CLIMB_PUNCH_X			-7  // how far to 'punch' client X axis when climbing
 #define CLIMB_PUNCH_Z			7	// how far to 'punch' client Z axis when climbing
 
-void CBasePlayer::PreThink(void)
+void CBasePlayer::PreThink()
 {
 	if (m_afPhysicsFlags & PFLAG_ON_GRAPPLE) // If we are on a grapple
 		pev->velocity = (m_MyGrapple->pev->origin - pev->origin) * 2;
@@ -2510,7 +2509,7 @@ Things powered by the battery
 
 #define GEIGERDELAY 0.25
 
-void CBasePlayer::UpdateGeigerCounter(void)
+void CBasePlayer::UpdateGeigerCounter()
 {
 	BYTE range;
 
@@ -2727,7 +2726,7 @@ static void CheckPowerups(entvars_t *pev)
 // UpdatePlayerSound - updates the position of the player's
 // reserved sound slot in the sound list.
 //=========================================================
-void CBasePlayer::UpdatePlayerSound(void)
+void CBasePlayer::UpdatePlayerSound()
 {
 	int iBodyVolume;
 	int iVolume;
@@ -3066,7 +3065,7 @@ ReturnSpot:
 	return pSpot->edict();
 }
 
-void CBasePlayer::Spawn(void)
+void CBasePlayer::Spawn()
 {
 	//	ALERT(at_console, "PLAYER spawns at time %f\n", UTIL_GlobalTimeBase());
 
@@ -3209,7 +3208,7 @@ void CBasePlayer::Spawn(void)
 }
 
 
-void CBasePlayer::Precache(void)
+void CBasePlayer::Precache()
 {
 	// in the event that the player JUST spawned, and the level node graph
 	// was loaded, fix all of the node graph pointers before the game starts.
@@ -3269,7 +3268,7 @@ int CBasePlayer::Save(CSave &save)
 //
 // Marks everything as new so the player will resend this to the hud.
 //
-void CBasePlayer::RenewItems(void)
+void CBasePlayer::RenewItems()
 {
 
 }
@@ -3441,7 +3440,7 @@ void CBasePlayer::SelectItem(const char *pstr)
 }
 
 
-void CBasePlayer::SelectLastItem(void)
+void CBasePlayer::SelectLastItem()
 {
 	if (!m_pLastItem)
 	{
@@ -3471,7 +3470,7 @@ void CBasePlayer::SelectLastItem(void)
 //==============================================
 // HasWeapons - do I have any weapons at all?
 //==============================================
-BOOL CBasePlayer::HasWeapons(void)
+BOOL CBasePlayer::HasWeapons()
 {
 	int i;
 
@@ -3491,7 +3490,7 @@ void CBasePlayer::SelectPrevItem(int iItem)
 }
 
 
-const char *CBasePlayer::TeamID(void)
+const char *CBasePlayer::TeamID()
 {
 	if (pev == NULL)		// Not fully connected yet
 		return "";
@@ -3509,9 +3508,9 @@ class CSprayCan : public CBaseEntity
 {
 public:
 	void	Spawn(entvars_t *pevOwner);
-	void	Think(void);
+	void	Think();
 
-	virtual int	ObjectCaps(void) { return FCAP_DONT_SAVE; }
+	virtual int	ObjectCaps() { return FCAP_DONT_SAVE; }
 };
 
 void CSprayCan::Spawn(entvars_t *pevOwner)
@@ -3525,7 +3524,7 @@ void CSprayCan::Spawn(entvars_t *pevOwner)
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/sprayer.wav", VOL_NORM, ATTN_NORM);
 }
 
-void CSprayCan::Think(void)
+void CSprayCan::Think()
 {
 	TraceResult	tr;
 	int playernum;
@@ -3567,7 +3566,7 @@ class	CBloodSplat : public CBaseEntity
 {
 public:
 	void	Spawn(entvars_t *pevOwner);
-	void	Spray(void);
+	void	Spray();
 };
 
 void CBloodSplat::Spawn(entvars_t *pevOwner)
@@ -3580,7 +3579,7 @@ void CBloodSplat::Spawn(entvars_t *pevOwner)
 	SetNextThink(0.1);
 }
 
-void CBloodSplat::Spray(void)
+void CBloodSplat::Spray()
 {
 	TraceResult	tr;
 
@@ -3683,13 +3682,13 @@ void UTIL_EdictScreenFade(edict_s *edict, const Vector &color, float fadeTime, f
 	UTIL_EdictScreenFadeWrite(fade, edict);
 }
 
-BOOL CBasePlayer::FlashlightIsOn(void)
+BOOL CBasePlayer::FlashlightIsOn()
 {
 	//return FBitSet(pev->effects, EF_BRIGHTLIGHT);
 	return m_flFlashlightIsOn;
 }
 
-void CBasePlayer::FlashlightTurnOn(void)
+void CBasePlayer::FlashlightTurnOn()
 {
 	if (!g_pGameRules->FAllowFlashlight()) return;
 
@@ -3708,7 +3707,7 @@ void CBasePlayer::FlashlightTurnOn(void)
 	}
 }
 
-void CBasePlayer::FlashlightTurnOff(void)
+void CBasePlayer::FlashlightTurnOff()
 {
 	UTIL_EdictScreenFade(edict(), Vector(0, 0, 0), 0.1, 0, 0, FFADE_IN); //off
 
@@ -3732,7 +3731,7 @@ so that the client side .dll can behave correctly.
 Reset stuff so that the state is transmitted.
 ===============
 */
-void CBasePlayer::ForceClientDllUpdate(void)
+void CBasePlayer::ForceClientDllUpdate()
 {
 	m_iClientHealth = -1;
 	m_iClientBattery = -1;
@@ -4322,7 +4321,7 @@ int CBasePlayer::GetAmmoIndex(const char *psz)
 
 // Called from UpdateClientData
 // makes sure the client has all the necessary ammo info,  if values have changed
-void CBasePlayer::SendAmmoUpdate(void)
+void CBasePlayer::SendAmmoUpdate()
 {
 	for (int i = 0; i < MAX_AMMO_SLOTS; i++)
 	{
@@ -4356,7 +4355,7 @@ reflecting all of the HUD state info.
 // camera flags
 #define	MONSTER_VIEW	8
 
-void CBasePlayer::UpdateClientData(void)
+void CBasePlayer::UpdateClientData()
 {
 	if (m_fInitHUD) //AJH The HUD needs (re)initialising
 	{
@@ -4817,7 +4816,7 @@ void CBasePlayer::UpdateClientData(void)
 // FBecomeProne - Overridden for the player to set the proper
 // physics flags when a barnacle grabs player.
 //=========================================================
-BOOL CBasePlayer::FBecomeProne(void)
+BOOL CBasePlayer::FBecomeProne()
 {
 	m_afPhysicsFlags |= PFLAG_ONBARNACLE;
 	return TRUE;
@@ -4837,7 +4836,7 @@ void CBasePlayer::BarnacleVictimBitten(entvars_t *pevBarnacle)
 // BarnacleVictimReleased - overridden for player who has
 // physics flags concerns.
 //=========================================================
-void CBasePlayer::BarnacleVictimReleased(void)
+void CBasePlayer::BarnacleVictimReleased()
 {
 	m_afPhysicsFlags &= ~PFLAG_ONBARNACLE;
 }
@@ -4847,7 +4846,7 @@ void CBasePlayer::BarnacleVictimReleased(void)
 // Illumination
 // return player light level plus virtual muzzle flash
 //=========================================================
-int CBasePlayer::Illumination(void)
+int CBasePlayer::Illumination()
 {
 	int iIllum = CBaseEntity::Illumination();
 
@@ -5123,7 +5122,7 @@ GetCustomDecalFrames
   Returns the # of custom frames this player's custom clan logo contains.
 =============
 */
-int CBasePlayer::GetCustomDecalFrames(void)
+int CBasePlayer::GetCustomDecalFrames()
 {
 	return m_nCustomSprayFrames;
 }
@@ -5446,18 +5445,18 @@ class CRevertSaved : public CPointEntity
 {
 public:
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	EXPORT MessageThink(void);
-	void	EXPORT LoadThink(void);
+	void	EXPORT MessageThink();
+	void	EXPORT LoadThink();
 	void	KeyValue(KeyValueData *pkvd);
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	inline	float	Duration(void) { return pev->dmg_take; }
-	inline	float	HoldTime(void) { return pev->dmg_save; }
-	inline	float	MessageTime(void) { return m_messageTime; }
-	inline	float	LoadTime(void) { return m_loadTime; }
+	inline	float	Duration() { return pev->dmg_take; }
+	inline	float	HoldTime() { return pev->dmg_save; }
+	inline	float	MessageTime() { return m_messageTime; }
+	inline	float	LoadTime() { return m_loadTime; }
 
 	inline	void	SetDuration(float duration) { pev->dmg_take = duration; }
 	inline	void	SetHoldTime(float hold) { pev->dmg_save = hold; }
@@ -5513,7 +5512,7 @@ void CRevertSaved::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 }
 
 
-void CRevertSaved::MessageThink(void)
+void CRevertSaved::MessageThink()
 {
 	UTIL_ShowMessageAll(STRING(pev->message));
 	float nextThink = LoadTime() - MessageTime();
@@ -5527,7 +5526,7 @@ void CRevertSaved::MessageThink(void)
 }
 
 
-void CRevertSaved::LoadThink(void)
+void CRevertSaved::LoadThink()
 {
 	if (!gpGlobals->deathmatch)
 	{
@@ -5540,11 +5539,11 @@ void CRevertSaved::LoadThink(void)
 //=========================================================
 class CInfoIntermission :public CPointEntity
 {
-	void Spawn(void);
-	void Think(void);
+	void Spawn();
+	void Think();
 };
 
-void CInfoIntermission::Spawn(void)
+void CInfoIntermission::Spawn()
 {
 	UTIL_SetOrigin(this, pev->origin);
 	pev->solid = SOLID_NOT;
@@ -5555,7 +5554,7 @@ void CInfoIntermission::Spawn(void)
 
 }
 
-void CInfoIntermission::Think(void)
+void CInfoIntermission::Think()
 {
 	CBaseEntity *pTarget;
 
@@ -5580,13 +5579,13 @@ LINK_ENTITY_TO_CLASS(info_intermission, CInfoIntermission);
 
 class CHudSprite :public CBaseEntity
 {
-	void Spawn(void);
+	void Spawn();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	STATE GetState(void) { return pev->spawnflags & SF_HUDSPR_ACTIVE ? STATE_ON : STATE_OFF; }
-	void Think(void);
+	STATE GetState() { return pev->spawnflags & SF_HUDSPR_ACTIVE ? STATE_ON : STATE_OFF; }
+	void Think();
 };
 
-void CHudSprite::Spawn(void)
+void CHudSprite::Spawn()
 {
 	//LRC 1.8
 // We can't keep a hud.txt spritename in pev->model, because on loading a saved game, it
@@ -5610,7 +5609,7 @@ void CHudSprite::Spawn(void)
 	}
 }
 
-void CHudSprite::Think(void)
+void CHudSprite::Think()
 {
 	Use(this, this, USE_ON, 0);
 }
@@ -5646,7 +5645,7 @@ void CHudSprite::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 
 LINK_ENTITY_TO_CLASS(hud_sprite, CHudSprite);
 
-void CBasePlayer::NvgUpdate(void)
+void CBasePlayer::NvgUpdate()
 {
 	if (m_flFlashlightIsOn)
 	{

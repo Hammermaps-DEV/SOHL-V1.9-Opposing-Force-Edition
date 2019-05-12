@@ -35,22 +35,22 @@
 // class definition
 class CZombie : public CBaseMonster {
 public:
-	void Spawn(void) override;
-	void Precache(void) override;
+	void Spawn() override;
+	void Precache() override;
 	void HandleAnimEvent(MonsterEvent_t *pEvent) override;
-	void PainSound(void) override;
-	void DeathSound(void) override;
-	void AlertSound(void) override;
-	void IdleSound(void) override;
-	void AttackSound(void) override;
+	void PainSound() override;
+	void DeathSound() override;
+	void AlertSound() override;
+	void IdleSound() override;
+	void AttackSound() override;
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
 
 	bool CheckRangeAttack1(float flDot, float flDist) override { return false; }
 	bool CheckRangeAttack2(float flDot, float flDist) override { return false; }
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
-	int IgnoreConditions(void) override;
-	int Classify(void) override;
+	int IgnoreConditions() override;
+	int Classify() override;
 
 	int	Save(CSave &save) override;
 	int	Restore(CRestore &restore) override;

@@ -87,7 +87,7 @@ int g_iUser3;
 #define SBOARD_INDENT_X_400		0
 #define SBOARD_INDENT_Y_400		20
 
-void IN_ResetMouse(void);
+void IN_ResetMouse();
 extern CMenuPanel *CMessageWindowPanel_Create(const char *szMOTD, const char *szTitle, int iShadeFullscreen, int iRemoveMe, int x, int y, int wide, int tall);
 extern float * GetClientColor(int clientIndex);
 
@@ -288,7 +288,7 @@ bool CCommandMenu::KeyInput(int keyNum)
 // Purpose: clears the current menus buttons of any armed (highlighted) 
 //			state, and all their sub buttons
 //-----------------------------------------------------------------------------
-void CCommandMenu::ClearButtonsOfArmedState(void)
+void CCommandMenu::ClearButtonsOfArmedState()
 {
 	for (int i = 0; i < GetNumButtons(); i++)
 	{
@@ -633,7 +633,7 @@ TeamFortressViewport::TeamFortressViewport(int x, int y, int wide, int tall) : P
 //-----------------------------------------------------------------------------
 // Purpose: Called everytime a new level is started. Viewport clears out it's data.
 //-----------------------------------------------------------------------------
-void TeamFortressViewport::Initialize(void)
+void TeamFortressViewport::Initialize()
 {
 	// Force each menu to Initialize
 
@@ -1366,7 +1366,7 @@ void TeamFortressViewport::HideCommandMenu()
 //-----------------------------------------------------------------------------
 // Purpose: Bring up the scoreboard
 //-----------------------------------------------------------------------------
-void TeamFortressViewport::ShowScoreBoard(void)
+void TeamFortressViewport::ShowScoreBoard()
 {
 	if (m_pScoreBoard)
 	{
@@ -1382,7 +1382,7 @@ void TeamFortressViewport::ShowScoreBoard(void)
 //-----------------------------------------------------------------------------
 // Purpose: Returns true if the scoreboard is up
 //-----------------------------------------------------------------------------
-bool TeamFortressViewport::IsScoreBoardVisible(void)
+bool TeamFortressViewport::IsScoreBoardVisible()
 {
 	if (m_pScoreBoard)
 		return m_pScoreBoard->isVisible();
@@ -1393,7 +1393,7 @@ bool TeamFortressViewport::IsScoreBoardVisible(void)
 //-----------------------------------------------------------------------------
 // Purpose: Hide the scoreboard
 //-----------------------------------------------------------------------------
-void TeamFortressViewport::HideScoreBoard(void)
+void TeamFortressViewport::HideScoreBoard()
 {
 	// Prevent removal of scoreboard during intermission
 	if (gHUD.m_iIntermission)
@@ -1413,7 +1413,7 @@ void TeamFortressViewport::HideScoreBoard(void)
 // Purpose: Activate's the player special ability
 //			called when the player hits their "special" key
 //-----------------------------------------------------------------------------
-void TeamFortressViewport::InputPlayerSpecial(void)
+void TeamFortressViewport::InputPlayerSpecial()
 {
 	if (!m_iInitialized)
 		return;
@@ -1585,7 +1585,7 @@ void TeamFortressViewport::UpdateSpectatorPanel()
 }
 
 //======================================================================
-void TeamFortressViewport::CreateScoreBoard(void)
+void TeamFortressViewport::CreateScoreBoard()
 {
 	int xdent = SBOARD_INDENT_X, ydent = SBOARD_INDENT_Y;
 	if (ScreenWidth == 512)
@@ -1604,7 +1604,7 @@ void TeamFortressViewport::CreateScoreBoard(void)
 	m_pScoreBoard->setVisible(false);
 }
 
-void TeamFortressViewport::CreateServerBrowser(void)
+void TeamFortressViewport::CreateServerBrowser()
 {
 	m_pServerBrowser = new ServerBrowser(0, 0, ScreenWidth, ScreenHeight);
 	m_pServerBrowser->setParent(this);
@@ -1879,7 +1879,7 @@ void TeamFortressViewport::HideTopMenu()
 }
 
 // Return TRUE if the HUD's allowed to print text messages
-bool TeamFortressViewport::AllowedToPrintText(void)
+bool TeamFortressViewport::AllowedToPrintText()
 {
 	// Prevent text messages when fullscreen menus are up
 	if (m_pCurrentMenu && g_iPlayerClass == 0)
@@ -2023,7 +2023,7 @@ void TeamFortressViewport::UpdateHighlights()
 		m_pCurrentCommandMenu->MakeVisible(NULL);
 }
 
-void TeamFortressViewport::GetAllPlayersInfo(void)
+void TeamFortressViewport::GetAllPlayersInfo()
 {
 	for (int i = 1; i < MAX_PLAYERS; i++)
 	{

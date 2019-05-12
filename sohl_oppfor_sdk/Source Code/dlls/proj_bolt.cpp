@@ -39,7 +39,7 @@
 
 LINK_ENTITY_TO_CLASS(crossbow_bolt, CBolt);
 
-CBolt *CBolt::BoltCreate(void)
+CBolt *CBolt::BoltCreate()
 {
 	// Create a new entity with CCrossbowBolt private data
 	CBolt *pBolt = GetClassPtr((CBolt *)NULL);
@@ -162,7 +162,7 @@ void CBolt::BoltTouch(CBaseEntity *pOther)
 	}
 }
 
-void CBolt::BubbleThink(void)
+void CBolt::BubbleThink()
 {
 	SetNextThink(0.1);
 
@@ -172,7 +172,7 @@ void CBolt::BubbleThink(void)
 	UTIL_BubbleTrail(pev->origin - pev->velocity * 0.1, pev->origin, 1);
 }
 
-void CBolt::ExplodeThink(void)
+void CBolt::ExplodeThink()
 {
 	int iContents = UTIL_PointContents(pev->origin);
 	int iScale;

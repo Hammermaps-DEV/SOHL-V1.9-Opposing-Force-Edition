@@ -54,7 +54,7 @@ IMPLEMENT_SAVERESTORE(CRecruit, CBaseMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CRecruit::Classify(void)
+int	CRecruit::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_NONE;
 }
@@ -63,7 +63,7 @@ int	CRecruit::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CRecruit::SetYawSpeed(void)
+void CRecruit::SetYawSpeed()
 {
 	int ys;
 
@@ -95,7 +95,7 @@ void CRecruit::HandleAnimEvent(MonsterEvent_t *pEvent)
 //=========================================================
 // ISoundMask - generic monster can't hear.
 //=========================================================
-int CRecruit::ISoundMask(void)
+int CRecruit::ISoundMask()
 {
 	return	NULL;
 }

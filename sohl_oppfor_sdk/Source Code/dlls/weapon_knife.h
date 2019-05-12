@@ -59,20 +59,20 @@ enum class KNIFE_STAB { sequence = 12, frames = 21, fps = 30 };
 class CKnife : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 	void Charge(bool Swing);
 	int Swing(int fFirst);
 
 	//Animations
-	BOOL Deploy(void);
+	BOOL Deploy();
 	void Holster();
-	void WeaponIdle(void);
+	void WeaponIdle();
 
 	//Vars
 	BOOL fHitWorld;

@@ -57,7 +57,7 @@ typedef struct SDL_Keysym
 /**
  *  \brief Get the window which currently has keyboard focus.
  */
-extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus(void);
+extern DECLSPEC SDL_Window * SDLCALL SDL_GetKeyboardFocus();
 
 /**
  *  \brief Get a snapshot of the current state of the keyboard.
@@ -79,7 +79,7 @@ extern DECLSPEC Uint8 *SDLCALL SDL_GetKeyboardState(int *numkeys);
 /**
  *  \brief Get the current key modifier state for the keyboard.
  */
-extern DECLSPEC SDL_Keymod SDLCALL SDL_GetModState(void);
+extern DECLSPEC SDL_Keymod SDLCALL SDL_GetModState();
 
 /**
  *  \brief Set the current key modifier state for the keyboard.
@@ -157,7 +157,7 @@ extern DECLSPEC SDL_Keycode SDLCALL SDL_GetKeyFromName(const char *name);
  *  \sa SDL_SetTextInputRect()
  *  \sa SDL_HasScreenKeyboardSupport()
  */
-extern DECLSPEC void SDLCALL SDL_StartTextInput(void);
+extern DECLSPEC void SDLCALL SDL_StartTextInput();
 
 /**
  *  \brief Return whether or not Unicode text input events are enabled.
@@ -165,7 +165,7 @@ extern DECLSPEC void SDLCALL SDL_StartTextInput(void);
  *  \sa SDL_StartTextInput()
  *  \sa SDL_StopTextInput()
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputActive(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputActive();
 
 /**
  *  \brief Stop receiving any text input events.
@@ -174,7 +174,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_IsTextInputActive(void);
  *  \sa SDL_StartTextInput()
  *  \sa SDL_HasScreenKeyboardSupport()
  */
-extern DECLSPEC void SDLCALL SDL_StopTextInput(void);
+extern DECLSPEC void SDLCALL SDL_StopTextInput();
 
 /**
  *  \brief Set the rectangle used to type Unicode text inputs.
@@ -193,7 +193,7 @@ extern DECLSPEC void SDLCALL SDL_SetTextInputRect(SDL_Rect *rect);
  *  
  *  \sa SDL_IsScreenKeyboardShown()
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasScreenKeyboardSupport(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasScreenKeyboardSupport();
 
 /**
  *  \brief Returns whether the screen keyboard is shown for given window.

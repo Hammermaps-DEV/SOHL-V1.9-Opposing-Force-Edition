@@ -44,17 +44,17 @@ extern "C" {
  *  
  * \note This value wraps if the program runs for more than ~49 days.
  */
-extern DECLSPEC Uint32 SDLCALL SDL_GetTicks(void);
+extern DECLSPEC Uint32 SDLCALL SDL_GetTicks();
 
 /**
  * \brief Get the current value of the high resolution counter
  */
-extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceCounter(void);
+extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceCounter();
 
 /**
  * \brief Get the count per second of the high resolution counter
  */
-extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceFrequency(void);
+extern DECLSPEC Uint64 SDLCALL SDL_GetPerformanceFrequency();
 
 /**
  * \brief Wait a specified number of milliseconds before returning.

@@ -38,8 +38,6 @@
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
-#include	"monsters.h"
-#include	"decals.h"
 #include	"weapons.h"
 
 class CLegacyCineMonster : public CBaseMonster
@@ -47,55 +45,55 @@ class CLegacyCineMonster : public CBaseMonster
 public:
 	void CineSpawn(char *szModel);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT CineThink(void);
-	void Pain(void);
-	void Die(void);
+	void EXPORT CineThink();
+	void Pain();
+	void Die();
 };
 
 class CCineScientist : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine-scientist.mdl"); }
+	void Spawn() { CineSpawn("models/cine-scientist.mdl"); }
 };
 class CCine2Scientist : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine2-scientist.mdl"); }
+	void Spawn() { CineSpawn("models/cine2-scientist.mdl"); }
 };
 class CCinePanther : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine-panther.mdl"); }
+	void Spawn() { CineSpawn("models/cine-panther.mdl"); }
 };
 
 class CCineBarney : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine-barney.mdl"); }
+	void Spawn() { CineSpawn("models/cine-barney.mdl"); }
 };
 
 class CCine2HeavyWeapons : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine2_hvyweapons.mdl"); }
+	void Spawn() { CineSpawn("models/cine2_hvyweapons.mdl"); }
 };
 
 class CCine2Slave : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine2_slave.mdl"); }
+	void Spawn() { CineSpawn("models/cine2_slave.mdl"); }
 };
 
 class CCine3Scientist : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine3-scientist.mdl"); }
+	void Spawn() { CineSpawn("models/cine3-scientist.mdl"); }
 };
 
 class CCine3Barney : public CLegacyCineMonster
 {
 public:
-	void Spawn(void) { CineSpawn("models/cine3-barney.mdl"); }
+	void Spawn() { CineSpawn("models/cine3-barney.mdl"); }
 };
 
 //
@@ -156,7 +154,7 @@ void CLegacyCineMonster::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 //
 // ********** Scientist DIE **********
 //
-void CLegacyCineMonster::Die(void)
+void CLegacyCineMonster::Die()
 {
 	SetThink(&CLegacyCineMonster::SUB_Remove);
 }
@@ -164,12 +162,12 @@ void CLegacyCineMonster::Die(void)
 //
 // ********** Scientist PAIN **********
 //
-void CLegacyCineMonster::Pain(void)
+void CLegacyCineMonster::Pain()
 {
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/pain3.wav", VOL_NORM, ATTN_NORM);
 }
 
-void CLegacyCineMonster::CineThink(void)
+void CLegacyCineMonster::CineThink()
 {
 	// DBG_CheckMonsterData(pev);
 
@@ -198,15 +196,15 @@ void CLegacyCineMonster::CineThink(void)
 class CCineBlood : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn();
 	void EXPORT BloodStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT BloodGush(void);
+	void EXPORT BloodGush();
 };
 
 LINK_ENTITY_TO_CLASS(cine_blood, CCineBlood);
 
 
-void CCineBlood::BloodGush(void)
+void CCineBlood::BloodGush()
 {
 	Vector	vecSplatDir;
 	TraceResult	tr;
@@ -246,7 +244,7 @@ void CCineBlood::BloodStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 	SetNextThink(0);// now!
 }
 
-void CCineBlood::Spawn(void)
+void CCineBlood::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	SetUse(&CCineBlood::BloodStart);

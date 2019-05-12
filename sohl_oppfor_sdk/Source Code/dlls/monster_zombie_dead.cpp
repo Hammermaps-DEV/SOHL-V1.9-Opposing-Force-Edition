@@ -61,14 +61,14 @@ void CDeadZombie::KeyValue(KeyValueData *pkvd) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CDeadZombie::Classify(void) {
+int	CDeadZombie::Classify() {
 	return m_iClass ? m_iClass : CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 // Spawn DEAD Zombie
 //=========================================================
-void CDeadZombie::Spawn(void) {
+void CDeadZombie::Spawn() {
 	Precache();
 
 	if (pev->model)

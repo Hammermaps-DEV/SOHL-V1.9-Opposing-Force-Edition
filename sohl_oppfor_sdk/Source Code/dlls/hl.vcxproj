@@ -30,6 +30,7 @@
     <ClCompile Include="ammo_spore.cpp" />
     <ClCompile Include="ammo_spore_plant.cpp" />
     <ClCompile Include="baseactanimating.cpp" />
+    <ClCompile Include="CWallHealth.cpp" />
     <ClCompile Include="func_grass.cpp" />
     <ClCompile Include="genericmodel.cpp" />
     <ClCompile Include="item_antirad.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="item_medicalkit.cpp" />
     <ClCompile Include="monster_blkop_apache.cpp" />
     <ClCompile Include="monster_blkop_osprey.cpp" />
+    <ClCompile Include="monster_civ.cpp" />
     <ClCompile Include="monster_diablo.cpp" />
     <ClCompile Include="monster_massn.cpp" />
     <ClCompile Include="proj_grapple_tonguetip.cpp" />
@@ -144,13 +146,13 @@
     <ClCompile Include="weapon_handgrenade.cpp" />
     <ClCompile Include="monster_hassassin.cpp" />
     <ClCompile Include="monster_headcrab.cpp" />
-    <ClCompile Include="item_healthkit.cpp" />
+    <ClCompile Include="CHealthKit.cpp" />
     <ClCompile Include="monster_hgrunt.cpp" />
     <ClCompile Include="proj_hornet.cpp" />
     <ClCompile Include="weapon_hornetgun.cpp" />
     <ClCompile Include="monster_houndeye.cpp" />
     <ClCompile Include="h_ai.cpp" />
-    <ClCompile Include="h_battery.cpp" />
+    <ClCompile Include="CRecharge.cpp" />
     <ClCompile Include="h_cine.cpp" />
     <ClCompile Include="h_cycler.cpp" />
     <ClCompile Include="h_export.cpp" />
@@ -245,7 +247,10 @@
     <ClInclude Include="basemonster.h" />
     <ClInclude Include="cbase.h" />
     <ClInclude Include="cdll_dll.h" />
+    <ClInclude Include="CHealthKit.h" />
     <ClInclude Include="client.h" />
+    <ClInclude Include="CRecharge.h" />
+    <ClInclude Include="CWallHealth.h" />
     <ClInclude Include="decals.h" />
     <ClInclude Include="defaultai.h" />
     <ClInclude Include="doors.h" />
@@ -260,6 +265,7 @@
     <ClInclude Include="genericmodel.h" />
     <ClInclude Include="monster_blkop_apache.h" />
     <ClInclude Include="monster_blkop_osprey.h" />
+    <ClInclude Include="monster_civ.h" />
     <ClInclude Include="monster_diablo.h" />
     <ClInclude Include="monster_massn.h" />
     <ClInclude Include="proj_grapple_tonguetip.h" />

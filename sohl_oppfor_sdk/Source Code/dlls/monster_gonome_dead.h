@@ -31,8 +31,8 @@
 class CDeadGonome : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_HUMAN_MILITARY; }
+	void Spawn();
+	int	Classify() { return	CLASS_HUMAN_MILITARY; }
 
 	void KeyValue(KeyValueData *pkvd);
 

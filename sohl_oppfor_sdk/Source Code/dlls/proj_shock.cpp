@@ -54,7 +54,7 @@ TYPEDESCRIPTION	CShock::m_SaveData[] = {
 
 IMPLEMENT_SAVERESTORE(CShock, CBaseEntity);
 
-void CShock::Spawn(void) {
+void CShock::Spawn() {
 	Precache();
 	pev->movetype = MOVETYPE_FLY;
 	pev->classname = MAKE_STRING("shock");
@@ -90,7 +90,7 @@ void CShock::Precache() {
 	PRECACHE_SOUND("weapons/shock_impact.wav");
 }
 
-void CShock::ShockThink(void) {
+void CShock::ShockThink() {
 	SetNextThink(0.01);
 
 	Vector vDir = pev->velocity.Normalize();
@@ -165,7 +165,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 		UTIL_DecalTrace(&tr, DECAL_SHOCKSCORCH1 + RANDOM_LONG(0, 2));
 		UTIL_Sparks(tr.vecPlaneNormal);
 
-		if (pOther->pev->flags & FL_MONSTER | pOther->IsPlayer()) {
+		if (pOther->pev->flags & FL_MONSTER || pOther->IsPlayer()) {
 			pOther->pev->renderfx = kRenderFxGlowShell;
 			pOther->pev->rendercolor.x = 0; // R
 			pOther->pev->rendercolor.y = 255; // G
@@ -193,7 +193,7 @@ void CShock::Touch(CBaseEntity *pOther) {
 	UTIL_Sparks(tr.vecEndPos);
 }
 
-void CShock::FadeShock(void) {
+void CShock::FadeShock() {
 	if (pShockedEnt) {
 		pShockedEnt->pev->renderfx = kRenderFxNone;
 		pShockedEnt->pev->rendercolor.x = 0; // R
@@ -267,7 +267,7 @@ void CShock::ComputeBeamPositions(const Vector& vel, Vector* pos1, Vector* pos2)
 	*pos2 = pev->origin + (vNormVelocity * -SHOCK_BEAM_LENGTH_HALF);
 }
 
-void CShock::Glow(void) {
+void CShock::Glow() {
 	m_pSprite = CSprite::SpriteCreate("sprites/glow03.spr", m_vecBeamEnd, TRUE);
 	m_pSprite->SetTransparency(kRenderTransAdd, 255, 255, 255, 80, kRenderFxNoDissipation);
 	m_pSprite->SetAttachment(edict(), 1);

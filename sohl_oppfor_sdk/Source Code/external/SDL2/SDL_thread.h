@@ -146,7 +146,7 @@ extern DECLSPEC const char *SDLCALL SDL_GetThreadName(SDL_Thread *thread);
 /**
  *  Get the thread identifier for the current thread.
  */
-extern DECLSPEC SDL_threadID SDLCALL SDL_ThreadID(void);
+extern DECLSPEC SDL_threadID SDLCALL SDL_ThreadID();
 
 /**
  *  Get the thread identifier for the specified thread.

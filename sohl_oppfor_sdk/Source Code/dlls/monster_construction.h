@@ -32,12 +32,12 @@
 class CConstruction : public CScientist
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 
-	void TalkInit(void);
+	void TalkInit();
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	void MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval);
 

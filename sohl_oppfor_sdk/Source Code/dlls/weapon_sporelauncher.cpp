@@ -48,7 +48,7 @@ LINK_ENTITY_TO_CLASS(weapon_sporelauncher, CSporelauncher);
 //=========================================================
 // Spawn Spore Launcher
 //=========================================================
-void CSporelauncher::Spawn(void) {
+void CSporelauncher::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_spore_launcher.mdl");
@@ -64,7 +64,7 @@ void CSporelauncher::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CSporelauncher::Precache(void) {
+void CSporelauncher::Precache() {
 	PRECACHE_MODEL("models/v_spore_launcher.mdl");
 	PRECACHE_MODEL("models/w_spore_launcher.mdl");
 	PRECACHE_MODEL("models/p_spore_launcher.mdl");
@@ -104,7 +104,7 @@ int CSporelauncher::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CSporelauncher::PrimaryAttack(void) {
+void CSporelauncher::PrimaryAttack() {
 	if (m_iClip == 0) {
 		PlayEmptySound();
 		Reload();
@@ -157,7 +157,7 @@ void CSporelauncher::PrimaryAttack(void) {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CSporelauncher::SecondaryAttack(void) {
+void CSporelauncher::SecondaryAttack() {
 	if (m_iClip == 0) {
 		PlayEmptySound();
 		Reload();
@@ -211,7 +211,7 @@ void CSporelauncher::SecondaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CSporelauncher::Deploy(void) {
+BOOL CSporelauncher::Deploy() {
 	return DefaultDeploy("models/v_spore_launcher.mdl", "models/p_spore_launcher.mdl", (int)SPLAUNCHER_DRAW::sequence,
 		"shotgun", CalculateWeaponTime((int)SPLAUNCHER_DRAW::frames, (int)SPLAUNCHER_DRAW::fps));
 }
@@ -219,7 +219,7 @@ BOOL CSporelauncher::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CSporelauncher::Holster(void) {
+void CSporelauncher::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)SPLAUNCHER_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -229,7 +229,7 @@ void CSporelauncher::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CSporelauncher::Reload(void) {
+void CSporelauncher::Reload() {
 	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0 || m_iClip == SPORELAUNCHER_MAX_CLIP) ||
 		m_flNextPrimaryAttack > UTIL_GlobalTimeBase() || m_flNextSecondaryAttack > UTIL_GlobalTimeBase()) {
 		return;
@@ -289,7 +289,7 @@ void CSporelauncher::Charge(bool m_BeginAttack) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CSporelauncher::WeaponIdle(void) {
+void CSporelauncher::WeaponIdle() {
 	if ((m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) && !m_iChargeLevel) {
 		return;

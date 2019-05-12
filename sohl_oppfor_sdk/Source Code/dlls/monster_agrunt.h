@@ -32,33 +32,33 @@
 class CAGrunt : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
-	int  ISoundMask(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
+	int  ISoundMask();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox()
 	{
 		pev->absmin = pev->origin + Vector(-32, -32, 0);
 		pev->absmax = pev->origin + Vector(32, 32, 85);
 	}
 
-	Schedule_t* GetSchedule(void);
+	Schedule_t* GetSchedule();
 	Schedule_t* GetScheduleOfType(int Type);
-	BOOL FCanCheckAttacks(void);
+	BOOL FCanCheckAttacks();
 	bool CheckMeleeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack1(float flDot, float flDist);
 	void StartTask(Task_t *pTask);
-	void AlertSound(void);
-	void DeathSound(void);
-	void PainSound(void);
-	void AttackSound(void);
-	void PrescheduleThink(void);
+	void AlertSound();
+	void DeathSound();
+	void PainSound();
+	void AttackSound();
+	void PrescheduleThink();
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	int IRelationship(CBaseEntity *pTarget);
-	void StopTalking(void);
-	BOOL ShouldSpeak(void);
+	void StopTalking();
+	BOOL ShouldSpeak();
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
 
 

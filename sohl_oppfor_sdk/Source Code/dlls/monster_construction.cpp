@@ -73,7 +73,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CConstruction, CTalkMonster);
 //=========================================================
 // Spawn
 //=========================================================
-void CConstruction::Spawn(void) {
+void CConstruction::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -110,7 +110,7 @@ void CConstruction::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CConstruction::Precache(void) {
+void CConstruction::Precache() {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else

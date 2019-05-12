@@ -35,7 +35,7 @@ class CSporeAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn(void) {
+	void Spawn() {
 		Precache();
 		SET_MODEL(ENT(pev), "models/spore.mdl");
 		CBasePlayerAmmo::Spawn();
@@ -44,7 +44,7 @@ class CSporeAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache(void) {
+	void Precache() {
 		PRECACHE_MODEL("models/spore.mdl");
 		PRECACHE_SOUND("weapons/spore_ammo.wav");
 	}

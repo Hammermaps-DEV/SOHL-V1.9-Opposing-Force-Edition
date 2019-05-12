@@ -56,7 +56,7 @@ LINK_ENTITY_TO_CLASS(weapon_grapple, CGrapple);
 //=========================================================
 // Spawn Grapple
 //=========================================================
-void CGrapple::Spawn(void) {
+void CGrapple::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_bgrap.mdl");
@@ -68,7 +68,7 @@ void CGrapple::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CGrapple::Precache(void) {
+void CGrapple::Precache() {
 	PRECACHE_MODEL("models/v_bgrap.mdl");
 	PRECACHE_MODEL("models/p_bgrap.mdl");
 	PRECACHE_MODEL("models/w_bgrap.mdl");
@@ -134,7 +134,7 @@ void CGrapple::PrimaryAttack() {
 //=========================================================
 // FlyThink
 //=========================================================
-void CGrapple::FlyThink(void) {
+void CGrapple::FlyThink() {
 	if (m_pPlayer->m_afPhysicsFlags & PFLAG_ON_GRAPPLE) {
 		EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav", VOL_NORM, ATTN_NORM);
 		SendWeaponAnim((int)GRAPPLE_FIRETRAVEL::sequence);
@@ -172,7 +172,7 @@ void CGrapple::FlyThink(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CGrapple::Deploy(void) {
+BOOL CGrapple::Deploy() {
 	return DefaultDeploy("models/v_bgrap.mdl", "models/p_bgrap.mdl", (int)GRAPPLE_DRAW::sequence,
 		"hive", CalculateWeaponTime((int)GRAPPLE_DRAW::frames, (int)GRAPPLE_DRAW::fps));
 }
@@ -180,7 +180,7 @@ BOOL CGrapple::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CGrapple::Holster(void) {
+void CGrapple::Holster() {
 	StopSounds();	// Fograin92: Stop looped sounds
 	SendWeaponAnim((int)GRAPPLE_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -190,7 +190,7 @@ void CGrapple::Holster(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CGrapple::WeaponIdle(void) {
+void CGrapple::WeaponIdle() {
 	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) {
 		return;
@@ -240,7 +240,7 @@ void CGrapple::WeaponIdle(void) {
 //=========================================================
 // StopSounds
 //=========================================================
-void CGrapple::StopSounds(void) {
+void CGrapple::StopSounds() {
 	STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_wait.wav");
 	STOP_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/bgrapple_pull.wav");
 }
@@ -248,7 +248,7 @@ void CGrapple::StopSounds(void) {
 //=========================================================
 // PukeGibs
 //=========================================================
-void CGrapple::PukeGibs(void) {
+void CGrapple::PukeGibs() {
 	// Fograin92: Get proper XYZ values
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
 	Vector GunPosition = m_pPlayer->GetGunPosition();

@@ -35,23 +35,23 @@ public:
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void RunAI(void);
+	void RunAI();
 	bool CheckRangeAttack1(float flDot, float flDist);	// balls
 	bool CheckRangeAttack2(float flDot, float flDist);	// head
 	bool CheckMeleeAttack1(float flDot, float flDist) { return false; };	// block, throw
-	Schedule_t* GetSchedule(void);
+	Schedule_t* GetSchedule();
 	Schedule_t* GetScheduleOfType(int Type);
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
 	CUSTOM_SCHEDULES;
 
-	void Stop(void);
+	void Stop();
 	void Move(float flInterval);
 	int  CheckLocalMove(const Vector &vecStart, const Vector &vecEnd, CBaseEntity *pTarget, float *pflDist);
 	void MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, float flInterval);
@@ -64,11 +64,11 @@ public:
 	float m_flShootTime;
 	float m_flShootEnd;
 
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
-	void AttackSound(void);
-	void DeathSound(void);
+	void PainSound();
+	void AlertSound();
+	void IdleSound();
+	void AttackSound();
+	void DeathSound();
 
 	static const char *pAttackSounds[];
 	static const char *pIdleSounds[];
@@ -78,7 +78,7 @@ public:
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	void Killed(entvars_t *pevAttacker, int iGib);
-	void GibMonster(void);
+	void GibMonster();
 
 	CSprite *m_pBall[2];	// hand balls
 	int m_iBall[2];			// how bright it should be
@@ -93,13 +93,13 @@ public:
 
 class CControllerHeadBall : public CBaseMonster
 {
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT HuntThink(void);
-	void EXPORT DieThink(void);
+	void Spawn();
+	void Precache();
+	void EXPORT HuntThink();
+	void EXPORT DieThink();
 	void EXPORT BounceTouch(CBaseEntity *pOther);
 	void MovetoTarget(Vector vecTarget);
-	void Crawl(void);
+	void Crawl();
 	int m_iTrail;
 	int m_flNextAttack;
 	Vector m_vecIdeal;
@@ -108,9 +108,9 @@ class CControllerHeadBall : public CBaseMonster
 
 class CControllerZapBall : public CBaseMonster
 {
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT AnimateThink(void);
+	void Spawn();
+	void Precache();
+	void EXPORT AnimateThink();
 	void EXPORT ExplodeTouch(CBaseEntity *pOther);
 
 	EHANDLE m_hOwner;

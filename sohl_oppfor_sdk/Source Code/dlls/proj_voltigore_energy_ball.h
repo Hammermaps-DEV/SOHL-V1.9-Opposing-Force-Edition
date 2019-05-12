@@ -35,14 +35,14 @@
 class CVoltigoreEnergyBall : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn();
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void EXPORT Touch(CBaseEntity *pOther);
-	void EXPORT Think(void);
-	void Precache(void);
-	void Glow(void);
-	void EXPORT Animate(void);
+	void EXPORT Think();
+	void Precache();
+	void Glow();
+	void EXPORT Animate();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

@@ -111,7 +111,7 @@ void COsprey::KeyValue(KeyValueData *pkvd) {
 //=========================================================
 // Spawn Osprey
 //=========================================================
-void COsprey::Spawn(void) {
+void COsprey::Spawn() {
 	if (!m_iMonster) {
 		m_iMonster = 5;
 	}
@@ -170,14 +170,14 @@ void COsprey::Spawn(void) {
 // Classify - indicates this monster's place in the
 // relationship table.
 //=========================================================
-int	COsprey::Classify(void) {
+int	COsprey::Classify() {
 	return m_iClass ? m_iClass : CLASS_MACHINE;
 }
 
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void COsprey::Precache(void) {
+void COsprey::Precache() {
 	if (m_iMonster == 4) {
 		UTIL_PrecacheOther("monster_human_grunt_ally");
 		UTIL_PrecacheOther("monster_human_medic_ally");

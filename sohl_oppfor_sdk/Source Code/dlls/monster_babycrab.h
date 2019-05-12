@@ -34,14 +34,14 @@
 class CBabyCrab : public CHeadCrab
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	float GetDamageAmount(void) { return gSkillData.headcrabDmgBite * 0.3; }
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	float GetDamageAmount() { return gSkillData.headcrabDmgBite * 0.3; }
 	bool CheckRangeAttack1(float flDot, float flDist);
 	Schedule_t* GetScheduleOfType(int Type);
-	virtual int GetVoicePitch(void) { return PITCH_NORM + RANDOM_LONG(40, 50); }
-	virtual float GetSoundVolue(void) { return 0.8; }
+	virtual int GetVoicePitch() { return PITCH_NORM + RANDOM_LONG(40, 50); }
+	virtual float GetSoundVolue() { return 0.8; }
 };
 
 #endif // MONSTER_BABYHEADCRAB_H

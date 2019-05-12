@@ -147,7 +147,7 @@ enum
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CStrooper::GibMonster(void)
+void CStrooper::GibMonster()
 {
 	Vector	vecGunPos;
 	Vector	vecGunAngles;
@@ -173,7 +173,7 @@ void CStrooper::GibMonster(void)
 	CBaseMonster::GibMonster();
 }
 
-void CStrooper::IdleSound(void)
+void CStrooper::IdleSound()
 {
 	if (FOkToSpeak() && (g_fStrooperQuestion || RANDOM_LONG(0, 1)))
 	{
@@ -216,7 +216,7 @@ void CStrooper::IdleSound(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CStrooper::Classify(void) {
+int	CStrooper::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MILITARY;
 }
 
@@ -401,7 +401,7 @@ void CStrooper::Precache()
 //=========================================================
 // PainSound
 //=========================================================
-void CStrooper::PainSound(void)
+void CStrooper::PainSound()
 {
 	if (UTIL_GlobalTimeBase() > m_flNextPainTime) {
 		switch (RANDOM_LONG(0, 4)) {
@@ -429,7 +429,7 @@ void CStrooper::PainSound(void)
 //=========================================================
 // DeathSound 
 //=========================================================
-void CStrooper::DeathSound(void) {
+void CStrooper::DeathSound() {
 	switch (RANDOM_LONG(0, 3)) {
 	case 0:
 		EMIT_SOUND(ENT(pev), CHAN_VOICE, "shocktrooper/shock_trooper_die1.wav", VOL_NORM, ATTN_IDLE);
@@ -537,7 +537,7 @@ void CStrooper::SetActivity(Activity NewActivity)
 //=========================================================
 // Get Schedule!
 //=========================================================
-Schedule_t *CStrooper::GetSchedule(void)
+Schedule_t *CStrooper::GetSchedule()
 {
 
 	// clear old sentence

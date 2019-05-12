@@ -32,17 +32,17 @@
 class CFlockingFlyerFlock : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void KeyValue(KeyValueData *pkvd);
-	void SpawnFlock(void);
+	void SpawnFlock();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// Sounds are shared by the flock
-	static  void PrecacheFlockSounds(void);
+	static  void PrecacheFlockSounds();
 
 	int		m_cFlockSize;
 	float	m_flFlockRadius;
@@ -51,36 +51,36 @@ public:
 class CFlockingFlyer : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SpawnCommonCode(void);
-	void EXPORT IdleThink(void);
-	void BoidAdvanceFrame(void);
-	void EXPORT FormFlock(void);
-	void EXPORT Start(void);
-	void EXPORT FlockLeaderThink(void);
-	void EXPORT FlockFollowerThink(void);
-	void EXPORT FallHack(void);
-	void MakeSound(void);
-	void AlertFlock(void);
-	void SpreadFlock(void);
-	void SpreadFlock2(void);
+	void Spawn();
+	void Precache();
+	void SpawnCommonCode();
+	void EXPORT IdleThink();
+	void BoidAdvanceFrame();
+	void EXPORT FormFlock();
+	void EXPORT Start();
+	void EXPORT FlockLeaderThink();
+	void EXPORT FlockFollowerThink();
+	void EXPORT FallHack();
+	void MakeSound();
+	void AlertFlock();
+	void SpreadFlock();
+	void SpreadFlock2();
 	void Killed(entvars_t *pevAttacker, int iGib);
-	void Poop(void);
-	BOOL FPathBlocked(void);
+	void Poop();
+	BOOL FPathBlocked();
 	//void KeyValue( KeyValueData *pkvd );
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	int IsLeader(void) { return m_pSquadLeader == this; }
-	int	InSquad(void) { return m_pSquadLeader != NULL; }
-	int	SquadCount(void);
+	int IsLeader() { return m_pSquadLeader == this; }
+	int	InSquad() { return m_pSquadLeader != NULL; }
+	int	SquadCount();
 	void SquadRemove(CFlockingFlyer *pRemove);
-	void SquadUnlink(void);
+	void SquadUnlink();
 	void SquadAdd(CFlockingFlyer *pAdd);
-	void SquadDisband(void);
+	void SquadDisband();
 
 	CFlockingFlyer *m_pSquadLeader;
 	CFlockingFlyer *m_pSquadNext;

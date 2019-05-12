@@ -37,25 +37,25 @@
 
 class CGonome : public CBullsquid {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  ISoundMask(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  ISoundMask();
 
-	int  Classify(void);
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void PainSound(void);
-	void DeathSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
-	void AttackSound(void);
+	void PainSound();
+	void DeathSound();
+	void AlertSound();
+	void IdleSound();
+	void AttackSound();
 	void StartTask(Task_t *pTask);
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);
 	static TYPEDESCRIPTION m_SaveData[];
 
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 	Schedule_t *GetScheduleOfType(int Type);
 
 	static const char *pAttackSounds[];
@@ -68,11 +68,11 @@ public:
 	bool CheckMeleeAttack1(float flDot, float flDist);
 	bool CheckMeleeAttack2(float flDot, float flDist);
 	bool CheckRangeAttack1(float flDot, float flDist);
-	void RunAI(void);
+	void RunAI();
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	int IgnoreConditions(void);
-	MONSTERSTATE GetIdealState(void);
+	int IgnoreConditions();
+	MONSTERSTATE GetIdealState();
 	CUSTOM_SCHEDULES;
 
 	int iGonomeSpitSprite;

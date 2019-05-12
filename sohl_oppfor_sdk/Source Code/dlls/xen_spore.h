@@ -31,25 +31,25 @@
 
 class CXenSpore : public CActAnimating {
 public:
-	void		Spawn(void);
-	void		Precache(void);
-	void		Think(void);
+	void		Spawn();
+	void		Precache();
+	void		Think();
 	int			TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) { Attack(); return 0; }
-	void		Attack(void) {}
+	void		Attack() {}
 
 	static const char *pModelNames[];
 };
 
 class CXenSporeSmall : public CXenSpore {
-	void Spawn(void);
+	void Spawn();
 };
 
 class CXenSporeMed : public CXenSpore {
-	void Spawn(void);
+	void Spawn();
 };
 
 class CXenSporeLarge : public CXenSpore {
-	void Spawn(void);
+	void Spawn();
 	static const Vector m_hullSizes[];
 };
 

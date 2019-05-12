@@ -32,45 +32,45 @@
 class CHGrunt : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
-	int ISoundMask(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
+	int ISoundMask();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	BOOL FCanCheckAttacks(void);
+	BOOL FCanCheckAttacks();
 	bool CheckMeleeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack2(float flDot, float flDist);
-	void CheckAmmo(void);
+	void CheckAmmo();
 	void SetActivity(Activity NewActivity);
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
-	void DeathSound(void);
-	void PainSound(void);
-	void IdleSound(void);
-	Vector GetGunPosition(void);
-	void ShootMP5(void);
-	void ShootShotgun(void);
-	void ShootShotgunDouble(void);
-	void PrescheduleThink(void);
-	void GibMonster(void);
-	void SpeakSentence(void);
+	void DeathSound();
+	void PainSound();
+	void IdleSound();
+	Vector GetGunPosition();
+	void ShootMP5();
+	void ShootShotgun();
+	void ShootShotgunDouble();
+	void PrescheduleThink();
+	void GibMonster();
+	void SpeakSentence();
 	void KeyValue(KeyValueData *pkvd);
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);
 
-	CBaseEntity	*Kick(void);
-	Schedule_t	*GetSchedule(void);
+	CBaseEntity	*Kick();
+	Schedule_t	*GetSchedule();
 	Schedule_t  *GetScheduleOfType(int Type);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 
 	int IRelationship(CBaseEntity *pTarget);
 
-	BOOL FOkToSpeak(void);
-	void JustSpoke(void);
+	BOOL FOkToSpeak();
+	void JustSpoke();
 
 	CUSTOM_SCHEDULES;
 	static TYPEDESCRIPTION m_SaveData[];
@@ -108,8 +108,8 @@ public:
 class CHGruntRepel : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture;	// Don't save, precache
 };

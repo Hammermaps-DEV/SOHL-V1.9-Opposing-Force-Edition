@@ -55,7 +55,7 @@ void CGenericModel::KeyValue(KeyValueData* pkvd)
 		CBaseDelay::KeyValue(pkvd);
 }
 
-void CGenericModel::Spawn(void)
+void CGenericModel::Spawn()
 {
 	Precache();
 
@@ -91,12 +91,12 @@ void CGenericModel::Spawn(void)
 	SetNextThink(0.1);
 }
 
-void CGenericModel::Precache(void)
+void CGenericModel::Precache()
 {
 	PRECACHE_MODEL((char*)STRING(pev->model));
 }
 
-void CGenericModel::IdleThink(void)
+void CGenericModel::IdleThink()
 {
 	float flInterval = StudioFrameAdvance();
 

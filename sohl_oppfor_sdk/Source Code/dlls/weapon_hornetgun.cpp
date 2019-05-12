@@ -48,7 +48,7 @@ LINK_ENTITY_TO_CLASS(weapon_hornetgun, CHgun);
 //=========================================================
 // Spawn Glock 17
 //=========================================================
-void CHgun::Spawn(void) {
+void CHgun::Spawn() {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_hgun.mdl");
 
@@ -61,7 +61,7 @@ void CHgun::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CHgun::Precache(void) {
+void CHgun::Precache() {
 	PRECACHE_MODEL("models/v_hgun.mdl");
 	PRECACHE_MODEL("models/w_hgun.mdl");
 	PRECACHE_MODEL("models/p_hgun.mdl");
@@ -90,7 +90,7 @@ int CHgun::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CHgun::PrimaryAttack(void) {
+void CHgun::PrimaryAttack() {
 	Reload();
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
 		return;
@@ -125,7 +125,7 @@ void CHgun::PrimaryAttack(void) {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CHgun::SecondaryAttack(void) {
+void CHgun::SecondaryAttack() {
 	Reload();
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) {
 		return;
@@ -193,7 +193,7 @@ void CHgun::SecondaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CHgun::Deploy(void) {
+BOOL CHgun::Deploy() {
 	return DefaultDeploy("models/v_hgun.mdl", "models/p_hgun.mdl", (int)HGUN_UP::sequence,
 		"hive", CalculateWeaponTime((int)HGUN_UP::frames, (int)HGUN_UP::fps));
 }
@@ -201,7 +201,7 @@ BOOL CHgun::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CHgun::Holster(void) {
+void CHgun::Holster() {
 	SendWeaponAnim((int)HGUN_DOWN::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)HGUN_DOWN::frames, (int)HGUN_DOWN::fps);
@@ -213,7 +213,7 @@ void CHgun::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CHgun::Reload(void) {
+void CHgun::Reload() {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == HORNET_MAX_CARRY) {
 		return;
 	}
@@ -227,7 +227,7 @@ void CHgun::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CHgun::WeaponIdle(void) {
+void CHgun::WeaponIdle() {
 	Reload();
 	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||

@@ -32,28 +32,28 @@
 class CHoundeye : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void SetYawSpeed(void);
-	void WarmUpSound(void);
-	void AlertSound(void);
-	void DeathSound(void);
-	void WarnSound(void);
-	void PainSound(void);
-	void IdleSound(void);
+	void SetYawSpeed();
+	void WarmUpSound();
+	void AlertSound();
+	void DeathSound();
+	void WarnSound();
+	void PainSound();
+	void IdleSound();
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
-	void SonicAttack(void);
-	void PrescheduleThink(void);
+	void SonicAttack();
+	void PrescheduleThink();
 	void SetActivity(Activity NewActivity);
-	void WriteBeamColor(void);
+	void WriteBeamColor();
 	bool CheckRangeAttack1(float flDot, float flDist);
 	BOOL FValidateHintType(short sHint);
-	BOOL FCanActiveIdle(void);
+	BOOL FCanActiveIdle();
 	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *CHoundeye::GetSchedule(void);
+	Schedule_t *CHoundeye::GetSchedule();
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);

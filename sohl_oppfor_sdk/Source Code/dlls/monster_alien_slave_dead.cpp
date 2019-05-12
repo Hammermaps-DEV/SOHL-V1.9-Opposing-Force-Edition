@@ -52,7 +52,7 @@ LINK_ENTITY_TO_CLASS(monster_alien_slave_dead, CDeadISlave);
 //=========================================================
 // ********** DeadHoundeye SPAWN **********
 //=========================================================
-void CDeadISlave::Spawn(void)
+void CDeadISlave::Spawn()
 {
 	PRECACHE_MODEL("models/islave.mdl");
 	SET_MODEL(ENT(pev), "models/islave.mdl");

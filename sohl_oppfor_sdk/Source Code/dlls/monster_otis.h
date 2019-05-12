@@ -39,21 +39,21 @@
 // class definition
 class COtis : public CBarney {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void FirePistol(void);
+	void Spawn();
+	void Precache();
+	void FirePistol();
 	void KeyValue(KeyValueData *pkvd);
-	void AlertSound(void);
+	void AlertSound();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-	void DeclineFollowing(void);
+	void DeclineFollowing();
 
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 
-	void TalkInit(void);
+	void TalkInit();
 	void Killed(entvars_t *pevAttacker, int iGib);
 
 	virtual int	Save(CSave &save);

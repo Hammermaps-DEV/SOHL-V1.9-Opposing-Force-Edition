@@ -61,7 +61,7 @@ void CKnife::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CKnife::Precache(void) {
+void CKnife::Precache() {
 	PRECACHE_MODEL("models/v_knife.mdl");
 	PRECACHE_MODEL("models/w_knife.mdl");
 	PRECACHE_MODEL("models/p_knife.mdl");
@@ -299,7 +299,7 @@ void CKnife::Holster() {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CKnife::WeaponIdle(void) {
+void CKnife::WeaponIdle() {
 	if ((m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) && !m_fInAttack) {
 		return;

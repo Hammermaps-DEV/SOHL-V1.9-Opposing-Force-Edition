@@ -48,20 +48,20 @@ enum class MP5_RELOAD { sequence = 6, frames = 47, fps = 30 };
 class CMP5 : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 
 	//Animations
-	int SecondaryAmmoIndex(void) { return m_iSecondaryAmmoType; };
-	BOOL Deploy(void);
-	void CMP5::Holster(void);
-	void Reload(void);
-	void WeaponIdle(void);
+	int SecondaryAmmoIndex() { return m_iSecondaryAmmoType; };
+	BOOL Deploy();
+	void CMP5::Holster();
+	void Reload();
+	void WeaponIdle();
 private:
 	//Events
 	unsigned short m_usMP5;

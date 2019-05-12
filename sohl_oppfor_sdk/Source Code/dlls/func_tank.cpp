@@ -64,12 +64,12 @@ class CTankSequence;
 class CFuncTankControls : public CBaseEntity
 {
 public:
-	virtual int	ObjectCaps(void);
-	void Spawn(void);
+	virtual int	ObjectCaps();
+	void Spawn();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	//	void Think( void );
 	void	KeyValue(KeyValueData *pkvd);
-	STATE GetState(void) { return m_active ? STATE_ON : STATE_OFF; }
+	STATE GetState() { return m_active ? STATE_ON : STATE_OFF; }
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
@@ -113,15 +113,15 @@ class CTankSequence : public CBaseEntity
 {
 public:
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EndThink(void);
-	void TimeOutThink(void);
+	void EndThink();
+	void TimeOutThink();
 	void	KeyValue(KeyValueData *pkvd);
-	STATE	GetState(void) { return m_pTank ? STATE_ON : STATE_OFF; }
-	virtual int	ObjectCaps(void);
+	STATE	GetState() { return m_pTank ? STATE_ON : STATE_OFF; }
+	virtual int	ObjectCaps();
 
-	void StopSequence(void);
-	void FacingNotify(void);
-	void DeadEnemyNotify(void);
+	void StopSequence();
+	void FacingNotify();
+	void DeadEnemyNotify();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
@@ -147,17 +147,17 @@ public:
 class CFuncTank : public CBaseEntity
 {
 public:
-	void	Spawn(void);
-	void	PostSpawn(void);
-	void	Precache(void);
+	void	Spawn();
+	void	PostSpawn();
+	void	Precache();
 	void	KeyValue(KeyValueData *pkvd);
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	Think(void);
-	void	TrackTarget(void);
-	CBaseEntity* BestVisibleEnemy(void);
+	void	Think();
+	void	TrackTarget();
+	CBaseEntity* BestVisibleEnemy();
 	int		IRelationship(CBaseEntity* pTarget);
 
-	int		Classify(void) { return m_iTankClass; }
+	int		Classify() { return m_iTankClass; }
 
 	void TryFire(const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker);
 	virtual void Fire(const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker);
@@ -166,18 +166,18 @@ public:
 		return pTarget->BodyTarget(pev->origin);
 	}
 
-	void	StartRotSound(void);
-	void	StopRotSound(void);
-	STATE	GetState(void) { return m_iActive ? STATE_ON : STATE_OFF; }//Support this stuff for watcher
+	void	StartRotSound();
+	void	StopRotSound();
+	STATE	GetState() { return m_iActive ? STATE_ON : STATE_OFF; }//Support this stuff for watcher
 	int m_iActive;
 
 	// Bmodels don't go across transitions
-	virtual int	ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	inline BOOL IsActive(void) { return (pev->spawnflags & SF_TANK_ACTIVE) ? TRUE : FALSE; }
-	inline void TankActivate(void) { pev->spawnflags |= SF_TANK_ACTIVE; SetNextThink(0.1); m_fireLast = 0; }
-	inline void TankDeactivate(void) { pev->spawnflags &= ~SF_TANK_ACTIVE; m_fireLast = 0; StopRotSound(); }
-	inline BOOL CanFire(void) { return (UTIL_GlobalTimeBase() - m_lastSightTime) < m_persist; }
+	inline BOOL IsActive() { return (pev->spawnflags & SF_TANK_ACTIVE) ? TRUE : FALSE; }
+	inline void TankActivate() { pev->spawnflags |= SF_TANK_ACTIVE; SetNextThink(0.1); m_fireLast = 0; }
+	inline void TankDeactivate() { pev->spawnflags &= ~SF_TANK_ACTIVE; m_fireLast = 0; StopRotSound(); }
+	inline BOOL CanFire() { return (UTIL_GlobalTimeBase() - m_lastSightTime) < m_persist; }
 	BOOL		InRange(float range);
 
 	// Acquire a target.  pPlayer is a player in the PVS
@@ -185,7 +185,7 @@ public:
 
 	void		TankTrace(const Vector &vecStart, const Vector &vecForward, const Vector &vecSpread, TraceResult &tr);
 
-	Vector		BarrelPosition(void)
+	Vector		BarrelPosition()
 	{
 		Vector forward, right, up;
 		UTIL_MakeVectorsPrivate(pev->angles, forward, right, up);
@@ -251,7 +251,7 @@ protected:
 
 	int			m_iTankClass;	// Behave As
 
-	void CFuncTank::UpdateSpot(void);
+	void CFuncTank::UpdateSpot();
 	//	CLaserSpot*  m_pViewTarg;	// Player view indicator
 
 	CPointEntity *m_pFireProxy; //LRC - locus position for custom shots
@@ -309,7 +309,7 @@ static Vector gTankSpread[] =
 #define MAX_FIRING_SPREADS HL_ARRAYSIZE(gTankSpread)
 
 
-void CFuncTank::Spawn(void)
+void CFuncTank::Spawn()
 {
 	Precache();
 
@@ -349,7 +349,7 @@ void CFuncTank::Spawn(void)
 	}
 }
 
-void CFuncTank::PostSpawn(void)
+void CFuncTank::PostSpawn()
 {
 	if (m_pMoveWith)
 	{
@@ -363,7 +363,7 @@ void CFuncTank::PostSpawn(void)
 	}
 }
 
-void CFuncTank::Precache(void)
+void CFuncTank::Precache()
 {
 	//	PRECACHE_MODEL( "sprites/mommablob.spr" );
 	if (m_iszSpriteSmoke)
@@ -578,7 +578,7 @@ void CFuncTank::StopControl(CFuncTankControls* pControls)
 	}
 }
 
-void CFuncTank::UpdateSpot(void)
+void CFuncTank::UpdateSpot()
 {
 	if (pev->spawnflags & SF_TANK_LASERSPOT)
 	{
@@ -689,7 +689,7 @@ edict_t *CFuncTank::FindTarget(edict_t *pPlayer)
 	return pPlayer;
 }
 
-CBaseEntity *CFuncTank::BestVisibleEnemy(void)
+CBaseEntity *CFuncTank::BestVisibleEnemy()
 {
 	CBaseEntity	*pReturn;
 	int			iNearest;
@@ -838,7 +838,7 @@ void CFuncTank::StopSequence()
 }
 
 // NB: tracktarget updates nextthink
-void CFuncTank::Think(void)
+void CFuncTank::Think()
 {
 	//	pev->avelocity = g_vecZero;
 	TrackTarget();
@@ -849,7 +849,7 @@ void CFuncTank::Think(void)
 		StopRotSound();
 }
 
-void CFuncTank::TrackTarget(void)
+void CFuncTank::TrackTarget()
 {
 	TraceResult tr;
 	//	edict_t *pPlayer;
@@ -1262,7 +1262,7 @@ void CFuncTank::TankTrace(const Vector &vecStart, const Vector &vecForward, cons
 }
 
 
-void CFuncTank::StartRotSound(void)
+void CFuncTank::StartRotSound()
 {
 	if (!pev->noise || (pev->spawnflags & SF_TANK_SOUNDON))
 		return;
@@ -1271,7 +1271,7 @@ void CFuncTank::StartRotSound(void)
 }
 
 
-void CFuncTank::StopRotSound(void)
+void CFuncTank::StopRotSound()
 {
 	if (pev->spawnflags & SF_TANK_SOUNDON)
 		STOP_SOUND(edict(), CHAN_STATIC, (char*)STRING(pev->noise));
@@ -1329,21 +1329,21 @@ void CFuncTankGun::Fire(const Vector &barrelEnd, const Vector &forward, entvars_
 class CFuncTankOf : public CFuncTank
 {
 public:
-	inline BOOL IsActive(void) { return (pev->spawnflags & SF_TANK_PLAYER) ? TRUE : FALSE; }
-	inline void TankActivate(void) { pev->spawnflags |= SF_TANK_PLAYER; SetNextThink(0.1); m_fireLast = 0; }
-	inline void TankDeactivate(void) { pev->spawnflags &= ~SF_TANK_PLAYER; m_fireLast = 0; StopRotSound(); }
-	inline BOOL CanFire(void) { return false; }
+	inline BOOL IsActive() { return (pev->spawnflags & SF_TANK_PLAYER) ? TRUE : FALSE; }
+	inline void TankActivate() { pev->spawnflags |= SF_TANK_PLAYER; SetNextThink(0.1); m_fireLast = 0; }
+	inline void TankDeactivate() { pev->spawnflags &= ~SF_TANK_PLAYER; m_fireLast = 0; StopRotSound(); }
+	inline BOOL CanFire() { return false; }
 };
 LINK_ENTITY_TO_CLASS(func_tank_of, CFuncTankOf);
 
 class CFuncTankLaser : public CFuncTank
 {
 public:
-	void	Activate(void);
+	void	Activate();
 	void	KeyValue(KeyValueData *pkvd);
 	void	Fire(const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker);
-	void	Think(void);
-	CLaser *GetLaser(void);
+	void	Think();
+	CLaser *GetLaser();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
@@ -1363,7 +1363,7 @@ TYPEDESCRIPTION	CFuncTankLaser::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CFuncTankLaser, CFuncTank);
 
-void CFuncTankLaser::Activate(void)
+void CFuncTankLaser::Activate()
 {
 	if (!GetLaser())
 	{
@@ -1390,7 +1390,7 @@ void CFuncTankLaser::KeyValue(KeyValueData *pkvd)
 }
 
 
-CLaser *CFuncTankLaser::GetLaser(void)
+CLaser *CFuncTankLaser::GetLaser()
 {
 	if (m_pLaser)
 		return m_pLaser;
@@ -1414,7 +1414,7 @@ CLaser *CFuncTankLaser::GetLaser(void)
 }
 
 
-void CFuncTankLaser::Think(void)
+void CFuncTankLaser::Think()
 {
 	if (m_pLaser && (UTIL_GlobalTimeBase() > m_laserTime))
 		m_pLaser->TurnOff();
@@ -1466,12 +1466,12 @@ void CFuncTankLaser::Fire(const Vector &barrelEnd, const Vector &forward, entvar
 class CFuncTankRocket : public CFuncTank
 {
 public:
-	void Precache(void);
+	void Precache();
 	virtual void Fire(const Vector &barrelEnd, const Vector &forward, entvars_t *pevAttacker);
 };
 LINK_ENTITY_TO_CLASS(func_tankrocket, CFuncTankRocket);
 
-void CFuncTankRocket::Precache(void)
+void CFuncTankRocket::Precache()
 {
 	UTIL_PrecacheOther("rpg_rocket");
 	CFuncTank::Precache();
@@ -1580,7 +1580,7 @@ void CFuncTankControls::KeyValue(KeyValueData *pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-int	CFuncTankControls::ObjectCaps(void)
+int	CFuncTankControls::ObjectCaps()
 {
 	if (pev->spawnflags & SF_TANKCONTROLS_NO_USE)
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
@@ -1750,7 +1750,7 @@ void CFuncTankControls :: Think( void )
 	}
 }*/
 
-void CFuncTankControls::Spawn(void)
+void CFuncTankControls::Spawn()
 {
 	pev->solid = SOLID_TRIGGER;
 	pev->movetype = MOVETYPE_NONE;
@@ -1791,7 +1791,7 @@ TYPEDESCRIPTION	CTankSequence::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CTankSequence, CBaseEntity);
 
-int	CTankSequence::ObjectCaps(void)
+int	CTankSequence::ObjectCaps()
 {
 	return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION);
 }

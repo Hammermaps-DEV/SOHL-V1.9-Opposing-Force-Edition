@@ -28,18 +28,10 @@
 
 #include "extdll.h"
 #include "util.h"
-
 #include "cbase.h"
 #include "player.h"
-#include "trains.h"
-#include "nodes.h"
 #include "weapons.h"
-#include "soundent.h"
 #include "monsters.h"
-#include "shake.h"
-#include "decals.h"
-#include "gamerules.h"
-
 
 float AmmoDamage(const char *pName)
 {

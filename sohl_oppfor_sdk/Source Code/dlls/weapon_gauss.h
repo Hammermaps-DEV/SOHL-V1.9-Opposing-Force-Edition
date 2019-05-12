@@ -52,20 +52,20 @@ enum class GAUSS_DRAW { sequence = 8, frames = 36, fps = 60 };
 class CGauss : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	void StartFire(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
+	void StartFire();
 	void Fire(Vector vecOrigSrc, Vector vecDirShooting, float flDamage);
 
 	//Animations
-	BOOL Deploy(void);
+	BOOL Deploy();
 	void Holster();
-	void WeaponIdle(void);
+	void WeaponIdle();
 
 	//Vars
 	int m_iSoundState;

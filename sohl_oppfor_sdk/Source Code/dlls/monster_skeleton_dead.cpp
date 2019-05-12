@@ -50,7 +50,7 @@ LINK_ENTITY_TO_CLASS(monster_skeleton_dead, CSkeleton);
 //=========================================================
 // ********** Skeleton SPAWN **********
 //=========================================================
-void CSkeleton::Spawn(void) {
+void CSkeleton::Spawn() {
 	PRECACHE_MODEL("models/skeleton.mdl");
 	SET_MODEL(ENT(pev), "models/skeleton.mdl");
 

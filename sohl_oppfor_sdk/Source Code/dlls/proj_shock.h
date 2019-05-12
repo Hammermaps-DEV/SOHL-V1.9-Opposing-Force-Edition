@@ -29,19 +29,19 @@
 class CShock : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void EXPORT ShockThink(void);
+	void EXPORT ShockThink();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void EXPORT FadeShock(void);
-	void Glow(void);
+	void EXPORT FadeShock();
+	void Glow();
 
 	void CreateBeam(const Vector& start, const Vector& end, int width);
 	void ClearBeam();

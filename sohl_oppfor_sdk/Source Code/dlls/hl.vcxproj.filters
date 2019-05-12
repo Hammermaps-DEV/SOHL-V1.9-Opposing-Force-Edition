@@ -125,9 +125,6 @@
     <ClCompile Include="item_generic.cpp">
       <Filter>Source Files\dlls\item</Filter>
     </ClCompile>
-    <ClCompile Include="item_healthkit.cpp">
-      <Filter>Source Files\dlls\item</Filter>
-    </ClCompile>
     <ClCompile Include="item_longjump.cpp">
       <Filter>Source Files\dlls\item</Filter>
     </ClCompile>
@@ -479,9 +476,6 @@
     <ClCompile Include="h_ai.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
-    <ClCompile Include="h_battery.cpp">
-      <Filter>Source Files\dlls</Filter>
-    </ClCompile>
     <ClCompile Include="h_cine.cpp">
       <Filter>Source Files\dlls</Filter>
     </ClCompile>
@@ -703,6 +697,18 @@
     </ClCompile>
     <ClCompile Include="CWorld.cpp">
       <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="CRecharge.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="CWallHealth.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="CHealthKit.cpp">
+      <Filter>Source Files\dlls\item</Filter>
+    </ClCompile>
+    <ClCompile Include="monster_civ.cpp">
+      <Filter>Source Files\dlls\monsters</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1239,6 +1245,18 @@
     </ClInclude>
     <ClInclude Include="CWorld.h">
       <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="CRecharge.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="CWallHealth.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="CHealthKit.h">
+      <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="monster_civ.h">
+      <Filter>Header Files\dlls\monsters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

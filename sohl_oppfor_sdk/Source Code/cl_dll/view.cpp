@@ -452,7 +452,7 @@ V_CalcRefdef
 
 ==================
 */
-extern void RenderFog(void); //LRC
+extern void RenderFog(); //LRC
 
 void V_CalcNormalRefdef(struct ref_params_s *pparams)
 {
@@ -1731,14 +1731,14 @@ void V_PunchAxis( int axis, float punch )
 	ev_punchangle[ axis ] = punch;
 }
 
-void CMD_ThirdPerson(void)
+void CMD_ThirdPerson()
 {
 	if (!gHUD.viewFlags)
 		gHUD.m_iLastCameraMode = gHUD.m_iCameraMode = 1;
 	else gHUD.m_iLastCameraMode = 1; //set new view after release camera
 }
 
-void CMD_FirstPerson(void)
+void CMD_FirstPerson()
 {
 	if (!gHUD.viewFlags)
 		gHUD.m_iLastCameraMode = gHUD.m_iCameraMode = 0;
@@ -1750,7 +1750,7 @@ void CMD_FirstPerson(void)
 V_Init
 =============
 */
-void V_Init (void)
+void V_Init ()
 {
 	gEngfuncs.pfnAddCommand ("centerview", V_StartPitchDrift );
 

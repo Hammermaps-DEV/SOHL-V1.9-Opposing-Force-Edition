@@ -50,7 +50,7 @@ LINK_ENTITY_TO_CLASS(weapon_m40a1, CSniperrifle);
 //=========================================================
 // Spawn M40A1 Sniper Rifle
 //=========================================================
-void CSniperrifle::Spawn(void) {
+void CSniperrifle::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_m40a1.mdl");
@@ -65,7 +65,7 @@ void CSniperrifle::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CSniperrifle::Precache(void) {
+void CSniperrifle::Precache() {
 	PRECACHE_MODEL("models/v_m40a1.mdl");
 	PRECACHE_MODEL("models/w_m40a1.mdl");
 	PRECACHE_MODEL("models/p_m40a1.mdl");
@@ -111,7 +111,7 @@ int CSniperrifle::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CSniperrifle::PrimaryAttack(void) {
+void CSniperrifle::PrimaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound();
@@ -172,7 +172,7 @@ void CSniperrifle::PrimaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CSniperrifle::Deploy(void) {
+BOOL CSniperrifle::Deploy() {
 	if (m_fNeedAjustBolt) {
 		m_iBoltState = BOLTSTATE_ADJUST;
 	}
@@ -184,7 +184,7 @@ BOOL CSniperrifle::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CSniperrifle::Holster(void) {
+void CSniperrifle::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	ZoomReset();
 
@@ -201,7 +201,7 @@ void CSniperrifle::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CSniperrifle::Reload(void) {
+void CSniperrifle::Reload() {
 	if (m_pPlayer->ammo_762 <= 0)
 		return;
 
@@ -226,7 +226,7 @@ void CSniperrifle::Reload(void) {
 //=========================================================
 // ZoomUpdate
 //=========================================================
-void CSniperrifle::ZoomUpdate(void) {
+void CSniperrifle::ZoomUpdate() {
 	if (m_pPlayer->pev->button & IN_ATTACK2) {
 		if (m_iChargeLevel == 0) {
 			if (m_flShockTime > UTIL_GlobalTimeBase()) return;
@@ -261,7 +261,7 @@ void CSniperrifle::ZoomUpdate(void) {
 //=========================================================
 // ZoomReset
 //=========================================================
-void CSniperrifle::ZoomReset(void) {
+void CSniperrifle::ZoomReset() {
 	m_flShockTime = UTIL_GlobalTimeBase() + 0.5;
 	m_pPlayer->m_iFOV = 90;
 	m_iChargeLevel = 0;//clear zoom
@@ -270,7 +270,7 @@ void CSniperrifle::ZoomReset(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CSniperrifle::WeaponIdle(void) {
+void CSniperrifle::WeaponIdle() {
 	ZoomUpdate();
 	ResetEmptySound();
 
@@ -311,7 +311,7 @@ void CSniperrifle::WeaponIdle(void) {
 //=========================================================
 // ItemPostFrame
 //=========================================================
-void CSniperrifle::ItemPostFrame(void) {
+void CSniperrifle::ItemPostFrame() {
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= UTIL_GlobalTimeBase())) {
 		if (m_fNeedAjustBolt) {
 			switch (m_iBoltState) {

@@ -40,11 +40,11 @@ class CParticleEmitter : public CPointEntity {
 	float flTimeTurnedOn;
 public:
 	bool bIsOn;
-	void Spawn(void);
+	void Spawn();
 	void KeyValue(KeyValueData* pKeyValueData);
 	void MakeAware(CBaseEntity* pEnt);
 	void EXPORT Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	int ObjectCaps(void) { return CBaseEntity::ObjectCaps() | FCAP_MASTER; }
+	int ObjectCaps() { return CBaseEntity::ObjectCaps() | FCAP_MASTER; }
 	bool IsTriggered(CBaseEntity *pActivator);
 };
 

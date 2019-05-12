@@ -39,14 +39,14 @@ public:
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
-	int  Classify(void) { return CLASS_ALIEN_MILITARY; };
-	int  BloodColor(void) { return BLOOD_COLOR_YELLOW; }
+	void Spawn();
+	void Precache();
+	int  Classify() { return CLASS_ALIEN_MILITARY; };
+	int  BloodColor() { return BLOOD_COLOR_YELLOW; }
 	void Killed(entvars_t *pevAttacker, int iGib);
-	void GibMonster(void);
+	void GibMonster();
 
-	void SetObjectCollisionBox(void)
+	void SetObjectCollisionBox()
 	{
 		pev->absmin = pev->origin + Vector(-16 * N_SCALE, -16 * N_SCALE, -48 * N_SCALE);
 		pev->absmax = pev->origin + Vector(16 * N_SCALE, 16 * N_SCALE, 28 * N_SCALE);
@@ -54,31 +54,31 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void EXPORT StartupThink(void);
-	void EXPORT HuntThink(void);
+	void EXPORT StartupThink();
+	void EXPORT HuntThink();
 	void EXPORT CrashTouch(CBaseEntity *pOther);
-	void EXPORT DyingThink(void);
+	void EXPORT DyingThink();
 	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink(void);
+	void EXPORT NullThink();
 	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	void FloatSequence(void);
-	void NextActivity(void);
+	void FloatSequence();
+	void NextActivity();
 
-	void Flight(void);
+	void Flight();
 
-	BOOL AbsorbSphere(void);
-	BOOL EmitSphere(void);
+	BOOL AbsorbSphere();
+	BOOL EmitSphere();
 	void TargetSphere(USE_TYPE useType, float value);
 	CBaseEntity *RandomTargetname(const char *szName);
-	void ShootBalls(void);
+	void ShootBalls();
 	void MakeFriend(Vector vecPos);
 
 	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
-	void PainSound(void);
-	void DeathSound(void);
+	void PainSound();
+	void DeathSound();
 
 	static const char *pAttackSounds[];	// vocalization: play sometimes when he launches an attack
 	static const char *pBallSounds[];	// the sound of the lightening ball launch
@@ -145,21 +145,21 @@ public:
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
 	void CircleInit(CBaseEntity *pTarget);
-	void AbsorbInit(void);
+	void AbsorbInit();
 	void TeleportInit(CNihilanth *pOwner, CBaseEntity *pEnemy, CBaseEntity *pTarget, CBaseEntity *pTouch);
-	void GreenBallInit(void);
+	void GreenBallInit();
 	void ZapInit(CBaseEntity *pEnemy);
 
-	void EXPORT HoverThink(void);
+	void EXPORT HoverThink();
 	BOOL CircleTarget(Vector vecTarget);
-	void EXPORT DissipateThink(void);
+	void EXPORT DissipateThink();
 
-	void EXPORT ZapThink(void);
-	void EXPORT TeleportThink(void);
+	void EXPORT ZapThink();
+	void EXPORT TeleportThink();
 	void EXPORT TeleportTouch(CBaseEntity *pOther);
 
 	void EXPORT RemoveTouch(CBaseEntity *pOther);
@@ -171,10 +171,10 @@ public:
 	// void EXPORT SphereUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
 	void MovetoTarget(Vector vecTarget);
-	virtual void Crawl(void);
+	virtual void Crawl();
 
-	void Zap(void);
-	void Teleport(void);
+	void Zap();
+	void Teleport();
 
 	float m_flIdealVel;
 	Vector m_vecIdeal;

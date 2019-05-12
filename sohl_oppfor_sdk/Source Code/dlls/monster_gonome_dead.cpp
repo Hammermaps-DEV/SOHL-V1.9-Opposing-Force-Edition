@@ -52,7 +52,7 @@ LINK_ENTITY_TO_CLASS(monster_gonome_dead, CDeadGonome);
 //=========================================================
 // ********** DeadGonome SPAWN **********
 //=========================================================
-void CDeadGonome::Spawn(void)
+void CDeadGonome::Spawn()
 {
 	PRECACHE_MODEL("models/gonome.mdl");
 	SET_MODEL(ENT(pev), "models/gonome.mdl");

@@ -34,14 +34,14 @@
 
 // class definition
 class CBolt : public CBaseEntity {
-	void Spawn(void);
-	void Precache(void);
-	int Classify(void) { return CLASS_NONE; }
-	void EXPORT BubbleThink(void);
+	void Spawn();
+	void Precache();
+	int Classify() { return CLASS_NONE; }
+	void EXPORT BubbleThink();
 	void EXPORT BoltTouch(CBaseEntity *pOther);
-	void EXPORT ExplodeThink(void);
+	void EXPORT ExplodeThink();
 public:
-	static CBolt *BoltCreate(void);
+	static CBolt *BoltCreate();
 };
 
 #endif // PROJ_BOLT_H

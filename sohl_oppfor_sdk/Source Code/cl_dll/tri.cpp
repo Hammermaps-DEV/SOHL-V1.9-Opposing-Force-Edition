@@ -164,7 +164,7 @@ void CShinySurface::Draw(const vec3_t &org)
 //-----------------------------------------------------
 //
 
-void RenderFog(void)
+void RenderFog()
 {
 	float g_fFogColor[4] = { FogColor.x, FogColor.y, FogColor.z, 1.0 };
 	bool bFog = g_iWaterLevel < 2 && g_fStartDist > 0 && g_fEndDist > 0;
@@ -190,7 +190,7 @@ draw raindrips and snowflakes
 extern cl_drip FirstChainDrip;
 extern rain_properties Rain;
 
-void DrawRain(void)
+void DrawRain()
 {
 	if (FirstChainDrip.p_Next == NULL)
 		return; // no drips to draw

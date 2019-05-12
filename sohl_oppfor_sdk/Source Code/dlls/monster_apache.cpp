@@ -89,7 +89,7 @@ const char *CApache::pExplodeSounds[] = {
 //=========================================================
 // Spawn Apache
 //=========================================================
-void CApache::Spawn(void) {
+void CApache::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -140,14 +140,14 @@ void CApache::Spawn(void) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CApache::Classify(void) {
+int	CApache::Classify() {
 	return m_iClass ? m_iClass : CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CApache::Precache(void) {
+void CApache::Precache() {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
@@ -175,7 +175,7 @@ void CApache::Precache(void) {
 //=========================================================
 // NullThink
 //=========================================================
-void CApache::NullThink(void) {
+void CApache::NullThink() {
 	StudioFrameAdvance();
 	SetNextThink(0.5);
 }
@@ -222,7 +222,7 @@ void CApache::Killed(entvars_t *pevAttacker, int iGib) {
 //=========================================================
 // DyingThink
 //=========================================================
-void CApache::DyingThink(void) {
+void CApache::DyingThink() {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
 
@@ -501,7 +501,7 @@ void CApache::CrashTouch(CBaseEntity *pOther) {
 //=========================================================
 // SetObjectCollisionBox
 //=========================================================
-void CApache::SetObjectCollisionBox(void) {
+void CApache::SetObjectCollisionBox() {
 	pev->absmin = pev->origin + Vector(-300, -300, -172);
 	pev->absmax = pev->origin + Vector(300, 300, 8);
 }
@@ -509,7 +509,7 @@ void CApache::SetObjectCollisionBox(void) {
 //=========================================================
 // HuntThink
 //=========================================================
-void CApache::HuntThink(void) {
+void CApache::HuntThink() {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
 	ShowDamage();
@@ -637,7 +637,7 @@ void CApache::HuntThink(void) {
 //=========================================================
 // Flight
 //=========================================================
-void CApache::Flight(void) {
+void CApache::Flight() {
 	// tilt model 5 degrees
 	Vector vecAdj = Vector(5.0, 0, 0);
 
@@ -764,7 +764,7 @@ void CApache::Flight(void) {
 //=========================================================
 // FireRocket
 //=========================================================
-void CApache::FireRocket(void) {
+void CApache::FireRocket() {
 	static float side = 1.0;
 	static int count;
 
@@ -869,7 +869,7 @@ BOOL CApache::FireGun() {
 //=========================================================
 // ShowDamage
 //=========================================================
-void CApache::ShowDamage(void) {
+void CApache::ShowDamage() {
 	if (m_iDoSmokePuff > 0 || RANDOM_LONG(0, 99) > pev->health) {
 		if (CVAR_GET_FLOAT("r_particles") != 0) {
 			MESSAGE_BEGIN(MSG_ALL, gmsgParticles);

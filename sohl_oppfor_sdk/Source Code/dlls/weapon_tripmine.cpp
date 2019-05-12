@@ -51,8 +51,8 @@ enum tripmine_e {
 
 class CTripmineGrenade : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
@@ -61,14 +61,14 @@ class CTripmineGrenade : public CGrenade
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 
-	void EXPORT WarningThink(void);
-	void EXPORT PowerupThink(void);
-	void EXPORT BeamBreakThink(void);
-	void EXPORT DelayDeathThink(void);
+	void EXPORT WarningThink();
+	void EXPORT PowerupThink();
+	void EXPORT BeamBreakThink();
+	void EXPORT DelayDeathThink();
 	void Killed(entvars_t *pevAttacker, int iGib);
 
-	void MakeBeam(void);
-	void KillBeam(void);
+	void MakeBeam();
+	void KillBeam();
 
 	float		m_flPowerUp;
 	Vector		m_vecDir;
@@ -86,13 +86,13 @@ class CTripmineGrenade : public CGrenade
 class CTripmine : public CBasePlayerWeapon
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
-	void PrimaryAttack(void);
-	BOOL Deploy(void);
+	void PrimaryAttack();
+	BOOL Deploy();
 	void Holster();
-	void WeaponIdle(void);
+	void WeaponIdle();
 };
 
 LINK_ENTITY_TO_CLASS(monster_tripmine, CTripmineGrenade);
@@ -114,7 +114,7 @@ TYPEDESCRIPTION	CTripmineGrenade::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CTripmineGrenade, CGrenade);
 
 
-void CTripmineGrenade::Spawn(void)
+void CTripmineGrenade::Spawn()
 {
 	Precache();
 	// motor
@@ -160,7 +160,7 @@ void CTripmineGrenade::Spawn(void)
 }
 
 
-void CTripmineGrenade::Precache(void)
+void CTripmineGrenade::Precache()
 {
 	PRECACHE_MODEL("models/w_tripmine.mdl");
 	PRECACHE_SOUND("weapons/mine_deploy.wav");
@@ -169,7 +169,7 @@ void CTripmineGrenade::Precache(void)
 }
 
 
-void CTripmineGrenade::WarningThink(void)
+void CTripmineGrenade::WarningThink()
 {
 	// play warning sound
 	EMIT_SOUND(ENT(pev), CHAN_VOICE, "buttons/Blip2.wav", VOL_NORM, ATTN_NORM);
@@ -180,7 +180,7 @@ void CTripmineGrenade::WarningThink(void)
 }
 
 
-void CTripmineGrenade::PowerupThink(void)
+void CTripmineGrenade::PowerupThink()
 {
 	TraceResult tr;
 
@@ -243,7 +243,7 @@ void CTripmineGrenade::PowerupThink(void)
 }
 
 
-void CTripmineGrenade::KillBeam(void)
+void CTripmineGrenade::KillBeam()
 {
 	if (m_pBeam)
 	{
@@ -258,7 +258,7 @@ void CTripmineGrenade::KillBeam(void)
 }
 
 
-void CTripmineGrenade::MakeBeam(void)
+void CTripmineGrenade::MakeBeam()
 {
 	TraceResult tr;
 	Vector mirpos, mirend;
@@ -292,7 +292,7 @@ void CTripmineGrenade::MakeBeam(void)
 }
 
 
-void CTripmineGrenade::BeamBreakThink(void)
+void CTripmineGrenade::BeamBreakThink()
 {
 	BOOL bBlowup = 0;
 
@@ -369,7 +369,7 @@ void CTripmineGrenade::Killed(entvars_t *pevAttacker, int iGib)
 }
 
 
-void CTripmineGrenade::DelayDeathThink(void)
+void CTripmineGrenade::DelayDeathThink()
 {
 	KillBeam();
 	TraceResult tr;
@@ -389,7 +389,7 @@ void CTripmine::Spawn()
 	m_iDefaultAmmo = TRIPMINE_DEFAULT_GIVE;
 }
 
-void CTripmine::Precache(void)
+void CTripmine::Precache()
 {
 	PRECACHE_MODEL("models/v_tripmine.mdl");
 	PRECACHE_MODEL("models/p_tripmine.mdl");
@@ -438,7 +438,7 @@ void CTripmine::Holster()
 	EMIT_SOUND(ENT(m_pPlayer->pev), CHAN_WEAPON, "common/null.wav", VOL_NORM, ATTN_NORM);
 }
 
-void CTripmine::PrimaryAttack(void)
+void CTripmine::PrimaryAttack()
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0) return;
 
@@ -475,7 +475,7 @@ void CTripmine::PrimaryAttack(void)
 	m_flTimeUpdate = UTIL_GlobalTimeBase() + RANDOM_FLOAT(0.5, 1.0); //time to deploy next tripmine
 }
 
-void CTripmine::WeaponIdle(void)
+void CTripmine::WeaponIdle()
 {
 	if (m_flTimeUpdate < UTIL_GlobalTimeBase() && m_iBody)
 	{

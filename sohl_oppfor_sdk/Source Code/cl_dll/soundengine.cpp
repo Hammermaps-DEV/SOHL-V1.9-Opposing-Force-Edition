@@ -152,7 +152,7 @@ GetDllPointers
 
 ====================
 */
-void CSoundEngine::GetDllPointers(void)
+void CSoundEngine::GetDllPointers()
 {
 	char szPath[256];
 
@@ -238,7 +238,7 @@ void CSoundEngine::GetDllPointers(void)
 Init
 ====================
 */
-void CSoundEngine::Init(void)
+void CSoundEngine::Init()
 {
 	//Parse fmodex.dll
 	GetDllPointers();
@@ -332,7 +332,7 @@ void CSoundEngine::Init(void)
 Shutdown
 ====================
 */
-void CSoundEngine::Shutdown(void)
+void CSoundEngine::Shutdown()
 {
 	SetEvent(g_hExitEvent);
 	WaitForSingleObject(g_hThreadHandle, 500);
@@ -354,7 +354,7 @@ ResetEngine
 
 ====================
 */
-void CSoundEngine::ResetEngine(void)
+void CSoundEngine::ResetEngine()
 {
 	if (m_iNumActiveSounds != 0)
 	{
@@ -400,7 +400,7 @@ VidInit
 
 ====================
 */
-void CSoundEngine::VidInit(void)
+void CSoundEngine::VidInit()
 {
 	if (gEngfuncs.pfnGetCvarFloat("s_eax"))
 	{
@@ -496,7 +496,7 @@ SetupListener
 
 ====================
 */
-void CSoundEngine::SetupListener(void)
+void CSoundEngine::SetupListener()
 {
 	vec3_t vForward, vUp;
 	FMOD_VECTOR vOriginFM, vForwardFM, vUpFM;
@@ -516,7 +516,7 @@ SetupSounds
 
 ====================
 */
-void CSoundEngine::SetupSounds(void)
+void CSoundEngine::SetupSounds()
 {
 	FMOD_BOOL	bState, bPaused;
 	FMOD_VECTOR vPos;
@@ -710,7 +710,7 @@ SetupMusic
 
 ====================
 */
-void CSoundEngine::SetupMusic(void)
+void CSoundEngine::SetupMusic()
 {
 	if (!m_bPlayingMusic)
 		return;
@@ -737,7 +737,7 @@ SetupGeometry
 
 ======================
 */
-void CSoundEngine::SetupGeometry(void)
+void CSoundEngine::SetupGeometry()
 {
 	if (m_bReloaded)
 		return;
@@ -753,7 +753,7 @@ SetupReverbation
 
 ====================
 */
-void CSoundEngine::SetupReverbation(void)
+void CSoundEngine::SetupReverbation()
 {
 	if (m_pCvarRoomType->value == m_iCurrentRoomType)
 		return;
@@ -1579,7 +1579,7 @@ LoadSentences
 
 ====================
 */
-void CSoundEngine::LoadSentences(void)
+void CSoundEngine::LoadSentences()
 {
 	if (m_iNumSentences)
 		return;
@@ -2144,7 +2144,7 @@ CL_SoundEngineReset
 
 ===================================
 */
-extern "C" __declspec(dllexport) void CL_SoundEngineReset(void)
+extern "C" __declspec(dllexport) void CL_SoundEngineReset()
 {
 	gSoundEngine.ResetEngine();
 }

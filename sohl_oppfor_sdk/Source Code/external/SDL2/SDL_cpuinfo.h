@@ -81,7 +81,7 @@ extern "C" {
 /**
  *  This function returns the number of CPU cores available.
  */
-extern DECLSPEC int SDLCALL SDL_GetCPUCount(void);
+extern DECLSPEC int SDLCALL SDL_GetCPUCount();
 
 /**
  *  This function returns the L1 cache line size of the CPU
@@ -89,52 +89,52 @@ extern DECLSPEC int SDLCALL SDL_GetCPUCount(void);
  *  This is useful for determining multi-threaded structure padding
  *  or SIMD prefetch sizes.
  */
-extern DECLSPEC int SDLCALL SDL_GetCPUCacheLineSize(void);
+extern DECLSPEC int SDLCALL SDL_GetCPUCacheLineSize();
 
 /**
  *  This function returns true if the CPU has the RDTSC instruction.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasRDTSC(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasRDTSC();
 
 /**
  *  This function returns true if the CPU has AltiVec features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasAltiVec(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasAltiVec();
 
 /**
  *  This function returns true if the CPU has MMX features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasMMX(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasMMX();
 
 /**
  *  This function returns true if the CPU has 3DNow! features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_Has3DNow(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_Has3DNow();
 
 /**
  *  This function returns true if the CPU has SSE features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE();
 
 /**
  *  This function returns true if the CPU has SSE2 features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE2(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE2();
 
 /**
  *  This function returns true if the CPU has SSE3 features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE3(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE3();
 
 /**
  *  This function returns true if the CPU has SSE4.1 features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE41(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE41();
 
 /**
  *  This function returns true if the CPU has SSE4.2 features.
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE42(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_HasSSE42();
 
 
 /* Ends C function definitions when using C++ */

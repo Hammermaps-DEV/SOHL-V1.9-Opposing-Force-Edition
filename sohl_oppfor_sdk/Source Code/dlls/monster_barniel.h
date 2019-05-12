@@ -38,16 +38,16 @@
 // class definition
 class CBarniel : public CBarney {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void DeathSound(void);
-	void PainSound(void);
-	void AlertSound(void);
-	void Fire9mmPistol(void);
-	void TalkInit(void);
+	void Spawn();
+	void Precache();
+	void DeathSound();
+	void PainSound();
+	void AlertSound();
+	void Fire9mmPistol();
+	void TalkInit();
 
 	void Killed(entvars_t *pevAttacker, int iGib);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 
 	static const char *pPainSounds[];
 	static const char *pDeathSounds[];

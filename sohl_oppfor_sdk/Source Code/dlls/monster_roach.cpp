@@ -56,7 +56,7 @@ LINK_ENTITY_TO_CLASS(monster_cockroach, CRoach);
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CRoach::ISoundMask(void)
+int CRoach::ISoundMask()
 {
 	return	bits_SOUND_CARCASS | bits_SOUND_MEAT;
 }
@@ -65,7 +65,7 @@ int CRoach::ISoundMask(void)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CRoach::Classify(void)
+int	CRoach::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_INSECT;
 }
@@ -98,7 +98,7 @@ void CRoach::Touch(CBaseEntity *pOther)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CRoach::SetYawSpeed(void)
+void CRoach::SetYawSpeed()
 {
 	int ys;
 
@@ -185,7 +185,7 @@ void CRoach::Killed(entvars_t *pevAttacker, int iGib)
 //=========================================================
 // MonsterThink, overridden for roaches.
 //=========================================================
-void CRoach::MonsterThink(void)
+void CRoach::MonsterThink()
 {
 	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())) && !HaveCamerasInPVS(edict()))
 		SetNextThink(RANDOM_FLOAT(1, 1.5));

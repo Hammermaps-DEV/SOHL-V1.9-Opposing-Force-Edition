@@ -58,7 +58,7 @@ Schedule_t	slBHCRangeAttack1Fast[] =
 	},
 };
 
-void CBabyCrab::Spawn(void)
+void CBabyCrab::Spawn()
 {
 	CHeadCrab::Spawn();
 	if (pev->model)
@@ -72,7 +72,7 @@ void CBabyCrab::Spawn(void)
 	pev->health = gSkillData.headcrabHealth * 0.25;	// less health than full grown
 }
 
-void CBabyCrab::Precache(void)
+void CBabyCrab::Precache()
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -82,7 +82,7 @@ void CBabyCrab::Precache(void)
 }
 
 
-void CBabyCrab::SetYawSpeed(void)
+void CBabyCrab::SetYawSpeed()
 {
 	pev->yaw_speed = 120;
 }

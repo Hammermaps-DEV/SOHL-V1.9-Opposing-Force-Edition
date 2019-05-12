@@ -430,7 +430,7 @@ void CRCAllyMonster::SetActivity(Activity newActivity) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CRCAllyMonster::Classify(void) {
+int	CRCAllyMonster::Classify() {
 	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
 }
 
@@ -497,7 +497,7 @@ void CRCAllyMonster::StartTask(Task_t *pTask) {
 		TaskComplete();
 		break;
 	case TASK_CANT_FOLLOW:
-		StopFollowing(FALSE);
+		StopFollowing(false);
 		PlaySentence(m_szGrp[TLK_STOP], RANDOM_FLOAT(2, 2.5), VOL_NORM, ATTN_NORM);
 		TaskComplete();
 		break;
@@ -730,7 +730,7 @@ CBaseEntity	*CRCAllyMonster::EnumFriends(CBaseEntity *pPrevious, int listNumber,
 //=========================================================
 // AlertFriends
 //=========================================================
-void CRCAllyMonster::AlertFriends(void) {
+void CRCAllyMonster::AlertFriends() {
 	CBaseEntity *pFriend = NULL;
 	int i;
 
@@ -749,7 +749,7 @@ void CRCAllyMonster::AlertFriends(void) {
 //=========================================================
 // ShutUpFriends
 //=========================================================
-void CRCAllyMonster::ShutUpFriends(void)
+void CRCAllyMonster::ShutUpFriends()
 {
 	CBaseEntity *pFriend = NULL;
 	int i;
@@ -771,7 +771,7 @@ void CRCAllyMonster::ShutUpFriends(void)
 //=========================================================
 // TargetDistance
 //=========================================================
-float CRCAllyMonster::TargetDistance(void) {
+float CRCAllyMonster::TargetDistance() {
 	// If we lose the player, or he dies, return a really large distance
 	if (m_hTargetEnt == NULL || !m_hTargetEnt->IsAlive())
 		return 1e6;
@@ -803,7 +803,7 @@ void CRCAllyMonster::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // Init talk data
 //=========================================================
-void CRCAllyMonster::TalkInit(void) {
+void CRCAllyMonster::TalkInit() {
 	CRCAllyMonster::g_talkWaitTime = 0;
 
 	if (m_iszSpeakAs) {
@@ -897,7 +897,7 @@ void CRCAllyMonster::TalkInit(void) {
 // Scan for nearest, visible friend. If fPlayer is true, look for
 // nearest player
 //=========================================================
-CBaseEntity *CRCAllyMonster::FindNearestFriend(BOOL fPlayer) {
+CBaseEntity *CRCAllyMonster::FindNearestFriend(bool fPlayer) {
 	CBaseEntity *pFriend = NULL;
 	CBaseEntity *pNearest = NULL;
 	float range = 10000000.0;
@@ -962,7 +962,7 @@ CBaseEntity *CRCAllyMonster::FindNearestFriend(BOOL fPlayer) {
 //=========================================================
 // GetVoicePitch
 //=========================================================
-int CRCAllyMonster::GetVoicePitch(void) {
+int CRCAllyMonster::GetVoicePitch() {
 	return m_voicePitch + RANDOM_LONG(0, 6);
 }
 
@@ -993,7 +993,7 @@ void CRCAllyMonster::Touch(CBaseEntity *pOther) {
 // IdleRespond
 // Respond to a previous question
 //=========================================================
-void CRCAllyMonster::IdleRespond(void) {
+void CRCAllyMonster::IdleRespond() {
 	// play response
 	PlaySentence(m_szGrp[TLK_ANSWER], RANDOM_FLOAT(2.8, 3.2), VOL_NORM, ATTN_IDLE);
 }
@@ -1001,7 +1001,7 @@ void CRCAllyMonster::IdleRespond(void) {
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-int CRCAllyMonster::FOkToSpeak(void) {
+int CRCAllyMonster::FOkToSpeak() {
 	// if in the grip of a barnacle, don't speak
 	if (m_MonsterState == MONSTERSTATE_PRONE || m_IdealMonsterState == MONSTERSTATE_PRONE) {
 		return FALSE;
@@ -1043,13 +1043,13 @@ int CRCAllyMonster::CanPlaySentence(BOOL fDisregardState) {
 //=========================================================
 // FIdleStare
 //=========================================================
-int CRCAllyMonster::FIdleStare(void) {
+int CRCAllyMonster::FIdleStare() {
 	if (!FOkToSpeak())
 		return FALSE;
 
 	PlaySentence(m_szGrp[TLK_STARE], RANDOM_FLOAT(5, 7.5), VOL_NORM, ATTN_IDLE);
 
-	m_hTalkTarget = FindNearestFriend(TRUE);
+	m_hTalkTarget = FindNearestFriend(true);
 	return TRUE;
 }
 
@@ -1057,14 +1057,14 @@ int CRCAllyMonster::FIdleStare(void) {
 // IdleHello
 // Try to greet player first time he's seen
 //=========================================================
-int CRCAllyMonster::FIdleHello(void) {
+int CRCAllyMonster::FIdleHello() {
 	if (!FOkToSpeak())
 		return FALSE;
 
 	// if this is first time scientist has seen player, greet him
 	if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer)) {
 		// get a player
-		CBaseEntity *pPlayer = FindNearestFriend(TRUE);
+		CBaseEntity *pPlayer = FindNearestFriend(true);
 
 		if (pPlayer) {
 			if (FInViewCone(pPlayer) && FVisible(pPlayer)) {
@@ -1105,7 +1105,7 @@ void CRCAllyMonster::IdleHeadTurn(Vector &vecFriend) {
 // FIdleSpeak
 // ask question of nearby friend, or make statement
 //=========================================================
-int CRCAllyMonster::FIdleSpeak(void) {
+int CRCAllyMonster::FIdleSpeak() {
 	// try to start a conversation, or make statement
 	int pitch;
 	const char *szIdleGroup;
@@ -1161,7 +1161,7 @@ int CRCAllyMonster::FIdleSpeak(void) {
 	}
 
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
-	CBaseEntity *pFriend = FindNearestFriend(FALSE);
+	CBaseEntity *pFriend = FindNearestFriend(false);
 
 	if (pFriend && !(pFriend->IsMoving()) && (RANDOM_LONG(0, 99) < 75)) {
 		PlaySentence(szQuestionGroup, duration, VOL_NORM, ATTN_IDLE);
@@ -1180,7 +1180,7 @@ int CRCAllyMonster::FIdleSpeak(void) {
 	// otherwise, play an idle statement, try to face client when making a statement.
 	if (RANDOM_LONG(0, 1)) {
 		//SENTENCEG_PlayRndSz( ENT(pev), szIdleGroup, 1.0, ATTN_IDLE, 0, pitch );
-		CBaseEntity *pFriend = FindNearestFriend(TRUE);
+		CBaseEntity *pFriend = FindNearestFriend(true);
 
 		if (pFriend) {
 			m_hTalkTarget = pFriend;
@@ -1346,19 +1346,18 @@ Schedule_t* CRCAllyMonster::GetScheduleOfType(int iType) {
 //=========================================================
 // IsTalking - am I saying a sentence right now?
 //=========================================================
-BOOL CRCAllyMonster::IsTalking(void) {
-	if (m_flStopTalkTime > UTIL_GlobalTimeBase()) {
-		return TRUE;
-	}
+bool CRCAllyMonster::IsTalking() {
+	if (m_flStopTalkTime > UTIL_GlobalTimeBase())
+		return true;
 
-	return FALSE;
+	return false;
 }
 
 //=========================================================
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CRCAllyMonster::PrescheduleThink(void) {
+void CRCAllyMonster::PrescheduleThink() {
 	if (InSquad() && m_hEnemy != NULL) {
 		if (HasConditions(bits_COND_SEE_ENEMY)) {
 			// update the squad's last enemy sighting time.
@@ -1380,7 +1379,7 @@ void CRCAllyMonster::PrescheduleThink(void) {
 //=========================================================
 // try to smell something
 //=========================================================
-void CRCAllyMonster::TrySmellTalk(void)
+void CRCAllyMonster::TrySmellTalk()
 {
 	if (!FOkToSpeak())
 		return;
@@ -1404,7 +1403,7 @@ void CRCAllyMonster::TrySmellTalk(void)
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CRCAllyMonster::ISoundMask(void) {
+int CRCAllyMonster::ISoundMask() {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
 		bits_SOUND_MEAT |
@@ -1435,7 +1434,7 @@ int CRCAllyMonster::IRelationship(CBaseEntity *pTarget) {
 //=========================================================
 // StopFollowing
 //=========================================================
-void CRCAllyMonster::StopFollowing(BOOL clearSchedule)
+void CRCAllyMonster::StopFollowing(bool clearSchedule)
 {
 	if (IsFollowing())
 	{
@@ -1476,21 +1475,21 @@ void CRCAllyMonster::StartFollowing(CBaseEntity *pLeader)
 //=========================================================
 // CanFollow
 //=========================================================
-BOOL CRCAllyMonster::CanFollow(void)
+bool CRCAllyMonster::CanFollow()
 {
 	if (m_MonsterState == MONSTERSTATE_SCRIPT)
 	{
 		if (!m_pCine)
-			return FALSE;
+			return false;
 
 		if (!m_pCine->CanInterrupt())
-			return FALSE;
+			return false;
 	}
 
 	if (!IsAlive())
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -1525,7 +1524,7 @@ void CRCAllyMonster::FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, 
 		}
 		else {
 			//ALERT(at_console,"Stop\n");
-			StopFollowing(TRUE);
+			StopFollowing(true);
 		}
 	}
 }
@@ -1579,7 +1578,7 @@ void CRCAllyMonster::KeyValue(KeyValueData *pkvd)
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CRCAllyMonster::Precache(void) {
+void CRCAllyMonster::Precache() {
 	if (m_iszUse)
 		m_szGrp[TLK_USE] = STRING(m_iszUse);
 
@@ -1671,7 +1670,7 @@ void CRCAllyMonster::VacateSlot() {
 //=========================================================
 // ScheduleChange
 //=========================================================
-void CRCAllyMonster::ScheduleChange(void) {
+void CRCAllyMonster::ScheduleChange() {
 	VacateSlot();
 }
 
@@ -1735,7 +1734,7 @@ BOOL CRCAllyMonster::SquadAdd(CRCAllyMonster *pAdd) {
 // current info on the enemy so that it can be stored for 
 // members who don't have current info.
 //=========================================================
-void CRCAllyMonster::SquadPasteEnemyInfo(void) {
+void CRCAllyMonster::SquadPasteEnemyInfo() {
 	CRCAllyMonster *pSquadLeader = MySquadLeader();
 	if (pSquadLeader)
 		pSquadLeader->m_vecEnemyLKP = m_vecEnemyLKP;
@@ -1749,7 +1748,7 @@ void CRCAllyMonster::SquadPasteEnemyInfo(void) {
 // so the most recent data is always available here.
 //
 //=========================================================
-void CRCAllyMonster::SquadCopyEnemyInfo(void) {
+void CRCAllyMonster::SquadCopyEnemyInfo() {
 	CRCAllyMonster *pSquadLeader = MySquadLeader();
 	if (pSquadLeader)
 		m_vecEnemyLKP = pSquadLeader->m_vecEnemyLKP;
@@ -1794,7 +1793,7 @@ void CRCAllyMonster::SquadMakeEnemy(CBaseEntity *pEnemy) {
 // SquadCount(), return the number of members of this squad
 // callable from leaders & followers
 //=========================================================
-int CRCAllyMonster::SquadCount(void) {
+int CRCAllyMonster::SquadCount() {
 	if (!InSquad())
 		return 0;
 
@@ -1919,7 +1918,7 @@ int CRCAllyMonster::CheckEnemy(CBaseEntity *pEnemy)
 //=========================================================
 // StartMonster
 //=========================================================
-void CRCAllyMonster::StartMonster(void)
+void CRCAllyMonster::StartMonster()
 {
 	CBaseMonster::StartMonster();
 
@@ -1950,7 +1949,7 @@ void CRCAllyMonster::StartMonster(void)
 // Builds a large box in front of the grunt and checks to see 
 // if any squad members are in that box. 
 //=========================================================
-BOOL CRCAllyMonster::NoFriendlyFire(void) {
+BOOL CRCAllyMonster::NoFriendlyFire() {
 	return NoFriendlyFire(FALSE); //default: don't like the player
 }
 
@@ -2031,7 +2030,7 @@ BOOL CRCAllyMonster::NoFriendlyFire(BOOL playerAlly) {
 // GetIdealState - surveys the Conditions information available
 // and finds the best new state for a monster.
 //=========================================================
-MONSTERSTATE CRCAllyMonster::GetIdealState(void) {
+MONSTERSTATE CRCAllyMonster::GetIdealState() {
 	int iConditions = IScheduleFlags();
 
 	// If no schedule conditions, the new ideal state is probably the reason we're in here.
@@ -2072,7 +2071,7 @@ BOOL CRCAllyMonster::FValidateCover(const Vector &vecCoverLocation)
 // SquadEnemySplit- returns TRUE if not all squad members
 // are fighting the same enemy. 
 //=========================================================
-BOOL CRCAllyMonster::SquadEnemySplit(void)
+BOOL CRCAllyMonster::SquadEnemySplit()
 {
 	if (!InSquad())
 		return FALSE;
@@ -2114,7 +2113,7 @@ BOOL CRCAllyMonster::SquadMemberInRange(const Vector &vecLocation, float flDist)
 //=========================================================
 // Kick
 //=========================================================
-CBaseEntity *CRCAllyMonster::Kick(void) {
+CBaseEntity *CRCAllyMonster::Kick() {
 	TraceResult tr;
 
 	UTIL_MakeVectors(pev->angles);
@@ -2135,7 +2134,7 @@ CBaseEntity *CRCAllyMonster::Kick(void) {
 //=========================================================
 // PainSound
 //=========================================================
-void CRCAllyMonster::PainSound(void) {
+void CRCAllyMonster::PainSound() {
 	if (UTIL_GlobalTimeBase() < m_flNextPainTime)
 		return;
 
@@ -2146,7 +2145,7 @@ void CRCAllyMonster::PainSound(void) {
 //=========================================================
 // DeathSound 
 //=========================================================
-void CRCAllyMonster::DeathSound(void) {
+void CRCAllyMonster::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
@@ -2154,7 +2153,7 @@ void CRCAllyMonster::DeathSound(void) {
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void CRCAllyMonster::CheckAmmo(void) {
+void CRCAllyMonster::CheckAmmo() {
 	if (m_cAmmoLoaded <= 0) {
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
@@ -2172,7 +2171,7 @@ void CRCAllyMonster::CheckAmmo(void) {
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CRCAllyMonster::FCanCheckAttacks(void) {
+BOOL CRCAllyMonster::FCanCheckAttacks() {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
 		return TRUE;
 	}
@@ -2235,7 +2234,7 @@ bool CRCAllyMonster::CheckRangeAttack1(float flDot, float flDist) {
 //=========================================================
 // DeclineFollowing 
 //=========================================================
-void CRCAllyMonster::DeclineFollowing(void) {
+void CRCAllyMonster::DeclineFollowing() {
 	PlaySentence("FG_STOP", 2, VOL_NORM, ATTN_NORM);
 }
 
@@ -2254,7 +2253,7 @@ Vector CRCAllyMonster::GetGunPosition() {
 //=========================================================
 // Shoot MP5
 //=========================================================
-void CRCAllyMonster::ShootMP5(void) {
+void CRCAllyMonster::ShootMP5() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -2287,7 +2286,7 @@ void CRCAllyMonster::ShootMP5(void) {
 //=========================================================
 // Shoot Shotgun
 //=========================================================
-void CRCAllyMonster::ShootShotgun(void) {
+void CRCAllyMonster::ShootShotgun() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -2316,7 +2315,7 @@ void CRCAllyMonster::ShootShotgun(void) {
 	SetBlending(0, angDir.x);
 }
 
-void CRCAllyMonster::ShootShotgunDouble(void) {
+void CRCAllyMonster::ShootShotgunDouble() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -2348,7 +2347,7 @@ void CRCAllyMonster::ShootShotgunDouble(void) {
 //=========================================================
 // Shoot M249
 //=========================================================
-void CRCAllyMonster::ShootM249(void) {
+void CRCAllyMonster::ShootM249() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -2389,7 +2388,7 @@ void CRCAllyMonster::ShootM249(void) {
 //=========================================================
 // Shoot Desert Eagle
 //=========================================================
-void CRCAllyMonster::ShootDesertEagle(void) {
+void CRCAllyMonster::ShootDesertEagle() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -2427,7 +2426,7 @@ void CRCAllyMonster::ShootDesertEagle(void) {
 //=========================================================
 // Shoot 9mm Glock
 //=========================================================
-void CRCAllyMonster::ShootGlock(void) {
+void CRCAllyMonster::ShootGlock() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -2578,7 +2577,7 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 	}
 
 	if (pevAttacker && m_MonsterState != MONSTERSTATE_PRONE && (pevAttacker->flags & FL_CLIENT)) {
-		CBaseEntity *pFriend = FindNearestFriend(FALSE);
+		CBaseEntity *pFriend = FindNearestFriend(false);
 		if (pFriend && pFriend->IsAlive()) {
 			// only if not dead or dying!
 			CRCAllyMonster *pTalkMonster = (CRCAllyMonster *)pFriend;
@@ -2599,7 +2598,7 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else {
 				if (m_iszSpeakAs) {

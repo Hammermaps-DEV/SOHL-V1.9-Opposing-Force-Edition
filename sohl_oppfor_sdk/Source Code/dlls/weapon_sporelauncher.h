@@ -49,20 +49,20 @@ enum class SPLAUNCHER_IDLE2 { sequence = 8, frames = 121, fps = 30 };
 class CSporelauncher : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void Reload(void);
+	BOOL Deploy();
+	void Holster();
+	void Reload();
 	void Charge(bool m_BeginAttack);
-	void WeaponIdle(void);
+	void WeaponIdle();
 private:
 	unsigned short m_usSporeFire;
 };

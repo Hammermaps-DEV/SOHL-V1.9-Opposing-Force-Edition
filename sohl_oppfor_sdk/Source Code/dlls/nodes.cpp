@@ -66,7 +66,7 @@ LINK_ENTITY_TO_CLASS(info_node_air, CNodeEnt)
 // memory currently in use by the world graph, NULLs 
 // all pointers, and zeros the node count.
 //=========================================================
-void CGraph::InitGraph(void)
+void CGraph::InitGraph()
 {
 	// Make the graph unavailable
 	//
@@ -125,7 +125,7 @@ void CGraph::InitGraph(void)
 // reasonable number of nodes so we can build the path which
 // will be saved to disk.
 //=========================================================
-int CGraph::AllocNodes(void)
+int CGraph::AllocNodes()
 {
 	//  malloc all of the nodes
 	WorldGraph.m_pNodes = (CNode *)calloc(sizeof(CNode), MAX_NODES);
@@ -1494,12 +1494,12 @@ class CTestHull : public CBaseMonster
 {
 public:
 	void Spawn(entvars_t *pevMasterNode);
-	virtual int ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	void EXPORT CallBuildNodeGraph(void);
-	void BuildNodeGraph(void);
-	void EXPORT ShowBadNode(void);
-	void EXPORT DropDelay(void);
-	void EXPORT PathFind(void);
+	virtual int ObjectCaps() { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void EXPORT CallBuildNodeGraph();
+	void BuildNodeGraph();
+	void EXPORT ShowBadNode();
+	void EXPORT DropDelay();
+	void EXPORT PathFind();
 
 	Vector vecBadNodeOrigin;
 };
@@ -1542,7 +1542,7 @@ void CTestHull::Spawn(entvars_t *pevMasterNode)
 // TestHull::DropDelay - spawns TestHull on top of 
 // the 0th node and drops it to the ground.
 //=========================================================
-void CTestHull::DropDelay(void)
+void CTestHull::DropDelay()
 {
 	UTIL_CenterPrintAll("Node Graph out of Date. Rebuilding...");
 
@@ -1576,7 +1576,7 @@ void CNodeEnt::KeyValue(KeyValueData *pkvd)
 
 //=========================================================
 //=========================================================
-void CNodeEnt::Spawn(void)
+void CNodeEnt::Spawn()
 {
 	pev->movetype = MOVETYPE_NONE;
 	pev->solid = SOLID_NOT;// always solid_not 
@@ -1623,7 +1623,7 @@ void CNodeEnt::Spawn(void)
 // hull will be placed up the bad node's location and will generate
 // particles
 //=========================================================
-void CTestHull::ShowBadNode(void)
+void CTestHull::ShowBadNode()
 {
 	pev->movetype = MOVETYPE_FLY;
 	pev->angles.y = pev->angles.y + 4;
@@ -1641,7 +1641,7 @@ void CTestHull::ShowBadNode(void)
 
 extern BOOL gTouchDisabled;
 
-void CTestHull::CallBuildNodeGraph(void)
+void CTestHull::CallBuildNodeGraph()
 {
 	// TOUCH HACK -- Don't allow this entity to call anyone's "touch" function
 	gTouchDisabled = TRUE;
@@ -1658,7 +1658,7 @@ void CTestHull::CallBuildNodeGraph(void)
 // hull that walks between each node and each of its links
 // to ensure that a monster can actually fit through the space
 //=========================================================
-void CTestHull::BuildNodeGraph(void)
+void CTestHull::BuildNodeGraph()
 {
 	//TraceResult tr;
 	FILE *file;
@@ -2122,7 +2122,7 @@ void CTestHull::BuildNodeGraph(void)
 //=========================================================
 // returns a hardcoded path.
 //=========================================================
-void CTestHull::PathFind(void)
+void CTestHull::PathFind()
 {
 	int iPath[50];
 	int iPathSize;
@@ -2171,7 +2171,7 @@ void CTestHull::PathFind(void)
 //=========================================================
 // CStack Constructor
 //=========================================================
-CStack::CStack(void)
+CStack::CStack()
 {
 	m_level = 0;
 }
@@ -2193,7 +2193,7 @@ void CStack::Push(int value)
 //=========================================================
 // pops a value off of the stack
 //=========================================================
-int CStack::Pop(void)
+int CStack::Pop()
 {
 	if (m_level <= 0)
 		return -1;
@@ -2205,7 +2205,7 @@ int CStack::Pop(void)
 //=========================================================
 // returns the value on the top of the stack
 //=========================================================
-int CStack::Top(void)
+int CStack::Top()
 {
 	return m_stack[m_level - 1];
 }
@@ -2226,7 +2226,7 @@ void CStack::CopyToArray(int *piArray)
 //=========================================================
 // CQueue constructor
 //=========================================================
-CQueue::CQueue(void)
+CQueue::CQueue()
 {
 	m_cSize = 0;
 	m_head = 0;
@@ -2276,7 +2276,7 @@ int CQueue::Remove(float &fPriority)
 //=========================================================
 // CQueue constructor
 //=========================================================
-CQueuePriority::CQueuePriority(void)
+CQueuePriority::CQueuePriority()
 {
 	m_cSize = 0;
 }
@@ -2346,7 +2346,7 @@ void CQueuePriority::Heap_SiftDown(int iSubRoot)
 	m_heap[parent] = Ref;
 }
 
-void CQueuePriority::Heap_SiftUp(void)
+void CQueuePriority::Heap_SiftUp()
 {
 	int child = m_cSize - 1;
 	while (child)
@@ -2622,7 +2622,7 @@ int CGraph::FSaveGraph(char *szMapName)
 // this is done after loading the graph from disk, whereupon
 // the pointers are not valid.
 //=========================================================
-int CGraph::FSetGraphPointers(void)
+int CGraph::FSetGraphPointers()
 {
 	int i;
 	edict_t	*pentLinkEnt;
@@ -2857,7 +2857,7 @@ void CGraph::HashChoosePrimes(int TableSize)
 //
 #define UNNUMBERED_NODE -1
 
-void CGraph::SortNodes(void)
+void CGraph::SortNodes()
 {
 	// We are using m_iPreviousNode to be the new node number.
 	// After assigning new node numbers to everything, we move
@@ -2919,7 +2919,7 @@ void CGraph::SortNodes(void)
 	}
 }
 
-void CGraph::BuildLinkLookups(void)
+void CGraph::BuildLinkLookups()
 {
 	int i;
 	m_nHashLinks = 3 * m_cLinks / 2 + 3;
@@ -2955,7 +2955,7 @@ void CGraph::BuildLinkLookups(void)
 #endif
 }
 
-void CGraph::BuildRegionTables(void)
+void CGraph::BuildRegionTables()
 {
 	int i, j;
 	if (m_di)
@@ -3104,7 +3104,7 @@ void CGraph::BuildRegionTables(void)
 	memset(m_Cache, 0, sizeof(m_Cache));
 }
 
-void CGraph::ComputeStaticRoutingTables(void)
+void CGraph::ComputeStaticRoutingTables()
 {
 	int iFrom;
 	int nRoutes = m_cNodes * m_cNodes;
@@ -3411,7 +3411,7 @@ void CGraph::ComputeStaticRoutingTables(void)
 
 // Test those routing tables. Doesn't really work, yet.
 //
-void CGraph::TestRoutingTables(void)
+void CGraph::TestRoutingTables()
 {
 	int i;
 	int *pMyPath = new int[m_cNodes];
@@ -3546,7 +3546,7 @@ EnoughSaid:
 class CNodeViewer : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn();
 
 	int m_iBaseNode;
 	int m_iDraw;
@@ -3559,7 +3559,7 @@ public:
 
 	void FindNodeConnections(int iNode);
 	void AddNode(int iFrom, int iTo);
-	void EXPORT DrawThink(void);
+	void EXPORT DrawThink();
 };
 
 LINK_ENTITY_TO_CLASS(node_viewer, CNodeViewer)
@@ -3674,7 +3674,7 @@ void CNodeViewer::AddNode(int iFrom, int iTo)
 	}
 }
 
-void CNodeViewer::DrawThink(void)
+void CNodeViewer::DrawThink()
 {
 	pev->nextthink = UTIL_GlobalTimeBase();
 

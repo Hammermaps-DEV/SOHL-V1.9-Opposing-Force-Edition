@@ -32,23 +32,23 @@
 class CGenericMonster : public CTalkMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int ISoundMask(void);
+	int ISoundMask();
 	void KeyValue(KeyValueData *pkvd);
-	void Torch(void);
-	void MakeGas(void);
-	void UpdateGas(void);
-	void KillGas(void);
+	void Torch();
+	void MakeGas();
+	void UpdateGas();
+	void KillGas();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	virtual int HasCustomGibs(void) { return m_iszGibModel; }
+	virtual int HasCustomGibs() { return m_iszGibModel; }
 
 	CBeam *m_pBeam;
 	int m_iszGibModel;

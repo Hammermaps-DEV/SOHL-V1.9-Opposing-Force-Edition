@@ -130,7 +130,7 @@ BOOL CGameRules::CanHavePlayerItem(CBasePlayer *pPlayer, CBasePlayerItem *pWeapo
 //=========================================================
 // load the SkillData struct with the proper values based on the skill level.
 //=========================================================
-void CGameRules::RefreshSkillData(void)
+void CGameRules::RefreshSkillData()
 {
 	int	iSkill;
 
@@ -563,7 +563,7 @@ void CGameRules::RefreshSkillData(void)
 // instantiate the proper game rules object
 //=========================================================
 
-CGameRules *InstallGameRules(void)
+CGameRules *InstallGameRules()
 {
 	SERVER_COMMAND("exec game.cfg\n");
 	SERVER_EXECUTE();

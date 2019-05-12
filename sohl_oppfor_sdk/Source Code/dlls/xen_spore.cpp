@@ -60,7 +60,7 @@ const Vector CXenSporeLarge::m_hullSizes[] = {
 //=========================================================
 // Spawn
 //=========================================================
-void CXenSpore::Spawn(void) {
+void CXenSpore::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), pModelNames[pev->skin]);
@@ -76,19 +76,19 @@ void CXenSpore::Spawn(void) {
 	SetNextThink(RANDOM_FLOAT(0.1, 0.4));	// Load balance these a bit
 }
 
-void CXenSporeSmall::Spawn(void) {
+void CXenSporeSmall::Spawn() {
 	pev->skin = 0;
 	CXenSpore::Spawn();
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 64));
 }
 
-void CXenSporeMed::Spawn(void) {
+void CXenSporeMed::Spawn() {
 	pev->skin = 1;
 	CXenSpore::Spawn();
 	UTIL_SetSize(pev, Vector(-40, -40, 0), Vector(40, 40, 120));
 }
 
-void CXenSporeLarge::Spawn(void) {
+void CXenSporeLarge::Spawn() {
 	pev->skin = 2;
 	CXenSpore::Spawn();
 	UTIL_SetSize(pev, Vector(-48, -48, 110), Vector(48, 48, 240));
@@ -105,7 +105,7 @@ void CXenSporeLarge::Spawn(void) {
 //=========================================================
 // Precache
 //=========================================================
-void CXenSpore::Precache(void)
+void CXenSpore::Precache()
 {
 	PRECACHE_MODEL((char *)pModelNames[pev->skin]);
 }
@@ -113,7 +113,7 @@ void CXenSpore::Precache(void)
 //=========================================================
 // Think
 //=========================================================
-void CXenSpore::Think(void)
+void CXenSpore::Think()
 {
 	float flInterval = StudioFrameAdvance();
 	SetNextThink(0.1);

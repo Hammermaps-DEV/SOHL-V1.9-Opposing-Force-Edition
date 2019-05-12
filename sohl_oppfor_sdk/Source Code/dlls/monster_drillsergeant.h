@@ -32,12 +32,12 @@
 class CDrillsergeant : public CTalkMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	int ISoundMask(void);
+	int ISoundMask();
 
 	int	Save(CSave &save);
 	int Restore(CRestore &restore);

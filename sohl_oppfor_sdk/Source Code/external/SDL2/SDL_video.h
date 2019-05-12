@@ -214,7 +214,7 @@ typedef enum
  *  
  *  \sa SDL_GetVideoDriver()
  */
-extern DECLSPEC int SDLCALL SDL_GetNumVideoDrivers(void);
+extern DECLSPEC int SDLCALL SDL_GetNumVideoDrivers();
 
 /**
  *  \brief Get the name of a built in video driver.
@@ -249,7 +249,7 @@ extern DECLSPEC int SDLCALL SDL_VideoInit(const char *driver_name);
  *  
  *  \sa SDL_VideoInit()
  */
-extern DECLSPEC void SDLCALL SDL_VideoQuit(void);
+extern DECLSPEC void SDLCALL SDL_VideoQuit();
 
 /**
  *  \brief Returns the name of the currently initialized video driver.
@@ -260,14 +260,14 @@ extern DECLSPEC void SDLCALL SDL_VideoQuit(void);
  *  \sa SDL_GetNumVideoDrivers()
  *  \sa SDL_GetVideoDriver()
  */
-extern DECLSPEC const char *SDLCALL SDL_GetCurrentVideoDriver(void);
+extern DECLSPEC const char *SDLCALL SDL_GetCurrentVideoDriver();
 
 /**
  *  \brief Returns the number of available video displays.
  *  
  *  \sa SDL_GetDisplayBounds()
  */
-extern DECLSPEC int SDLCALL SDL_GetNumVideoDisplays(void);
+extern DECLSPEC int SDLCALL SDL_GetNumVideoDisplays();
 
 /**
  *  \brief Get the name of a display in UTF-8 encoding
@@ -788,7 +788,7 @@ extern DECLSPEC void SDLCALL SDL_DestroyWindow(SDL_Window * window);
  *  \sa SDL_EnableScreenSaver()
  *  \sa SDL_DisableScreenSaver()
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled();
 
 /**
  *  \brief Allow the screen to be blanked by a screensaver
@@ -796,7 +796,7 @@ extern DECLSPEC SDL_bool SDLCALL SDL_IsScreenSaverEnabled(void);
  *  \sa SDL_IsScreenSaverEnabled()
  *  \sa SDL_DisableScreenSaver()
  */
-extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
+extern DECLSPEC void SDLCALL SDL_EnableScreenSaver();
 
 /**
  *  \brief Prevent the screen from being blanked by a screensaver
@@ -804,7 +804,7 @@ extern DECLSPEC void SDLCALL SDL_EnableScreenSaver(void);
  *  \sa SDL_IsScreenSaverEnabled()
  *  \sa SDL_EnableScreenSaver()
  */
-extern DECLSPEC void SDLCALL SDL_DisableScreenSaver(void);
+extern DECLSPEC void SDLCALL SDL_DisableScreenSaver();
 
 
 /**
@@ -842,7 +842,7 @@ extern DECLSPEC void *SDLCALL SDL_GL_GetProcAddress(const char *proc);
  *  
  *  \sa SDL_GL_LoadLibrary()
  */
-extern DECLSPEC void SDLCALL SDL_GL_UnloadLibrary(void);
+extern DECLSPEC void SDLCALL SDL_GL_UnloadLibrary();
 
 /**
  *  \brief Return true if an OpenGL extension is supported for the current 
@@ -903,7 +903,7 @@ extern DECLSPEC int SDLCALL SDL_GL_SetSwapInterval(int interval);
  *  
  *  \sa SDL_GL_SetSwapInterval()
  */
-extern DECLSPEC int SDLCALL SDL_GL_GetSwapInterval(void);
+extern DECLSPEC int SDLCALL SDL_GL_GetSwapInterval();
 
 /**
  * \brief Swap the OpenGL buffers for a window, if double-buffering is 

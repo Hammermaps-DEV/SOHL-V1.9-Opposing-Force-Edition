@@ -48,20 +48,20 @@ enum class GLOCK_RELOAD_NOT_EMPTY { sequence = 8, frames = 42, fps = 18 };
 class CGlock : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 	void GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim);
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void Reload(void);
-	void WeaponIdle(void);
+	BOOL Deploy();
+	void Holster();
+	void Reload();
+	void WeaponIdle();
 private:
 	//Events
 	unsigned short m_usFireGlock;

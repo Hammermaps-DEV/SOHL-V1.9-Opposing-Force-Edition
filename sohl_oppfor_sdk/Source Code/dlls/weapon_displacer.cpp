@@ -51,7 +51,7 @@ LINK_ENTITY_TO_CLASS(weapon_displacer, CDisplacer);
 //=========================================================
 // Spawn Displacer
 //=========================================================
-void CDisplacer::Spawn(void) {
+void CDisplacer::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_displacer.mdl");
@@ -106,7 +106,7 @@ int CDisplacer::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // Precache
 //=========================================================
-void CDisplacer::Precache(void) {
+void CDisplacer::Precache() {
 	PRECACHE_MODEL("models/v_displacer.mdl");
 	PRECACHE_MODEL("models/w_displacer.mdl");
 	PRECACHE_MODEL("models/p_displacer.mdl");
@@ -127,7 +127,7 @@ void CDisplacer::Precache(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CDisplacer::Deploy(void) {
+BOOL CDisplacer::Deploy() {
 	return DefaultDeploy("models/v_displacer.mdl", "models/p_displacer.mdl", (int)DISPLACER_DRAW::sequence,
 		"gauss", CalculateWeaponTime((int)DISPLACER_DRAW::frames, (int)DISPLACER_DRAW::fps));
 }
@@ -135,7 +135,7 @@ BOOL CDisplacer::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CDisplacer::Holster(void) {
+void CDisplacer::Holster() {
 	ClearSpin();
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)DISPLACER_HOLSTER::sequence);
@@ -146,7 +146,7 @@ void CDisplacer::Holster(void) {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CDisplacer::SecondaryAttack(void) {
+void CDisplacer::SecondaryAttack() {
 	if (m_pPlayer->IsOnRope())
 	{
 		m_pPlayer->pev->movetype = MOVETYPE_WALK;
@@ -180,7 +180,7 @@ void CDisplacer::SecondaryAttack(void) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CDisplacer::PrimaryAttack(void) {
+void CDisplacer::PrimaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		PlayEmptySound(2);
@@ -204,7 +204,7 @@ void CDisplacer::PrimaryAttack(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CDisplacer::WeaponIdle(void) {
+void CDisplacer::WeaponIdle() {
 	ResetEmptySound();
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase())
 		return;
@@ -258,7 +258,7 @@ void CDisplacer::WeaponIdle(void) {
 //=========================================================
 // ClearSpin
 //=========================================================
-void CDisplacer::ClearSpin(void) {
+void CDisplacer::ClearSpin() {
 
 	switch (m_iFireMode) {
 	case FIREMODE_FORWARD:
@@ -300,7 +300,7 @@ void CDisplacer::SpinUp(int iFireMode) {
 //=========================================================
 // Spin
 //=========================================================
-void CDisplacer::Spin(void) {
+void CDisplacer::Spin() {
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_SPIN::sequence, 0, 0, 0);
 
 	m_iFireState = FIRESTATE_FIRE;
@@ -337,7 +337,7 @@ void CDisplacer::Fire(BOOL fIsPrimary)
 //=========================================================
 // Purpose:
 //=========================================================
-void CDisplacer::Displace(void) {
+void CDisplacer::Displace() {
 	PLAYBACK_EVENT_FULL(0, m_pPlayer->edict(), m_usDisplacer, 0.0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, (int)DISPLACER_FIRE::sequence, FIREMODE_FORWARD, 0, 0);
 
 	Vector vecSrc;
@@ -356,7 +356,7 @@ void CDisplacer::Displace(void) {
 //=========================================================
 // Purpose:
 //=========================================================
-void CDisplacer::Teleport(void)
+void CDisplacer::Teleport()
 {
 	edict_t* pEnt_earth = FIND_ENTITY_BY_CLASSNAME(NULL, "info_displacer_earth_target");
 	edict_t* pEnt_xen = FIND_ENTITY_BY_CLASSNAME(NULL, "info_displacer_xen_target");
@@ -424,14 +424,14 @@ void CDisplacer::Teleport(void)
 //=========================================================
 // ShouldUpdateEffects
 //=========================================================
-BOOL CDisplacer::ShouldUpdateEffects(void) const {
+BOOL CDisplacer::ShouldUpdateEffects() const {
 	return (m_iFireState != FIRESTATE_NONE);
 }
 
 //=========================================================
 // HasAmmo
 //=========================================================
-BOOL CDisplacer::HasAmmo(void) {
+BOOL CDisplacer::HasAmmo() {
 	if (m_pPlayer->ammo_uranium <= 0)
 		return FALSE;
 

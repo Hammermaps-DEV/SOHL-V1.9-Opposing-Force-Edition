@@ -38,23 +38,23 @@
 // class definition
 class CHFGrunt : public CRCAllyMonster {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	void SetActivity(Activity NewActivity);
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 	void KeyValue(KeyValueData *pkvd);
-	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	virtual int	ObjectCaps() { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	bool CheckRangeAttack2(float flDot, float flDist);
 
 	// Override these to set behavior
 	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 
-	void GibMonster(void);
-	void JustSpoke(void);
+	void GibMonster();
+	void JustSpoke();
 
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 
@@ -81,8 +81,8 @@ public:
 // class definition
 class CHFGruntRepel : public CBaseMonster {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture;	// Don't save, precache
 };
@@ -90,8 +90,8 @@ public:
 // class definition
 class CDeadFGrunt : public CBaseMonster {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_PLAYER_ALLY; }
+	void Spawn();
+	int	Classify() { return	CLASS_PLAYER_ALLY; }
 
 	void KeyValue(KeyValueData *pkvd);
 

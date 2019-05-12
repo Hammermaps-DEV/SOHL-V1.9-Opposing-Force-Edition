@@ -33,13 +33,13 @@
 
 class CEgonAmmo : public CBasePlayerAmmo
 {
-	void Spawn(void)
+	void Spawn()
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
-	void Precache(void)
+	void Precache()
 	{
 		PRECACHE_MODEL("models/w_chainammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");

@@ -134,7 +134,7 @@ extern DECLSPEC SDL_LogPriority SDLCALL SDL_LogGetPriority(int category);
  *
  *  \note This is called in SDL_Quit().
  */
-extern DECLSPEC void SDLCALL SDL_LogResetPriorities(void);
+extern DECLSPEC void SDLCALL SDL_LogResetPriorities();
 
 /**
  *  \brief Log a message with SDL_LOG_CATEGORY_APPLICATION and SDL_LOG_PRIORITY_INFO

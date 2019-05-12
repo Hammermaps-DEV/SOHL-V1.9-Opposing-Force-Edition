@@ -29,9 +29,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "weapons.h"
 #include "player.h"
-#include "skill.h"
 #include "items.h"
 #include "gamerules.h"
 
@@ -46,7 +44,7 @@ extern bool gEvilImpulse101;
 #define ITEM_PICKEDUP 1
 #define ITEM_DRAINED 2	//The item has had some 'charge' removed but remains in existence
 
-void CItemMedicalKit::Spawn(void)
+void CItemMedicalKit::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_portablemed.mdl");	// create a new model and spawn it here
@@ -62,22 +60,23 @@ void CItemMedicalKit::Spawn(void)
 	{
 		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
 		UTIL_Remove(this);
-		return;
 	}
 }
 
-void CItemMedicalKit::Precache(void)
+void CItemMedicalKit::Precache()
 {
 	PRECACHE_MODEL("models/w_portablemed.mdl");	// create a new model and precache it here
 	PRECACHE_SOUND("items/smallmedkit1.wav");
 }
 
-int CItemMedicalKit::MyTouch(CBasePlayer *pPlayer)
+bool CItemMedicalKit::MyTouch(CBasePlayer *pPlayer)
 {
-	if (pPlayer->pev->deadflag != DEAD_NO || pPlayer->m_rgItems[ITEM_HEALTHKIT] >= (int)CVAR_GET_FLOAT("max_medkit"))
-	{
-		return ITEM_NOTPICKEDUP;
+	if (pPlayer->IsPlayer() || 
+		pPlayer->pev->deadflag != DEAD_NO || 
+		pPlayer->m_rgItems[ITEM_HEALTHKIT] >= (int)CVAR_GET_FLOAT("max_medkit")) {
+		return false;
 	}
+
 	pPlayer->m_rgItems[ITEM_HEALTHKIT] += (pev->health) ? pev->health : CHARGE_IN_MEDKIT;//increment/decrement counter by this ammount
 	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);	//msg change inventory
 	WRITE_SHORT((ITEM_HEALTHKIT));							//which item to change
@@ -88,24 +87,21 @@ int CItemMedicalKit::MyTouch(CBasePlayer *pPlayer)
 	{
 		pev->health = pPlayer->m_rgItems[ITEM_HEALTHKIT] - MAX_MEDKIT; //set the amount of charge left in the kit to be the difference
 		pPlayer->m_rgItems[ITEM_HEALTHKIT] = MAX_MEDKIT;//set players kit charge to max
-	//	Respawn();// respawn the model (with the new decreased charge)
-		return ITEM_DRAINED;
+		return true;
+	}
+
+	if (g_pGameRules->ItemShouldRespawn(this))
+	{
+		pev->health = pev->dmg; //Reset initial health;
+		Respawn();
 	}
 	else
 	{
-		if (g_pGameRules->ItemShouldRespawn(this))
-		{
-			pev->health = pev->dmg; //Reset initial health;
-			Respawn();
-		}
-		else
-		{
-			SetTouch(NULL); //Is this necessary?
-			UTIL_Remove(this);
-		}
-
-		return ITEM_PICKEDUP;
+		SetTouch(NULL); //Is this necessary?
+		UTIL_Remove(this);
 	}
+
+	return true;
 }
 
 void CItemMedicalKit::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
@@ -118,7 +114,7 @@ void CItemMedicalKit::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 
 	EMIT_SOUND(pActivator->edict(), CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM); //play sound to tell player it's been used
 
-	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
+	auto m_hActivator = static_cast<CBasePlayer*>(pActivator);
 	int m_fHealthUsed = (int)m_hActivator->TakeHealth(m_hActivator->m_rgItems[ITEM_HEALTHKIT], DMG_GENERIC); //Actually give the health
 	m_hActivator->m_rgItems[ITEM_HEALTHKIT] -= m_fHealthUsed;//increment/decrement counter by this ammount
 
@@ -135,9 +131,7 @@ void CItemMedicalKit::ItemTouch(CBaseEntity *pOther)
 {
 	// if it's not a player, ignore
 	if (!pOther->IsPlayer())
-	{
 		return;
-	}
 
 	CBasePlayer *pPlayer = (CBasePlayer *)pOther;
 

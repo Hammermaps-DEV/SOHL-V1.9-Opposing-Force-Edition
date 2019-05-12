@@ -50,7 +50,7 @@ LINK_ENTITY_TO_CLASS(weapon_gauss, CGauss);
 //=========================================================
 // Spawn Gauss
 //=========================================================
-void CGauss::Spawn(void) {
+void CGauss::Spawn() {
 	Precache();
 	m_iId = WEAPON_GAUSS;
 
@@ -63,7 +63,7 @@ void CGauss::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CGauss::Precache(void) {
+void CGauss::Precache() {
 	PRECACHE_MODEL("models/w_gauss.mdl");
 	PRECACHE_MODEL("models/v_gauss.mdl");
 	PRECACHE_MODEL("models/p_gauss.mdl");
@@ -103,7 +103,7 @@ int CGauss::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CGauss::PrimaryAttack(void) {
+void CGauss::PrimaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel != 3 && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 2) {
 		m_pPlayer->m_iWeaponVolume = PRIMARY_FIRE_VOLUME;
@@ -126,7 +126,7 @@ void CGauss::PrimaryAttack(void) {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CGauss::SecondaryAttack(void) {
+void CGauss::SecondaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->pev->waterlevel == 3) {
 		if (m_fInAttack != 0) {
@@ -237,7 +237,7 @@ void CGauss::SecondaryAttack(void) {
 // of weaponidle() and make its own function then to try to
 // merge this into Fire(), which has some identical variable names 
 //=========================================================
-void CGauss::StartFire(void) {
+void CGauss::StartFire() {
 	float flDamage;
 
 	UTIL_MakeVectors(m_pPlayer->pev->v_angle + m_pPlayer->pev->punchangle);
@@ -256,7 +256,7 @@ void CGauss::StartFire(void) {
 		if (!pev->frags)
 			m_pPlayer->pev->velocity = m_pPlayer->pev->velocity - gpGlobals->v_forward * flDamage * 10;
 
-		if (!IsMultiplayer() && !g_allowGJump)
+		if (!IsMultiplayer() && g_allowGJump)
 			m_pPlayer->pev->velocity.z = flZVel;
 	}
 
@@ -412,7 +412,7 @@ void CGauss::Holster() {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CGauss::WeaponIdle(void) {
+void CGauss::WeaponIdle() {
 	// play aftershock static discharge
 	if (m_flShockTime && m_flShockTime < UTIL_GlobalTimeBase()) {
 		switch (RANDOM_LONG(0, 2)) {

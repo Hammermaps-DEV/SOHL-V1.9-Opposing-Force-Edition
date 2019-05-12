@@ -235,7 +235,7 @@ typedef void						(*pfnEngSrc_pfnSetCrosshair_t )		(HL_HSPRITE hspr, wrect_t rc,
 typedef struct cvar_s *				(*pfnEngSrc_pfnRegisterVariable_t )	( char *szName, char *szValue, int flags );
 typedef float						(*pfnEngSrc_pfnGetCvarFloat_t )		( char *szName );
 typedef char*						(*pfnEngSrc_pfnGetCvarString_t )		( char *szName );
-typedef int							(*pfnEngSrc_pfnAddCommand_t )			( char *cmd_name, void (*pfnEngSrc_function)(void) );
+typedef int							(*pfnEngSrc_pfnAddCommand_t )			( char *cmd_name, void (*pfnEngSrc_function)() );
 typedef int							(*pfnEngSrc_pfnHookUserMsg_t )			( char *szMsgName, pfnUserMsgHook pfn );
 typedef int							(*pfnEngSrc_pfnServerCmd_t )			( char *szCmdString );
 typedef int							(*pfnEngSrc_pfnClientCmd_t )			( char *szCmdString );
@@ -259,7 +259,7 @@ typedef void						(*pfnEngSrc_GetViewAngles_t )			( float * );
 typedef void						(*pfnEngSrc_SetViewAngles_t )			( float * );
 typedef int							(*pfnEngSrc_GetMaxClients_t )			( void );
 typedef void						(*pfnEngSrc_Cvar_SetValue_t )			( char *cvar, float value );
-typedef int       					(*pfnEngSrc_Cmd_Argc_t)					(void);	
+typedef int       					(*pfnEngSrc_Cmd_Argc_t)					();	
 typedef char *						(*pfnEngSrc_Cmd_Argv_t )				( int arg );
 typedef void						(*pfnEngSrc_Con_Printf_t )				( char *fmt, ... );
 typedef void						(*pfnEngSrc_Con_DPrintf_t )			( char *fmt, ... );
@@ -511,7 +511,7 @@ typedef void	(*pfnEngDst_pfnSetCrosshair_t )			(HL_HSPRITE *, struct rect_s *, i
 typedef void	(*pfnEngDst_pfnRegisterVariable_t )		( char **, char **, int * );
 typedef void	(*pfnEngDst_pfnGetCvarFloat_t )			( char ** );
 typedef void	(*pfnEngDst_pfnGetCvarString_t )		( char ** );
-typedef void	(*pfnEngDst_pfnAddCommand_t )			( char **, void (**pfnEngDst_function)(void) );
+typedef void	(*pfnEngDst_pfnAddCommand_t )			( char **, void (**pfnEngDst_function)() );
 typedef void	(*pfnEngDst_pfnHookUserMsg_t )			( char **, pfnUserMsgHook * );
 typedef void	(*pfnEngDst_pfnServerCmd_t )			( char ** );
 typedef void	(*pfnEngDst_pfnClientCmd_t )			( char ** );
@@ -535,7 +535,7 @@ typedef void	(*pfnEngDst_GetViewAngles_t )			( float ** );
 typedef void	(*pfnEngDst_SetViewAngles_t )			( float ** );
 typedef void	(*pfnEngDst_GetMaxClients_t )			( void );
 typedef void	(*pfnEngDst_Cvar_SetValue_t )			( char **, float * );
-typedef void    (*pfnEngDst_Cmd_Argc_t)					(void);	
+typedef void    (*pfnEngDst_Cmd_Argc_t)					();	
 typedef void	(*pfnEngDst_Cmd_Argv_t )				( int * );
 typedef void	(*pfnEngDst_Con_Printf_t )				( char **);
 typedef void	(*pfnEngDst_Con_DPrintf_t )				( char **);
@@ -825,12 +825,12 @@ typedef struct engdata_s
 // Functions exposed by the security module
 // ********************************************************
 typedef void (*PFN_LOADMOD)(char *pchModule);
-typedef void (*PFN_CLOSEMOD)(void);
+typedef void (*PFN_CLOSEMOD)();
 typedef int (*PFN_NCALL)(int ijump, int cnArg, ...);
 
 typedef void (*PFN_GETCLDSTADDRS)(cldll_func_dst_t *pcldstAddrs);
 typedef void (*PFN_GETENGDSTADDRS)(cl_enginefunc_dst_t *pengdstAddrs);
-typedef void (*PFN_MODULELOADED)(void);
+typedef void (*PFN_MODULELOADED)();
 
 typedef void (*PFN_PROCESSOUTGOINGNET)(struct netchan_s *pchan, struct sizebuf_s *psizebuf);
 typedef qboolean (*PFN_PROCESSINCOMINGNET)(struct netchan_s *pchan, struct sizebuf_s *psizebuf);
@@ -838,9 +838,9 @@ typedef qboolean (*PFN_PROCESSINCOMINGNET)(struct netchan_s *pchan, struct sizeb
 typedef void (*PFN_TEXTURELOAD)(char *pszName, int dxWidth, int dyHeight, char *pbData);
 typedef void (*PFN_MODELLOAD)(struct model_s *pmodel, void *pvBuf);
 
-typedef void (*PFN_FRAMEBEGIN)(void);
-typedef void (*PFN_FRAMERENDER1)(void);
-typedef void (*PFN_FRAMERENDER2)(void);
+typedef void (*PFN_FRAMEBEGIN)();
+typedef void (*PFN_FRAMERENDER1)();
+typedef void (*PFN_FRAMERENDER2)();
 
 typedef void (*PFN_SETMODSHELPERS)(modshelpers_t *pmodshelpers);
 typedef void (*PFN_SETMODCHELPERS)(modchelpers_t *pmodchelpers);
@@ -852,10 +852,10 @@ typedef void (*PFN_PLAYERSTATUS)(unsigned char *pbData, int cbData);
 
 typedef void (*PFN_SETENGINEVERSION)(int nVersion);
 
-// typedef class CMachine *(*PFN_PCMACHINE)(void);
-typedef int (*PFN_PCMACHINE)(void);
+// typedef class CMachine *(*PFN_PCMACHINE)();
+typedef int (*PFN_PCMACHINE)();
 typedef void (*PFN_SETIP)(int ijump);
-typedef void (*PFN_EXECUTE)(void);
+typedef void (*PFN_EXECUTE)();
 
 typedef struct modfuncs_s
 {

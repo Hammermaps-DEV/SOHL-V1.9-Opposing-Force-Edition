@@ -72,7 +72,7 @@ IParticleMan *g_pParticleMan = NULL;
 void CL_LoadParticleMan( void );
 void CL_UnloadParticleMan( void );
 
-void InitInput (void);
+void InitInput ();
 void EV_HookEvents( void );
 void IN_Commands( void );
 

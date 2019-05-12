@@ -245,7 +245,7 @@ typedef struct
 class CBasePlayerItem : public CBaseAnimating
 {
 public:
-	virtual void SetObjectCollisionBox(void);
+	virtual void SetObjectCollisionBox();
 	virtual void KeyValue(KeyValueData* pkvd);
 
 	virtual int		Save(CSave &save);
@@ -255,30 +255,30 @@ public:
 
 	virtual int AddToPlayer(CBasePlayer *pPlayer);	// return TRUE if the item you want the item added to the player inventory
 	virtual bool AddDuplicate(CBasePlayerItem *pItem) { return false; }	// return TRUE if you want your duplicate removed from world
-	void EXPORT DestroyItem(void);
+	void EXPORT DestroyItem();
 	void EXPORT DefaultTouch(CBaseEntity *pOther);	// default weapon touch
-	void EXPORT FallThink(void);// when an item is first spawned, this think is run to determine when the object has hit the ground.
-	void EXPORT Materialize(void);// make a weapon visible and tangible
-	void EXPORT AttemptToMaterialize(void);  // the weapon desires to become visible and tangible, if the game rules allow for it
-	CBaseEntity* Respawn(void);// copy a weapon
-	void FallInit(void);
-	void CheckRespawn(void);
+	void EXPORT FallThink();// when an item is first spawned, this think is run to determine when the object has hit the ground.
+	void EXPORT Materialize();// make a weapon visible and tangible
+	void EXPORT AttemptToMaterialize();  // the weapon desires to become visible and tangible, if the game rules allow for it
+	CBaseEntity* Respawn();// copy a weapon
+	void FallInit();
+	void CheckRespawn();
 	virtual int GetItemInfo(ItemInfo *p) { return 0; };	// returns 0 if struct not filled out
-	virtual BOOL CanDeploy(void) { return TRUE; };
+	virtual BOOL CanDeploy() { return TRUE; };
 	virtual BOOL Deploy()								// returns is deploy was successful
 	{
 		return TRUE;
 	};
 
-	virtual BOOL CanHolster(void) { return TRUE; };// can this weapon be put away right now?
+	virtual BOOL CanHolster() { return TRUE; };// can this weapon be put away right now?
 	virtual void Holster();
-	virtual void UpdateItemInfo(void) { return; };
+	virtual void UpdateItemInfo() { return; };
 
-	virtual void ItemPreFrame(void) { return; }		// called each frame by the player PreThink
-	virtual void ItemPostFrame(void) { return; }		// called each frame by the player PostThink
+	virtual void ItemPreFrame() { return; }		// called each frame by the player PreThink
+	virtual void ItemPostFrame() { return; }		// called each frame by the player PostThink
 
-	virtual void Drop(void);
-	virtual void Kill(void);
+	virtual void Drop();
+	virtual void Kill();
 	virtual void AttachToPlayer(CBasePlayer *pPlayer);
 
 	virtual int PrimaryAmmoIndex() { return -1; };
@@ -286,7 +286,7 @@ public:
 
 	virtual int UpdateClientData(CBasePlayer *pPlayer) { return 0; }
 
-	virtual CBasePlayerItem *GetWeaponPtr(void) { return NULL; };
+	virtual CBasePlayerItem *GetWeaponPtr() { return NULL; };
 
 	static ItemInfo ItemInfoArray[MAX_WEAPONS];
 	static AmmoInfo AmmoInfoArray[MAX_AMMO_SLOTS];
@@ -297,9 +297,9 @@ public:
 	CBasePlayerItem *m_pNext;
 	int		m_iId;												// WEAPON_???
 
-	virtual void Spawn(void);
+	virtual void Spawn();
 
-	virtual int iItemSlot(void)
+	virtual int iItemSlot()
 	{
 		ItemInfo II;
 		if (GetItemInfo(&II))
@@ -308,15 +308,15 @@ public:
 			return 0;// return 0 to MAX_ITEMS_SLOTS, used in hud
 	}
 
-	int			iItemPosition(void) { return ItemInfoArray[m_iId].iPosition; }
-	const char	*pszAmmo1(void) { return ItemInfoArray[m_iId].pszAmmo1; }
-	int			iMaxAmmo1(void) { return ItemInfoArray[m_iId].iMaxAmmo1; }
-	const char	*pszAmmo2(void) { return ItemInfoArray[m_iId].pszAmmo2; }
-	int			iMaxAmmo2(void) { return ItemInfoArray[m_iId].iMaxAmmo2; }
-	const char	*pszName(void) { return ItemInfoArray[m_iId].pszName; }
-	int			iMaxClip(void) { return ItemInfoArray[m_iId].iMaxClip; }
-	int			iWeight(void) { return ItemInfoArray[m_iId].iWeight; }
-	int			iFlags(void) { return ItemInfoArray[m_iId].iFlags; }
+	int			iItemPosition() { return ItemInfoArray[m_iId].iPosition; }
+	const char	*pszAmmo1() { return ItemInfoArray[m_iId].pszAmmo1; }
+	int			iMaxAmmo1() { return ItemInfoArray[m_iId].iMaxAmmo1; }
+	const char	*pszAmmo2() { return ItemInfoArray[m_iId].pszAmmo2; }
+	int			iMaxAmmo2() { return ItemInfoArray[m_iId].iMaxAmmo2; }
+	const char	*pszName() { return ItemInfoArray[m_iId].pszName; }
+	int			iMaxClip() { return ItemInfoArray[m_iId].iMaxClip; }
+	int			iWeight() { return ItemInfoArray[m_iId].iWeight; }
+	int			iFlags() { return ItemInfoArray[m_iId].iFlags; }
 };
 
 
@@ -338,38 +338,38 @@ public:
 	virtual bool ExtractAmmo(CBasePlayerWeapon *pWeapon);				// Return TRUE if you can add ammo to yourself when picked up
 	virtual int ExtractClipAmmo(CBasePlayerWeapon *pWeapon);			// Return TRUE if you can add ammo to yourself when picked up
 
-	virtual bool AddWeapon(void) { ExtractAmmo(this); return true; };	// Return TRUE if you want to add yourself to the player
+	virtual bool AddWeapon() { ExtractAmmo(this); return true; };	// Return TRUE if you want to add yourself to the player
 
 	// generic "shared" ammo handlers
 	bool AddPrimaryAmmo(int iCount, char *szName, int iMaxClip, int iMaxCarry);
 	bool AddSecondaryAmmo(int iCount, char *szName, int iMaxCarry);
 
-	virtual void UpdateItemInfo(void) {};	// updates HUD state
+	virtual void UpdateItemInfo() {};	// updates HUD state
 
 	int m_fFireOnEmpty;		// True when the gun is empty and the player is still holding down the
 							// attack key(s)
 	BOOL PlayEmptySound(int iSoundType = 0);//universal empty sound
-	virtual void ResetEmptySound(void);
+	virtual void ResetEmptySound();
 
 	virtual void SendWeaponAnim(const int &iAnim);
 
-	virtual BOOL CanDeploy(void);
-	virtual BOOL IsUseable(void);
+	virtual BOOL CanDeploy();
+	virtual BOOL IsUseable();
 	BOOL DefaultDeploy(char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, float fDrawTime = 0.5);
 	BOOL DefaultDeploy(string_t iViewModel, string_t iWeaponModel, int iAnim, char *szAnimExt, float fDrawTime = 0.5);
 	int DefaultReload(int iClipSize, int iAnim, float fDelay);
 
-	virtual void ItemPostFrame(void);	// called each frame by the player PostThink
+	virtual void ItemPostFrame();	// called each frame by the player PostThink
 	// called by CBasePlayerWeapons ItemPostFrame()
-	virtual void PrimaryAttack(void) { return; }				// do "+ATTACK"
-	virtual void SecondaryAttack(void) { return; }			// do "+ATTACK2"
-	virtual void Reload(void) { return; }						// do "+RELOAD"
-	virtual void WeaponIdle(void) { return; }					// called when no buttons pressed
+	virtual void PrimaryAttack() { return; }				// do "+ATTACK"
+	virtual void SecondaryAttack() { return; }			// do "+ATTACK2"
+	virtual void Reload() { return; }						// do "+RELOAD"
+	virtual void WeaponIdle() { return; }					// called when no buttons pressed
 	virtual int UpdateClientData(CBasePlayer *pPlayer);		// sends hud info to client dll, if things have changed
-	virtual void RetireWeapon(void);
-	virtual BOOL ShouldWeaponIdle(void) { return FALSE; };
-	virtual void Holster(void);
-	virtual void RestoreBody(void);
+	virtual void RetireWeapon();
+	virtual BOOL ShouldWeaponIdle() { return FALSE; };
+	virtual void Holster();
+	virtual void RestoreBody();
 
 	//LRC - used by weaponstrip
 	void DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren, int iShock, int iSpore);
@@ -377,9 +377,9 @@ public:
 	int	PrimaryAmmoIndex();
 	int	SecondaryAmmoIndex();
 
-	void PrintState(void);
+	void PrintState();
 
-	virtual CBasePlayerItem *GetWeaponPtr(void) { return (CBasePlayerItem *)this; };
+	virtual CBasePlayerItem *GetWeaponPtr() { return (CBasePlayerItem *)this; };
 
 	float	m_flNextPrimaryAttack;								// soonest time ItemPostFrame will call PrimaryAttack
 	float	m_flNextSecondaryAttack;							// soonest time ItemPostFrame will call SecondaryAttack
@@ -413,12 +413,12 @@ public:
 class CBasePlayerAmmo : public CBasePlayerItem
 {
 public:
-	virtual void Spawn(void);
+	virtual void Spawn();
 	void EXPORT DefaultTouch(CBaseEntity *pOther); // default weapon touch
 	virtual BOOL AddAmmo(CBaseEntity *pOther) { return TRUE; };
 
-	CBaseEntity* Respawn(void);
-	void EXPORT Materialize(void);
+	CBaseEntity* Respawn();
+	void EXPORT Materialize();
 };
 
 
@@ -452,7 +452,7 @@ extern DLL_GLOBAL 	unsigned short 	m_usDecals;	    //Decal event
 extern DLL_GLOBAL 	unsigned short 	m_usEfx;	    //special effects event (rocket trail, explosion e.t.c.)
 
 
-extern void ClearMultiDamage(void);
+extern void ClearMultiDamage();
 extern void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker);
 extern void AddMultiDamage(entvars_t *pevInflictor, CBaseEntity *pEntity, float flDamage, int bitsDamageType);
 
@@ -505,16 +505,16 @@ extern MULTIDAMAGE gMultiDamage;
 //=========================================================
 class CWeaponBox : public CBaseEntity
 {
-	void Precache(void);
-	void Spawn(void);
+	void Precache();
+	void Spawn();
 	void Touch(CBaseEntity *pOther);
 	void KeyValue(KeyValueData *pkvd);
-	BOOL IsEmpty(void);
+	BOOL IsEmpty();
 	int  GiveAmmo(int iCount, char *szName, int iMax, int *pIndex = NULL);
-	void SetObjectCollisionBox(void);
+	void SetObjectCollisionBox();
 
 public:
-	void EXPORT Kill(void);
+	void EXPORT Kill();
 	int		Save(CSave &save);
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];

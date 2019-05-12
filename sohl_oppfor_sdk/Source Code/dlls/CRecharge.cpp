@@ -27,7 +27,7 @@
 ***/
 /*
 
-===== h_battery.cpp ========================================================
+===== CRecharge.cpp ========================================================
 
   battery-related code
 
@@ -40,31 +40,7 @@
 #include "skill.h"
 #include "gamerules.h"
 #include "player.h"
-
-class CRecharge : public CBaseToggle
-{
-public:
-	void Spawn();
-	void Precache(void);
-	void EXPORT Off(void);
-	void EXPORT Recharge(void);
-	void KeyValue(KeyValueData *pkvd);
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	virtual int	ObjectCaps(void) { return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
-	virtual STATE GetState(void);
-
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	float   m_flNextCharge;
-	int		m_iReactivate; // DeathMatch Delay until reactvated
-	int		m_iJuice;
-	int		m_iOn;			// 0 = off, 1 = startup, 2 = going
-	float   m_flSoundTime;
-	char	*m_szTarget;
-	BOOL	m_bTriggerable;
-};
+#include "CRecharge.h"
 
 TYPEDESCRIPTION CRecharge::m_SaveData[] =
 {
@@ -119,8 +95,10 @@ void CRecharge::Spawn()
 	pev->frame = 0;
 
 	//LRC
-	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
-	else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "z");
+	if (m_iStyle >= 32) 
+		LIGHT_STYLE(m_iStyle, "a");
+	else if (m_iStyle <= -32) 
+		LIGHT_STYLE(-m_iStyle, "z");
 }
 
 void CRecharge::Precache()
@@ -142,14 +120,17 @@ void CRecharge::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useT
 		if (m_bTriggerable)
 		{
 			FireTargets(STRING(pev->target), pActivator, this, USE_TOGGLE, 0);
-			m_bTriggerable = FALSE;
+			m_bTriggerable = false;
 		}
 
 		pev->frame = 1;
 
 		//LRC
-		if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "z");
-		else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "a");
+		if (m_iStyle >= 32) 
+			LIGHT_STYLE(m_iStyle, "z");
+		else if (m_iStyle <= -32) 
+			LIGHT_STYLE(-m_iStyle, "a");
+
 		Off();
 	}
 
@@ -201,25 +182,32 @@ void CRecharge::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useT
 	if (m_hActivator->TakeArmor(1))
 	{
 		m_iJuice--;
+		m_hActivator->pev->armorvalue += 1;
+
+		if (m_hActivator->pev->armorvalue > 100)
+			m_hActivator->pev->armorvalue = 100;
 	}
 
 	// govern the rate of charge
 	m_flNextCharge = UTIL_GlobalTimeBase() + 0.1;
 }
 
-void CRecharge::Recharge(void)
+void CRecharge::Recharge()
 {
 	m_iJuice = gSkillData.suitchargerCapacity;
-	m_bTriggerable = TRUE;
+	m_bTriggerable = true;
 	pev->frame = 0;
 
 	//LRC
-	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
-	else if (m_iStyle <= -32) LIGHT_STYLE(-m_iStyle, "z");
+	if (m_iStyle >= 32) 
+		LIGHT_STYLE(m_iStyle, "a");
+	else if (m_iStyle <= -32) 
+		LIGHT_STYLE(-m_iStyle, "z");
+
 	SetThink(&CRecharge::SUB_DoNothing);
 }
 
-void CRecharge::Off(void)
+void CRecharge::Off()
 {
 	// Stop looping sound.
 	if (m_iOn > 1)
@@ -236,12 +224,13 @@ void CRecharge::Off(void)
 		SetThink(&CRecharge::SUB_DoNothing);
 }
 
-STATE CRecharge::GetState(void)
+STATE CRecharge::GetState()
 {
 	if (m_iOn == 2)
 		return STATE_IN_USE;
-	else if (m_iJuice)
+
+	if (m_iJuice)
 		return STATE_ON;
-	else
-		return STATE_OFF;
+
+	return STATE_OFF;
 }

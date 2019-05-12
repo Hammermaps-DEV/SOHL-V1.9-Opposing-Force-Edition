@@ -34,13 +34,13 @@
 class CBabyVoltigore : public CVoltigore
 {
 public:
-	void	Spawn(void);
-	void	Precache(void);
+	void	Spawn();
+	void	Precache();
 	void	HandleAnimEvent(MonsterEvent_t* pEvent);
 	void	StartTask(Task_t *pTask);
 
-	virtual BOOL	CanThrowEnergyBall(void)	const { return FALSE; }
-	virtual BOOL	CanGib(void)				const { return FALSE; }
+	virtual BOOL	CanThrowEnergyBall()	const { return FALSE; }
+	virtual BOOL	CanGib()				const { return FALSE; }
 };
 
 #endif // MONSTER_ALIEN_BABYVOLTIGORE_H

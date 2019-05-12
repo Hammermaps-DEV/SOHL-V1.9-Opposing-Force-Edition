@@ -38,32 +38,32 @@
 // class definition
 class CBarney : public CTalkMonster {
 public:
-	virtual void Spawn(void);
-	virtual void Precache(void);
-	virtual void SetYawSpeed(void);
-	virtual int  ISoundMask(void);
-	virtual void FirePistol(void);
-	virtual void AlertSound(void);
-	virtual int  Classify(void);
+	virtual void Spawn();
+	virtual void Precache();
+	virtual void SetYawSpeed();
+	virtual int  ISoundMask();
+	virtual void FirePistol();
+	virtual void AlertSound();
+	virtual int  Classify();
 	virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
 	virtual void KeyValue(KeyValueData *pkvd);
 
 	virtual void RunTask(Task_t *pTask);
 	virtual void StartTask(Task_t *pTask);
-	virtual int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	virtual int	ObjectCaps() { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual bool CheckRangeAttack1(float flDot, float flDist);
 
-	virtual void DeclineFollowing(void);
+	virtual void DeclineFollowing();
 
 	virtual Schedule_t *GetScheduleOfType(int Type);
-	virtual Schedule_t *GetSchedule(void);
-	virtual MONSTERSTATE GetIdealState(void);
+	virtual Schedule_t *GetSchedule();
+	virtual MONSTERSTATE GetIdealState();
 
-	virtual void DeathSound(void);
-	virtual void PainSound(void);
+	virtual void DeathSound();
+	virtual void PainSound();
 
-	virtual void TalkInit(void);
+	virtual void TalkInit();
 
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual void Killed(entvars_t *pevAttacker, int iGib);

@@ -214,7 +214,7 @@ typedef struct SDL_AudioCVT
  *  order that they are normally initialized by default.
  */
 /*@{*/
-extern DECLSPEC int SDLCALL SDL_GetNumAudioDrivers(void);
+extern DECLSPEC int SDLCALL SDL_GetNumAudioDrivers();
 extern DECLSPEC const char *SDLCALL SDL_GetAudioDriver(int index);
 /*@}*/
 
@@ -227,14 +227,14 @@ extern DECLSPEC const char *SDLCALL SDL_GetAudioDriver(int index);
  */
 /*@{*/
 extern DECLSPEC int SDLCALL SDL_AudioInit(const char *driver_name);
-extern DECLSPEC void SDLCALL SDL_AudioQuit(void);
+extern DECLSPEC void SDLCALL SDL_AudioQuit();
 /*@}*/
 
 /**
  *  This function returns the name of the current audio driver, or NULL
  *  if no driver has been initialized.
  */
-extern DECLSPEC const char *SDLCALL SDL_GetCurrentAudioDriver(void);
+extern DECLSPEC const char *SDLCALL SDL_GetCurrentAudioDriver();
 
 /**
  *  This function opens the audio device with the desired parameters, and
@@ -361,7 +361,7 @@ typedef enum
     SDL_AUDIO_PLAYING,
     SDL_AUDIO_PAUSED
 } SDL_AudioStatus;
-extern DECLSPEC SDL_AudioStatus SDLCALL SDL_GetAudioStatus(void);
+extern DECLSPEC SDL_AudioStatus SDLCALL SDL_GetAudioStatus();
 
 extern DECLSPEC SDL_AudioStatus SDLCALL
 SDL_GetAudioDeviceStatus(SDL_AudioDeviceID dev);
@@ -478,16 +478,16 @@ extern DECLSPEC void SDLCALL SDL_MixAudioFormat(Uint8 * dst,
  *  function or you will cause deadlock.
  */
 /*@{*/
-extern DECLSPEC void SDLCALL SDL_LockAudio(void);
+extern DECLSPEC void SDLCALL SDL_LockAudio();
 extern DECLSPEC void SDLCALL SDL_LockAudioDevice(SDL_AudioDeviceID dev);
-extern DECLSPEC void SDLCALL SDL_UnlockAudio(void);
+extern DECLSPEC void SDLCALL SDL_UnlockAudio();
 extern DECLSPEC void SDLCALL SDL_UnlockAudioDevice(SDL_AudioDeviceID dev);
 /*@}*//*Audio lock functions*/
 
 /**
  *  This function shuts down audio processing and closes the audio device.
  */
-extern DECLSPEC void SDLCALL SDL_CloseAudio(void);
+extern DECLSPEC void SDLCALL SDL_CloseAudio();
 extern DECLSPEC void SDLCALL SDL_CloseAudioDevice(SDL_AudioDeviceID dev);
 
 /**

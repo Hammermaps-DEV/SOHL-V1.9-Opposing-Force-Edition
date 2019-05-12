@@ -33,10 +33,7 @@
 #include "util.h"
 #include "cbase.h"
 #include "locus.h"
-#include "../engine/customentity.h"
 #include "effects.h"
-#include "decals.h"
-
 
 Vector CalcLocus_Position(CBaseEntity *pEntity, CBaseEntity *pLocus, const char *szText)
 {
@@ -108,10 +105,10 @@ float CalcLocus_Ratio(CBaseEntity *pLocus, const char *szText)	//AJH calls new C
 class CLocusAlias : public CBaseAlias
 {
 public:
-	void	PostSpawn(void);
+	void	PostSpawn();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	CBaseEntity		*FollowAlias(CBaseEntity *pFrom);
-	void	FlushChanges(void);
+	void	FlushChanges();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
@@ -130,7 +127,7 @@ TYPEDESCRIPTION	CLocusAlias::m_SaveData[] =
 LINK_ENTITY_TO_CLASS(locus_alias, CLocusAlias);
 IMPLEMENT_SAVERESTORE(CLocusAlias, CBaseAlias);
 
-void CLocusAlias::PostSpawn(void)
+void CLocusAlias::PostSpawn()
 {
 	m_hValue = UTIL_FindEntityByTargetname(NULL, STRING(pev->netname));
 }
@@ -141,7 +138,7 @@ void CLocusAlias::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	UTIL_AddToAliasList(this);
 }
 
-void CLocusAlias::FlushChanges(void)
+void CLocusAlias::FlushChanges()
 {
 	m_hValue = m_hChangeTo;
 	m_hChangeTo = NULL;
@@ -176,8 +173,8 @@ CBaseEntity *CLocusAlias::FollowAlias(CBaseEntity *pFrom)
 class CLocusBeam : public CPointEntity
 {
 public:
-	void	Spawn(void);
-	void	Precache(void);
+	void	Spawn();
+	void	Precache();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	void KeyValue(KeyValueData *pkvd);
@@ -280,7 +277,7 @@ void CLocusBeam::KeyValue(KeyValueData *pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void CLocusBeam::Precache(void)
+void CLocusBeam::Precache()
 {
 	PRECACHE_MODEL((char*)STRING(m_iszSprite));
 }
@@ -352,7 +349,7 @@ void CLocusBeam::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	}
 }
 
-void CLocusBeam::Spawn(void)
+void CLocusBeam::Spawn()
 {
 	Precache();
 	m_iFlags = 0;
@@ -839,13 +836,13 @@ class CMark : public CPointEntity
 public:
 	Vector	CalcVelocity(CBaseEntity *pLocus) { return pev->movedir; }
 	float	CalcRatio(CBaseEntity *pLocus, int mode) { return pev->frags; }//AJH added 'mode' = ratio to return
-	void	Think(void) { SUB_Remove(); }
+	void	Think() { SUB_Remove(); }
 };
 
 class CLocusVariable : public CPointEntity
 {
 public:
-	void	Spawn(void);
+	void	Spawn();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	Vector	CalcVelocity(CBaseEntity *pLocus) { return pev->movedir; }
 	float	CalcRatio(CBaseEntity *pLocus, int mode) { return pev->frags; }//AJH added 'mode' = ratio to return
@@ -913,7 +910,7 @@ void CLocusVariable::KeyValue(KeyValueData *pkvd)
 		CPointEntity::KeyValue(pkvd);
 }
 
-void CLocusVariable::Spawn(void)
+void CLocusVariable::Spawn()
 {
 	SetMovedir(pev);
 }

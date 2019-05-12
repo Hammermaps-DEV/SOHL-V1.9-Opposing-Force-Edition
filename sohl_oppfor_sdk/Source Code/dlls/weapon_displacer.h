@@ -45,14 +45,14 @@ enum class DISPLACER_HOLSTER { sequence = 6, frames = 16, fps = 15 };
 //Displacer Base-Class | Base | Attack | Animations | Vars | Events
 class CDisplacer : public CBasePlayerWeapon {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
-	BOOL Deploy(void);
-	void Holster(void);
-	void WeaponIdle(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
+	BOOL Deploy();
+	void Holster();
+	void WeaponIdle();
 	void AttachBeamCreate(const Vector &vecEndPos);
 
 	int		m_iFireState;
@@ -60,7 +60,7 @@ public:
 	CBaseEntity* m_hTargetEarth;
 	CBaseEntity* m_hTargetXen;
 
-	BOOL HasAmmo(void);
+	BOOL HasAmmo();
 	void UseAmmo(int count);
 	BOOL CanFireDisplacer() const;
 
@@ -69,16 +69,16 @@ public:
 	enum DISPLACER_EFFECT { EFFECT_NONE = 0, EFFECT_CORE };
 
 private:
-	void ClearSpin(void);
+	void ClearSpin();
 	void SpinUp(int iFireMode);
-	void Spin(void);
+	void Spin();
 	void Fire(BOOL fIsPrimary);
-	void Teleport(void);
-	void Displace(void);
+	void Teleport();
+	void Displace();
 
 	CBeam *m_pBeam;
 
-	BOOL ShouldUpdateEffects(void) const;
+	BOOL ShouldUpdateEffects() const;
 	unsigned short m_usDisplacer;
 };
 #endif

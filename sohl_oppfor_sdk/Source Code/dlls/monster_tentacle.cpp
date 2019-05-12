@@ -173,7 +173,7 @@ typedef enum
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CTentacle::Classify(void)
+int	CTentacle::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -377,7 +377,7 @@ int CTentacle::MyLevel()
 //
 // TentacleThink
 //
-void CTentacle::Cycle(void)
+void CTentacle::Cycle()
 {
 	// ALERT( at_console, "%s %.2f %d %d\n", STRING( pev->targetname ), pev->origin.z, m_MonsterState, m_IdealMonsterState );
 	SetNextThink(0.1);
@@ -658,7 +658,7 @@ void CTentacle::CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 
 
 
-void CTentacle::DieThink(void)
+void CTentacle::DieThink()
 {
 	SetNextThink(0.1);
 
@@ -840,7 +840,7 @@ void CTentacle::HandleAnimEvent(MonsterEvent_t *pEvent)
 // TentacleStart
 //
 // void CTentacle :: Start( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
-void CTentacle::Start(void)
+void CTentacle::Start()
 {
 	SetThink(&CTentacle::Cycle);
 

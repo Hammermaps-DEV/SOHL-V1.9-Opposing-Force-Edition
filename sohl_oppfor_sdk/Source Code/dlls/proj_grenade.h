@@ -33,7 +33,7 @@
 class CGrenade : public CBaseMonster
 {
 public:
-	void Spawn(void);
+	void Spawn();
 
 	typedef enum { SATCHEL_DETONATE = 0, SATCHEL_RELEASE } SATCHELCODE;
 
@@ -44,19 +44,19 @@ public:
 
 	void virtual Explode(Vector vecSrc, Vector vecAim);
 	void virtual Explode(TraceResult *pTrace, int bitsDamageType);
-	void EXPORT Smoke(void);
+	void EXPORT Smoke();
 
 	void EXPORT BounceTouch(CBaseEntity *pOther);
 	void EXPORT SlideTouch(CBaseEntity *pOther);
 	void EXPORT ExplodeTouch(CBaseEntity *pOther);
-	void EXPORT DangerSoundThink(void);
-	void EXPORT PreDetonate(void);
-	void EXPORT Detonate(void);
+	void EXPORT DangerSoundThink();
+	void EXPORT PreDetonate();
+	void EXPORT Detonate();
 	void EXPORT DetonateUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT TumbleThink(void);
+	void EXPORT TumbleThink();
 
-	virtual void BounceSound(void);
-	virtual int	BloodColor(void) { return DONT_BLEED; }
+	virtual void BounceSound();
+	virtual int	BloodColor() { return DONT_BLEED; }
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
 
 	BOOL m_fRegisteredSound;// whether or not this grenade has issued its DANGER sound to the world sound list yet.

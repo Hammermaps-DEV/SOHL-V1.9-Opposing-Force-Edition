@@ -35,7 +35,7 @@
 extern int gmsgGrassParticles;
 
 // create ourselves a garden
-void CGrass::Spawn(void)
+void CGrass::Spawn()
 {
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_NONE;

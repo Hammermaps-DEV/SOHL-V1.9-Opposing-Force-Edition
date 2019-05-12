@@ -44,10 +44,10 @@
 class CSporeAmmoPlant : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT BornThink(void);
-	void EXPORT IdleThink(void);
+	void Spawn();
+	void Precache();
+	void EXPORT BornThink();
+	void EXPORT IdleThink();
 	void EXPORT AmmoTouch(CBaseEntity *pOther);
 	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
@@ -81,7 +81,7 @@ TYPEDESCRIPTION	CSporeAmmoPlant::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE(CSporeAmmoPlant, CBaseEntity);
 
-void CSporeAmmoPlant::Precache(void)
+void CSporeAmmoPlant::Precache()
 {
 	PRECACHE_MODEL("models/spore_ammo.mdl");
 	m_iExplode = PRECACHE_MODEL("sprites/spore_exp_c_01.spr");
@@ -91,7 +91,7 @@ void CSporeAmmoPlant::Precache(void)
 //=========================================================
 // Spawn
 //=========================================================
-void CSporeAmmoPlant::Spawn(void) {
+void CSporeAmmoPlant::Spawn() {
 	Precache();
 	SET_MODEL(ENT(pev), "models/spore_ammo.mdl");
 	UTIL_SetSize(pev, Vector(-20, -20, -8), Vector(20, 20, 16));
@@ -163,7 +163,7 @@ void CSporeAmmoPlant::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector
 //=========================================================
 // Thinking begin
 //=========================================================
-void CSporeAmmoPlant::BornThink(void)
+void CSporeAmmoPlant::BornThink()
 {
 	SetNextThink(0.1);
 	if (m_flTimeSporeIdle > UTIL_GlobalTimeBase())
@@ -179,7 +179,7 @@ void CSporeAmmoPlant::BornThink(void)
 	m_flTimeSporeIdle = UTIL_GlobalTimeBase() + 16;
 }
 
-void CSporeAmmoPlant::IdleThink(void)
+void CSporeAmmoPlant::IdleThink()
 {
 	SetNextThink(0.1);
 	if (m_flTimeSporeIdle > UTIL_GlobalTimeBase())

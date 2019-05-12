@@ -38,7 +38,7 @@ public:
         delete[] m_pData;
     }
   
-    inline char *Memory(void) { return m_pData; }
+    inline char *Memory() { return m_pData; }
 
 	MemoryBlock * next;
 	MemoryBlock * prev;
@@ -161,17 +161,17 @@ protected:
     // ------------ Memory pool manager calls.
     // Find a free block and mark it as "in use".  Return NULL
     //  if no free blocks found.
-    char *AllocateFreeBlock(void);
+    char *AllocateFreeBlock();
 public:
 
     // Return a pointer to usable block of memory.
-    char *newBlock(void);
+    char *newBlock();
 
     // Mark a target memory item as no longer "in use".
     void deleteBlock(MemoryBlock *p);
 
     // Return the remaining capacity of the memory pool as a percent.
-    long PercentUsed(void);
+    long PercentUsed();
 
 	void ProcessAll( void ); //Processes all
 
@@ -179,8 +179,8 @@ public:
 
 	static int ApplyForce( Vector vOrigin, Vector vDirection, float flRadius, float flStrength );
 
-    static CMiniMem *Instance(void);
-    static long MaxBlockSize(void);
+    static CMiniMem *Instance();
+    static long MaxBlockSize();
 
 	bool CheckSize( int iSize );
 

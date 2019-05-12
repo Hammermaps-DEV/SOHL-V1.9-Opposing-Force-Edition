@@ -31,13 +31,13 @@ public:
 	int	Save(CSave &save);
 	int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
-	void Spawn(void);
-	void Precache(void);
-	void EXPORT FollowThink(void);
-	void EXPORT IgniteThink(void);
+	void Spawn();
+	void Precache();
+	void EXPORT FollowThink();
+	void EXPORT IgniteThink();
 	void EXPORT RocketTouch(CBaseEntity *pOther);
-	void Detonate(void);
-	void CreateTrail(void);
+	void Detonate();
+	void CreateTrail();
 	static CRpgRocket *Create(Vector vecOrigin, Vector vecAngles, CBaseEntity *pOwner, CRpg *pLauncher);
 
 	int m_iTrail;

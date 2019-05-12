@@ -49,7 +49,7 @@ void CPropBushs::KeyValue(KeyValueData* pkvd)
 		CGenericModel::KeyValue(pkvd);
 }
 
-void CPropBushs::Spawn(void) {
+void CPropBushs::Spawn() {
 	if (strchr(strdup(STRING(m_isBush)), '0') && !pev->model) {
 		int m_iBush = RANDOM_LONG(2, PROP_BUSH_MODELS);
 		if (m_iBush < 10) {
@@ -85,7 +85,7 @@ void CPropBushs::Spawn(void) {
 	SetUse(NULL);
 }
 
-void CPropBushs::Precache(void) {
+void CPropBushs::Precache() {
 	if (strchr(strdup(STRING(m_isBush)), '0') && !pev->model)
 		PRECACHE_MODEL(RandomMDL);
 	else if (pev->model)

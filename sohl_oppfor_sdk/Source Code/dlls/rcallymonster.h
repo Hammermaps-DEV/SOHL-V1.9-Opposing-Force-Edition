@@ -136,13 +136,13 @@ enum
 class CRCAllyMonster : public CBaseMonster
 {
 public:
-	void			TalkInit(void);
-	CBaseEntity		*FindNearestFriend(BOOL fPlayer);
-	float			TargetDistance(void);
-	void			StopTalking(void) { SentenceStop(); }
+	void			TalkInit();
+	CBaseEntity		*FindNearestFriend(bool fPlayer);
+	float			TargetDistance();
+	void			StopTalking() { SentenceStop(); }
 
 	// Base Monster functions
-	void			Precache(void);
+	void			Precache();
 	int				TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	void			Touch(CBaseEntity *pOther);
 	void			Killed(entvars_t *pevAttacker, int iGib);
@@ -151,27 +151,27 @@ public:
 	virtual void	PlaySentence(const char *pszSentence, float duration, float volume, float attenuation);
 	void			PlayScriptedSentence(const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener);
 	void			KeyValue(KeyValueData *pkvd);
-	int				Classify(void);
-	CBaseEntity		*Kick(void);
-	void			CheckAmmo(void);
-	BOOL			FCanCheckAttacks(void);
+	int				Classify();
+	CBaseEntity		*Kick();
+	void			CheckAmmo();
+	BOOL			FCanCheckAttacks();
 
 	// Attack
 	bool			CheckRangeAttack2(float flDot, float flDist);
-	void			ShootMP5(void);
-	void			ShootShotgun(void);
-	void			ShootShotgunDouble(void);
-	void			ShootDesertEagle(void);
-	void			ShootM249(void);
-	void			ShootGlock(void);
+	void			ShootMP5();
+	void			ShootShotgun();
+	void			ShootShotgunDouble();
+	void			ShootDesertEagle();
+	void			ShootM249();
+	void			ShootGlock();
 	bool			CheckMeleeAttack1(float flDot, float flDist);
 	bool			CheckRangeAttack1(float flDot, float flDist);
 	Vector			GetGunPosition();
 
 	// Base Monster Sounds
-	int				ISoundMask(void);
-	void			DeathSound(void);
-	void			PainSound(void);
+	int				ISoundMask();
+	void			DeathSound();
+	void			PainSound();
 
 	// AI functions
 	void			SetActivity(Activity newActivity);
@@ -179,29 +179,29 @@ public:
 	void			StartTask(Task_t *pTask);
 	void			RunTask(Task_t *pTask);
 	void			HandleAnimEvent(MonsterEvent_t *pEvent);
-	void			PrescheduleThink(void);
+	void			PrescheduleThink();
 
 	// Conversations / communication
-	int				GetVoicePitch(void);
-	void			IdleRespond(void);
-	int				FIdleSpeak(void);
-	int				FIdleStare(void);
-	int				FIdleHello(void);
+	int				GetVoicePitch();
+	void			IdleRespond();
+	int				FIdleSpeak();
+	int				FIdleStare();
+	int				FIdleHello();
 	void			IdleHeadTurn(Vector &vecFriend);
-	int				FOkToSpeak(void);
-	void			TrySmellTalk(void);
+	int				FOkToSpeak();
+	void			TrySmellTalk();
 	CBaseEntity		*EnumFriends(CBaseEntity *pentPrevious, int listNumber, BOOL bTrace);
-	void			AlertFriends(void);
-	void			ShutUpFriends(void);
-	BOOL			IsTalking(void);
+	void			AlertFriends();
+	void			ShutUpFriends();
+	bool			IsTalking();
 	void			Talk(float flDuration);
 
 	// For following
-	BOOL			CanFollow(void);
-	BOOL			IsFollowing(void) { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
-	void			StopFollowing(BOOL clearSchedule);
+	bool			CanFollow();
+	bool			IsFollowing() { return m_hTargetEnt != NULL && m_hTargetEnt->IsPlayer(); }
+	void			StopFollowing(bool clearSchedule);
 	void			StartFollowing(CBaseEntity *pLeader);
-	void			DeclineFollowing(void);
+	void			DeclineFollowing();
 
 	void			GruntHealerCall(CBaseEntity *pGrunt);
 
@@ -255,11 +255,11 @@ public:
 	int	m_iMySlot;// this is the behaviour slot that the monster currently holds in the squad. 
 
 	int  CheckEnemy(CBaseEntity *pEnemy);
-	void StartMonster(void);
-	void VacateSlot(void);
-	void ScheduleChange(void);
+	void StartMonster();
+	void VacateSlot();
+	void ScheduleChange();
 	BOOL OccupySlot(int iDesiredSlot);
-	BOOL NoFriendlyFire(void);
+	BOOL NoFriendlyFire();
 	BOOL NoFriendlyFire(BOOL playerAlly);
 
 	// squad functions still left in base class
@@ -279,23 +279,23 @@ public:
 			return (CRCAllyMonster *)((CBaseEntity *)m_hSquadMember[i]);
 	}
 
-	int	InSquad(void) { return m_hSquadLeader != NULL; }
-	int IsLeader(void) { return m_hSquadLeader == this; }
+	int	InSquad() { return m_hSquadLeader != NULL; }
+	int IsLeader() { return m_hSquadLeader == this; }
 	int SquadRecruit(int searchRadius, int maxMembers);
-	int	SquadCount(void);
+	int	SquadCount();
 	void SquadRemove(CRCAllyMonster *pRemove);
 	BOOL SquadAdd(CRCAllyMonster *pAdd);
 	void SquadMakeEnemy(CBaseEntity *pEnemy);
-	void SquadPasteEnemyInfo(void);
-	void SquadCopyEnemyInfo(void);
-	BOOL SquadEnemySplit(void);
+	void SquadPasteEnemyInfo();
+	void SquadCopyEnemyInfo();
+	BOOL SquadEnemySplit();
 	BOOL SquadMemberInRange(const Vector &vecLocation, float flDist);
 
-	virtual CRCAllyMonster *MyTalkSquadMonsterPointer(void) { return this; }
+	virtual CRCAllyMonster *MyTalkSquadMonsterPointer() { return this; }
 
 	BOOL FValidateCover(const Vector &vecCoverLocation);
 
-	MONSTERSTATE GetIdealState(void);
+	MONSTERSTATE GetIdealState();
 
 	//BrassShell
 	int	m_iBrassShell;

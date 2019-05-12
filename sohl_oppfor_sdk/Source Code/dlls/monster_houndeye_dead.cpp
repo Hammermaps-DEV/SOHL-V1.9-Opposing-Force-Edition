@@ -52,7 +52,7 @@ LINK_ENTITY_TO_CLASS(monster_houndeye_dead, CDeadHoundeye);
 //=========================================================
 // ********** DeadHoundeye SPAWN **********
 //=========================================================
-void CDeadHoundeye::Spawn(void)
+void CDeadHoundeye::Spawn()
 {
 	PRECACHE_MODEL("models/houndeye_dead.mdl");
 	SET_MODEL(ENT(pev), "models/houndeye_dead.mdl");

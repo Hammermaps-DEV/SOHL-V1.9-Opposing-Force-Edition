@@ -34,29 +34,29 @@
 class CMedic : public CRCAllyMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
 	void KeyValue(KeyValueData *pkvd);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	void SetActivity(Activity NewActivity);
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
-	virtual int	ObjectCaps(void) { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	virtual int	ObjectCaps() { return CRCAllyMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	bool CheckRangeAttack1(float flDot, float flDist);
 
 	void HealerFollow(CBaseEntity *pHealTarget);
 
-	BOOL CanHeal(void); // Can we heal the player, or the injured grunt?
-	void Heal(void);// Lets apply the healing.
+	BOOL CanHeal(); // Can we heal the player, or the injured grunt?
+	void Heal();// Lets apply the healing.
 
 	// Override these to set behavior
 	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 
-	void GibMonster(void);
-	void JustSpoke(void);
+	void GibMonster();
+	void JustSpoke();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
@@ -84,8 +84,8 @@ private:
 class CMedicRepel : public CHFGruntRepel
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture;	// Don't save, precache
 };

@@ -34,18 +34,22 @@
 
 class CItemSecurity : public CItem
 {
-	void Spawn(void)
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_security.mdl");
 		CItem::Spawn();
 	}
-	void Precache(void)
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_security.mdl");
 	}
-	BOOL MyTouch(CBasePlayer *pPlayer)
+	bool MyTouch(CBasePlayer *pPlayer) override
 	{
+		// if it's not a player, ignore
+		if (!pPlayer->IsPlayer())
+			return false;
+
 		pPlayer->m_rgItems[ITEM_SECURITY] += 1;		//AJH implement a new system with different cards instead of just MORE cards
 
 		MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);	//AJH msg change inventory
@@ -58,7 +62,7 @@ class CItemSecurity : public CItem
 		else
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-		return TRUE;
+		return true;
 	}
 };
 

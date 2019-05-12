@@ -220,7 +220,7 @@ int COtis::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flD
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else {
 				if (m_iszSpeakAs) {
@@ -325,7 +325,7 @@ void COtis::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, T
 //=========================================================
 // AlertSound
 //=========================================================
-void COtis::AlertSound(void) {
+void COtis::AlertSound() {
 	if (m_hEnemy != NULL) {
 		if (FOkToSpeak()) {
 			if (m_iszSpeakAs) {
@@ -368,7 +368,7 @@ void COtis::HandleAnimEvent(MonsterEvent_t *pEvent) {
 // BarneyFirePistol - shoots one round from the pistol at
 // the enemy otis is facing.
 //=========================================================
-void COtis::FirePistol(void) {
+void COtis::FirePistol() {
 	UTIL_MakeVectors(pev->angles);
 	Vector vecShootOrigin = pev->origin + Vector(0, 0, 55);
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
@@ -473,7 +473,7 @@ void COtis::Killed(entvars_t *pevAttacker, int iGib) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *COtis::GetSchedule(void) {
+Schedule_t *COtis::GetSchedule() {
 	if (HasConditions(bits_COND_HEAR_SOUND)) {
 		CSound *pSound;
 		pSound = PBestSound();
@@ -517,7 +517,7 @@ Schedule_t *COtis::GetSchedule(void) {
 
 		if (m_hEnemy == NULL && IsFollowing()) {
 			if (!m_hTargetEnt->IsAlive()) {
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else {
@@ -543,7 +543,7 @@ Schedule_t *COtis::GetSchedule(void) {
 //=========================================================
 // Decline Following from Monster
 //=========================================================
-void COtis::DeclineFollowing(void)
+void COtis::DeclineFollowing()
 {
 	PlaySentence(m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM); //LRC
 	//PlaySentence("OT_POK", 2, VOL_NORM, ATTN_NORM);

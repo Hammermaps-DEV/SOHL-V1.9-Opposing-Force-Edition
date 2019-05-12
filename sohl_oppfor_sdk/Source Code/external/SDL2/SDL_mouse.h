@@ -67,7 +67,7 @@ typedef enum
 /**
  *  \brief Get the window which currently has mouse focus.
  */
-extern DECLSPEC SDL_Window * SDLCALL SDL_GetMouseFocus(void);
+extern DECLSPEC SDL_Window * SDLCALL SDL_GetMouseFocus();
 
 /**
  *  \brief Retrieve the current state of the mouse.
@@ -123,7 +123,7 @@ extern DECLSPEC int SDLCALL SDL_SetRelativeMouseMode(SDL_bool enabled);
  *  
  *  \sa SDL_SetRelativeMouseMode()
  */
-extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode(void);
+extern DECLSPEC SDL_bool SDLCALL SDL_GetRelativeMouseMode();
 
 /**
  *  \brief Create a cursor, using the specified bitmap data and
@@ -172,7 +172,7 @@ extern DECLSPEC void SDLCALL SDL_SetCursor(SDL_Cursor * cursor);
 /**
  *  \brief Return the active cursor.
  */
-extern DECLSPEC SDL_Cursor *SDLCALL SDL_GetCursor(void);
+extern DECLSPEC SDL_Cursor *SDLCALL SDL_GetCursor();
 
 /**
  *  \brief Frees a cursor created with SDL_CreateCursor().

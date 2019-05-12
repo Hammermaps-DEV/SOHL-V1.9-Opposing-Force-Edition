@@ -41,7 +41,7 @@ public:
 
 	virtual BOOL ClientCommand(CBasePlayer *pPlayer, const char *pcmd);
 	virtual void ClientUserInfoChanged(CBasePlayer *pPlayer, char *infobuffer);
-	virtual BOOL IsTeamplay(void);
+	virtual BOOL IsTeamplay();
 	virtual BOOL FPlayerCanTakeDamage(CBasePlayer *pPlayer, CBaseEntity *pAttacker);
 	virtual int PlayerRelationship(CBaseEntity *pPlayer, CBaseEntity *pTarget);
 	virtual const char *GetTeamID(CBaseEntity *pEntity);
@@ -49,10 +49,10 @@ public:
 	virtual int IPointsForKill(CBasePlayer *pAttacker, CBasePlayer *pKilled);
 	virtual void InitHUD(CBasePlayer *pl);
 	virtual void DeathNotice(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pevInflictor);
-	virtual const char *GetGameDescription(void) { return GAME_NAME_TP; }  // this is the game name that gets seen in the server browser
+	virtual const char *GetGameDescription() { return GAME_NAME_TP; }  // this is the game name that gets seen in the server browser
 	virtual void UpdateGameMode(CBasePlayer *pPlayer);  // the client needs to be informed of the current game mode
 	virtual void PlayerKilled(CBasePlayer *pVictim, entvars_t *pKiller, entvars_t *pInflictor);
-	virtual void Think(void);
+	virtual void Think();
 	virtual int GetTeamIndex(const char *pTeamName);
 	virtual const char *GetIndexedTeamName(int teamIndex);
 	virtual BOOL IsValidTeam(const char *pTeamName);
@@ -61,7 +61,7 @@ public:
 
 private:
 	void RecountTeams(bool bResendInfo = FALSE);
-	const char *TeamWithFewestPlayers(void);
+	const char *TeamWithFewestPlayers();
 
 	BOOL m_DisableDeathMessages;
 	BOOL m_DisableDeathPenalty;

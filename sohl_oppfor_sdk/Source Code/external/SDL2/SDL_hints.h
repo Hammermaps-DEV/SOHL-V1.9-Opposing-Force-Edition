@@ -274,7 +274,7 @@ extern DECLSPEC const char * SDLCALL SDL_GetHint(const char *name);
  *
  *  This function is called during SDL_Quit() to free stored hints.
  */
-extern DECLSPEC void SDLCALL SDL_ClearHints(void);
+extern DECLSPEC void SDLCALL SDL_ClearHints();
 
 
 /* Ends C function definitions when using C++ */

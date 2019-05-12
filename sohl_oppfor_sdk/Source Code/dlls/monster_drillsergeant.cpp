@@ -55,7 +55,7 @@ IMPLEMENT_SAVERESTORE(CDrillsergeant, CTalkMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CDrillsergeant::Classify(void)
+int	CDrillsergeant::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_NONE;
 }
@@ -64,7 +64,7 @@ int	CDrillsergeant::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CDrillsergeant::SetYawSpeed(void)
+void CDrillsergeant::SetYawSpeed()
 {
 	int ys;
 
@@ -96,7 +96,7 @@ void CDrillsergeant::HandleAnimEvent(MonsterEvent_t *pEvent)
 //=========================================================
 // ISoundMask - generic monster can't hear.
 //=========================================================
-int CDrillsergeant::ISoundMask(void)
+int CDrillsergeant::ISoundMask()
 {
 	return	NULL;
 }

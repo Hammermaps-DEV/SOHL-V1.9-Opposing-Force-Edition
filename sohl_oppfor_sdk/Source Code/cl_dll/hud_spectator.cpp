@@ -67,7 +67,7 @@ extern vec3_t v_angles;		// last view angle
 extern vec3_t v_cl_angles;	// last client/mouse angle
 extern vec3_t v_sim_org;	// last sim origin
 
-void SpectatorMode(void)
+void SpectatorMode()
 {
 
 
@@ -84,7 +84,7 @@ void SpectatorMode(void)
 		gHUD.m_Spectator.SetModes( atoi( gEngfuncs.Cmd_Argv(1) ), atoi( gEngfuncs.Cmd_Argv(2) )  );	
 }
 
-void SpectatorSpray(void)
+void SpectatorSpray()
 {
 	vec3_t forward;
 	char string[128];
@@ -104,7 +104,7 @@ void SpectatorSpray(void)
 	}
 
 }
-void SpectatorHelp(void)
+void SpectatorHelp()
 {
 	if ( gViewPort )
 	{

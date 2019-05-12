@@ -137,7 +137,7 @@ const char *CGonome::pDeathSounds[] = {
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CGonome::ISoundMask(void) {
+int CGonome::ISoundMask() {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
 		bits_SOUND_CARCASS |
@@ -150,14 +150,14 @@ int CGonome::ISoundMask(void) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CGonome::Classify(void) {
+int	CGonome::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
 //=========================================================
 // IgnoreConditions 
 //=========================================================
-int CGonome::IgnoreConditions(void) {
+int CGonome::IgnoreConditions() {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
 	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1)) {
@@ -305,35 +305,35 @@ bool CGonome::CheckMeleeAttack2(float flDot, float flDist)
 //=========================================================
 // IdleSound 
 //=========================================================
-void CGonome::IdleSound(void) {
+void CGonome::IdleSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CGonome::PainSound(void) {
+void CGonome::PainSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CGonome::AlertSound(void) {
+void CGonome::AlertSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
-void CGonome::DeathSound(void) {
+void CGonome::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
 //=========================================================
 // AttackSound 
 //=========================================================
-void CGonome::AttackSound(void) {
+void CGonome::AttackSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAttackSounds);
 }
 
@@ -341,7 +341,7 @@ void CGonome::AttackSound(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CGonome::SetYawSpeed(void) {
+void CGonome::SetYawSpeed() {
 	switch (m_Activity) {
 	default: pev->yaw_speed = 120;   break;
 	}
@@ -466,7 +466,7 @@ void CGonome::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // Spawn
 //=========================================================
-void CGonome::Spawn(void) {
+void CGonome::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -498,7 +498,7 @@ void CGonome::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CGonome::Precache(void)
+void CGonome::Precache()
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -537,7 +537,7 @@ void CGonome::Precache(void)
 // RunAI - overridden for gonome because there are things
 // that need to be checked every think.
 //========================================================
-void CGonome::RunAI(void) {
+void CGonome::RunAI() {
 	// first, do base class stuff
 	CBaseMonster::RunAI();
 
@@ -730,7 +730,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CGonome, CBaseMonster);
 //=========================================================
 // GetSchedule 
 //=========================================================
-Schedule_t *CGonome::GetSchedule(void)
+Schedule_t *CGonome::GetSchedule()
 {
 	switch (m_MonsterState)
 	{
@@ -899,7 +899,7 @@ void CGonome::StartTask(Task_t *pTask)
 // the feature that makes it lose interest in headcrabs for 
 // a while if something injures it. 
 //=========================================================
-MONSTERSTATE CGonome::GetIdealState(void) {
+MONSTERSTATE CGonome::GetIdealState() {
 	int	iConditions;
 	iConditions = IScheduleFlags();
 	m_IdealMonsterState = CBaseMonster::GetIdealState();

@@ -48,7 +48,7 @@ LINK_ENTITY_TO_CLASS(weapon_9mmhandgun, CGlock);
 //=========================================================
 // Spawn Glock 17
 //=========================================================
-void CGlock::Spawn(void) {
+void CGlock::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_9mmhandgun.mdl");
@@ -60,7 +60,7 @@ void CGlock::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CGlock::Precache(void) {
+void CGlock::Precache() {
 	PRECACHE_MODEL("models/v_9mmhandgun.mdl");
 	PRECACHE_MODEL("models/w_9mmhandgun.mdl");
 	PRECACHE_MODEL("models/p_9mmhandgun.mdl");
@@ -95,14 +95,14 @@ int CGlock::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CGlock::PrimaryAttack(void) {
+void CGlock::PrimaryAttack() {
 	GlockFire(0.01, 0.35, true);
 }
 
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CGlock::SecondaryAttack(void) {
+void CGlock::SecondaryAttack() {
 	GlockFire(0.1, 0.25, false);
 }
 
@@ -154,7 +154,7 @@ void CGlock::GlockFire(float flSpread, float flCycleTime, bool fUseAutoAim) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CGlock::Deploy(void) {
+BOOL CGlock::Deploy() {
 	return DefaultDeploy("models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", (int)GLOCK_DRAW::sequence,
 		"onehanded", CalculateWeaponTime((int)GLOCK_DRAW::frames, (int)GLOCK_DRAW::fps));
 }
@@ -162,7 +162,7 @@ BOOL CGlock::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CGlock::Holster(void) {
+void CGlock::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)GLOCK_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -172,7 +172,7 @@ void CGlock::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CGlock::Reload(void) {
+void CGlock::Reload() {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
 		return;
 	}
@@ -192,7 +192,7 @@ void CGlock::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CGlock::WeaponIdle(void) {
+void CGlock::WeaponIdle() {
 	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {

@@ -63,7 +63,7 @@ void CMP5::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CMP5::Precache(void) {
+void CMP5::Precache() {
 	PRECACHE_MODEL("models/v_9mmAR.mdl");
 	PRECACHE_MODEL("models/w_9mmAR.mdl");
 	PRECACHE_MODEL("models/p_9mmAR.mdl");
@@ -146,7 +146,7 @@ void CMP5::PrimaryAttack() {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CMP5::SecondaryAttack(void) {
+void CMP5::SecondaryAttack() {
 	// don't fire underwater
 	if (m_pPlayer->m_rgAmmo[m_iSecondaryAmmoType] > 0 && m_pPlayer->pev->waterlevel != 3) {
 		m_pPlayer->m_iWeaponVolume = NORMAL_GUN_VOLUME;
@@ -196,7 +196,7 @@ BOOL CMP5::Deploy() {
 //=========================================================
 // Holster
 //=========================================================
-void CMP5::Holster(void) {
+void CMP5::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)MP5_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -206,7 +206,7 @@ void CMP5::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CMP5::Reload(void) {
+void CMP5::Reload() {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
 		return;
 	}
@@ -220,7 +220,7 @@ void CMP5::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CMP5::WeaponIdle(void) {
+void CMP5::WeaponIdle() {
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
 		m_flTimeWeaponIdleLock > UTIL_GlobalTimeBase()) {
 		return;

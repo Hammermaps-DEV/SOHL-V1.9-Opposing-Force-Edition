@@ -50,18 +50,18 @@ enum class HANDGRENADE_DRAW { sequence = 7, frames = 16, fps = 30 };
 class CHandGrenade : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
+	void PrimaryAttack();
 
 	//Animations
-	BOOL Deploy(void);
-	BOOL CanHolster(void) { return (m_flStartThrow == 0); }
+	BOOL Deploy();
+	BOOL CanHolster() { return (m_flStartThrow == 0); }
 	void Holster();
-	void WeaponIdle(void);
+	void WeaponIdle();
 };
 #endif
 

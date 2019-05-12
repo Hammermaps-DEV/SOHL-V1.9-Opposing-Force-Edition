@@ -180,7 +180,7 @@ void CHeadCrab::Precache() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CHeadCrab::Classify(void) {
+int	CHeadCrab::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_PREY;
 }
 
@@ -188,7 +188,7 @@ int	CHeadCrab::Classify(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHeadCrab::SetYawSpeed(void) {
+void CHeadCrab::SetYawSpeed() {
 	switch (m_Activity) {
 	case ACT_RUN:
 	case ACT_WALK:
@@ -306,7 +306,7 @@ void CHeadCrab::LeapTouch(CBaseEntity *pOther) {
 //=========================================================
 // PrescheduleThink
 //=========================================================
-void CHeadCrab::PrescheduleThink(void) {
+void CHeadCrab::PrescheduleThink() {
 	// make the crab coo a little bit in combat state
 	if (m_MonsterState == MONSTERSTATE_COMBAT && RANDOM_FLOAT(0, 5) < 0.1) {
 		IdleSound();
@@ -384,28 +384,28 @@ int CHeadCrab::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float
 //=========================================================
 // IdleSound
 //=========================================================
-void CHeadCrab::IdleSound(void) {
+void CHeadCrab::IdleSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
-void CHeadCrab::AlertSound(void) {
+void CHeadCrab::AlertSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAlertSounds);
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
-void CHeadCrab::PainSound(void) {
+void CHeadCrab::PainSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
-void CHeadCrab::DeathSound(void) {
+void CHeadCrab::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 

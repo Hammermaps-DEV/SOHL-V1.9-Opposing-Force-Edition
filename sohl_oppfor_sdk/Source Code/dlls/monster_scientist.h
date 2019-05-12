@@ -53,38 +53,38 @@ enum
 class CScientist : public CTalkMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	virtual void Spawn();
+	virtual void Precache();
 
-	void SetYawSpeed(void);
-	int  Classify(void);
+	void SetYawSpeed();
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
-	int	ObjectCaps(void) { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
+	int	ObjectCaps() { return CTalkMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual int FriendNumber(int arrayNumber);
 	void SetActivity(Activity newActivity);
-	Activity GetStoppedActivity(void);
-	int ISoundMask(void);
-	void DeclineFollowing(void);
+	Activity GetStoppedActivity();
+	int ISoundMask();
+	void DeclineFollowing();
 
-	float	CoverRadius(void) { return 1200; }		// Need more room for cover because scientists want to get far away!
+	float	CoverRadius() { return 1200; }		// Need more room for cover because scientists want to get far away!
 	BOOL	DisregardEnemy(CBaseEntity *pEnemy) { return !pEnemy->IsAlive() || (UTIL_GlobalTimeBase() - m_fearTime) > 15; }
 
-	BOOL	CanHeal(void);
-	void	Heal(void);
-	void	Scream(void);
+	virtual bool CanHeal();
+	void	Heal();
+	void	Scream();
 
 	// Override these to set behavior
 	Schedule_t *GetScheduleOfType(int Type);
-	Schedule_t *GetSchedule(void);
-	MONSTERSTATE GetIdealState(void);
+	Schedule_t *GetSchedule();
+	MONSTERSTATE GetIdealState();
 
-	void DeathSound(void);
-	void PainSound(void);
+	void DeathSound() override;
+	void PainSound() override;
 
-	void TalkInit(void);
+	void TalkInit();
 
 	void			Killed(entvars_t *pevAttacker, int iGib);
 
@@ -103,8 +103,8 @@ private:
 class CDeadScientist : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_HUMAN_PASSIVE; }
+	virtual void Spawn();
+	int	Classify() { return	CLASS_HUMAN_PASSIVE; }
 
 	void KeyValue(KeyValueData *pkvd);
 	int	m_iPose;// which sequence to display
@@ -114,11 +114,11 @@ public:
 class CSittingScientist : public CScientist // kdb: changed from public CBaseMonster so he can speak
 {
 public:
-	void Spawn(void);
-	void  Precache(void);
+	void Spawn();
+	void  Precache();
 
-	void EXPORT SittingThink(void);
-	int	Classify(void);
+	void EXPORT SittingThink();
+	int	Classify();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
@@ -126,7 +126,7 @@ public:
 	virtual void SetAnswerQuestion(CTalkMonster *pSpeaker);
 	int FriendNumber(int arrayNumber);
 
-	int FIdleSpeak(void);
+	int FIdleSpeak();
 	int		m_baseSequence;
 	int		m_headTurn;
 	float	m_flResponseDelay;

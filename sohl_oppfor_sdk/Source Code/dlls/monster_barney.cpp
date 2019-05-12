@@ -167,7 +167,7 @@ void CBarney::Spawn() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBarney::Classify(void) {
+int	CBarney::Classify() {
 	return m_iClass ? m_iClass : CLASS_PLAYER_ALLY;
 }
 
@@ -244,7 +244,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 				}
 
 				Remember(bits_MEMORY_PROVOKED);
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 			else {
 				if (m_iszSpeakAs) {
@@ -349,7 +349,7 @@ void CBarney::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 //=========================================================
 // PainSound
 //=========================================================
-void CBarney::PainSound(void) {
+void CBarney::PainSound() {
 	if (UTIL_GlobalTimeBase() < m_painTime)
 		return;
 
@@ -360,14 +360,14 @@ void CBarney::PainSound(void) {
 //=========================================================
 // DeathSound 
 //=========================================================
-void CBarney::DeathSound(void) {
+void CBarney::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CBarney::AlertSound(void) {
+void CBarney::AlertSound() {
 	if (m_hEnemy != NULL) {
 		if (FOkToSpeak()) {
 			if (m_iszSpeakAs) {
@@ -436,7 +436,7 @@ bool CBarney::CheckRangeAttack1(float flDot, float flDist) {
 //=========================================================
 // Barney shoots one round from the pistol at 9mm
 //=========================================================
-void CBarney::FirePistol(void) {
+void CBarney::FirePistol() {
 	UTIL_MakeVectors(pev->angles);
 	Vector vecShootOrigin = pev->origin + Vector(0, 0, 55);
 	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
@@ -593,7 +593,7 @@ void CBarney::RunTask(Task_t *pTask) {
 // ISoundMask - returns a bit mask indicating which types
 // of sounds this monster regards. 
 //=========================================================
-int CBarney::ISoundMask(void) {
+int CBarney::ISoundMask() {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
 		bits_SOUND_CARCASS |
@@ -607,7 +607,7 @@ int CBarney::ISoundMask(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CBarney::SetYawSpeed(void) {
+void CBarney::SetYawSpeed() {
 	int ys = 0;
 	switch (m_Activity) {
 	case ACT_IDLE:
@@ -726,7 +726,7 @@ Schedule_t* CBarney::GetScheduleOfType(int Type) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CBarney::GetSchedule(void) {
+Schedule_t *CBarney::GetSchedule() {
 	if (HasConditions(bits_COND_HEAR_SOUND)) {
 		CSound *pSound;
 		pSound = PBestSound();
@@ -770,7 +770,7 @@ Schedule_t *CBarney::GetSchedule(void) {
 
 		if (m_hEnemy == NULL && IsFollowing()) {
 			if (!m_hTargetEnt->IsAlive()) {
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else {
@@ -796,13 +796,13 @@ Schedule_t *CBarney::GetSchedule(void) {
 //=========================================================
 // Get IdealState for Monster
 //=========================================================
-MONSTERSTATE CBarney::GetIdealState(void) {
+MONSTERSTATE CBarney::GetIdealState() {
 	return CTalkMonster::GetIdealState();
 }
 
 //=========================================================
 // Decline Following from Monster
 //=========================================================
-void CBarney::DeclineFollowing(void) {
+void CBarney::DeclineFollowing() {
 	PlaySentence(m_szGrp[TLK_DECLINE], 2, VOL_NORM, ATTN_NORM); //LRC
 }

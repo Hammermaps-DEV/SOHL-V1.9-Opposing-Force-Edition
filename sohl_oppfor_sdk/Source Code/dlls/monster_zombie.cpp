@@ -144,7 +144,7 @@ void CZombie::Spawn() {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CZombie::Classify(void) {
+int	CZombie::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
 
@@ -275,35 +275,35 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 //=========================================================
 // IdleSound
 //=========================================================
-void CZombie::IdleSound(void) {
+void CZombie::IdleSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // AlertSound 
 //=========================================================
-void CZombie::AlertSound(void) {
+void CZombie::AlertSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAlertSounds);
 }
 
 //=========================================================
 // PainSound 
 //=========================================================
-void CZombie::PainSound(void) {
+void CZombie::PainSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // DeathSound 
 //=========================================================
-void CZombie::DeathSound(void) {
+void CZombie::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
 //=========================================================
 // AttackSound 
 //=========================================================
-void CZombie::AttackSound(void) {
+void CZombie::AttackSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAttackSounds);
 }
 
@@ -379,7 +379,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // IgnoreConditions
 //=========================================================
-int CZombie::IgnoreConditions(void) {
+int CZombie::IgnoreConditions() {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 	if ((m_Activity == ACT_MELEE_ATTACK1)) {
 		if (m_flNextFlinch >= UTIL_GlobalTimeBase())

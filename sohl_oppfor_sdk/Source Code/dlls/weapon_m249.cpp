@@ -49,7 +49,7 @@ LINK_ENTITY_TO_CLASS(weapon_saw, CM249);
 //=========================================================
 // Spawn M249 Squad Automatic Weapon
 //=========================================================
-void CM249::Spawn(void) {
+void CM249::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_saw.mdl");
@@ -61,7 +61,7 @@ void CM249::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CM249::Precache(void) {
+void CM249::Precache() {
 	PRECACHE_MODEL("models/v_saw.mdl");
 	PRECACHE_MODEL("models/w_saw.mdl");
 	PRECACHE_MODEL("models/p_saw.mdl");
@@ -100,7 +100,7 @@ int CM249::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CM249::PrimaryAttack(void) {
+void CM249::PrimaryAttack() {
 	if (m_iReloadStep)
 		return;
 
@@ -150,7 +150,7 @@ void CM249::PrimaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CM249::Deploy(void) {
+BOOL CM249::Deploy() {
 	return DefaultDeploy("models/v_saw.mdl", "models/p_saw.mdl", (int)SAW_DRAW::sequence,
 		"mp5", CalculateWeaponTime((int)SAW_DRAW::frames, (int)SAW_DRAW::fps));
 }
@@ -158,7 +158,7 @@ BOOL CM249::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CM249::Holster(void) {
+void CM249::Holster() {
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)SAW_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
@@ -168,7 +168,7 @@ void CM249::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CM249::Reload(void) {
+void CM249::Reload() {
 	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0 || m_iClip == M249_MAX_CLIP) && !gInfinitelyAmmo) {
 		return;
 	}
@@ -188,7 +188,7 @@ void CM249::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CM249::WeaponIdle(void) {
+void CM249::WeaponIdle() {
 	if (m_iReloadStep) {
 		m_iReloadStep = false;
 		SendWeaponAnim((int)SAW_RELOAD_END::sequence);
@@ -233,7 +233,7 @@ void CM249::WeaponIdle(void) {
 //=========================================================
 // UpdateClip
 //=========================================================
-void CM249::UpdateClip(void) {
+void CM249::UpdateClip() {
 	if (m_iClip <= 8)
 		pev->body = 1;
 	if (m_iClip <= 7)

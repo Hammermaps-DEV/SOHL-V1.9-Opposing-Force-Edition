@@ -122,7 +122,7 @@ const char *CDiablo::pStepSounds[] = {
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CDiablo::ISoundMask(void) {
+int CDiablo::ISoundMask() {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
 		bits_SOUND_CARCASS |
@@ -135,7 +135,7 @@ int CDiablo::ISoundMask(void) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CDiablo::Classify(void) {
+int	CDiablo::Classify() {
 	return m_iClass ? m_iClass : CLASS_ALIEN_PREDATOR;
 }
 
@@ -143,7 +143,7 @@ int	CDiablo::Classify(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CDiablo::SetYawSpeed(void) {
+void CDiablo::SetYawSpeed() {
 	switch (m_Activity) {
 	default: pev->yaw_speed = 140; break;
 	}
@@ -298,28 +298,28 @@ bool CDiablo::CheckMeleeAttack2(float flDot, float flDist) {
 //=========================================================
 // PainSound
 //=========================================================
-void CDiablo::PainSound(void) {
+void CDiablo::PainSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
 // AlertSound
 //=========================================================
-void CDiablo::AlertSound(void) {
+void CDiablo::AlertSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAlertSounds);
 }
 
 //=========================================================
 // IdleSound
 //=========================================================
-void CDiablo::IdleSound(void) {
+void CDiablo::IdleSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pIdleSounds);
 }
 
 //=========================================================
 // AttackSound 
 //=========================================================
-void CDiablo::AttackSound(void) {
+void CDiablo::AttackSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pAttackSounds);
 }
 
@@ -411,7 +411,7 @@ void CDiablo::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // Spawn
 //=========================================================
-void CDiablo::Spawn(void) {
+void CDiablo::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -453,7 +453,7 @@ void CDiablo::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CDiablo::Precache(void) {
+void CDiablo::Precache() {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else
@@ -539,7 +539,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CDiablo, CBaseMonster);
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-int CDiablo::IgnoreConditions(void) {
+int CDiablo::IgnoreConditions() {
 	int iIgnore = CBaseMonster::IgnoreConditions();
 
 	if ((m_Activity == ACT_MELEE_ATTACK1) || (m_Activity == ACT_MELEE_ATTACK1)) {
@@ -559,7 +559,7 @@ int CDiablo::IgnoreConditions(void) {
 //=========================================================
 // GetSchedule
 //=========================================================
-Schedule_t *CDiablo::GetSchedule(void) {
+Schedule_t *CDiablo::GetSchedule() {
 	switch (m_MonsterState) {
 	case MONSTERSTATE_COMBAT: {
 		if (HasConditions(bits_COND_CAN_MELEE_ATTACK1)) {

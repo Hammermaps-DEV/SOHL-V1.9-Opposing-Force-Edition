@@ -34,7 +34,7 @@
 class CGrass : public CBaseEntity {
 public:
 	bool bIsOn;
-	void Spawn(void);
+	void Spawn();
 	void KeyValue(KeyValueData* pKeyValueData);
 	void MakeAware(CBaseEntity* pEnt);
 	void EXPORT	GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);

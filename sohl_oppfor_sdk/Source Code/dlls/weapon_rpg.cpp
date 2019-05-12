@@ -72,7 +72,7 @@ void CRpg::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CRpg::Precache(void) {
+void CRpg::Precache() {
 	PRECACHE_MODEL("models/w_rpg.mdl");
 	PRECACHE_MODEL("models/v_rpg.mdl");
 	PRECACHE_MODEL("models/p_rpg.mdl");
@@ -182,7 +182,7 @@ void CRpg::Holster() {
 //=========================================================
 // Reload
 //=========================================================
-void CRpg::Reload(void) {
+void CRpg::Reload() {
 	if ((m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) ||
 		(m_iClip == 1) ||
 		(m_iChargeLevel && m_iOverloadLevel)) {
@@ -207,7 +207,7 @@ void CRpg::Reload(void) {
 //=========================================================
 // UpdateSpot
 //=========================================================
-void CRpg::UpdateSpot(void) {
+void CRpg::UpdateSpot() {
 	if (m_iOverloadLevel) {
 		if (!m_pSpot) {
 			m_pSpot = CLaserSpot::CreateSpot();
@@ -245,7 +245,7 @@ void CRpg::UpdateSpot(void) {
 //=========================================================
 // UpdateScreen
 //=========================================================
-void CRpg::UpdateScreen(void) {
+void CRpg::UpdateScreen() {
 	if (m_flTimeUpdate > UTIL_GlobalTimeBase()) return;
 
 	if (m_pSpot) {
@@ -275,7 +275,7 @@ void CRpg::UpdateScreen(void) {
 //=========================================================
 // ShutdownScreen
 //=========================================================
-void CRpg::ShutdownScreen(void) {
+void CRpg::ShutdownScreen() {
 	pev->skin = 0;
 	if (m_pSpot) {
 		m_pSpot->Killed(NULL, GIB_NEVER);
@@ -293,7 +293,7 @@ void CRpg::ShutdownScreen(void) {
 //=========================================================
 // WeaponIdle
 //=========================================================
-void CRpg::WeaponIdle(void) {
+void CRpg::WeaponIdle() {
 	UpdateSpot(); //m_iSkin;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) return;
 

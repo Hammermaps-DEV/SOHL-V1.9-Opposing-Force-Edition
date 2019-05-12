@@ -39,21 +39,21 @@
 class CShockRoach : public CHeadCrab {
 public:
 	// void
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void EXPORT LeapTouch(CBaseEntity *pOther);
-	void PainSound(void);
-	void DeathSound(void);
-	void IdleSound(void);
-	void AlertSound(void);
-	void AttackSound(void);
-	void PrescheduleThink(void);
+	void PainSound();
+	void DeathSound();
+	void IdleSound();
+	void AlertSound();
+	void AttackSound();
+	void PrescheduleThink();
 	void StartTask(Task_t* pTask);
 	void KeyValue(KeyValueData *pkvd);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
 	// int void
-	int Classify(void);
+	int Classify();
 
 	// virtual int
 	virtual int	Save(CSave &save);

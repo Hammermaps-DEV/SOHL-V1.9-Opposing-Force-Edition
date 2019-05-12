@@ -42,7 +42,7 @@ LINK_ENTITY_TO_CLASS(monster_zombie_barney_dead, CDeadZombieBarney);
 //=========================================================
 // Spawn DEAD-Barney Zombie
 //=========================================================
-void CDeadZombieBarney::Spawn(void) {
+void CDeadZombieBarney::Spawn() {
 	Precache();
 
 	if (pev->model)

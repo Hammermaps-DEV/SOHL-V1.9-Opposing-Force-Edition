@@ -113,20 +113,20 @@ class CLight : public CPointEntity
 {
 public:
 	virtual void	KeyValue(KeyValueData* pkvd);
-	virtual void	Spawn(void);
+	virtual void	Spawn();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	Think(void);
+	void	Think();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
-	virtual STATE	GetState(void) { return m_iState; }; //LRC
+	virtual STATE	GetState() { return m_iState; }; //LRC
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	int		GetStyle(void) { return m_iszCurrentStyle; }; //LRC
+	int		GetStyle() { return m_iszCurrentStyle; }; //LRC
 	void	SetStyle(int iszPattern); //LRC
 
-	void	SetCorrectStyle(void); //LRC
+	void	SetCorrectStyle(); //LRC
 
 private:
 	STATE	m_iState; // current state
@@ -223,7 +223,7 @@ void CLight::SetStyle(int iszPattern)
 }
 
 // regardless of what's been set by trigger_lightstyle ents, set the style I think I need
-void CLight::SetCorrectStyle(void)
+void CLight::SetCorrectStyle()
 {
 	if (m_iStyle >= 32)
 	{
@@ -263,7 +263,7 @@ void CLight::SetCorrectStyle(void)
 	}
 }
 
-void CLight::Think(void)
+void CLight::Think()
 {
 	switch (GetState())
 	{
@@ -286,7 +286,7 @@ Default style is 0
 If targeted, it will toggle between on or off.
 */
 
-void CLight::Spawn(void)
+void CLight::Spawn()
 {
 	if (FStringNull(pev->targetname))
 	{       // inert light
@@ -346,7 +346,7 @@ class CEnvLight : public CLight
 {
 public:
 	void	KeyValue(KeyValueData* pkvd);
-	void	Spawn(void);
+	void	Spawn();
 };
 
 LINK_ENTITY_TO_CLASS(light_environment, CEnvLight);
@@ -389,7 +389,7 @@ void CEnvLight::KeyValue(KeyValueData* pkvd)
 }
 
 
-void CEnvLight::Spawn(void)
+void CEnvLight::Spawn()
 {
 	char szVector[64];
 	UTIL_MakeAimVectors(pev->angles);
@@ -414,17 +414,17 @@ void CEnvLight::Spawn(void)
 class CLightDynamic : public CBaseEntity
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	void SetEffects(void);
-	STATE GetState(void);
+	int ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	void SetEffects();
+	STATE GetState();
 };
 
 LINK_ENTITY_TO_CLASS(light_glow, CLightDynamic);
 
-void CLightDynamic::Spawn(void)
+void CLightDynamic::Spawn()
 {
 	Precache();
 
@@ -439,7 +439,7 @@ void CLightDynamic::Spawn(void)
 	}
 }
 
-void CLightDynamic::Precache(void)
+void CLightDynamic::Precache()
 {
 	PRECACHE_MODEL("sprites/null.spr");
 }
@@ -456,7 +456,7 @@ void CLightDynamic::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	}
 }
 
-void CLightDynamic::SetEffects(void)
+void CLightDynamic::SetEffects()
 {
 	if (pev->health)
 	{
@@ -474,7 +474,7 @@ void CLightDynamic::SetEffects(void)
 	}
 }
 
-STATE CLightDynamic::GetState(void)
+STATE CLightDynamic::GetState()
 {
 	if (pev->health)
 		return STATE_ON;
@@ -488,8 +488,8 @@ STATE CLightDynamic::GetState(void)
 class CLightFader : public CPointEntity
 {
 public:
-	void EXPORT FadeThink(void);
-	void EXPORT WaitThink(void);
+	void EXPORT FadeThink();
+	void EXPORT WaitThink();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 
@@ -521,7 +521,7 @@ TYPEDESCRIPTION	CLightFader::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CLightFader, CPointEntity);
 
-void CLightFader::FadeThink(void)
+void CLightFader::FadeThink()
 {
 	if (m_fEndTime > UTIL_GlobalTimeBase())
 	{
@@ -551,7 +551,7 @@ void CLightFader::FadeThink(void)
 }
 
 // we've finished. revert the light and kill the fader.
-void CLightFader::WaitThink(void)
+void CLightFader::WaitThink()
 {
 	m_pLight->SetCorrectStyle();
 	SetThink(&CLightFader::SUB_Remove);

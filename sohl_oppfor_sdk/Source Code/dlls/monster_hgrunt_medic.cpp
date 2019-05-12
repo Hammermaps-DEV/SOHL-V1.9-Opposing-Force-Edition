@@ -176,7 +176,7 @@ void CMedic::KeyValue(KeyValueData *pkvd) {
 //=========================================================
 // JustSpoke
 //=========================================================
-void CMedic::JustSpoke(void) {
+void CMedic::JustSpoke() {
 	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = MEDIC_SENT_NONE;
 }
@@ -1080,7 +1080,7 @@ void CMedic::RunTask(Task_t *pTask) {
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CMedic::GibMonster(void) {
+void CMedic::GibMonster() {
 	if (GetBodygroup(3) != 2 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
@@ -1107,7 +1107,7 @@ void CMedic::GibMonster(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CMedic::SetYawSpeed(void) {
+void CMedic::SetYawSpeed() {
 	switch (m_Activity) {
 	case ACT_WALK:
 	case ACT_TURN_LEFT:
@@ -1250,7 +1250,7 @@ void CMedic::HandleAnimEvent(MonsterEvent_t *pEvent) {
 //=========================================================
 // Spawn
 //=========================================================
-void CMedic::Spawn(void) {
+void CMedic::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -1338,7 +1338,7 @@ void CMedic::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CMedic::Precache(void) {
+void CMedic::Precache() {
 	CRCAllyMonster::Precache();
 
 	if (pev->model)
@@ -1617,7 +1617,7 @@ void CMedic::SetActivity(Activity NewActivity)
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CMedic::GetSchedule(void) {
+Schedule_t *CMedic::GetSchedule() {
 	// clear old sentence
 	m_iSentence = -1;
 
@@ -1814,7 +1814,7 @@ Schedule_t *CMedic::GetSchedule(void) {
 
 			if (!m_hTargetEnt->IsAlive()) {
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else {
@@ -1841,7 +1841,7 @@ Schedule_t *CMedic::GetSchedule(void) {
 //=========================================================
 // CanHeal
 //=========================================================
-BOOL CMedic::CanHeal(void) {
+BOOL CMedic::CanHeal() {
 	ALERT(at_console, "Heal amount is %f\n", m_flHealAnount);
 	if (m_flHealAnount <= 0) {
 		if (!m_fDepleteLine) {
@@ -1861,7 +1861,7 @@ BOOL CMedic::CanHeal(void) {
 //=========================================================
 // Heal
 //=========================================================
-void CMedic::Heal(void) {
+void CMedic::Heal() {
 	if (!CanHeal())
 		return;
 
@@ -1879,7 +1879,7 @@ void CMedic::Heal(void) {
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_medic_ally_repel, CMedicRepel);
 
-void CMedicRepel::Spawn(void)
+void CMedicRepel::Spawn()
 {
 	Precache();
 	pev->solid = SOLID_NOT;
@@ -1887,7 +1887,7 @@ void CMedicRepel::Spawn(void)
 	SetUse(&CMedicRepel::RepelUse);
 }
 
-void CMedicRepel::Precache(void)
+void CMedicRepel::Precache()
 {
 	UTIL_PrecacheOther("monster_human_medic_ally");
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");

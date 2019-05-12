@@ -39,25 +39,25 @@ extern bool gEvilImpulse101;
 
 class CItemSuit : public CItem
 {
-	void Spawn(void)
+	void Spawn() override
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_suit.mdl");
 		CItem::Spawn();
 	}
 
-	void Precache(void)
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_suit.mdl");
 	}
 
-	BOOL MyTouch(CBasePlayer *pPlayer)
+	bool MyTouch(CBasePlayer *pPlayer) override
 	{
 		if (pPlayer->pev->deadflag != DEAD_NO)
-			return FALSE;
+			return false;
 
 		if (pPlayer->m_iHideHUD & ITEM_SUIT)
-			return FALSE;
+			return false;
 
 		if (!gEvilImpulse101)//g-cont. do not play logon sentence at evil impulse
 		{
@@ -68,7 +68,7 @@ class CItemSuit : public CItem
 		}
 
 		pPlayer->m_iHideHUD |= ITEM_SUIT;
-		return TRUE;
+		return true;
 	}
 };
 

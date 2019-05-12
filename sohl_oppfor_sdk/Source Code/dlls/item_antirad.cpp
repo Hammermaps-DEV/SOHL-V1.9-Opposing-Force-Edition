@@ -32,20 +32,23 @@
 #include "player.h"
 #include "items.h"
 
-void CItemAntiRad::Spawn(void)
+void CItemAntiRad::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_rad.mdl");
 	CItem::Spawn();
 }
 
-void CItemAntiRad::Precache(void)
+void CItemAntiRad::Precache()
 {
 	PRECACHE_MODEL("models/w_rad.mdl");
 }
 
-BOOL CItemAntiRad::MyTouch(CBasePlayer *pPlayer)
+bool CItemAntiRad::MyTouch(CBasePlayer *pPlayer)
 {
+	if (!pPlayer->IsPlayer() || pPlayer->pev->deadflag != DEAD_NO)
+		return false;
+
 	pPlayer->SetSuitUpdate("!HEV_DET5", FALSE, SUIT_NEXT_IN_1MIN); //TODO: find right suit notifcation
 
 	pPlayer->m_rgItems[ITEM_ANTIRAD] += 1;
@@ -53,12 +56,13 @@ BOOL CItemAntiRad::MyTouch(CBasePlayer *pPlayer)
 	WRITE_SHORT((ITEM_ANTIRAD));						//which item to change
 	WRITE_SHORT(pPlayer->m_rgItems[ITEM_ANTIRAD]);		//set counter to this ammount
 	MESSAGE_END();
+
 	if (pev->noise)	//AJH
 		EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, STRING(pev->noise), 1, ATTN_NORM);
 	else
 		EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-	return TRUE;
+	return true;
 }
 
 void CItemAntiRad::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)

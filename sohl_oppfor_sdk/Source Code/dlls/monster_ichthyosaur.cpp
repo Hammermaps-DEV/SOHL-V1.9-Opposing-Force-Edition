@@ -120,32 +120,32 @@ const char *CIchthyosaur::pDieSounds[] =
 	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,HL_ARRAYSIZE( array )-1) ], VOL_NORM, 0.6, 0, RANDOM_LONG(95,105) ); 
 
 
-void CIchthyosaur::IdleSound(void)
+void CIchthyosaur::IdleSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pIdleSounds);
 }
 
-void CIchthyosaur::AlertSound(void)
+void CIchthyosaur::AlertSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pAlertSounds);
 }
 
-void CIchthyosaur::AttackSound(void)
+void CIchthyosaur::AttackSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pAttackSounds);
 }
 
-void CIchthyosaur::BiteSound(void)
+void CIchthyosaur::BiteSound()
 {
 	EMIT_ICKY_SOUND(CHAN_WEAPON, pBiteSounds);
 }
 
-void CIchthyosaur::DeathSound(void)
+void CIchthyosaur::DeathSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pDieSounds);
 }
 
-void CIchthyosaur::PainSound(void)
+void CIchthyosaur::PainSound()
 {
 	EMIT_ICKY_SOUND(CHAN_VOICE, pPainSounds);
 }
@@ -260,7 +260,7 @@ IMPLEMENT_CUSTOM_SCHEDULES(CIchthyosaur, CFlyingMonster);
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CIchthyosaur::Classify(void)
+int	CIchthyosaur::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_ALIEN_MONSTER;
 }
@@ -317,7 +317,7 @@ bool CIchthyosaur::CheckRangeAttack1(float flDot, float flDist)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CIchthyosaur::SetYawSpeed(void)
+void CIchthyosaur::SetYawSpeed()
 {
 	pev->yaw_speed = 100;
 }
@@ -331,7 +331,7 @@ void CIchthyosaur::Killed(entvars_t *pevAttacker, int iGib)
 	pev->velocity = Vector(0, 0, 0);
 }
 
-void CIchthyosaur::BecomeDead(void)
+void CIchthyosaur::BecomeDead()
 {
 	pev->takedamage = DAMAGE_YES;// don't let autoaim aim at corpses.
 
@@ -704,7 +704,7 @@ void CIchthyosaur::Move(float flInterval)
 	CFlyingMonster::Move(flInterval);
 }
 
-float CIchthyosaur::FlPitchDiff(void)
+float CIchthyosaur::FlPitchDiff()
 {
 	float	flPitchDiff;
 	float	flCurrentPitch;
@@ -769,7 +769,7 @@ float CIchthyosaur::ChangeYaw(int speed)
 }
 
 
-Activity CIchthyosaur::GetStoppedActivity(void)
+Activity CIchthyosaur::GetStoppedActivity()
 {
 	if (pev->movetype != MOVETYPE_FLY)		// UNDONE: Ground idle here, IDLE may be something else
 		return ACT_IDLE;
@@ -782,7 +782,7 @@ void CIchthyosaur::MoveExecute(CBaseEntity *pTargetEnt, const Vector &vecDir, fl
 }
 
 
-void CIchthyosaur::MonsterThink(void)
+void CIchthyosaur::MonsterThink()
 {
 	CFlyingMonster::MonsterThink();
 
@@ -809,7 +809,7 @@ void CIchthyosaur::MonsterThink(void)
 	}
 }
 
-void CIchthyosaur::Stop(void)
+void CIchthyosaur::Stop()
 {
 	if (!m_bOnAttack)
 		m_flightSpeed = 80.0;

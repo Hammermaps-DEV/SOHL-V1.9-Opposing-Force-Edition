@@ -36,7 +36,6 @@
 #include	"talkmonster.h"
 #include	"schedule.h"
 #include	"defaultai.h"
-#include	"scripted.h"
 #include	"animation.h"
 #include	"soundent.h"
 #include	"monster_scientist.h"
@@ -361,7 +360,7 @@ DEFINE_CUSTOM_SCHEDULES(CScientist)
 IMPLEMENT_CUSTOM_SCHEDULES(CScientist, CTalkMonster);
 
 
-void CScientist::DeclineFollowing(void)
+void CScientist::DeclineFollowing()
 {
 	Talk(10);
 	m_hTalkTarget = m_hEnemy;
@@ -369,7 +368,7 @@ void CScientist::DeclineFollowing(void)
 }
 
 
-void CScientist::Scream(void)
+void CScientist::Scream()
 {
 	if (FOkToSpeak())
 	{
@@ -380,7 +379,7 @@ void CScientist::Scream(void)
 }
 
 
-Activity CScientist::GetStoppedActivity(void)
+Activity CScientist::GetStoppedActivity()
 {
 	if (m_hEnemy != NULL)
 		return ACT_EXCITED;
@@ -523,7 +522,7 @@ void CScientist::RunTask(Task_t *pTask)
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CScientist::Classify(void)
+int	CScientist::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_HUMAN_PASSIVE;
 }
@@ -533,7 +532,7 @@ int	CScientist::Classify(void)
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CScientist::SetYawSpeed(void)
+void CScientist::SetYawSpeed()
 {
 	int ys;
 
@@ -591,7 +590,7 @@ void CScientist::HandleAnimEvent(MonsterEvent_t *pEvent)
 //=========================================================
 // Spawn
 //=========================================================
-void CScientist::Spawn(void)
+void CScientist::Spawn()
 {
 	Precache();
 
@@ -636,7 +635,7 @@ void CScientist::Spawn(void)
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CScientist::Precache(void)
+void CScientist::Precache()
 {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
@@ -729,7 +728,7 @@ int CScientist::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 	if (pevInflictor && pevInflictor->flags & FL_CLIENT)
 	{
 		Remember(bits_MEMORY_PROVOKED);
-		StopFollowing(TRUE);
+		StopFollowing(true);
 	}
 
 	// make sure friends talk about it if player hurts scientist...
@@ -741,7 +740,7 @@ int CScientist::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, floa
 // of sounds this monster regards. In the base class implementation,
 // monsters care about all sounds, but no scents.
 //=========================================================
-int CScientist::ISoundMask(void)
+int CScientist::ISoundMask()
 {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
@@ -752,7 +751,7 @@ int CScientist::ISoundMask(void)
 //=========================================================
 // PainSound
 //=========================================================
-void CScientist::PainSound(void)
+void CScientist::PainSound()
 {
 	if (UTIL_GlobalTimeBase() < m_painTime)
 		return;
@@ -772,7 +771,7 @@ void CScientist::PainSound(void)
 //=========================================================
 // DeathSound 
 //=========================================================
-void CScientist::DeathSound(void)
+void CScientist::DeathSound()
 {
 	PainSound();
 }
@@ -853,7 +852,7 @@ Schedule_t* CScientist::GetScheduleOfType(int Type)
 	return CTalkMonster::GetScheduleOfType(Type);
 }
 
-Schedule_t *CScientist::GetSchedule(void)
+Schedule_t *CScientist::GetSchedule()
 {
 	// so we don't keep calling through the EHANDLE stuff
 	CBaseEntity *pEnemy = m_hEnemy;
@@ -915,7 +914,7 @@ Schedule_t *CScientist::GetSchedule(void)
 			if (!m_hTargetEnt->IsAlive())
 			{
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 
@@ -968,7 +967,7 @@ Schedule_t *CScientist::GetSchedule(void)
 	return CTalkMonster::GetSchedule();
 }
 
-MONSTERSTATE CScientist::GetIdealState(void)
+MONSTERSTATE CScientist::GetIdealState()
 {
 	switch (m_MonsterState)
 	{
@@ -985,14 +984,14 @@ MONSTERSTATE CScientist::GetIdealState(void)
 					m_IdealMonsterState = MONSTERSTATE_ALERT;
 					return m_IdealMonsterState;
 				}
-				StopFollowing(TRUE);
+				StopFollowing(true);
 			}
 		}
 		else if (HasConditions(bits_COND_LIGHT_DAMAGE | bits_COND_HEAVY_DAMAGE))
 		{
 			// Stop following if you take damage
 			if (IsFollowing())
-				StopFollowing(TRUE);
+				StopFollowing(true);
 		}
 		break;
 
@@ -1030,16 +1029,15 @@ MONSTERSTATE CScientist::GetIdealState(void)
 	return CTalkMonster::GetIdealState();
 }
 
-
-BOOL CScientist::CanHeal(void)
+bool CScientist::CanHeal()
 {
 	if ((m_healTime > UTIL_GlobalTimeBase()) || (m_hTargetEnt == NULL) || (m_hTargetEnt->pev->health > (m_hTargetEnt->pev->max_health * 0.5)))
-		return FALSE;
+		return false;
 
-	return TRUE;
+	return true;
 }
 
-void CScientist::Heal(void)
+void CScientist::Heal()
 {
 	if (!CanHeal())
 		return;
@@ -1189,7 +1187,7 @@ void CSittingScientist::Spawn()
 	DROP_TO_FLOOR(ENT(pev));
 }
 
-void CSittingScientist::Precache(void)
+void CSittingScientist::Precache()
 {
 	m_baseSequence = LookupSequence("sitlookleft");
 	TalkInit();
@@ -1198,7 +1196,7 @@ void CSittingScientist::Precache(void)
 //=========================================================
 // ID as a passive human
 //=========================================================
-int	CSittingScientist::Classify(void)
+int	CSittingScientist::Classify()
 {
 	return m_iClass ? m_iClass : CLASS_HUMAN_PASSIVE;
 }
@@ -1217,7 +1215,7 @@ int CSittingScientist::FriendNumber(int arrayNumber)
 //=========================================================
 // sit, do stuff
 //=========================================================
-void CSittingScientist::SittingThink(void)
+void CSittingScientist::SittingThink()
 {
 	CBaseEntity *pent;
 
@@ -1226,7 +1224,7 @@ void CSittingScientist::SittingThink(void)
 	// try to greet player
 	if (FIdleHello())
 	{
-		pent = FindNearestFriend(TRUE);
+		pent = FindNearestFriend(true);
 		if (pent)
 		{
 			float yaw = VecToYaw(pent->pev->origin - pev->origin) - pev->angles.y;
@@ -1263,9 +1261,9 @@ void CSittingScientist::SittingThink(void)
 			// turn towards player or nearest friend and speak
 
 			if (!FBitSet(m_bitsSaid, bit_saidHelloPlayer))
-				pent = FindNearestFriend(TRUE);
+				pent = FindNearestFriend(true);
 			else
-				pent = FindNearestFriend(FALSE);
+				pent = FindNearestFriend(false);
 
 			if (!FIdleSpeak() || !pent)
 			{
@@ -1326,23 +1324,20 @@ void CSittingScientist::SetAnswerQuestion(CTalkMonster *pSpeaker)
 // FIdleSpeak
 // ask question of nearby friend, or make statement
 //=========================================================
-int CSittingScientist::FIdleSpeak(void)
+int CSittingScientist::FIdleSpeak()
 {
-	// try to start a conversation, or make statement
-	int pitch;
-
 	if (!FOkToSpeak())
 		return FALSE;
 
 	// set global min delay for next conversation
 	CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(4.8, 5.2);
 
-	pitch = GetVoicePitch();
+	int pitch = GetVoicePitch();
 
 	// if there is a friend nearby to speak to, play sentence, set friend's response time, return
 
 	// try to talk to any standing or sitting scientists nearby
-	CBaseEntity *pentFriend = FindNearestFriend(FALSE);
+	CBaseEntity *pentFriend = FindNearestFriend(false);
 
 	if (pentFriend && RANDOM_LONG(0, 1))
 	{

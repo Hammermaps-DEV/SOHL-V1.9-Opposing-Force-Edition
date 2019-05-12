@@ -29,26 +29,24 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "weapons.h"
 #include "player.h"
 #include "items.h"
 
-void CItemAntidote::Spawn(void)
+void CItemAntidote::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_antidote.mdl");
 	CItem::Spawn();
 }
 
-void CItemAntidote::Precache(void)
+void CItemAntidote::Precache()
 {
 	PRECACHE_MODEL("models/w_antidote.mdl");
 }
 
-BOOL CItemAntidote::MyTouch(CBasePlayer *pPlayer)
+bool CItemAntidote::MyTouch(CBasePlayer *pPlayer)
 {
 	pPlayer->SetSuitUpdate("!HEV_DET4", FALSE, SUIT_NEXT_IN_1MIN);
-
 	pPlayer->m_rgItems[ITEM_ANTIDOTE] += 1;
 
 	MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);//AJH msg change inventory
@@ -61,18 +59,17 @@ BOOL CItemAntidote::MyTouch(CBasePlayer *pPlayer)
 	else
 		EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM);
 
-	return TRUE;
+	return true;
 }
 
 void CItemAntidote::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
-
 	if (!(pActivator->IsPlayer())) {
 		ALERT(at_debug, "DEBUG: Antidote kit used by non-player\n");
 		return;
 	}
 
-	CBasePlayer* m_hActivator = (CBasePlayer*)pActivator;
+	auto m_hActivator = static_cast<CBasePlayer*>(pActivator);
 	ALERT(at_console, "HazardSuit: Antitoxin shots remaining: %i\n", m_hActivator->m_rgItems[ITEM_ANTIDOTE]);
 }
 

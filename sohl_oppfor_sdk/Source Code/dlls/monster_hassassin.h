@@ -32,24 +32,24 @@
 class CHAssassin : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int  Classify(void);
-	int  ISoundMask(void);
-	void Shoot(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int  Classify();
+	int  ISoundMask();
+	void Shoot();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	Schedule_t* GetSchedule(void);
+	Schedule_t* GetSchedule();
 	Schedule_t* GetScheduleOfType(int Type);
 	bool CheckMeleeAttack1(float flDot, float flDist);	// jump
 														// BOOL CheckMeleeAttack2 ( float flDot, float flDist );
 	bool CheckRangeAttack1(float flDot, float flDist);	// shoot
 	bool CheckRangeAttack2(float flDot, float flDist);	// throw grenade
 	void StartTask(Task_t *pTask);
-	void RunAI(void);
+	void RunAI();
 	void RunTask(Task_t *pTask);
-	void DeathSound(void);
-	void IdleSound(void);
+	void DeathSound();
+	void IdleSound();
 	CUSTOM_SCHEDULES;
 
 	int	Save(CSave &save);

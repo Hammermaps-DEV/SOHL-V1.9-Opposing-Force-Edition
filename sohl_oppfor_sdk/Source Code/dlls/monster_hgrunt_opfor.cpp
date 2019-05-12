@@ -192,7 +192,7 @@ void CHFGrunt::KeyValue(KeyValueData *pkvd) {
 //=========================================================
 // Spawn Human Grunt Ally
 //=========================================================
-void CHFGrunt::Spawn(void) {
+void CHFGrunt::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -300,7 +300,7 @@ void CHFGrunt::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CHFGrunt::Precache(void) {
+void CHFGrunt::Precache() {
 	CRCAllyMonster::Precache();
 
 	if (pev->model)
@@ -315,7 +315,7 @@ void CHFGrunt::Precache(void) {
 //=========================================================
 // JustSpoke
 //=========================================================
-void CHFGrunt::JustSpoke(void) {
+void CHFGrunt::JustSpoke() {
 	CRCAllyMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = FGRUNT_SENT_NONE;
 }
@@ -1158,7 +1158,7 @@ void CHFGrunt::RunTask(Task_t *pTask) {
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CHFGrunt::GibMonster(void) {
+void CHFGrunt::GibMonster() {
 	if (GetBodygroup(3) != 3 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024)) {
 		Vector	vecGunPos;
 		Vector	vecGunAngles;
@@ -1208,7 +1208,7 @@ void CHFGrunt::GibMonster(void) {
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHFGrunt::SetYawSpeed(void) {
+void CHFGrunt::SetYawSpeed() {
 	switch (m_Activity) {
 	case ACT_WALK:
 	case ACT_TURN_LEFT:
@@ -1830,7 +1830,7 @@ void CHFGrunt::SetActivity(Activity NewActivity) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CHFGrunt::GetSchedule(void) {
+Schedule_t *CHFGrunt::GetSchedule() {
 	// clear old sentence
 	m_iSentence = -1;
 
@@ -2030,7 +2030,7 @@ Schedule_t *CHFGrunt::GetSchedule(void) {
 		if (m_hEnemy == NULL && IsFollowing()) {
 			if (!m_hTargetEnt->IsAlive()) {
 				// UNDONE: Comment about the recently dead player here?
-				StopFollowing(FALSE);
+				StopFollowing(false);
 				break;
 			}
 			else {
@@ -2060,14 +2060,14 @@ Schedule_t *CHFGrunt::GetSchedule(void) {
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_hgrunt_ally_repel, CHFGruntRepel);
 
-void CHFGruntRepel::Spawn(void) {
+void CHFGruntRepel::Spawn() {
 	Precache();
 	pev->solid = SOLID_NOT;
 
 	SetUse(&CHFGruntRepel::RepelUse);
 }
 
-void CHFGruntRepel::Precache(void) {
+void CHFGruntRepel::Precache() {
 	UTIL_PrecacheOther("monster_human_grunt_ally");
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
 }

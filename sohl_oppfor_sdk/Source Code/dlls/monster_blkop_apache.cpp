@@ -51,7 +51,7 @@ LINK_ENTITY_TO_CLASS(monster_blkop_apache, CBlackOPApache);
 //=========================================================
 // Spawn Apache
 //=========================================================
-void CBlackOPApache::Spawn(void) {
+void CBlackOPApache::Spawn() {
 	Precache();
 
 	if (pev->model)
@@ -101,14 +101,14 @@ void CBlackOPApache::Spawn(void) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CBlackOPApache::Classify(void) {
+int	CBlackOPApache::Classify() {
 	return m_iClass ? m_iClass : CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 // Precache - precaches all resources this monster needs
 //=========================================================
-void CBlackOPApache::Precache(void) {
+void CBlackOPApache::Precache() {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else

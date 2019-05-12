@@ -38,38 +38,38 @@ public:
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	virtual int	ObjectCaps(void) { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	virtual int	ObjectCaps() { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
-	void Spawn(void);
-	void Precache(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	int  Classify();
 
-	void IdleSound(void);
-	void AlertSound(void);
-	void DeathSound(void);
+	void IdleSound();
+	void AlertSound();
+	void DeathSound();
 
-	void AngrySound(void);
-	void FlinchSound(void);
-	void SwipeSound(void);
-	void BeamSound(void);
+	void AngrySound();
+	void FlinchSound();
+	void SwipeSound();
+	void BeamSound();
 
-	void SetObjectCollisionBox(void);
+	void SetObjectCollisionBox();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 
 	int CanPlaySequence(BOOL fDisregardState);
 
-	void EXPORT StartupThink(void);
-	void EXPORT DyingThink(void);
+	void EXPORT StartupThink();
+	void EXPORT DyingThink();
 	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink(void);
+	void EXPORT NullThink();
 	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT	HuntThink(void);
+	void EXPORT	HuntThink();
 
 	void EXPORT WormTouch(CBaseEntity* pOther);
 
-	void FloatSequence(void);
-	void NextActivity(void);
+	void FloatSequence();
+	void NextActivity();
 
 	Vector m_avelocity;
 
@@ -96,20 +96,20 @@ public:
 	const Vector& IdealPosition(const float dz) const;
 	const Vector& IdealPosition(CBaseEntity* pEnemy) const;
 
-	void UpdateBodyControllers(void);
+	void UpdateBodyControllers();
 
 	void CreateBeam(const Vector& src, const Vector& target, int width);
-	void DestroyBeam(void);
+	void DestroyBeam();
 	void UpdateBeam(const Vector& src, const Vector& target);
 
 	void SetupBeamPoints(CBaseEntity* pEnemy, Vector* vecleft, Vector* vecRight);
 	void UpdateBeamPoints(CBaseEntity* pEnemy, Vector* vecTarget);
 
-	void CreateGlow(void);
-	void DestroyGlow(void);
-	void EyeOff(void);
+	void CreateGlow();
+	void DestroyGlow();
+	void EyeOff();
 	void EyeOn(int level);
-	void EyeUpdate(void);
+	void EyeUpdate();
 
 	float m_flInitialYaw;
 	Vector m_spawnAngles;

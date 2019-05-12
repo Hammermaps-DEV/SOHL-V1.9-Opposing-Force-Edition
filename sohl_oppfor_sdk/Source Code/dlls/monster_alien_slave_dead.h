@@ -31,8 +31,8 @@
 class CDeadISlave : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_ALIEN_MONSTER; }
+	void Spawn();
+	int	Classify() { return	CLASS_ALIEN_MONSTER; }
 
 	void KeyValue(KeyValueData *pkvd);
 

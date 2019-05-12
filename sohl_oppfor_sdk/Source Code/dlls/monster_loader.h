@@ -31,8 +31,8 @@
 class CLoader : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 };
 
 #endif // MONSTER_LOADER_H

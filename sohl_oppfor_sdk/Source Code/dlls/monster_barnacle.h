@@ -32,13 +32,13 @@
 class CBarnacle : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	CBaseEntity *TongueTouchEnt(float *pflLength);
-	int  Classify(void);
+	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void EXPORT BarnacleThink(void);
-	void EXPORT WaitTillDead(void);
+	void EXPORT BarnacleThink();
+	void EXPORT WaitTillDead();
 	void Killed(entvars_t *pevAttacker, int iGib);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	virtual int		Save(CSave &save);

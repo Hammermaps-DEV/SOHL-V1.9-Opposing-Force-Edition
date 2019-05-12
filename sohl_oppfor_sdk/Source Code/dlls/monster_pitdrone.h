@@ -35,31 +35,31 @@
 // class definition
 class CPitDrone : public CBaseMonster {
 public:
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void IdleSound(void);
-	void PainSound(void);
-	void AlertSound(void);
-	void DeathSound(void);
-	void AttackSound(void);
-	void AttackSoundSpike(void);
+	void IdleSound();
+	void PainSound();
+	void AlertSound();
+	void DeathSound();
+	void AttackSound();
+	void AttackSoundSpike();
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	void UpdateHorns(void);
-	void SetYawSpeed(void);
+	void UpdateHorns();
+	void SetYawSpeed();
 	void KeyValue(KeyValueData *pkvd);
-	void StopTalking(void);
+	void StopTalking();
 	void StartTask(Task_t *pTask);
 	void RunTask(Task_t *pTask);
-	void RunAI(void);
+	void RunAI();
 
 	bool CheckRangeAttack1(float flDot, float flDist);
-	BOOL ShouldSpeak(void);
+	BOOL ShouldSpeak();
 
-	int Classify(void);
+	int Classify();
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	int IRelationship(CBaseEntity *pTarget);
-	int IgnoreConditions(void);
+	int IgnoreConditions();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
@@ -75,9 +75,9 @@ public:
 	static const char *pAttackMissSounds[];
 	static const char *pAttackSoundsSpike[];
 
-	Schedule_t* GetSchedule(void);
+	Schedule_t* GetSchedule();
 	Schedule_t* GetScheduleOfType(int Type);
-	MONSTERSTATE GetIdealState(void);
+	MONSTERSTATE GetIdealState();
 
 	CUSTOM_SCHEDULES;
 

@@ -37,7 +37,7 @@
 
 LINK_ENTITY_TO_CLASS(prop_generic, CPropGeneric);
 
-void CPropGeneric::Spawn(void) {
+void CPropGeneric::Spawn() {
 	Vector vecSize = pev->size;
 
 	Precache();
@@ -61,7 +61,7 @@ void CPropGeneric::Spawn(void) {
 	SetBoneController(1, 0);
 }
 
-void CPropGeneric::Precache(void) {
+void CPropGeneric::Precache() {
 	if (pev->model)
 		PRECACHE_MODEL((char*)STRING(pev->model)); //LRC
 	else

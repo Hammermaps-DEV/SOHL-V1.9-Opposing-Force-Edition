@@ -31,11 +31,11 @@
 
 class CApacheHVR : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	void EXPORT ExplodeTouch(CBaseEntity *pOther);
-	void EXPORT IgniteThink(void);
-	void EXPORT AccelerateThink(void);
+	void EXPORT IgniteThink();
+	void EXPORT AccelerateThink();
 
 	int		Save(CSave &save);
 	int		Restore(CRestore &restore);

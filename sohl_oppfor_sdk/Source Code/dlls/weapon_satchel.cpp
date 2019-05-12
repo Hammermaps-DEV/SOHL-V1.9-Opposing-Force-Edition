@@ -58,33 +58,33 @@ public:
 	int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 	bool AddDuplicate(CBasePlayerItem *pOriginal) override;
 	int CSatchel::AddToPlayer(CBasePlayer *pPlayer);
-	BOOL CanDeploy(void);
-	BOOL Deploy(void);
-	BOOL IsUseable(void);
+	BOOL CanDeploy();
+	BOOL Deploy();
+	BOOL IsUseable();
 
 	void Holster();
-	void WeaponIdle(void);
-	void Throw(void);
+	void WeaponIdle();
+	void Throw();
 };
 
 class CSatchelCharge : public CGrenade
 {
-	void Spawn(void);
-	void Precache(void);
-	void BounceSound(void);
+	void Spawn();
+	void Precache();
+	void BounceSound();
 
 	void EXPORT SatchelSlide(CBaseEntity *pOther);
-	void EXPORT SatchelThink(void);
+	void EXPORT SatchelThink();
 
 public:
-	void Deactivate(void);
+	void Deactivate();
 };
 LINK_ENTITY_TO_CLASS(monster_satchel, CSatchelCharge);
 
@@ -92,14 +92,14 @@ LINK_ENTITY_TO_CLASS(monster_satchel, CSatchelCharge);
 // Deactivate - do whatever it is we do to an orphaned 
 // satchel when we don't want it in the world anymore.
 //=========================================================
-void CSatchelCharge::Deactivate(void)
+void CSatchelCharge::Deactivate()
 {
 	pev->solid = SOLID_NOT;
 	UTIL_Remove(this);
 }
 
 
-void CSatchelCharge::Spawn(void)
+void CSatchelCharge::Spawn()
 {
 	Precache();
 	// motor
@@ -149,7 +149,7 @@ void CSatchelCharge::SatchelSlide(CBaseEntity *pOther)
 }
 
 
-void CSatchelCharge::SatchelThink(void)
+void CSatchelCharge::SatchelThink()
 {
 	StudioFrameAdvance();
 	SetNextThink(0.1);
@@ -173,7 +173,7 @@ void CSatchelCharge::SatchelThink(void)
 
 }
 
-void CSatchelCharge::Precache(void)
+void CSatchelCharge::Precache()
 {
 	PRECACHE_MODEL("models/grenade.mdl");
 	PRECACHE_SOUND("weapons/g_bounce1.wav");
@@ -181,7 +181,7 @@ void CSatchelCharge::Precache(void)
 	PRECACHE_SOUND("weapons/g_bounce3.wav");
 }
 
-void CSatchelCharge::BounceSound(void)
+void CSatchelCharge::BounceSound()
 {
 	switch (RANDOM_LONG(0, 2))
 	{
@@ -237,7 +237,7 @@ void CSatchel::Spawn()
 }
 
 
-void CSatchel::Precache(void)
+void CSatchel::Precache()
 {
 	PRECACHE_MODEL("models/v_satchel.mdl");
 	PRECACHE_MODEL("models/v_satchel_radio.mdl");
@@ -268,14 +268,14 @@ int CSatchel::GetItemInfo(ItemInfo *p)
 
 //=========================================================
 //=========================================================
-BOOL CSatchel::IsUseable(void)
+BOOL CSatchel::IsUseable()
 {
 	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0) return TRUE;
 	if (m_chargeReady != 0) return TRUE;
 	return FALSE;
 }
 
-BOOL CSatchel::CanDeploy(void)
+BOOL CSatchel::CanDeploy()
 {
 	if (m_pPlayer->m_rgAmmo[PrimaryAmmoIndex()] > 0) return TRUE;
 	if (m_chargeReady != 0) return TRUE;
@@ -340,13 +340,13 @@ void CSatchel::PrimaryAttack()
 }
 
 
-void CSatchel::SecondaryAttack(void)
+void CSatchel::SecondaryAttack()
 {
 	if (m_chargeReady != 2) Throw();
 }
 
 
-void CSatchel::Throw(void)
+void CSatchel::Throw()
 {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType])
 	{
@@ -376,7 +376,7 @@ void CSatchel::Throw(void)
 }
 
 
-void CSatchel::WeaponIdle(void)
+void CSatchel::WeaponIdle()
 {
 	if (m_flTimeUpdate < UTIL_GlobalTimeBase() && m_iChargeLevel)
 	{

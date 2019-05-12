@@ -270,23 +270,23 @@ CSoundEngine
 class CSoundEngine
 {
 public:
-	void	GetDllPointers(void);
+	void	GetDllPointers();
 
-	void	Init(void);
-	void	Shutdown(void);
+	void	Init();
+	void	Shutdown();
 
-	void	ResetEngine(void);
-	void	VidInit(void);
+	void	ResetEngine();
+	void	VidInit();
 
 	void	ErrorCheck(bool bInit = false);
 	void	FatalError(char *pszFormat, ...);
 
 	void	SetupFrame(ref_params_t *pparams);
-	void    SetupListener(void);
-	void	SetupSounds(void);
-	void	SetupMusic(void);
-	void	SetupGeometry(void);
-	void	SetupReverbation(void);
+	void    SetupListener();
+	void	SetupSounds();
+	void	SetupMusic();
+	void	SetupGeometry();
+	void	SetupReverbation();
 
 	sound_t* PrepareSound(const char *szFile, int iEntIndex, int iFlags, int iChannel);
 	void	 PlaySound(const char *szFile, vec3_t vOrigin = g_vecZero, int iFlags = NULL, int iChannel = CHAN_AUTO, float fVolume = VOL_NORM, int iPitch = PITCH_NORM, float flAttenuation = ATTN_NORM, edict_t *pEdict = NULL, int iEntIndex = NULL);
@@ -300,7 +300,7 @@ public:
 	scache_t*	GetSoundFromCache(char *szFile);
 
 	void	TempEntPlaySound(TEMPENTITY *pTemp, float flVolume);
-	void	LoadSentences(void);
+	void	LoadSentences();
 	int		MsgFunc_PlayAudio(const char *pszName, int iSize, void *pBuf);
 
 	int		m_iFlags;

@@ -45,7 +45,7 @@ client_textmessage_t	g_pCustomMessage;
 char *g_pCustomName = "Custom";
 char g_pCustomText[1024];
 
-int CHudMessage::Init(void)
+int CHudMessage::Init()
 {
 	HOOK_MESSAGE( HudText );
 	HOOK_MESSAGE( GameTitle );

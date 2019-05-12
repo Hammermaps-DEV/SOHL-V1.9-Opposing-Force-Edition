@@ -49,7 +49,7 @@ LINK_ENTITY_TO_CLASS(weapon_handgrenade, CHandGrenade);
 //=========================================================
 // Spawn Mk 2 Grenade
 //=========================================================
-void CHandGrenade::Spawn(void) {
+void CHandGrenade::Spawn() {
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/w_grenade.mdl");
@@ -62,7 +62,7 @@ void CHandGrenade::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CHandGrenade::Precache(void) {
+void CHandGrenade::Precache() {
 	PRECACHE_MODEL("models/w_grenade.mdl");
 	PRECACHE_MODEL("models/v_grenade.mdl");
 	PRECACHE_MODEL("models/p_grenade.mdl");
@@ -89,7 +89,7 @@ int CHandGrenade::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CHandGrenade::PrimaryAttack(void) {
+void CHandGrenade::PrimaryAttack() {
 	if (!m_flStartThrow && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] > 0) {
 		m_flStartThrow = UTIL_GlobalTimeBase();
 		m_flReleaseThrow = 0;
@@ -103,7 +103,7 @@ void CHandGrenade::PrimaryAttack(void) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CHandGrenade::Deploy(void) {
+BOOL CHandGrenade::Deploy() {
 	m_iChargeLevel = 0;
 	return DefaultDeploy("models/v_grenade.mdl", "models/p_grenade.mdl", (int)HANDGRENADE_DRAW::sequence,
 		"crowbar", CalculateWeaponTime((int)HANDGRENADE_DRAW::frames, (int)HANDGRENADE_DRAW::fps));
@@ -112,7 +112,7 @@ BOOL CHandGrenade::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CHandGrenade::Holster(void) {
+void CHandGrenade::Holster() {
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() + 0.5;
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]) {
 		SendWeaponAnim((int)HANDGRENADE_HOLSTER::sequence);
@@ -132,7 +132,7 @@ void CHandGrenade::Holster(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CHandGrenade::WeaponIdle(void) {
+void CHandGrenade::WeaponIdle() {
 	if (m_flTimeUpdate < UTIL_GlobalTimeBase() && m_iChargeLevel) {
 		// we've finished the throw, restart.
 		m_flStartThrow = 0;

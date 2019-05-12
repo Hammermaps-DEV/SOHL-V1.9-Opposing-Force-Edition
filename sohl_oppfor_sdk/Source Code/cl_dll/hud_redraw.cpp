@@ -60,7 +60,7 @@ float HUD_GetFOV( void );
 extern cvar_t *sensitivity;
 
 // Think
-void CHud::Think(void)
+void CHud::Think()
 {
 	int newfov;
 	HUDLIST *pList = m_pHudList;

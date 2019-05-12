@@ -31,19 +31,19 @@
 class CRat : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	void EXPORT MonsterThink(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	void EXPORT MonsterThink();
 	void Move(float flInterval);
 	void PickNewDest(int iCondition);
 	void EXPORT Touch(CBaseEntity *pOther);
 	void Killed(entvars_t *pevAttacker, int iGib);
 	float m_flLastLightLevel;
 	float m_flNextSmellTime;
-	int Classify(void) { return m_iClass ? m_iClass : CLASS_INSECT; }
+	int Classify() { return m_iClass ? m_iClass : CLASS_INSECT; }
 	void Look(int iDistance);
-	int ISoundMask(void) { return bits_SOUND_CARCASS | bits_SOUND_MEAT; }
+	int ISoundMask() { return bits_SOUND_CARCASS | bits_SOUND_MEAT; }
 	BOOL m_fLightHacked;
 	int m_iMode;
 };

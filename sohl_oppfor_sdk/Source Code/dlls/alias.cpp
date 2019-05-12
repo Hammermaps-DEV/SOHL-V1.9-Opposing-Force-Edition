@@ -67,12 +67,12 @@ public:
 	int		m_iCurrentTarget; //AJH the current target that is being aliased
 
 	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
-	void Spawn(void);
+	void Spawn();
 	STATE GetState() { return (pev->spawnflags & SF_ALIAS_OFF) ? STATE_OFF : STATE_ON; }
 
 	CBaseEntity *FollowAlias(CBaseEntity *pFrom);
 	void ChangeValue(int iszValue);
-	void FlushChanges(void);
+	void FlushChanges();
 	void KeyValue(struct KeyValueData_s *); //AJH
 
 	virtual int		Save(CSave &save);
@@ -146,7 +146,7 @@ void CInfoAlias::KeyValue(KeyValueData *pkvd) //AJH
 	}
 }
 
-void CInfoAlias::Spawn(void)
+void CInfoAlias::Spawn()
 {
 	if (m_iMode == 0) {
 		if (pev->spawnflags & SF_ALIAS_OFF)
@@ -232,7 +232,7 @@ void CInfoAlias::ChangeValue(int iszValue)
 	UTIL_AddToAliasList(this);
 }
 
-void CInfoAlias::FlushChanges(void)
+void CInfoAlias::FlushChanges()
 {
 	pev->message = pev->noise;
 	if (pev->spawnflags & SF_ALIAS_DEBUG)
@@ -461,14 +461,14 @@ CBaseEntity *CMultiAlias::FollowAlias(CBaseEntity *pStartEntity)
 class CTriggerChangeAlias : public CBaseEntity
 {
 public:
-	void Spawn(void);
+	void Spawn();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	int ObjectCaps(void) { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
+	int ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
 LINK_ENTITY_TO_CLASS(trigger_changealias, CTriggerChangeAlias);
 
-void CTriggerChangeAlias::Spawn(void)
+void CTriggerChangeAlias::Spawn()
 {
 }
 

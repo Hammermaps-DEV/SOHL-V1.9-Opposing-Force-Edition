@@ -29,11 +29,11 @@ class CGenericModel : public CBaseAnimating
 {
 public:
 
-	virtual void Spawn(void);
-	virtual void Precache(void);
+	virtual void Spawn();
+	virtual void Precache();
 	virtual void KeyValue(KeyValueData* pkvd);
 
-	virtual void EXPORT IdleThink(void);
+	virtual void EXPORT IdleThink();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

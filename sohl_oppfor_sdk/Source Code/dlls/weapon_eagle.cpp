@@ -59,7 +59,7 @@ void CEagle::Spawn() {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CEagle::Precache(void) {
+void CEagle::Precache() {
 	PRECACHE_MODEL("models/v_desert_eagle.mdl");
 	PRECACHE_MODEL("models/w_desert_eagle.mdl");
 	PRECACHE_MODEL("models/p_desert_eagle.mdl");
@@ -95,7 +95,7 @@ int CEagle::GetItemInfo(ItemInfo *p) {
 //=========================================================
 // PrimaryAttack
 //=========================================================
-void CEagle::PrimaryAttack(void) {
+void CEagle::PrimaryAttack() {
 	if (m_iClip <= 0) {
 		if (m_fFireOnEmpty) {
 			PlayEmptySound();
@@ -147,7 +147,7 @@ void CEagle::PrimaryAttack(void) {
 //=========================================================
 // SecondaryAttack
 //=========================================================
-void CEagle::SecondaryAttack(void) {
+void CEagle::SecondaryAttack() {
 	if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && !m_iClip) {
 		return;
 	}
@@ -171,7 +171,7 @@ BOOL CEagle::Deploy() {
 //=========================================================
 // Holster
 //=========================================================
-void CEagle::Holster(void) {
+void CEagle::Holster() {
 	ShutdownSpot();
 	m_fInReload = FALSE;// cancel any reload in progress.
 	SendWeaponAnim((int)EAGLE_HOLSTER::sequence);
@@ -182,7 +182,7 @@ void CEagle::Holster(void) {
 //=========================================================
 // Reload
 //=========================================================
-void CEagle::Reload(void) {
+void CEagle::Reload() {
 	if (m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] == 0) {
 		return;
 	}
@@ -206,7 +206,7 @@ void CEagle::Reload(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CEagle::WeaponIdle(void) {
+void CEagle::WeaponIdle() {
 	UpdateSpot();
 	float flTime = 0.0;
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase() ||
@@ -260,7 +260,7 @@ void CEagle::WeaponIdle(void) {
 //=========================================================
 // ShutdownScreen
 //=========================================================
-void CEagle::ShutdownSpot(void) {
+void CEagle::ShutdownSpot() {
 	if (m_pSpot) {
 		m_pSpot->Killed(NULL, GIB_NEVER);
 		m_pSpot = NULL;
@@ -277,7 +277,7 @@ void CEagle::ShutdownSpot(void) {
 //=========================================================
 // UpdateSpot
 //=========================================================
-void CEagle::UpdateSpot(void) {
+void CEagle::UpdateSpot() {
 	if (m_fSpotActive) {
 		if (!m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] && !m_iClip) {
 			ShutdownSpot();

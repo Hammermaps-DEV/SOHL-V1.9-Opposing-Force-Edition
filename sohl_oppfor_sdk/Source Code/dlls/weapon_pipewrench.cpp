@@ -48,7 +48,7 @@ LINK_ENTITY_TO_CLASS(weapon_pipewrench, CPipeWrench);
 //=========================================================
 // Spawn Pipe Wrench
 //=========================================================
-void CPipeWrench::Spawn(void) {
+void CPipeWrench::Spawn() {
 	Precache();
 	m_iId = WEAPON_PIPEWRENCH;
 
@@ -62,7 +62,7 @@ void CPipeWrench::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CPipeWrench::Precache(void) {
+void CPipeWrench::Precache() {
 	PRECACHE_MODEL("models/v_pipe_wrench.mdl");
 	PRECACHE_MODEL("models/w_pipe_wrench.mdl");
 	PRECACHE_MODEL("models/p_pipe_wrench.mdl");
@@ -136,7 +136,7 @@ void CPipeWrench::SecondaryAttack() {
 // of weaponidle() and make its own function then to try to
 // merge this into Fire(), which has some identical variable names 
 //=========================================================
-void CPipeWrench::StartLargeSwing(void) {
+void CPipeWrench::StartLargeSwing() {
 	float flDamage;
 	if ((UTIL_GlobalTimeBase() - m_flChargeTime) >= m_fullcharge) {
 		flDamage = 200;
@@ -324,7 +324,7 @@ int CPipeWrench::Swing(int fFirst) {
 //=========================================================
 // Deploy
 //=========================================================
-BOOL CPipeWrench::Deploy(void) {
+BOOL CPipeWrench::Deploy() {
 	return DefaultDeploy("models/v_pipe_wrench.mdl", "models/p_pipe_wrench.mdl", (int)PIPE_WRENCH_DRAW::sequence,
 		"crowbar", CalculateWeaponTime((int)PIPE_WRENCH_DRAW::frames, (int)PIPE_WRENCH_DRAW::fps));
 }
@@ -332,7 +332,7 @@ BOOL CPipeWrench::Deploy(void) {
 //=========================================================
 // Holster
 //=========================================================
-void CPipeWrench::Holster(void) {
+void CPipeWrench::Holster() {
 	SendWeaponAnim((int)PIPE_WRENCH_HOLSTER::sequence);
 	m_pPlayer->m_flNextAttack = UTIL_GlobalTimeBase() +
 		CalculateWeaponTime((int)PIPE_WRENCH_HOLSTER::frames, (int)PIPE_WRENCH_HOLSTER::fps);
@@ -341,7 +341,7 @@ void CPipeWrench::Holster(void) {
 //=========================================================
 // WeaponIdle Animation
 //=========================================================
-void CPipeWrench::WeaponIdle(void) {
+void CPipeWrench::WeaponIdle() {
 	if (m_flTimeWeaponIdle > UTIL_GlobalTimeBase()) {
 		return;
 	}

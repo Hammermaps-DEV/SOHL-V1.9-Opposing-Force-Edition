@@ -52,7 +52,7 @@ CGrappleHook* CGrappleHook::Create(Vector Pos, Vector Aim, CBasePlayer* Owner)
 	return Hook;
 }
 
-void CGrappleHook::Spawn(void)
+void CGrappleHook::Spawn()
 {
 	Precache();
 
@@ -81,7 +81,7 @@ void CGrappleHook::Spawn(void)
 }
 
 
-void CGrappleHook::Precache(void)
+void CGrappleHook::Precache()
 {
 	PRECACHE_MODEL("sprites/tongue.spr");
 	PRECACHE_MODEL("models/null.mdl");
@@ -213,7 +213,7 @@ void CGrappleHook::Killed(entvars_t *pev, int gib)
 	SUB_Remove();
 }
 
-void CGrappleHook::Move(void)
+void CGrappleHook::Move()
 {
 	//ALERT(at_console, "Tongue was move.\n");
 

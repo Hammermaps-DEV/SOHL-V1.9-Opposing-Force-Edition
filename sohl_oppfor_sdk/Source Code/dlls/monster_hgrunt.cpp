@@ -943,7 +943,7 @@ void CHGrunt::SetActivity(Activity NewActivity) {
 // may still fail but in most cases, well after the grunt has 
 // started moving.
 //=========================================================
-void CHGrunt::SpeakSentence(void) {
+void CHGrunt::SpeakSentence() {
 	if (m_iSentence == HGRUNT_SENT_NONE) {
 		return; // no sentence cued up.
 	}
@@ -974,7 +974,7 @@ int CHGrunt::IRelationship(CBaseEntity *pTarget) {
 //=========================================================
 // GibMonster - make gun fly through the air.
 //=========================================================
-void CHGrunt::GibMonster(void) {
+void CHGrunt::GibMonster() {
 	Vector	vecGunPos, vecGunAngles;
 	if (GetBodygroup(2) != 2 && !(pev->spawnflags & SF_MONSTER_SPAWNFLAG_1024))
 	{// throw a gun if the grunt has one
@@ -1018,7 +1018,7 @@ void CHGrunt::GibMonster(void) {
 // hear the DANGER sound that is made by hand grenades and
 // other dangerous items.
 //=========================================================
-int CHGrunt::ISoundMask(void) {
+int CHGrunt::ISoundMask() {
 	return	bits_SOUND_WORLD |
 		bits_SOUND_COMBAT |
 		bits_SOUND_MEAT |
@@ -1030,7 +1030,7 @@ int CHGrunt::ISoundMask(void) {
 //=========================================================
 // someone else is talking - don't speak
 //=========================================================
-BOOL CHGrunt::FOkToSpeak(void) {
+BOOL CHGrunt::FOkToSpeak() {
 	// if someone else is talking, don't speak
 	if (UTIL_GlobalTimeBase() <= CTalkMonster::g_talkWaitTime)
 		return FALSE;
@@ -1047,7 +1047,7 @@ BOOL CHGrunt::FOkToSpeak(void) {
 
 //=========================================================
 //=========================================================
-void CHGrunt::JustSpoke(void) {
+void CHGrunt::JustSpoke() {
 	CTalkMonster::g_talkWaitTime = UTIL_GlobalTimeBase() + RANDOM_FLOAT(1.5, 2.0);
 	m_iSentence = HGRUNT_SENT_NONE;
 }
@@ -1056,7 +1056,7 @@ void CHGrunt::JustSpoke(void) {
 // PrescheduleThink - this function runs after conditions
 // are collected and before scheduling code is run.
 //=========================================================
-void CHGrunt::PrescheduleThink(void) {
+void CHGrunt::PrescheduleThink() {
 	if (InSquad() && m_hEnemy != NULL) {
 		if (HasConditions(bits_COND_SEE_ENEMY)) {
 			// update the squad's last enemy sighting time.
@@ -1083,7 +1083,7 @@ void CHGrunt::PrescheduleThink(void) {
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-BOOL CHGrunt::FCanCheckAttacks(void) {
+BOOL CHGrunt::FCanCheckAttacks() {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
 		return TRUE;
 	}
@@ -1287,7 +1287,7 @@ int CHGrunt::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 // SetYawSpeed - allows each sequence to have a different
 // turn rate associated with it.
 //=========================================================
-void CHGrunt::SetYawSpeed(void) {
+void CHGrunt::SetYawSpeed() {
 	switch (m_Activity) {
 	case ACT_IDLE:
 	case ACT_RUN:
@@ -1316,7 +1316,7 @@ void CHGrunt::SetYawSpeed(void) {
 	}
 }
 
-void CHGrunt::IdleSound(void) {
+void CHGrunt::IdleSound() {
 	if (FOkToSpeak() && (g_fGruntQuestion || RANDOM_LONG(0, 1))) {
 		if (m_iszSpeakAs) {
 			char szBuf[64];
@@ -1395,7 +1395,7 @@ void CHGrunt::IdleSound(void) {
 // CheckAmmo - overridden for the grunt because he actually
 // uses ammo! (base class doesn't)
 //=========================================================
-void CHGrunt::CheckAmmo(void) {
+void CHGrunt::CheckAmmo() {
 	if (m_cAmmoLoaded <= 0) {
 		SetConditions(bits_COND_NO_AMMO_LOADED);
 	}
@@ -1405,13 +1405,13 @@ void CHGrunt::CheckAmmo(void) {
 // Classify - indicates this monster's place in the 
 // relationship table.
 //=========================================================
-int	CHGrunt::Classify(void) {
+int	CHGrunt::Classify() {
 	return m_iClass ? m_iClass : CLASS_HUMAN_MILITARY;
 }
 
 //=========================================================
 //=========================================================
-CBaseEntity *CHGrunt::Kick(void) {
+CBaseEntity *CHGrunt::Kick() {
 	TraceResult tr;
 
 	UTIL_MakeVectors(pev->angles);
@@ -1448,7 +1448,7 @@ Vector CHGrunt::GetGunPosition()
 //=========================================================
 // Shoot MP5
 //=========================================================
-void CHGrunt::ShootMP5(void) {
+void CHGrunt::ShootMP5() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -1481,7 +1481,7 @@ void CHGrunt::ShootMP5(void) {
 //=========================================================
 // Shoot Shotgun
 //=========================================================
-void CHGrunt::ShootShotgun(void) {
+void CHGrunt::ShootShotgun() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -1510,7 +1510,7 @@ void CHGrunt::ShootShotgun(void) {
 	SetBlending(0, angDir.x);
 }
 
-void CHGrunt::ShootShotgunDouble(void) {
+void CHGrunt::ShootShotgunDouble() {
 	if ((m_hEnemy == NULL && m_pCine == NULL) || !NoFriendlyFire()) {
 		return;
 	}
@@ -1877,7 +1877,7 @@ void CHGrunt::RunTask(Task_t *pTask)
 //=========================================================
 // PainSound
 //=========================================================
-void CHGrunt::PainSound(void) {
+void CHGrunt::PainSound() {
 	if (UTIL_GlobalTimeBase() > m_flNextPainTime) {
 		EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 		m_flNextPainTime = UTIL_GlobalTimeBase() + 1;
@@ -1887,7 +1887,7 @@ void CHGrunt::PainSound(void) {
 //=========================================================
 // DeathSound 
 //=========================================================
-void CHGrunt::DeathSound(void) {
+void CHGrunt::DeathSound() {
 	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pDeathSounds);
 }
 
@@ -1897,7 +1897,7 @@ void CHGrunt::DeathSound(void) {
 // monster's member function to get a pointer to a schedule
 // of the proper type.
 //=========================================================
-Schedule_t *CHGrunt::GetSchedule(void)
+Schedule_t *CHGrunt::GetSchedule()
 {
 
 	// clear old sentence
@@ -2297,7 +2297,7 @@ Schedule_t* CHGrunt::GetScheduleOfType(int Type)
 //=========================================================
 LINK_ENTITY_TO_CLASS(monster_grunt_repel, CHGruntRepel);
 
-void CHGruntRepel::Spawn(void)
+void CHGruntRepel::Spawn()
 {
 	Precache();
 	pev->solid = SOLID_NOT;
@@ -2305,7 +2305,7 @@ void CHGruntRepel::Spawn(void)
 	SetUse(&CHGruntRepel::RepelUse);
 }
 
-void CHGruntRepel::Precache(void)
+void CHGruntRepel::Precache()
 {
 	UTIL_PrecacheOther("monster_human_grunt");
 	m_iSpriteTexture = PRECACHE_MODEL("sprites/rope.spr");
@@ -2341,8 +2341,8 @@ void CHGruntRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 class CDeadHGrunt : public CBaseMonster
 {
 public:
-	void Spawn(void);
-	int	Classify(void) { return	CLASS_HUMAN_MILITARY; }
+	void Spawn();
+	int	Classify() { return	CLASS_HUMAN_MILITARY; }
 
 	void KeyValue(KeyValueData *pkvd);
 
@@ -2368,7 +2368,7 @@ LINK_ENTITY_TO_CLASS(monster_hgrunt_dead, CDeadHGrunt);
 //=========================================================
 // ********** DeadHGrunt SPAWN **********
 //=========================================================
-void CDeadHGrunt::Spawn(void)
+void CDeadHGrunt::Spawn()
 {
 	int oldBody;
 

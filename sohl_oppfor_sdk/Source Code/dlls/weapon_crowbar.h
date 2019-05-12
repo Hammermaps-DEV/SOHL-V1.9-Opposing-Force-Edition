@@ -57,19 +57,19 @@ enum class CROWBAR_ATTACK3MISS { sequence = 10, frames = 19, fps = 22 };
 class CCrowbar : public CBasePlayerWeapon {
 public:
 	//Base
-	void Spawn(void);
-	void Precache(void);
+	void Spawn();
+	void Precache();
 	int GetItemInfo(ItemInfo *p);
 
 	//Attack
-	void PrimaryAttack(void);
-	void SecondaryAttack(void);
+	void PrimaryAttack();
+	void SecondaryAttack();
 	int Swing(int fFirst);
 
 	//Animations
-	BOOL Deploy(void);
-	void Holster(void);
-	void WeaponIdle(void);
+	BOOL Deploy();
+	void Holster();
+	void WeaponIdle();
 
 	//Vars
 	BOOL bHit;

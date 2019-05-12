@@ -35,7 +35,7 @@ class CGaussAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn(void) {
+	void Spawn() {
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_gaussammo.mdl");
 		CBasePlayerAmmo::Spawn();
@@ -44,7 +44,7 @@ class CGaussAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache(void) {
+	void Precache() {
 		PRECACHE_MODEL("models/w_gaussammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}

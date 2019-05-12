@@ -283,7 +283,7 @@ extern module_t	g_module;
 #define RecEngDraw_FillRGBABlend(a, b, c, d, e, f, g, h)		(g_engdstAddrs.pfnFillRGBABlend(&a, &b, &c, &d, &e, &f, &g, &h))
 
 // Dummy destination function for use when there's no security module
-extern void NullDst(void);
+extern void NullDst();
 
 // Use this to init an engdst structure to point to NullDst
 #define k_engdstNull \

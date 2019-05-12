@@ -148,7 +148,7 @@ extern DECLSPEC Uint32 SDLCALL SDL_WasInit(Uint32 flags);
  *  This function cleans up all initialized subsystems. You should
  *  call it upon all exit conditions.
  */
-extern DECLSPEC void SDLCALL SDL_Quit(void);
+extern DECLSPEC void SDLCALL SDL_Quit();
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

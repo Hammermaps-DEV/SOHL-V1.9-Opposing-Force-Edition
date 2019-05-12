@@ -33,7 +33,6 @@
 #include	"extdll.h"
 #include	"util.h"
 #include	"cbase.h"
-#include	"schedule.h"
 #include	"item_generic.h"
 
 //=========================================================
@@ -53,7 +52,7 @@ IMPLEMENT_SAVERESTORE(CItemGeneric, CBaseAnimating);
 //=========================================================
 // Spawn Generic
 //=========================================================
-void CItemGeneric::Spawn(void) {
+void CItemGeneric::Spawn() {
 	Precache();
 	SET_MODEL(ENT(pev), (char*)STRING(pev->model));
 
@@ -73,7 +72,7 @@ void CItemGeneric::Spawn(void) {
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
-void CItemGeneric::Precache(void) {
+void CItemGeneric::Precache() {
 	PRECACHE_MODEL((char*)STRING(pev->model));
 }
 
@@ -92,7 +91,7 @@ void CItemGeneric::KeyValue(KeyValueData* pkvd) {
 //=========================================================
 // StartupThink
 //=========================================================
-void CItemGeneric::StartupThink(void) {
+void CItemGeneric::StartupThink() {
 	// Try to look for a sequence to play.
 	int iSequence = -1;
 	iSequence = LookupSequence(STRING(m_iszSequenceName));
@@ -112,7 +111,7 @@ void CItemGeneric::StartupThink(void) {
 //=========================================================
 // SequenceThink
 //=========================================================
-void CItemGeneric::SequenceThink(void) {
+void CItemGeneric::SequenceThink() {
 	// Set next think time.
 	SetNextThink(0.1);
 

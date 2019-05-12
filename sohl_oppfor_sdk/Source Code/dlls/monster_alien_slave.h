@@ -34,11 +34,11 @@
 class CISlave : public CSquadMonster
 {
 public:
-	void Spawn(void);
-	void Precache(void);
-	void SetYawSpeed(void);
-	int	 ISoundMask(void);
-	int  Classify(void);
+	void Spawn();
+	void Precache();
+	void SetYawSpeed();
+	int	 ISoundMask();
+	int  Classify();
 	int  IRelationship(CBaseEntity *pTarget);
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 	bool CheckRangeAttack1(float flDot, float flDist);
@@ -47,15 +47,15 @@ public:
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 
-	void DeathSound(void);
-	void PainSound(void);
-	void AlertSound(void);
-	void IdleSound(void);
+	void DeathSound();
+	void PainSound();
+	void AlertSound();
+	void IdleSound();
 
 	void Killed(entvars_t *pevAttacker, int iGib);
 
 	void StartTask(Task_t *pTask);
-	Schedule_t *GetSchedule(void);
+	Schedule_t *GetSchedule();
 	Schedule_t *GetScheduleOfType(int Type);
 	CUSTOM_SCHEDULES;
 
@@ -67,7 +67,7 @@ public:
 	void ArmBeam(int side);
 	void WackBeam(int side, CBaseEntity *pEntity);
 	void ZapBeam(int side);
-	void BeamGlow(void);
+	void BeamGlow();
 
 	int m_iBravery;
 

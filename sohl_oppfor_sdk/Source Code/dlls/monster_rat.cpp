@@ -60,7 +60,7 @@ void CRat::Touch(CBaseEntity *pOther) {
 	TakeDamage(pOther->pev, pOther->pev, pev->health, DMG_CRUSH);
 }
 
-void CRat::SetYawSpeed(void) {
+void CRat::SetYawSpeed() {
 	int ys;
 	ys = 120;
 	pev->yaw_speed = ys;
@@ -145,7 +145,7 @@ void CRat::Killed(entvars_t *pevAttacker, int iGib) {
 	}
 }
 
-void CRat::MonsterThink(void)
+void CRat::MonsterThink()
 {
 	if (FNullEnt(FIND_CLIENT_IN_PVS(edict())))
 		SetNextThink(RANDOM_FLOAT(1, 1.5));

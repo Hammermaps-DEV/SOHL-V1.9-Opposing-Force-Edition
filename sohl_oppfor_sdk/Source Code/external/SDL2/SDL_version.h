@@ -141,7 +141,7 @@ extern DECLSPEC void SDLCALL SDL_GetVersion(SDL_version * ver);
  *  exact revision of the SDL library in use, and is only useful in comparing
  *  against other revisions. It is NOT an incrementing number.
  */
-extern DECLSPEC const char *SDLCALL SDL_GetRevision(void);
+extern DECLSPEC const char *SDLCALL SDL_GetRevision();
 
 /**
  *  \brief Get the revision number of SDL that is linked against your program.
@@ -150,7 +150,7 @@ extern DECLSPEC const char *SDLCALL SDL_GetRevision(void);
  *  library in use. It is an incrementing number based on commits to
  *  hg.libsdl.org.
  */
-extern DECLSPEC int SDLCALL SDL_GetRevisionNumber(void);
+extern DECLSPEC int SDLCALL SDL_GetRevisionNumber();
 
 
 /* Ends C function definitions when using C++ */

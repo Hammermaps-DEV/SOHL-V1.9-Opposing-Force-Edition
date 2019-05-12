@@ -31,13 +31,13 @@
 
 class CXenPLight : public CActAnimating {
 public:
-	void		Spawn(void);
-	void		Precache(void);
+	void		Spawn();
+	void		Precache();
 	void		Touch(CBaseEntity *pOther);
-	void		Think(void);
+	void		Think();
 
-	void		LightOn(void);
-	void		LightOff(void);
+	void		LightOn();
+	void		LightOff();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

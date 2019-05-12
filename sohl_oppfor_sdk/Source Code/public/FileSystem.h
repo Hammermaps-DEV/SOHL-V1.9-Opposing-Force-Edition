@@ -66,8 +66,8 @@ class IFileSystem : public IBaseInterface
 {
 public:
 	// Mount and unmount the filesystem
-	virtual void			Mount(void) = 0;
-	virtual void			Unmount(void) = 0;
+	virtual void			Mount() = 0;
+	virtual void			Unmount() = 0;
 
 	// Remove all search paths (including write path?)
 	virtual void			RemoveAllSearchPaths( void ) = 0;

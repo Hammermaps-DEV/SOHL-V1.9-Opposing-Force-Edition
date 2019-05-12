@@ -40,7 +40,7 @@ TYPEDESCRIPTION	CApacheHVR::m_SaveData[] = {
 
 IMPLEMENT_SAVERESTORE(CApacheHVR, CGrenade);
 
-void CApacheHVR::Spawn(void)
+void CApacheHVR::Spawn()
 {
 	Precache();
 	// motor
@@ -63,7 +63,7 @@ void CApacheHVR::Spawn(void)
 	pev->dmg = 150;
 }
 
-void CApacheHVR::Precache(void)
+void CApacheHVR::Precache()
 {
 	PRECACHE_MODEL("models/HVR.mdl");
 	m_iTrail = PRECACHE_MODEL("sprites/smoke.spr");
@@ -84,7 +84,7 @@ void CApacheHVR::ExplodeTouch(CBaseEntity *pOther)
 	Explode(&tr, DMG_BLAST);
 }
 
-void CApacheHVR::IgniteThink(void)
+void CApacheHVR::IgniteThink()
 {
 	pev->effects |= EF_LIGHT;
 
@@ -111,7 +111,7 @@ void CApacheHVR::IgniteThink(void)
 	SetNextThink(0.1);
 }
 
-void CApacheHVR::AccelerateThink(void)
+void CApacheHVR::AccelerateThink()
 {
 	// check world boundaries
 	if (pev->origin.x < -4096 || pev->origin.x > 4096 || pev->origin.y < -4096 ||
