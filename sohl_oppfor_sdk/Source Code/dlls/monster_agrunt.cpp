@@ -236,12 +236,12 @@ void CAGrunt::StopTalking()
 //=========================================================
 // ShouldSpeak - Should this agrunt be talking?
 //=========================================================
-BOOL CAGrunt::ShouldSpeak()
+bool CAGrunt::ShouldSpeak()
 {
 	if (m_flNextSpeakTime > UTIL_GlobalTimeBase())
 	{
 		// my time to talk is still in the future.
-		return FALSE;
+		return false;
 	}
 
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_2)
@@ -253,11 +253,11 @@ BOOL CAGrunt::ShouldSpeak()
 			// into the future a bit, so we don't talk immediately after 
 			// going into combat
 			m_flNextSpeakTime = UTIL_GlobalTimeBase() + 3;
-			return FALSE;
+			return false;
 		}
 	}
 
-	return TRUE;
+	return true;
 }
 
 //=========================================================
@@ -861,16 +861,12 @@ IMPLEMENT_CUSTOM_SCHEDULES(CAGrunt, CSquadMonster);
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-BOOL CAGrunt::FCanCheckAttacks()
+bool CAGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
-	{
-		return TRUE;
-	}
-	else
-	{
-		return FALSE;
-	}
+		return true;
+
+	return false;
 }
 
 //=========================================================
@@ -897,9 +893,7 @@ bool CAGrunt::CheckMeleeAttack1(float flDot, float flDist)
 bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 {
 	if (UTIL_GlobalTimeBase() < m_flNextHornetAttackCheck)
-	{
-		return (bool)m_fCanHornetAttack;
-	}
+		return m_fCanHornetAttack;
 
 	if (HasConditions(bits_COND_SEE_ENEMY) && flDist >= AGRUNT_MELEE_DIST && flDist <= 1024 && flDot >= 0.5 && NoFriendlyFire())
 	{
@@ -916,14 +910,14 @@ bool CAGrunt::CheckRangeAttack1(float flDot, float flDist)
 		if (tr.flFraction == 1.0 || tr.pHit == m_hEnemy->edict())
 		{
 			m_flNextHornetAttackCheck = UTIL_GlobalTimeBase() + RANDOM_FLOAT(2, 5);
-			m_fCanHornetAttack = TRUE;
+			m_fCanHornetAttack = true;
 			return m_fCanHornetAttack;
 		}
 	}
 
 	m_flNextHornetAttackCheck = UTIL_GlobalTimeBase() + 0.2;// don't check for half second if this check wasn't successful
-	m_fCanHornetAttack = FALSE;
-	return (bool)m_fCanHornetAttack;
+	m_fCanHornetAttack = false;
+	return m_fCanHornetAttack;
 }
 
 //=========================================================

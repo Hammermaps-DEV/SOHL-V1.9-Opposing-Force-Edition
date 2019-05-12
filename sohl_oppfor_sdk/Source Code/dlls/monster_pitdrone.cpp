@@ -617,7 +617,7 @@ void CPitDrone::UpdateHorns() {
 //=========================================================
 // ShouldSpeak - Should this PDrone be talking?
 //=========================================================
-BOOL CPitDrone::ShouldSpeak() {
+bool CPitDrone::ShouldSpeak() {
 	if (m_flNextSpeakTime > UTIL_GlobalTimeBase()) {
 		// my time to talk is still in the future.
 		return false;

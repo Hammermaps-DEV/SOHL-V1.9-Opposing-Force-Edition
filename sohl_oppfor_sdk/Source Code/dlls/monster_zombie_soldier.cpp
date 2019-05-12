@@ -33,7 +33,6 @@
 #include	"util.h"
 #include	"cbase.h"
 #include	"monsters.h"
-#include	"schedule.h"
 #include	"monster_zombie_soldier.h"
 
 //=========================================================

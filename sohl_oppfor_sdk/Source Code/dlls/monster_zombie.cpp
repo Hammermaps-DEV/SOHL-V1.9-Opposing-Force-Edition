@@ -174,7 +174,7 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 		if (m_flDebug)
 			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
-		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+		CBaseEntity *pEnt = Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
 			pev->health = pev->max_health / 2;
 			if (flDamage > 0) //Override all damage
@@ -187,7 +187,7 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 		}
 
 		if (pevAttacker->owner) {
-			pEnt = CBaseEntity::Instance(pevAttacker->owner);
+			pEnt = Instance(pevAttacker->owner);
 			if (pEnt->IsPlayer()) {
 				pev->health = pev->max_health / 2;
 				if (flDamage > 0) //Override all damage
@@ -228,10 +228,10 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
 		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
-			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
+			CBaseEntity *pEnt = Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {
-				pEnt = CBaseEntity::Instance(pevAttacker->owner);
+				pEnt = Instance(pevAttacker->owner);
 				if (pEnt->IsPlayer()) { return; }
 			}
 		}
@@ -290,7 +290,8 @@ void CZombie::AlertSound() {
 // PainSound 
 //=========================================================
 void CZombie::PainSound() {
-	EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
+	if (RANDOM_LONG(0, 5) < 2)
+		EMIT_SOUND_ARRAY_DYN(CHAN_VOICE, pPainSounds);
 }
 
 //=========================================================
@@ -369,7 +370,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 
 		if (RANDOM_LONG(0, 1)) { AttackSound(); }
 	}
-								break;
+	break;
 	default:
 		CBaseMonster::HandleAnimEvent(pEvent);
 		break;

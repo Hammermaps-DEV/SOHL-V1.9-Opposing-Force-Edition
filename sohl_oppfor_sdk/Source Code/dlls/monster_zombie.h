@@ -48,6 +48,8 @@ public:
 	bool CheckRangeAttack1(float flDot, float flDist) override { return false; }
 	bool CheckRangeAttack2(float flDot, float flDist) override { return false; }
 
+	void SetYawSpeed() override { pev->yaw_speed = 120; };
+
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) override;
 	int IgnoreConditions() override;
 	int Classify() override;
@@ -66,7 +68,7 @@ public:
 	static const char *pAttackMissSounds[];
 
 protected:
-	BOOL m_flDebug = false;
+	bool m_flDebug = false;
 	float m_flBulletDR = 0.0;
 	float m_flNextFlinch;
 	float m_flHitgroupHead;

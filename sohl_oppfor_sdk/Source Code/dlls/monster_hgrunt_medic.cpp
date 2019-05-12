@@ -1145,9 +1145,7 @@ void CMedic::SetYawSpeed() {
 bool CMedic::CheckRangeAttack1(float flDot, float flDist)
 {
 	if ((GetBodygroup(3) != 2) && (GetBodygroup(3) != 3)) 
-	{
 		return CRCAllyMonster::CheckRangeAttack1(flDot, flDist);
-	}
 
 	return false;
 }

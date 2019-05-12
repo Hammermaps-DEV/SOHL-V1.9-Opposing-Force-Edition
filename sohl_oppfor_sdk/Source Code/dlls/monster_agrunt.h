@@ -32,40 +32,39 @@
 class CAGrunt : public CSquadMonster
 {
 public:
-	void Spawn();
-	void Precache();
-	void SetYawSpeed();
-	int  Classify();
-	int  ISoundMask();
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void SetObjectCollisionBox()
+	void Spawn() override;
+	void Precache() override;
+	void SetYawSpeed() override;
+	int  Classify() override;
+	int  ISoundMask() override;
+	void HandleAnimEvent(MonsterEvent_t *pEvent) override;
+	void SetObjectCollisionBox() override
 	{
 		pev->absmin = pev->origin + Vector(-32, -32, 0);
 		pev->absmax = pev->origin + Vector(32, 32, 85);
 	}
 
-	Schedule_t* GetSchedule();
-	Schedule_t* GetScheduleOfType(int Type);
-	BOOL FCanCheckAttacks();
-	bool CheckMeleeAttack1(float flDot, float flDist);
-	bool CheckRangeAttack1(float flDot, float flDist);
-	void StartTask(Task_t *pTask);
-	void AlertSound();
-	void DeathSound();
-	void PainSound();
-	void AttackSound();
-	void PrescheduleThink();
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-	int IRelationship(CBaseEntity *pTarget);
+	Schedule_t* GetSchedule() override;
+	Schedule_t* GetScheduleOfType(int Type) override;
+	bool FCanCheckAttacks() override;
+	bool CheckMeleeAttack1(float flDot, float flDist) override;
+	bool CheckRangeAttack1(float flDot, float flDist) override;
+	void StartTask(Task_t *pTask) override;
+	void AlertSound() override;
+	void DeathSound() override;
+	void PainSound() override;
+	void AttackSound() override;
+	void PrescheduleThink() override;
+	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType) override;
+	int IRelationship(CBaseEntity *pTarget) override;
 	void StopTalking();
-	BOOL ShouldSpeak();
-	virtual void Killed(entvars_t *pevAttacker, int iGib);
-
+	bool ShouldSpeak();
+	void Killed(entvars_t *pevAttacker, int iGib) override;
 
 	CUSTOM_SCHEDULES;
 
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
+	int	Save(CSave &save) override;
+	int	Restore(CRestore &restore) override;
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	static const char *pAttackHitSounds[];
@@ -76,7 +75,7 @@ public:
 	static const char *pIdleSounds[];
 	static const char *pAlertSounds[];
 
-	BOOL	m_fCanHornetAttack;
+	bool	m_fCanHornetAttack;
 	float	m_flNextHornetAttackCheck;
 
 	float m_flNextPainTime;
