@@ -2980,9 +2980,8 @@ USES AND SETS GLOBAL g_pLastSpawn
 edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 {
 	CBaseEntity *pSpot;
-	edict_t		*player;
 
-	player = pPlayer->edict();
+	edict_t* player = pPlayer->edict();
 
 	// choose a info_player_deathmatch point
 	if (g_pGameRules->IsCoOp())
@@ -2990,9 +2989,16 @@ edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 		pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_coop");
 		if (!FNullEnt(pSpot))
 			goto ReturnSpot;
+
 		pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_start");
 		if (!FNullEnt(pSpot))
 			goto ReturnSpot;
+
+		for (int i = RANDOM_LONG(1, 5); i > 0; i--)
+			pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_deathmatch");
+
+		if (FNullEnt(pSpot))  // skip over the null point
+			pSpot = UTIL_FindEntityByClassname(pSpot, "info_player_deathmatch");
 	}
 	else if (g_pGameRules->IsDeathmatch())
 	{
@@ -3000,6 +3006,7 @@ edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 		// Randomize the start spot
 		for (int i = RANDOM_LONG(1, 5); i > 0; i--)
 			pSpot = UTIL_FindEntityByClassname(pSpot, "info_player_deathmatch");
+
 		if (FNullEnt(pSpot))  // skip over the null point
 			pSpot = UTIL_FindEntityByClassname(pSpot, "info_player_deathmatch");
 
@@ -3044,8 +3051,16 @@ edict_t *EntSelectSpawnPoint(CBaseEntity *pPlayer)
 	if (FStringNull(gpGlobals->startspot) || !strlen(STRING(gpGlobals->startspot)))
 	{
 		pSpot = UTIL_FindEntityByClassname(NULL, "info_player_start");
-		if (!FNullEnt(pSpot))
-			goto ReturnSpot;
+		if (FNullEnt(pSpot))
+		{
+			pSpot = UTIL_FindEntityByClassname(pSpot, "info_player_coop");
+			if (FNullEnt(pSpot))
+			{
+				pSpot = UTIL_FindEntityByClassname(g_pLastSpawn, "info_player_deathmatch");
+				if (FNullEnt(pSpot))
+					goto ReturnSpot;
+			}
+		}
 	}
 	else
 	{

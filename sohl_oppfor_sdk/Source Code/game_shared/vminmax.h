@@ -20,4 +20,8 @@
 #define max(a,b)            (((a) > (b)) ? (a) : (b))
 #endif
 
+#ifndef clamp
+#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
+#endif
+
 #endif // VMINMAX_H

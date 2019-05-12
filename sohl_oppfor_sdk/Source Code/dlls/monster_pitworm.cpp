@@ -963,8 +963,6 @@ const Vector& CPitWorm::IdealPosition(CBaseEntity* pEnemy) const
 	return IdealPosition(pEnemy->pev->origin.z);
 }
 
-#define clamp( val, min, max ) ( ((val) > (max)) ? (max) : ( ((val) < (min)) ? (min) : (val) ) )
-
 //=========================================================
 // UpdateBodyControllers
 //=========================================================

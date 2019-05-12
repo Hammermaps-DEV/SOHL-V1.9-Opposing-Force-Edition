@@ -87,6 +87,18 @@
     <Filter Include="Source Files\dlls\rope">
       <UniqueIdentifier>{cff2d3b7-f5a2-4ea3-880e-6b694c7131fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\dlls\cycler">
+      <UniqueIdentifier>{ab75d7c6-9589-48e5-9251-34cb2ff8204b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\cycler">
+      <UniqueIdentifier>{bf902881-4395-4978-a7bf-cd502670cb2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlls\gunman">
+      <UniqueIdentifier>{2356c209-c1d9-43a5-a857-a1d9a5b94be0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\dlls\gunman">
+      <UniqueIdentifier>{a5fbe79d-0369-4188-befb-d00a5051f3ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ammo_9mmbox.cpp">
@@ -710,6 +722,18 @@
     <ClCompile Include="monster_civ.cpp">
       <Filter>Source Files\dlls\monsters</Filter>
     </ClCompile>
+    <ClCompile Include="CDecoreSpacedebris.cpp">
+      <Filter>Source Files\dlls\gunman</Filter>
+    </ClCompile>
+    <ClCompile Include="CGunmanCycler.cpp">
+      <Filter>Source Files\dlls\gunman</Filter>
+    </ClCompile>
+    <ClCompile Include="CDecoreAsteroid.cpp">
+      <Filter>Source Files\dlls\gunman</Filter>
+    </ClCompile>
+    <ClCompile Include="CGunmanUnarmed.cpp">
+      <Filter>Source Files\dlls\gunman</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1257,6 +1281,33 @@
     </ClInclude>
     <ClInclude Include="monster_civ.h">
       <Filter>Header Files\dlls\monsters</Filter>
+    </ClInclude>
+    <ClInclude Include="CCycler.h">
+      <Filter>Header Files\dlls\cycler</Filter>
+    </ClInclude>
+    <ClInclude Include="CGenericCycler.h">
+      <Filter>Header Files\dlls\cycler</Filter>
+    </ClInclude>
+    <ClInclude Include="CCyclerProbe.h">
+      <Filter>Header Files\dlls\cycler</Filter>
+    </ClInclude>
+    <ClInclude Include="CWeaponCycler.h">
+      <Filter>Header Files\dlls\cycler</Filter>
+    </ClInclude>
+    <ClInclude Include="CCyclerSprite.h">
+      <Filter>Header Files\dlls\cycler</Filter>
+    </ClInclude>
+    <ClInclude Include="CGunmanCycler.h">
+      <Filter>Header Files\dlls\gunman</Filter>
+    </ClInclude>
+    <ClInclude Include="CDecoreSpacedebris.h">
+      <Filter>Header Files\dlls\gunman</Filter>
+    </ClInclude>
+    <ClInclude Include="CDecoreAsteroid.h">
+      <Filter>Header Files\dlls\gunman</Filter>
+    </ClInclude>
+    <ClInclude Include="CGunmanUnarmed.h">
+      <Filter>Header Files\dlls\gunman</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

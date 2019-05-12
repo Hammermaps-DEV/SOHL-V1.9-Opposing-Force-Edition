@@ -36,35 +36,16 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "monsters.h"
-#include "animation.h"
 #include "weapons.h"
+#include "CCycler.h"
+#include "CGenericCycler.h"
+#include "CCyclerProbe.h"
+#include "CWeaponCycler.h"
 #include "player.h"
-
+#include "CCyclerSprite.h"
 
 #define TEMP_FOR_SCREEN_SHOTS
 #ifdef TEMP_FOR_SCREEN_SHOTS //===================================================
-
-class CCycler : public CBaseMonster
-{
-public:
-	void GenericCyclerSpawn(char *szModel, Vector vecMin, Vector vecMax);
-	virtual int	ObjectCaps() { return (CBaseEntity::ObjectCaps() | FCAP_IMPULSE_USE); }
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void Spawn();
-	void Think();
-	//void Pain( float flDamage );
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-
-	// Don't treat as a live target
-	virtual BOOL IsAlive() { return FALSE; }
-
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	int			m_animate;
-};
 
 TYPEDESCRIPTION	CCycler::m_SaveData[] =
 {
@@ -73,29 +54,10 @@ TYPEDESCRIPTION	CCycler::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CCycler, CBaseMonster);
 
-
-//
-// we should get rid of all the other cyclers and replace them with this.
-//
-class CGenericCycler : public CCycler
-{
-public:
-	void Spawn() { GenericCyclerSpawn((char *)STRING(pev->model), Vector(-16, -16, 0), Vector(16, 16, 72)); }
-};
 LINK_ENTITY_TO_CLASS(cycler, CGenericCycler);
 
-
-
-// Probe droid imported for tech demo compatibility
-//
-// PROBE DROID
-//
-class CCyclerProbe : public CCycler
-{
-public:
-	void Spawn();
-};
 LINK_ENTITY_TO_CLASS(cycler_prdroid, CCyclerProbe);
+
 void CCyclerProbe::Spawn()
 {
 	pev->origin = pev->origin + Vector(0, 0, 16);
@@ -227,27 +189,6 @@ int CCycler::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 
 #endif
 
-
-class CCyclerSprite : public CBaseEntity
-{
-public:
-	void Spawn();
-	void Think();
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	virtual int	ObjectCaps() { return (CBaseEntity::ObjectCaps() | FCAP_DONT_SAVE | FCAP_IMPULSE_USE); }
-	virtual int	TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void	Animate(float frames);
-
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	inline int		ShouldAnimate() { return m_animate && m_maxFrame > 1.0; }
-	int			m_animate;
-	float		m_lastTime;
-	float		m_maxFrame;
-};
-
 LINK_ENTITY_TO_CLASS(cycler_sprite, CCyclerSprite);
 
 TYPEDESCRIPTION	CCyclerSprite::m_SaveData[] =
@@ -312,29 +253,6 @@ void CCyclerSprite::Animate(float frames)
 		pev->frame = fmod(pev->frame, m_maxFrame);
 }
 
-
-
-//Weapon Cycler
-class CWeaponCycler : public CBasePlayerWeapon
-{
-public:
-	void Spawn();
-	int GetItemInfo(ItemInfo *p);
-
-	void PrimaryAttack();
-	void SecondaryAttack();
-	BOOL Deploy();
-	void Holster();
-	void KeyValue(KeyValueData *pkvd);
-
-	virtual int Save(CSave &save);
-	virtual int Restore(CRestore &restore);
-	static	TYPEDESCRIPTION m_SaveData[];
-private:
-	string_t	m_iPlayerModel;
-	string_t	m_iWorldModel;
-	string_t	m_iViewModel;
-};
 LINK_ENTITY_TO_CLASS(cycler_weapon, CWeaponCycler);
 LINK_ENTITY_TO_CLASS(weapon_question, CWeaponCycler);	// saverestore issues
 
