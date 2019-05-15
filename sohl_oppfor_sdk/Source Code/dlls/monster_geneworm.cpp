@@ -94,13 +94,13 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void EXPORT StartupThink();
-	void EXPORT HuntThink();
-	void EXPORT CrashTouch(CBaseEntity *pOther);
-	void EXPORT DyingThink();
-	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink();
-	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT StartupThink();
+	void DLLEXPORT HuntThink();
+	void DLLEXPORT CrashTouch(CBaseEntity *pOther);
+	void DLLEXPORT DyingThink();
+	void DLLEXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT NullThink();
+	void DLLEXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	void FloatSequence();
 	void NextActivity();

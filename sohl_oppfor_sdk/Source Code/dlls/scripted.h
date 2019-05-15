@@ -77,9 +77,9 @@ public:
 	virtual STATE	GetState() { return m_iState; };
 	STATE	m_iState;
 
-	// void EXPORT CineSpawnThink( void );
-	void EXPORT CineThink();
-	void EXPORT InitIdleThink(); //LRC
+	// void DLLEXPORT CineSpawnThink( void );
+	void DLLEXPORT CineThink();
+	void DLLEXPORT InitIdleThink(); //LRC
 	void Pain();
 	void Die();
 	void DelayStart(int state);

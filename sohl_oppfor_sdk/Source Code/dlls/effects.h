@@ -61,8 +61,8 @@ public:
 			flags = FCAP_DONT_SAVE;
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags;
 	}
-	void EXPORT AnimateThink();
-	void EXPORT ExpandThink();
+	void DLLEXPORT AnimateThink();
+	void DLLEXPORT ExpandThink();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void Animate(float frames);
 	void Expand(float scaleSpeed, float fadeSpeed);
@@ -105,7 +105,7 @@ public:
 		SetNextThink(0);
 	}
 
-	void EXPORT AnimateUntilDead();
+	void DLLEXPORT AnimateUntilDead();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
@@ -132,7 +132,7 @@ public:
 		return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | flags;
 	}
 
-	void EXPORT TriggerTouch(CBaseEntity *pOther);
+	void DLLEXPORT TriggerTouch(CBaseEntity *pOther);
 
 	// These functions are here to show the way beams are encoded as entities.
 	// Encoding beams as entities simplifies their management in the client/server architecture
@@ -219,7 +219,7 @@ public:
 
 	void	FireAtPoint(Vector startpos, TraceResult &point);
 
-	void	EXPORT StrikeThink();
+	void	DLLEXPORT StrikeThink();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

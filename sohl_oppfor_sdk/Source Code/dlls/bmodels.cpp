@@ -268,7 +268,7 @@ class CFuncIllusionary : public CBaseToggle
 {
 public:
 	void Spawn();
-	void EXPORT SloshTouch(CBaseEntity *pOther);
+	void DLLEXPORT SloshTouch(CBaseEntity *pOther);
 	void KeyValue(KeyValueData *pkvd);
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
@@ -311,7 +311,7 @@ public:
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
 	void DesiredAction();
-	void EXPORT Think();
+	void DLLEXPORT Think();
 };
 
 LINK_ENTITY_TO_CLASS(func_shine, CFuncShine);
@@ -396,13 +396,13 @@ public:
 	// basic functions
 	void Spawn();
 	void Precache();
-	void EXPORT SpinUp();
-	void EXPORT SpinDown();
+	void DLLEXPORT SpinUp();
+	void DLLEXPORT SpinDown();
 	void KeyValue(KeyValueData* pkvd);
-	void EXPORT HurtTouch(CBaseEntity *pOther);
-	void EXPORT RotatingUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT WaitForStart(); //LRC - get round 1.1.0.8's bizarre behaviour on startup
-	void EXPORT Rotate();
+	void DLLEXPORT HurtTouch(CBaseEntity *pOther);
+	void DLLEXPORT RotatingUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT WaitForStart(); //LRC - get round 1.1.0.8's bizarre behaviour on startup
+	void DLLEXPORT Rotate();
 	void RampPitchVol(int fUp);
 	void Blocked(CBaseEntity *pOther);
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -897,11 +897,11 @@ class CPendulum : public CBaseEntity
 public:
 	void	Spawn();
 	void	KeyValue(KeyValueData *pkvd);
-	void	EXPORT SwingThink();
-	void	EXPORT PendulumUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	EXPORT StopThink();
+	void	DLLEXPORT SwingThink();
+	void	DLLEXPORT PendulumUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	DLLEXPORT StopThink();
 	void	Touch(CBaseEntity *pOther);
-	void	EXPORT RopeTouch(CBaseEntity *pOther);// this touch func makes the pendulum a rope
+	void	DLLEXPORT RopeTouch(CBaseEntity *pOther);// this touch func makes the pendulum a rope
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

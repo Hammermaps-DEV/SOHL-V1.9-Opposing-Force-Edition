@@ -80,8 +80,8 @@ class CSatchelCharge : public CGrenade
 	void Precache();
 	void BounceSound();
 
-	void EXPORT SatchelSlide(CBaseEntity *pOther);
-	void EXPORT SatchelThink();
+	void DLLEXPORT SatchelSlide(CBaseEntity *pOther);
+	void DLLEXPORT SatchelThink();
 
 public:
 	void Deactivate();

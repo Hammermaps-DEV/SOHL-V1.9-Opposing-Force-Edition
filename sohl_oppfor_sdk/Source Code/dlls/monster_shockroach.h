@@ -41,7 +41,7 @@ public:
 	// void
 	void Spawn();
 	void Precache();
-	void EXPORT LeapTouch(CBaseEntity *pOther);
+	void DLLEXPORT LeapTouch(CBaseEntity *pOther);
 	void PainSound();
 	void DeathSound();
 	void IdleSound();

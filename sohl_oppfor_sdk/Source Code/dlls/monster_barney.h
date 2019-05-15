@@ -23,6 +23,7 @@
 *   Code used from FWGS Team (Fixes for SOHL)
 *   Code used from LevShisterov (Bugfixed and improved HLSDK)
 *	Code used from Fograin (Half-Life: Update MOD)
+*	Code used from Yellow-Shift Development Team (Half-Life: Yellow-Shift)
 *
 ***/
 //=========================================================
@@ -34,6 +35,12 @@
 
 // include
 #include "talkmonster.h"
+
+enum
+{
+	SCHED_BARNEY_RELOAD = LAST_TALKMONSTER_SCHEDULE + 1,
+	LAST_BARNEY_SCHEDULE,
+};
 
 // class definition
 class CBarney : public CTalkMonster {
@@ -65,6 +72,8 @@ public:
 
 	virtual void TalkInit();
 
+	virtual void CheckAmmo();
+
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
 
@@ -83,6 +92,7 @@ public:
 	float	m_checkAttackTime;
 	BOOL	m_lastAttackCheck;
 	float	m_flPlayerDamage;
+	int		m_cClipSize;
 
 	CUSTOM_SCHEDULES;
 protected:
@@ -93,6 +103,7 @@ protected:
 	float m_flHitgroupArm;
 	float m_flHitgroupLeg;
 	int	  m_iBrassShell;
+	int	  m_iEmptyMag;
 	int	  head;
 };
 

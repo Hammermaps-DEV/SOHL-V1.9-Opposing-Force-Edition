@@ -43,7 +43,7 @@ public:
 	void Spawn();
 	void KeyValue(KeyValueData* pKeyValueData);
 	void MakeAware(CBaseEntity* pEnt);
-	void EXPORT Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int ObjectCaps() { return CBaseEntity::ObjectCaps() | FCAP_MASTER; }
 	bool IsTriggered(CBaseEntity *pActivator);
 };

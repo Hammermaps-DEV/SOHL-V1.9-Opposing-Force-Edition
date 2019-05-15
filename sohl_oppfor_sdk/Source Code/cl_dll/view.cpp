@@ -48,6 +48,7 @@
 #include "hltv.h"
 #include "studio.h"
 #include "soundengine.h"
+#include "exports.h"
 
 #ifndef M_PI
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
@@ -56,7 +57,7 @@
 int CL_IsThirdPerson(void);
 void CL_CameraOffset(float *ofs);
 
-extern "C" void DLLEXPORT V_CalcRefdef(struct ref_params_s *pparams);
+void DLLEXPORT V_CalcRefdef(struct ref_params_s *pparams);
 
 int		PM_GetVisEntInfo(int ent);
 int		PM_GetPhysEntInfo(int ent);
@@ -442,12 +443,6 @@ typedef struct
 	int CurrentAngle;
 } viewinterp_t;
 
-/*
-==================
-V_CalcRefdef
-
-==================
-*/
 /*
 ==================
 V_CalcRefdef
@@ -1642,7 +1637,6 @@ void V_CalcThirdPersonRefdef(struct ref_params_s * pparams)
 				//Draw the actual 'player' (thirdperson) view next iteration.
 		pparams->nextView = 1;
 	}
-
 	//Either there is no env_sky in the level or we have just drawn the sky. Either way, draw the thirdperson view now.
 	else if (gHUD.m_iSkyMode == SKY_OFF || pparams->nextView == 1)
 	{
@@ -1668,7 +1662,6 @@ void V_CalcThirdPersonRefdef(struct ref_params_s * pparams)
 		pparams->nextView = 0; //We've finished drawing the level this frame.
 	}
 }
-
 
 void DLLEXPORT V_CalcRefdef(struct ref_params_s *pparams)
 {

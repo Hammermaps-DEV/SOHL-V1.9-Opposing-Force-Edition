@@ -53,10 +53,10 @@ public:
 	void Spawn();
 	void Precache();
 	void KeyValue(KeyValueData* pkvd);
-	void EXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT CyclicUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT MakerThink();
-	void EXPORT MakeMonsterThink();
+	void DLLEXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT CyclicUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT MakerThink();
+	void DLLEXPORT MakeMonsterThink();
 	void DeathNotice(entvars_t *pevChild);// monster maker children use this to tell the monster maker that they have died.
 	void TryMakeMonster(); //LRC - to allow for a spawndelay
 	CBaseMonster* MakeMonster(); //LRC - actually make a monster (and return the new creation)

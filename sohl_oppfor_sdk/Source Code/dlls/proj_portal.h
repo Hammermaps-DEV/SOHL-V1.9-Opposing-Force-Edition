@@ -35,15 +35,15 @@ public:
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void EXPORT Animate();
-	void EXPORT GlowThink();
+	void DLLEXPORT Animate();
+	void DLLEXPORT GlowThink();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void ComputeBeamPositions(const Vector& vel, Vector* pos1, Vector* pos2);
-	void EXPORT FadeShock();
+	void DLLEXPORT FadeShock();
 	void Glow();
 
 	int  m_iBeams;

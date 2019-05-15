@@ -37,8 +37,8 @@ public:
 	void Precache();
 	void KeyValue(KeyValueData* pkvd);
 
-	void EXPORT StartupThink();
-	void EXPORT SequenceThink();
+	void DLLEXPORT StartupThink();
+	void DLLEXPORT SequenceThink();
 
 	string_t m_iszSequenceName;
 };

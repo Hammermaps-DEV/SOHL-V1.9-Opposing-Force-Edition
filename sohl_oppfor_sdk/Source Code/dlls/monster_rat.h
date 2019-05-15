@@ -34,10 +34,10 @@ public:
 	void Spawn();
 	void Precache();
 	void SetYawSpeed();
-	void EXPORT MonsterThink();
+	void DLLEXPORT MonsterThink();
 	void Move(float flInterval);
 	void PickNewDest(int iCondition);
-	void EXPORT Touch(CBaseEntity *pOther);
+	void DLLEXPORT Touch(CBaseEntity *pOther);
 	void Killed(entvars_t *pevAttacker, int iGib);
 	float m_flLastLightLevel;
 	float m_flNextSmellTime;

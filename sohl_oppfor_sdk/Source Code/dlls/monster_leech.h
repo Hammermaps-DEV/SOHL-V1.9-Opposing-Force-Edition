@@ -35,8 +35,8 @@ public:
 	void Spawn();
 	void Precache();
 
-	void EXPORT SwimThink();
-	void EXPORT DeadThink();
+	void DLLEXPORT SwimThink();
+	void DLLEXPORT DeadThink();
 	void Touch(CBaseEntity *pOther)
 	{
 		if (pOther->IsPlayer())

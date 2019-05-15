@@ -37,7 +37,7 @@ public:
 	void Spawn();
 	void KeyValue(KeyValueData* pKeyValueData);
 	void MakeAware(CBaseEntity* pEnt);
-	void EXPORT	GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT	GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 private:
 	char sParticleDefintionFile[MAX_PARTICLE_PATH];
 	unsigned int iID;

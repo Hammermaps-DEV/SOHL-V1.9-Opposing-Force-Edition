@@ -1272,8 +1272,8 @@ public:
 		return flags | FCAP_CONTINUOUS_USE;
 	}
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	EXPORT Off();
-	void	EXPORT Return();
+	void	DLLEXPORT Off();
+	void	DLLEXPORT Return();
 	void	UpdateSelf(float value);
 	void	UpdateSelfReturn(float value);
 	void	UpdateAllButtons(float value, int start);
@@ -1520,11 +1520,11 @@ class CEnvSpark : public CBaseEntity
 public:
 	void	Spawn();
 	void	Precache();
-	void	EXPORT SparkThink();
-	void	EXPORT SparkWait();
-	void	EXPORT SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	EXPORT SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	EXPORT SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	DLLEXPORT SparkThink();
+	void	DLLEXPORT SparkWait();
+	void	DLLEXPORT SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	DLLEXPORT SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	DLLEXPORT SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void	KeyValue(KeyValueData *pkvd);
 
 	virtual int		Save(CSave &save);
@@ -1611,7 +1611,7 @@ void CEnvSpark::KeyValue(KeyValueData *pkvd)
 		CBaseEntity::KeyValue(pkvd);
 }
 
-void EXPORT CEnvSpark::SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+void DLLEXPORT CEnvSpark::SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	if (m_pfnThink == NULL)
 	{
@@ -1625,12 +1625,12 @@ void EXPORT CEnvSpark::SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller
 	}
 }
 
-void EXPORT CEnvSpark::SparkWait()
+void DLLEXPORT CEnvSpark::SparkWait()
 {
 	SetThink(NULL);
 }
 
-void EXPORT CEnvSpark::SparkThink()
+void DLLEXPORT CEnvSpark::SparkThink()
 {
 	DoSpark(pev, pev->origin);
 	if (pev->spawnflags & 16)
@@ -1643,7 +1643,7 @@ void EXPORT CEnvSpark::SparkThink()
 	}
 }
 
-void EXPORT CEnvSpark::SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+void DLLEXPORT CEnvSpark::SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetUse(&CEnvSpark::SparkStop);
 	SetThink(&CEnvSpark::SparkThink);
@@ -1651,7 +1651,7 @@ void EXPORT CEnvSpark::SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller,
 	SetNextThink(0.1 + RANDOM_FLOAT(0, m_flDelay));
 }
 
-void EXPORT CEnvSpark::SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
+void DLLEXPORT CEnvSpark::SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	SetUse(&CEnvSpark::SparkStart);
 	SetThink(NULL);

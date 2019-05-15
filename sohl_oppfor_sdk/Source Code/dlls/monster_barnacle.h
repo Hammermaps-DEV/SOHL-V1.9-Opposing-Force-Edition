@@ -37,8 +37,8 @@ public:
 	CBaseEntity *TongueTouchEnt(float *pflLength);
 	int  Classify();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	void EXPORT BarnacleThink();
-	void EXPORT WaitTillDead();
+	void DLLEXPORT BarnacleThink();
+	void DLLEXPORT WaitTillDead();
 	void Killed(entvars_t *pevAttacker, int iGib);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	virtual int		Save(CSave &save);

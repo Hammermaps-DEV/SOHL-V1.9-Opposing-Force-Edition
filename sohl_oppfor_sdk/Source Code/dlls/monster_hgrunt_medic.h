@@ -86,7 +86,7 @@ class CMedicRepel : public CHFGruntRepel
 public:
 	void Spawn();
 	void Precache();
-	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	int m_iSpriteTexture;	// Don't save, precache
 };
 

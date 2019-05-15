@@ -46,9 +46,9 @@ class CSporeAmmoPlant : public CBaseEntity
 public:
 	void Spawn();
 	void Precache();
-	void EXPORT BornThink();
-	void EXPORT IdleThink();
-	void EXPORT AmmoTouch(CBaseEntity *pOther);
+	void DLLEXPORT BornThink();
+	void DLLEXPORT IdleThink();
+	void DLLEXPORT AmmoTouch(CBaseEntity *pOther);
 	int  TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 

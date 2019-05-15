@@ -69,7 +69,7 @@ public:
 	void Spawn();
 	virtual void Precache();
 	void KeyValue(KeyValueData *pkvd);
-	void EXPORT TurretUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT TurretUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual int	 TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
@@ -80,24 +80,24 @@ public:
 
 	// Think functions
 
-	void EXPORT ActiveThink();
-	void EXPORT SearchThink();
-	void EXPORT AutoSearchThink();
-	void EXPORT TurretDeath();
+	void DLLEXPORT ActiveThink();
+	void DLLEXPORT SearchThink();
+	void DLLEXPORT AutoSearchThink();
+	void DLLEXPORT TurretDeath();
 
-	virtual void EXPORT SpinDownCall() { m_iSpin = 0; }
-	virtual void EXPORT SpinUpCall() { m_iSpin = 1; }
+	virtual void DLLEXPORT SpinDownCall() { m_iSpin = 0; }
+	virtual void DLLEXPORT SpinUpCall() { m_iSpin = 1; }
 
 	// void SpinDown();
-	// float EXPORT SpinDownCall( void ) { return SpinDown(); }
+	// float DLLEXPORT SpinDownCall( void ) { return SpinDown(); }
 
 	// virtual float SpinDown() { return 0;}
 	// virtual float Retire() { return 0;}
 
-	void EXPORT Deploy();
-	void EXPORT Retire();
+	void DLLEXPORT Deploy();
+	void DLLEXPORT Retire();
 
-	void EXPORT Initialize();
+	void DLLEXPORT Initialize();
 
 	virtual void Ping();
 	virtual void EyeOn();
@@ -1186,8 +1186,8 @@ public:
 	// other functions
 	void Shoot(Vector &vecSrc, Vector &vecDirToEnemy);
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
-	void EXPORT SentryTouch(CBaseEntity *pOther);
-	void EXPORT SentryDeath();
+	void DLLEXPORT SentryTouch(CBaseEntity *pOther);
+	void DLLEXPORT SentryDeath();
 
 };
 

@@ -44,16 +44,16 @@ public:
 
 	void virtual Explode(Vector vecSrc, Vector vecAim);
 	void virtual Explode(TraceResult *pTrace, int bitsDamageType);
-	void EXPORT Smoke();
+	void DLLEXPORT Smoke();
 
-	void EXPORT BounceTouch(CBaseEntity *pOther);
-	void EXPORT SlideTouch(CBaseEntity *pOther);
-	void EXPORT ExplodeTouch(CBaseEntity *pOther);
-	void EXPORT DangerSoundThink();
-	void EXPORT PreDetonate();
-	void EXPORT Detonate();
-	void EXPORT DetonateUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT TumbleThink();
+	void DLLEXPORT BounceTouch(CBaseEntity *pOther);
+	void DLLEXPORT SlideTouch(CBaseEntity *pOther);
+	void DLLEXPORT ExplodeTouch(CBaseEntity *pOther);
+	void DLLEXPORT DangerSoundThink();
+	void DLLEXPORT PreDetonate();
+	void DLLEXPORT Detonate();
+	void DLLEXPORT DetonateUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT TumbleThink();
 
 	virtual void BounceSound();
 	virtual int	BloodColor() { return DONT_BLEED; }

@@ -338,7 +338,7 @@ public:
 	void SendAmmoUpdate();
 
 	void WaterMove();
-	void EXPORT PlayerDeathThink();
+	void DLLEXPORT PlayerDeathThink();
 	void PlayerUse();
 
 	void CheckSuitUpdate();

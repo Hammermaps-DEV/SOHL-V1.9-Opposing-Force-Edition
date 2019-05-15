@@ -157,7 +157,7 @@ public:
 	virtual void	DeclineFollowing() {}
 	void			LimitFollowers(CBaseEntity *pPlayer, int maxFollowers);
 
-	void EXPORT		FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT		FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual void	SetAnswerQuestion(CTalkMonster *pSpeaker);
 	virtual int		FriendNumber(int arrayNumber) { return arrayNumber; }

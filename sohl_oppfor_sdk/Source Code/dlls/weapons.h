@@ -44,7 +44,7 @@ class CLaserSpot : public CBaseEntity
 
 public:
 	void Suspend(float flSuspendTime);
-	void EXPORT Revive();
+	void DLLEXPORT Revive();
 
 	static CLaserSpot *CreateSpot();
 	static CLaserSpot *CreateSpot(const char* spritename);
@@ -255,11 +255,11 @@ public:
 
 	virtual int AddToPlayer(CBasePlayer *pPlayer);	// return TRUE if the item you want the item added to the player inventory
 	virtual bool AddDuplicate(CBasePlayerItem *pItem) { return false; }	// return TRUE if you want your duplicate removed from world
-	void EXPORT DestroyItem();
-	void EXPORT DefaultTouch(CBaseEntity *pOther);	// default weapon touch
-	void EXPORT FallThink();// when an item is first spawned, this think is run to determine when the object has hit the ground.
-	void EXPORT Materialize();// make a weapon visible and tangible
-	void EXPORT AttemptToMaterialize();  // the weapon desires to become visible and tangible, if the game rules allow for it
+	void DLLEXPORT DestroyItem();
+	void DLLEXPORT DefaultTouch(CBaseEntity *pOther);	// default weapon touch
+	void DLLEXPORT FallThink();// when an item is first spawned, this think is run to determine when the object has hit the ground.
+	void DLLEXPORT Materialize();// make a weapon visible and tangible
+	void DLLEXPORT AttemptToMaterialize();  // the weapon desires to become visible and tangible, if the game rules allow for it
 	CBaseEntity* Respawn();// copy a weapon
 	void FallInit();
 	void CheckRespawn();
@@ -414,11 +414,11 @@ class CBasePlayerAmmo : public CBasePlayerItem
 {
 public:
 	virtual void Spawn();
-	void EXPORT DefaultTouch(CBaseEntity *pOther); // default weapon touch
+	void DLLEXPORT DefaultTouch(CBaseEntity *pOther); // default weapon touch
 	virtual BOOL AddAmmo(CBaseEntity *pOther) { return TRUE; };
 
 	CBaseEntity* Respawn();
-	void EXPORT Materialize();
+	void DLLEXPORT Materialize();
 };
 
 
@@ -514,7 +514,7 @@ class CWeaponBox : public CBaseEntity
 	void SetObjectCollisionBox();
 
 public:
-	void EXPORT Kill();
+	void DLLEXPORT Kill();
 	int		Save(CSave &save);
 	int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];

@@ -95,9 +95,9 @@ class CControllerHeadBall : public CBaseMonster
 {
 	void Spawn();
 	void Precache();
-	void EXPORT HuntThink();
-	void EXPORT DieThink();
-	void EXPORT BounceTouch(CBaseEntity *pOther);
+	void DLLEXPORT HuntThink();
+	void DLLEXPORT DieThink();
+	void DLLEXPORT BounceTouch(CBaseEntity *pOther);
 	void MovetoTarget(Vector vecTarget);
 	void Crawl();
 	int m_iTrail;
@@ -110,8 +110,8 @@ class CControllerZapBall : public CBaseMonster
 {
 	void Spawn();
 	void Precache();
-	void EXPORT AnimateThink();
-	void EXPORT ExplodeTouch(CBaseEntity *pOther);
+	void DLLEXPORT AnimateThink();
+	void DLLEXPORT ExplodeTouch(CBaseEntity *pOther);
 
 	EHANDLE m_hOwner;
 };

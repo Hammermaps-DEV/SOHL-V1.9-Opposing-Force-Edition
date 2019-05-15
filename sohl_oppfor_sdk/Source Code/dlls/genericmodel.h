@@ -33,7 +33,7 @@ public:
 	virtual void Precache();
 	virtual void KeyValue(KeyValueData* pkvd);
 
-	virtual void EXPORT IdleThink();
+	virtual void DLLEXPORT IdleThink();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

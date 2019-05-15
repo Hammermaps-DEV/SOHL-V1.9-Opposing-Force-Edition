@@ -46,8 +46,8 @@ class CItem : public CBaseEntity
 {
 public:
 	void	Spawn();
-	void	EXPORT ItemTouch(CBaseEntity *pOther);
-	void	EXPORT Materialize();
+	void	DLLEXPORT ItemTouch(CBaseEntity *pOther);
+	void	DLLEXPORT Materialize();
 	virtual bool MyTouch(CBasePlayer *pPlayer) { return false; };
 	CBaseEntity* Respawn();
 };
@@ -58,7 +58,7 @@ public:
 	void Spawn() override;
 	void Precache() override;
 	bool MyTouch(CBasePlayer *pPlayer) override;
-	void EXPORT ItemTouch(CBaseEntity *pOther);
+	void DLLEXPORT ItemTouch(CBaseEntity *pOther);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
 
 };
@@ -96,7 +96,7 @@ public:
 	void Spawn() override;
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void Precache() override;
-	void EXPORT ItemTouch(CBaseEntity *pOther);
+	void DLLEXPORT ItemTouch(CBaseEntity *pOther);
 	bool MyTouch(CBasePlayer *pPlayer) override;
 	void StripFromPlayer();
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) override;

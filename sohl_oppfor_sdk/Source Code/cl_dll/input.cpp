@@ -249,7 +249,7 @@ KB_Find
 Allows the engine to get a kbutton_t directly ( so it can check +mlook state, etc ) for saving out to .cfg files
 ============
 */
-struct kbutton_s CL_DLLEXPORT *KB_Find( const char *name )
+struct kbutton_s DLLEXPORT *KB_Find( const char *name )
 {
 	kblist_t *p;
 	p = g_kbkeys;
@@ -406,7 +406,7 @@ HUD_Key_Event
 Return 1 to allow engine to process the key, otherwise, act on it as needed
 ============
 */
-int CL_DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
+int DLLEXPORT HUD_Key_Event( int down, int keynum, const char *pszCurrentBinding )
 {
 	if (gViewPort)
 		return gViewPort->KeyInput(down, keynum, pszCurrentBinding);
@@ -742,7 +742,7 @@ if active == 1 then we are 1) not playing back demos ( where our commands are ig
 2 ) we have finished signing on to server
 ================
 */
-void CL_DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
+void DLLEXPORT CL_CreateMove ( float frametime, struct usercmd_s *cmd, int active )
 {	
 	float spd;
 	vec3_t viewangles;
@@ -1193,7 +1193,7 @@ void ShutdownInput ()
 #include "interface.h"
 void CL_UnloadParticleMan();
 
-void CL_DLLEXPORT HUD_Shutdown( void )
+void DLLEXPORT HUD_Shutdown( void )
 {
 	ShutdownInput();
 	CL_UnloadParticleMan();

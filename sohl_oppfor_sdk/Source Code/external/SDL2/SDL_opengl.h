@@ -9443,7 +9443,7 @@ typedef void (APIENTRYP PFNGLDRAWBUFFERSATIPROC) (GLsizei n, const GLenum *bufs)
 #ifndef GL_ATI_pixel_format_float
 #define GL_ATI_pixel_format_float 1
 /* This is really a WGL extension, but defines some associated GL enums.
- * ATI does not export "GL_ATI_pixel_format_float" in the GL_EXTENSIONS string.
+ * ATI does not DLLEXPORT "GL_ATI_pixel_format_float" in the GL_EXTENSIONS string.
  */
 #endif
 

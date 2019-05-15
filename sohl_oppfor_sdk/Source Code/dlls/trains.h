@@ -95,7 +95,7 @@ public:
 
 	static	TYPEDESCRIPTION m_SaveData[];
 #if PATH_SPARKLE_DEBUG
-	void EXPORT Sparkle();
+	void DLLEXPORT Sparkle();
 #endif
 
 	float		m_length;
@@ -125,11 +125,11 @@ public:
 
 	void DesiredAction(); //LRC - used to be called Next!
 
-//	void EXPORT Next( void );
-	void EXPORT PostponeNext();
-	void EXPORT Find();
-	void EXPORT NearestPath();
-	void EXPORT DeadEnd();
+//	void DLLEXPORT Next( void );
+	void DLLEXPORT PostponeNext();
+	void DLLEXPORT Find();
+	void DLLEXPORT NearestPath();
+	void DLLEXPORT DeadEnd();
 
 	void		NextThink(float thinkTime, BOOL alwaysThink);
 
@@ -206,15 +206,15 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// local functions
-	void EXPORT FindTrain();
-	void EXPORT DoorGoUp();
-	void EXPORT DoorGoDown();
-	void EXPORT DoorHitTop();
-	void EXPORT DoorSlideUp();
-	void EXPORT DoorSlideDown();
-	void EXPORT DoorSlideWait();		// wait before sliding
-	void EXPORT DoorHitBottom();
-	void EXPORT ActivateTrain();
+	void DLLEXPORT FindTrain();
+	void DLLEXPORT DoorGoUp();
+	void DLLEXPORT DoorGoDown();
+	void DLLEXPORT DoorHitTop();
+	void DLLEXPORT DoorSlideUp();
+	void DLLEXPORT DoorSlideDown();
+	void DLLEXPORT DoorSlideWait();		// wait before sliding
+	void DLLEXPORT DoorHitBottom();
+	void DLLEXPORT ActivateTrain();
 
 	BYTE	m_bMoveSnd;			// sound a door makes while moving
 	BYTE	m_bStopSnd;			// sound a door makes when it stops

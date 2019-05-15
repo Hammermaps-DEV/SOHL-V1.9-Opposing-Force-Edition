@@ -72,14 +72,14 @@ public:
 	virtual void SetToggleState(int state);
 
 	// used to selectivly override defaults
-	void EXPORT DoorTouch(CBaseEntity *pOther);
+	void DLLEXPORT DoorTouch(CBaseEntity *pOther);
 
 	// local functions
 	int DoorActivate();
-	void EXPORT DoorGoUp();
-	void EXPORT DoorGoDown();
-	void EXPORT DoorHitTop();
-	void EXPORT DoorHitBottom();
+	void DLLEXPORT DoorGoUp();
+	void DLLEXPORT DoorGoDown();
+	void DLLEXPORT DoorHitTop();
+	void DLLEXPORT DoorHitBottom();
 
 	BYTE	m_bHealthValue;// some doors are medi-kit doors, they give players health
 
@@ -1103,7 +1103,7 @@ class CMomentaryDoor : public CBaseToggle
 public:
 	void	Spawn();
 	void Precache();
-	void EXPORT MomentaryMoveDone();
+	void DLLEXPORT MomentaryMoveDone();
 
 	void	KeyValue(KeyValueData *pkvd);
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);

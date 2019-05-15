@@ -33,9 +33,9 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 	void Spawn();
 	void Precache();
-	void EXPORT FollowThink();
-	void EXPORT IgniteThink();
-	void EXPORT RocketTouch(CBaseEntity *pOther);
+	void DLLEXPORT FollowThink();
+	void DLLEXPORT IgniteThink();
+	void DLLEXPORT RocketTouch(CBaseEntity *pOther);
 	void Detonate();
 	void CreateTrail();
 	static CRpgRocket *Create(Vector vecOrigin, Vector vecAngles, CBaseEntity *pOwner, CRpg *pLauncher);

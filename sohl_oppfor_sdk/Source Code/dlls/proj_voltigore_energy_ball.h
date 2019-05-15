@@ -38,11 +38,11 @@ public:
 	void Spawn();
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
-	void EXPORT Touch(CBaseEntity *pOther);
-	void EXPORT Think();
+	void DLLEXPORT Touch(CBaseEntity *pOther);
+	void DLLEXPORT Think();
 	void Precache();
 	void Glow();
-	void EXPORT Animate();
+	void DLLEXPORT Animate();
 
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);

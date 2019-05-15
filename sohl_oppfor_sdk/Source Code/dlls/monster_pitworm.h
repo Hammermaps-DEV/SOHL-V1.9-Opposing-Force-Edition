@@ -59,14 +59,14 @@ public:
 
 	int CanPlaySequence(BOOL fDisregardState);
 
-	void EXPORT StartupThink();
-	void EXPORT DyingThink();
-	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT NullThink();
-	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void EXPORT	HuntThink();
+	void DLLEXPORT StartupThink();
+	void DLLEXPORT DyingThink();
+	void DLLEXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT NullThink();
+	void DLLEXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void DLLEXPORT	HuntThink();
 
-	void EXPORT WormTouch(CBaseEntity* pOther);
+	void DLLEXPORT WormTouch(CBaseEntity* pOther);
 
 	void FloatSequence();
 	void NextActivity();
