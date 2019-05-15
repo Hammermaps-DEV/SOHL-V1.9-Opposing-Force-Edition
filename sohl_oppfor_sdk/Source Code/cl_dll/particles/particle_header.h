@@ -44,6 +44,8 @@ extern cvar_t* g_ParticleCount;
 extern cvar_t* g_ParticleDebug;
 // how many sorts we are going to have a second
 extern cvar_t* g_ParticleSorts;
+// this player's position from pm_shared
+extern "C" vec3_t flPlayerOrigin;
 // sets up ogl for all particles
 extern inline void Particle_InitOpenGL( void );
 // "closes" opengl again when drawing is done so we don't screw up settings for HL

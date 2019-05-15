@@ -43,8 +43,17 @@
 
 static void PlatSpawnInsideTrigger(entvars_t* pevPlatform);
 
-int nanmask_win = 255 << 23;
-#define	IS_NAN(x) (((*(int *)&x)&nanmask_win)==nanmask_win)
+// from mathlib.h
+// BUG BUG This is declared in pm_math.cpp, Linux will spit about it
+// No idea why windows does not pick that up, in fact
+// MSVC will complain it's not delcared if you use extern...
+#ifdef _WIN32
+int nanmask = 255 << 23;
+#else
+extern int nanmask;
+#endif
+
+#define	IS_NAN(x) (((*(int *)&x)&nanmask)==nanmask)
 
 static float Fix(float angle)
 {

@@ -146,9 +146,9 @@ void CGrassParticle::Draw( void )
 		return;
 	}
 
-	Vector vForward, vRight, vUp;
+	Vector vForward, vRight, vUp, vDir;
 	AngleVectors(v_angles, vForward, vRight, vUp );
-	Vector vDir = ( sParticle.vPosition - flPlayerOrigin ).Normalize( );
+	vDir = ( sParticle.vPosition - flPlayerOrigin ).Normalize( );
 	if ( DotProduct ( vDir, vForward ) < 0 )
 		return;
 

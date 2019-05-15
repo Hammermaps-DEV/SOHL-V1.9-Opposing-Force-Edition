@@ -38,7 +38,6 @@
 
 #include "eventscripts.h"
 #include "ev_hldm.h"
-#include "pm_shared.h"
 
 #include "r_efx.h"
 #include "event_api.h"
@@ -72,7 +71,7 @@ extern engine_studio_api_t IEngineStudio;
 
 static int tracerCount[ 32 ];
 
-extern char PM_FindTextureType( char *name );
+extern "C" char PM_FindTextureType( char *name );
 
 void V_PunchAxis( int axis, float punch );
 void VectorAngles( const float *forward, float *angles );

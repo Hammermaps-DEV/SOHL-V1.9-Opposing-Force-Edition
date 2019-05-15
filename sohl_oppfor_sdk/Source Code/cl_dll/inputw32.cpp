@@ -64,7 +64,7 @@ extern "C"
 }
 
 // Defined in pm_math.c
-extern float anglemod( float a );
+extern "C" float anglemod( float a );
 
 extern cl_enginefunc_t gEngfuncs;
 

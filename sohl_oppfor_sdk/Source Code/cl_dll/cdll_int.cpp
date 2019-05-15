@@ -25,6 +25,11 @@
 *	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
+//
+//  cdll_int.c
+//
+// this implementation handles the linking of the engine to the DLL
+//
 
 #include "hud.h"
 #include "cl_util.h"
@@ -33,7 +38,11 @@
 #include "../public/interface.h"
 //#include "vgui_schememanager.h"
 
+extern "C"
+{
 #include "pm_shared.h"
+}
+
 #include <string.h>
 #include "hud_servers.h"
 #include "vgui_int.h"
