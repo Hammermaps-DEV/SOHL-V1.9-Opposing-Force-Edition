@@ -301,12 +301,12 @@ public:
 
 	virtual void Blocked(CBaseEntity *pOther);
 
-	void DLLEXPORT PlatUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT PlatUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	void	DLLEXPORT CallGoUp() { GoUp(); }
-	void	DLLEXPORT CallGoDown() { GoDown(); }
-	void	DLLEXPORT CallHitTop() { HitTop(); }
-	void	DLLEXPORT CallHitBottom() { HitBottom(); }
+	void	EXPORT CallGoUp() { GoUp(); }
+	void	EXPORT CallGoDown() { GoDown(); }
+	void	EXPORT CallHitTop() { HitTop(); }
+	void	EXPORT CallHitBottom() { HitBottom(); }
 
 	virtual void GoUp();
 	virtual void GoDown();
@@ -825,10 +825,10 @@ public:
 	void StopSequence();
 	CTrainSequence *m_pSequence;
 
-	void DLLEXPORT Wait();
-	void DLLEXPORT Next();
-	void DLLEXPORT ThinkDoNext();
-	void DLLEXPORT SoundSetup();
+	void EXPORT Wait();
+	void EXPORT Next();
+	void EXPORT ThinkDoNext();
+	void EXPORT SoundSetup();
 
 	STATE GetState() { return m_iState; }
 
@@ -2271,7 +2271,7 @@ class CFuncTrainControls : public CBaseEntity
 public:
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 	void Spawn();
-	void DLLEXPORT Find();
+	void EXPORT Find();
 };
 LINK_ENTITY_TO_CLASS(func_traincontrols, CFuncTrainControls);
 
@@ -2414,12 +2414,12 @@ public:
 	void Precache();
 
 	//	virtual void	Blocked( void );
-	virtual void	DLLEXPORT GoUp();
-	virtual void	DLLEXPORT GoDown();
+	virtual void	EXPORT GoUp();
+	virtual void	EXPORT GoDown();
 
 	void			KeyValue(KeyValueData* pkvd);
 	void			Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void			DLLEXPORT Find();
+	void			EXPORT Find();
 	TRAIN_CODE		EvaluateTrain(CPathTrack *pcurrent);
 	void			UpdateTrain(Vector &dest);
 	virtual void	HitBottom();
@@ -2992,9 +2992,9 @@ class CGunTarget : public CBaseMonster
 public:
 	void			Spawn();
 	void			Activate();
-	void DLLEXPORT		Next();
-	void DLLEXPORT		Start();
-	void DLLEXPORT		Wait();
+	void EXPORT		Next();
+	void EXPORT		Start();
+	void EXPORT		Wait();
 	void			Stop();
 
 	int				BloodColor() { return DONT_BLEED; }
@@ -3536,8 +3536,8 @@ public:
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 
-	void DLLEXPORT Wait();
-	void DLLEXPORT Next();
+	void EXPORT Wait();
+	void EXPORT Next();
 
 	void Think() override;
 

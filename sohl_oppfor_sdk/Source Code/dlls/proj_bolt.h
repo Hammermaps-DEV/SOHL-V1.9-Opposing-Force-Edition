@@ -37,9 +37,9 @@ class CBolt : public CBaseEntity {
 	void Spawn();
 	void Precache();
 	int Classify() { return CLASS_NONE; }
-	void DLLEXPORT BubbleThink();
-	void DLLEXPORT BoltTouch(CBaseEntity *pOther);
-	void DLLEXPORT ExplodeThink();
+	void EXPORT BubbleThink();
+	void EXPORT BoltTouch(CBaseEntity *pOther);
+	void EXPORT ExplodeThink();
 public:
 	static CBolt *BoltCreate();
 };

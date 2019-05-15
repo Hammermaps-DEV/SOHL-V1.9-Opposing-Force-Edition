@@ -33,9 +33,9 @@ class CApacheHVR : public CGrenade
 {
 	void Spawn();
 	void Precache();
-	void DLLEXPORT ExplodeTouch(CBaseEntity *pOther);
-	void DLLEXPORT IgniteThink();
-	void DLLEXPORT AccelerateThink();
+	void EXPORT ExplodeTouch(CBaseEntity *pOther);
+	void EXPORT IgniteThink();
+	void EXPORT AccelerateThink();
 
 	int		Save(CSave &save);
 	int		Restore(CRestore &restore);

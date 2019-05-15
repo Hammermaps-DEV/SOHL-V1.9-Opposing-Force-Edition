@@ -117,7 +117,7 @@ public:
 	void Spawn();
 	void  Precache();
 
-	void DLLEXPORT SittingThink();
+	void EXPORT SittingThink();
 	int	Classify();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

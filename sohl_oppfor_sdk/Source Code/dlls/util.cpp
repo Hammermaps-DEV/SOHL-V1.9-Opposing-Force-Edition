@@ -1593,36 +1593,8 @@ void UTIL_BloodStream(const Vector &origin, const Vector &direction, int color, 
 	if (!UTIL_ShouldShowBlood(color))
 		return;
 
-	if (color == BLOOD_COLOR_RED)
-		color = 70;
-
 	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, origin);
 	WRITE_BYTE(TE_BLOODSTREAM);
-	WRITE_COORD(origin.x);
-	WRITE_COORD(origin.y);
-	WRITE_COORD(origin.z);
-	WRITE_COORD(direction.x);
-	WRITE_COORD(direction.y);
-	WRITE_COORD(direction.z);
-	WRITE_BYTE(color);
-	WRITE_BYTE(min(amount, 255));
-	MESSAGE_END();
-}
-
-//=========================================================
-// UTIL_BloodParticles - Spawns lots of chunky blood particles.
-//=========================================================
-
-void UTIL_BloodParticles(const Vector &origin, const Vector &direction, int color, int amount)
-{
-	if (!UTIL_ShouldShowBlood(color))
-		return;
-
-	if (color == BLOOD_COLOR_RED)
-		color = 70;
-
-	MESSAGE_BEGIN(MSG_PVS, SVC_TEMPENTITY, origin);
-	WRITE_BYTE(TE_BLOOD);
 	WRITE_COORD(origin.x);
 	WRITE_COORD(origin.y);
 	WRITE_COORD(origin.z);

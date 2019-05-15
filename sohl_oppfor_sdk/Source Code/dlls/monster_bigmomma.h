@@ -58,7 +58,7 @@ public:
 
 	static CBMortar *Shoot(edict_t *pOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void DLLEXPORT Animate();
+	void EXPORT Animate();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

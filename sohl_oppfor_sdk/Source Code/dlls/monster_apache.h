@@ -45,12 +45,12 @@ public:
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual void SetObjectCollisionBox();
 
-	void DLLEXPORT HuntThink();
-	void DLLEXPORT FlyTouch(CBaseEntity *pOther);
-	void DLLEXPORT CrashTouch(CBaseEntity *pOther);
-	void DLLEXPORT DyingThink();
-	void DLLEXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT NullThink();
+	void EXPORT HuntThink();
+	void EXPORT FlyTouch(CBaseEntity *pOther);
+	void EXPORT CrashTouch(CBaseEntity *pOther);
+	void EXPORT DyingThink();
+	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT NullThink();
 
 	virtual void ShowDamage();
 	virtual void Flight();

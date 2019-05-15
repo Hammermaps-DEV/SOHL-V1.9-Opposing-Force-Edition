@@ -1495,11 +1495,11 @@ class CTestHull : public CBaseMonster
 public:
 	void Spawn(entvars_t *pevMasterNode);
 	virtual int ObjectCaps() { return CBaseMonster::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
-	void DLLEXPORT CallBuildNodeGraph();
+	void EXPORT CallBuildNodeGraph();
 	void BuildNodeGraph();
-	void DLLEXPORT ShowBadNode();
-	void DLLEXPORT DropDelay();
-	void DLLEXPORT PathFind();
+	void EXPORT ShowBadNode();
+	void EXPORT DropDelay();
+	void EXPORT PathFind();
 
 	Vector vecBadNodeOrigin;
 };
@@ -3559,7 +3559,7 @@ public:
 
 	void FindNodeConnections(int iNode);
 	void AddNode(int iFrom, int iTo);
-	void DLLEXPORT DrawThink();
+	void EXPORT DrawThink();
 };
 
 LINK_ENTITY_TO_CLASS(node_viewer, CNodeViewer)

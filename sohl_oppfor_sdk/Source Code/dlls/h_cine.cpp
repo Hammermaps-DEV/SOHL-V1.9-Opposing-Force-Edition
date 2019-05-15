@@ -45,7 +45,7 @@ class CLegacyCineMonster : public CBaseMonster
 public:
 	void CineSpawn(char *szModel);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT CineThink();
+	void EXPORT CineThink();
 	void Pain();
 	void Die();
 };
@@ -197,8 +197,8 @@ class CCineBlood : public CBaseEntity
 {
 public:
 	void Spawn();
-	void DLLEXPORT BloodStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT BloodGush();
+	void EXPORT BloodStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT BloodGush();
 };
 
 LINK_ENTITY_TO_CLASS(cine_blood, CCineBlood);

@@ -49,6 +49,8 @@
 #define HULL_PLANE_SKIP
 #include "particle_header.h"
 
+#define DLLEXPORT __declspec( dllexport )
+
 extern "C"
 {
 	void DLLEXPORT HUD_DrawNormalTriangles( void );
@@ -357,7 +359,7 @@ HUD_DrawNormalTriangles
 Non-transparent triangles-- add them here
 =================
 */
-void DLLEXPORT HUD_DrawNormalTriangles( void )
+void CL_DLLEXPORT HUD_DrawNormalTriangles( void )
 {
 	gHUD.m_Spectator.DrawOverview();
 }
@@ -372,7 +374,7 @@ Render any triangles with transparent rendermode needs here
 extern ParticleSystemManager* g_pParticleSystems; // LRC
 class CException;
 
-void DLLEXPORT HUD_DrawTransparentTriangles( void )
+void CL_DLLEXPORT HUD_DrawTransparentTriangles( void )
 {
 	try {
 		pParticleManager->UpdateSystems();

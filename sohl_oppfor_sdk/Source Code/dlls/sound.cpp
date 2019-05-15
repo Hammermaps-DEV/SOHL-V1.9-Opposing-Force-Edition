@@ -136,9 +136,9 @@ public:
 	void Spawn();
 	//	void PostSpawn( void );
 	void Precache();
-	void DLLEXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT StartPlayFrom();
-	void DLLEXPORT RampThink();
+	void EXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT StartPlayFrom();
+	void EXPORT RampThink();
 	void InitModulationParms();
 
 	virtual int		Save(CSave &save);
@@ -1953,8 +1953,8 @@ public:
 	void KeyValue(KeyValueData* pkvd);
 	void Spawn();
 	void Precache();
-	void DLLEXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT SpeakerThink();
+	void EXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT SpeakerThink();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

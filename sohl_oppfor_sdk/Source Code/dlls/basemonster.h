@@ -131,8 +131,8 @@ public:
 	void KeyValue(KeyValueData *pkvd);
 
 	// monster use function
-	void DLLEXPORT			MonsterUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT			CorpseUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT			MonsterUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT			CorpseUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	// overrideable Monster member functions
 
@@ -160,14 +160,14 @@ public:
 
 	// stuff written for new state machine
 	virtual void MonsterThink();
-	void DLLEXPORT	CallMonsterThink() { this->MonsterThink(); }
+	void EXPORT	CallMonsterThink() { this->MonsterThink(); }
 	virtual int IRelationship(CBaseEntity *pTarget);
 	virtual void MonsterInit();
 	virtual void MonsterInitDead();	// Call after animation/pose is set up
 	virtual void BecomeDead();
-	void DLLEXPORT CorpseFallThink();
+	void EXPORT CorpseFallThink();
 
-	void DLLEXPORT MonsterInitThink();
+	void EXPORT MonsterInitThink();
 	virtual void StartMonster();
 	virtual CBaseEntity* BestVisibleEnemy();// finds best visible enemy for attack
 	virtual BOOL FInViewCone(CBaseEntity *pEntity);// see if pEntity is in monster's view cone

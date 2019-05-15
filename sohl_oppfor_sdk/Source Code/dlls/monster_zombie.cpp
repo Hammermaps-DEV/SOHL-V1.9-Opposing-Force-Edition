@@ -236,13 +236,11 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 			}
 		}
 
-		m_bloodColor = BLOOD_COLOR_RED;
 		switch (ptr->iHitgroup) {
 		case HITGROUP_HEAD:
 			if (m_flDebug)
 				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 			flDamage = m_flHitgroupHead * flDamage;
-			m_bloodColor = BLOOD_COLOR_GREEN;
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)

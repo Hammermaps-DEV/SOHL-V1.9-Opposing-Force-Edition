@@ -87,7 +87,7 @@ public:
 	void	Precache();
 	void	KeyValue(KeyValueData *pkvd);
 
-	void	DLLEXPORT FizzThink();
+	void	EXPORT FizzThink();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual int		Save(CSave &save);
@@ -411,13 +411,13 @@ public:
 	void	KeyValue(KeyValueData *pkvd);
 	void	Activate();
 
-	void	DLLEXPORT StrikeThink();
-	void	DLLEXPORT TripThink();
+	void	EXPORT StrikeThink();
+	void	EXPORT TripThink();
 	void	RandomArea();
 	void	RandomPoint(Vector &vecSrc);
 	void	Zap(const Vector &vecSrc, const Vector &vecDest);
-	void	DLLEXPORT StrikeUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	DLLEXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	EXPORT StrikeUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	EXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	inline BOOL ServerSide()
 	{
@@ -1680,7 +1680,7 @@ class CEnvModel : public CBaseAnimating
 {
 	void Spawn();
 	void Precache();
-	void DLLEXPORT Think();
+	void EXPORT Think();
 	void KeyValue(KeyValueData *pkvd);
 	STATE GetState();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
@@ -1882,7 +1882,7 @@ public:
 	virtual void	Spawn();
 	void	Precache();
 	void	KeyValue(KeyValueData *pkvd);
-	void DLLEXPORT ShootThink();
+	void EXPORT ShootThink();
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual CBaseEntity *CreateGib(Vector vecPos, Vector vecVel);
@@ -3067,7 +3067,7 @@ public:
 	void	Precache();
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	STATE	GetState();
-	void	DLLEXPORT StartTrailThink();
+	void	EXPORT StartTrailThink();
 	void	Affect(CBaseEntity *pTarget, USE_TYPE useType);
 
 	int		m_iSprite;	// Don't save, precache
@@ -4249,8 +4249,8 @@ class CItemSoda : public CBaseEntity
 public:
 	void	Spawn() override;
 	void	Precache() override;
-	void	DLLEXPORT CanThink();
-	void	DLLEXPORT CanTouch(CBaseEntity *pOther);
+	void	EXPORT CanThink();
+	void	EXPORT CanTouch(CBaseEntity *pOther);
 };
 
 void CItemSoda::Precache()
@@ -4321,12 +4321,12 @@ class CEnvFog : public CBaseEntity
 public:
 	void Spawn();
 	void Precache();
-	void DLLEXPORT ResumeThink();
-	void DLLEXPORT Resume2Think();
-	void DLLEXPORT TurnOn();
-	void DLLEXPORT TurnOff();
-	void DLLEXPORT FadeInDone();
-	void DLLEXPORT FadeOutDone();
+	void EXPORT ResumeThink();
+	void EXPORT Resume2Think();
+	void EXPORT TurnOn();
+	void EXPORT TurnOff();
+	void EXPORT FadeInDone();
+	void EXPORT FadeOutDone();
 	void SendData(Vector col, int fFadeTime, int StartDist, int iEndDist);
 	void KeyValue(KeyValueData *pkvd);
 	virtual int		Save(CSave &save);

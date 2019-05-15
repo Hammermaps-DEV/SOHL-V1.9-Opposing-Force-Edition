@@ -34,8 +34,8 @@ class CWallHealth : public CBaseToggle
 public:
 	void Spawn() override;
 	void Precache() override;
-	void DLLEXPORT Off();
-	void DLLEXPORT Recharge();
+	void EXPORT Off();
+	void EXPORT Recharge();
 	void KeyValue(KeyValueData *pkvd) override;
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
 	int	ObjectCaps() override { return (CBaseToggle::ObjectCaps() | FCAP_CONTINUOUS_USE) & ~FCAP_ACROSS_TRANSITION; }

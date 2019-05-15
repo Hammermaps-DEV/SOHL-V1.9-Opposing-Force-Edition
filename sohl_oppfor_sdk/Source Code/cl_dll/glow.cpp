@@ -33,6 +33,7 @@ Merged and given some nicer CVARs by FragBait0, tlevi@tpg.com.au
 #include <cg/cgGL.h>
 #include "r_studioint.h"
 
+#define DLLEXPORT __declspec( dllexport )
 #define GL_TEXTURE_RECTANGLENV 0x84F5
 
 // START glow (shader+lowend) -- FragBait0

@@ -36,7 +36,7 @@ public:
 	void RunTask(Task_t *pTask);
 	void StartTask(Task_t *pTask);
 	void SetYawSpeed();
-	void DLLEXPORT LeapTouch(CBaseEntity *pOther);
+	void EXPORT LeapTouch(CBaseEntity *pOther);
 	void PainSound();
 	void DeathSound();
 	void IdleSound();

@@ -34,13 +34,13 @@ public:
 
 	static void Shoot(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);
 	void Touch(CBaseEntity *pOther);
-	void DLLEXPORT ShockThink();
+	void EXPORT ShockThink();
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void DLLEXPORT FadeShock();
+	void EXPORT FadeShock();
 	void Glow();
 
 	void CreateBeam(const Vector& start, const Vector& end, int width);

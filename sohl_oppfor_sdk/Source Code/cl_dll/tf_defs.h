@@ -1305,7 +1305,7 @@ class CTFFlame : public CBaseMonster
 public:
 	void	Spawn( void );
 	void	Precache( void );
-	void	DLLEXPORT FlameThink( void );
+	void	EXPORT FlameThink( void );
 	static  CTFFlame *FlameSpawn( CBaseEntity *pOwner, CBaseEntity *pTarget );
 	void	FlameDestroy( void );
 
@@ -1319,7 +1319,7 @@ class CTFGoal : public CBaseAnimating
 public:
 	void	Spawn( void );
 	void	StartGoal( void );
-	void	DLLEXPORT PlaceGoal( void );
+	void	EXPORT PlaceGoal( void );
 	void	Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 	int		Classify ( void ) { return	CLASS_TFGOAL; }
 
@@ -1331,7 +1331,7 @@ class CTFGoalItem : public CTFGoal
 public:
 	void	Spawn( void );
 	void	StartItem( void );
-	void	DLLEXPORT PlaceItem( void );
+	void	EXPORT PlaceItem( void );
 	int		Classify ( void ) { return	CLASS_TFGOAL_ITEM; }
 
 	float	m_flDroppedAt;
@@ -1366,7 +1366,7 @@ class CTelefragDeath : public CBaseEntity
 {
 public:
 	void		Spawn( void );
-	void		DLLEXPORT	DeathTouch( CBaseEntity *pOther );
+	void		EXPORT	DeathTouch( CBaseEntity *pOther );
 };
 
 class CTeamCheck : public CBaseDelay

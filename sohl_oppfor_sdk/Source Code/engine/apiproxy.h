@@ -788,7 +788,7 @@ typedef struct engdata_s
 	cl_enginefunc_t	*pcl_enginefuncs;		// functions exported by the engine
 	cl_enginefunc_dst_t *pg_engdstAddrs;	// destination handlers for engine exports
 	cldll_func_t *pcl_funcs;				// client exports
-	cldll_func_dst_t *pg_cldstAddrs;		// client DLLEXPORT destination handlers
+	cldll_func_dst_t *pg_cldstAddrs;		// client export destination handlers
 	struct modfuncs_s *pg_modfuncs;			// engine's pointer to module functions
 	struct cmd_function_s **pcmd_functions;	// list of all registered commands
 	void *pkeybindings;						// all key bindings (not really a void *, but easier this way)

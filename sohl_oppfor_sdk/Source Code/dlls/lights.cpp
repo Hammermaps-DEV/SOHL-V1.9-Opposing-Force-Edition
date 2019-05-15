@@ -488,8 +488,8 @@ STATE CLightDynamic::GetState()
 class CLightFader : public CPointEntity
 {
 public:
-	void DLLEXPORT FadeThink();
-	void DLLEXPORT WaitThink();
+	void EXPORT FadeThink();
+	void EXPORT WaitThink();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 

@@ -42,11 +42,11 @@ public:
 	void Precache();
 	void KeyValue(KeyValueData* pkvd);
 	virtual float CalcRatio(CBaseEntity *pLocus, int mode);//AJH added 'mode' = ratio to return);
-	void DLLEXPORT BreakTouch(CBaseEntity *pOther);
-	void DLLEXPORT BreakUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT RespawnUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT RespawnThink();
-	void DLLEXPORT RespawnFadeThink();
+	void EXPORT BreakTouch(CBaseEntity *pOther);
+	void EXPORT BreakUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT RespawnUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT RespawnThink();
+	void EXPORT RespawnFadeThink();
 	void DamageSound();
 	virtual void DoRespawn(); //AJH Fix for respawnable breakable pushables
 	virtual int Classify() { return m_iClass; }
@@ -63,7 +63,7 @@ public:
 
 	int	 DamageDecal(int bitsDamageType);
 
-	void DLLEXPORT		Die();
+	void EXPORT		Die();
 	virtual int		ObjectCaps() { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

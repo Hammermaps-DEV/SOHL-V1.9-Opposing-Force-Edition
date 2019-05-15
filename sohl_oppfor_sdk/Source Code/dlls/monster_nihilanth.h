@@ -54,13 +54,13 @@ public:
 
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
 
-	void DLLEXPORT StartupThink();
-	void DLLEXPORT HuntThink();
-	void DLLEXPORT CrashTouch(CBaseEntity *pOther);
-	void DLLEXPORT DyingThink();
-	void DLLEXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT NullThink();
-	void DLLEXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT StartupThink();
+	void EXPORT HuntThink();
+	void EXPORT CrashTouch(CBaseEntity *pOther);
+	void EXPORT DyingThink();
+	void EXPORT StartupUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT NullThink();
+	void EXPORT CommandUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	void FloatSequence();
 	void NextActivity();
@@ -154,21 +154,21 @@ public:
 	void GreenBallInit();
 	void ZapInit(CBaseEntity *pEnemy);
 
-	void DLLEXPORT HoverThink();
+	void EXPORT HoverThink();
 	BOOL CircleTarget(Vector vecTarget);
-	void DLLEXPORT DissipateThink();
+	void EXPORT DissipateThink();
 
-	void DLLEXPORT ZapThink();
-	void DLLEXPORT TeleportThink();
-	void DLLEXPORT TeleportTouch(CBaseEntity *pOther);
+	void EXPORT ZapThink();
+	void EXPORT TeleportThink();
+	void EXPORT TeleportTouch(CBaseEntity *pOther);
 
-	void DLLEXPORT RemoveTouch(CBaseEntity *pOther);
-	void DLLEXPORT BounceTouch(CBaseEntity *pOther);
-	void DLLEXPORT ZapTouch(CBaseEntity *pOther);
+	void EXPORT RemoveTouch(CBaseEntity *pOther);
+	void EXPORT BounceTouch(CBaseEntity *pOther);
+	void EXPORT ZapTouch(CBaseEntity *pOther);
 
 	CBaseEntity *RandomClassname(const char *szName);
 
-	// void DLLEXPORT SphereUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
+	// void EXPORT SphereUse( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
 	void MovetoTarget(Vector vecTarget);
 	virtual void Crawl();

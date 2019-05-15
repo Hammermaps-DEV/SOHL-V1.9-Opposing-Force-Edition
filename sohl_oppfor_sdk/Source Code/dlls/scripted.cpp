@@ -908,9 +908,9 @@ public:
 	void Spawn();
 	void KeyValue(KeyValueData *pkvd);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT FindThink();
-	void DLLEXPORT DelayThink();
-	void DLLEXPORT DurationThink();
+	void EXPORT FindThink();
+	void EXPORT DelayThink();
+	void EXPORT DurationThink();
 	int	 ObjectCaps() { return (CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
 
 	STATE GetState() { return m_playing ? STATE_ON : STATE_OFF; }

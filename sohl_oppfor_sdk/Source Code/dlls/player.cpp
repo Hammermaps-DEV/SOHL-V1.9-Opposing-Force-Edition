@@ -5460,8 +5460,8 @@ class CRevertSaved : public CPointEntity
 {
 public:
 	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void	DLLEXPORT MessageThink();
-	void	DLLEXPORT LoadThink();
+	void	EXPORT MessageThink();
+	void	EXPORT LoadThink();
 	void	KeyValue(KeyValueData *pkvd);
 
 	virtual int		Save(CSave &save);

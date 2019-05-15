@@ -333,7 +333,6 @@ extern int			UTIL_PointContents(const Vector &vec);
 
 extern int			UTIL_IsMasterTriggered(string_t sMaster, CBaseEntity *pActivator);
 extern void			UTIL_BloodStream(const Vector &origin, const Vector &direction, int color, int amount);
-extern void			UTIL_BloodParticles(const Vector &origin, const Vector &direction, int color, int amount);
 extern void			UTIL_BloodDrips(const Vector &origin, const Vector &direction, int color, int amount);
 extern Vector		UTIL_RandomBloodVector();
 extern BOOL			UTIL_ShouldShowBlood(int bloodColor);

@@ -65,8 +65,8 @@ public:
 	void WeaponIdle();
 	BOOL ShouldWeaponIdle() { return TRUE; }; //Call WeaponIdle Loop
 	void StopSounds();
-	void DLLEXPORT FlyThink();
-	void DLLEXPORT PukeGibs();
+	void EXPORT FlyThink();
+	void EXPORT PukeGibs();
 private:
 	//Vars
 	bool StartIdle;

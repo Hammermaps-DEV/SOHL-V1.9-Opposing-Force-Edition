@@ -55,7 +55,7 @@ public:
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	void DLLEXPORT FieldUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT FieldUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	int m_iszXController;
 	int m_iszYController;
@@ -207,7 +207,7 @@ public:
 	void Spawn();
 	void Precache();
 
-	void DLLEXPORT MortarExplode();
+	void EXPORT MortarExplode();
 
 	int m_spriteTexture;
 };

@@ -36,6 +36,14 @@
 // This is conveniently done for them in extdll.h
 //
 
+/*
+#ifdef _WIN32
+#define DLLEXPORT __stdcall
+#else
+#define DLLEXPORT  __attribute__ ((visibility("default")))
+#endif
+*/
+
 typedef enum {
 	at_notice,
 	at_console,		// same as at_notice, but forces a ConPrintf, not a message box

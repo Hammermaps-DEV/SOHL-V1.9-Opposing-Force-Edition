@@ -34,7 +34,7 @@
 
 int iMouseInUse = 0;
 
-void DLLEXPORT CAM_Think( void )
+void CL_DLLEXPORT CAM_Think( void )
 {
 }
 
@@ -42,12 +42,12 @@ void CAM_Init( void )
 {
 }
 
-int DLLEXPORT CL_IsThirdPerson( void )
+int CL_DLLEXPORT CL_IsThirdPerson( void )
 {
 	return (gHUD.m_iCameraMode ? 1 : 0) || (g_iUser1 && (g_iUser2 == gEngfuncs.GetLocalPlayer()->index) );
 }
 
-void DLLEXPORT CL_CameraOffset( float *ofs )
+void CL_DLLEXPORT CL_CameraOffset( float *ofs )
 {
 	VectorCopy( vec3_origin, ofs );
 }

@@ -41,11 +41,11 @@ public:
 	int  IRelationship(CBaseEntity *pTarget);
 
 	void IgniteTrail();
-	void DLLEXPORT StartTrack();
-	void DLLEXPORT StartDart();
-	void DLLEXPORT TrackTarget();
-	void DLLEXPORT TrackTouch(CBaseEntity *pOther);
-	void DLLEXPORT DieTouch(CBaseEntity *pOther);
+	void EXPORT StartTrack();
+	void EXPORT StartDart();
+	void EXPORT TrackTarget();
+	void EXPORT TrackTouch(CBaseEntity *pOther);
+	void EXPORT DieTouch(CBaseEntity *pOther);
 
 	static const char *pHitSounds[];
 	static const char *pMissSounds[];

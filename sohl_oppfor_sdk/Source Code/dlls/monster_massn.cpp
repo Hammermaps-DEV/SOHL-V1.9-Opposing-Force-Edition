@@ -312,7 +312,7 @@ class CAssassinRepel : public CHGruntRepel
 {
 public:
 	void Precache();
-	void DLLEXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 };
 
 LINK_ENTITY_TO_CLASS(monster_assassin_repel, CAssassinRepel);

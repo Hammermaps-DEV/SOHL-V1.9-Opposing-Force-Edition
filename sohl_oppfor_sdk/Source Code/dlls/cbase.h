@@ -73,11 +73,16 @@ CBaseEntity
 #include "monsterevent.h"
 #endif
 
-#include "platform.h"
-
 // C functions for external declarations that call the appropriate C++ methods
-extern "C" DLLEXPORT int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion);
-extern "C" DLLEXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
+
+#ifdef _WIN32
+#define EXPORT	_declspec( dllexport )
+#else
+#define EXPORT	/* */
+#endif
+
+extern "C" EXPORT int GetEntityAPI(DLL_FUNCTIONS *pFunctionTable, int interfaceVersion);
+extern "C" EXPORT int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion);
 
 extern int DispatchSpawn(edict_t *pent);
 extern void DispatchKeyValue(edict_t *pentKeyvalue, KeyValueData *pkvd);
@@ -381,11 +386,11 @@ public:
 	virtual void PreRemoval() { return; }
 
 	// common member functions
-	void DLLEXPORT SUB_Remove();
-	void DLLEXPORT SUB_DoNothing();
-	void DLLEXPORT SUB_StartFadeOut();
-	void DLLEXPORT SUB_FadeOut();
-	void DLLEXPORT SUB_CallUseToggle() // a think function used at spawn time. Don't apply the moveWith fix to it.
+	void EXPORT SUB_Remove();
+	void EXPORT SUB_DoNothing();
+	void EXPORT SUB_StartFadeOut();
+	void EXPORT SUB_FadeOut();
+	void EXPORT SUB_CallUseToggle() // a think function used at spawn time. Don't apply the moveWith fix to it.
 	{
 		this->Use(this, this, USE_TOGGLE, 0);
 	}
@@ -448,7 +453,7 @@ public:
 	void FunctionCheck(void *pFunction, char *name)
 	{
 		if (pFunction && !NAME_FOR_FUNCTION((unsigned long)(pFunction)))
-			ALERT(at_error, "No DLLEXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, (unsigned long)pFunction);
+			ALERT(at_error, "No EXPORT: %s:%s (%08lx)\n", STRING(pev->classname), name, (unsigned long)pFunction);
 	}
 
 	BASEPTR	ThinkSet(BASEPTR func, char *name)
@@ -587,7 +592,7 @@ public:
 	void KeyValue(KeyValueData *pkvd);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	STATE GetState();
-	void DLLEXPORT Register();
+	void EXPORT Register();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 
@@ -618,7 +623,7 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 	// common member functions
 	void SUB_UseTargets(CBaseEntity *pActivator, USE_TYPE useType, float value);
-	void DLLEXPORT DelayThink();
+	void EXPORT DelayThink();
 };
 
 
@@ -722,14 +727,14 @@ public:
 	// common member functions
 	void LinearMove(Vector	vecInput, float flSpeed);
 	void LinearMove(Vector vecInput, float flSpeed, float flAccel, float flDecel); //AJH-Accelerated linear movement
-	void DLLEXPORT LinearMoveNow(); //LRC- think function that lets us guarantee a LinearMove gets done as a think.
-	void DLLEXPORT LinearMoveDone();
-	void DLLEXPORT LinearMoveDoneNow(); //LRC
-//	void DLLEXPORT LinearMoveFinalDone( void );
+	void EXPORT LinearMoveNow(); //LRC- think function that lets us guarantee a LinearMove gets done as a think.
+	void EXPORT LinearMoveDone();
+	void EXPORT LinearMoveDoneNow(); //LRC
+//	void EXPORT LinearMoveFinalDone( void );
 	void AngularMove(Vector vecDestAngle, float flSpeed);
-	void DLLEXPORT AngularMoveNow(); //LRC- think function that lets us guarantee an AngularMove gets done as a think.
-	void DLLEXPORT AngularMoveDone();
-	void DLLEXPORT AngularMoveDoneNow();
+	void EXPORT AngularMoveNow(); //LRC- think function that lets us guarantee an AngularMove gets done as a think.
+	void EXPORT AngularMoveDone();
+	void EXPORT AngularMoveDoneNow();
 	BOOL IsLockedByMaster();
 
 	static float		AxisValue(int flags, const Vector &angles);
@@ -875,14 +880,14 @@ public:
 	void ButtonActivate();
 	void SparkSoundCache();
 
-	void DLLEXPORT ButtonShot();
-	void DLLEXPORT ButtonTouch(CBaseEntity *pOther);
-	void DLLEXPORT ButtonSpark();
-	void DLLEXPORT TriggerAndWait();
-	void DLLEXPORT ButtonReturn();
-	void DLLEXPORT ButtonBackHome();
-	void DLLEXPORT ButtonUse_IgnorePlayer(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT ButtonUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT ButtonShot();
+	void EXPORT ButtonTouch(CBaseEntity *pOther);
+	void EXPORT ButtonSpark();
+	void EXPORT TriggerAndWait();
+	void EXPORT ButtonReturn();
+	void EXPORT ButtonBackHome();
+	void EXPORT ButtonUse_IgnorePlayer(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT ButtonUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	virtual int		TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);

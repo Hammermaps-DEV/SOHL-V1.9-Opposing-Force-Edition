@@ -205,7 +205,7 @@ public:
 
 	void			GruntHealerCall(CBaseEntity *pGrunt);
 
-	void DLLEXPORT		FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT		FollowerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual void	SetAnswerQuestion(CRCAllyMonster *pSpeaker);
 	virtual int		FriendNumber(int arrayNumber) { return arrayNumber; }

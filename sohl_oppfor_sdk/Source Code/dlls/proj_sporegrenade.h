@@ -41,9 +41,9 @@ public:
 	void Glow();
 	void Explode();
 
-	void DLLEXPORT ExplodeThink(CBaseEntity *pOther);
-	void DLLEXPORT BounceThink(CBaseEntity *pOther);
-	void DLLEXPORT FlyThink();
+	void EXPORT ExplodeThink(CBaseEntity *pOther);
+	void EXPORT BounceThink(CBaseEntity *pOther);
+	void EXPORT FlyThink();
 
 	static CSporeGrenade *ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time);
 	static CSporeGrenade *ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity);

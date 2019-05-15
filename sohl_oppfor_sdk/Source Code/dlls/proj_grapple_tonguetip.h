@@ -34,8 +34,8 @@ class CGrappleHook : public CBaseEntity
 public:
 	void Spawn();
 	void Precache();
-	void DLLEXPORT Move();
-	void DLLEXPORT Hit(CBaseEntity*);
+	void EXPORT Move();
+	void EXPORT Hit(CBaseEntity*);
 	void Killed(entvars_t *pev, int gib);
 
 	static	CGrappleHook* Create(Vector Pos, Vector Aim, CBasePlayer* Owner);

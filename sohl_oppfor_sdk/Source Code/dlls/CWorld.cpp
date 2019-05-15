@@ -126,8 +126,8 @@ class CDecal : public CBaseEntity
 public:
 	void	Spawn() override;
 	void	KeyValue(KeyValueData *pkvd) override;
-	void	DLLEXPORT StaticDecal();
-	void	DLLEXPORT TriggerDecal(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	EXPORT StaticDecal();
+	void	EXPORT TriggerDecal(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 };
 
 LINK_ENTITY_TO_CLASS(infodecal, CDecal);

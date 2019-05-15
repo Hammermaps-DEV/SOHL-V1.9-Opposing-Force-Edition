@@ -55,12 +55,12 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void IgniteTrail();
-	void DLLEXPORT StartTrack();
-	void DLLEXPORT StartDart();
-	void DLLEXPORT TrackTarget();
-	void DLLEXPORT TrackTouch(CBaseEntity *pOther);
-	void DLLEXPORT DartTouch(CBaseEntity *pOther);
-	void DLLEXPORT DieTouch(CBaseEntity *pOther);
+	void EXPORT StartTrack();
+	void EXPORT StartDart();
+	void EXPORT TrackTarget();
+	void EXPORT TrackTouch(CBaseEntity *pOther);
+	void EXPORT DartTouch(CBaseEntity *pOther);
+	void EXPORT DieTouch(CBaseEntity *pOther);
 
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 

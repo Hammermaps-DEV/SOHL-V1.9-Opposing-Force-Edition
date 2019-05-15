@@ -64,7 +64,7 @@ class CFrictionModifier : public CBaseEntity
 public:
 	void		Spawn();
 	void		KeyValue(KeyValueData *pkvd);
-	void DLLEXPORT	ChangeFriction(CBaseEntity *pOther);
+	void EXPORT	ChangeFriction(CBaseEntity *pOther);
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 
@@ -122,8 +122,8 @@ class CTrainSetSpeed : public CBaseDelay
 public:
 	void		Spawn();
 	void		KeyValue(KeyValueData *pkvd);
-	void DLLEXPORT	Find();
-	void DLLEXPORT	UpdateSpeed();
+	void EXPORT	Find();
+	void EXPORT	UpdateSpeed();
 	virtual int	Save(CSave &save);
 	virtual int	Restore(CRestore &restore);
 
@@ -641,12 +641,12 @@ class CMultiManager : public CBaseEntity//Toggle
 public:
 	void KeyValue(KeyValueData *pkvd);
 	void Spawn();
-	void DLLEXPORT UseThink();
-	void DLLEXPORT ManagerThink();
-	void DLLEXPORT ManagerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT UseThink();
+	void EXPORT ManagerThink();
+	void EXPORT ManagerUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 #if _DEBUG
-	void DLLEXPORT ManagerReport();
+	void EXPORT ManagerReport();
 #endif
 
 	BOOL		HasTarget(string_t targetname);
@@ -1225,7 +1225,7 @@ class CStateWatcher : public CBaseToggle
 {
 public:
 	void Spawn();
-	void DLLEXPORT Think();
+	void EXPORT Think();
 	void KeyValue(KeyValueData *pkvd);
 	virtual STATE GetState();
 	virtual STATE GetState(CBaseEntity *pActivator);
@@ -1475,7 +1475,7 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	void Spawn();
-	void DLLEXPORT Think();
+	void EXPORT Think();
 	virtual STATE GetState() { return (pev->spawnflags & SF_SWATCHER_VALID) ? STATE_ON : STATE_OFF; };
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 
@@ -1678,7 +1678,7 @@ class CRenderFxFader : public CBaseEntity
 {
 public:
 	void Spawn();
-	void DLLEXPORT FadeThink();
+	void EXPORT FadeThink();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -2410,7 +2410,7 @@ public:
 	//LRC - this was very bloated. I moved lots of methods into the
 	// subclasses where they belonged.
 	void InitTrigger();
-	void DLLEXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	BOOL CanTouch(entvars_t *pevToucher);
 
 	virtual int	ObjectCaps() { return CBaseToggle::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -2490,8 +2490,8 @@ class CTriggerHurt : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT RadiationThink();
-	void DLLEXPORT HurtTouch(CBaseEntity *pOther);
+	void EXPORT RadiationThink();
+	void EXPORT HurtTouch(CBaseEntity *pOther);
 	virtual void KeyValue(KeyValueData *pkvd);
 };
 
@@ -2729,8 +2729,8 @@ class CTriggerHevCharge : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT ChargeTouch(CBaseEntity *pOther);
-	void DLLEXPORT AnnounceThink();
+	void EXPORT ChargeTouch(CBaseEntity *pOther);
+	void EXPORT AnnounceThink();
 };
 
 LINK_ENTITY_TO_CLASS(trigger_hevcharge, CTriggerHevCharge);
@@ -3147,8 +3147,8 @@ public:
 		if (!FStringNull(pev->noise))
 			PRECACHE_SOUND((char*)STRING(pev->noise));
 	}
-	void DLLEXPORT MultiTouch(CBaseEntity *pOther);
-	void DLLEXPORT MultiWaitOver();
+	void EXPORT MultiTouch(CBaseEntity *pOther);
+	void EXPORT MultiWaitOver();
 	void ActivateMultiTrigger(CBaseEntity *pActivator);
 };
 
@@ -3292,8 +3292,8 @@ class CTriggerInOut : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT Touch(CBaseEntity *pOther);
-	void DLLEXPORT Think();
+	void EXPORT Touch(CBaseEntity *pOther);
+	void EXPORT Think();
 	void FireOnEntry(CBaseEntity *pOther);
 	void FireOnLeaving(CBaseEntity *pOther);
 
@@ -3491,7 +3491,7 @@ class CTriggerCounter : public CTriggerMultiple
 {
 public:
 	void Spawn();
-	void DLLEXPORT CounterUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT CounterUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void KeyValue(KeyValueData *pkvd);
 };
 LINK_ENTITY_TO_CLASS(trigger_counter, CTriggerCounter);
@@ -3611,10 +3611,10 @@ class CChangeLevel : public CBaseTrigger
 public:
 	void Spawn();
 	void KeyValue(KeyValueData *pkvd);
-	void DLLEXPORT UseChangeLevel(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT TriggerChangeLevel();
-	void DLLEXPORT ExecuteChangeLevel();
-	void DLLEXPORT TouchChangeLevel(CBaseEntity *pOther);
+	void EXPORT UseChangeLevel(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT TriggerChangeLevel();
+	void EXPORT ExecuteChangeLevel();
+	void EXPORT TouchChangeLevel(CBaseEntity *pOther);
 	void ChangeLevelNow(CBaseEntity *pActivator);
 
 	static edict_t *FindLandmark(const char *pLandmarkName);
@@ -4490,7 +4490,7 @@ class CTriggerTeleport : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT TeleportTouch(CBaseEntity *pOther);
+	void EXPORT TeleportTouch(CBaseEntity *pOther);
 };
 LINK_ENTITY_TO_CLASS(trigger_teleport, CTriggerTeleport);
 
@@ -4605,7 +4605,7 @@ class CTriggerSave : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT SaveTouch(CBaseEntity *pOther);
+	void EXPORT SaveTouch(CBaseEntity *pOther);
 };
 LINK_ENTITY_TO_CLASS(trigger_autosave, CTriggerSave);
 
@@ -4641,9 +4641,9 @@ class CTriggerEndSection : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT EndSectionTouch(CBaseEntity *pOther);
+	void EXPORT EndSectionTouch(CBaseEntity *pOther);
 	void KeyValue(KeyValueData *pkvd);
-	void DLLEXPORT EndSectionUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void EXPORT EndSectionUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 };
 LINK_ENTITY_TO_CLASS(trigger_endsection, CTriggerEndSection);
 
@@ -4712,7 +4712,7 @@ class CTriggerGravity : public CBaseTrigger
 {
 public:
 	void Spawn();
-	void DLLEXPORT GravityTouch(CBaseEntity *pOther);
+	void EXPORT GravityTouch(CBaseEntity *pOther);
 };
 LINK_ENTITY_TO_CLASS(trigger_gravity, CTriggerGravity);
 
@@ -5684,7 +5684,7 @@ class CTriggerChangeCVar : public CBaseEntity
 {
 public:
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT Think();
+	void EXPORT Think();
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
@@ -5755,7 +5755,7 @@ public:
 	void Spawn();
 	void KeyValue(KeyValueData *pkvd);
 	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	void DLLEXPORT FollowTarget();
+	void EXPORT FollowTarget();
 	void Move();
 
 	virtual int		Save(CSave &save);

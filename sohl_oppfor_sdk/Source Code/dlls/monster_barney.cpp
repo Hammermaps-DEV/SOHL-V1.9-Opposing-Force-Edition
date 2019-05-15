@@ -23,7 +23,6 @@
 *   Code used from FWGS Team (Fixes for SOHL)
 *   Code used from LevShisterov (Bugfixed and improved HLSDK)
 *	Code used from Fograin (Half-Life: Update MOD)
-*	Code used from Yellow-Shift Development Team (Half-Life: Yellow-Shift)
 *
 ***/
 //=========================================================
@@ -36,6 +35,7 @@
 #include	"monsters.h"
 #include	"schedule.h"
 #include	"defaultai.h"
+#include	"scripted.h"
 #include	"weapons.h"
 #include	"soundent.h"
 #include    "monster_barney.h"
@@ -46,7 +46,6 @@
 #define	BARNEY_AE_DRAW		( 2 )
 #define	BARNEY_AE_SHOOT		( 3 )
 #define	BARNEY_AE_DISARM	( 4 )
-#define	BARNEY_AE_RELOAD	( 5 ) 
 
 #define	NUM_BARNEY_HEADS	3
 
@@ -61,9 +60,6 @@
 #define	GUN_DRAWN			1
 #define	GUN_NO_GUN			2
 
-#define	GUN_9MM_CLIP_SIZE   17
-#define	GUN_357_CLIP_SIZE   6
-
 //=========================================================
 // Monster's link to Class & Saverestore Begins
 //=========================================================
@@ -76,7 +72,6 @@ TYPEDESCRIPTION	CBarney::m_SaveData[] = {
 	DEFINE_FIELD(CBarney, m_checkAttackTime, FIELD_TIME),
 	DEFINE_FIELD(CBarney, m_lastAttackCheck, FIELD_BOOLEAN),
 	DEFINE_FIELD(CBarney, m_flPlayerDamage, FIELD_FLOAT),
-	DEFINE_FIELD(CBarney, m_cClipSize, FIELD_INTEGER),
 	DEFINE_FIELD(CBarney, head, FIELD_INTEGER),
 };
 
@@ -92,17 +87,6 @@ void CBarney::KeyValue(KeyValueData *pkvd) {
 	}
 	else
 		CTalkMonster::KeyValue(pkvd);
-}
-
-//=========================================================
-// CheckAmmo
-//=========================================================
-void CBarney::CheckAmmo()
-{
-	if (m_cAmmoLoaded <= 0)
-	{
-		SetConditions(bits_COND_NO_AMMO_LOADED);
-	}
 }
 
 //=========================================================
@@ -151,12 +135,6 @@ void CBarney::Spawn() {
 	m_flFieldOfView = VIEW_FIELD_WIDE; // NOTE: we need a wide field of view so npc will notice player and say hello
 	m_MonsterState = MONSTERSTATE_NONE;
 
-	m_cClipSize = GUN_9MM_CLIP_SIZE;
-	if (pev->frags) //357
-		m_cClipSize = GUN_357_CLIP_SIZE;
-
-	m_cAmmoLoaded = m_cClipSize;
-
 	m_fGunDrawn = FALSE;
 
 	m_afCapability = bits_CAP_HEAR | bits_CAP_TURN_HEAD | bits_CAP_DOORS_GROUP;
@@ -203,9 +181,6 @@ void CBarney::Precache() {
 		PRECACHE_MODEL("models/barney.mdl");
 
 	m_iBrassShell = PRECACHE_MODEL("models/shell.mdl");// brass shell
-	m_iEmptyMag = PRECACHE_MODEL("models/w_9mmclip.mdl"); // magazine model
-
-	PRECACHE_SOUND("barney/ba_reload1.wav");
 
 	PRECACHE_SOUND_ARRAY(pAttackSounds);
 	PRECACHE_SOUND_ARRAY(pPainSounds);
@@ -223,7 +198,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 		if (m_flDebug)
 			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
-		CBaseEntity *pEnt = Instance(pevAttacker);
+		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
 			pev->health = pev->max_health / 2;
 			if (flDamage > 0) //Override all damage
@@ -236,7 +211,7 @@ int CBarney::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 		}
 
 		if (pevAttacker->owner) {
-			pEnt = Instance(pevAttacker->owner);
+			pEnt = CBaseEntity::Instance(pevAttacker->owner);
 			if (pEnt->IsPlayer()) {
 				pev->health = pev->max_health / 2;
 				if (flDamage > 0) //Override all damage
@@ -312,10 +287,10 @@ void CBarney::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 	if (pev->takedamage) {
 		if (IsAlive() && RANDOM_LONG(0, 4) <= 2) { PainSound(); }
 		if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
-			CBaseEntity *pEnt = Instance(pevAttacker);
+			CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 			if (pEnt->IsPlayer()) { return; }
 			if (pevAttacker->owner) {
-				pEnt = Instance(pevAttacker->owner);
+				pEnt = CBaseEntity::Instance(pevAttacker->owner);
 				if (pEnt->IsPlayer()) { return; }
 			}
 		}
@@ -413,11 +388,6 @@ void CBarney::AlertSound() {
 // that occur when tagged animation frames are played.
 //=========================================================
 void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
-	UTIL_MakeVectors(pev->angles);
-	Vector vecShootOrigin = pev->origin + Vector(0, 0, 40);
-	Vector vecShootDir = ShootAtEnemy(vecShootOrigin);
-	Vector vecShellVelocity;
-
 	switch (pEvent->event) {
 	case BARNEY_AE_SHOOT:
 		FirePistol();
@@ -429,13 +399,6 @@ void CBarney::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	case BARNEY_AE_DISARM:
 		SetBodygroup(GUN_GROUP, GUN_NONE);
 		m_fGunDrawn = FALSE;
-		break;
-	case BARNEY_AE_RELOAD: // YELLOWSHIFT Animation Event for Reload
-		EMIT_SOUND(ENT(pev), CHAN_WEAPON, "barney/ba_reload1.wav", 1, ATTN_NORM);
-		m_cAmmoLoaded = m_cClipSize;
-		vecShellVelocity = gpGlobals->v_right * RANDOM_FLOAT(10, 20) + gpGlobals->v_up * RANDOM_FLOAT(15, 20) + gpGlobals->v_forward * RANDOM_FLOAT(-10, 10);
-		EjectBrass(vecShootOrigin - vecShootDir * 24, vecShellVelocity, pev->angles.y, m_iEmptyMag, TE_BOUNCE_SHELL);
-		ClearConditions(bits_COND_NO_AMMO_LOADED);
 		break;
 	default:
 		CTalkMonster::HandleAnimEvent(pEvent);
@@ -598,36 +561,11 @@ Schedule_t	slIdleBaStand[] = {
 	},
 };
 
-Task_t	tlBaReload[] =
-{
-	{ TASK_STOP_MOVING,				(float)0					},
-	{ TASK_SET_FAIL_SCHEDULE,		(float)SCHED_RELOAD			},
-	{ TASK_FIND_COVER_FROM_ENEMY,	(float)0					},
-	{ TASK_RUN_PATH,				(float)0					},
-	{ TASK_WAIT_FOR_MOVEMENT,		(float)0					},
-	{ TASK_REMEMBER,				(float)bits_MEMORY_INCOVER	},
-	{ TASK_FACE_ENEMY,				(float)0					},
-	{ TASK_PLAY_SEQUENCE,			(float)ACT_RELOAD			},
-};
-
-Schedule_t slBaReload[] =
-{
-	{
-		tlBaReload,
-		HL_ARRAYSIZE(tlBaReload),
-		bits_COND_HEAVY_DAMAGE |
-		bits_COND_HEAR_SOUND,
-		bits_SOUND_DANGER,
-		"BarneyReload"
-	}
-};
-
 DEFINE_CUSTOM_SCHEDULES(CBarney) {
 	slBaFollow,
-	slBarneyEnemyDraw,
-	slBaFaceTarget,
-	slIdleBaStand,
-	slBaReload,
+		slBarneyEnemyDraw,
+		slBaFaceTarget,
+		slIdleBaStand,
 };
 
 
@@ -766,9 +704,6 @@ Schedule_t* CBarney::GetScheduleOfType(int Type) {
 		else
 			return psched;
 		break;
-	case SCHED_BARNEY_RELOAD:
-		return &slBaReload[0];
-		break;
 	case SCHED_TARGET_CHASE:
 		return slBaFollow;
 		break;
@@ -793,7 +728,8 @@ Schedule_t* CBarney::GetScheduleOfType(int Type) {
 //=========================================================
 Schedule_t *CBarney::GetSchedule() {
 	if (HasConditions(bits_COND_HEAR_SOUND)) {
-		CSound *pSound = PBestSound();
+		CSound *pSound;
+		pSound = PBestSound();
 		ASSERT(pSound != NULL);
 		if (pSound && (pSound->m_iType & bits_SOUND_DANGER))
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_BEST_SOUND);
@@ -825,10 +761,6 @@ Schedule_t *CBarney::GetSchedule() {
 
 		if (HasConditions(bits_COND_HEAVY_DAMAGE))
 			return GetScheduleOfType(SCHED_TAKE_COVER_FROM_ENEMY);
-
-		// no ammo
-		if (HasConditions(bits_COND_NO_AMMO_LOADED))
-			return GetScheduleOfType(SCHED_BARNEY_RELOAD);
 		break;
 	case MONSTERSTATE_ALERT:
 	case MONSTERSTATE_IDLE:
