@@ -11,8 +11,6 @@
 
 #include "cl_entity.h"
 
-
-
 #define INSET_OFF				0
 #define	INSET_CHASE_FREE		1
 #define	INSET_IN_EYE			2
@@ -20,8 +18,6 @@
 #define	INSET_MAP_CHASE			4
 
 #define MAX_SPEC_HUD_MESSAGES	8
-
-
 
 #define OVERVIEW_TILE_SIZE		128		// don't change this
 #define OVERVIEW_MAX_LAYERS		1

@@ -50,8 +50,8 @@ DLL_GLOBAL int			gDisplayTitle;
 DLL_GLOBAL bool			g_fGameOver;
 DLL_GLOBAL const Vector	g_vecZero = Vector(0, 0, 0);
 
-extern "C" int g_iOnGround;
-extern "C" int g_iWaterlevel;
+extern int g_iOnGround;
+extern int g_iWaterlevel;
 
 int g_iOnGround = 0;
 int g_iWaterlevel = 0;

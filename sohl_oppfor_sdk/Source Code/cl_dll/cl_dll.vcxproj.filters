@@ -712,15 +712,6 @@
     <ClCompile Include="particlesys.cpp">
       <Filter>Source Files\cl_dll\particle</Filter>
     </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_math.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_shared.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_debug.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
     <ClCompile Include="vgui_teammenu.cpp">
       <Filter>Source Files\cl_dll\vgui</Filter>
     </ClCompile>
@@ -903,6 +894,15 @@
     </ClCompile>
     <ClCompile Include="vgui_CustomMenu.cpp">
       <Filter>Header Files\cl_dll\vgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_debug.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_math.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_shared.cpp">
+      <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

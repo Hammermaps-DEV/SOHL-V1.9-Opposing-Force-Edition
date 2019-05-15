@@ -58,10 +58,10 @@ extern int g_weaponselect;
 extern cl_enginefunc_t gEngfuncs;
 
 // Defined in pm_math.c
-extern "C" float anglemod( float a );
+extern float anglemod( float a );
 
-extern "C" int g_iOnGround;
-extern "C" int g_iWaterlevel;
+extern int g_iOnGround;
+extern int g_iWaterlevel;
 
 void IN_Init ();
 void IN_Move ( float frametime, usercmd_t *cmd);

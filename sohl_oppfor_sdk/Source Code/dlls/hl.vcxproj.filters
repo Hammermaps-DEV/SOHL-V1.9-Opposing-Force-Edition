@@ -428,15 +428,6 @@
     <ClCompile Include="func_break.cpp">
       <Filter>Source Files\dlls\func</Filter>
     </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_debug.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_math.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_shared.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\game_shared\voice_gamemgr.cpp">
       <Filter>Source Files\game_shared</Filter>
     </ClCompile>
@@ -733,6 +724,15 @@
     </ClCompile>
     <ClCompile Include="CGunmanUnarmed.cpp">
       <Filter>Source Files\dlls\gunman</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_shared.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_math.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_debug.cpp">
+      <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

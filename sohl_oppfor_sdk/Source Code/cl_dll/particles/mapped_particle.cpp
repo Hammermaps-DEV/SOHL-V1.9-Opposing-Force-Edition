@@ -167,9 +167,9 @@ void CMappedParticle::Draw( void )
 	if(sParticle.pTexture == NULL)
 		return;
 
-	Vector vForward, vRight, vUp, vDir;
+	Vector vForward, vRight, vUp;
 	AngleVectors(v_angles, vForward, vRight, vUp );
-	vDir = ( sParticle.vPosition - flPlayerOrigin ).Normalize( );
+	Vector vDir = ( sParticle.vPosition - flPlayerOrigin ).Normalize( );
 
 	// Fograin92: Disabled because bullshit happens
 	//if ( DotProduct ( vDir, vForward ) < 0 )
