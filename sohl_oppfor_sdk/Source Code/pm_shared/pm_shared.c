@@ -34,14 +34,11 @@
 #include "pm_shared.h"
 #include "pm_movevars.h"
 #include "pm_debug.h"
-#include "platform.h"
 #include <stdio.h>  // NULL
 #include <math.h>   // sqrt
 #include <string.h> // strcpy
 #include <stdlib.h> // atoi
 #include <ctype.h>  // isspace
-
-vec3_t flPlayerOrigin;
 
 #ifdef CLIENT_DLL
 // Spectator Mode
@@ -50,6 +47,7 @@ float	vJumpOrigin[3];
 float	vJumpAngles[3];
 #endif
 
+static vec3_t flPlayerOrigin = { 0,0,0 };
 static vec3_t vec3_origin = { 0,0,0 };
 static int pm_shared_initialized = false;
 
