@@ -34,14 +34,12 @@
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
-#include	"nodes.h"
-#include	"effects.h"
-#include	"decals.h"
 #include	"soundent.h"
 #include	"game.h"
 #include	"weapons.h"
 #include	"proj_pitdronespit.h"
 #include	"monster_pitdrone.h"
+#include "CGib.h"
 
 //=========================================================
 // Monster's Anim Events Go Here
@@ -208,7 +206,9 @@ int	CPitDrone::Classify() {
 //=========================================================
 void CPitDrone::Precache() {
 	PRECACHE_MODEL("models/pit_drone.mdl");
-	m_iSpitSprite = PRECACHE_MODEL("sprites/blood_tinyspit.spr");
+	PRECACHE_MODEL("models/pit_drone_gibs.mdl");
+
+	m_iSpitSprite = PRECACHE_MODEL("sprites/tinyspit.spr");
 
 	PRECACHE_SOUND_ARRAY(pAttackHitSounds);
 	PRECACHE_SOUND_ARRAY(pAttackHitStrikeSounds);
@@ -975,4 +975,19 @@ void CPitDrone::SetYawSpeed() {
 	}
 
 	pev->yaw_speed = ys;
+}
+
+//=========================================================
+// GibMonster
+//=========================================================
+const GibData PitDroneGibs = { "models/pit_drone_gibs.mdl", 0, 7 };
+
+void CPitDrone::GibMonster()
+{
+	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "common/bodysplat.wav", 1, ATTN_NORM);
+	CGib::SpawnRandomGibs(pev, 6, PitDroneGibs);	// Throw alien gibs
+
+	// don't remove players!
+	SetThink(&CBaseMonster::SUB_Remove);
+	pev->nextthink = gpGlobals->time;
 }

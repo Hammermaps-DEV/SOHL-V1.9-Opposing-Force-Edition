@@ -12,9 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\game_shared\voice_gamemgr.cpp" />
-    <ClCompile Include="..\pm_shared\pm_debug.c" />
-    <ClCompile Include="..\pm_shared\pm_math.c" />
-    <ClCompile Include="..\pm_shared\pm_shared.c" />
+    <ClCompile Include="..\pm_shared\pm_debug.cpp" />
+    <ClCompile Include="..\pm_shared\pm_math.cpp" />
+    <ClCompile Include="..\pm_shared\pm_shared.cpp" />
     <ClCompile Include="ammo_357.cpp" />
     <ClCompile Include="ammo_556.cpp" />
     <ClCompile Include="ammo_762.cpp" />
@@ -238,6 +238,7 @@
     <ClInclude Include="..\engine\progs.h" />
     <ClInclude Include="..\engine\shake.h" />
     <ClInclude Include="..\engine\studio.h" />
+    <ClInclude Include="..\game_shared\platform.h" />
     <ClInclude Include="..\game_shared\voice_gamemgr.h" />
     <ClInclude Include="..\pm_shared\pm_debug.h" />
     <ClInclude Include="..\pm_shared\pm_defs.h" />

@@ -135,6 +135,7 @@
     <ClInclude Include="..\external\SDL2\SDL_version.h" />
     <ClInclude Include="..\external\SDL2\SDL_video.h" />
     <ClInclude Include="..\game_shared\bitvec.h" />
+    <ClInclude Include="..\game_shared\platform.h" />
     <ClInclude Include="..\game_shared\vgui_checkbutton2.h" />
     <ClInclude Include="..\game_shared\vgui_defaultinputsignal.h" />
     <ClInclude Include="..\game_shared\vgui_grid.h" />
@@ -143,7 +144,6 @@
     <ClInclude Include="..\game_shared\vgui_loadtga.h" />
     <ClInclude Include="..\game_shared\vgui_scrollbar2.h" />
     <ClInclude Include="..\game_shared\vgui_slider2.h" />
-    <ClInclude Include="..\game_shared\vminmax.h" />
     <ClInclude Include="..\game_shared\voice_banmgr.h" />
     <ClInclude Include="..\game_shared\voice_common.h" />
     <ClInclude Include="..\game_shared\voice_status.h" />
@@ -219,9 +219,9 @@
     <ClCompile Include="..\game_shared\voice_banmgr.cpp" />
     <ClCompile Include="..\game_shared\voice_status.cpp" />
     <ClCompile Include="..\game_shared\voice_vgui_tweakdlg.cpp" />
-    <ClCompile Include="..\pm_shared\pm_debug.c" />
-    <ClCompile Include="..\pm_shared\pm_math.c" />
-    <ClCompile Include="..\pm_shared\pm_shared.c" />
+    <ClCompile Include="..\pm_shared\pm_debug.cpp" />
+    <ClCompile Include="..\pm_shared\pm_math.cpp" />
+    <ClCompile Include="..\pm_shared\pm_shared.cpp" />
     <ClCompile Include="..\public\interface.cpp" />
     <ClCompile Include="ammo.cpp" />
     <ClCompile Include="ammohistory.cpp" />

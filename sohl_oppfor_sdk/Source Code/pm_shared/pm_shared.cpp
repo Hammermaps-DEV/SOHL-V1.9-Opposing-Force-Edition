@@ -26,6 +26,8 @@
 *
 ***/
 
+#include "platform.h"
+
 #include <assert.h>
 #include "mathlib.h"
 #include "const.h"
@@ -34,7 +36,6 @@
 #include "pm_shared.h"
 #include "pm_movevars.h"
 #include "pm_debug.h"
-#include "vminmax.h"
 #include <stdio.h>  // NULL
 #include <math.h>   // sqrt
 #include <string.h> // strcpy
@@ -44,17 +45,20 @@
 #ifdef CLIENT_DLL
 // Spectator Mode
 int		iJumpSpectator;
+#ifndef DISABLE_JUMP_ORIGIN
 float	vJumpOrigin[3];
 float	vJumpAngles[3];
+#else
+extern float	vJumpOrigin[3];
+extern float	vJumpAngles[3];
+#endif
 #endif
 
-vec3_t flPlayerOrigin = { 0,0,0 };
-
+static vec3_t flPlayerOrigin = { 0,0,0 };
 static vec3_t vec3_origin = { 0,0,0 };
 static int pm_shared_initialized = false;
 
-#pragma warning(disable : 4305)
-#pragma warning(disable : 4244)
+#pragma warning( disable : 4305 )
 
 typedef enum { mod_brush, mod_sprite, mod_alias, mod_studio } modtype_t;
 
@@ -176,9 +180,8 @@ static char grgchTextureType[CTEXTURESMAX];
 
 int g_onladder = 0;
 int g_bBunnyHop = 1;
-
-extern int g_iOnGround;
-extern int g_iWaterlevel;
+int g_iOnGround = 0;
+int g_iWaterlevel = 0;
 
 void PM_SwapTextures(int i, int j)
 {

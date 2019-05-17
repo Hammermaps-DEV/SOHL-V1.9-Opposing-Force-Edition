@@ -40,6 +40,7 @@
 #include "particle_header.h"
 
 extern vec3_t v_angles;
+
 // creates a grass particle
 CGrassParticle::CGrassParticle(grass_particle_system *pSystem, particle_texture_s *pParticleTexture) : CParticle()
 {	

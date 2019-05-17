@@ -371,9 +371,6 @@
     <ClInclude Include="..\game_shared\vgui_slider2.h">
       <Filter>Header Files\game_shared</Filter>
     </ClInclude>
-    <ClInclude Include="..\game_shared\vminmax.h">
-      <Filter>Header Files\game_shared</Filter>
-    </ClInclude>
     <ClInclude Include="..\game_shared\voice_banmgr.h">
       <Filter>Header Files\game_shared</Filter>
     </ClInclude>
@@ -665,6 +662,9 @@
     <ClInclude Include="soundengine.h">
       <Filter>Header Files\cl_dll</Filter>
     </ClInclude>
+    <ClInclude Include="..\game_shared\platform.h">
+      <Filter>Header Files\game_shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="hud_update.cpp">
@@ -711,15 +711,6 @@
     </ClCompile>
     <ClCompile Include="particlesys.cpp">
       <Filter>Source Files\cl_dll\particle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_math.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_shared.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_debug.c">
-      <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
     <ClCompile Include="vgui_teammenu.cpp">
       <Filter>Source Files\cl_dll\vgui</Filter>
@@ -903,6 +894,15 @@
     </ClCompile>
     <ClCompile Include="vgui_CustomMenu.cpp">
       <Filter>Header Files\cl_dll\vgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_debug.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_math.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_shared.cpp">
+      <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

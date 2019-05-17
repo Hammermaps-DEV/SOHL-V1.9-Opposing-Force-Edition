@@ -1,9 +1,4 @@
-// CL_DLLEXPORT is the client version of dllexport.  It's turned off for secure clients.
-#ifdef _WIN32
-#define CL_DLLEXPORT __declspec(dllexport)
-#else
-#define CL_DLLEXPORT __attribute__ ((visibility("default")))
-#endif
+#include "platform.h"
 
 extern "C" 
 {
@@ -63,7 +58,7 @@ extern "C"
 	void CL_DLLEXPORT HUD_DrawTransparentTriangles( void );
 
 	// From view
-	void	CL_DLLEXPORT V_CalcRefdef( struct ref_params_s *pparams );
+	void CL_DLLEXPORT V_CalcRefdef( struct ref_params_s *pparams );
 
 	// From GameStudioModelRenderer
 	int CL_DLLEXPORT HUD_GetStudioModelInterface( int version, struct r_studio_interface_s **ppinterface, struct engine_studio_api_s *pstudio );

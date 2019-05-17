@@ -428,15 +428,6 @@
     <ClCompile Include="func_break.cpp">
       <Filter>Source Files\dlls\func</Filter>
     </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_debug.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_math.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
-    <ClCompile Include="..\pm_shared\pm_shared.c">
-      <Filter>Source Files\pm_shared</Filter>
-    </ClCompile>
     <ClCompile Include="..\game_shared\voice_gamemgr.cpp">
       <Filter>Source Files\game_shared</Filter>
     </ClCompile>
@@ -736,6 +727,15 @@
     </ClCompile>
     <ClCompile Include="CGib.cpp">
       <Filter>Source Files\dlls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_shared.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_math.cpp">
+      <Filter>Source Files\pm_shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pm_shared\pm_debug.cpp">
+      <Filter>Source Files\pm_shared</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1314,6 +1314,9 @@
     </ClInclude>
     <ClInclude Include="CGib.h">
       <Filter>Header Files\dlls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\game_shared\platform.h">
+      <Filter>Header Files\game_shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

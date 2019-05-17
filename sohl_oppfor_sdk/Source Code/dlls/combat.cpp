@@ -55,10 +55,6 @@ extern DLL_GLOBAL int			g_iSkillLevel;
 extern Vector VecBModelOrigin(entvars_t* pevBModel);
 extern entvars_t *g_pevLastInflictor;
 
-#define GERMAN_GIB_COUNT		4
-#define	HUMAN_GIB_COUNT			6
-#define ALIEN_GIB_COUNT			4
-
 //LRC - work out gibs from blood colour, instead of from class.
 BOOL CBaseMonster::HasHumanGibs()
 {

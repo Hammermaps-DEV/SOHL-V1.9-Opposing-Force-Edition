@@ -63,8 +63,8 @@ extern "C"
 	void DLLEXPORT IN_ClearStates ();
 }
 
-// Defined in pm_math.c
-extern "C" float anglemod( float a );
+// Defined in pm_math.cpp
+extern float anglemod( float a );
 
 extern cl_enginefunc_t gEngfuncs;
 

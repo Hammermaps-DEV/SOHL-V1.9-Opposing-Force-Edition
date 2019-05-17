@@ -47,9 +47,7 @@ void CGib::LimitVelocity()
 
 void CGib::SpawnStickyGibs(entvars_t *pevVictim, Vector vecOrigin, int cGibs)
 {
-	int i;
-
-	for (i = 0; i < cGibs; i++)
+	for (int i = 0; i < cGibs; i++)
 	{
 		CGib *pGib = GetClassPtr((CGib *)NULL);
 
@@ -163,12 +161,95 @@ void CGib::SpawnHeadGib(entvars_t *pevVictim, const char* szGibModel)
 	pGib->LimitVelocity();
 }
 
+void CGib::SpawnRandomGibs(entvars_t *pevVictim, int cGibs, const GibData& gibData)
+{
+	//Track the number of uses of a particular submodel so we can avoid spawning too many of the same
+	auto pLimitTracking = gibData.Limits != nullptr ? stackalloc<int[]>(gibData.SubModelCount) : nullptr;
+
+	if (pLimitTracking)
+	{
+		memset(pLimitTracking, 0, sizeof(int) * gibData.SubModelCount);
+	}
+
+	auto currentBody = 0;
+
+	int cSplat;
+
+	for (cSplat = 0; cSplat < cGibs; cSplat++)
+	{
+		CGib *pGib = GetClassPtr((CGib *)NULL);
+
+
+		pGib->Spawn(gibData.ModelName);
+
+		if (pLimitTracking)
+		{
+			if (pLimitTracking[currentBody] >= gibData.Limits[currentBody].MaxGibs)
+			{
+				++currentBody;
+			}
+
+			pGib->pev->body = currentBody;
+
+			++pLimitTracking[currentBody];
+		}
+		else
+		{
+			pGib->pev->body = RANDOM_LONG(gibData.FirstSubModel, gibData.SubModelCount - 1);
+		}
+
+		if (pevVictim)
+		{
+			// spawn the gib somewhere in the monster's bounding volume
+			pGib->pev->origin.x = pevVictim->absmin.x + pevVictim->size.x * (RANDOM_FLOAT(0, 1));
+			pGib->pev->origin.y = pevVictim->absmin.y + pevVictim->size.y * (RANDOM_FLOAT(0, 1));
+			pGib->pev->origin.z = pevVictim->absmin.z + pevVictim->size.z * (RANDOM_FLOAT(0, 1)) + 1;	// absmin.z is in the floor because the engine subtracts 1 to enlarge the box
+
+			// make the gib fly away from the attack vector
+			pGib->pev->velocity = g_vecAttackDir * -1;
+
+			// mix in some noise
+			pGib->pev->velocity.x += RANDOM_FLOAT(-0.25, 0.25);
+			pGib->pev->velocity.y += RANDOM_FLOAT(-0.25, 0.25);
+			pGib->pev->velocity.z += RANDOM_FLOAT(-0.25, 0.25);
+
+			pGib->pev->velocity = pGib->pev->velocity * RANDOM_FLOAT(300, 400);
+
+			pGib->pev->avelocity.x = RANDOM_FLOAT(100, 200);
+			pGib->pev->avelocity.y = RANDOM_FLOAT(100, 300);
+
+			// copy owner's blood color
+			pGib->m_bloodColor = (CBaseEntity::Instance(pevVictim))->BloodColor();
+
+			if (pevVictim->health > -50)
+			{
+				pGib->pev->velocity = pGib->pev->velocity * 0.7;
+			}
+			else if (pevVictim->health > -200)
+			{
+				pGib->pev->velocity = pGib->pev->velocity * 2;
+			}
+			else
+			{
+				pGib->pev->velocity = pGib->pev->velocity * 4;
+			}
+
+			pGib->pev->solid = SOLID_BBOX;
+			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
+		}
+		pGib->LimitVelocity();
+	}
+
+	stackfree(pLimitTracking);
+}
+
+// start at one to avoid throwing random amounts of skulls (0th gib)
+const GibData HumanGibs = { "models/hgibs.mdl", 1, HUMAN_GIB_COUNT };
+const GibData AlienGibs = { "models/agibs.mdl", 0, ALIEN_GIB_COUNT };
+
 void CGib::SpawnRandomGibs(entvars_t *pevVictim, int cGibs, int human)
 {
-	if (human)
-		SpawnRandomGibs(pevVictim, cGibs, 1, "models/hgibs.mdl");
-	else
-		SpawnRandomGibs(pevVictim, cGibs, 0, "models/agibs.mdl");
+	SpawnRandomGibs(pevVictim, cGibs, human ? HumanGibs : AlienGibs);
 }
 
 //LRC - changed signature, to support custom gib models

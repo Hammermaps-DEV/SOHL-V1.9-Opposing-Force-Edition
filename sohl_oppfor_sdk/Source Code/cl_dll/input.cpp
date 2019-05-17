@@ -57,11 +57,11 @@ extern int g_iAlive;
 extern int g_weaponselect;
 extern cl_enginefunc_t gEngfuncs;
 
-// Defined in pm_math.c
-extern "C" float anglemod( float a );
+// Defined in pm_math.cpp
+extern float anglemod( float a );
 
-extern "C" int g_iOnGround;
-extern "C" int g_iWaterlevel;
+extern int g_iOnGround;
+extern int g_iWaterlevel;
 
 void IN_Init ();
 void IN_Move ( float frametime, usercmd_t *cmd);
@@ -76,9 +76,6 @@ extern cvar_t *in_joystick;
 bool g_bDecentJumped = false;
 bool g_bLongJumped = false;
 bool g_bBunnyhopJumped = false;
-
-int g_iOnGround = 0;
-int g_iWaterlevel = 0;
 
 int	in_impulse	= 0;
 int	in_cancel	= 0;

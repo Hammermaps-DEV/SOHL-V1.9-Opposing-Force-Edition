@@ -37,7 +37,8 @@ typedef	int	fixed16_t;
 struct mplane_s;
 
 extern vec3_t vec3_origin;
-extern	int nanmask;
+extern vec3_t flPlayerOrigin;
+extern int nanmask;
 
 #define	IS_NAN(x) (((*(int *)&x)&nanmask)==nanmask)
 
@@ -126,9 +127,9 @@ void AngleMatrix (const vec3_t angles, float (*matrix)[4] );
 void AngleIMatrix (const vec3_t angles, float (*matrix)[4] );
 void VectorTransform (const vec3_t in1, float in2[3][4], vec3_t out);
 
-void NormalizeAngles( vec3_t angles );
+void NormalizeAngles(float* angles);
 void InterpolateAngles( vec3_t start, vec3_t end, vec3_t output, float frac );
-float AngleBetweenVectors( const vec3_t v1, const vec3_t v2 );
+float AngleBetweenVectors(const float* v1, const float* v2);
 
 
 void VectorMatrix( vec3_t forward, vec3_t right, vec3_t up);

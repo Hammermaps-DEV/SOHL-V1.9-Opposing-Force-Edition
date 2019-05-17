@@ -75,6 +75,8 @@ public:
 	static const char *pAttackMissSounds[];
 	static const char *pAttackSoundsSpike[];
 
+	void GibMonster() override;
+
 	Schedule_t* GetSchedule();
 	Schedule_t* GetScheduleOfType(int Type);
 	MONSTERSTATE GetIdealState();
