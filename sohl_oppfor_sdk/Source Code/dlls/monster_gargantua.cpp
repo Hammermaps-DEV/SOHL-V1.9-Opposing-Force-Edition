@@ -43,6 +43,7 @@
 #include	"func_break.h"
 #include	"scripted.h"
 #include	"monster_gargantua.h"
+#include "CGib.h"
 
 //=========================================================
 // Gargantua Monster

@@ -48,6 +48,7 @@
 #include "rope/CRope.h"
 #include "items.h" //AJH Inventory system
 #include "gamerules.h"
+#include "CGib.h"
 
 extern DLL_GLOBAL ULONG		g_ulModelIndexPlayer;
 extern DLL_GLOBAL bool		g_fGameOver;

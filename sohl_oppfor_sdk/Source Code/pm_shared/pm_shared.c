@@ -34,10 +34,7 @@
 #include "pm_shared.h"
 #include "pm_movevars.h"
 #include "pm_debug.h"
-<<<<<<< HEAD
-=======
 #include "vminmax.h"
->>>>>>> parent of 9b373ef... Cleanup
 #include <stdio.h>  // NULL
 #include <math.h>   // sqrt
 #include <string.h> // strcpy
@@ -51,7 +48,8 @@ float	vJumpOrigin[3];
 float	vJumpAngles[3];
 #endif
 
-static vec3_t flPlayerOrigin = { 0,0,0 };
+vec3_t flPlayerOrigin = { 0,0,0 };
+
 static vec3_t vec3_origin = { 0,0,0 };
 static int pm_shared_initialized = false;
 

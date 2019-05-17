@@ -32,6 +32,7 @@
     <ClCompile Include="baseactanimating.cpp" />
     <ClCompile Include="CDecoreAsteroid.cpp" />
     <ClCompile Include="CDecoreSpacedebris.cpp" />
+    <ClCompile Include="CGib.cpp" />
     <ClCompile Include="CGunmanCycler.cpp" />
     <ClCompile Include="CGunmanUnarmed.cpp" />
     <ClCompile Include="CWallHealth.cpp" />
@@ -257,6 +258,7 @@
     <ClInclude Include="CDecoreSpacedebris.h" />
     <ClInclude Include="cdll_dll.h" />
     <ClInclude Include="CGenericCycler.h" />
+    <ClInclude Include="CGib.h" />
     <ClInclude Include="CGunmanCycler.h" />
     <ClInclude Include="CGunmanUnarmed.h" />
     <ClInclude Include="CHealthKit.h" />

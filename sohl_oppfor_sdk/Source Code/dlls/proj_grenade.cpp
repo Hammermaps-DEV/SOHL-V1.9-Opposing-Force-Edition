@@ -42,6 +42,7 @@
 #include "decals.h"
 #include "proj_grenade.h"
 #include "particle_defs.h"
+#include "CGib.h"
 
 #define EXP_SCALE		100
 extern int gmsgParticles;//define external message

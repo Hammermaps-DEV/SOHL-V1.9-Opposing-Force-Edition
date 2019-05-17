@@ -70,7 +70,6 @@ const char *CBreakable::pSpawnObjects[] = {
 	"weapon_satchel",	// 19
 	"weapon_snark",		// 20
 	"weapon_hornetgun",	// 21
-
 	"weapon_pipewrench",// 22
 	"weapon_knife",		// 23
 	"weapon_grapple",	// 24
@@ -158,7 +157,6 @@ void CBreakable::KeyValue(KeyValueData* pkvd)
 	else
 		CBaseDelay::KeyValue(pkvd);
 }
-
 
 //
 // func_breakable - bmodel that breaks into pieces after taking damage

@@ -734,6 +734,9 @@
     <ClCompile Include="CGunmanUnarmed.cpp">
       <Filter>Source Files\dlls\gunman</Filter>
     </ClCompile>
+    <ClCompile Include="CGib.cpp">
+      <Filter>Source Files\dlls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="monster_aflock.h">
@@ -1308,6 +1311,9 @@
     </ClInclude>
     <ClInclude Include="CGunmanUnarmed.h">
       <Filter>Header Files\dlls\gunman</Filter>
+    </ClInclude>
+    <ClInclude Include="CGib.h">
+      <Filter>Header Files\dlls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

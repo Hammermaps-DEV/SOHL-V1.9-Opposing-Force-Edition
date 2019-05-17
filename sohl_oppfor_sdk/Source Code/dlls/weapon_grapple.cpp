@@ -45,6 +45,7 @@
 #include "proj_grapple_tonguetip.h"
 #include "weapon_grapple.h"
 #include "particle_defs.h"
+#include "CGib.h"
 
 extern int gmsgParticles;
 
