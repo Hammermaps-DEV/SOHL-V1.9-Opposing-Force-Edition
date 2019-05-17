@@ -36,8 +36,6 @@
 #include "monsters.h"
 #include "talkmonster.h"
 #include "schedule.h"
-#include "defaultai.h"
-#include "scripted.h"
 #include "weapons.h"
 #include "soundent.h"
 #include "monster_otis.h"
@@ -70,7 +68,13 @@
 LINK_ENTITY_TO_CLASS(monster_otis, COtis);
 
 TYPEDESCRIPTION	COtis::m_SaveData[] = {
+	DEFINE_FIELD(COtis, m_fGunDrawn, FIELD_BOOLEAN),
+	DEFINE_FIELD(COtis, m_painTime, FIELD_TIME),
+	DEFINE_FIELD(COtis, m_checkAttackTime, FIELD_TIME),
+	DEFINE_FIELD(COtis, m_lastAttackCheck, FIELD_BOOLEAN),
+	DEFINE_FIELD(COtis, m_flPlayerDamage, FIELD_FLOAT),
 	DEFINE_FIELD(COtis, head, FIELD_INTEGER),
+	DEFINE_FIELD(COtis, m_iBaseBody, FIELD_INTEGER),
 };
 
 IMPLEMENT_SAVERESTORE(COtis, CBarney);

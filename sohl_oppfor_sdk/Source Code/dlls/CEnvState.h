@@ -25,44 +25,29 @@
 *	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-//=========================================================
-// NPC: Otis * http://half-life.wikia.com/wiki/Otis_Laurey
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-//=========================================================
 
-#ifndef MONSTER_OTIS_H
-#define MONSTER_OTIS_H
+#define SF_ENVSTATE_START_ON		1
+#define SF_ENVSTATE_DEBUG			2
 
-// include
-#include "monster_barney.h"
-
-// class definition
-class COtis : public CBarney {
+class CEnvState : public CPointEntity
+{
 public:
-	void Spawn();
-	void Precache();
-	void FirePistol();
-	void KeyValue(KeyValueData *pkvd);
-	void AlertSound();
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	void	Spawn();
+	void	Think();
+	void	KeyValue(KeyValueData *pkvd);
+	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	BOOL	IsLockedByMaster() { return !UTIL_IsMasterTriggered(m_sMaster, NULL); };
 
-	void DeclineFollowing();
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
 
-	Schedule_t *GetSchedule();
+	virtual STATE	GetState() { return m_iState; }
 
-	void TalkInit();
-	void Killed(entvars_t *pevAttacker, int iGib);
-
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	static const char *pAttackSounds[];
-
-	float m_flPlayerDamage;// how much pain has the player inflicted on me?
+	STATE		m_iState;
+	float		m_fTurnOnTime;
+	float		m_fTurnOffTime;
+	int			m_sMaster;
 };
-
-#endif // MONSTER_OTIS_H

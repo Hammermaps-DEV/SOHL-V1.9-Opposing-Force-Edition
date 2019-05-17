@@ -50,7 +50,6 @@ TYPEDESCRIPTION	CBaseAnimating::m_SaveData[] =
 
 IMPLEMENT_SAVERESTORE(CBaseAnimating, CBaseDelay);
 
-
 //=========================================================
 // StudioFrameAdvance - advance the animation frame up to the current time
 // if an flInterval is passed in, only advance animation that number of seconds

@@ -25,44 +25,30 @@
 *	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-//=========================================================
-// NPC: Otis * http://half-life.wikia.com/wiki/Otis_Laurey
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-//=========================================================
 
-#ifndef MONSTER_OTIS_H
-#define MONSTER_OTIS_H
+#ifndef CENVSPARK_H
+#define CENVSPARK_H
 
-// include
-#include "monster_barney.h"
-
-// class definition
-class COtis : public CBarney {
+class CEnvSpark : public CBaseEntity
+{
 public:
-	void Spawn();
-	void Precache();
-	void FirePistol();
-	void KeyValue(KeyValueData *pkvd);
-	void AlertSound();
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	void	Spawn();
+	void	Precache();
+	void	EXPORT SparkThink();
+	void	EXPORT SparkWait();
+	void	EXPORT SparkCyclic(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	EXPORT SparkStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	EXPORT SparkStop(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	void	KeyValue(KeyValueData *pkvd);
+	void	DoSpark(entvars_t *pev, const Vector &location);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
 
-	void DeclineFollowing();
-
-	Schedule_t *GetSchedule();
-
-	void TalkInit();
-	void Killed(entvars_t *pevAttacker, int iGib);
-
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	static const char *pAttackSounds[];
-
-	float m_flPlayerDamage;// how much pain has the player inflicted on me?
+	float	m_flDelay;
+	STATE	m_iState; //LRC
+	virtual STATE	GetState() { return m_iState; };
 };
-
-#endif // MONSTER_OTIS_H
+#endif // CENVSPARK_H

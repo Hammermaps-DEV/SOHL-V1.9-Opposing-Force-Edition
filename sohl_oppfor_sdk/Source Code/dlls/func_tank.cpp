@@ -537,6 +537,12 @@ BOOL CFuncTank::StartControl(CBasePlayer* pController, CFuncTankControls *pContr
 		}
 	}
 
+	if (pController->m_pActiveItem)
+	{
+		pController->m_pActiveItem->Holster();
+		pController->pev->weaponmodel = 0;
+	}
+
 	//	ALERT( at_console, "using TANK!\n");
 
 	m_iActive = 1;

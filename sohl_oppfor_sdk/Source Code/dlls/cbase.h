@@ -48,6 +48,7 @@ CBaseEntity
 */
 
 #define		MAX_PATH_SIZE	10 // max number of nodes available for a path.
+#define		MAX_MULTI_TARGETS	16 // maximum number of targets a single multi_manager entity may be assigned.
 
 // These are caps bits to indicate what an object's capabilities (currently used for save/restore and level transitions)
 #define		FCAP_CUSTOMSAVE				0x00000001
@@ -102,6 +103,8 @@ extern void ResetGlobalState();
 //extern CBaseEntity *g_pDesiredList; //LRC- handles DesiredVel, for movewith
 
 extern char* GetStringForUseType(USE_TYPE useType);
+
+extern int gmsgParticles;//define external message
 
 extern void FireTargets(const char *targetName, CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
@@ -579,34 +582,6 @@ typedef struct locksounds			// sounds that doors and buttons make when locked/un
 void PlayLockSounds(entvars_t *pev, locksound_t *pls, int flocked, int fbutton);
 
 //
-// MultiSouce
-//
-
-#define MAX_MULTI_TARGETS	16 // maximum number of targets a single multi_manager entity may be assigned.
-#define MS_MAX_TARGETS 32
-
-class CMultiSource : public CPointEntity
-{
-public:
-	void Spawn();
-	void KeyValue(KeyValueData *pkvd);
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
-	STATE GetState();
-	void EXPORT Register();
-	virtual int		Save(CSave &save);
-	virtual int		Restore(CRestore &restore);
-
-	static	TYPEDESCRIPTION m_SaveData[];
-
-	EHANDLE		m_rgEntities[MS_MAX_TARGETS];
-	int			m_rgTriggered[MS_MAX_TARGETS];
-
-	int			m_iTotal;
-	string_t	m_globalstate;
-};
-
-
-//
 // generic Delay entity.
 //
 class CBaseDelay : public CBaseEntity
@@ -894,6 +869,8 @@ public:
 
 	enum BUTTON_CODE { BUTTON_NOTHING, BUTTON_ACTIVATE, BUTTON_RETURN };
 	BUTTON_CODE	ButtonResponseToTouch();
+
+	void DoSpark(entvars_t *pev, const Vector &location);
 
 	static	TYPEDESCRIPTION m_SaveData[];
 	virtual int	ObjectCaps();

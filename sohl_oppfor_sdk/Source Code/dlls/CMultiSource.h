@@ -25,44 +25,29 @@
 *	Code used from Fograin (Half-Life: Update MOD)
 *
 ***/
-//=========================================================
-// NPC: Otis * http://half-life.wikia.com/wiki/Otis_Laurey
-// For Spirit of Half-Life v1.9: Opposing-Force Edition
-//=========================================================
 
-#ifndef MONSTER_OTIS_H
-#define MONSTER_OTIS_H
+#ifndef CMULTISOURCE_H
+#define CMULTISOURCE_H
 
-// include
-#include "monster_barney.h"
+#define MS_MAX_TARGETS 32
 
-// class definition
-class COtis : public CBarney {
+class CMultiSource : public CPointEntity
+{
 public:
 	void Spawn();
-	void Precache();
-	void FirePistol();
 	void KeyValue(KeyValueData *pkvd);
-	void AlertSound();
-	void HandleAnimEvent(MonsterEvent_t *pEvent);
+	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+	STATE GetState();
+	void EXPORT Register();
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
 
-	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
-	void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
-
-	void DeclineFollowing();
-
-	Schedule_t *GetSchedule();
-
-	void TalkInit();
-	void Killed(entvars_t *pevAttacker, int iGib);
-
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	static const char *pAttackSounds[];
+	EHANDLE		m_rgEntities[MS_MAX_TARGETS];
+	int			m_rgTriggered[MS_MAX_TARGETS];
 
-	float m_flPlayerDamage;// how much pain has the player inflicted on me?
+	int			m_iTotal;
+	string_t	m_globalstate;
 };
-
-#endif // MONSTER_OTIS_H
+#endif // CMULTISOURCE_H

@@ -35,9 +35,10 @@
 #include "gamerules.h"
 #include "game.h"
 #include "movewith.h"
-#include "skill.h"
 #include "weapons.h"
 #include "CWorld.h"
+#include "particle_defs.h"
+#include "skill.h"
 
 void EntvarsKeyvalue(entvars_t *pev, KeyValueData *pkvd);
 
@@ -879,9 +880,9 @@ int CBaseEntity::TakeArmor(float flArmor)
 // inflict damage on this entity.  bitsDamageType indicates type of damage inflicted, ie: DMG_CRUSH
 int CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType)
 {
-	Vector			vecTemp;
+	Vector	vecTemp;
 
-	if (!pev->takedamage)
+	if (!pev->takedamage || pev->takedamage == DAMAGE_NO)
 		return 0;
 
 	// UNDONE: some entity types may be immune or resistant to some bitsDamageType
@@ -913,6 +914,7 @@ int CBaseEntity::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, flo
 
 		if (flForce > 1000.0)
 			flForce = 1000.0;
+
 		pev->velocity = pev->velocity + vecDir * flForce;
 	}
 
@@ -988,6 +990,7 @@ int CBaseEntity::Save(CSave &save)
 int CBaseEntity::Restore(CRestore &restore)
 {
 	int status = restore.ReadEntVars("ENTVARS", pev);
+
 	if (status)
 		status = restore.ReadFields("BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
 
@@ -998,6 +1001,7 @@ int CBaseEntity::Restore(CRestore &restore)
 
 		PRECACHE_MODEL((char *)STRING(pev->model));
 		SET_MODEL(ENT(pev), STRING(pev->model));
+
 		UTIL_SetSize(pev, mins, maxs);	// Reset them
 	}
 
@@ -1083,20 +1087,25 @@ int CBaseEntity::IsDormant()
 
 BOOL CBaseEntity::IsInWorld()
 {
-	// position 
-	if (pev->origin.x >= 4096) return FALSE;
-	if (pev->origin.y >= 4096) return FALSE;
-	if (pev->origin.z >= 4096) return FALSE;
-	if (pev->origin.x <= -4096) return FALSE;
-	if (pev->origin.y <= -4096) return FALSE;
-	if (pev->origin.z <= -4096) return FALSE;
+	// position
+	if (pev->origin.x >= 4096.0 || pev->origin.y >= 4096.0 || pev->origin.z >= 4096.0)
+	{
+		return FALSE;
+	}
+	if (pev->origin.x <= -4096.0 || pev->origin.y <= -4096.0 || pev->origin.z <= -4096.0)
+	{
+		return FALSE;
+	}
+
 	// speed
-	if (pev->velocity.x >= 2000) return FALSE;
-	if (pev->velocity.y >= 2000) return FALSE;
-	if (pev->velocity.z >= 2000) return FALSE;
-	if (pev->velocity.x <= -2000) return FALSE;
-	if (pev->velocity.y <= -2000) return FALSE;
-	if (pev->velocity.z <= -2000) return FALSE;
+	if (pev->velocity.x >= 2000.0 || pev->velocity.y >= 2000.0 || pev->velocity.z >= 2000.0)
+	{
+		return FALSE;
+	}
+	if (pev->velocity.x <= -2000.0 || pev->velocity.y <= -2000.0 || pev->velocity.z <= -2000.0)
+	{
+		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -1154,9 +1163,139 @@ CBaseEntity * CBaseEntity::Create(char *szName, const Vector &vecOrigin, const V
 	}
 
 	CBaseEntity* pEntity = CBaseEntity::Instance(pent);
+
 	pEntity->pev->owner = pentOwner;
 	pEntity->pev->origin = vecOrigin;
 	pEntity->pev->angles = vecAngles;
+
 	DispatchSpawn(pEntity->edict());
+
 	return pEntity;
+}
+
+void CBaseEntity::TraceBleed(float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType)
+{
+	if (BloodColor() == DONT_BLEED)
+		return;
+
+	if (flDamage == 0)
+		return;
+
+	if (!(bitsDamageType & (DMG_CRUSH | DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB | DMG_MORTAR)))
+		return;
+
+	// make blood decal on the wall! 
+	TraceResult Bloodtr;
+	Vector vecTraceDir;
+	float flNoise;
+	int cCount;
+	int i;
+
+	if (flDamage < 10)
+	{
+		flNoise = 0.1;
+		cCount = 1;
+	}
+	else if (flDamage < 25)
+	{
+		flNoise = 0.2;
+		cCount = 2;
+	}
+	else
+	{
+		flNoise = 0.3;
+		cCount = 4;
+	}
+
+	for (i = 0; i < cCount; i++)
+	{
+		vecTraceDir = vecDir * -1;// trace in the opposite direction the shot came from (the direction the shot is going)
+
+		vecTraceDir.x += RANDOM_FLOAT(-flNoise, flNoise);
+		vecTraceDir.y += RANDOM_FLOAT(-flNoise, flNoise);
+		vecTraceDir.z += RANDOM_FLOAT(-flNoise, flNoise);
+
+		UTIL_TraceLine(ptr->vecEndPos, ptr->vecEndPos + vecTraceDir * -172, ignore_monsters, ENT(pev), &Bloodtr);
+
+		if (Bloodtr.flFraction != 1.0)
+		{
+			//UTIL_BloodDecalTrace( &Bloodtr, BloodColor() );
+
+			int blood;
+			if (BloodColor() == BLOOD_COLOR_RED)blood = 1;
+			else if (BloodColor() == BLOOD_COLOR_YELLOW)blood = 2;
+			CBaseEntity *pHit = CBaseEntity::Instance(Bloodtr.pHit);
+			PLAYBACK_EVENT_FULL(FEV_RELIABLE | FEV_GLOBAL, edict(), m_usDecals, 0.0, (float *)&Bloodtr.vecEndPos, (float *)&g_vecZero, 0.0, 0.0, pHit->entindex(), blood, 0, 0);
+		}
+	}
+}
+
+void CBaseEntity::BulletWaterImpact(Vector vecSrc, Vector vecEnd)
+{
+	if ((POINT_CONTENTS(vecEnd) == CONTENTS_WATER && POINT_CONTENTS(vecSrc) == CONTENTS_WATER)
+		|| (POINT_CONTENTS(vecEnd) != CONTENTS_WATER && POINT_CONTENTS(vecSrc) != CONTENTS_WATER))
+		return;
+
+	float x = vecEnd.x - vecSrc.x;
+	float y = vecEnd.y - vecSrc.y;
+	float z = vecEnd.z - vecSrc.z;
+	float len = sqrt(x * x + y * y + z * z);
+
+	Vector vecTemp = Vector((vecEnd.x + vecSrc.x) / 2, (vecEnd.y + vecSrc.y) / 2, (vecEnd.z + vecSrc.z) / 2);
+
+	// We hit the water surface
+	if (len <= 1) {
+		MESSAGE_BEGIN(MSG_ALL, gmsgParticles);
+		WRITE_SHORT(0);
+		WRITE_BYTE(0);
+		WRITE_COORD(vecSrc.x);
+		WRITE_COORD(vecSrc.y);
+		WRITE_COORD(vecSrc.z);
+		WRITE_COORD(vecEnd.x);
+		WRITE_COORD(vecEnd.y);
+		WRITE_COORD(vecEnd.z);
+		WRITE_SHORT(iImpactWater);
+		MESSAGE_END();
+	}
+	else {
+		if (POINT_CONTENTS(vecTemp) != POINT_CONTENTS(vecSrc))
+			BulletWaterImpact(vecSrc, vecTemp);
+		else
+			BulletWaterImpact(vecTemp, vecEnd);
+	}
+}
+
+//
+// fade out - slowly fades a entity out, then removes it.
+//
+// DON'T USE ME FOR GIBS AND STUFF IN MULTIPLAYER! 
+// SET A FUTURE THINK AND A RENDERMODE!!
+void CBaseEntity::SUB_StartFadeOut()
+{
+	if (pev->rendermode == kRenderNormal)
+	{
+		pev->renderamt = 255;
+		pev->rendermode = kRenderTransTexture;
+	}
+
+	pev->solid = SOLID_NOT;
+	pev->avelocity = g_vecZero;
+
+	SetNextThink(0.1);
+	SetThink(&CBaseEntity::SUB_FadeOut);
+}
+
+void CBaseEntity::SUB_FadeOut()
+{
+	if (pev->renderamt > 7)
+	{
+		pev->renderamt -= 7;
+		SetNextThink(0.1);
+	}
+	else
+	{
+		pev->renderamt = 0;
+		SetNextThink(0.2);
+		SetThink(&CBaseEntity::SUB_Remove);
+	}
 }

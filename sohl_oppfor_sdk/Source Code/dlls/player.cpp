@@ -3342,6 +3342,8 @@ int CBasePlayer::Restore(CRestore &restore)
 	}
 
 	RenewItems();
+	TabulateAmmo();
+
 	return status;
 }
 

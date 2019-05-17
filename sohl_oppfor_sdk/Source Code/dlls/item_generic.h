@@ -26,19 +26,26 @@
 *
 ***/
 
+#ifndef ITEM_GENERIC_H
+#define ITEM_GENERIC_H
+
+const auto SF_ITEMGENERIC_DROP_TO_FLOOR = 1 << 0;
+
 class CItemGeneric : public CBaseAnimating {
 public:
-	int		Save(CSave &save);
-	int		Restore(CRestore &restore);
+	int		Save(CSave &save) override;
+	int		Restore(CRestore &restore) override;
 
 	static	TYPEDESCRIPTION m_SaveData[];
+	void	Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
 
-	void Spawn();
-	void Precache();
-	void KeyValue(KeyValueData* pkvd);
+	void Spawn() override;
+	void Precache() override;
+	void KeyValue(KeyValueData* pkvd) override;
 
 	void EXPORT StartupThink();
 	void EXPORT SequenceThink();
 
 	string_t m_iszSequenceName;
 };
+#endif // ITEM_GENERIC_H

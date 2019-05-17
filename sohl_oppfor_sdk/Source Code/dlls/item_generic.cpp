@@ -54,26 +54,41 @@ IMPLEMENT_SAVERESTORE(CItemGeneric, CBaseAnimating);
 //=========================================================
 void CItemGeneric::Spawn() {
 	Precache();
-	SET_MODEL(ENT(pev), (char*)STRING(pev->model));
+
+	SET_MODEL(ENT(pev), const_cast<char*>(STRING(pev->model)));
 
 	UTIL_SetOrigin(this, pev->origin);
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 32));
 
 	pev->takedamage = DAMAGE_NO;
-	pev->solid = SOLID_BBOX;
+	pev->solid = SOLID_NOT;
 	pev->sequence = -1;
+	pev->movetype = 0;
+	pev->effects = 0;
+	pev->frame = 0;
 
 	// Call startup sequence to look for a sequence to play.
-	SetThink(&CItemGeneric::StartupThink);
+	if (m_iszSequenceName)
+	{
+		SetThink(&CItemGeneric::StartupThink);
+		SetNextThink(0.1);
+	}
 
-	SetNextThink(0.1);
+	if (pev->spawnflags & SF_ITEMGENERIC_DROP_TO_FLOOR)
+	{
+		if (!DROP_TO_FLOOR(pev->pContainingEntity))
+		{
+			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+			UTIL_Remove(this);
+		}
+	}
 }
 
 //=========================================================
 // Precache - precaches all resources this weapon needs
 //=========================================================
 void CItemGeneric::Precache() {
-	PRECACHE_MODEL((char*)STRING(pev->model));
+	PRECACHE_MODEL(const_cast<char*>(STRING(pev->model)));
 }
 
 //=========================================================
@@ -83,6 +98,16 @@ void CItemGeneric::KeyValue(KeyValueData* pkvd) {
 	if (FStrEq(pkvd->szKeyName, "sequencename")) {
 		m_iszSequenceName = ALLOC_STRING(pkvd->szValue);
 		pkvd->fHandled = TRUE;
+	}
+	else if (FStrEq("skin", pkvd->szKeyName))
+	{
+		pev->skin = static_cast<int>(atof(pkvd->szValue));
+		pkvd->fHandled = true;
+	}
+	else if (FStrEq("body", pkvd->szKeyName))
+	{
+		pev->body = atoi(pkvd->szValue);
+		pkvd->fHandled = true;
 	}
 	else
 		CBaseAnimating::KeyValue(pkvd);
@@ -130,9 +155,17 @@ void CItemGeneric::SequenceThink() {
 			m_fSequenceFinished = TRUE;
 			return;
 		}
-		else {
-			pev->frame = 0;
-			ResetSequenceInfo();
-		}
+
+		pev->frame = 0;
+		ResetSequenceInfo();
 	}
+}
+
+//=========================================================
+// Use
+//=========================================================
+void CItemGeneric::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	SetThink(&CItemGeneric::SUB_Remove);
+	SetNextThink(0.1);
 }
