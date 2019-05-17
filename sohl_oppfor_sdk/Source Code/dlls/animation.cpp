@@ -44,7 +44,7 @@ typedef unsigned char byte;
 #include "progdefs.h"
 #include "edict.h"
 #include "eiface.h"
-#include "platform.h"
+#include "vminmax.h"
 
 #include "studio.h"
 

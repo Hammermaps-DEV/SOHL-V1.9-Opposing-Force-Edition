@@ -2171,11 +2171,13 @@ void CRCAllyMonster::CheckAmmo() {
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool CRCAllyMonster::FCanCheckAttacks() {
-	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
-		return true;
-
-	return false;
+BOOL CRCAllyMonster::FCanCheckAttacks() {
+	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 //=========================================================
@@ -2243,8 +2245,9 @@ Vector CRCAllyMonster::GetGunPosition() {
 	if (m_fStanding) {
 		return pev->origin + Vector(0, 0, 60);
 	}
-
-	return pev->origin + Vector(0, 0, 48);
+	else {
+		return pev->origin + Vector(0, 0, 48);
+	}
 }
 
 //=========================================================

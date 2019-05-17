@@ -980,12 +980,14 @@ void CBaseMonster::CheckAttacks(CBaseEntity *pTarget, float flDist)
 // CanCheckAttacks - prequalifies a monster to do more fine
 // checking of potential attacks. 
 //=========================================================
-bool CBaseMonster::FCanCheckAttacks()
+BOOL CBaseMonster::FCanCheckAttacks()
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && !HasConditions(bits_COND_ENEMY_TOOFAR))
-		return true;
+	{
+		return TRUE;
+	}
 
-	return false;
+	return FALSE;
 }
 
 //=========================================================

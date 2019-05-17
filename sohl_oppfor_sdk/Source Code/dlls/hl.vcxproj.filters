@@ -1309,8 +1309,5 @@
     <ClInclude Include="CGunmanUnarmed.h">
       <Filter>Header Files\dlls\gunman</Filter>
     </ClInclude>
-    <ClInclude Include="..\game_shared\vminmax.h">
-      <Filter>Header Files\game_shared</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

@@ -257,7 +257,7 @@ public:
 	virtual BOOL FValidateCover(const Vector &vecCoverLocation) { return TRUE; };
 	virtual float CoverRadius() { return 784; } // Default cover radius
 
-	virtual bool FCanCheckAttacks();
+	virtual BOOL FCanCheckAttacks();
 	virtual void CheckAmmo() { return; };
 	virtual int IgnoreConditions();
 

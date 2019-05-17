@@ -1083,12 +1083,12 @@ void CHGrunt::PrescheduleThink() {
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool CHGrunt::FCanCheckAttacks() {
+BOOL CHGrunt::FCanCheckAttacks() {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
-		return true;
+		return TRUE;
 	}
 
-	return false;
+	return FALSE;
 }
 
 //=========================================================

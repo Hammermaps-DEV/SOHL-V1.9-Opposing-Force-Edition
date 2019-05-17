@@ -34,6 +34,10 @@
 #include "pm_shared.h"
 #include "pm_movevars.h"
 #include "pm_debug.h"
+<<<<<<< HEAD
+=======
+#include "vminmax.h"
+>>>>>>> parent of 9b373ef... Cleanup
 #include <stdio.h>  // NULL
 #include <math.h>   // sqrt
 #include <string.h> // strcpy

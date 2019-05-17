@@ -46,7 +46,6 @@
     <ClInclude Include="..\common\parsemsg.h" />
     <ClInclude Include="..\common\particledef.h" />
     <ClInclude Include="..\common\particle_defs.h" />
-    <ClInclude Include="..\common\platform.h" />
     <ClInclude Include="..\common\pmtrace.h" />
     <ClInclude Include="..\common\port.h" />
     <ClInclude Include="..\common\qfont.h" />
@@ -144,6 +143,7 @@
     <ClInclude Include="..\game_shared\vgui_loadtga.h" />
     <ClInclude Include="..\game_shared\vgui_scrollbar2.h" />
     <ClInclude Include="..\game_shared\vgui_slider2.h" />
+    <ClInclude Include="..\game_shared\vminmax.h" />
     <ClInclude Include="..\game_shared\voice_banmgr.h" />
     <ClInclude Include="..\game_shared\voice_common.h" />
     <ClInclude Include="..\game_shared\voice_status.h" />
