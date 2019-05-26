@@ -49,10 +49,10 @@ IMPLEMENT_SAVERESTORE(CGonomeSpit, CBaseEntity);
 void CGonomeSpit::Spawn() {
 	Precache();
 
-	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("gonomespit");
+	SetMoveType(MOVETYPE_FLY);
+	SetClassname("gonomespit");
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 255;
 

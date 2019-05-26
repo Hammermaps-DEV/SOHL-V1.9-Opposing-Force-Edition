@@ -270,20 +270,16 @@ UTIL_SharedRandomLong
 */
 int UTIL_SharedRandomLong(unsigned int seed, int low, int high)
 {
-	U_Srand((int)seed + low + high);
-
 	unsigned int range = high - low + 1;
-	if (!(range - 1))
-	{
-		return low;
-	}
-	else
+	U_Srand((unsigned int)(high + low + seed));
+	if (range != 1)
 	{
 		int rnum = U_Random();
 		int offset = rnum % range;
-
 		return (low + offset);
 	}
+
+	return low;
 }
 
 /*
@@ -293,19 +289,20 @@ UTIL_SharedRandomFloat
 */
 float UTIL_SharedRandomFloat(unsigned int seed, float low, float high)
 {
-	U_Srand((int)seed + *(int *)&low + *(int *)&high);
-
-	U_Random();
-	U_Random();
-
 	unsigned int range = high - low;
+	U_Srand((unsigned int)seed + *(unsigned int *)&low + *(unsigned int *)&high);
 
-	if (!range)
-		return low;
+	U_Random();
+	U_Random();
 
-	int tensixrand = U_Random() & 65535;
-	float offset = (float)tensixrand / 65536.0;
-	return (low + offset * range);
+	if (range)
+	{
+		int tensixrand = U_Random() & 0xFFFFu;
+		float offset = float(tensixrand) / 0x10000u;
+		return (low + offset * range);
+	}
+
+	return low;
 }
 
 void UTIL_ParametricRocket(entvars_t *pev, Vector vecOrigin, Vector vecAngles, edict_t *owner)
@@ -486,10 +483,13 @@ edict_t *DBG_EntOfVars(const entvars_t *pev)
 {
 	if (pev->pContainingEntity != NULL)
 		return pev->pContainingEntity;
+
 	ALERT(at_debug, "entvars_t pContainingEntity is NULL, calling into engine");
 	edict_t* pent = (*g_engfuncs.pfnFindEntityByVars)((entvars_t*)pev);
+
 	if (pent == NULL)
 		ALERT(at_debug, "DAMN!  Even the engine couldn't FindEntityByVars!");
+
 	((entvars_t *)pev)->pContainingEntity = pent;
 	return pent;
 }
@@ -518,15 +518,10 @@ DBG_AssertFunction(
 // ripped this out of the engine
 float	UTIL_AngleMod(float a)
 {
-	if (a < 0)
-	{
-		a = a + 360 * ((int)(a / 360) + 1);
-	}
-	else if (a >= 360)
-	{
-		a = a - 360 * ((int)(a / 360));
-	}
-	// a = (360.0/65536) * ((int)(a*(65536/360.0)) & 65535);
+	if (a < 0.0f)
+		a = a + 360.0f * (int(a / 360.0f) + 1);
+	else if (a >= 360.0f)
+		a = a - 360.0f * int(a / 360.0f);
 	return a;
 }
 
@@ -588,19 +583,16 @@ void UTIL_MoveToOrigin(edict_t *pent, const Vector &vecGoal, float flDist, int i
 {
 	float rgfl[3];
 	vecGoal.CopyToArray(rgfl);
-	//		return MOVE_TO_ORIGIN ( pent, rgfl, flDist, iMoveType ); 
 	MOVE_TO_ORIGIN(pent, rgfl, flDist, iMoveType);
 }
 
-
 int UTIL_EntitiesInBox(CBaseEntity **pList, int listMax, const Vector &mins, const Vector &maxs, int flagMask)
 {
-	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
-
+	edict_t *pEdict = INDEXENT(1);
 	int count = 0;
 
 	if (!pEdict)
-		return count;
+		return 0;
 
 	for (int i = 1; i < gpGlobals->maxEntities; i++, pEdict++)
 	{
@@ -622,25 +614,20 @@ int UTIL_EntitiesInBox(CBaseEntity **pList, int listMax, const Vector &mins, con
 		if (!pEntity)
 			continue;
 
-		pList[count] = pEntity;
-		count++;
+		pList[count++] = pEntity;
 
 		if (count >= listMax)
-			return count;
+			break;
 	}
 
 	return count;
 }
 
-
 int UTIL_MonstersInSphere(CBaseEntity **pList, int listMax, const Vector &center, float radius)
 {
-	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
-	CBaseEntity *pEntity;
-	int			count;
-	float		distance, delta;
+	edict_t		*pEdict = INDEXENT(1);
 
-	count = 0;
+	int count = 0;
 	float radiusSquared = radius * radius;
 
 	if (!pEdict)
@@ -656,12 +643,12 @@ int UTIL_MonstersInSphere(CBaseEntity **pList, int listMax, const Vector &center
 
 		// Use origin for X & Y since they are centered for all monsters
 		// Now X
-		delta = center.x - pEdict->v.origin.x;//(pEdict->v.absmin.x + pEdict->v.absmax.x)*0.5;
+		float delta = center.x - pEdict->v.origin.x;//(pEdict->v.absmin.x + pEdict->v.absmax.x)*0.5;
 		delta *= delta;
 
 		if (delta > radiusSquared)
 			continue;
-		distance = delta;
+		float distance = delta;
 
 		// Now Y
 		delta = center.y - pEdict->v.origin.y;//(pEdict->v.absmin.y + pEdict->v.absmax.y)*0.5;
@@ -679,7 +666,7 @@ int UTIL_MonstersInSphere(CBaseEntity **pList, int listMax, const Vector &center
 		if (distance > radiusSquared)
 			continue;
 
-		pEntity = CBaseEntity::Instance(pEdict);
+		CBaseEntity* pEntity = CBaseEntity::Instance(pEdict);
 		if (!pEntity)
 			continue;
 

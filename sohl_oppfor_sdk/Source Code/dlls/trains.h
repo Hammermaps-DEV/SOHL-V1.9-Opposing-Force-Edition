@@ -148,8 +148,8 @@ public:
 	static	TYPEDESCRIPTION m_SaveData[];
 	virtual int	ObjectCaps() { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_DIRECTIONAL_USE; }
 
-	virtual void	OverrideReset();
-	virtual void	ClearPointers();
+	void	OverrideReset() override;
+	void	ClearPointers() override;
 
 	CPathTrack	*m_ppath;
 	CBaseTrainDoor	*m_pDoor;

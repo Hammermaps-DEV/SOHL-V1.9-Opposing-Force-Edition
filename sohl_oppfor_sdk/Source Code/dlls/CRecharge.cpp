@@ -84,8 +84,8 @@ void CRecharge::Spawn()
 {
 	Precache();
 
-	pev->solid = SOLID_BSP;
-	pev->movetype = MOVETYPE_PUSH;
+	SetSolidType(SOLID_BSP);
+	SetMoveType(MOVETYPE_PUSH);
 
 	UTIL_SetOrigin(this, pev->origin);		// set size and link into world
 	UTIL_SetSize(pev, pev->mins, pev->maxs);

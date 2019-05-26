@@ -930,7 +930,7 @@ void CLocusVariable::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 	if (m_iszTargetName)
 	{
 		CMark *pMark = GetClassPtr((CMark*)NULL);
-		pMark->pev->classname = MAKE_STRING("mark");
+		pMark->SetClassname("mark");
 		pMark->pev->origin = vecPos;
 		pMark->pev->movedir = vecDir;
 		pMark->pev->frags = fRatio;

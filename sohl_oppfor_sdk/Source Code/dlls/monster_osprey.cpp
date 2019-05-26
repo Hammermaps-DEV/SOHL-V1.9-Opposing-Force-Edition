@@ -134,8 +134,8 @@ void COsprey::Spawn() {
 	UTIL_SetOrigin(this, pev->origin);
 
 	// Motor
-	pev->movetype = MOVETYPE_FLY;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_FLY);
+	SetSolidType(SOLID_BBOX);
 	pev->flags |= FL_MONSTER | FL_FLY;
 	pev->takedamage = DAMAGE_YES;
 	pev->speed = 80; //LRC - default speed, in case path corners don't give a speed.
@@ -329,7 +329,7 @@ CBaseMonster *COsprey::MakeGrunt(Vector vecSrc) {
 
 			pEntity = Create(m_monster_spawn, vecSrc, pev->angles);
 			pGrunt = pEntity->MyMonsterPointer();
-			pGrunt->pev->movetype = MOVETYPE_FLY;
+			pGrunt->SetMoveType(MOVETYPE_FLY);
 			pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
 			pGrunt->SetActivity(ACT_GLIDE);
 
@@ -594,7 +594,7 @@ int COsprey::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float f
 //=========================================================
 void COsprey::Killed(entvars_t *pevAttacker, int iGib)
 {
-	pev->movetype = MOVETYPE_TOSS;
+	SetMoveType(MOVETYPE_TOSS);
 	pev->gravity = 0.3;
 
 	pev->velocity = m_velocity;

@@ -253,15 +253,15 @@ void CBaseButton::Spawn()
 
 	SetMovedir(pev);
 
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 	if (FBitSet(pev->spawnflags, SF_BUTTON_NOT_SOLID))
 	{
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 		pev->skin = CONTENTS_EMPTY;
 	}
 	else
 	{
-		pev->solid = SOLID_BSP;
+		SetSolidType(SOLID_BSP);
 	}
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
@@ -702,12 +702,12 @@ void CRotButton::Spawn()
 	if (FBitSet(pev->spawnflags, SF_DOOR_ROTATE_BACKWARDS))
 		pev->movedir = pev->movedir * -1;
 
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 
 	if (pev->spawnflags & SF_ROTBUTTON_NOTSOLID)
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 	else
-		pev->solid = SOLID_BSP;
+		SetSolidType(SOLID_BSP);
 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
@@ -829,11 +829,11 @@ void CMomentaryRotButton::Spawn()
 	}
 
 	if (pev->spawnflags & SF_MOMENTARY_DOOR)
-		pev->solid = SOLID_BSP;
+		SetSolidType(SOLID_BSP);
 	else
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 	UTIL_SetOrigin(this, pev->origin);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
@@ -1044,12 +1044,12 @@ void CButtonTarget::KeyValue(KeyValueData *pkvd) //AJH
 
 void CButtonTarget::Spawn()
 {
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 	if (pev->spawnflags&SF_BTARGET_SOLIDNOT) {	//AJH - non solid button targets
-		pev->solid = SOLID_NOT;					//note: setting non solid will stop 
+		SetSolidType(SOLID_NOT);					//note: setting non solid will stop 
 	}
 	else {										//'trigger on shot' as no collision occurs
-		pev->solid = SOLID_BSP;			//Default behaviour is SOLID
+		SetSolidType(SOLID_BSP);			//Default behaviour is SOLID
 	}											//
 
 	SET_MODEL(ENT(pev), STRING(pev->model));

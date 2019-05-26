@@ -78,7 +78,7 @@ void CCrossbow::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CCrossbow::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "bolts";
 	p->iMaxAmmo1 = BOLT_MAX_CARRY;
 	p->pszAmmo2 = NULL;
@@ -164,7 +164,7 @@ void CCrossbow::FireSniperBolt() {
 		CBolt *pBolt = CBolt::BoltCreate();
 		pBolt->pev->origin = tr.vecEndPos - vecDir * 10;
 		pBolt->pev->angles = UTIL_VecToAngles(vecDir);
-		pBolt->pev->solid = SOLID_NOT;
+		pBolt->SetSolidType(SOLID_NOT);
 		pBolt->SetTouch(NULL);
 		pBolt->SetThink(&CBolt::SUB_Remove);
 

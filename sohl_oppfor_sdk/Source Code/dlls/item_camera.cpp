@@ -61,22 +61,22 @@ void CItemCamera::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), "models/w_camera.mdl");
-	pev->movetype = MOVETYPE_NONE;
-	pev->classname = MAKE_STRING("item_camera");
+	SetMoveType(MOVETYPE_NONE);
+	SetClassname("item_camera");
 	m_iobjectcaps = 0;
 	if (pev->targetname == NULL) pev->targetname = MAKE_STRING("item_camera");
 	m_state = 0;
 	m_pLastCamera = NULL;
 	m_pNextCamera = NULL;
 
-	pev->solid = SOLID_TRIGGER;
+	SetSolidType(SOLID_TRIGGER);
 	UTIL_SetOrigin(this, pev->origin);
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
 	SetTouch(&CItemCamera::ItemTouch);
 
 	if (DROP_TO_FLOOR(ENT(pev)) == 0)
 	{
-		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+		ALERT(at_error, "Item %s fell out of level at %f,%f,%f", GetClassname(), pev->origin.x, pev->origin.y, pev->origin.z);
 		UTIL_Remove(this);
 		return;
 	}
@@ -151,13 +151,13 @@ bool CItemCamera::MyTouch(CBasePlayer *pPlayer)
 		MESSAGE_END();
 		SetTouch(NULL);
 
-		//pev->solid = SOLID_NOT;		// Remove model & collisions
+		//SetSolidType(SOLID_NOT);		// Remove model & collisions
 		//pev->renderamt = 0;								// The engine won't draw this model if this is set to 0 and blending is on
 		//pev->rendermode = kRenderTransTexture;
 		pev->effects |= EF_NODRAW;	//Don't draw the model
 
 		m_iobjectcaps |= FCAP_ACROSS_TRANSITION;
-		pev->movetype = MOVETYPE_FOLLOW; //Follow the player (so that level transitions work)
+		SetMoveType(MOVETYPE_FOLLOW); //Follow the player (so that level transitions work)
 		pev->aiment = pPlayer->edict();
 		pev->owner = pPlayer->edict();
 
@@ -224,7 +224,7 @@ void CItemCamera::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 			{
 				pev->origin = pev->oldorigin; //Reset initial position;
 				m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
-				pev->movetype = MOVETYPE_NONE;
+				SetMoveType(MOVETYPE_NONE);
 				pev->aiment = NULL;
 				pev->owner = NULL;
 				pev->takedamage = DAMAGE_NO;
@@ -253,7 +253,7 @@ void CItemCamera::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 			pev->effects &= ~EF_NODRAW;
 
 			m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
-			pev->movetype = MOVETYPE_NONE; // Stop following the player 
+			SetMoveType(MOVETYPE_NONE); // Stop following the player 
 			pev->aiment = NULL;
 			pev->owner = NULL;
 			pev->takedamage = DAMAGE_YES;
@@ -280,7 +280,7 @@ void CItemCamera::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 			pPlayer->viewNeedsUpdate = 1;
 
 			m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
-			pev->movetype = MOVETYPE_NONE; // Stop following the player 
+			SetMoveType(MOVETYPE_NONE); // Stop following the player 
 			pev->aiment = NULL;
 			pev->owner = NULL;
 
@@ -303,7 +303,7 @@ void CItemCamera::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 			pPlayer->EnableControl(TRUE);
 
 			m_iobjectcaps &= ~FCAP_ACROSS_TRANSITION;
-			pev->movetype = MOVETYPE_NONE; // Stop following the player 
+			SetMoveType(MOVETYPE_NONE); // Stop following the player 
 			pev->aiment = NULL;
 			pev->owner = NULL;
 

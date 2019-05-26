@@ -89,9 +89,9 @@ IMPLEMENT_SAVERESTORE(CFrictionModifier, CBaseEntity);
 // Modify an entity's friction
 void CFrictionModifier::Spawn()
 {
-	pev->solid = SOLID_TRIGGER;
+	SetSolidType(SOLID_TRIGGER);
 	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
-	pev->movetype = MOVETYPE_NONE;
+	SetMoveType(MOVETYPE_NONE);
 	SetTouch(&CFrictionModifier::ChangeFriction);
 }
 
@@ -490,7 +490,7 @@ void CTriggerRelay::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	{
 		if (!pActivator || !pActivator->IsPlayer())
 		{
-			pActivator = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+			pActivator = CBaseEntity::Instance(INDEXENT(1));
 		}
 		if (pActivator && pActivator->IsPlayer())
 		{
@@ -806,7 +806,7 @@ void CMultiManager::Spawn()
 		}
 	}
 
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	SetUse(&CMultiManager::ManagerUse);
 	SetThink(&CMultiManager::ManagerThink);
 
@@ -1275,7 +1275,7 @@ void CStateWatcher::KeyValue(KeyValueData *pkvd)
 		}
 		else
 		{
-			ALERT(at_debug, "%s: Too many targets for %s \"%s\" (limit is %d)\n", pkvd->szKeyName, STRING(pev->classname), STRING(pev->targetname), MAX_MULTI_TARGETS);
+			ALERT(at_debug, "%s: Too many targets for %s \"%s\" (limit is %d)\n", pkvd->szKeyName, GetClassname(), STRING(pev->targetname), MAX_MULTI_TARGETS);
 		}
 	}
 	else // add this field to the target list
@@ -1290,14 +1290,14 @@ void CStateWatcher::KeyValue(KeyValueData *pkvd)
 		}
 		else
 		{
-			ALERT(at_debug, "WARNING - %s: Too many targets for %s \"%s\" (limit is %d)\n", pkvd->szKeyName, STRING(pev->classname), STRING(pev->targetname), MAX_MULTI_TARGETS);
+			ALERT(at_debug, "WARNING - %s: Too many targets for %s \"%s\" (limit is %d)\n", pkvd->szKeyName, GetClassname(), STRING(pev->targetname), MAX_MULTI_TARGETS);
 		}
 	}
 }
 
 void CStateWatcher::Spawn()
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	if (pev->target)
 		SetNextThink(0.5);
 }
@@ -1339,7 +1339,7 @@ void CStateWatcher::Think()
 		if (oldflag)
 		{
 			// ...to off. Send "off".
-//			ALERT(at_console,"%s turns off\n",STRING(pev->classname));
+//			ALERT(at_console,"%s turns off\n",GetClassname());
 			if (!FBitSet(pev->spawnflags, SF_SWATCHER_DONTSEND_OFF))
 			{
 				if (pev->spawnflags & SF_SWATCHER_SENDTOGGLE)
@@ -1351,7 +1351,7 @@ void CStateWatcher::Think()
 		else
 		{
 			// ...to on. Send "on".
-//			ALERT(at_console,"%s turns on\n",STRING(pev->classname));
+//			ALERT(at_console,"%s turns on\n",GetClassname());
 			if (!FBitSet(pev->spawnflags, SF_SWATCHER_DONTSEND_ON))
 			{
 				if (pev->spawnflags & SF_SWATCHER_SENDTOGGLE)
@@ -1511,7 +1511,7 @@ void CWatcherCount::KeyValue(KeyValueData *pkvd)
 
 void CWatcherCount::Spawn()
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	SetNextThink(0.5);
 }
 
@@ -2203,11 +2203,11 @@ void CEnvCustomize::Affect(CBaseEntity *pTarget, USE_TYPE useType)
 	{
 	case CUSTOM_FLAG_ON:
 		if (*(STRING(pTarget->pev->model)) == '*')
-			pTarget->pev->solid = SOLID_BSP;
+			pTarget->SetSolidType(SOLID_BSP);
 		else
-			pTarget->pev->solid = SOLID_SLIDEBOX;
+			pTarget->SetSolidType(SOLID_SLIDEBOX);
 		break;
-	case CUSTOM_FLAG_OFF:	pTarget->pev->solid = SOLID_NOT;	break;
+	case CUSTOM_FLAG_OFF:	pTarget->SetSolidType(SOLID_NOT);	break;
 	}
 	/*	if (m_iVisible != CUSTOM_FLAG_NOCHANGE)
 		{
@@ -2230,20 +2230,20 @@ void CEnvCustomize::Affect(CBaseEntity *pTarget, USE_TYPE useType)
 			{
 				if (*(STRING(pTarget->pev->model)) == '*')
 				{
-					pTarget->pev->solid = SOLID_BSP;
+					pTarget->SetSolidType(SOLID_BSP);
 					if (pev->spawnflags & SF_CUSTOM_DEBUG)
 						ALERT(at_debug, " solid=YES(bsp)");
 				}
 				else
 				{
-					pTarget->pev->solid = SOLID_SLIDEBOX;
+					pTarget->SetSolidType(SOLID_SLIDEBOX);
 					if (pev->spawnflags & SF_CUSTOM_DEBUG)
 						ALERT(at_debug, " solid=YES(point)");
 				}
 			}
 			else if (m_iSolid != CUSTOM_FLAG_ON)
 			{
-				pTarget->pev->solid = SOLID_NOT;
+				pTarget->SetSolidType(SOLID_NOT);
 				if (pev->spawnflags & SF_CUSTOM_DEBUG)
 					ALERT(at_debug, " solid=NO");
 			}
@@ -2449,7 +2449,7 @@ void CBaseTrigger::ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 {
 	if (pev->solid == SOLID_NOT)
 	{// if the trigger is off, turn it on
-		pev->solid = SOLID_TRIGGER;
+		SetSolidType(SOLID_TRIGGER);
 		m_hActivator = pActivator; //AJH players can get frags for world kills
 
 		// Force retouch
@@ -2457,7 +2457,7 @@ void CBaseTrigger::ToggleUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 	}
 	else
 	{// turn the trigger off
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 		m_hActivator = NULL; //AJH players can get frags for world kills
 
 	}
@@ -2475,8 +2475,8 @@ void CBaseTrigger::InitTrigger()
 	// to mean no restrictions, so use a yaw of 360 instead.
 	if (pev->angles != g_vecZero)
 		SetMovedir(pev);
-	pev->solid = SOLID_TRIGGER;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_TRIGGER);
+	SetMoveType(MOVETYPE_NONE);
 	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
 	if (CVAR_GET_FLOAT("showtriggers") == 0)
 		SetBits(pev->effects, EF_NODRAW);
@@ -2545,7 +2545,7 @@ void CTriggerHurt::Spawn()
 	}
 
 	if (FBitSet(pev->spawnflags, SF_TRIGGER_HURT_START_OFF))// if flagged to Start Turned Off, make trigger nonsolid.
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 
 	UTIL_SetOrigin(this, pev->origin);		// Link into the list
 }
@@ -2751,7 +2751,7 @@ void CTriggerHevCharge::Spawn()
 	}
 
 	if (FBitSet(pev->spawnflags, SF_TRIGGER_HURT_START_OFF))// if flagged to Start Turned Off, make trigger nonsolid.
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 
 	UTIL_SetOrigin(this, pev->origin);		// Link into the list
 }
@@ -2850,7 +2850,7 @@ void CTriggerMonsterJump::Spawn()
 
 	if (!FStringNull(pev->targetname))
 	{// if targetted, spawn turned off
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 		UTIL_SetOrigin(this, pev->origin); // Unlink from trigger list
 		SetUse(&CTriggerMonsterJump::ToggleUse);
 	}
@@ -2859,7 +2859,7 @@ void CTriggerMonsterJump::Spawn()
 
 void CTriggerMonsterJump::Think()
 {
-	pev->solid = SOLID_NOT;// kill the trigger for now !!!UNDONE
+	SetSolidType(SOLID_NOT);// kill the trigger for now !!!UNDONE
 	UTIL_SetOrigin(this, pev->origin); // Unlink from trigger list
 	SetThink(NULL);
 }
@@ -2914,8 +2914,8 @@ TYPEDESCRIPTION	CTargetFMODAudio::m_SaveData[] =
 IMPLEMENT_SAVERESTORE(CTargetFMODAudio, CPointEntity);
 
 void CTargetFMODAudio::Spawn() {
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 
 	m_bPlaying = FALSE; // start out not playing
 }
@@ -3033,7 +3033,7 @@ void PlayCDTrack(int iTrack)
 	edict_t *pClient;
 
 	// manually find the single player. 
-	pClient = g_engfuncs.pfnPEntityOfEntIndex(1);
+	pClient = INDEXENT(1);
 
 	// Can't play if the client is not connected!
 	if (!pClient)
@@ -3097,8 +3097,8 @@ void CTargetCDAudio::KeyValue(KeyValueData *pkvd)
 
 void CTargetCDAudio::Spawn()
 {
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 
 	if (pev->scale > 0)
 		SetNextThink(1.0);
@@ -3115,7 +3115,7 @@ void CTargetCDAudio::Think()
 	edict_t *pClient;
 
 	// manually find the single player. 
-	pClient = g_engfuncs.pfnPEntityOfEntIndex(1);
+	pClient = INDEXENT(1);
 
 	// Can't play if the client is not connected!
 	if (!pClient)
@@ -3352,7 +3352,7 @@ CInOutRegister *CInOutRegister::Add(CBaseEntity *pValue)
 		pResult->m_hValue = pValue;
 		pResult->m_pNext = this;
 		pResult->m_pField = m_pField;
-		pResult->pev->classname = MAKE_STRING("inout_register");
+		pResult->SetClassname("inout_register");
 
 		//		ALERT(at_console, "adding; max %.2f %.2f %.2f, min %.2f %.2f %.2f is inside max %.2f %.2f %.2f, min %.2f %.2f %.2f\n", pResult->m_hValue->pev->absmax.x, pResult->m_hValue->pev->absmax.y, pResult->m_hValue->pev->absmax.z, pResult->m_hValue->pev->absmin.x, pResult->m_hValue->pev->absmin.y, pResult->m_hValue->pev->absmin.z, pResult->m_pField->pev->absmax.x, pResult->m_pField->pev->absmax.y, pResult->m_pField->pev->absmax.z, pResult->m_pField->pev->absmin.x, pResult->m_pField->pev->absmin.y, pResult->m_pField->pev->absmin.z); //LRCT
 
@@ -3439,7 +3439,7 @@ void CTriggerInOut::Spawn()
 	m_pRegister->m_hValue = NULL;
 	m_pRegister->m_pNext = NULL;
 	m_pRegister->m_pField = this;
-	m_pRegister->pev->classname = MAKE_STRING("inout_register");
+	m_pRegister->SetClassname("inout_register");
 }
 
 void CTriggerInOut::Touch(CBaseEntity *pOther)
@@ -3565,8 +3565,8 @@ LINK_ENTITY_TO_CLASS(trigger_transition, CTriggerVolume);
 // Define space that travels across a level transition
 void CTriggerVolume::Spawn()
 {
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
 	pev->model = NULL;
 	pev->modelindex = 0;
@@ -3586,7 +3586,7 @@ LINK_ENTITY_TO_CLASS(fireanddie, CFireAndDie);
 
 void CFireAndDie::Spawn()
 {
-	pev->classname = MAKE_STRING("fireanddie");
+	SetClassname("fireanddie");
 	// Don't call Precache() - it should be called on restore
 }
 
@@ -3769,7 +3769,7 @@ void CChangeLevel::ChangeLevelNow(CBaseEntity *pActivator)
 
 	pev->dmgtime = UTIL_GlobalTimeBase();
 
-	CBaseEntity *pPlayer = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+	CBaseEntity *pPlayer = CBaseEntity::Instance(INDEXENT(1));
 	if (!InTransitionVolume(pPlayer, m_szLandmarkName))
 	{
 		ALERT(at_aiconsole, "Player isn't in the transition volume %s, aborting\n", m_szLandmarkName);
@@ -4053,7 +4053,7 @@ void CLadder::KeyValue(KeyValueData *pkvd)
 void CLadder::Precache()
 {
 	// Do all of this in here because we need to 'convert' old saved games
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	pev->skin = CONTENTS_LADDER;
 	if (CVAR_GET_FLOAT("showtriggers") == 0 && !(pev->spawnflags & SF_LADDER_VISIBLE))
 	{
@@ -4073,7 +4073,7 @@ void CLadder::Spawn()
 	Precache();
 
 	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 }
 
 
@@ -4131,7 +4131,7 @@ void CTriggerPush::Spawn()
 	InitTrigger();
 
 	if (FBitSet(pev->spawnflags, SF_TRIGGER_PUSH_START_OFF))// if flagged to Start Turned Off, make trigger nonsolid.
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 
 	SetUse(&CTriggerPush::ToggleUse);
 
@@ -5058,7 +5058,7 @@ IMPLEMENT_SAVERESTORE(CMotionThread, CPointEntity);
 
 void CMotionThread::Spawn() //AJH
 {
-	pev->classname = MAKE_STRING("motionthread"); //We need this for save/restore to work
+	SetClassname("motionthread"); //We need this for save/restore to work
 }
 
 void CMotionThread::Think()
@@ -5804,8 +5804,8 @@ IMPLEMENT_SAVERESTORE(CTriggerCamera, CBaseDelay);
 
 void CTriggerCamera::Spawn()
 {
-	pev->movetype = MOVETYPE_NOCLIP;
-	pev->solid = SOLID_NOT;							// Remove model & collisions
+	SetMoveType(MOVETYPE_NOCLIP);
+	SetSolidType(SOLID_NOT);							// Remove model & collisions
 	pev->renderamt = 0;								// The engine won't draw this model if this is set to 0 and blending is on
 	pev->rendermode = kRenderTransTexture;
 
@@ -5864,7 +5864,7 @@ void CTriggerCamera::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE
 	}
 	if (!pActivator || !pActivator->IsPlayer())
 	{
-		pActivator = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+		pActivator = CBaseEntity::Instance(INDEXENT(1));
 	}
 
 	m_hPlayer = pActivator;
@@ -6109,8 +6109,6 @@ void CPlayerFreeze::Spawn()
 {
 	CBaseDelay::Spawn();
 
-	m_hPlayer.Set(NULL);
-
 	CBaseEntity* pPlayer = UTIL_FindEntityByClassname(NULL, "player");
 
 	if (pPlayer)
@@ -6136,7 +6134,7 @@ void CPlayerFreeze::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 		}
 	}
 
-	if (m_hPlayer.Get())
+	if (m_hPlayer->IsAlive())
 	{
 		if (!ShouldToggle(useType, m_hPlayer->pev->flags & FL_FROZEN))
 			return;

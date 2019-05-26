@@ -68,8 +68,8 @@ void CGrenade::Explode(TraceResult *pTrace, int bitsDamageType)
 {
 	float	flRndSound;// sound randomizer
 
-	pev->model = iStringNull;//invisible
-	pev->solid = SOLID_NOT;// intangible
+	ClearModel();//invisible
+	SetSolidType(SOLID_NOT);// intangible
 
 	pev->takedamage = DAMAGE_NO;
 
@@ -457,10 +457,10 @@ void CGrenade::TumbleThink()
 
 void CGrenade::Spawn()
 {
-	pev->movetype = MOVETYPE_BOUNCE;
-	pev->classname = MAKE_STRING("grenade");
+	SetMoveType(MOVETYPE_BOUNCE);
+	SetClassname("grenade");
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 
 	SET_MODEL(ENT(pev), "models/grenade.mdl");
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
@@ -540,10 +540,10 @@ CGrenade * CGrenade::ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vec
 CGrenade * CGrenade::ShootSatchelCharge(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity)
 {
 	CGrenade *pGrenade = GetClassPtr((CGrenade *)NULL);
-	pGrenade->pev->movetype = MOVETYPE_BOUNCE;
-	pGrenade->pev->classname = MAKE_STRING("grenade");
+	pGrenade->SetMoveType(MOVETYPE_BOUNCE);
+	pGrenade->SetClassname("grenade");
 
-	pGrenade->pev->solid = SOLID_BBOX;
+	pGrenade->SetSolidType(SOLID_BBOX);
 
 	SET_MODEL(ENT(pGrenade->pev), "models/grenade.mdl");	// Change this to satchel charge model
 

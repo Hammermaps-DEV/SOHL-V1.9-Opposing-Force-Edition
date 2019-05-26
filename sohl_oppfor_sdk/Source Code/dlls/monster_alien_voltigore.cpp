@@ -168,8 +168,8 @@ void CVoltigore::Spawn() {
 
 	UTIL_SetSize(pev, Vector(-80, -80, 0), Vector(80, 80, 90));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = gSkillData.voltigoreHealth;
@@ -264,29 +264,29 @@ void CVoltigore::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecD
 		switch (ptr->iHitgroup) {
 		case HITGROUP_HEAD:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", GetClassname());
 			flDamage = m_flHitgroupHead * flDamage;
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", GetClassname());
 			flDamage = m_flHitgroupChest * flDamage;
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", GetClassname());
 			flDamage = m_flHitgroupStomach * flDamage;
 			break;
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", GetClassname());
 			flDamage = m_flHitgroupArm * flDamage;
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", GetClassname());
 			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}

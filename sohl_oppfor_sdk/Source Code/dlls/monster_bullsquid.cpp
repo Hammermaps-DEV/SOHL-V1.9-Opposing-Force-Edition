@@ -82,10 +82,10 @@ IMPLEMENT_SAVERESTORE(CSquidSpit, CBaseEntity);
 
 void CSquidSpit::Spawn()
 {
-	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("squidspit");
+	SetMoveType(MOVETYPE_FLY);
+	SetClassname("squidspit");
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 255;
 
@@ -651,8 +651,8 @@ void CBullsquid::Spawn()
 
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 

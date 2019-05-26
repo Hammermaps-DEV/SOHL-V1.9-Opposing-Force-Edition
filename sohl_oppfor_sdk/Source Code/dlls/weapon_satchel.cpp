@@ -94,7 +94,7 @@ LINK_ENTITY_TO_CLASS(monster_satchel, CSatchelCharge);
 //=========================================================
 void CSatchelCharge::Deactivate()
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	UTIL_Remove(this);
 }
 
@@ -103,8 +103,8 @@ void CSatchelCharge::Spawn()
 {
 	Precache();
 	// motor
-	pev->movetype = MOVETYPE_BOUNCE;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_BOUNCE);
+	SetSolidType(SOLID_BBOX);
 
 	SET_MODEL(ENT(pev), "models/w_satchel.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));	// Uses point-sized, and can be stepped over
@@ -162,13 +162,13 @@ void CSatchelCharge::SatchelThink()
 
 	if (pev->waterlevel == 3 && pev->watertype != CONTENT_FOG)
 	{
-		pev->movetype = MOVETYPE_FLY;
+		SetMoveType(MOVETYPE_FLY);
 		pev->velocity = pev->velocity * 0.8;
 		pev->avelocity = pev->avelocity * 0.9;
 		pev->velocity.z += 8;
 	}
 	else if (pev->waterlevel == 0 || pev->watertype == CONTENT_FOG)
-		pev->movetype = MOVETYPE_BOUNCE;
+		SetMoveType(MOVETYPE_BOUNCE);
 	else	pev->velocity.z -= 8;
 
 }
@@ -251,7 +251,7 @@ void CSatchel::Precache()
 
 int CSatchel::GetItemInfo(ItemInfo *p)
 {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "Satchel Charge";
 	p->iMaxAmmo1 = SATCHEL_MAX_CARRY;
 	p->pszAmmo2 = NULL;

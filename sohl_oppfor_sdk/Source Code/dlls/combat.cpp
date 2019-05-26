@@ -41,7 +41,7 @@
 #include "decals.h"
 #include "animation.h"
 #include "weapons.h"
-#include "func_break.h"
+#include "CBreakable.h"
 #include "pm_materials.h"
 #include "../engine/studio.h" //LRC
 #include "particle_defs.h"
@@ -95,7 +95,7 @@ void CBaseMonster::FadeMonster()
 {
 	StopAnimation();
 	pev->velocity = g_vecZero;
-	pev->movetype = MOVETYPE_NONE;
+	SetMoveType(MOVETYPE_NONE);
 	pev->avelocity = g_vecZero;
 	pev->animtime = UTIL_GlobalTimeBase();
 	pev->effects |= EF_NOINTERP;
@@ -331,13 +331,12 @@ void CBaseMonster::BecomeDead()
 	pev->max_health = 5; // max_health now becomes a counter for how many blood decals the corpse can place.
 
 	// make the corpse fly away from the attack vector
-	pev->movetype = MOVETYPE_TOSS;
+	SetMoveType(MOVETYPE_TOSS);
 	//pev->flags &= ~FL_ONGROUND;
 	//pev->origin.z += 2;
 	//pev->velocity = g_vecAttackDir * -1;
 	//pev->velocity = pev->velocity * RANDOM_FLOAT( 300, 400 );
 }
-
 
 BOOL CBaseMonster::ShouldGibMonster(int iGib)
 {
@@ -347,11 +346,10 @@ BOOL CBaseMonster::ShouldGibMonster(int iGib)
 	return FALSE;
 }
 
-
 void CBaseMonster::CallGibMonster()
 {
 	pev->takedamage = DAMAGE_NO;
-	pev->solid = SOLID_NOT;// do something with the body. while monster blows up
+	SetSolidType(SOLID_NOT);// do something with the body. while monster blows up
 	pev->effects = EF_NODRAW; // make the model invisible.
 	GibMonster();
 
@@ -367,7 +365,6 @@ void CBaseMonster::CallGibMonster()
 	if (ShouldFadeOnDeath())
 		UTIL_Remove(this);
 }
-
 
 /*
 ============
@@ -536,7 +533,7 @@ void CGib::StickyGibTouch(CBaseEntity *pOther)
 	pev->angles = UTIL_VecToAngles(pev->velocity);
 	pev->velocity = g_vecZero;
 	pev->avelocity = g_vecZero;
-	pev->movetype = MOVETYPE_NONE;
+	SetMoveType(MOVETYPE_NONE);
 }
 
 //
@@ -544,7 +541,7 @@ void CGib::StickyGibTouch(CBaseEntity *pOther)
 //
 void CGib::Spawn(const char *szGibModel)
 {
-	pev->movetype = MOVETYPE_BOUNCE;
+	SetMoveType(MOVETYPE_BOUNCE);
 	pev->friction = 0.55; // deading the bounce a bit
 
 	// sometimes an entity inherits the edict from a former piece of glass,
@@ -552,9 +549,9 @@ void CGib::Spawn(const char *szGibModel)
 	pev->renderamt = 255;
 	pev->rendermode = kRenderNormal;
 	pev->renderfx = kRenderFxNone;
-	pev->solid = SOLID_TRIGGER; //LRC - so that they don't get in each other's way when we fire lots
-//	pev->solid = SOLID_SLIDEBOX;/// hopefully this will fix the VELOCITY TOO LOW crap
-	pev->classname = MAKE_STRING("gib");
+	SetSolidType(SOLID_TRIGGER); //LRC - so that they don't get in each other's way when we fire lots
+//	SetSolidType(SOLID_SLIDEBOX);/// hopefully this will fix the VELOCITY TOO LOW crap
+	SetClassname("gib");
 
 	SET_MODEL(ENT(pev), szGibModel);
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));

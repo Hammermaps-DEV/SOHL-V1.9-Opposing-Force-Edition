@@ -83,7 +83,7 @@ void CM249::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CM249::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "556";
 	p->iMaxAmmo1 = _556_MAX_CARRY;
 	p->pszAmmo2 = NULL;

@@ -148,9 +148,6 @@ class CThinker;
 //
 class EHANDLE
 {
-private:
-	edict_t *m_pent;
-	int		m_serialnumber;
 public:
 	edict_t *Get();
 	edict_t *Set(edict_t *pent);
@@ -167,6 +164,9 @@ public:
 	{
 		return static_cast<T*>(operator CBaseEntity *());
 	}
+private:
+	edict_t *m_pent;
+	int		m_serialnumber;
 };
 
 //
@@ -212,6 +212,92 @@ public:
 	//E.g instead of "Player1 killed Player2 with train" you can have "Player1 decapitated Player2 with a large table saw!)
 	string_t			killname;	//AJH custom 'deathnotice' name
 	string_t			killmethod;	//AJH custom kill techniques
+
+	/*
+	*	Getters and setters for entvars_t.
+	*/
+
+	/**
+	*	@return This entity's classname.
+	*/
+	const char* GetClassname() const { return STRING(pev->classname); }
+
+	/**
+	*	Sets this entity's classname.
+	*	It is assumed that pszClassName is either a string in the program's string table or allocated using ALLOC_STRING,
+	*	or otherwise has a lifetime that is at least as long as the rest of the map.
+	*/
+	void SetClassname(const char* pszClassName)
+	{
+		pev->classname = MAKE_STRING(pszClassName);
+	}
+
+	/**
+	*	Sets the model.
+	*	@param pszModelName Name of the model.
+	*/
+	void SetModel(const char* const pszModelName)
+	{
+		SET_MODEL(edict(), pszModelName);
+	}
+
+	/**
+	*	Emit a Sound.
+	*/
+	void EmitSound(int channel, const char *sample, float volume, float attenuation)
+	{
+		EMIT_SOUND(edict(), channel, sample, volume, attenuation);
+	}
+
+	/**
+*	Sets the model.
+*	@param iszModelName Name of the model.
+*/
+	void SetModel(const string_t iszModelName)
+	{
+		SET_MODEL(edict(), STRING(iszModelName));
+	}
+
+	/**
+	*	Clears the model.
+	*/
+	void ClearModel() const
+	{
+		pev->model = iStringNull;
+		pev->modelindex = 0;
+	}
+
+	/**
+	*	@return The movetype.
+	*/
+	MoveType GetMoveType() const { return static_cast<MoveType>(pev->movetype); }
+
+	/**
+	*	Sets the movetype.
+	*	@param moveType Movetype to set.
+	*/
+	void SetMoveType(const MoveType moveType)
+	{
+		pev->movetype = moveType;
+	}
+
+	/**
+	*	@return The solid type.
+	*/
+	Solid GetSolidType() const { return static_cast<Solid>(pev->solid); }
+
+	/**
+	*	Sets the solid type.
+	*	@param solidType Solid type to set.
+	*/
+	void SetSolidType(const Solid solidType)
+	{
+		pev->solid = solidType;
+	}
+
+	/*
+	*	Getters and setters for entvars_t end.
+	*/
 
 	//LRC - decent mechanisms for setting think times!
 	// this should have been done a long time ago, but MoveWith finally forced me.
@@ -276,25 +362,23 @@ public:
 	void			SetParent(int m_iNewParent, int m_iAttachment = 0);//g-cont. two version of SetParent. from xash 0.4
 	void			SetParent(CBaseEntity *pParent, int m_iAttachment = 0);//g-cont. dynamiclly link parents
 	void			ResetParent();
-	void			ClearPointers(); //g-cont. directly clear all movewith pointer before changelevel
+	virtual void	ClearPointers(); //g-cont. directly clear all movewith pointer before changelevel
 	virtual void	PostSpawn() {} //LRC - called by Activate() to handle entity-specific initialisation.
 	// (mostly setting positions, for MoveWith support)
 
 	// Setup the object->object collision box (pev->mins / pev->maxs is the object->world collision box)
 	virtual void	SetObjectCollisionBox();
 
-	void UTIL_AutoSetSize()//automatically set collision box
+	virtual void UTIL_AutoSetSize()//automatically set collision box
 	{
-		studiohdr_t *pstudiohdr;
-		pstudiohdr = (studiohdr_t*)GET_MODEL_PTR(ENT(pev));
-
+		const auto pstudiohdr = static_cast<studiohdr_t*>(GET_MODEL_PTR(ENT(pev)));
 		if (pstudiohdr == NULL)
 		{
 			ALERT(at_console, "Unable to fetch model pointer!\n");
 			return;
 		}
-		mstudioseqdesc_t    *pseqdesc;
-		pseqdesc = (mstudioseqdesc_t *)((byte *)pstudiohdr + pstudiohdr->seqindex);
+
+		auto pseqdesc = reinterpret_cast<mstudioseqdesc_t *>((byte *)pstudiohdr + pstudiohdr->seqindex);
 		UTIL_SetSize(pev, pseqdesc[pev->sequence].bbmin, pseqdesc[pev->sequence].bbmax);
 	}
 
@@ -341,7 +425,7 @@ public:
 	virtual void    StopSneaking() {}
 	virtual BOOL	OnControls(entvars_t *pev) { return FALSE; }
 	virtual BOOL    IsSneaking() { return FALSE; }
-	virtual BOOL	IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
+	virtual bool	IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	virtual BOOL	IsBSPModel() { return pev->solid == SOLID_BSP || pev->movetype == MOVETYPE_PUSHSTEP; }
 	virtual BOOL	ReflectGauss() { return (IsBSPModel() && !pev->takedamage); }
 	virtual BOOL	HasTarget(string_t targetname) { return FStrEq(STRING(targetname), STRING(pev->targetname)); }
@@ -561,7 +645,6 @@ public:
 	void	Spawn();
 	virtual int	ObjectCaps() { return CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION; }
 };
-
 
 typedef struct locksounds			// sounds that doors and buttons make when locked/unlocked
 {
@@ -897,10 +980,10 @@ public:
 
 #define	BAD_WEAPON 0x00007FFF
 
-//
-// Converts a entvars_t * to a class pointer
-// It will allocate the class and entity if necessary
-//
+/**
+*	Converts a entvars_t * to a class pointer
+*	It will allocate the class and entity if necessary
+*/
 template <class T> T * GetClassPtr(T *a)
 {
 	entvars_t *pev = (entvars_t *)a;
@@ -920,7 +1003,6 @@ template <class T> T * GetClassPtr(T *a)
 	}
 	return a;
 }
-
 
 /*
 bit_PUSHBRUSH_DATA | bit_TOGGLE_DATA

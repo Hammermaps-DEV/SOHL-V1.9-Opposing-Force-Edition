@@ -33,25 +33,40 @@
 
 class CEgonAmmo : public CBasePlayerAmmo
 {
-	void Spawn()
+	//=========================================================
+	// Spawn
+	//=========================================================
+	void Spawn() override
 	{
 		Precache();
-		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
+		SetModel("models/w_chainammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
-	void Precache()
+
+	//=========================================================
+	// Precache
+	//=========================================================
+	void Precache() override
 	{
 		PRECACHE_MODEL("models/w_chainammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-	BOOL AddAmmo(CBaseEntity *pOther)
+
+	//=========================================================
+	// AddAmmo
+	//=========================================================
+	bool AddAmmo(CBaseEntity *pOther) override
 	{
-		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY) != -1)
-		{
-			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
-			return TRUE;
+		const bool bResult = (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY) != -1);
+		if (bResult) {
+			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
-		return FALSE;
+
+		return bResult;
 	}
 };
+
+//=========================================================
+// Link entity to Class
+//=========================================================
 LINK_ENTITY_TO_CLASS(ammo_egonclip, CEgonAmmo);

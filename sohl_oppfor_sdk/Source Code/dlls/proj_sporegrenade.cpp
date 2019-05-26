@@ -58,9 +58,9 @@ LINK_ENTITY_TO_CLASS(spore, CSporeGrenade);
 CSporeGrenade *CSporeGrenade::ShootTimed(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity, float time) {
 	CSporeGrenade *pSpore = GetClassPtr((CSporeGrenade *)NULL);
 	UTIL_SetOrigin(pSpore, vecStart);
-	pSpore->pev->movetype = MOVETYPE_BOUNCE;
+	pSpore->SetMoveType(MOVETYPE_BOUNCE);
 	pSpore->pev->owner = ENT(pevOwner);
-	pSpore->pev->classname = MAKE_STRING("spore");
+	pSpore->SetClassname("spore");
 	pSpore->pev->velocity = vecVelocity;
 	pSpore->pev->velocity = pSpore->pev->velocity + gpGlobals->v_forward * 700;
 	pSpore->pev->angles = UTIL_VecToAngles(pSpore->pev->velocity);
@@ -77,9 +77,9 @@ CSporeGrenade *CSporeGrenade::ShootTimed(entvars_t *pevOwner, Vector vecStart, V
 CSporeGrenade *CSporeGrenade::ShootContact(entvars_t *pevOwner, Vector vecStart, Vector vecVelocity) {
 	CSporeGrenade *pSpore = GetClassPtr((CSporeGrenade *)NULL);
 	UTIL_SetOrigin(pSpore, vecStart);
-	pSpore->pev->movetype = MOVETYPE_FLY;
+	pSpore->SetMoveType(MOVETYPE_FLY);
 	pSpore->pev->owner = ENT(pevOwner);
-	pSpore->pev->classname = MAKE_STRING("spore");
+	pSpore->SetClassname("spore");
 	pSpore->pev->velocity = vecVelocity;
 	pSpore->pev->velocity = pSpore->pev->velocity + gpGlobals->v_forward * 1500;
 	pSpore->pev->angles = UTIL_VecToAngles(pSpore->pev->velocity);
@@ -93,7 +93,7 @@ CSporeGrenade *CSporeGrenade::ShootContact(entvars_t *pevOwner, Vector vecStart,
 void CSporeGrenade::Spawn() {
 	Precache();
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 
 	SET_MODEL(ENT(pev), "models/spore.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, -4), Vector(4, 4, 4));

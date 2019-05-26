@@ -148,7 +148,7 @@ public:
 	virtual void RunAI();// core ai function!	
 	void Listen();
 
-	virtual BOOL	IsAlive() { return (pev->deadflag != DEAD_DEAD); }
+	virtual bool	IsAlive() { return (pev->deadflag != DEAD_DEAD); }
 	virtual BOOL	ShouldFadeOnDeath();
 
 	// Basic Monster AI functions
@@ -211,7 +211,7 @@ public:
 	//		virtual int CanPlaySequence( void ) { return ((m_pCine == NULL) && (m_MonsterState == MONSTERSTATE_NONE || m_MonsterState == MONSTERSTATE_IDLE || m_IdealMonsterState == MONSTERSTATE_IDLE)); }
 	virtual int CanPlaySequence(int interruptFlags);
 	//		virtual int CanPlaySequence( BOOL fDisregardState, int interruptLevel );
-	virtual int CanPlaySentence(BOOL fDisregardState) { return IsAlive(); }
+	virtual int CanPlaySentence(BOOL fDisregardState) { return IsAlive() ? 1 : 0; }
 	virtual void PlaySentence(const char *pszSentence, float duration, float volume, float attenuation);
 	virtual void PlayScriptedSentence(const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener);
 
@@ -257,7 +257,7 @@ public:
 	virtual BOOL FValidateCover(const Vector &vecCoverLocation) { return TRUE; };
 	virtual float CoverRadius() { return 784; } // Default cover radius
 
-	virtual BOOL FCanCheckAttacks();
+	virtual bool FCanCheckAttacks();
 	virtual void CheckAmmo() { return; };
 	virtual int IgnoreConditions();
 

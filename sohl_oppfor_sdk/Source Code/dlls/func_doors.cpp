@@ -331,17 +331,17 @@ void CBaseDoor::Spawn()
 	if (pev->skin == 0)
 	{//normal door
 		if (FBitSet(pev->spawnflags, SF_DOOR_PASSABLE))
-			pev->solid = SOLID_NOT;
+			SetSolidType(SOLID_NOT);
 		else
-			pev->solid = SOLID_BSP;
+			SetSolidType(SOLID_BSP);
 	}
 	else
 	{// special contents
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 		SetBits(pev->spawnflags, SF_DOOR_SILENT);	// water is silent for now
 	}
 
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetOrigin(this, pev->origin);
 
@@ -1044,11 +1044,11 @@ void CRotDoor::Spawn()
 	ASSERTSZ(m_vecAngle1 != m_vecAngle2, "rotating door start/end positions are equal");
 
 	if (FBitSet(pev->spawnflags, SF_DOOR_PASSABLE))
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 	else
-		pev->solid = SOLID_BSP;
+		SetSolidType(SOLID_BSP);
 
-	pev->movetype = MOVETYPE_PUSH;
+	SetMoveType(MOVETYPE_PUSH);
 	UTIL_SetOrigin(this, pev->origin);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
@@ -1139,8 +1139,8 @@ void CMomentaryDoor::Spawn()
 {
 	SetMovedir(pev);
 
-	pev->solid = SOLID_BSP;
-	pev->movetype = MOVETYPE_PUSH;
+	SetSolidType(SOLID_BSP);
+	SetMoveType(MOVETYPE_PUSH);
 
 	UTIL_SetOrigin(this, pev->origin);
 	SET_MODEL(ENT(pev), STRING(pev->model));
@@ -1393,8 +1393,8 @@ void CBaseTrainDoor::Spawn()
 	Precache();
 	SetMovedir(pev);
 
-	pev->movetype = MOVETYPE_PUSH;
-	pev->solid = SOLID_BSP;
+	SetMoveType(MOVETYPE_PUSH);
+	SetSolidType(SOLID_BSP);
 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetOrigin(this, pev->origin);

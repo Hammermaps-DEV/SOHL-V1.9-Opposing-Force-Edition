@@ -87,13 +87,11 @@ void set_suicide_frame(entvars_t* pev)
 	if (!FStrEq(STRING(pev->model), "models/player.mdl"))
 		return; // allready gibbed
 
-//	pev->frame		= $deatha11;
 	pev->solid = SOLID_NOT;
 	pev->movetype = MOVETYPE_TOSS;
 	pev->deadflag = DEAD_DEAD;
 	pev->nextthink = -1;
 }
-
 
 /*
 ===========
@@ -1047,7 +1045,7 @@ void ClientPrecache()
 	PRECACHE_SOUND("common/bodysplat.wav");
 
 	// player pain sounds
-		//PRECACHE_SOUND("player/h2odeath.wav");
+	PRECACHE_SOUND("player/h2odeath.wav");
 	PRECACHE_SOUND("player/pl_pain2.wav");
 	PRECACHE_SOUND("player/pl_pain4.wav");
 	PRECACHE_SOUND("player/pl_pain5.wav");

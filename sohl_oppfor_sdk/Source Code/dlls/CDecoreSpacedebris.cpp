@@ -40,8 +40,8 @@ void CDecoreSpacedebris::Spawn()
 
 	pev->body = RANDOM_LONG(0, 3);
 
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 	pev->effects |= EF_NODRAW;
 
 	m_blRotate = false;
@@ -87,8 +87,8 @@ void CDecoreSpacedebris::KeyValue(KeyValueData *pkvd)
 void CDecoreSpacedebris::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
 	pev->effects &= ~EF_NODRAW;
-	pev->solid = SOLID_BBOX;
-	pev->movetype = MOVETYPE_BOUNCEMISSILE;
+	SetSolidType(SOLID_BBOX);
+	SetMoveType(MOVETYPE_BOUNCEMISSILE);
 
 	Vector vecAngles = UTIL_VecToAngles(pev->movedir);
 	vecAngles.x = -vecAngles.x;

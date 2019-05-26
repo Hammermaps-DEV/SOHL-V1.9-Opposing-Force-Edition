@@ -1299,8 +1299,8 @@ void CTorch::Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->health == 0) //LRC
@@ -1402,7 +1402,7 @@ void CTorch::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, 
 		case HITGROUP_HEAD_HELMET_GT:
 		case HITGROUP_HEAD:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", GetClassname());
 
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
 				flDamage -= 20;
@@ -1417,14 +1417,14 @@ void CTorch::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, 
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", GetClassname());
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
 				flDamage = (m_flHitgroupChest*flDamage) / 2;
 			}
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", GetClassname());
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
 				flDamage = (m_flHitgroupStomach*flDamage) / 2;
 			}
@@ -1432,13 +1432,13 @@ void CTorch::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, 
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", GetClassname());
 			flDamage = m_flHitgroupArm * flDamage;
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", GetClassname());
 			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		case HITGROUP_TANK:
@@ -1700,7 +1700,7 @@ void CTorch::SetActivity(Activity NewActivity) {
 	}
 	else {
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		ALERT(at_console, "%s has no sequence for act:%d\n", GetClassname(), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
@@ -1718,7 +1718,7 @@ Schedule_t *CTorch::GetSchedule() {
 	if (pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE) {
 		if (pev->flags & FL_ONGROUND) {
 			// just landed
-			pev->movetype = MOVETYPE_STEP;
+			SetMoveType(MOVETYPE_STEP);
 			return GetScheduleOfType(SCHED_TORCH_REPEL_LAND);
 		}
 		else {
@@ -1936,7 +1936,7 @@ LINK_ENTITY_TO_CLASS(monster_human_torch_ally_repel, CTorchRepel);
 void CTorchRepel::Spawn()
 {
 	Precache();
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 
 	SetUse(&CTorchRepel::RepelUse);
 }
@@ -1954,7 +1954,7 @@ void CTorchRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 
 	CBaseEntity *pEntity = Create("monster_human_torch_ally", pev->origin, pev->angles);
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer();
-	pGrunt->pev->movetype = MOVETYPE_FLY;
+	pGrunt->SetMoveType(MOVETYPE_FLY);
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
 	pGrunt->SetActivity(ACT_GLIDE);
 	pGrunt->m_vecLastPosition = tr.vecEndPos;

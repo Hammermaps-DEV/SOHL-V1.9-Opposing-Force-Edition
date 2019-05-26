@@ -42,9 +42,9 @@ CXenHull *CXenHull::CreateHull(CBaseEntity *source, const Vector &mins, const Ve
 	CXenHull *pHull = GetClassPtr((CXenHull *)NULL);
 	UTIL_SetOrigin(pHull, source->pev->origin + offset);
 	SET_MODEL(pHull->edict(), STRING(source->pev->model));
-	pHull->pev->solid = SOLID_BBOX;
-	pHull->pev->classname = MAKE_STRING("xen_hull");
-	pHull->pev->movetype = MOVETYPE_NONE;
+	pHull->SetSolidType(SOLID_BBOX);
+	pHull->SetClassname("xen_hull");
+	pHull->SetMoveType(MOVETYPE_NONE);
 	pHull->pev->owner = source->edict();
 	UTIL_SetSize(pHull->pev, mins, maxs);
 	pHull->pev->renderamt = 0;

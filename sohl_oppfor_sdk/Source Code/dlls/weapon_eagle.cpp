@@ -78,7 +78,7 @@ void CEagle::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CEagle::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "357";
 	p->iMaxAmmo1 = _357_MAX_CARRY;
 	p->pszAmmo2 = NULL;

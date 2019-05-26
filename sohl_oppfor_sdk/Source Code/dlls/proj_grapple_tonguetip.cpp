@@ -57,8 +57,8 @@ void CGrappleHook::Spawn()
 	Precache();
 
 	SET_MODEL(ENT(pev), "models/null.mdl");
-	pev->movetype = MOVETYPE_FLY;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_FLY);
+	SetSolidType(SOLID_BBOX);
 	pev->rendermode = kRenderNormal;
 	pev->renderamt = 0;
 
@@ -68,7 +68,7 @@ void CGrappleHook::Spawn()
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(this, pev->origin);
 
-	pev->classname = MAKE_STRING("proj_hook");
+	SetClassname("proj_hook");
 
 	SetThink(&CGrappleHook::Move);
 	SetTouch(&CGrappleHook::Hit);
@@ -136,7 +136,7 @@ void CGrappleHook::Hit(CBaseEntity* Target)
 		{
 			pev->velocity = pev->velocity.Normalize();
 			myowner->m_afPhysicsFlags |= PFLAG_ON_GRAPPLE; // Set physics flag to "on grapple"
-			myowner->pev->movetype = MOVETYPE_BOUNCE; // Remove gravity effect on player
+			myowner->SetMoveType(MOVETYPE_BOUNCE); // Remove gravity effect on player
 			SetTouch(NULL);	// Fograin92: Let's reset this, we don't want multiple HIT execs when target is moving.
 		}
 	}
@@ -178,7 +178,7 @@ void CGrappleHook::Hit(CBaseEntity* Target)
 		{
 			pev->velocity = pev->velocity.Normalize();
 			myowner->m_afPhysicsFlags |= PFLAG_ON_GRAPPLE; // Set physics flag to "on grapple"
-			myowner->pev->movetype = MOVETYPE_BOUNCE; // Remove gravity effect on player
+			myowner->SetMoveType(MOVETYPE_BOUNCE); // Remove gravity effect on player
 		}
 		else
 		{
@@ -193,14 +193,14 @@ void CGrappleHook::Killed(entvars_t *pev, int gib)
 	ALERT(at_console, "Tongue was killed.\n");
 
 	// Fograin92: Clear player
-	myowner->pev->movetype = MOVETYPE_WALK; //Re-apply gravity
+	myowner->SetMoveType(MOVETYPE_WALK); //Re-apply gravity
 	myowner->m_afPhysicsFlags &= ~PFLAG_ON_GRAPPLE; //Remove "on grapple" flag
 	myowner->m_pGrappleExists = false;
 	myowner->m_flNextAttack = UTIL_GlobalTimeBase() + 1.0;
 
 	// Fograin92: Clear monster
 	if ((m_iHitMonster == 2) && (myHitMonster->IsAlive()))
-		myHitMonster->pev->movetype = MOVETYPE_STEP;	// Re-apply gravity to the pulled monster, if it's alive
+		myHitMonster->SetMoveType(MOVETYPE_STEP);	// Re-apply gravity to the pulled monster, if it's alive
 
 														// Fograin92: Clear tongue leftovers
 	bPullBack = false;
@@ -259,7 +259,7 @@ void CGrappleHook::Move()
 			// Fograin92: We did hit tiny monster, let's pull it
 			if (m_iHitMonster == 2)
 			{
-				myHitMonster->pev->movetype = MOVETYPE_FLY;	// Remove gravity effect on our pulled monster
+				myHitMonster->SetMoveType(MOVETYPE_FLY);	// Remove gravity effect on our pulled monster
 				myHitMonster->pev->velocity = (myowner->pev->origin - myHitMonster->pev->origin) * 4;	// Pull our monster
 			}
 

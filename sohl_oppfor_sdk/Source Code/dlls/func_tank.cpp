@@ -313,8 +313,8 @@ void CFuncTank::Spawn()
 {
 	Precache();
 
-	pev->movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
-	pev->solid = SOLID_BSP;
+	SetMoveType(MOVETYPE_PUSH);  // so it doesn't get pushed by anything
+	SetSolidType(SOLID_BSP);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	//	if (pev->health) pev->flags |= FL_MONSTER; //LRC - maybe?
@@ -345,7 +345,7 @@ void CFuncTank::Spawn()
 	if (m_iszLocusFire) //LRC - locus trigger
 	{
 		m_pFireProxy = GetClassPtr((CPointEntity*)NULL);
-		m_pFireProxy->pev->classname = MAKE_STRING("info_proxy");	// g-cont. allow saverestore
+		m_pFireProxy->SetClassname("info_proxy");	// g-cont. allow saverestore
 	}
 }
 
@@ -1758,8 +1758,8 @@ void CFuncTankControls :: Think( void )
 
 void CFuncTankControls::Spawn()
 {
-	pev->solid = SOLID_TRIGGER;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_TRIGGER);
+	SetMoveType(MOVETYPE_NONE);
 	if (!(pev->spawnflags & SF_TANKCONTROLS_VISIBLE))
 		pev->effects |= EF_NODRAW;
 	SET_MODEL(ENT(pev), STRING(pev->model));

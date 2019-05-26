@@ -123,11 +123,11 @@ extern "C" {
 	{
 		if (!pFunctionTable || interfaceVersion != INTERFACE_VERSION)
 		{
-			return FALSE;
+			return 0;
 		}
 
 		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-		return TRUE;
+		return 1;
 	}
 
 	int GetEntityAPI2(DLL_FUNCTIONS *pFunctionTable, int *interfaceVersion)
@@ -136,11 +136,11 @@ extern "C" {
 		{
 			// Tell engine what version we had, so it can figure out who is out of date.
 			*interfaceVersion = INTERFACE_VERSION;
-			return FALSE;
+			return 0;
 		}
 
 		memcpy(pFunctionTable, &gFunctionTable, sizeof(DLL_FUNCTIONS));
-		return TRUE;
+		return 1;
 	}
 
 #ifndef _WIN32
@@ -579,14 +579,14 @@ void CBaseEntity::SetParent(CBaseEntity *pParent, int m_iAttachment)
 	}
 
 	//	if (pev->targetname)
-	//		ALERT(at_console,"Init: %s %s moves with %s\n", STRING(pev->classname), STRING(pev->targetname), STRING(m_MoveWith));
+	//		ALERT(at_console,"Init: %s %s moves with %s\n", GetClassname(), STRING(pev->targetname), STRING(m_MoveWith));
 	//	else
-	//		ALERT(at_console,"Init: %s moves with %s\n", STRING(pev->classname), STRING(m_MoveWith));
+	//		ALERT(at_console,"Init: %s moves with %s\n", GetClassname(), STRING(m_MoveWith));
 
 		//check for himself parent
 	if (m_pMoveWith == this)
 	{
-		ALERT(at_debug, "%s has himself parent!\n", STRING(pev->classname));
+		ALERT(at_debug, "%s has himself parent!\n", GetClassname());
 		return;
 	}
 
@@ -609,11 +609,11 @@ void CBaseEntity::SetParent(CBaseEntity *pParent, int m_iAttachment)
 				pev->skin = ENTINDEX(m_pMoveWith->edict());
 				pev->body = m_iAttachment;
 				pev->aiment = m_pMoveWith->edict();
-				pev->movetype = MOVETYPE_FOLLOW;
+				SetMoveType(MOVETYPE_FOLLOW);
 			}
 			else //error
 			{
-				ALERT(at_debug, "%s not following with aiment %d!(yet)\n", STRING(pev->classname), m_iAttachment);
+				ALERT(at_debug, "%s not following with aiment %d!(yet)\n", GetClassname(), m_iAttachment);
 			}
 			return;
 		}
@@ -622,15 +622,15 @@ void CBaseEntity::SetParent(CBaseEntity *pParent, int m_iAttachment)
 			if (pev->movetype == MOVETYPE_NONE)
 			{
 				if (pev->solid == SOLID_BSP)
-					pev->movetype = MOVETYPE_PUSH;
-				else pev->movetype = MOVETYPE_NOCLIP; // or _FLY, perhaps?
+					SetMoveType(MOVETYPE_PUSH);
+				else SetMoveType(MOVETYPE_NOCLIP); // or _FLY, perhaps?
 				SetBits(m_iLFlags, LF_MOVENONE); //member movetype
 			}
 
 			if (m_pMoveWith->pev->movetype == MOVETYPE_WALK)//parent is walking monster?
 			{
 				SetBits(m_iLFlags, LF_POSTORG);//copy pos from parent every frame
-				pev->solid = SOLID_NOT;//set non solid
+				SetSolidType(SOLID_NOT);//set non solid
 			}
 			m_vecParentOrigin = m_pMoveWith->pev->origin;
 			m_vecParentAngles = m_pMoveWith->pev->angles;
@@ -673,7 +673,7 @@ void CBaseEntity::ResetParent()
 	if (m_iLFlags & LF_MOVENONE)//this entity was static e.g. func_wall
 	{
 		ClearBits(m_iLFlags, LF_MOVENONE);
-		pev->movetype = MOVETYPE_NONE;
+		SetMoveType(MOVETYPE_NONE);
 	}
 
 	if (!g_pWorld)
@@ -687,7 +687,7 @@ void CBaseEntity::ResetParent()
 	{
 		if (this == pTemp->m_pAssistLink)
 		{
-			//			ALERT(at_console,"REMOVE: %s removed from the Assist List.\n", STRING(pev->classname));
+			//			ALERT(at_console,"REMOVE: %s removed from the Assist List.\n", GetClassname());
 			pTemp->m_pAssistLink = this->m_pAssistLink;
 			this->m_pAssistLink = NULL;
 			break;
@@ -716,7 +716,7 @@ void CBaseEntity::ResetParent()
 			}
 
 		}
-		//		ALERT(at_console,"REMOVE: %s removed from the %s ChildMoveWith list.\n", STRING(pev->classname), STRING(m_pMoveWith->pev->targetname));
+		//		ALERT(at_console,"REMOVE: %s removed from the %s ChildMoveWith list.\n", GetClassname(), STRING(m_pMoveWith->pev->targetname));
 	}
 
 	//LRC - do the same thing if another entity is moving with _me_.
@@ -840,7 +840,7 @@ void CBaseEntity::ThinkCorrection()
 	{
 		// The engine has changed our nextthink, in its typical endearing way.
 		// Now we have to apply that change in the _right_ places.
-		// ALERT(at_console, "StoredThink corrected for %s \"%s\": %f -> %f\n", STRING(pev->classname), STRING(pev->targetname), m_fNextThink, m_fNextThink + pev->nextthink - m_fPevNextThink);
+		// ALERT(at_console, "StoredThink corrected for %s \"%s\": %f -> %f\n", GetClassname(), STRING(pev->targetname), m_fNextThink, m_fNextThink + pev->nextthink - m_fPevNextThink);
 		m_fNextThink += pev->nextthink - m_fPevNextThink;
 		m_fPevNextThink = pev->nextthink;
 	}
@@ -981,7 +981,7 @@ int CBaseEntity::Save(CSave &save)
 		if (pev->targetname)
 			return save.WriteFields(STRING(pev->targetname), "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
 
-		return save.WriteFields(STRING(pev->classname), "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
+		return save.WriteFields(GetClassname(), "BASE", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
 	}
 
 	return 0;
@@ -1069,9 +1069,9 @@ void CBaseEntity::MakeDormant()
 	SetBits(pev->flags, FL_DORMANT);
 
 	// Don't touch
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	// Don't move
-	pev->movetype = MOVETYPE_NONE;
+	SetMoveType(MOVETYPE_NONE);
 	// Don't draw
 	SetBits(pev->effects, EF_NODRAW);
 	// Don't think
@@ -1115,9 +1115,9 @@ BOOL CBaseEntity::ShouldToggle(USE_TYPE useType, BOOL currentState)
 	if (useType != USE_TOGGLE && useType != USE_SET)
 	{
 		if ((currentState && useType == USE_ON) || (!currentState && useType == USE_OFF))
-			return FALSE;
+			return 0;
 	}
-	return TRUE;
+	return 1;
 }
 
 BOOL CBaseEntity::ShouldToggle(USE_TYPE useType)
@@ -1278,7 +1278,7 @@ void CBaseEntity::SUB_StartFadeOut()
 		pev->rendermode = kRenderTransTexture;
 	}
 
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	pev->avelocity = g_vecZero;
 
 	SetNextThink(0.1);

@@ -113,9 +113,9 @@ void CFuncMortarField::KeyValue(KeyValueData *pkvd)
 // Drop bombs from above
 void CFuncMortarField::Spawn()
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
-	pev->movetype = MOVETYPE_NONE;
+	SetMoveType(MOVETYPE_NONE);
 	SetBits(pev->effects, EF_NODRAW);
 	SetUse(&CFuncMortarField::FieldUse);
 	Precache();
@@ -216,8 +216,8 @@ LINK_ENTITY_TO_CLASS(monster_mortar, CMortar);
 
 void CMortar::Spawn()
 {
-	pev->movetype = MOVETYPE_NONE;
-	pev->solid = SOLID_NOT;
+	SetMoveType(MOVETYPE_NONE);
+	SetSolidType(SOLID_NOT);
 
 	pev->dmg = 200;
 

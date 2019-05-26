@@ -59,10 +59,10 @@ IMPLEMENT_SAVERESTORE(CPortal, CBaseEntity);
 void CPortal::Spawn() {
 	Precache();
 
-	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("portal");
+	SetMoveType(MOVETYPE_FLY);
+	SetClassname("portal");
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 	pev->rendermode = kRenderTransAdd;
 	pev->renderamt = 255;
 

@@ -135,8 +135,8 @@ void CSqueakGrenade::Spawn()
 {
 	Precache();
 	// motor
-	pev->movetype = MOVETYPE_BOUNCE;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_BOUNCE);
+	SetSolidType(SOLID_BBOX);
 
 	SET_MODEL(ENT(pev), "models/w_squeak.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 8));
@@ -180,7 +180,7 @@ void CSqueakGrenade::Precache()
 
 void CSqueakGrenade::Killed(entvars_t *pevAttacker, int iGib)
 {
-	pev->model = iStringNull;// make invisible
+	ClearModel();// make invisible
 	SetThink(&CSqueakGrenade::SUB_Remove);
 	SetTouch(NULL);
 	SetNextThink(0.1);
@@ -235,13 +235,13 @@ void CSqueakGrenade::HuntThink()
 	{
 		if (pev->movetype == MOVETYPE_BOUNCE)
 		{
-			pev->movetype = MOVETYPE_FLY;
+			SetMoveType(MOVETYPE_FLY);
 		}
 		pev->velocity = pev->velocity * 0.9;
 		pev->velocity.z += 8.0;
 	}
 	else if (pev->movetype == MOVETYPE_FLY)
-		pev->movetype = MOVETYPE_BOUNCE;
+		SetMoveType(MOVETYPE_BOUNCE);
 
 	// return if not time to hunt
 	if (m_flNextHunt > UTIL_GlobalTimeBase())
@@ -418,7 +418,7 @@ void CSqueak::Precache()
 
 int CSqueak::GetItemInfo(ItemInfo *p)
 {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "Snarks";
 	p->iMaxAmmo1 = SNARK_MAX_CARRY;
 	p->pszAmmo2 = NULL;

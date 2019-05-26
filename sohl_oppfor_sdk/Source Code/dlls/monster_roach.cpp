@@ -120,8 +120,8 @@ void CRoach::Spawn()
 		SET_MODEL(ENT(pev), "models/roach.mdl");
 	UTIL_SetSize(pev, Vector(-1, -1, 0), Vector(1, 1, 2));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 	pev->effects = 0;
 	pev->health = 1;
@@ -160,7 +160,7 @@ void CRoach::Precache()
 //=========================================================
 void CRoach::Killed(entvars_t *pevAttacker, int iGib)
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 
 	//random sound
 	if (RANDOM_LONG(0, 4) == 1)
@@ -445,7 +445,7 @@ void CRoach::Look(int iDistance)
 				case	R_NO:
 					break;
 				default:
-					ALERT(at_debug, "%s can't assess %s\n", STRING(pev->classname), STRING(pSightEnt->pev->classname));
+					ALERT(at_debug, "%s can't assess %s\n", GetClassname(), STRING(pSightEnt->pev->classname));
 					break;
 				}
 			}

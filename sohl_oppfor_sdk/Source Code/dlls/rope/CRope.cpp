@@ -821,11 +821,11 @@ void CRope::SetRopeSegments(const size_t uiNumSegments,
 			std::swap(ppVisible, ppActualHidden);
 		}
 
-		ppVisible[0]->pev->solid = SOLID_TRIGGER;
+		ppVisible[0]->SetSolidType(SOLID_TRIGGER);
 		//TODO: maybe only set/unset the nodraw flag
 		ppVisible[0]->pev->effects = 0;
 
-		ppActualHidden[0]->pev->solid = SOLID_NOT;
+		ppActualHidden[0]->SetSolidType(SOLID_NOT);
 		ppActualHidden[0]->pev->effects = EF_NODRAW;
 
 		for (size_t uiIndex = 1; uiIndex < uiNumSegments; ++uiIndex)
@@ -833,10 +833,10 @@ void CRope::SetRopeSegments(const size_t uiNumSegments,
 			CRopeSegment* pPrim = ppVisible[uiIndex];
 			CRopeSegment* pHidden = ppActualHidden[uiIndex];
 
-			pPrim->pev->solid = SOLID_TRIGGER;
+			pPrim->SetSolidType(SOLID_TRIGGER);
 			pPrim->pev->effects = 0;
 
-			pHidden->pev->solid = SOLID_NOT;
+			pHidden->SetSolidType(SOLID_NOT);
 			pHidden->pev->effects = EF_NODRAW;
 
 			Vector vecOrigin = pPrim->pev->origin;

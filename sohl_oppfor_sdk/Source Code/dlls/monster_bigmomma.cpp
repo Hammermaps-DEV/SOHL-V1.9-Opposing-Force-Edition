@@ -511,8 +511,8 @@ void CBigMomma::Spawn()
 		SET_MODEL(ENT(pev), "models/big_mom.mdl");
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	if (pev->health == 0)
 		pev->health = 150 * gSkillData.bigmommaHealthFactor;
@@ -783,7 +783,7 @@ void CBigMomma::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_aiconsole, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		ALERT(at_aiconsole, "%s has no sequence for act:%d\n", GetClassname(), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 
@@ -1040,10 +1040,10 @@ void MortarSpray(const Vector &position, const Vector &direction, int spriteMode
 // UNDONE: right now this is pretty much a copy of the squid spit with minor changes to the way it does damage
 void CBMortar::Spawn()
 {
-	pev->movetype = MOVETYPE_TOSS;
-	pev->classname = MAKE_STRING("bmortar");
+	SetMoveType(MOVETYPE_TOSS);
+	SetClassname("bmortar");
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 255;
 

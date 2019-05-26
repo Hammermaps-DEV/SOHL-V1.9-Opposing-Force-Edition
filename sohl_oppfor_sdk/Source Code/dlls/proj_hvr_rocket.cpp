@@ -44,8 +44,8 @@ void CApacheHVR::Spawn()
 {
 	Precache();
 	// motor
-	pev->movetype = MOVETYPE_FLY;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_FLY);
+	SetSolidType(SOLID_BBOX);
 
 	SET_MODEL(ENT(pev), "models/HVR.mdl");
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));

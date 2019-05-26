@@ -86,7 +86,7 @@ void CPipeWrench::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CPipeWrench::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = NULL;
 	p->iMaxAmmo1 = -1;
 	p->pszAmmo2 = NULL;

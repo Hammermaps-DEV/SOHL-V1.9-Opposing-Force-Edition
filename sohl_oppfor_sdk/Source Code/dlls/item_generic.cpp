@@ -61,7 +61,7 @@ void CItemGeneric::Spawn() {
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 32));
 
 	pev->takedamage = DAMAGE_NO;
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	pev->sequence = -1;
 	pev->movetype = 0;
 	pev->effects = 0;
@@ -78,7 +78,7 @@ void CItemGeneric::Spawn() {
 	{
 		if (!DROP_TO_FLOOR(pev->pContainingEntity))
 		{
-			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", STRING(pev->classname), pev->origin.x, pev->origin.y, pev->origin.z);
+			ALERT(at_error, "Item %s fell out of level at %f,%f,%f", GetClassname(), pev->origin.x, pev->origin.y, pev->origin.z);
 			UTIL_Remove(this);
 		}
 	}

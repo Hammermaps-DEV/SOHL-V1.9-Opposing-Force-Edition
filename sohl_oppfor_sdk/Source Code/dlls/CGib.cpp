@@ -96,8 +96,8 @@ void CGib::SpawnStickyGibs(entvars_t *pevVictim, Vector vecOrigin, int cGibs)
 			}
 
 
-			pGib->pev->movetype = MOVETYPE_TOSS;
-			pGib->pev->solid = SOLID_BBOX;
+			pGib->SetMoveType(MOVETYPE_TOSS);
+			pGib->SetSolidType(SOLID_BBOX);
 			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
 			pGib->SetTouch(&CGib::StickyGibTouch);
 			pGib->SetThink(NULL);
@@ -234,7 +234,7 @@ void CGib::SpawnRandomGibs(entvars_t *pevVictim, int cGibs, const GibData& gibDa
 				pGib->pev->velocity = pGib->pev->velocity * 4;
 			}
 
-			pGib->pev->solid = SOLID_BBOX;
+			pGib->SetSolidType(SOLID_BBOX);
 			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
 		}
 		pGib->LimitVelocity();
@@ -317,7 +317,7 @@ void CGib::SpawnRandomGibs(entvars_t *pevVictim, int cGibs, int notfirst, const 
 				pGib->pev->velocity = pGib->pev->velocity * 4;
 			}
 
-			pGib->pev->solid = SOLID_BBOX;
+			pGib->SetSolidType(SOLID_BBOX);
 			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
 		}
 		pGib->LimitVelocity();

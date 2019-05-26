@@ -47,8 +47,8 @@ called when a spectator connects to a server
 void CBaseSpectator::SpectatorConnect()
 {
 	pev->flags = FL_SPECTATOR;
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NOCLIP;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NOCLIP);
 
 	m_pGoalEnt = NULL;
 }
@@ -135,8 +135,8 @@ void  CBaseSpectator::SpectatorThink()
 		pev->flags = FL_SPECTATOR;
 	}
 
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NOCLIP;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NOCLIP);
 
 	if (pev->impulse)
 		SpectatorImpulseCommand();
@@ -153,8 +153,8 @@ Spawn
 void CBaseSpectator::Spawn()
 {
 	pev->flags = FL_SPECTATOR;
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NOCLIP;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NOCLIP);
 
 	m_pGoalEnt = NULL;
 }

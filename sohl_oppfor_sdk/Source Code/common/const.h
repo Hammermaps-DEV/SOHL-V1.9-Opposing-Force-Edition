@@ -64,37 +64,139 @@
 #define WALKMOVE_WORLDONLY	1 // doesn't hit ANY entities, no matter what the solid type
 #define WALKMOVE_CHECKONLY	2 // move, but don't touch triggers
 
-// edict->movetype values
-#define	MOVETYPE_NONE			0		// never moves
-//#define	MOVETYPE_ANGLENOCLIP	1
-//#define	MOVETYPE_ANGLECLIP		2
-#define	MOVETYPE_WALK			3		// Player only - moving on the ground
-#define	MOVETYPE_STEP			4		// gravity, special edge handling -- monsters use this
-#define	MOVETYPE_FLY			5		// No gravity, but still collides with stuff
-#define	MOVETYPE_TOSS			6		// gravity/collisions
-#define	MOVETYPE_PUSH			7		// no clip to world, push and crush
-#define	MOVETYPE_NOCLIP			8		// No gravity, no collisions, still do velocity/avelocity
-#define	MOVETYPE_FLYMISSILE		9		// extra size to monsters
-#define	MOVETYPE_BOUNCE			10		// Just like Toss, but reflect velocity when contacting surfaces
-#define MOVETYPE_BOUNCEMISSILE	11		// bounce w/o gravity
-#define MOVETYPE_FOLLOW			12		// track movement of aiment
-#define	MOVETYPE_PUSHSTEP		13		// BSP model that needs physics/world collisions (uses nearest hull for world collision)
 
-// edict->solid values
-// NOTE: Some movetypes will cause collisions independent of SOLID_NOT/SOLID_TRIGGER when the entity moves
-// SOLID only effects OTHER entities colliding with this one when they move - UGH!
-#define	SOLID_NOT				0		// no interaction with other objects
-#define	SOLID_TRIGGER			1		// touch on edge, but not blocking
-#define	SOLID_BBOX				2		// touch on edge, block
-#define	SOLID_SLIDEBOX			3		// touch on edge, but not an onground
-#define	SOLID_BSP				4		// bsp clip, touch on edge, block
+/**
+*	edict->v.movetype values.
+*/
+enum MoveType
+{
+	/**
+	*	Never moves.
+	*/
+	MOVETYPE_NONE = 0,
+	//MOVETYPE_ANGLENOCLIP	= 1,
+	//MOVETYPE_ANGLECLIP	= 2,
 
-// edict->deadflag values
-#define	DEAD_NO					0 // alive
-#define	DEAD_DYING				1 // playing death animation or still falling off of a ledge waiting to hit ground
-#define	DEAD_DEAD				2 // dead. lying still.
-#define DEAD_RESPAWNABLE		3
-#define DEAD_DISCARDBODY		4
+	/**
+	*	Player only - moving on the ground.
+	*/
+	MOVETYPE_WALK = 3,
+
+	/**
+	*	Gravity, special edge handling -- monsters use this.
+	*/
+	MOVETYPE_STEP = 4,
+
+	/**
+	*	No gravity, but still collides with stuff.
+	*/
+	MOVETYPE_FLY = 5,
+
+	/**
+	*	Gravity/collisions.
+	*/
+	MOVETYPE_TOSS = 6,
+
+	/**
+	*	No clip to world, push and crush.
+	*/
+	MOVETYPE_PUSH = 7,
+
+	/**
+	*	No gravity, no collisions, still do velocity/avelocity.
+	*/
+	MOVETYPE_NOCLIP = 8,
+
+	/**
+	*	Extra size to monsters.
+	*/
+	MOVETYPE_FLYMISSILE = 9,
+
+	/**
+	*	Just like Toss, but reflect velocity when contacting surfaces.
+	*/
+	MOVETYPE_BOUNCE = 10,
+
+	/**
+	*	Bounce w/o gravity.
+	*/
+	MOVETYPE_BOUNCEMISSILE = 11,
+
+	/**
+	*	Track movement of aiment.
+	*/
+	MOVETYPE_FOLLOW = 12,
+
+	/**
+	*	BSP model that needs physics/world collisions (uses nearest hull for world collision).
+	*/
+	MOVETYPE_PUSHSTEP = 13,
+};
+
+/**
+*	edict->v.solid values.
+*	NOTE: Some movetypes will cause collisions independent of SOLID_NOT/SOLID_TRIGGER when the entity moves.
+*	SOLID only effects OTHER entities colliding with this one when they move - UGH!
+*/
+enum Solid
+{
+	/**
+	*	No interaction with other objects.
+	*/
+	SOLID_NOT = 0,
+
+	/**
+	*	Touch on edge, but not blocking.
+	*/
+	SOLID_TRIGGER = 1,
+
+	/**
+	*	Touch on edge, block.
+	*/
+	SOLID_BBOX = 2,
+
+	/**
+	*	Touch on edge, but not an onground.
+	*/
+	SOLID_SLIDEBOX = 3,
+
+	/**
+	*	BSP clip, touch on edge, block.
+	*/
+	SOLID_BSP = 4,
+};
+
+/**
+*	edict->deadflag values.
+*	Used by the engine, don't change.
+*/
+enum DeadFlag
+{
+	/**
+	*	Alive.
+	*/
+	DEAD_NO = 0,
+
+	/**
+	*	Playing death animation or still falling off of a ledge waiting to hit ground.
+	*/
+	DEAD_DYING = 1,
+
+	/**
+	*	Dead. lying still.
+	*/
+	DEAD_DEAD = 2,
+
+	/**
+	*	Dead, and can be respawned.
+	*/
+	DEAD_RESPAWNABLE = 3,
+
+	/**
+	*	Not used in the SDK, used by TFC for spies feigning death.
+	*/
+	DEAD_DISCARDBODY = 4,
+};
 
 #define	DAMAGE_NO				0
 #define	DAMAGE_YES				1

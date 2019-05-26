@@ -29,7 +29,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "particle_emitter.h"
+#include "CParticleEmitter.h"
 #include <ctype.h>
 
 extern char *UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBuffer, int bufferSize);
@@ -37,8 +37,8 @@ extern char *UTIL_memfgets(byte *pMemFile, int fileSize, int &filePos, char *pBu
 // create ourselves a particle emitter
 void CParticleEmitter::Spawn()
 {
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	pev->effects |= EF_NODRAW;
 

@@ -59,8 +59,8 @@ void CGenericModel::Spawn()
 {
 	Precache();
 
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 	pev->takedamage = DAMAGE_NO;
 
 	SET_MODEL(ENT(pev), STRING(pev->model));

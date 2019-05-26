@@ -56,10 +56,10 @@ IMPLEMENT_SAVERESTORE(CShock, CBaseEntity);
 
 void CShock::Spawn() {
 	Precache();
-	pev->movetype = MOVETYPE_FLY;
-	pev->classname = MAKE_STRING("shock");
+	SetMoveType(MOVETYPE_FLY);
+	SetClassname("shock");
 
-	pev->solid = SOLID_BBOX;
+	SetSolidType(SOLID_BBOX);
 	pev->rendermode = kRenderTransAlpha;
 	pev->renderamt = 0;
 

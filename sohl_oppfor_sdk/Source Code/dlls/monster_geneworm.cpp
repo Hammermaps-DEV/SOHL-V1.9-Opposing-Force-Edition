@@ -308,8 +308,8 @@ void CGeneWorm::Spawn()
 {
 	Precache();
 	// motor
-	pev->movetype = MOVETYPE_FLY;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_FLY);
+	SetSolidType(SOLID_BBOX);
 
 
 	SET_MODEL(ENT(pev), "models/geneworm.mdl");

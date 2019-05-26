@@ -218,8 +218,8 @@ void CAmbientGeneric::Spawn()
 		SetThink(&CAmbientGeneric::SUB_Remove);
 		return;
 	}
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 
 	// Set up think function for dynamic modification 
 	// of ambient sound's pitch or volume. Don't
@@ -1171,8 +1171,8 @@ void CTriggerSound::Touch(CBaseEntity *pOther)
 
 void CTriggerSound::Spawn()
 {
-	pev->solid = SOLID_TRIGGER;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_TRIGGER);
+	SetMoveType(MOVETYPE_NONE);
 	SET_MODEL(ENT(pev), STRING(pev->model));    // set size and link into world
 	SetBits(pev->effects, EF_NODRAW);
 }
@@ -1987,8 +1987,8 @@ void CSpeaker::Spawn()
 		SetThink(&CSpeaker::SUB_Remove);
 		return;
 	}
-	pev->solid = SOLID_NOT;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_NOT);
+	SetMoveType(MOVETYPE_NONE);
 
 
 	SetThink(&CSpeaker::SpeakerThink);

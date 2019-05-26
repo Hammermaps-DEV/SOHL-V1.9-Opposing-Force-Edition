@@ -77,7 +77,7 @@ public:
 			pev->skin = ENTINDEX(pEntity);
 			pev->body = attachment;
 			pev->aiment = pEntity;
-			pev->movetype = MOVETYPE_FOLLOW;
+			SetMoveType(MOVETYPE_FOLLOW);
 		}
 	}
 	void TurnOff();

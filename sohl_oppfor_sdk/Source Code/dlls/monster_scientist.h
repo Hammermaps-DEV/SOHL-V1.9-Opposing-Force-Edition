@@ -70,7 +70,7 @@ public:
 	void DeclineFollowing();
 
 	float	CoverRadius() { return 1200; }		// Need more room for cover because scientists want to get far away!
-	BOOL	DisregardEnemy(CBaseEntity *pEnemy) { return !pEnemy->IsAlive() || (UTIL_GlobalTimeBase() - m_fearTime) > 15; }
+	bool	DisregardEnemy(CBaseEntity *pEnemy) { return !pEnemy->IsAlive() || (UTIL_GlobalTimeBase() - m_fearTime) > 15; }
 
 	virtual bool CanHeal();
 	void	Heal();

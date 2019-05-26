@@ -119,8 +119,8 @@ void CLegacyCineMonster::CineSpawn(char *szModel)
 	SET_MODEL(ENT(pev), szModel);
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 64));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	pev->effects = 0;
 	pev->health = 1;
 	pev->yaw_speed = 10;
@@ -246,7 +246,7 @@ void CCineBlood::BloodStart(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 
 void CCineBlood::Spawn()
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	SetUse(&CCineBlood::BloodStart);
 	pev->health = 20;//hacked health to count iterations
 }

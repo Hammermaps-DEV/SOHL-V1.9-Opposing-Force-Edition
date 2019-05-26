@@ -92,7 +92,7 @@ BOOL CSound::FIsScent()
 //=========================================================
 void CSoundEnt::Spawn()
 {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	Initialize();
 
 	SetNextThink(1);

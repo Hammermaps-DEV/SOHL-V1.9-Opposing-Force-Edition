@@ -84,7 +84,7 @@ void CMP5::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CMP5::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "9mm";
 	p->iMaxAmmo1 = _9MM_MAX_CARRY;
 	p->pszAmmo2 = "ARgrenades";

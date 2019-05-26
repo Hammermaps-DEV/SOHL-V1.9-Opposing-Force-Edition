@@ -308,8 +308,8 @@ void CHoundeye::Spawn()
 		SET_MODEL(ENT(pev), "models/houndeye.mdl");
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 36));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_YELLOW;
 	pev->effects = 0;
 	if (pev->health == 0)

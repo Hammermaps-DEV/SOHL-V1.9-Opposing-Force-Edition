@@ -361,7 +361,7 @@ int CSquadMonster::SquadRecruit(int searchRadius, int maxMembers)
 			{
 				// Can we recruit this guy?
 				if (!pRecruit->InSquad() && pRecruit->Classify() == iMyClass &&
-					((iMyClass != CLASS_ALIEN_MONSTER) || FStrEq(STRING(pev->classname), STRING(pRecruit->pev->classname))) &&
+					((iMyClass != CLASS_ALIEN_MONSTER) || FStrEq(GetClassname(), STRING(pRecruit->pev->classname))) &&
 					FStringNull(pRecruit->pev->netname))
 				{
 					TraceResult tr;
@@ -437,7 +437,7 @@ void CSquadMonster::StartMonster()
 
 		if (iSquadSize)
 		{
-			ALERT(at_aiconsole, "Squad of %d %s formed\n", iSquadSize, STRING(pev->classname));
+			ALERT(at_aiconsole, "Squad of %d %s formed\n", iSquadSize, GetClassname());
 		}
 	}
 }

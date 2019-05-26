@@ -94,7 +94,7 @@ void CSniperrifle::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CSniperrifle::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "762";
 	p->iMaxAmmo1 = _762_MAX_CARRY;
 	p->pszAmmo2 = NULL;

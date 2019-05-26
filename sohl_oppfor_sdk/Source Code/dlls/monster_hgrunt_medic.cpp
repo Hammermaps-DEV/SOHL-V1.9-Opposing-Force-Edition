@@ -1260,8 +1260,8 @@ void CMedic::Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->health == 0) //LRC
@@ -1625,7 +1625,7 @@ Schedule_t *CMedic::GetSchedule() {
 	if (pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE) {
 		if (pev->flags & FL_ONGROUND) {
 			// just landed
-			pev->movetype = MOVETYPE_STEP;
+			SetMoveType(MOVETYPE_STEP);
 			return GetScheduleOfType(SCHED_MEDIC_REPEL_LAND);
 		}
 		else {
@@ -1882,7 +1882,7 @@ LINK_ENTITY_TO_CLASS(monster_medic_ally_repel, CMedicRepel);
 void CMedicRepel::Spawn()
 {
 	Precache();
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 
 	SetUse(&CMedicRepel::RepelUse);
 }
@@ -1900,7 +1900,7 @@ void CMedicRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TY
 
 	CBaseEntity *pEntity = Create("monster_human_medic_ally", pev->origin, pev->angles);
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer();
-	pGrunt->pev->movetype = MOVETYPE_FLY;
+	pGrunt->SetMoveType(MOVETYPE_FLY);
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
 	pGrunt->SetActivity(ACT_GLIDE);
 	pGrunt->m_vecLastPosition = tr.vecEndPos;

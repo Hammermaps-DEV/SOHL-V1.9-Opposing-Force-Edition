@@ -1,3 +1,6 @@
+#ifndef CCYCLER_H
+#define CCYCLER_H
+
 class CCycler : public CBaseMonster
 {
 public:
@@ -10,7 +13,7 @@ public:
 	virtual void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	// Don't treat as a live target
-	virtual BOOL IsAlive() { return FALSE; }
+	virtual bool IsAlive() { return false; }
 
 	virtual int		Save(CSave &save);
 	virtual int		Restore(CRestore &restore);
@@ -18,3 +21,4 @@ public:
 
 	int			m_animate;
 };
+#endif // CCYCLER_H

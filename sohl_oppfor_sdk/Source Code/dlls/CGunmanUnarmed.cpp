@@ -117,8 +117,8 @@ void CGunmanUnarmed::Spawn()
 
 	SetBodygroup(GROUP_WEAPON, m_iBodygroup);
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = 100;
 	pev->view_ofs = Vector(0, 0, 50);// position of the eyes relative to monster's origin.
@@ -131,7 +131,7 @@ void CGunmanUnarmed::Spawn()
 
 	if (pev->spawnflags & SF_HUMANUNARMED_NOTSOLID != 0)
 	{
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 		pev->takedamage = DAMAGE_NO;
 	}
 }

@@ -252,7 +252,7 @@ void CHAssassin::HandleAnimEvent(MonsterEvent_t *pEvent)
 	{
 		// ALERT( at_console, "jumping");
 		UTIL_MakeAimVectors(pev->angles);
-		pev->movetype = MOVETYPE_TOSS;
+		SetMoveType(MOVETYPE_TOSS);
 		pev->flags &= ~FL_ONGROUND;
 		if (m_pCine) //LRC...
 		{
@@ -303,8 +303,8 @@ void CHAssassin::Spawn()
 		SET_MODEL(ENT(pev), "models/hassassin.mdl");
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
 	if (pev->health == 0)
@@ -894,7 +894,7 @@ Schedule_t *CHAssassin::GetSchedule()
 			{
 				// ALERT( at_console, "landed\n");
 				// just landed
-				pev->movetype = MOVETYPE_STEP;
+				SetMoveType(MOVETYPE_STEP);
 				return GetScheduleOfType(SCHED_ASSASSIN_JUMP_LAND);
 			}
 			else

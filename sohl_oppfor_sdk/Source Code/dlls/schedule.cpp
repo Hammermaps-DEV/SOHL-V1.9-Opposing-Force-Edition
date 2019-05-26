@@ -429,7 +429,7 @@ void CBaseMonster::RunTask(Task_t *pTask)
 			{
 				// a bit of a hack. If a corpses' bbox is positioned such that being left solid so that it can be attacked will
 				// block the player on a slope or stairs, the corpse is made nonsolid. 
-//					pev->solid = SOLID_NOT;
+//					SetSolidType(SOLID_NOT);
 				UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 1));
 			}
 			else // !!!HACKHACK - put monster in a thin, wide bounding box until we fix the solid type/bounding volume problem
@@ -886,14 +886,14 @@ void CBaseMonster::StartTask(Task_t *pTask)
 					if (!MoveToLocation(newActivity, 2, vecDest))
 					{
 						TaskFail();
-						ALERT(at_aiconsole, "%s Failed to reach script!!!\n", STRING(pev->classname));
+						ALERT(at_aiconsole, "%s Failed to reach script!!!\n", GetClassname());
 						RouteClear();
 					}
 				}
 				else
 				{
 					TaskFail();
-					ALERT(at_aiconsole, "%s: MoveTarget is missing!?!\n", STRING(pev->classname));
+					ALERT(at_aiconsole, "%s: MoveTarget is missing!?!\n", GetClassname());
 					RouteClear();
 				}
 			}
@@ -1290,7 +1290,7 @@ void CBaseMonster::StartTask(Task_t *pTask)
 				m_IdealActivity = ACT_HOP; break;
 			}
 			pev->framerate = 1.0; // shouldn't be needed, but just in case
-			pev->movetype = MOVETYPE_FLY;
+			SetMoveType(MOVETYPE_FLY);
 			ClearBits(pev->flags, FL_ONGROUND);
 		}
 		else
@@ -1299,7 +1299,7 @@ void CBaseMonster::StartTask(Task_t *pTask)
 			if (m_fSequenceFinished)
 				ClearSchedule();
 			pev->framerate = 1.0;
-			//ALERT( at_aiconsole, "Script %s has begun for %s\n", STRING( m_pCine->m_iszPlay ), STRING(pev->classname) );
+			//ALERT( at_aiconsole, "Script %s has begun for %s\n", STRING( m_pCine->m_iszPlay ), GetClassname() );
 		}
 		m_scriptState = SCRIPT_PLAYING;
 		break;
@@ -1564,8 +1564,8 @@ Schedule_t *CBaseMonster::GetSchedule()
 		//ASSERT( m_pCine != NULL );
 		if (!m_pCine)
 		{
-			ALERT(at_aiconsole, "Script failed for %s\n", STRING(pev->classname));
-			//				ALERT( at_console, "Script failed for %s\n", STRING(pev->classname) );
+			ALERT(at_aiconsole, "Script failed for %s\n", GetClassname());
+			//				ALERT( at_console, "Script failed for %s\n", GetClassname() );
 			CineCleanup();
 			return GetScheduleOfType(SCHED_IDLE_STAND);
 		}

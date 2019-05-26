@@ -111,7 +111,7 @@ int CShockrifle::AddToPlayer(CBasePlayer *pPlayer) {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CShockrifle::GetItemInfo(ItemInfo *p) {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "shocks";
 	p->iMaxAmmo1 = SHOCK_MAX_CARRY;
 	p->pszAmmo2 = NULL;

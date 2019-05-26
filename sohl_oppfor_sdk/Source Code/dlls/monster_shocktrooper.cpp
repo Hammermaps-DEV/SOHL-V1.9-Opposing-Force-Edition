@@ -329,8 +329,8 @@ void CStrooper::Spawn()
 	SET_MODEL(ENT(pev), "models/strooper.mdl");
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
 	pev->health = gSkillData.strooperHealth;
@@ -528,7 +528,7 @@ void CStrooper::SetActivity(Activity NewActivity)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
+		ALERT(at_console, "%s has no sequence for act:%d\n", GetClassname(), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
@@ -549,7 +549,7 @@ Schedule_t *CStrooper::GetSchedule()
 		if (pev->flags & FL_ONGROUND)
 		{
 			// just landed
-			pev->movetype = MOVETYPE_STEP;
+			SetMoveType(MOVETYPE_STEP);
 			return GetScheduleOfType(SCHED_STROOPER_REPEL_LAND);
 		}
 		else

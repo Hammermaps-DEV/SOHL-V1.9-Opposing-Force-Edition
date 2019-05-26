@@ -304,32 +304,32 @@ Vector VecVelocityForDamage(float flDamage)
 {
 	Vector vec(RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(-100, 100), RANDOM_FLOAT(200, 300));
 
-	if (flDamage > -50)
-		vec = vec * 0.7;
-	else if (flDamage > -200)
-		vec = vec * 2;
+	if (flDamage > -50.0f)
+		vec = vec * 0.7f;
+	else if (flDamage > -200.0f)
+		vec = vec * 2.0f;
 	else
-		vec = vec * 10;
+		vec = vec * 10.0f;
 
 	return vec;
 }
 
 int TrainSpeed(int iSpeed, int iMax)
 {
-	float fMax = (float)iMax;
-	float fSpeed = iSpeed;
-
-	fSpeed = fSpeed / fMax;
-	int iRet = TRAIN_FAST;
+	int iRet = 0;
+	float fMax = float(iMax);
+	float fSpeed = iSpeed / fMax;
 
 	if (iSpeed < 0)
 		iRet = TRAIN_BACK;
 	else if (iSpeed == 0)
 		iRet = TRAIN_NEUTRAL;
-	else if (fSpeed < 0.33)
+	else if (fSpeed < 0.33f)
 		iRet = TRAIN_SLOW;
-	else if (fSpeed < 0.66)
+	else if (fSpeed < 0.66f)
 		iRet = TRAIN_MEDIUM;
+	else
+		iRet = TRAIN_FAST;
 
 	return iRet;
 }
@@ -338,7 +338,7 @@ void CBasePlayer::DeathSound()
 {
 	// water death sounds
 	if (pev->waterlevel == 3) {
-		//	EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
+		EMIT_SOUND(ENT(pev), CHAN_VOICE, "player/h2odeath.wav", 1, ATTN_NONE);
 		return;
 	}
 
@@ -360,16 +360,8 @@ void CBasePlayer::DeathSound()
 	//LRC- if no suit, then no flatline sound. (unless it's a deathmatch.)
 	if (!(m_iHideHUD & ITEM_SUIT) && !g_pGameRules->IsDeathmatch())
 		return;
+
 	EMIT_GROUPNAME_SUIT(ENT(pev), "HEV_DEAD");
-}
-
-// override takehealth
-// bitsDamageType indicates type of damage healed.
-
-int CBasePlayer::TakeHealth(float flHealth, int bitsDamageType)
-{
-	return CBaseMonster::TakeHealth(flHealth, bitsDamageType);
-
 }
 
 int CBasePlayer::TakeArmor(float flArmor)
@@ -1050,7 +1042,7 @@ void CBasePlayer::Killed(entvars_t *pevAttacker, int iGib)
 	if (pev->velocity.x > 40 || pev->velocity.y > 40 || pev->velocity.z > 40) pev->renderfx = kRenderFxDeadPlayer;
 
 	pev->deadflag = DEAD_DYING;
-	pev->movetype = MOVETYPE_TOSS;
+	SetMoveType(MOVETYPE_TOSS);
 	ClearBits(pev->flags, FL_ONGROUND);
 	if (pev->velocity.z < 10)
 		pev->velocity.z += RANDOM_FLOAT(0, 300);
@@ -1084,7 +1076,7 @@ void CBasePlayer::Killed(entvars_t *pevAttacker, int iGib)
 
 	if ((pev->health < -40 && iGib != GIB_NEVER) || iGib == GIB_ALWAYS)
 	{
-		pev->solid = SOLID_NOT;
+		SetSolidType(SOLID_NOT);
 		GibMonster();	// This clears pev->model
 		pev->effects |= EF_NODRAW;
 		return;
@@ -1456,7 +1448,7 @@ void CBasePlayer::PlayerDeathThink()
 	// once we're done animating our death and we're on the ground, we want to set movetype to None so our dead body won't do collisions and stuff anymore
 	// this prevents a bug where the dead body would go to a player's head if he walked over it while the dead player was clicking their button to respawn
 	if (pev->movetype != MOVETYPE_NONE && FBitSet(pev->flags, FL_ONGROUND))
-		pev->movetype = MOVETYPE_NONE;
+		SetMoveType(MOVETYPE_NONE);
 
 	if (pev->deadflag == DEAD_DYING)
 		pev->deadflag = DEAD_DEAD;
@@ -1574,9 +1566,9 @@ void CBasePlayer::StartObserver(Vector vecPosition, Vector vecViewAngle)
 	pev->view_ofs = g_vecZero;
 	pev->angles = pev->v_angle = vecViewAngle;
 	pev->fixangle = TRUE;
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	pev->takedamage = DAMAGE_NO;
-	pev->movetype = MOVETYPE_NONE;
+	SetMoveType(MOVETYPE_NONE);
 	pev->modelindex = 0;
 	UTIL_SetOrigin(this, vecPosition);
 }
@@ -2053,8 +2045,8 @@ void CBasePlayer::PreThink()
 							if (!m_pRope->MoveDown(flDelta))
 							{
 								//Let go of the rope, detach. - Solokiller
-								pev->movetype = MOVETYPE_WALK;
-								pev->solid = SOLID_SLIDEBOX;
+								SetMoveType(MOVETYPE_WALK);
+								SetSolidType(SOLID_SLIDEBOX);
 
 								m_afPhysicsFlags &= ~PFLAG_ONROPE;
 								m_pRope->DetachObject();
@@ -2076,8 +2068,8 @@ void CBasePlayer::PreThink()
 						else if (!m_pRope->MoveDown(flDelta))
 						{
 							//Let go of the rope, detach. - Solokiller
-							pev->movetype = MOVETYPE_WALK;
-							pev->solid = SOLID_SLIDEBOX;
+							SetMoveType(MOVETYPE_WALK);
+							SetSolidType(SOLID_SLIDEBOX);
 							m_afPhysicsFlags &= ~PFLAG_ONROPE;
 							m_pRope->DetachObject();
 							m_pRope = nullptr;
@@ -2114,8 +2106,8 @@ void CBasePlayer::PreThink()
 		if (m_afButtonPressed & IN_JUMP)
 		{
 			//We've jumped off the rope, give us some momentum - Solokiller
-			pev->movetype = MOVETYPE_WALK;
-			pev->solid = SOLID_SLIDEBOX;
+			SetMoveType(MOVETYPE_WALK);
+			SetSolidType(SOLID_SLIDEBOX);
 			m_afPhysicsFlags &= ~PFLAG_ONROPE;
 
 			Vector vecDir = gpGlobals->v_up * 165.0 + gpGlobals->v_forward * 150.0;
@@ -3085,12 +3077,12 @@ void CBasePlayer::Spawn()
 {
 	//	ALERT(at_console, "PLAYER spawns at time %f\n", UTIL_GlobalTimeBase());
 
-	pev->classname = MAKE_STRING("player");
+	SetClassname("player");
 	pev->health = 100;
 	pev->armorvalue = 0;
 	pev->takedamage = DAMAGE_AIM;
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_WALK;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_WALK);
 	pev->max_health = pev->health;
 	pev->flags &= FL_PROXY;	// keep proxy flag sey by engine
 	pev->flags |= FL_CLIENT;
@@ -4989,7 +4981,7 @@ Vector CBasePlayer::GetAutoaimVector(float flDelta)
 
 Vector CBasePlayer::AutoaimDeflection(Vector &vecSrc, float flDist, float flDelta)
 {
-	edict_t		*pEdict = g_engfuncs.pfnPEntityOfEntIndex(1);
+	edict_t		*pEdict = INDEXENT(1);
 	TraceResult tr;
 
 	if (g_psv_aim->value == 0)
@@ -5448,7 +5440,7 @@ void CStripWeapons::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 	}
 	else if (!g_pGameRules->IsDeathmatch())
 	{
-		pPlayer = (CBasePlayer *)CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+		pPlayer = (CBasePlayer *)CBaseEntity::Instance(INDEXENT(1));
 	}
 
 	if (pPlayer)
@@ -5564,7 +5556,7 @@ class CInfoIntermission :public CPointEntity
 void CInfoIntermission::Spawn()
 {
 	UTIL_SetOrigin(this, pev->origin);
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	pev->effects = EF_NODRAW;
 	pev->v_angle = g_vecZero;
 
@@ -5636,7 +5628,7 @@ void CHudSprite::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 {
 	if (!pActivator || !pActivator->IsPlayer())
 	{
-		pActivator = Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
+		pActivator = Instance(INDEXENT(1));
 	}
 
 	if (ShouldToggle(useType))

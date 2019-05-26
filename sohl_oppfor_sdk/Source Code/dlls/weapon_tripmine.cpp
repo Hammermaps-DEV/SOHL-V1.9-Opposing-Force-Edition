@@ -118,8 +118,8 @@ void CTripmineGrenade::Spawn()
 {
 	Precache();
 	// motor
-	pev->movetype = MOVETYPE_FLY;
-	pev->solid = SOLID_NOT;
+	SetMoveType(MOVETYPE_FLY);
+	SetSolidType(SOLID_NOT);
 
 	SET_MODEL(ENT(pev), "models/w_tripmine.mdl");
 
@@ -231,7 +231,7 @@ void CTripmineGrenade::PowerupThink()
 	if (UTIL_GlobalTimeBase() > m_flPowerUp)
 	{
 		// make solid
-		pev->solid = SOLID_BBOX;
+		SetSolidType(SOLID_BBOX);
 		UTIL_SetOrigin(this, pev->origin);
 
 		MakeBeam();
@@ -398,7 +398,7 @@ void CTripmine::Precache()
 
 int CTripmine::GetItemInfo(ItemInfo *p)
 {
-	p->pszName = STRING(pev->classname);
+	p->pszName = GetClassname();
 	p->pszAmmo1 = "Trip Mine";
 	p->iMaxAmmo1 = TRIPMINE_MAX_CARRY;
 	p->pszAmmo2 = NULL;

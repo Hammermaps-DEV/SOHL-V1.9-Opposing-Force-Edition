@@ -43,7 +43,7 @@ CBolt *CBolt::BoltCreate()
 {
 	// Create a new entity with CCrossbowBolt private data
 	CBolt *pBolt = GetClassPtr((CBolt *)NULL);
-	pBolt->pev->classname = MAKE_STRING("bolt");
+	pBolt->SetClassname("bolt");
 	pBolt->Spawn();
 
 	return pBolt;
@@ -52,8 +52,8 @@ CBolt *CBolt::BoltCreate()
 void CBolt::Spawn()
 {
 	Precache();
-	pev->movetype = MOVETYPE_FLY;
-	pev->solid = SOLID_BBOX;
+	SetMoveType(MOVETYPE_FLY);
+	SetSolidType(SOLID_BBOX);
 
 	pev->gravity = 0.5;
 
@@ -138,8 +138,8 @@ void CBolt::BoltTouch(CBaseEntity *pOther)
 		Vector vecDir = pev->velocity.Normalize();
 		UTIL_SetOrigin(this, pev->origin - vecDir * 12);
 		pev->angles = UTIL_VecToAngles(vecDir);
-		pev->solid = SOLID_NOT;
-		pev->movetype = MOVETYPE_FLY;
+		SetSolidType(SOLID_NOT);
+		SetMoveType(MOVETYPE_FLY);
 		pev->velocity = Vector(0, 0, 0);
 		pev->avelocity.z = 0;
 		pev->angles.z = RANDOM_LONG(0, 360);

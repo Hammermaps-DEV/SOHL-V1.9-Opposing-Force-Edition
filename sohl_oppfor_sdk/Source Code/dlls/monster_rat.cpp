@@ -73,8 +73,8 @@ void CRat::Spawn() {
 	else
 		SET_MODEL(ENT(pev), "models/bigrat.mdl");
 	UTIL_SetSize(pev, Vector(-4, -4, 0), Vector(4, 4, 2));
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_STEP;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_STEP);
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
 	pev->health = 1;
@@ -101,7 +101,7 @@ void CRat::Precache() {
 }
 
 void CRat::Killed(entvars_t *pevAttacker, int iGib) {
-	pev->solid = SOLID_NOT;
+	SetSolidType(SOLID_NOT);
 	pev->takedamage = DAMAGE_NO;
 	pev->deadflag = DEAD_DEAD;
 

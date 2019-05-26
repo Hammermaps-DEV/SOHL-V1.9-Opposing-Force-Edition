@@ -1072,7 +1072,7 @@ Schedule_t *CBaseMonster::ScheduleInList(const char *pName, Schedule_t **pList, 
 
 	if (!pName)
 	{
-		ALERT(at_debug, "%s set to unnamed schedule!\n", STRING(pev->classname));
+		ALERT(at_debug, "%s set to unnamed schedule!\n", GetClassname());
 		return NULL;
 	}
 
@@ -1106,12 +1106,12 @@ Schedule_t* CBaseMonster::GetScheduleOfType(int Type)
 		//			ASSERT( m_pCine != NULL );
 		if (!m_pCine)
 		{
-			ALERT(at_aiconsole, "Script failed for %s\n", STRING(pev->classname));
+			ALERT(at_aiconsole, "Script failed for %s\n", GetClassname());
 			CineCleanup();
 			return GetScheduleOfType(SCHED_IDLE_STAND);
 		}
 		//			else
-		//				ALERT( at_aiconsole, "Starting script %s for %s\n", STRING( m_pCine->m_iszPlay ), STRING(pev->classname) );
+		//				ALERT( at_aiconsole, "Starting script %s for %s\n", STRING( m_pCine->m_iszPlay ), GetClassname() );
 
 		switch (m_pCine->m_fMoveTo)
 		{

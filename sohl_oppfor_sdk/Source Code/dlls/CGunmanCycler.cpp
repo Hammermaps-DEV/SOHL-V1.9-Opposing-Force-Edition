@@ -41,8 +41,8 @@ void CGunmanCycler::Spawn()
 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
-	pev->solid = SOLID_SLIDEBOX;
-	pev->movetype = MOVETYPE_NONE;
+	SetSolidType(SOLID_SLIDEBOX);
+	SetMoveType(MOVETYPE_NONE);
 	pev->takedamage = DAMAGE_NO;
 	pev->effects = 0;
 	pev->health = 80000;// no cycler should die
