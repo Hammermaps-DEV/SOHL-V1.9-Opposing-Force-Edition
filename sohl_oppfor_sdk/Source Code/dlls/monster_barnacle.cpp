@@ -102,8 +102,8 @@ void CBarnacle::Spawn()
 		SET_MODEL(ENT(pev), "models/barnacle.mdl");
 	UTIL_SetSize(pev, Vector(-16, -16, -32), Vector(16, 16, 0));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = DAMAGE_AIM;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = EF_INVLIGHT; // take light from the ceiling 
@@ -275,7 +275,7 @@ void CBarnacle::BarnacleThink()
 
 				m_hEnemy = pTouchEnt;
 
-				pTouchEnt->SetMoveType(MOVETYPE_FLY);
+				pTouchEnt->pev->movetype = MOVETYPE_FLY;
 				pTouchEnt->pev->velocity = pev->velocity; //LRC- make him come _with_ me
 				pTouchEnt->pev->basevelocity = pev->velocity; //LRC
 				pTouchEnt->pev->origin.x = pev->origin.x;
@@ -318,7 +318,7 @@ void CBarnacle::Killed(entvars_t *pevAttacker, int iGib)
 {
 	CBaseMonster *pVictim;
 
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->takedamage = DAMAGE_NO;
 
 	if (m_hEnemy != NULL)

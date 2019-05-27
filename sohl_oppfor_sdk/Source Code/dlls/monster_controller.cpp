@@ -312,8 +312,8 @@ void CController::Spawn()
 		SET_MODEL(ENT(pev), "models/controller.mdl");
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_FLY);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_FLY;
 	pev->flags |= FL_FLY;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	if (pev->health == 0)
@@ -855,6 +855,7 @@ void CController::Move(float flInterval)
 	float		flCheckDist;
 	float		flDist;// how far the lookahead check got before hitting an object.
 	float		flMoveDist;
+	Vector		vecDir;
 	Vector		vecApex;
 	CBaseEntity	*pTargetEnt;
 
@@ -885,7 +886,7 @@ void CController::Move(float flInterval)
 	do
 	{
 		// local move to waypoint.
-		Vector vecDir = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Normalize();
+		vecDir = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Normalize();
 		flWaypointDist = (m_Route[m_iRouteIndex].vecLocation - pev->origin).Length();
 
 		// MakeIdealYaw ( m_Route[ m_iRouteIndex ].vecLocation );
@@ -917,10 +918,12 @@ void CController::Move(float flInterval)
 		flDist = 0;
 		if (CheckLocalMove(pev->origin, pev->origin + vecDir * flCheckDist, pTargetEnt, &flDist) != LOCALMOVE_VALID)
 		{
+			CBaseEntity *pBlocker;
+
 			// Can't move, stop
 			Stop();
 			// Blocking entity is in global trace_ent
-			CBaseEntity* pBlocker = CBaseEntity::Instance(gpGlobals->trace_ent);
+			pBlocker = CBaseEntity::Instance(gpGlobals->trace_ent);
 			if (pBlocker)
 			{
 				DispatchBlocked(edict(), pBlocker->edict());
@@ -1010,6 +1013,8 @@ void CController::Move(float flInterval)
 	}
 }
 
+
+
 BOOL CController::ShouldAdvanceRoute(float flWaypointDist)
 {
 	if (flWaypointDist <= 32)
@@ -1019,6 +1024,7 @@ BOOL CController::ShouldAdvanceRoute(float flWaypointDist)
 
 	return FALSE;
 }
+
 
 int CController::CheckLocalMove(const Vector &vecStart, const Vector &vecEnd, CBaseEntity *pTarget, float *pflDist)
 {
@@ -1070,8 +1076,8 @@ void CControllerHeadBall::Spawn()
 {
 	Precache();
 	// motor
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 
 	SET_MODEL(ENT(pev), "sprites/xspark4.spr");
 	pev->rendermode = kRenderTransAdd;
@@ -1250,8 +1256,8 @@ void CControllerZapBall::Spawn()
 {
 	Precache();
 	// motor
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 
 	SET_MODEL(ENT(pev), "sprites/xspark4.spr");
 	pev->rendermode = kRenderTransAdd;

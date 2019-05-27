@@ -149,7 +149,7 @@ void CFlockingFlyerFlock::SpawnFlock()
 		vecSpot = pev->origin + vecSpot;
 
 		UTIL_SetOrigin(pBoid, vecSpot);
-		pBoid->SetMoveType(MOVETYPE_FLY);
+		pBoid->pev->movetype = MOVETYPE_FLY;
 		pBoid->SpawnCommonCode();
 		pBoid->pev->flags &= ~FL_ONGROUND;
 		pBoid->pev->velocity = g_vecZero;
@@ -234,7 +234,7 @@ void CFlockingFlyer::Killed(entvars_t *pevAttacker, int iGib)
 	pev->effects = EF_NOINTERP;
 
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
-	SetMoveType(MOVETYPE_TOSS);
+	pev->movetype = MOVETYPE_TOSS;
 
 	SetThink(&CFlockingFlyer::FallHack);
 	SetNextThink(0.1);
@@ -262,9 +262,9 @@ void CFlockingFlyer::FallHack()
 void CFlockingFlyer::SpawnCommonCode()
 {
 	pev->deadflag = DEAD_NO;
-	SetClassname("monster_flyer");
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_FLY);
+	pev->classname = MAKE_STRING("monster_flyer");
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_FLY;
 	pev->takedamage = DAMAGE_NO;
 	pev->health = 1;
 

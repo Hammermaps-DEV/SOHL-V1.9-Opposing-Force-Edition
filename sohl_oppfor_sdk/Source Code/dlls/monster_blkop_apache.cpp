@@ -63,8 +63,8 @@ void CBlackOPApache::Spawn() {
 	UTIL_SetOrigin(this, pev->origin);
 
 	// Motor
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 	pev->flags |= FL_MONSTER;
 	pev->takedamage = DAMAGE_AIM;
 

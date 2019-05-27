@@ -35,17 +35,17 @@ class CMP5Chainammo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn() override
+	void Spawn() 
 	{
 		Precache();
-		SetModel("models/w_chainammo.mdl");
+		SET_MODEL(ENT(pev), "models/w_chainammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache() override
+	void Precache() 
 	{
 		PRECACHE_MODEL("models/w_chainammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
@@ -54,13 +54,12 @@ class CMP5Chainammo : public CBasePlayerAmmo {
 	//=========================================================
 	// AddAmmo
 	//=========================================================
-	bool AddAmmo(CBaseEntity *pOther) override
+	BOOL AddAmmo(CBaseEntity *pOther) 
 	{
-		const bool bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
+		int bResult = (pOther->GiveAmmo(AMMO_CHAINBOX_GIVE, "9mm", _9MM_MAX_CARRY) != -1);
 		if (bResult) {
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
-
 		return bResult;
 	}
 };

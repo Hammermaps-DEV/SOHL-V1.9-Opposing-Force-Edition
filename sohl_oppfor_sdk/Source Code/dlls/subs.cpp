@@ -51,7 +51,7 @@ extern DLL_GLOBAL int g_iSkillLevel;
 // Landmark class
 void CPointEntity::Spawn()
 {
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 }
 
 class CNullEntity : public CBaseEntity
@@ -339,7 +339,7 @@ void CBaseDelay::SUB_UseTargets(CBaseEntity *pActivator, USE_TYPE useType, float
 	{
 		// create a temp object to fire at a later time
 		CBaseDelay *pTemp = GetClassPtr((CBaseDelay *)NULL);
-		pTemp->SetClassname("DelayedUse");
+		pTemp->pev->classname = MAKE_STRING("DelayedUse");
 
 		pTemp->SetNextThink(m_flDelay);
 
@@ -817,8 +817,8 @@ void CInfoMoveWith::Spawn()
 
 	if (pev->spawnflags & SF_IMW_BLOCKABLE)
 	{
-		SetSolidType(SOLID_SLIDEBOX);
-		SetMoveType(MOVETYPE_FLY);
+		pev->solid = SOLID_SLIDEBOX;
+		pev->movetype = MOVETYPE_FLY;
 	}
 	// and allow InitMoveWith to set things up as usual.
 }

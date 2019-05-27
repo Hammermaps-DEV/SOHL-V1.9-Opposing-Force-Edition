@@ -259,7 +259,7 @@ public:
 	virtual void PreThink();
 	virtual void PostThink();
 	virtual Vector GetGunPosition();
-	virtual int TakeHealth(float flHealth, int bitsDamageType) { return TakeHealth(flHealth, bitsDamageType); };
+	virtual int TakeHealth(float flHealth, int bitsDamageType);
 	virtual int TakeArmor(float flArmor);
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
@@ -268,7 +268,7 @@ public:
 	virtual void StartSneaking() { m_tSneaking = UTIL_GlobalTimeBase() - 1; }
 	virtual void StopSneaking() { m_tSneaking = UTIL_GlobalTimeBase() + 30; }
 	virtual BOOL IsSneaking() { return m_tSneaking <= UTIL_GlobalTimeBase(); }
-	virtual bool IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
+	virtual BOOL IsAlive() { return (pev->deadflag == DEAD_NO) && pev->health > 0; }
 	virtual BOOL ShouldFadeOnDeath() { return FALSE; }
 	virtual	bool IsPlayer() { return true; }			// Spectators should return FALSE for this, they aren't "players" as far as game logic is concerned
 

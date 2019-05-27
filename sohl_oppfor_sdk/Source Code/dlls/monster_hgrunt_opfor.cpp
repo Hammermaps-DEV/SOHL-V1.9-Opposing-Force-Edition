@@ -202,8 +202,8 @@ void CHFGrunt::Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->health == 0) //LRC
@@ -1521,7 +1521,7 @@ void CHFGrunt::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 		switch (ptr->iHitgroup) {
 		case HITGROUP_HEAD:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST | DMG_CLUB)) {
 				flDamage -= 20;
@@ -1536,14 +1536,14 @@ void CHFGrunt::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
 				flDamage = (m_flHitgroupChest*flDamage) / 2;
 			}
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
 				flDamage = (m_flHitgroupStomach*flDamage) / 2;
 			}
@@ -1551,13 +1551,13 @@ void CHFGrunt::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
 			flDamage = m_flHitgroupArm * flDamage;
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
 			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
@@ -1819,7 +1819,7 @@ void CHFGrunt::SetActivity(Activity NewActivity) {
 	}
 	else {
 		// Not available try to get default anim
-		ALERT(at_console, "%s has no sequence for act:%d\n", GetClassname(), NewActivity);
+		ALERT(at_console, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
@@ -1838,7 +1838,7 @@ Schedule_t *CHFGrunt::GetSchedule() {
 	if (pev->movetype == MOVETYPE_FLY && m_MonsterState != MONSTERSTATE_PRONE) {
 		if (pev->flags & FL_ONGROUND) {
 			// just landed
-			SetMoveType(MOVETYPE_STEP);
+			pev->movetype = MOVETYPE_STEP;
 			return GetScheduleOfType(SCHED_HGRUNT_ALLY_REPEL_LAND);
 		}
 		else {
@@ -2062,7 +2062,7 @@ LINK_ENTITY_TO_CLASS(monster_hgrunt_ally_repel, CHFGruntRepel);
 
 void CHFGruntRepel::Spawn() {
 	Precache();
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 
 	SetUse(&CHFGruntRepel::RepelUse);
 }
@@ -2078,7 +2078,7 @@ void CHFGruntRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 
 	CBaseEntity *pEntity = Create("monster_human_grunt_ally", pev->origin, pev->angles);
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer();
-	pGrunt->SetMoveType(MOVETYPE_FLY);
+	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
 	pGrunt->SetActivity(ACT_GLIDE);
 	pGrunt->m_vecLastPosition = tr.vecEndPos;

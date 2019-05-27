@@ -35,18 +35,16 @@ class CGaussAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn() override
-	{
+	void Spawn() {
 		Precache();
-		SetModel("models/w_gaussammo.mdl");
+		SET_MODEL(ENT(pev), "models/w_gaussammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache() override
-	{
+	void Precache() {
 		PRECACHE_MODEL("models/w_gaussammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
@@ -54,14 +52,12 @@ class CGaussAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// AddAmmo
 	//=========================================================
-	bool AddAmmo(CBaseEntity *pOther) override
-	{
-		const bool bResult = (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY) != -1);
-		if (bResult) {
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+	BOOL AddAmmo(CBaseEntity *pOther) {
+		if (pOther->GiveAmmo(AMMO_URANIUMBOX_GIVE, "uranium", URANIUM_MAX_CARRY) != -1) {
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			return TRUE;
 		}
-
-		return bResult;
+		return FALSE;
 	}
 };
 

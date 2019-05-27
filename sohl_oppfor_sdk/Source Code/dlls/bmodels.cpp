@@ -70,8 +70,8 @@ This is just a solid wall if not inhibited
 class CFuncWall : public CBaseEntity
 {
 public:
-	void	Spawn() override;
-	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
+	void	Spawn();
+	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 
 	virtual STATE GetState() { return pev->frame ? STATE_ON : STATE_OFF; };
 
@@ -85,9 +85,13 @@ LINK_ENTITY_TO_CLASS(func_wall, CFuncWall);
 
 void CFuncWall::Spawn()
 {
+
 	// If it can't move/go away, it's really part of the world
 	if (!m_pMoveWith) //LRC
 		pev->flags |= FL_WORLDBRUSH;
+
+
+
 
 	//AJH This allows rotating of func_walls on spawn.
 	//It would be easier to just use pev->angles directly but some old maps might have 'angles' specified already
@@ -99,9 +103,11 @@ void CFuncWall::Spawn()
 	if (pev->angles != g_vecZero)
 		ALERT(at_debug, "Rotating brush %s to %i,%i,%i\n", STRING(pev->model), pev->angles.x, pev->angles.y, pev->angles.z);
 
-	SetMoveType(MOVETYPE_PUSH);  // so it doesn't get pushed by anything
-	SetSolidType(SOLID_BSP);
+	pev->movetype = MOVETYPE_PUSH;  // so it doesn't get pushed by anything
+	pev->solid = SOLID_BSP;
 	SET_MODEL(ENT(pev), STRING(pev->model));
+
+
 
 	//LRC
 	if (m_iStyle >= 32) LIGHT_STYLE(m_iStyle, "a");
@@ -131,16 +137,17 @@ void CFuncWall::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useT
 	}
 }
 
+
 #define SF_WALL_START_OFF		0x0001
 
 class CFuncWallToggle : public CFuncWall
 {
 public:
-	void	Spawn() override;
-	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
+	void	Spawn();
+	void	Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void	TurnOff();
 	void	TurnOn();
-	bool	IsOn();
+	BOOL	IsOn();
 	virtual STATE GetState() { return (pev->solid == SOLID_NOT) ? STATE_OFF : STATE_ON; };
 };
 
@@ -153,27 +160,30 @@ void CFuncWallToggle::Spawn()
 		TurnOff();
 }
 
+
 void CFuncWallToggle::TurnOff()
 {
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects |= EF_NODRAW;
 	UTIL_SetOrigin(this, pev->origin);
 }
 
+
 void CFuncWallToggle::TurnOn()
 {
-	SetSolidType(SOLID_BSP);
+	pev->solid = SOLID_BSP;
 	pev->effects &= ~EF_NODRAW;
 	UTIL_SetOrigin(this, pev->origin);
 }
 
-bool CFuncWallToggle::IsOn()
+
+BOOL CFuncWallToggle::IsOn()
 {
 	if (pev->solid == SOLID_NOT)
-		return false;
-
-	return true;
+		return FALSE;
+	return TRUE;
 }
+
 
 void CFuncWallToggle::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value)
 {
@@ -188,6 +198,7 @@ void CFuncWallToggle::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYP
 			TurnOn();
 	}
 }
+
 
 #define SF_CONVEYOR_VISUAL		0x0001
 #define SF_CONVEYOR_NOTSOLID	0x0002
@@ -212,7 +223,7 @@ void CFuncConveyor::Spawn()
 	// HACKHACK - This is to allow for some special effects
 	if (pev->spawnflags & SF_CONVEYOR_NOTSOLID)
 	{
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		pev->skin = 0;		// Don't want the engine thinking we've got special contents on this brush
 	}
 
@@ -279,8 +290,8 @@ void CFuncIllusionary::KeyValue(KeyValueData *pkvd)
 void CFuncIllusionary::Spawn()
 {
 	pev->angles = g_vecZero;
-	SetMoveType(MOVETYPE_NONE);
-	SetSolidType(SOLID_NOT);// always solid_not 
+	pev->movetype = MOVETYPE_NONE;
+	pev->solid = SOLID_NOT;// always solid_not 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	// I'd rather eat the network bandwidth of this than figure out how to save/restore
@@ -308,7 +319,7 @@ LINK_ENTITY_TO_CLASS(func_shine, CFuncShine);
 extern int gmsgAddShine;
 void CFuncShine::Spawn()
 {
-	SetSolidType(SOLID_NOT);// always solid_not 
+	pev->solid = SOLID_NOT;// always solid_not 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	pev->effects |= EF_NODRAW;
 
@@ -538,14 +549,14 @@ void CFuncRotating::Spawn()
 	// some rotating objects like fake volumetric lights will not be solid.
 	if (FBitSet(pev->spawnflags, SF_ROTATING_NOT_SOLID))
 	{
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		pev->skin = CONTENTS_EMPTY;
-		SetMoveType(MOVETYPE_PUSH);
+		pev->movetype = MOVETYPE_PUSH;
 	}
 	else
 	{
-		SetSolidType(SOLID_BSP);
-		SetMoveType(MOVETYPE_PUSH);
+		pev->solid = SOLID_BSP;
+		pev->movetype = MOVETYPE_PUSH;
 	}
 
 	UTIL_SetOrigin(this, pev->origin);
@@ -957,10 +968,10 @@ void CPendulum::Spawn()
 	CBaseToggle::AxisDir(pev);
 
 	if (FBitSet(pev->spawnflags, SF_DOOR_PASSABLE))
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 	else
-		SetSolidType(SOLID_BSP);
-	SetMoveType(MOVETYPE_PUSH);
+		pev->solid = SOLID_BSP;
+	pev->movetype = MOVETYPE_PUSH;
 	UTIL_SetOrigin(this, pev->origin);
 	SET_MODEL(ENT(pev), STRING(pev->model));
 

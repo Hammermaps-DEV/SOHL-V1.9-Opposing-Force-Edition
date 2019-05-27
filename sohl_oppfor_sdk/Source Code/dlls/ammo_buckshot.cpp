@@ -31,23 +31,20 @@
 #include "cbase.h"
 #include "weapons.h"
 
-class CShotgunAmmo : public CBasePlayerAmmo 
-{
+class CShotgunAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn() override
-	{
+	void Spawn() {
 		Precache();
-		SetModel("models/w_shotbox.mdl");
+		SET_MODEL(ENT(pev), "models/w_shotbox.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache() override
-	{
+	void Precache() {
 		PRECACHE_MODEL("models/w_shotbox.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
@@ -55,14 +52,13 @@ class CShotgunAmmo : public CBasePlayerAmmo
 	//=========================================================
 	// AddAmmo
 	//=========================================================
-	bool AddAmmo(CBaseEntity *pOther) override
-	{
-		const bool bResult = (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY) != -1);
-		if (bResult) {
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+	BOOL AddAmmo(CBaseEntity *pOther) {
+		if (pOther->GiveAmmo(AMMO_BUCKSHOTBOX_GIVE, "buckshot", BUCKSHOT_MAX_CARRY) != -1) {
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			return TRUE;
 		}
 
-		return bResult;
+		return FALSE;
 	}
 };
 

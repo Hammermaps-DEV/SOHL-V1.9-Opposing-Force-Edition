@@ -26,28 +26,21 @@
 *
 ***/
 
-#ifndef PATICLE_EMITTER
-#define PATICLE_EMITTER
+#ifndef FUNC_GRASS
+#define FUNC_GRASS
 
 #include "particle_defs.h"
 
-const unsigned int SF_START_ON = 1;
-const unsigned int SF_TRIGGERABLE = 2;
-
-class CParticleEmitter : public CPointEntity {
+class CGrass : public CBaseEntity {
 public:
-	void Spawn() override;
-	void KeyValue(KeyValueData* pKeyValueData) override;
-	void MakeAware(CBaseEntity* pEnt);
-	void EXPORT Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
-	int ObjectCaps() override { return CBaseEntity::ObjectCaps() | FCAP_MASTER; }
-	bool IsTriggered(CBaseEntity *pActivator);
-
 	bool bIsOn;
+	void Spawn();
+	void KeyValue(KeyValueData* pKeyValueData);
+	void MakeAware(CBaseEntity* pEnt);
+	void EXPORT	GrassUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
+private:
 	char sParticleDefintionFile[MAX_PARTICLE_PATH];
 	unsigned int iID;
-	float flTimeTurnedOn;
 };
 
-static unsigned int iParticleIDCount = 0;
 #endif

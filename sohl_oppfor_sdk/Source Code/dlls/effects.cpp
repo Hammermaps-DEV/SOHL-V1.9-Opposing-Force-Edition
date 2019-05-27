@@ -34,7 +34,7 @@
 #include "effects.h"
 #include "weapons.h"
 #include "decals.h"
-#include "CBreakable.h"
+#include "func_break.h"
 #include "shake.h"
 #include "player.h" //LRC - footstep stuff
 #include "locus.h" //LRC - locus utilities
@@ -65,7 +65,7 @@ LINK_ENTITY_TO_CLASS(info_target, CInfoTarget);
 void CInfoTarget::Spawn()
 {
 	//Precache();
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	SetBits(m_iLFlags, LF_POINTENTITY);
 	if (pev->spawnflags & SF_TARGET_HACK_VISIBLE)
 	{
@@ -125,7 +125,7 @@ void CBubbling::Spawn()
 	Precache();
 	SET_MODEL(ENT(pev), STRING(pev->model));		// Set size
 
-	SetSolidType(SOLID_NOT);							// Remove model & collisions
+	pev->solid = SOLID_NOT;							// Remove model & collisions
 	pev->renderamt = 0;								// The engine won't draw this model if this is set to 0 and blending is on
 	pev->rendermode = kRenderTransTexture;
 	int speed = pev->speed > 0 ? pev->speed : -pev->speed;
@@ -217,7 +217,7 @@ LINK_ENTITY_TO_CLASS(beam, CBeam);
 
 void CBeam::Spawn()
 {
-	SetSolidType(SOLID_NOT);							// Remove model & collisions
+	pev->solid = SOLID_NOT;							// Remove model & collisions
 	Precache();
 }
 
@@ -273,7 +273,7 @@ CBeam *CBeam::BeamCreate(const char *pSpriteName, int width)
 {
 	// Create a new entity with CBeam private data
 	CBeam *pBeam = GetClassPtr((CBeam *)NULL);
-	pBeam->SetClassname("beam");
+	pBeam->pev->classname = MAKE_STRING("beam");
 
 	pBeam->BeamInit(pSpriteName, width);
 
@@ -467,7 +467,7 @@ void CTripBeam::Spawn()
 {
 	CLightning::Spawn();
 	SetTouch(&CTripBeam::TriggerTouch);
-	SetSolidType(SOLID_TRIGGER);
+	pev->solid = SOLID_TRIGGER;
 	RelinkBeam();
 }
 #endif
@@ -501,7 +501,7 @@ void CLightning::Spawn()
 		SetThink(&CLightning::SUB_Remove);
 		return;
 	}
-	SetSolidType(SOLID_NOT);							// Remove model & collisions
+	pev->solid = SOLID_NOT;							// Remove model & collisions
 	Precache();
 
 	pev->dmgtime = UTIL_GlobalTimeBase();
@@ -1077,7 +1077,7 @@ void CLaser::Spawn()
 		SetThink(&CLaser::SUB_Remove);
 		return;
 	}
-	SetSolidType(SOLID_NOT);							// Remove model & collisions
+	pev->solid = SOLID_NOT;							// Remove model & collisions
 	Precache();
 
 	SetThink(&CLaser::StrikeThink);
@@ -1105,7 +1105,7 @@ void CLaser::PostSpawn()
 		{
 			// use an env_sprite defined by the mapper
 			m_pStartSprite = (CSprite*)pTemp;
-			m_pStartSprite->SetMoveType(MOVETYPE_NOCLIP);
+			m_pStartSprite->pev->movetype = MOVETYPE_NOCLIP;
 		}
 	}
 	else if (pev->spawnflags & SF_LASER_INTERPOLATE) // interpolated lasers must have sprites at the start
@@ -1134,7 +1134,7 @@ void CLaser::PostSpawn()
 		{
 			// use an env_sprite defined by the mapper
 			m_pEndSprite = (CSprite*)pTemp;
-			m_pEndSprite->SetMoveType(MOVETYPE_NOCLIP);
+			m_pEndSprite->pev->movetype = MOVETYPE_NOCLIP;
 		}
 	}
 	else if (pev->spawnflags & SF_LASER_INTERPOLATE) // interpolated lasers must have sprites at the end
@@ -1454,8 +1454,8 @@ IMPLEMENT_SAVERESTORE(CGlow, CPointEntity);
 
 void CGlow::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects = 0;
 	pev->frame = 0;
 
@@ -1498,8 +1498,8 @@ IMPLEMENT_SAVERESTORE(CSprite, CPointEntity);
 
 void CSprite::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects = 0;
 	pev->frame = 0;
 
@@ -1548,9 +1548,9 @@ CSprite *CSprite::SpriteCreate(const char *pSpriteName, const Vector &origin, BO
 {
 	CSprite *pSprite = GetClassPtr((CSprite *)NULL);
 	pSprite->SpriteInit(pSpriteName, origin);
-	pSprite->SetClassname("env_sprite");
-	pSprite->SetSolidType(SOLID_NOT);
-	pSprite->SetMoveType(MOVETYPE_NOCLIP);
+	pSprite->pev->classname = MAKE_STRING("env_sprite");
+	pSprite->pev->solid = SOLID_NOT;
+	pSprite->pev->movetype = MOVETYPE_NOCLIP;
 	if (animate)
 		pSprite->TurnOn();
 
@@ -1746,7 +1746,7 @@ void CEnvModel::Spawn()
 
 	if (pev->spawnflags & SF_ENVMODEL_SOLID)
 	{
-		SetSolidType(SOLID_SLIDEBOX);
+		pev->solid = SOLID_SLIDEBOX;
 		UTIL_SetSize(pev, Vector(-10, -10, -10), Vector(10, 10, 10));	//LRCT
 	}
 
@@ -2010,7 +2010,7 @@ void CGibShooter::Spawn()
 {
 	Precache();
 
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 
 	if (m_flDelay == 0)
@@ -2130,7 +2130,7 @@ void CGibShooter::ShootThink()
 			//			pGib->pev->velocity = vecShootDir * flGibVelocity;
 
 			if (pev->spawnflags & SF_GIBSHOOTER_DEBUG)
-				ALERT(at_debug, "DEBUG: %s \"%s\" creates a shot at %f %f %f; vel %f %f %f; pos \"%s\"\n", GetClassname(), STRING(pev->targetname), pGib->pev->origin.x, pGib->pev->origin.y, pGib->pev->origin.z, pGib->pev->velocity.x, pGib->pev->velocity.y, pGib->pev->velocity.z, STRING(m_iszPosition));
+				ALERT(at_debug, "DEBUG: %s \"%s\" creates a shot at %f %f %f; vel %f %f %f; pos \"%s\"\n", STRING(pev->classname), STRING(pev->targetname), pGib->pev->origin.x, pGib->pev->origin.y, pGib->pev->origin.z, pGib->pev->velocity.x, pGib->pev->velocity.y, pGib->pev->velocity.z, STRING(m_iszPosition));
 
 			if (m_iszSpawnTarget)
 				FireTargets(STRING(m_iszSpawnTarget), pGib, this, USE_TOGGLE, 0);
@@ -2304,8 +2304,8 @@ CBaseEntity *CEnvShooter::CreateGib(Vector vecPos, Vector vecVel)
 
 		if (m_iPhysics) // sticky gib
 		{
-			pGib->SetMoveType(MOVETYPE_TOSS);
-			pGib->SetSolidType(SOLID_BBOX);
+			pGib->pev->movetype = MOVETYPE_TOSS;
+			pGib->pev->solid = SOLID_BBOX;
 			UTIL_SetSize(pGib->pev, Vector(0, 0, 0), Vector(0, 0, 0));
 			pGib->SetTouch(&CGib::StickyGibTouch);
 		}
@@ -2372,8 +2372,8 @@ CBaseEntity *CEnvShooter::CreateGib(Vector vecPos, Vector vecVel)
 
 	// special shot
 	CShot *pShot = GetClassPtr((CShot*)NULL);
-	pShot->SetClassname("shot");
-	pShot->SetSolidType(SOLID_SLIDEBOX);
+	pShot->pev->classname = MAKE_STRING("shot");
+	pShot->pev->solid = SOLID_SLIDEBOX;
 	pShot->pev->origin = vecPos;
 	pShot->pev->velocity = vecVel;
 	pShot->pev->avelocity = pev->avelocity;	// g-cont. copy avelocity to particle
@@ -2424,11 +2424,11 @@ CBaseEntity *CEnvShooter::CreateGib(Vector vecPos, Vector vecVel)
 
 	switch (m_iPhysics)
 	{
-	case 2: pShot->SetMoveType(MOVETYPE_NOCLIP); pShot->SetSolidType(SOLID_NOT); break;
-	case 3: pShot->SetMoveType(MOVETYPE_FLYMISSILE); break;
-	case 4: pShot->SetMoveType(MOVETYPE_BOUNCEMISSILE); break;
-	case 5: pShot->SetMoveType(MOVETYPE_TOSS); break;
-	default: pShot->SetMoveType(MOVETYPE_BOUNCE); break;
+	case 2: pShot->pev->movetype = MOVETYPE_NOCLIP; pShot->pev->solid = SOLID_NOT; break;
+	case 3: pShot->pev->movetype = MOVETYPE_FLYMISSILE; break;
+	case 4: pShot->pev->movetype = MOVETYPE_BOUNCEMISSILE; break;
+	case 5: pShot->pev->movetype = MOVETYPE_TOSS; break;
+	default: pShot->pev->movetype = MOVETYPE_BOUNCE; break;
 	}
 
 	if (pShot->pev->framerate)
@@ -2532,8 +2532,8 @@ LINK_ENTITY_TO_CLASS(env_blood, CBlood);
 
 void CBlood::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects = 0;
 	pev->frame = 0;
 	SetMovedir(pev);
@@ -2590,7 +2590,7 @@ Vector CBlood::BloodPosition(CBaseEntity *pActivator)
 			pPlayer = pActivator->edict();
 		}
 		else
-			pPlayer = INDEXENT(1);
+			pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 		if (pPlayer)
 			return (pPlayer->v.origin + pPlayer->v.view_ofs) + Vector(RANDOM_FLOAT(-10, 10), RANDOM_FLOAT(-10, 10), RANDOM_FLOAT(-10, 10));
 		// if no player found, fall through
@@ -2672,8 +2672,8 @@ LINK_ENTITY_TO_CLASS(env_shake, CShake);
 
 void CShake::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects = 0;
 	pev->frame = 0;
 
@@ -2751,8 +2751,8 @@ LINK_ENTITY_TO_CLASS(env_fade, CFade);
 
 void CFade::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects = 0;
 	pev->frame = 0;
 
@@ -2785,7 +2785,7 @@ void CFade::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType,
 	{
 		if (!pActivator || !pActivator->IsPlayer())
 		{
-			pActivator = CBaseEntity::Instance(INDEXENT(1));
+			pActivator = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
 		}
 		if (pActivator && pActivator->IsPlayer())
 		{
@@ -2855,8 +2855,8 @@ void CMessage::Spawn()
 {
 	Precache();
 
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 
 	switch (pev->impulse)
 	{
@@ -2925,7 +2925,7 @@ void CMessage::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useTy
 			pPlayer = pActivator;
 		else
 		{
-			pPlayer = CBaseEntity::Instance(INDEXENT(1));
+			pPlayer = CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
 		}
 		if (pPlayer)
 			UTIL_ShowMessage(STRING(pev->message), pPlayer);
@@ -3004,7 +3004,7 @@ void CEnvFunnel::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 void CEnvFunnel::Spawn()
 {
 	Precache();
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 }
 
@@ -3499,7 +3499,7 @@ void CEnvRain::Spawn()
 {
 	Precache();
 	SET_MODEL(ENT(pev), STRING(pev->model));		// Set size
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 
 	if (pev->rendercolor == g_vecZero)
@@ -4232,7 +4232,7 @@ void CEnvBeverage::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE u
 void CEnvBeverage::Spawn()
 {
 	Precache();
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 	pev->frags = 0;
 
@@ -4266,8 +4266,8 @@ LINK_ENTITY_TO_CLASS(item_sodacan, CItemSoda);
 void CItemSoda::Spawn()
 {
 	Precache();
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_TOSS);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_TOSS;
 
 	SET_MODEL(ENT(pev), "models/can.mdl");
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
@@ -4280,7 +4280,7 @@ void CItemSoda::CanThink()
 {
 	EMIT_SOUND(ENT(pev), CHAN_WEAPON, "weapons/g_bounce3.wav", VOL_NORM, ATTN_NORM);
 
-	SetSolidType(SOLID_TRIGGER);
+	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize(pev, Vector(-8, -8, 0), Vector(8, 8, 8));
 	SetThink(NULL);
 	SetTouch(&CItemSoda::CanTouch);
@@ -4303,8 +4303,8 @@ void CItemSoda::CanTouch(CBaseEntity *pOther)
 		pev->owner->v.frags = 0;
 	}
 
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects = EF_NODRAW;
 	SetTouch(NULL);
 	SetThink(&CItemSoda::SUB_Remove);
@@ -4605,7 +4605,7 @@ void CBaseParticle::Spawn()
 	Precache();
 	SET_MODEL(edict(), "sprites/null.spr");
 	UTIL_SetOrigin(this, pev->origin);
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	if (pev->spawnflags & SF_START_ON) pev->body = TRUE;
 }
 
@@ -4661,8 +4661,8 @@ void CEnvMirror::Spawn()
 	if (!m_pMoveWith) pev->flags |= FL_WORLDBRUSH;
 
 	pev->angles = g_vecZero;
-	SetMoveType(MOVETYPE_PUSH); // so it doesn't get pushed by anything
-	SetSolidType(SOLID_BSP);
+	pev->movetype = MOVETYPE_PUSH; // so it doesn't get pushed by anything
+	pev->solid = SOLID_BSP;
 
 	pev->impulse = TRUE;//enable mirror
 	Precache();
@@ -4717,8 +4717,8 @@ void CEnvMirror::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 
 void CRainSettings::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects |= EF_NODRAW;
 }
 
@@ -4753,8 +4753,8 @@ IMPLEMENT_SAVERESTORE(CRainSettings, CBaseEntity);
 
 void CRainModify::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->effects |= EF_NODRAW;
 
 	if (FStringNull(pev->targetname))
@@ -4811,7 +4811,7 @@ void CRainModify::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE us
 	}
 
 	CBasePlayer *pPlayer;
-	pPlayer = (CBasePlayer *)CBaseEntity::Instance(INDEXENT(1));
+	pPlayer = (CBasePlayer *)CBaseEntity::Instance(g_engfuncs.pfnPEntityOfEntIndex(1));
 
 	if (fadeTime)
 	{ // write to 'ideal' settings

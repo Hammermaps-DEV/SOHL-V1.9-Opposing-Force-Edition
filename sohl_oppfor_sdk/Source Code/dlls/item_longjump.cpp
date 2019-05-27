@@ -60,7 +60,7 @@ class CItemLongJump : public CItem
 			g_engfuncs.pfnSetPhysicsKeyValue(pPlayer->edict(), "slj", "1");
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev);
-			WRITE_STRING(GetClassname());
+			WRITE_STRING(STRING(pev->classname));
 			MESSAGE_END();
 
 			MESSAGE_BEGIN(MSG_ONE, gmsgInventory, NULL, pPlayer->pev);//AJH msg change inventory

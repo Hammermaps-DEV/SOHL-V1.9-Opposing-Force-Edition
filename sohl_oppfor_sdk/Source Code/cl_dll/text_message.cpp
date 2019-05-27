@@ -57,26 +57,25 @@ int CHudTextMessage::Init()
 // Searches through the string for any msg names (indicated by a '#')
 // any found are looked up in titles.txt and the new message substituted
 // the new value is pushed into dst_buffer
-char *CHudTextMessage::LocaliseTextString(const char *msg, char *dst_buffer, int buffer_size)
+char *CHudTextMessage::LocaliseTextString( const char *msg, char *dst_buffer, int buffer_size )
 {
 	char *dst = dst_buffer;
-	for (char *src = (char*)msg; *src != 0 && (buffer_size - 1) > 0; buffer_size--)
+	for ( char *src = (char*)msg; *src != 0 && buffer_size > 0; buffer_size-- )
 	{
-		if (*src == '#')
+		if ( *src == '#' )
 		{
 			// cut msg name out of string
 			static char word_buf[255];
 			char *wdst = word_buf, *word_start = src;
-			int wordbuf_size = 255;
-			for (++src; ((*src >= 'A' && *src <= 'z') || (*src >= '0' && *src <= '9')) && (wordbuf_size - 1) > 0; wdst++, src++, wordbuf_size--)
+			for ( ++src ; (*src >= 'A' && *src <= 'z') || (*src >= '0' && *src <= '9'); wdst++, src++ )
 			{
 				*wdst = *src;
 			}
 			*wdst = 0;
 
 			// lookup msg name in titles.txt
-			client_textmessage_t *clmsg = TextMessageGet(word_buf);
-			if (!clmsg || !(clmsg->pMessage))
+			client_textmessage_t *clmsg = TextMessageGet( word_buf );
+			if ( !clmsg || !(clmsg->pMessage) )
 			{
 				src = word_start;
 				*dst = *src;
@@ -85,20 +84,21 @@ char *CHudTextMessage::LocaliseTextString(const char *msg, char *dst_buffer, int
 			}
 
 			// copy string into message over the msg name
-			for (char *wsrc = (char*)clmsg->pMessage; *wsrc != 0 && (buffer_size - 1) > 0; wsrc++, dst++, buffer_size--)
+			for ( char *wsrc = (char*)clmsg->pMessage; *wsrc != 0; wsrc++, dst++ )
 			{
 				*dst = *wsrc;
 			}
-			buffer_size++;
+			*dst = 0;
 		}
 		else
 		{
 			*dst = *src;
 			dst++, src++;
+			*dst = 0;
 		}
 	}
 
-	*dst = 0; // ensure null termination
+	dst_buffer[buffer_size-1] = 0; // ensure null termination
 	return dst_buffer;
 }
 

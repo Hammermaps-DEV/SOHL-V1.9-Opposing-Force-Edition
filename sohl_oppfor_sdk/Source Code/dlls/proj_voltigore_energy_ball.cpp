@@ -56,10 +56,10 @@ IMPLEMENT_SAVERESTORE(CVoltigoreEnergyBall, CBaseEntity);
 void CVoltigoreEnergyBall::Spawn() {
 	Precache();
 
-	SetMoveType(MOVETYPE_FLY);
-	SetClassname("voltigore_energy_ball");
+	pev->movetype = MOVETYPE_FLY;
+	pev->classname = MAKE_STRING("voltigore_energy_ball");
 
-	SetSolidType(SOLID_BBOX);
+	pev->solid = SOLID_BBOX;
 	pev->rendermode = kRenderGlow;
 	pev->renderamt = 220;
 

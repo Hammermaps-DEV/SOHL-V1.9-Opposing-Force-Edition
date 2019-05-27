@@ -112,8 +112,8 @@ void CZombie::Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 
 	if (pev->health == 0)
@@ -172,7 +172,7 @@ void CZombie::Precache() {
 int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType) {
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", GetClassname());
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
@@ -204,7 +204,7 @@ int CZombie::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float f
 	// Take xx% damage from bullets
 	if (bitsDamageType == DMG_BULLET && m_flBulletDR != 0) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:DMG_BULLET:Reduce Damage\n", GetClassname());
+			ALERT(at_console, "%s:TakeDamage:DMG_BULLET:Reduce Damage\n", STRING(pev->classname));
 
 		Vector vecDir = pev->origin - (pevInflictor->absmin + pevInflictor->absmax) * 0.5;
 		vecDir = vecDir.Normalize();
@@ -239,29 +239,29 @@ void CZombie::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir,
 		switch (ptr->iHitgroup) {
 		case HITGROUP_HEAD:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 			flDamage = m_flHitgroupHead * flDamage;
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
 			flDamage = m_flHitgroupChest * flDamage;
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
 			flDamage = m_flHitgroupStomach * flDamage;
 			break;
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
 			flDamage = m_flHitgroupArm * flDamage;
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
 			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}
@@ -315,7 +315,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
 	case ZOMBIE_AE_ATTACK_LEFT: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Slash left!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Slash left!\n", STRING(pev->classname));
 
 		CBaseEntity *pHurt = CheckTraceHullAttack(70, m_flDmgOneSlash, DMG_SLASH);
 		if (pHurt) {
@@ -335,7 +335,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 								break;
 	case ZOMBIE_AE_ATTACK_RIGHT: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Slash right!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Slash right!\n", STRING(pev->classname));
 
 		CBaseEntity *pHurt = CheckTraceHullAttack(70, m_flDmgOneSlash, DMG_SLASH);
 		if (pHurt) {
@@ -353,7 +353,7 @@ void CZombie::HandleAnimEvent(MonsterEvent_t *pEvent) {
 								 break;
 	case ZOMBIE_AE_ATTACK_BOTH: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Slash both!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Slash both!\n", STRING(pev->classname));
 
 		CBaseEntity *pHurt = CheckTraceHullAttack(70, m_flDmgBothSlash, DMG_CLUB);
 		if (pHurt) {

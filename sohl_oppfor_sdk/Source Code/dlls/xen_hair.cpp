@@ -55,8 +55,8 @@ void CXenHair::Spawn() {
 
 	ResetSequenceInfo();
 
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	SetNextThink(RANDOM_FLOAT(0.1, 0.4));	// Load balance these a bit
 }
 

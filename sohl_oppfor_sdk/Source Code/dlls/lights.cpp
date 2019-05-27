@@ -429,8 +429,8 @@ void CLightDynamic::Spawn()
 	Precache();
 
 	SET_MODEL(ENT(pev), "sprites/null.spr");
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 
 	if (!(pev->spawnflags & SF_LIGHTDYNAMIC_START_OFF))
 	{
@@ -641,7 +641,7 @@ void CTriggerLightstyle::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_
 			{
 				//				ALERT(at_console, "Making fader ent, step 1/%d = %f\n", m_iFade, 1/m_iFade);
 				CLightFader *pFader = GetClassPtr((CLightFader*)NULL);
-				pFader->SetClassname("lightfader");
+				pFader->pev->classname = MAKE_STRING("lightfader");
 				pFader->m_pLight = pLight;
 				pFader->m_cFrom = ((char*)STRING(pLight->GetStyle()))[0];
 				pFader->m_cTo = ((char*)STRING(iszPattern))[0];

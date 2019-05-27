@@ -29,16 +29,16 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
-#include "CGrass.h"
-#include "CParticleEmitter.h"
+#include "func_grass.h"
+#include "particle_emitter.h"
 
 extern int gmsgGrassParticles;
 
 // create ourselves a garden
 void CGrass::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	pev->effects |= EF_NODRAW;
 

@@ -68,8 +68,8 @@ void CBabyVoltigore::Spawn()
 	SET_MODEL(ENT(pev), "models/baby_voltigore.mdl");
 	UTIL_SetSize(pev, Vector(-40, -40, 0), Vector(40, 40, 64));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	pev->health = 20 /*gSkillData.babyVoltigoreHealth*/;

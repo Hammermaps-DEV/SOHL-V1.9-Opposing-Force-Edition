@@ -553,7 +553,7 @@ void CRCAllyMonster::RunTask(Task_t *pTask)
 			!IsTalking())
 		{
 			// Get edict for one player
-			pPlayer = INDEXENT(1);
+			pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 
 			if (pPlayer)
 			{
@@ -593,7 +593,7 @@ void CRCAllyMonster::RunTask(Task_t *pTask)
 	case TASK_FACE_PLAYER:
 	{
 		// Get edict for one player
-		edict_t *pPlayer = INDEXENT(1);
+		edict_t *pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 
 		if (pPlayer)
 		{
@@ -1309,7 +1309,7 @@ Schedule_t* CRCAllyMonster::GetScheduleOfType(int iType) {
 
 		if (!IsTalking() && HasConditions(bits_COND_SEE_CLIENT) && RANDOM_LONG(0, 6) == 0)
 		{
-			edict_t *pPlayer = INDEXENT(1);
+			edict_t *pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 			if (pPlayer)
 			{
 				// watch the client.
@@ -1862,7 +1862,7 @@ int CRCAllyMonster::SquadRecruit(int searchRadius, int maxMembers) {
 			{
 				// Can we recruit this guy?
 				if (!pRecruit->InSquad() && pRecruit->Classify() == iMyClass &&
-					((iMyClass != CLASS_ALIEN_MONSTER) || FStrEq(GetClassname(), STRING(pRecruit->pev->classname))) &&
+					((iMyClass != CLASS_ALIEN_MONSTER) || FStrEq(STRING(pev->classname), STRING(pRecruit->pev->classname))) &&
 					FStringNull(pRecruit->pev->netname))
 				{
 					TraceResult tr;
@@ -1938,7 +1938,7 @@ void CRCAllyMonster::StartMonster()
 
 		if (iSquadSize)
 		{
-			ALERT(at_aiconsole, "Squad of %d %s formed\n", iSquadSize, GetClassname());
+			ALERT(at_aiconsole, "Squad of %d %s formed\n", iSquadSize, STRING(pev->classname));
 		}
 	}
 }
@@ -2171,11 +2171,13 @@ void CRCAllyMonster::CheckAmmo() {
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool CRCAllyMonster::FCanCheckAttacks() {
-	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
-		return true;
-
-	return false;
+BOOL CRCAllyMonster::FCanCheckAttacks() {
+	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
+		return TRUE;
+	}
+	else {
+		return FALSE;
+	}
 }
 
 //=========================================================
@@ -2540,7 +2542,7 @@ int CRCAllyMonster::TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, 
 
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", GetClassname());
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {

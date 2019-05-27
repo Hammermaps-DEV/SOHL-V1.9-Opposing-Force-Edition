@@ -40,9 +40,9 @@ CXenTreeTrigger *CXenTreeTrigger::TriggerCreate(edict_t *pOwner, const Vector &p
 {
 	CXenTreeTrigger *pTrigger = GetClassPtr((CXenTreeTrigger *)NULL);
 	pTrigger->pev->origin = position;
-	pTrigger->SetClassname("xen_ttrigger");
-	pTrigger->SetSolidType(SOLID_TRIGGER);
-	pTrigger->SetMoveType(MOVETYPE_NONE);
+	pTrigger->pev->classname = MAKE_STRING("xen_ttrigger");
+	pTrigger->pev->solid = SOLID_TRIGGER;
+	pTrigger->pev->movetype = MOVETYPE_NONE;
 	pTrigger->pev->owner = pOwner;
 
 	return pTrigger;

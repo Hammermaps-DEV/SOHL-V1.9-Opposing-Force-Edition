@@ -67,7 +67,7 @@ bool CHealthKit::MyTouch(CBasePlayer *pPlayer)
 	if (pPlayer->TakeHealth(gSkillData.healthkitCapacity, DMG_GENERIC))
 	{
 		MESSAGE_BEGIN(MSG_ONE, gmsgItemPickup, NULL, pPlayer->pev);
-		WRITE_STRING(GetClassname());
+		WRITE_STRING(STRING(pev->classname));
 		MESSAGE_END();
 
 		EMIT_SOUND(ENT(pPlayer->pev), CHAN_ITEM, "items/smallmedkit1.wav", 1, ATTN_NORM);

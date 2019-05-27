@@ -89,7 +89,7 @@ void CDisplacer::Spawn() {
 // GetItemInfo
 //=========================================================
 int CDisplacer::GetItemInfo(ItemInfo *p) {
-	p->pszName = GetClassname();
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "uranium";
 	p->iMaxAmmo1 = URANIUM_MAX_CARRY;
 	p->pszAmmo2 = NULL;
@@ -149,8 +149,8 @@ void CDisplacer::Holster() {
 void CDisplacer::SecondaryAttack() {
 	if (m_pPlayer->IsOnRope())
 	{
-		m_pPlayer->SetMoveType(MOVETYPE_WALK);
-		m_pPlayer->SetSolidType(SOLID_SLIDEBOX);
+		m_pPlayer->pev->movetype = MOVETYPE_WALK;
+		m_pPlayer->pev->solid = SOLID_SLIDEBOX;
 		m_pPlayer->SetOnRopeState(false);
 		m_pPlayer->GetRope()->DetachObject();
 		m_pPlayer->SetRope(nullptr);

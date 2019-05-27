@@ -70,7 +70,7 @@ void CDecoreAsteroid::Spawn()
 	break;
 	}
 
-	SetMoveType(MOVETYPE_FLY);
+	pev->movetype = MOVETYPE_FLY;
 }
 
 void CDecoreAsteroid::KeyValue(KeyValueData *pkvd)

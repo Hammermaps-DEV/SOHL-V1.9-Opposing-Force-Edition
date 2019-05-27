@@ -87,7 +87,7 @@ void CSporelauncher::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CSporelauncher::GetItemInfo(ItemInfo *p) {
-	p->pszName = GetClassname();
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "spore";
 	p->iMaxAmmo1 = SPORE_MAX_CARRY;
 	p->pszAmmo2 = NULL;

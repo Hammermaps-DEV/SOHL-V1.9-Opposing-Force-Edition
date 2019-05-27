@@ -38,10 +38,10 @@ class CBreakable : public CBaseDelay
 {
 public:
 	// basic functions
-	void Spawn() override;
-	void Precache() override;
-	void KeyValue(KeyValueData* pkvd) override;
-	float CalcRatio(CBaseEntity *pLocus, int mode) override;//AJH added 'mode' = ratio to return);
+	void Spawn();
+	void Precache();
+	void KeyValue(KeyValueData* pkvd);
+	virtual float CalcRatio(CBaseEntity *pLocus, int mode);//AJH added 'mode' = ratio to return);
 	void EXPORT BreakTouch(CBaseEntity *pOther);
 	void EXPORT BreakUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void EXPORT RespawnUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
@@ -59,9 +59,9 @@ public:
 	BOOL IsBreakable();
 	BOOL SparkWhenHit();
 
-	STATE GetState() override;
+	STATE GetState();
 
-	int	 DamageDecal(int bitsDamageType) override;
+	int	 DamageDecal(int bitsDamageType);
 
 	void EXPORT		Die();
 	virtual int		ObjectCaps() { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }

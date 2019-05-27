@@ -368,8 +368,8 @@ void CFuncPlat::Setup()
 	vecTempAngles = pev->angles;	// save angles
 	pev->angles = g_vecZero;
 
-	SetSolidType(SOLID_BSP);
-	SetMoveType(MOVETYPE_PUSH);
+	pev->solid = SOLID_BSP;
+	pev->movetype = MOVETYPE_PUSH;
 
 	UTIL_SetOrigin(this, pev->origin);		// set size and link into world
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
@@ -462,8 +462,8 @@ void CPlatTrigger::SpawnInsideTrigger(CFuncPlat *pPlatform)
 {
 	m_pPlatform = pPlatform;
 	// Create trigger entity, "point" it at the owning platform, give it a touch method
-	SetSolidType(SOLID_TRIGGER);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_TRIGGER;
+	pev->movetype = MOVETYPE_NONE;
 	pev->origin = pPlatform->pev->origin;
 
 	// Establish the trigger field's size
@@ -629,7 +629,7 @@ void CFuncPlat::Blocked(CBaseEntity *pOther)
 		}
 	}
 
-	ALERT(at_aiconsole, "%s Blocked by %s\n", GetClassname(), STRING(pOther->pev->classname));
+	ALERT(at_aiconsole, "%s Blocked by %s\n", STRING(pev->classname), STRING(pOther->pev->classname));
 	// Hurt the blocker a little
 	if (m_hActivator)
 		pOther->TakeDamage(pev, m_hActivator->pev, 1, DMG_CRUSH);
@@ -1300,12 +1300,12 @@ void CFuncTrain::Spawn()
 	else if (pev->dmg == -1) //LRC- a train that doesn't crush people!
 		pev->dmg = 0;
 
-	SetMoveType(MOVETYPE_PUSH);
+	pev->movetype = MOVETYPE_PUSH;
 
 	if (FBitSet(pev->spawnflags, SF_TRACKTRAIN_PASSABLE))
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 	else
-		SetSolidType(SOLID_BSP);
+		pev->solid = SOLID_BSP;
 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
@@ -1411,10 +1411,10 @@ void CFuncTrackTrain::Spawn()
 	}
 
 	if (pev->spawnflags & SF_TRACKTRAIN_PASSABLE)
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 	else
-		SetSolidType(SOLID_BSP);
-	SetMoveType(MOVETYPE_PUSH);
+		pev->solid = SOLID_BSP;
+	pev->movetype = MOVETYPE_PUSH;
 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
@@ -2308,8 +2308,8 @@ void CFuncTrainControls::Find()
 
 void CFuncTrainControls::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	UTIL_SetSize(pev, pev->mins, pev->maxs);
@@ -3035,8 +3035,8 @@ IMPLEMENT_SAVERESTORE(CGunTarget, CBaseMonster);
 
 void CGunTarget::Spawn()
 {
-	SetSolidType(SOLID_BSP);
-	SetMoveType(MOVETYPE_PUSH);
+	pev->solid = SOLID_BSP;
+	pev->movetype = MOVETYPE_PUSH;
 
 	UTIL_SetOrigin(this, pev->origin);
 	SET_MODEL(ENT(pev), STRING(pev->model));
@@ -3815,9 +3815,9 @@ void CSpriteTrain::Spawn()
 	if (pev->dmg == 0)
 		pev->dmg = 2;
 
-	SetMoveType(MOVETYPE_PUSH);
+	pev->movetype = MOVETYPE_PUSH;
 
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 
 	SET_MODEL(ENT(pev), STRING(pev->model));
 	UTIL_SetSize(pev, pev->mins, pev->maxs);

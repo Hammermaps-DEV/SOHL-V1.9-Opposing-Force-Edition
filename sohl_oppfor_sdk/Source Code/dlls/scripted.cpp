@@ -194,9 +194,9 @@ LINK_ENTITY_TO_CLASS(aiscripted_sequence, CCineMonster); //LRC - aiscripted sequ
 //=========================================================
 void CCineMonster::Spawn()
 {
-	// SetSolidType(SOLID_TRIGGER);
+	// pev->solid = SOLID_TRIGGER;
 	// UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 
 	m_iState = STATE_OFF; //LRC
 
@@ -294,7 +294,7 @@ void CCineMonster::Touch(CBaseEntity *pOther)
 	pevOther->velocity.z += m_flHeight;
 
 
-	SetSolidType(SOLID_NOT);// kill the trigger for now !!!UNDONE
+	pev->solid = SOLID_NOT;// kill the trigger for now !!!UNDONE
 }
 */
 
@@ -396,7 +396,7 @@ void CCineMonster::PossessEntity()
 			}
 			if (pTarget->m_hTargetEnt == NULL)
 			{	// nothing. Oh well.
-				ALERT(at_debug, "%s %s has a missing \"turn target\": %s\n", GetClassname(), STRING(pev->targetname), STRING(m_iszAttack));
+				ALERT(at_debug, "%s %s has a missing \"turn target\": %s\n", STRING(pev->classname), STRING(pev->targetname), STRING(m_iszAttack));
 				pTarget->m_hTargetEnt = this;
 			}
 		}
@@ -411,7 +411,7 @@ void CCineMonster::PossessEntity()
 			pTarget->m_pGoalEnt = UTIL_FindEntityByTargetname(NULL, STRING(m_iszMoveTarget), m_hActivator);
 			if (pTarget->m_pGoalEnt == NULL)
 			{	// nothing. Oh well.
-				ALERT(at_debug, "%s %s has a missing \"move target\": %s\n", GetClassname(), STRING(pev->targetname), STRING(m_iszMoveTarget));
+				ALERT(at_debug, "%s %s has a missing \"move target\": %s\n", STRING(pev->classname), STRING(pev->targetname), STRING(m_iszMoveTarget));
 				pTarget->m_pGoalEnt = this;
 			}
 		}
@@ -500,7 +500,7 @@ void CCineMonster::CineThink()
 // lookup a sequence name and setup the target monster to play it
 BOOL CCineMonster::StartSequence(CBaseMonster *pTarget, int iszSeq, BOOL completeOnEmpty)
 {
-	//	ALERT( at_console, "StartSequence %s \"%s\"\n", GetClassname(), STRING(pev->targetname));
+	//	ALERT( at_console, "StartSequence %s \"%s\"\n", STRING(pev->classname), STRING(pev->targetname));
 
 	if (!iszSeq && completeOnEmpty)
 	{
@@ -792,8 +792,8 @@ BOOL CBaseMonster::CineCleanup()
 	else
 	{
 		// arg, punt
-		SetMoveType(MOVETYPE_STEP);// this is evil
-		SetSolidType(SOLID_SLIDEBOX);
+		pev->movetype = MOVETYPE_STEP;// this is evil
+		pev->solid = SOLID_SLIDEBOX;
 	}
 	m_pCine = NULL;
 	m_hTargetEnt = NULL;
@@ -803,7 +803,7 @@ BOOL CBaseMonster::CineCleanup()
 		// last frame of death animation?
 		pev->health = 0;
 		pev->framerate = 0.0;
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		SetState(MONSTERSTATE_DEAD);
 		pev->deadflag = DEAD_DEAD;
 		UTIL_SetSize(pev, pev->mins, Vector(pev->maxs.x, pev->maxs.y, pev->mins.z + 2));
@@ -818,7 +818,7 @@ BOOL CBaseMonster::CineCleanup()
 			SUB_StartFadeOut(); // SetThink( SUB_DoNothing );
 		// This turns off animation & physics in case their origin ends up stuck in the world or something
 		StopAnimation();
-		SetMoveType(MOVETYPE_NONE);
+		pev->movetype = MOVETYPE_NONE;
 		pev->effects |= EF_NOINTERP;	// Don't interpolate either, assume the corpse is positioned in its final resting place
 		return FALSE;
 	}
@@ -1022,7 +1022,7 @@ void CScriptedSentence::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 
 void CScriptedSentence::Spawn()
 {
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 
 	m_active = TRUE;
 	m_playing = FALSE; //LRC
@@ -1251,8 +1251,8 @@ void CFurniture::Spawn()
 	PRECACHE_MODEL((char *)STRING(pev->model));
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
-	SetMoveType(MOVETYPE_NONE);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_NONE;
+	pev->solid = SOLID_BBOX;
 	pev->health = 80000;
 	pev->takedamage = DAMAGE_AIM;
 	pev->effects = 0;

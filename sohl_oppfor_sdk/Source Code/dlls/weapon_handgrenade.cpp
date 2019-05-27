@@ -72,7 +72,7 @@ void CHandGrenade::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CHandGrenade::GetItemInfo(ItemInfo *p) {
-	p->pszName = GetClassname();
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "Hand Grenade";
 	p->iMaxAmmo1 = HANDGRENADE_MAX_CARRY;
 	p->pszAmmo2 = NULL;

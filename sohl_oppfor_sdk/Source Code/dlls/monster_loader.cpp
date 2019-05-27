@@ -61,8 +61,8 @@ void CLoader::Spawn()
 
 	UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = DONT_BLEED;
 	pev->health = 100;
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
@@ -70,7 +70,7 @@ void CLoader::Spawn()
 
 	if (pev->spawnflags & SF_LOADER_NOTSOLID)
 	{
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		pev->takedamage = DAMAGE_NO;
 	}
 

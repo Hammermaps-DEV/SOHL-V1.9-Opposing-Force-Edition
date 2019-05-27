@@ -115,7 +115,7 @@ void CBarniel::Precache() {
 int CBarniel::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) {
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", GetClassname());
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {
@@ -217,19 +217,19 @@ void CBarniel::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 		switch (ptr->iHitgroup) {
 		case HITGROUP_HEAD:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 			flDamage = m_flHitgroupHead * flDamage;
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
 				flDamage = (m_flHitgroupChest*flDamage) / 2;
 			}
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
 			if (bitsDamageType & (DMG_BULLET | DMG_SLASH | DMG_BLAST)) {
 				flDamage = (m_flHitgroupStomach*flDamage) / 2;
 			}
@@ -237,13 +237,13 @@ void CBarniel::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
 			flDamage = m_flHitgroupArm * flDamage;
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
 			flDamage = m_flHitgroupLeg * flDamage;
 			break;
 		}

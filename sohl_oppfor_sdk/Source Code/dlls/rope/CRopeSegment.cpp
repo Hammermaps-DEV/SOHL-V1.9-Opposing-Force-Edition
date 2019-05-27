@@ -68,8 +68,8 @@ void CRopeSegment::Spawn()
 
 	SET_MODEL(edict(), STRING(m_iszModelName));
 
-	SetMoveType(MOVETYPE_NOCLIP);
-	SetSolidType(SOLID_TRIGGER);
+	pev->movetype = MOVETYPE_NOCLIP;
+	pev->solid = SOLID_TRIGGER;
 	pev->flags |= FL_ALWAYSTHINK;
 	pev->effects = EF_NODRAW;
 	UTIL_SetOrigin(this, pev->origin);

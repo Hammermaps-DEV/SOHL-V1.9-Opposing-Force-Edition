@@ -924,7 +924,7 @@ void CHGrunt::SetActivity(Activity NewActivity) {
 	}
 	else {
 		// Not available try to get default anim
-		ALERT(at_debug, "%s has no sequence for act:%d\n", GetClassname(), NewActivity);
+		ALERT(at_debug, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 
@@ -1083,12 +1083,12 @@ void CHGrunt::PrescheduleThink() {
 // this is a bad bug. Friendly machine gun fire avoidance
 // will unecessarily prevent the throwing of a grenade as well.
 //=========================================================
-bool CHGrunt::FCanCheckAttacks() {
+BOOL CHGrunt::FCanCheckAttacks() {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR)) {
-		return true;
+		return TRUE;
 	}
 
-	return false;
+	return FALSE;
 }
 
 //=========================================================
@@ -1718,8 +1718,8 @@ void CHGrunt::Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
 	if (pev->health == 0)
@@ -1909,7 +1909,7 @@ Schedule_t *CHGrunt::GetSchedule()
 		if (pev->flags & FL_ONGROUND)
 		{
 			// just landed
-			SetMoveType(MOVETYPE_STEP);
+			pev->movetype = MOVETYPE_STEP;
 			return GetScheduleOfType(SCHED_GRUNT_REPEL_LAND);
 		}
 		else
@@ -2300,7 +2300,7 @@ LINK_ENTITY_TO_CLASS(monster_grunt_repel, CHGruntRepel);
 void CHGruntRepel::Spawn()
 {
 	Precache();
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 
 	SetUse(&CHGruntRepel::RepelUse);
 }
@@ -2318,7 +2318,7 @@ void CHGruntRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_T
 
 	CBaseEntity *pEntity = Create("monster_human_grunt", pev->origin, pev->angles);
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer();
-	pGrunt->SetMoveType(MOVETYPE_FLY);
+	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
 	pGrunt->SetActivity(ACT_GLIDE);
 	pGrunt->m_vecLastPosition = tr.vecEndPos;

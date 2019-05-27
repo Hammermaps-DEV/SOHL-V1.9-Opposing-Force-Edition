@@ -35,18 +35,16 @@ class CRpgAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn() override
-	{
+	void Spawn() {
 		Precache();
-		SetModel("models/w_rpgammo.mdl");
+		SET_MODEL(ENT(pev), "models/w_rpgammo.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
 
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache() override 
-	{
+	void Precache() {
 		PRECACHE_MODEL("models/w_rpgammo.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
@@ -54,20 +52,23 @@ class CRpgAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// AddAmmo
 	//=========================================================
-	bool AddAmmo(CBaseEntity *pOther) override
-	{
-		int iGive = AMMO_RPGCLIP_GIVE;
+	BOOL AddAmmo(CBaseEntity *pOther) {
+		int iGive;
+
 		if (IsMultiplayer()) {
 			// hand out more ammo per rocket in multiplayer.
 			iGive = AMMO_RPGCLIP_GIVE * 2;
 		}
-
-		const bool bResult = (pOther->GiveAmmo(iGive, "rockets", ROCKET_MAX_CARRY) != -1);
-		if (bResult) {
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+		else {
+			iGive = AMMO_RPGCLIP_GIVE;
 		}
 
-		return bResult;
+		if (pOther->GiveAmmo(iGive, "rockets", ROCKET_MAX_CARRY) != -1) {
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+			return TRUE;
+		}
+
+		return FALSE;
 	}
 };
 

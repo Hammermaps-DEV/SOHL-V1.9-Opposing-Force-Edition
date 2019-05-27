@@ -154,7 +154,7 @@ public:
 	int				Classify();
 	CBaseEntity		*Kick();
 	void			CheckAmmo();
-	bool			FCanCheckAttacks();
+	BOOL			FCanCheckAttacks();
 
 	// Attack
 	bool			CheckRangeAttack2(float flDot, float flDist);

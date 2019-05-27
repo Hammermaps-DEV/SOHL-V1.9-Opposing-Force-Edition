@@ -101,8 +101,8 @@ void CApache::Spawn() {
 	UTIL_SetOrigin(this, pev->origin);
 
 	// Motor
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 	pev->flags |= FL_MONSTER | FL_FLY;
 	pev->takedamage = DAMAGE_AIM;
 
@@ -197,7 +197,7 @@ void CApache::Killed(entvars_t *pevAttacker, int iGib) {
 	ALERT(at_aiconsole, "AI Trigger Fire Target\n");
 	FireTargets(STRING(m_iszTriggerTarget), this, this, USE_TOGGLE, 0);
 
-	SetMoveType(MOVETYPE_TOSS);
+	pev->movetype = MOVETYPE_TOSS;
 	pev->gravity = 0.3;
 
 	STOP_SOUND(ENT(pev), CHAN_STATIC, pRotorSounds[m_iRotorSound]);
@@ -918,7 +918,7 @@ void CApache::ShowDamage() {
 int CApache::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType) {
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_64) {
 		if (m_flDebug)
-			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", GetClassname());
+			ALERT(at_console, "%s:TakeDamage:SF_MONSTER_SPAWNFLAG_64\n", STRING(pev->classname));
 
 		CBaseEntity *pEnt = CBaseEntity::Instance(pevAttacker);
 		if (pEnt->IsPlayer()) {

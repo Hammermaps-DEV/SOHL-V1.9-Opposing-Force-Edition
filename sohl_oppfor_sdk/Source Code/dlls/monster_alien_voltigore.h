@@ -39,9 +39,9 @@ class CVoltigore : public CSquadMonster {
 public:
 	virtual void Spawn();
 	virtual void Precache();
-	virtual void SetYawSpeed();
-	virtual void DieBlast();
-	virtual int  ISoundMask();
+	void SetYawSpeed();
+	void DieBlast();
+	int  ISoundMask();
 	virtual int  Classify();
 	virtual void HandleAnimEvent(MonsterEvent_t *pEvent);
 	virtual void IdleSound();
@@ -55,12 +55,12 @@ public:
 	virtual bool CheckRangeAttack1(float flDot, float flDist);
 	virtual void RunAI();
 	BOOL FValidateHintType(short sHint);
-	Schedule_t *GetSchedule() override;
-	Schedule_t *GetScheduleOfType(int Type) override;
+	Schedule_t *GetSchedule();
+	Schedule_t *GetScheduleOfType(int Type);
 	virtual int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);
 	virtual void TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType);
 	virtual int IgnoreConditions();
-	MONSTERSTATE GetIdealState() override;
+	MONSTERSTATE GetIdealState();
 	virtual void Killed(entvars_t *pevAttacker, int iGib);
 	void CallForHelp(char *szClassname, float flDist, EHANDLE hEnemy, Vector &vecLocation);
 
@@ -93,8 +93,8 @@ public:
 	static const char* pPainSounds[];
 	static const char* pGruntSounds[];
 
-	virtual bool	CanThrowEnergyBall()	const { return true; }
-	virtual bool	CanGib()				const { return true; }
+	virtual BOOL	CanThrowEnergyBall()	const { return TRUE; }
+	virtual BOOL	CanGib()				const { return TRUE; }
 	virtual void	PrintBloodDecal(CBaseEntity* pHurt, const Vector& vecOrigin, const Vector& vecVelocity, float maxDist, int bloodColor = DONT_BLEED);
 
 

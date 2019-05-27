@@ -135,8 +135,8 @@ void COsprey::Spawn() {
 	UTIL_SetOrigin(this, pev->origin);
 
 	// Motor
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 	pev->flags |= FL_MONSTER | FL_FLY;
 	pev->takedamage = DAMAGE_YES;
 	pev->speed = 80; //LRC - default speed, in case path corners don't give a speed.

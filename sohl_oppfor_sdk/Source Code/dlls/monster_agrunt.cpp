@@ -236,12 +236,12 @@ void CAGrunt::StopTalking()
 //=========================================================
 // ShouldSpeak - Should this agrunt be talking?
 //=========================================================
-bool CAGrunt::ShouldSpeak()
+BOOL CAGrunt::ShouldSpeak()
 {
 	if (m_flNextSpeakTime > UTIL_GlobalTimeBase())
 	{
 		// my time to talk is still in the future.
-		return false;
+		return FALSE;
 	}
 
 	if (pev->spawnflags & SF_MONSTER_SPAWNFLAG_2)
@@ -253,11 +253,11 @@ bool CAGrunt::ShouldSpeak()
 			// into the future a bit, so we don't talk immediately after 
 			// going into combat
 			m_flNextSpeakTime = UTIL_GlobalTimeBase() + 3;
-			return false;
+			return FALSE;
 		}
 	}
 
-	return true;
+	return TRUE;
 }
 
 //=========================================================
@@ -545,8 +545,8 @@ void CAGrunt::Spawn()
 		SET_MODEL(ENT(pev), "models/agrunt.mdl");
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 	if (pev->health == 0)
@@ -861,12 +861,16 @@ IMPLEMENT_CUSTOM_SCHEDULES(CAGrunt, CSquadMonster);
 // because they can use their smart weapons against unseen
 // enemies. Base class doesn't attack anyone it can't see.
 //=========================================================
-bool CAGrunt::FCanCheckAttacks()
+BOOL CAGrunt::FCanCheckAttacks()
 {
 	if (!HasConditions(bits_COND_ENEMY_TOOFAR))
-		return true;
-
-	return false;
+	{
+		return TRUE;
+	}
+	else
+	{
+		return FALSE;
+	}
 }
 
 //=========================================================

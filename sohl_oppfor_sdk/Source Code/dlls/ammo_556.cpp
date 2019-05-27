@@ -33,35 +33,24 @@
 
 class CM249AmmoClip : public CBasePlayerAmmo
 {
-	//=========================================================
-	// Spawn
-	//=========================================================
-	void Spawn() override
+	void Spawn()
 	{
 		Precache();
 		SET_MODEL(ENT(pev), "models/w_saw_clip.mdl");
 		CBasePlayerAmmo::Spawn();
 	}
-
-	//=========================================================
-	// Precache
-	//=========================================================
-	void Precache() override
+	void Precache()
 	{
 		PRECACHE_MODEL("models/w_saw_clip.mdl");
 		PRECACHE_SOUND("items/9mmclip1.wav");
 	}
-
-	//=========================================================
-	// AddAmmo
-	//=========================================================
-	bool AddAmmo(CBaseEntity *pOther) override
+	BOOL AddAmmo(CBaseEntity *pOther)
 	{
-		const bool bResult = (pOther->GiveAmmo(AMMO_556_GIVE, "556", _556_MAX_CARRY) != -1);
-		if (bResult) {
-			EmitSound(CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
+		int bResult = (pOther->GiveAmmo(AMMO_556_GIVE, "556", _556_MAX_CARRY) != -1);
+		if (bResult)
+		{
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "items/9mmclip1.wav", 1, ATTN_NORM);
 		}
-
 		return bResult;
 	}
 };

@@ -173,8 +173,8 @@ void CPitDrone::Spawn() {
 
 	UTIL_SetSize(pev, Vector(-24, -24, 0), Vector(24, 24, 64));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	pev->effects = 0;
 
@@ -286,29 +286,29 @@ void CPitDrone::TraceAttack(entvars_t *pevAttacker, float flDamage, Vector vecDi
 		switch (ptr->iHitgroup) {
 		case HITGROUP_HEAD:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_HEAD\n", STRING(pev->classname));
 			flDamage = gSkillData.pitdroneHead*flDamage;
 			break;
 		case HITGROUP_CHEST:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_CHEST\n", STRING(pev->classname));
 			flDamage = gSkillData.pitdroneChest*flDamage;
 			break;
 		case HITGROUP_STOMACH:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_STOMACH\n", STRING(pev->classname));
 			flDamage = gSkillData.pitdroneStomach*flDamage;
 			break;
 		case HITGROUP_LEFTARM:
 		case HITGROUP_RIGHTARM:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_ARM\n", STRING(pev->classname));
 			flDamage = gSkillData.pitdroneArm*flDamage;
 			break;
 		case HITGROUP_LEFTLEG:
 		case HITGROUP_RIGHTLEG:
 			if (m_flDebug)
-				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", GetClassname());
+				ALERT(at_console, "%s:TraceAttack:HITGROUP_LEG\n", STRING(pev->classname));
 			flDamage = gSkillData.pitdroneLeg*flDamage;
 			break;
 		}
@@ -368,7 +368,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 	switch (pEvent->event) {
 	case PIT_DRONE_AE_SLASH_LEFT: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Slash left!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Slash left!\n", STRING(pev->classname));
 
 		CBaseEntity *pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgWhip, DMG_SLASH);
 		if (pHurt) {
@@ -388,7 +388,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 								  break;
 	case PIT_DRONE_AE_SLASH_RIGHT: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Slash right!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Slash right!\n", STRING(pev->classname));
 
 		CBaseEntity *pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgWhip, DMG_SLASH);
 		if (pHurt) {
@@ -406,7 +406,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 								   break;
 	case PIT_DRONE_AE_BITE: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Slash both!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Slash both!\n", STRING(pev->classname));
 
 		CBaseEntity *pHurt = CheckTraceHullAttack(70, gSkillData.pitdroneDmgBite, DMG_CLUB);
 		if (pHurt) {
@@ -431,7 +431,7 @@ void CPitDrone::HandleAnimEvent(MonsterEvent_t *pEvent) {
 							break;
 	case PIT_DRONE_AE_RELOAD: {
 		if (m_flDebug)
-			ALERT(at_console, "%s:HandleAnimEvent:Horns reload!\n", GetClassname());
+			ALERT(at_console, "%s:HandleAnimEvent:Horns reload!\n", STRING(pev->classname));
 
 		if (bits_COND_NO_AMMO_LOADED) {
 			m_flhorns = m_flammo;
@@ -617,7 +617,7 @@ void CPitDrone::UpdateHorns() {
 //=========================================================
 // ShouldSpeak - Should this PDrone be talking?
 //=========================================================
-bool CPitDrone::ShouldSpeak() {
+BOOL CPitDrone::ShouldSpeak() {
 	if (m_flNextSpeakTime > UTIL_GlobalTimeBase()) {
 		// my time to talk is still in the future.
 		return false;

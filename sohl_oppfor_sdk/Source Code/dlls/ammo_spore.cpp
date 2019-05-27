@@ -35,8 +35,7 @@ class CSporeAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Spawn
 	//=========================================================
-	void Spawn() override
-	{
+	void Spawn() {
 		Precache();
 		SET_MODEL(ENT(pev), "models/spore.mdl");
 		CBasePlayerAmmo::Spawn();
@@ -45,8 +44,7 @@ class CSporeAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// Precache
 	//=========================================================
-	void Precache() override
-	{
+	void Precache() {
 		PRECACHE_MODEL("models/spore.mdl");
 		PRECACHE_SOUND("weapons/spore_ammo.wav");
 	}
@@ -54,13 +52,11 @@ class CSporeAmmo : public CBasePlayerAmmo {
 	//=========================================================
 	// AddAmmo
 	//=========================================================
-	bool AddAmmo(CBaseEntity *pOther) override
-	{
-		const bool bResult = (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spore", SPORE_MAX_CARRY) != -1);
+	BOOL AddAmmo(CBaseEntity *pOther) {
+		int bResult = (pOther->GiveAmmo(AMMO_SPORE_GIVE, "spore", SPORE_MAX_CARRY) != -1);
 		if (bResult) {
-			EmitSound(CHAN_ITEM, "weapons/spore_ammo.wav", 1, ATTN_NORM);
+			EMIT_SOUND(ENT(pev), CHAN_ITEM, "weapons/spore_ammo.wav", 1, ATTN_NORM);
 		}
-
 		return bResult;
 	}
 };

@@ -106,7 +106,7 @@ void CEgon::Holster()
 
 int CEgon::GetItemInfo(ItemInfo *p)
 {
-	p->pszName = GetClassname();
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = "uranium";
 	p->iMaxAmmo1 = URANIUM_MAX_CARRY;
 	p->pszAmmo2 = NULL;

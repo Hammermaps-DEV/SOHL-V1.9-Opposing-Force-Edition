@@ -36,7 +36,7 @@
 #include "util.h"
 #include "cbase.h"
 #include "saverestore.h"
-#include "CBreakable.h"
+#include "func_break.h"
 #include "decals.h"
 #include "explode.h"
 
@@ -206,11 +206,11 @@ void CBreakable::Spawn()
 	if (m_iszWhenHit) //LRC - locus trigger
 	{
 		m_pHitProxy = GetClassPtr((CPointEntity*)NULL);
-		m_pHitProxy->SetClassname("info_proxy");	// allow saverestore
+		m_pHitProxy->pev->classname = MAKE_STRING("info_proxy");	// allow saverestore
 	}
 
-	SetSolidType(SOLID_BSP);
-	SetMoveType(MOVETYPE_PUSH);
+	pev->solid = SOLID_BSP;
+	pev->movetype = MOVETYPE_PUSH;
 	m_angle = pev->angles.y;
 	pev->angles.y = 0;
 	m_iInitialHealth = pev->health;
@@ -626,12 +626,12 @@ void CBreakable::RespawnThink()
 			}
 		}
 		//		ALERT(at_debug,"Respawn OK\n");
-			/*	if (FStrEq("func_pushable",GetClassname())){	//AJH Fix for respawnable breakable pushables
-					SetSolidType(SOLID_BBOX);							//For some reason this code must be executed outside of
+			/*	if (FStrEq("func_pushable",STRING(pev->classname))){	//AJH Fix for respawnable breakable pushables
+					pev->solid = SOLID_BBOX;							//For some reason this code must be executed outside of
 					pev->origin.z+=1;									//the RespawnThink function. Uses DoRespawn()
 					UTIL_SetOrigin(this,pev->origin);
 				}else{
-					SetSolidType(SOLID_BSP);
+					pev->solid = SOLID_BSP;
 				}
 				*/
 		DoRespawn();	//AJH Fix for respawnable breakable pushables (BY HAWK777)
@@ -649,7 +649,7 @@ void CBreakable::RespawnThink()
 
 void CBreakable::DoRespawn()	//AJH Fix for respawnable breakable pushables (BY HAWK777)
 {
-	SetSolidType(SOLID_BSP);
+	pev->solid = SOLID_BSP;
 }
 
 void CBreakable::RespawnFadeThink()
@@ -940,7 +940,7 @@ void CBreakable::Die()
 	if (!m_iRespawnTime)
 		pev->targetname = 0;
 
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects |= EF_NODRAW;
 	pev->takedamage = DAMAGE_NO;
 
@@ -1063,8 +1063,8 @@ void CPushable::Spawn()
 	else
 		Precache();
 
-	SetMoveType(MOVETYPE_PUSHSTEP);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_PUSHSTEP;
+	pev->solid = SOLID_BBOX;
 	SET_MODEL(ENT(pev), STRING(pev->model));
 
 	//	UTIL_SetSize( pev, vecMins, vecMaxs );
@@ -1238,7 +1238,7 @@ int CPushable::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float
 }
 
 void CPushable::DoRespawn() {	//AJH Fix for respawnable breakable pushables (BY HAWK777)
-	SetSolidType(SOLID_BBOX);
+	pev->solid = SOLID_BBOX;
 	pev->origin.z += 1;
 	UTIL_SetOrigin(this, pev->origin);
 }

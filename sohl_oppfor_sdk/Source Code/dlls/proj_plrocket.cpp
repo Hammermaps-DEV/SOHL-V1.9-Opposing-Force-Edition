@@ -68,14 +68,14 @@ void CRpgRocket::Spawn()
 {
 	Precache();
 	// motor
-	SetMoveType(MOVETYPE_BOUNCE);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_BOUNCE;
+	pev->solid = SOLID_BBOX;
 	pev->renderfx = kRenderFxEntInPVS;//for telemetric rocket
 	SET_MODEL(ENT(pev), "models/rpgrocket.mdl");
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));
 	UTIL_SetOrigin(this, pev->origin);
 
-	SetClassname("rpg_rocket");
+	pev->classname = MAKE_STRING("rpg_rocket");
 
 	SetThink(&CRpgRocket::IgniteThink);
 	SetTouch(&CRpgRocket::ExplodeTouch);
@@ -137,7 +137,7 @@ void CRpgRocket::Precache()
 
 void CRpgRocket::IgniteThink()
 {
-	SetMoveType(MOVETYPE_FLY);
+	pev->movetype = MOVETYPE_FLY;
 	pev->effects |= EF_LIGHT;
 
 	CreateTrail();

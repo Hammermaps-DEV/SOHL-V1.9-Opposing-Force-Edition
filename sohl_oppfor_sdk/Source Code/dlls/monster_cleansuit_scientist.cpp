@@ -85,8 +85,8 @@ void CCleansuitScientist::Spawn() {
 
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 
 	if (pev->health == 0)
@@ -287,8 +287,8 @@ void CSittingCleansuitScientist::Spawn()
 
 	UTIL_SetSize(pev, Vector(-14, -14, 0), Vector(14, 14, 36));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	pev->effects = 0;
 	pev->health = 50;
 

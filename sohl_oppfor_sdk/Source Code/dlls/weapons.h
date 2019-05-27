@@ -29,7 +29,6 @@
 #define WEAPONS_H
 
 #include "effects.h"
-#include <cassert>
 
 class CBasePlayer;
 extern int gmsgWeapPickup;
@@ -375,8 +374,8 @@ public:
 	//LRC - used by weaponstrip
 	void DrainClip(CBasePlayer* pPlayer, BOOL keep, int i9mm, int i357, int iBuck, int iBolt, int iARGren, int iRock, int iUranium, int iSatchel, int iSnark, int iTrip, int iGren, int iShock, int iSpore);
 
-	int	PrimaryAmmoIndex() override;
-	int	SecondaryAmmoIndex() override;
+	int	PrimaryAmmoIndex();
+	int	SecondaryAmmoIndex();
 
 	void PrintState();
 
@@ -416,7 +415,7 @@ class CBasePlayerAmmo : public CBasePlayerItem
 public:
 	virtual void Spawn();
 	void EXPORT DefaultTouch(CBaseEntity *pOther); // default weapon touch
-	virtual bool AddAmmo(CBaseEntity *pOther) { return true; };
+	virtual BOOL AddAmmo(CBaseEntity *pOther) { return TRUE; };
 
 	CBaseEntity* Respawn();
 	void EXPORT Materialize();

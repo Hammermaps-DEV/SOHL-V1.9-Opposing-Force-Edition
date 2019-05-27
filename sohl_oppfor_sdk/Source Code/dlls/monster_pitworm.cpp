@@ -222,8 +222,8 @@ void CPitWorm::Spawn()
 {
 	Precache();
 
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 
 	if (pev->model)
 		SET_MODEL(ENT(pev), STRING(pev->model)); //LRC

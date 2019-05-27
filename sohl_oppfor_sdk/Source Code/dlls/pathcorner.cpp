@@ -39,12 +39,12 @@
 class CPathCorner : public CPointEntity
 {
 public:
-	void Spawn() override;
-	void KeyValue(KeyValueData* pkvd) override;
-	float GetDelay() override { return m_flWait; }
+	void Spawn();
+	void KeyValue(KeyValueData* pkvd);
+	float GetDelay() { return m_flWait; }
 	//	void Touch( CBaseEntity *pOther );
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
 
 	static	TYPEDESCRIPTION m_SaveData[];
 
@@ -84,6 +84,7 @@ void CPathCorner::KeyValue(KeyValueData *pkvd)
 	else
 		CPointEntity::KeyValue(pkvd);
 }
+
 
 void CPathCorner::Spawn()
 {
@@ -155,6 +156,7 @@ void CPathTrack::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE use
 	}
 }
 
+
 void CPathTrack::Link()
 {
 	CBaseEntity *pTarget;
@@ -183,9 +185,10 @@ void CPathTrack::Link()
 	}
 }
 
+
 void CPathTrack::Spawn()
 {
-	SetSolidType(SOLID_TRIGGER);
+	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize(pev, Vector(-8, -8, -8), Vector(8, 8, 8));
 
 	m_pnext = NULL;
@@ -196,6 +199,7 @@ void CPathTrack::Spawn()
 	SetNextThink(0.5);
 #endif
 }
+
 
 void CPathTrack::Activate()
 {
@@ -216,6 +220,7 @@ CPathTrack	*CPathTrack::ValidPath(CPathTrack	*ppath, int testFlag)
 	return ppath;
 }
 
+
 void CPathTrack::Project(CPathTrack *pstart, CPathTrack *pend, Vector *origin, float dist)
 {
 	if (pstart && pend)
@@ -234,6 +239,8 @@ CPathTrack *CPathTrack::GetNext()
 	return m_pnext;
 }
 
+
+
 CPathTrack *CPathTrack::GetPrevious()
 {
 	if (m_paltpath && FBitSet(pev->spawnflags, SF_PATH_ALTERNATE) && FBitSet(pev->spawnflags, SF_PATH_ALTREVERSE))
@@ -242,6 +249,8 @@ CPathTrack *CPathTrack::GetPrevious()
 	return m_pprevious;
 }
 
+
+
 void CPathTrack::SetPrevious(CPathTrack *pprev)
 {
 	// Only set previous if this isn't my alternate path
@@ -249,12 +258,14 @@ void CPathTrack::SetPrevious(CPathTrack *pprev)
 		m_pprevious = pprev;
 }
 
+
 // Assumes this is ALWAYS enabled
 CPathTrack *CPathTrack::LookAhead(Vector *origin, float dist, int move)
 {
+	CPathTrack *pcurrent;
 	float originalDist = dist;
 
-	CPathTrack* pcurrent = this;
+	pcurrent = this;
 	Vector currentPos = *origin;
 
 	if (dist < 0)		// Travelling backwards through path

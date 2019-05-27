@@ -77,7 +77,7 @@ void CCycler::GenericCyclerSpawn(char *szModel, Vector vecMin, Vector vecMax)
 		return;
 	}
 
-	SetClassname("cycler");
+	pev->classname = MAKE_STRING("cycler");
 	PRECACHE_MODEL(szModel);
 	SET_MODEL(ENT(pev), szModel);
 
@@ -90,8 +90,8 @@ void CCycler::GenericCyclerSpawn(char *szModel, Vector vecMin, Vector vecMax)
 void CCycler::Spawn()
 {
 	InitBoneControllers();
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = DAMAGE_YES;
 	pev->effects = 0;
 	pev->health = 80000;// no cycler should die
@@ -203,8 +203,8 @@ IMPLEMENT_SAVERESTORE(CCyclerSprite, CBaseEntity);
 
 void CCyclerSprite::Spawn()
 {
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = DAMAGE_YES;
 	pev->effects = 0;
 
@@ -266,10 +266,10 @@ TYPEDESCRIPTION	CWeaponCycler::m_SaveData[] =
 void CWeaponCycler::Spawn()
 {
 	// g-cont. this alias need for right slot switching because all selectable items must be preceed with "weapon_" or "item_"
-	SetClassname("weapon_question");
+	pev->classname = MAKE_STRING("weapon_question");
 	m_iId = WEAPON_CYCLER;
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_NONE;
 
 	char basemodel[80], v_path[80], p_path[80], w_path[80];
 
@@ -412,8 +412,8 @@ LINK_ENTITY_TO_CLASS(cycler_wreckage, CWreckage);
 
 void CWreckage::Spawn()
 {
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = 0;
 	pev->effects = 0;
 

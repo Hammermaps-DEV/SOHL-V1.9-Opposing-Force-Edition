@@ -32,13 +32,13 @@
 class CFlockingFlyerFlock : public CBaseMonster
 {
 public:
-	void Spawn() override;
-	void Precache() override;
-	void KeyValue(KeyValueData *pkvd) override;
+	void Spawn();
+	void Precache();
+	void KeyValue(KeyValueData *pkvd);
 	void SpawnFlock();
 
-	virtual int	Save(CSave &save);
-	virtual int	Restore(CRestore &restore);
+	virtual int		Save(CSave &save);
+	virtual int		Restore(CRestore &restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	// Sounds are shared by the flock
@@ -51,7 +51,7 @@ public:
 class CFlockingFlyer : public CBaseMonster
 {
 public:
-	void Spawn() override;
+	void Spawn();
 	void Precache();
 	void SpawnCommonCode();
 	void EXPORT IdleThink();

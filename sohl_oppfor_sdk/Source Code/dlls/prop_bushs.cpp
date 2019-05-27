@@ -62,8 +62,8 @@ void CPropBushs::Spawn() {
 
 	Precache();
 
-	SetSolidType(SOLID_NOT);
-	SetMoveType(MOVETYPE_NONE);
+	pev->solid = SOLID_NOT;
+	pev->movetype = MOVETYPE_NONE;
 	pev->takedamage = DAMAGE_NO;
 
 	if (strchr(strdup(STRING(m_isBush)), '0') && !pev->model)

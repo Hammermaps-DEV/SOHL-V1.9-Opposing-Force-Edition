@@ -113,7 +113,7 @@
     <ClCompile Include="monster_zombie_soldier_dead.cpp" />
     <ClCompile Include="monster_zombie_soldier_helmet.cpp" />
     <ClCompile Include="monster_zombie_soldier_helmet_dead.cpp" />
-    <ClCompile Include="CParticleEmitter.cpp" />
+    <ClCompile Include="particle_emitter.cpp" />
     <ClCompile Include="proj_gonomespit.cpp" />
     <ClCompile Include="proj_grenade.cpp" />
     <ClCompile Include="proj_hvr_rocket.cpp" />
@@ -282,8 +282,8 @@
     <ClInclude Include="enginecallback.h" />
     <ClInclude Include="explode.h" />
     <ClInclude Include="extdll.h" />
-    <ClInclude Include="CBreakable.h" />
-    <ClInclude Include="CGrass.h" />
+    <ClInclude Include="func_break.h" />
+    <ClInclude Include="func_grass.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="gamerules.h" />
     <ClInclude Include="genericmodel.h" />
@@ -366,7 +366,7 @@
     <ClInclude Include="monster_zombie_soldier_helmet_dead.h" />
     <ClInclude Include="movewith.h" />
     <ClInclude Include="nodes.h" />
-    <ClInclude Include="CParticleEmitter.h" />
+    <ClInclude Include="particle_emitter.h" />
     <ClInclude Include="proj_gonomespit.h" />
     <ClInclude Include="proj_hvr_rocket.h" />
     <ClInclude Include="proj_pitdronespit.h" />

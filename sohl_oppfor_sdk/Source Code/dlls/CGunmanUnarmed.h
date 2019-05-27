@@ -47,7 +47,7 @@ public:
 	int ISoundMask() override { return	NULL; };
 
 	int	ObjectCaps() override { return CBaseMonster::ObjectCaps() | FCAP_IMPULSE_USE; }
-	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value) override;
+	void Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value);
 	void PlayScriptedSentence(const char *pszSentence, float duration, float volume, float attenuation, BOOL bConcurrent, CBaseEntity *pListener) override;
 
 	Schedule_t *GetSchedule() override;

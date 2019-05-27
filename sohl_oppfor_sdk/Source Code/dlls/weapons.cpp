@@ -113,7 +113,7 @@ CLaserSpot *CLaserSpot::CreateSpot()
 	CLaserSpot *pSpot = GetClassPtr((CLaserSpot *)NULL);
 	pSpot->Spawn();
 
-	pSpot->SetClassname("laser_spot");
+	pSpot->pev->classname = MAKE_STRING("laser_spot");
 
 	return pSpot;
 }
@@ -132,8 +132,8 @@ CLaserSpot *CLaserSpot::CreateSpot(const char* spritename)
 void CLaserSpot::Spawn()
 {
 	Precache();
-	SetMoveType(MOVETYPE_NONE);
-	SetSolidType(SOLID_NOT);
+	pev->movetype = MOVETYPE_NONE;
+	pev->solid = SOLID_NOT;
 
 	pev->rendermode = kRenderGlow;
 	pev->renderfx = kRenderFxNoDissipation;
@@ -618,8 +618,8 @@ void CBasePlayerItem::SetObjectCollisionBox()
 //=========================================================
 void CBasePlayerItem::FallInit()
 {
-	SetMoveType(MOVETYPE_TOSS);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_TOSS;
+	pev->solid = SOLID_BBOX;
 
 	UTIL_SetOrigin(this, pev->origin);
 	UTIL_SetSize(pev, Vector(0, 0, 0), Vector(0, 0, 0));//pointsize until it lands on the ground.
@@ -672,7 +672,7 @@ void CBasePlayerItem::Materialize()
 		pev->effects |= EF_MUZZLEFLASH;
 	}
 
-	SetSolidType(SOLID_TRIGGER);
+	pev->solid = SOLID_TRIGGER;
 
 	UTIL_SetOrigin(this, pev->origin);// link into world.
 	SetTouch(&CBasePlayerItem::DefaultTouch);
@@ -722,7 +722,7 @@ CBaseEntity* CBasePlayerItem::Respawn()
 {
 	// make a copy of this weapon that is invisible and inaccessible to players (no touch function). The weapon spawn/respawn code
 	// will decide when to make the weapon visible and touchable.
-	CBaseEntity *pNewWeapon = CBaseEntity::Create((char *)GetClassname(), g_pGameRules->VecWeaponRespawnSpot(this), pev->angles, pev->owner);
+	CBaseEntity *pNewWeapon = CBaseEntity::Create((char *)STRING(pev->classname), g_pGameRules->VecWeaponRespawnSpot(this), pev->angles, pev->owner);
 
 	if (pNewWeapon)
 	{
@@ -738,7 +738,7 @@ CBaseEntity* CBasePlayerItem::Respawn()
 	}
 	else
 	{
-		ALERT(at_debug, "Respawn failed to create %s!\n", GetClassname());
+		ALERT(at_debug, "Respawn failed to create %s!\n", STRING(pev->classname));
 	}
 
 	return pNewWeapon;
@@ -773,7 +773,7 @@ void CBasePlayerItem::DefaultTouch(CBaseEntity *pOther)
 			int i;
 			char sample[32];
 			char weapon_name[32];
-			strcpy(weapon_name, GetClassname());
+			strcpy(weapon_name, STRING(pev->classname));
 
 			if (strncmp(weapon_name, "weapon_", 7) == 0)
 				i = 7;
@@ -923,12 +923,12 @@ void CBasePlayerItem::Holster()
 
 void CBasePlayerItem::AttachToPlayer(CBasePlayer *pPlayer)
 {
-	SetMoveType(MOVETYPE_FOLLOW);
-	SetSolidType(SOLID_NOT);
+	pev->movetype = MOVETYPE_FOLLOW;
+	pev->solid = SOLID_NOT;
 	pev->aiment = pPlayer->edict();
 	pev->effects = EF_NODRAW; // ??
 	pev->modelindex = 0;// server won't send down to clients if modelindex == 0
-	ClearModel();
+	pev->model = iStringNull;
 	pev->owner = pPlayer->edict();
 	SetNextThink(0.1);
 	SetTouch(NULL);
@@ -1271,8 +1271,8 @@ void CBasePlayerWeapon::Holster()
 
 void CBasePlayerAmmo::Spawn()
 {
-	SetMoveType(MOVETYPE_TOSS);
-	SetSolidType(SOLID_TRIGGER);
+	pev->movetype = MOVETYPE_TOSS;
+	pev->solid = SOLID_TRIGGER;
 	UTIL_SetSize(pev, Vector(-16, -16, 0), Vector(16, 16, 16));
 	UTIL_SetOrigin(this, pev->origin);
 
@@ -1484,8 +1484,8 @@ void CWeaponBox::Spawn()
 {
 	Precache();
 
-	SetMoveType(MOVETYPE_TOSS);
-	SetSolidType(SOLID_TRIGGER);
+	pev->movetype = MOVETYPE_TOSS;
+	pev->solid = SOLID_TRIGGER;
 
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 
@@ -1623,11 +1623,11 @@ BOOL CWeaponBox::PackWeapon(CBasePlayerItem *pWeapon)
 	}
 
 	pWeapon->pev->spawnflags |= SF_NORESPAWN;// never respawn
-	pWeapon->SetMoveType(MOVETYPE_NONE);
-	pWeapon->SetSolidType(SOLID_NOT);
+	pWeapon->pev->movetype = MOVETYPE_NONE;
+	pWeapon->pev->solid = SOLID_NOT;
 	pWeapon->pev->effects = EF_NODRAW;
 	pWeapon->pev->modelindex = 0;
-	pWeapon->ClearModel();
+	pWeapon->pev->model = iStringNull;
 	pWeapon->pev->owner = edict();
 	pWeapon->SetThink(NULL);// crowbar may be trying to swing again, etc.
 	pWeapon->SetTouch(NULL);

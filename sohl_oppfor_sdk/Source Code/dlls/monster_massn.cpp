@@ -234,8 +234,8 @@ void CMassn::Spawn()
 	SET_MODEL(ENT(pev), "models/massn.mdl");
 	UTIL_SetSize(pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->effects = 0;
 	pev->health = 1; //gSkillData.massnHealth;
@@ -334,7 +334,7 @@ void CAssassinRepel::RepelUse(CBaseEntity *pActivator, CBaseEntity *pCaller, USE
 
 	CBaseEntity *pEntity = Create("monster_male_assassin", pev->origin, pev->angles);
 	CBaseMonster *pGrunt = pEntity->MyMonsterPointer();
-	pGrunt->SetMoveType(MOVETYPE_FLY);
+	pGrunt->pev->movetype = MOVETYPE_FLY;
 	pGrunt->pev->velocity = Vector(0, 0, RANDOM_FLOAT(-196, -128));
 	pGrunt->SetActivity(ACT_GLIDE);
 	// UNDONE: position?

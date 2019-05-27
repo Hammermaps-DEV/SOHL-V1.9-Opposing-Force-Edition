@@ -62,9 +62,9 @@ const char *CPitDroneSpit::pMissSounds[] = {
 void CPitDroneSpit::Spawn() {
 	Precache();
 
-	SetClassname("pitdronespit");
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->classname = MAKE_STRING("pitdronespit");
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 	pev->takedamage = DAMAGE_NO;
 	pev->flags |= FL_MONSTER;
 	pev->health = 1;
@@ -181,7 +181,7 @@ void CPitDroneSpit::TrackTarget() {
 	SetNextThink(0.1);// fixed think time
 
 	pev->angles = UTIL_VecToAngles(pev->velocity);
-	SetSolidType(SOLID_BBOX);
+	pev->solid = SOLID_BBOX;
 
 	// if hornet is close to the enemy, jet in a straight line for a half second.
 	// (only in the single player game)
@@ -198,7 +198,7 @@ void CPitDroneSpit::TrackTarget() {
 //=========================================================
 void CPitDroneSpit::TrackTouch(CBaseEntity *pOther) {
 	if (pOther->edict() == pev->owner || pOther->pev->modelindex == pev->modelindex) {
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		return;
 	}
 
@@ -232,8 +232,8 @@ void CPitDroneSpit::DieTouch(CBaseEntity *pOther) {
 			Vector vecDir = pev->velocity.Normalize();
 			UTIL_SetOrigin(this, pev->origin - vecDir * 4);
 			pev->angles = UTIL_VecToAngles(vecDir);
-			SetSolidType(SOLID_NOT);
-			SetMoveType(MOVETYPE_FLY);
+			pev->solid = SOLID_NOT;
+			pev->movetype = MOVETYPE_FLY;
 			pev->velocity = Vector(0, 0, 0);
 			pev->avelocity.z = 0;
 			pev->angles.z = RANDOM_LONG(0, 360);

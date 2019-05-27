@@ -38,7 +38,7 @@ public:
 	int  Classify();
 	int ISoundMask();
 	void HandleAnimEvent(MonsterEvent_t *pEvent);
-	bool FCanCheckAttacks();
+	BOOL FCanCheckAttacks();
 	bool CheckMeleeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack1(float flDot, float flDist);
 	bool CheckRangeAttack2(float flDot, float flDist);

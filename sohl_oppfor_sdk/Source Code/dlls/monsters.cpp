@@ -138,7 +138,7 @@ int CBaseMonster::Save(CSave &save)
 	if (pev->targetname)
 		return save.WriteFields(STRING(pev->targetname), "CBaseMonster", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
 
-	return save.WriteFields(GetClassname(), "CBaseMonster", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
+	return save.WriteFields(STRING(pev->classname), "CBaseMonster", this, m_SaveData, HL_ARRAYSIZE(m_SaveData));
 }
 
 int CBaseMonster::Restore(CRestore &restore)
@@ -210,7 +210,7 @@ void CBaseMonster::BarnacleVictimReleased()
 	m_IdealMonsterState = MONSTERSTATE_IDLE;
 
 	pev->velocity = g_vecZero;
-	SetMoveType(MOVETYPE_STEP);
+	pev->movetype = MOVETYPE_STEP;
 }
 
 //=========================================================
@@ -408,7 +408,7 @@ void CBaseMonster::Look(int iDistance)
 					case    R_AL:
 						break;
 					default:
-						ALERT(at_aiconsole, "%s can't assess %s\n", GetClassname(), STRING(pSightEnt->pev->classname));
+						ALERT(at_aiconsole, "%s can't assess %s\n", STRING(pev->classname), STRING(pSightEnt->pev->classname));
 						break;
 					}
 				}
@@ -447,7 +447,7 @@ CSound* CBaseMonster::PBestSound()
 
 	if (iThisSound == SOUNDLIST_EMPTY)
 	{
-		ALERT(at_aiconsole, "ERROR! monster %s has no audible sounds!\n", GetClassname());
+		ALERT(at_aiconsole, "ERROR! monster %s has no audible sounds!\n", STRING(pev->classname));
 #if _DEBUG
 		ALERT(at_error, "NULL Return from PBestSound\n");
 #endif
@@ -980,12 +980,14 @@ void CBaseMonster::CheckAttacks(CBaseEntity *pTarget, float flDist)
 // CanCheckAttacks - prequalifies a monster to do more fine
 // checking of potential attacks. 
 //=========================================================
-bool CBaseMonster::FCanCheckAttacks()
+BOOL CBaseMonster::FCanCheckAttacks()
 {
 	if (HasConditions(bits_COND_SEE_ENEMY) && !HasConditions(bits_COND_ENEMY_TOOFAR))
-		return true;
+	{
+		return TRUE;
+	}
 
-	return false;
+	return FALSE;
 }
 
 //=========================================================
@@ -1182,7 +1184,7 @@ void CBaseMonster::SetActivity(Activity NewActivity)
 	{
 		// Not available try to get default anim
 		// ZAEBALO!!!!!
-		ALERT(at_aiconsole, "%s has no sequence for act:%d\n", GetClassname(), NewActivity);
+		ALERT(at_aiconsole, "%s has no sequence for act:%d\n", STRING(pev->classname), NewActivity);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 
@@ -1218,7 +1220,7 @@ void CBaseMonster::SetSequenceByName(char *szSequence)
 	else
 	{
 		// Not available try to get default anim
-		ALERT(at_aiconsole, "%s has no sequence named:%f\n", GetClassname(), szSequence);
+		ALERT(at_aiconsole, "%s has no sequence named:%f\n", STRING(pev->classname), szSequence);
 		pev->sequence = 0;	// Set to the reset anim (if it's there)
 	}
 }
@@ -1786,7 +1788,7 @@ void CBaseMonster::Move(float flInterval)
 				else
 				{
 					TaskFail();
-					ALERT(at_aiconsole, "%s Failed to move (%d)!\n", GetClassname(), HasMemory(bits_MEMORY_MOVE_FAILED));
+					ALERT(at_aiconsole, "%s Failed to move (%d)!\n", STRING(pev->classname), HasMemory(bits_MEMORY_MOVE_FAILED));
 					//ALERT( at_aiconsole, "%f, %f, %f\n", pev->origin.z, (pev->origin + (vecDir * flCheckDist)).z, m_Route[m_iRouteIndex].vecLocation.z );
 				}
 				return;
@@ -1924,7 +1926,7 @@ void CBaseMonster::StartPatrol(CBaseEntity* path)
 
 	if (!m_pGoalEnt)
 	{
-		ALERT(at_error, "ReadyMonster()--%s couldn't find target \"%s\"\n", GetClassname(), STRING(pev->target));
+		ALERT(at_error, "ReadyMonster()--%s couldn't find target \"%s\"\n", STRING(pev->classname), STRING(pev->target));
 	}
 	else
 	{
@@ -1983,7 +1985,7 @@ void CBaseMonster::StartMonster()
 		//LRC- there are perfectly good reasons for making a monster stuck, so it shouldn't always be an error.
 		if (!WALK_MOVE(ENT(pev), 0, 0, WALKMOVE_NORMAL) && !FBitSet(pev->spawnflags, SF_MONSTER_SPAWNFLAG_128))
 		{
-			ALERT(at_debug, "%s \"%s\" stuck in wall--level design error\n", GetClassname(), STRING(pev->targetname));
+			ALERT(at_debug, "%s \"%s\" stuck in wall--level design error\n", STRING(pev->classname), STRING(pev->targetname));
 			pev->effects = EF_BRIGHTFIELD;
 		}
 	}
@@ -2140,7 +2142,7 @@ BOOL CBaseMonster::FindCover(Vector vecThreat, Vector vecViewOffset, float flMin
 
 	if (iMyNode == NO_NODE)
 	{
-		ALERT(at_aiconsole, "FindCover() - %s has no nearest node!\n", GetClassname());
+		ALERT(at_aiconsole, "FindCover() - %s has no nearest node!\n", STRING(pev->classname));
 		return FALSE;
 	}
 	if (iThreatNode == NO_NODE)
@@ -2244,7 +2246,7 @@ BOOL CBaseMonster::BuildNearestRoute(Vector vecThreat, Vector vecViewOffset, flo
 
 	if (iMyNode == NO_NODE)
 	{
-		ALERT(at_aiconsole, "BuildNearestRoute() - %s has no nearest node!\n", GetClassname());
+		ALERT(at_aiconsole, "BuildNearestRoute() - %s has no nearest node!\n", STRING(pev->classname));
 		return FALSE;
 	}
 
@@ -2482,7 +2484,7 @@ void CBaseMonster::SetEyePosition()
 
 	if (pev->view_ofs == g_vecZero)
 	{
-		ALERT(at_aiconsole, "%s has no view_ofs!\n", GetClassname());
+		ALERT(at_aiconsole, "%s has no view_ofs!\n", STRING(pev->classname));
 	}
 }
 
@@ -2630,13 +2632,13 @@ void CBaseMonster::HandleAnimEvent(MonsterEvent_t *pEvent)
 			pev->deadflag = DEAD_DYING;
 			// Kill me now! (and fade out when CineCleanup() is called)
 #if _DEBUG
-			ALERT(at_aiconsole, "Death event: %s\n", GetClassname());
+			ALERT(at_aiconsole, "Death event: %s\n", STRING(pev->classname));
 #endif
 			pev->health = 0;
 		}
 #if _DEBUG
 		else
-			ALERT(at_aiconsole, "INVALID death event:%s\n", GetClassname());
+			ALERT(at_aiconsole, "INVALID death event:%s\n", STRING(pev->classname));
 #endif
 		break;
 	case SCRIPT_EVENT_NOT_DEAD:
@@ -2718,7 +2720,7 @@ void CBaseMonster::HandleAnimEvent(MonsterEvent_t *pEvent)
 	}
 
 	default:
-		ALERT(at_aiconsole, "Unhandled animation event %d for %s\n", pEvent->event, GetClassname());
+		ALERT(at_aiconsole, "Unhandled animation event %d for %s\n", pEvent->event, STRING(pev->classname));
 		break;
 
 	}
@@ -2873,7 +2875,7 @@ void CBaseMonster::ReportAIState()
 
 	static const char *pStateNames[] = { "None", "Idle", "Combat", "Alert", "Hunt", "Prone", "Scripted", "Dead" };
 
-	ALERT(level, "%s: ", GetClassname());
+	ALERT(level, "%s: ", STRING(pev->classname));
 	if ((int)m_MonsterState < HL_ARRAYSIZE(pStateNames))
 		ALERT(level, "State: %s, ", pStateNames[m_MonsterState]);
 	int i = 0;
@@ -3306,8 +3308,8 @@ void CBaseMonster::MonsterInitDead()
 {
 	InitBoneControllers();
 
-	SetSolidType(SOLID_BBOX);
-	SetMoveType(MOVETYPE_TOSS);// so he'll fall to ground
+	pev->solid = SOLID_BBOX;
+	pev->movetype = MOVETYPE_TOSS;// so he'll fall to ground
 
 	pev->frame = 0;
 	ResetSequenceInfo();

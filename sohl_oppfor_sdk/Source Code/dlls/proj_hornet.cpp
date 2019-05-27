@@ -75,8 +75,8 @@ void CHornet::Spawn()
 {
 	Precache();
 
-	SetMoveType(MOVETYPE_FLY);
-	SetSolidType(SOLID_BBOX);
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
 	pev->takedamage = DAMAGE_YES;
 	pev->flags |= FL_MONSTER;
 	pev->health = 1;// weak!
@@ -349,7 +349,7 @@ void CHornet::TrackTarget()
 
 	pev->angles = UTIL_VecToAngles(pev->velocity);
 
-	SetSolidType(SOLID_BBOX);
+	pev->solid = SOLID_BBOX;
 
 	// if hornet is close to the enemy, jet in a straight line for a half second.
 	// (only in the single player game)
@@ -389,7 +389,7 @@ void CHornet::TrackTouch(CBaseEntity *pOther)
 {
 	if (pOther->edict() == pev->owner || pOther->pev->modelindex == pev->modelindex)
 	{// bumped into the guy that shot it.
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		return;
 	}
 
@@ -432,7 +432,7 @@ void CHornet::DieTouch(CBaseEntity *pOther)
 	}
 
 	pev->modelindex = 0;// so will disappear for the 0.1 secs we wait until NEXTTHINK gets rid
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 
 	SetThink(&CHornet::SUB_Remove);
 	SetNextThink(1);// stick around long enough for the sound to finish!

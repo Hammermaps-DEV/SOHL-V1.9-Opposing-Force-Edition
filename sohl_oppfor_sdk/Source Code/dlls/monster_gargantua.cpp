@@ -40,7 +40,7 @@
 #include	"soundent.h"
 #include	"decals.h"
 #include	"explode.h"
-#include	"CBreakable.h"
+#include	"func_break.h"
 #include	"scripted.h"
 #include	"monster_gargantua.h"
 #include "CGib.h"
@@ -100,7 +100,7 @@ CStomp *CStomp::StompCreate(const Vector &origin, const Vector &end, float speed
 void CStomp::Spawn()
 {
 	SetNextThink(0);
-	SetClassname("garg_stomp");
+	pev->classname = MAKE_STRING("garg_stomp");
 	pev->dmgtime = UTIL_GlobalTimeBase();
 
 	pev->framerate = 30;
@@ -663,8 +663,8 @@ void CGargantua::Spawn()
 		SET_MODEL(ENT(pev), "models/garg.mdl");
 	UTIL_SetSize(pev, Vector(-32, -32, 0), Vector(32, 32, 64));
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_GREEN;
 	if (pev->health == 0)
 		pev->health = gSkillData.gargantuaHealth;
@@ -1197,9 +1197,9 @@ LINK_ENTITY_TO_CLASS(env_smoker, CSmoker);
 
 void CSmoker::Spawn()
 {
-	SetMoveType(MOVETYPE_NONE);
+	pev->movetype = MOVETYPE_NONE;
 	SetNextThink(0);
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->angles = g_vecZero;
@@ -1229,9 +1229,9 @@ void CSmoker::Think()
 
 void CSpiral::Spawn()
 {
-	SetMoveType(MOVETYPE_NONE);
+	pev->movetype = MOVETYPE_NONE;
 	SetNextThink(0);
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
 	pev->angles = g_vecZero;

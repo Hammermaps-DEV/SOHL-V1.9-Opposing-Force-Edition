@@ -502,7 +502,7 @@ void CTalkMonster::RunTask(Task_t *pTask)
 			!IsTalking())
 		{
 			// Get edict for one player
-			pPlayer = INDEXENT(1);
+			pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 
 			if (pPlayer)
 			{
@@ -541,7 +541,7 @@ void CTalkMonster::RunTask(Task_t *pTask)
 	case TASK_FACE_PLAYER:
 	{
 		// Get edict for one player
-		edict_t *pPlayer = INDEXENT(1);
+		edict_t *pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 
 		if (pPlayer)
 		{
@@ -1293,7 +1293,7 @@ Schedule_t* CTalkMonster::GetScheduleOfType(int Type)
 
 		if (!IsTalking() && HasConditions(bits_COND_SEE_CLIENT) && RANDOM_LONG(0, 6) == 0)
 		{
-			edict_t *pPlayer = INDEXENT(1);
+			edict_t *pPlayer = g_engfuncs.pfnPEntityOfEntIndex(1);
 
 			if (pPlayer)
 			{

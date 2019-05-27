@@ -54,7 +54,7 @@ public:
 	void RunAI();
 
 	bool CheckRangeAttack1(float flDot, float flDist);
-	bool ShouldSpeak();
+	BOOL ShouldSpeak();
 
 	int Classify();
 	int TakeDamage(entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType);

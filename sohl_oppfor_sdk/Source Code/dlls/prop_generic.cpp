@@ -49,7 +49,7 @@ void CPropGeneric::Spawn() {
 
 	UTIL_SetOrigin(this, pev->origin);
 
-	SetSolidType(SOLID_SLIDEBOX);
+	pev->solid = SOLID_SLIDEBOX;
 
 	Vector vecMax = vecSize / 2;
 	Vector vecMin = -vecMax;

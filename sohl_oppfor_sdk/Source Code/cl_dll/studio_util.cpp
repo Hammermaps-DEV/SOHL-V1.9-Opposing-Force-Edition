@@ -39,18 +39,19 @@ AngleMatrix
 
 ====================
 */
-void AngleMatrix (const float* angles, float(*matrix)[4])
+void AngleMatrix (const float *angles, float (*matrix)[4] )
 {
-	float sp, sy, cr, cp, cy;
+	float		angle;
+	float		sr, sp, sy, cr, cp, cy;
 	
-	float angle = angles[YAW] * (M_PI * 2 / 360);
+	angle = angles[YAW] * (M_PI*2 / 360);
 	sy = sin(angle);
 	cy = cos(angle);
 	angle = angles[PITCH] * (M_PI*2 / 360);
 	sp = sin(angle);
 	cp = cos(angle);
 	angle = angles[ROLL] * (M_PI*2 / 360);
-	float sr = sin(angle);
+	sr = sin(angle);
 	cr = cos(angle);
 
 	// matrix = (YAW * PITCH) * ROLL
@@ -70,15 +71,45 @@ void AngleMatrix (const float* angles, float(*matrix)[4])
 
 /*
 ====================
+VectorCompare
+
+====================
+*/
+int VectorCompare (const float *v1, const float *v2)
+{
+	int		i;
+	
+	for (i=0 ; i<3 ; i++)
+		if (v1[i] != v2[i])
+			return 0;
+			
+	return 1;
+}
+
+/*
+====================
 CrossProduct
 
 ====================
 */
-void CrossProduct (const float* v1, const float* v2, float* cross)
+void CrossProduct (const float *v1, const float *v2, float *cross)
 {
 	cross[0] = v1[1]*v2[2] - v1[2]*v2[1];
 	cross[1] = v1[2]*v2[0] - v1[0]*v2[2];
 	cross[2] = v1[0]*v2[1] - v1[1]*v2[0];
+}
+
+/*
+====================
+VectorTransform
+
+====================
+*/
+void VectorTransform (const float *in1, float in2[3][4], float *out)
+{
+	out[0] = DotProduct(in1, in2[0]) + in2[0][3];
+	out[1] = DotProduct(in1, in2[1]) + in2[1][3];
+	out[2] = DotProduct(in1, in2[2]) + in2[2][3];
 }
 
 /*

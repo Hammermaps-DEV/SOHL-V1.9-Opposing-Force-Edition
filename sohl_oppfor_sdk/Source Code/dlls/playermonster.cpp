@@ -112,8 +112,8 @@ void CPlayerMonster::Spawn()
 	SET_MODEL(ENT(pev), "models/player.mdl");
 	UTIL_SetSize(pev, VEC_HULL_MIN, VEC_HULL_MAX);
 
-	SetSolidType(SOLID_SLIDEBOX);
-	SetMoveType(MOVETYPE_STEP);
+	pev->solid = SOLID_SLIDEBOX;
+	pev->movetype = MOVETYPE_STEP;
 	m_bloodColor = BLOOD_COLOR_RED;
 	pev->health = 8;
 	m_flFieldOfView = 0.5;// indicates the width of this monster's forward view cone ( as a dotproduct result )
@@ -123,7 +123,7 @@ void CPlayerMonster::Spawn()
 	MonsterInit();
 	if (pev->spawnflags & SF_MONSTERPLAYER_NOTSOLID)
 	{
-		SetSolidType(SOLID_NOT);
+		pev->solid = SOLID_NOT;
 		pev->takedamage = DAMAGE_NO;
 	}
 }

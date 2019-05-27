@@ -35,6 +35,7 @@
 #include "extdll.h"
 #include "util.h"
 #include "cbase.h"
+#include "decals.h"
 #include "explode.h"
 #include "locus.h"
 #include "weapons.h"
@@ -45,10 +46,10 @@ extern int gmsgParticles;//define external message
 // Spark Shower
 class CShower : public CBaseEntity
 {
-	void Spawn() override;
-	void Think() override;
-	void Touch(CBaseEntity *pOther) override;
-	int ObjectCaps() override { return FCAP_DONT_SAVE; }
+	void Spawn();
+	void Think();
+	void Touch(CBaseEntity *pOther);
+	int ObjectCaps() { return FCAP_DONT_SAVE; }
 };
 
 LINK_ENTITY_TO_CLASS(spark_shower, CShower);
@@ -62,10 +63,10 @@ void CShower::Spawn()
 		pev->velocity.z += 200;
 	else
 		pev->velocity.z -= 200;
-	SetMoveType(MOVETYPE_BOUNCE);
+	pev->movetype = MOVETYPE_BOUNCE;
 	pev->gravity = 0.5;
 	SetNextThink(0.1);
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	SET_MODEL(edict(), "models/grenade.mdl");	// Need a model, just use the grenade, we don't draw it anyway
 	UTIL_SetSize(pev, g_vecZero, g_vecZero);
 	pev->effects |= EF_NODRAW;
@@ -136,10 +137,10 @@ void CEnvExplosion::KeyValue(KeyValueData *pkvd)
 
 void CEnvExplosion::Spawn()
 {
-	SetSolidType(SOLID_NOT);
+	pev->solid = SOLID_NOT;
 	pev->effects = EF_NODRAW;
 
-	SetMoveType(MOVETYPE_NONE);
+	pev->movetype = MOVETYPE_NONE;
 	/*
 	if ( m_iMagnitude > 250 )
 	{
@@ -168,8 +169,8 @@ void CEnvExplosion::Use(CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE 
 {
 	TraceResult tr;
 
-	ClearModel();//invisible
-	SetSolidType(SOLID_NOT);// intangible
+	pev->model = iStringNull;//invisible
+	pev->solid = SOLID_NOT;// intangible
 
 	Vector		vecSpot;// trace starts here!
 

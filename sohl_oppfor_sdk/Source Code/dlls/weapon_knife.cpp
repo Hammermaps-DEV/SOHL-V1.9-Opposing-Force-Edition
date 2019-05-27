@@ -81,7 +81,7 @@ void CKnife::Precache() {
 // GetItemInfo - give all Infos for this weapon
 //=========================================================
 int CKnife::GetItemInfo(ItemInfo *p) {
-	p->pszName = GetClassname();
+	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = NULL;
 	p->iMaxAmmo1 = -1;
 	p->pszAmmo2 = NULL;
