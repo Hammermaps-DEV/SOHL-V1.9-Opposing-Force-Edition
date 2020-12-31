@@ -417,7 +417,7 @@
     <ClCompile>
       <Optimization>MinSpace</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <AdditionalIncludeDirectories>..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\cl_dll;..\cl_dll\particles;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\external;..\public;..\dlls;..\common;..\pm_shared;..\engine;..\utils\vgui\include;..\cl_dll;..\cl_dll\particles;..\game_shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;CLIENT_DLL;CLIENT_WEAPONS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -442,8 +442,8 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;wsock32.lib;opengl32.lib;glu32.lib;../utils/vgui/lib/vgui.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>.\Release\client.dll</OutputFile>
+      <AdditionalDependencies>odbc32.lib;odbccp32.lib;winmm.lib;wsock32.lib;opengl32.lib;glu32.lib;../utils/vgui/lib/vgui.lib;dinput/dinput8.lib;dinput/dxguid.lib;../common/cg/cg.lib;../common/cg/cgGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)client.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/client.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>

@@ -53,9 +53,9 @@ protected:
 	inline float TimeSinceLastDraw( void ) const { return (gEngfuncs.GetClientTime() - m_flLastDraw); }
 
 	// returns the number of particles to be created on creation of this system
-	inline unsigned int StartingParticles( void );
+	unsigned int StartingParticles( void );
 	// returns the percentages of particles to be created now
-	inline float NewParticlesCreationDelay( void );
+	float NewParticlesCreationDelay( void );
 	// tests whether this system should be deleted or not
 	virtual inline bool TestSystem( void );
 	// updates the counters in the system
